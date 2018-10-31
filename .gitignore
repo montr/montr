@@ -20,6 +20,7 @@ packages
 x64/
 build/
 bld/
+dist/
 [Bb]in/
 [Oo]bj/
 
