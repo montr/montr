@@ -1,4 +1,5 @@
 module.exports = {
+    mode: 'development',
     entry: "./assets/index.tsx",
     output: {
         filename: "bundle.js",
@@ -10,7 +11,7 @@ module.exports = {
 
     resolve: {
         // Add '.ts' and '.tsx' as resolvable extensions.
-        extensions: [".ts", ".tsx", ".js", ".json"]
+        extensions: [ ".ts", ".tsx", ".js", ".json" ]
     },
 
     module: {
@@ -19,7 +20,9 @@ module.exports = {
             { test: /\.tsx?$/, loader: "awesome-typescript-loader" },
 
             // All output '.js' files will have any sourcemaps re-processed by 'source-map-loader'.
-            { enforce: "pre", test: /\.js$/, loader: "source-map-loader" }
+            { enforce: "pre", test: /\.js$/, loader: "source-map-loader" },
+
+            { test: /\.css$/, use: [ "style-loader", "css-loader" ] }
         ]
     },
 
