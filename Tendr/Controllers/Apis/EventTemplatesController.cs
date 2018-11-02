@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Tendr.Models;
 
-namespace Tendr.Controllers
+namespace Tendr.Controllers.Apis
 {
 	[ApiController, Route("api/[controller]")]
 	public class EventTemplatesController : ControllerBase

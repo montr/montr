@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 
-namespace tendr.core.Controllers
+namespace Tendr.Controllers.Apis
 {
 	[Route("api/[controller]")]
 	[ApiController]
