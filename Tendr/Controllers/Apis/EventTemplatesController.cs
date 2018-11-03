@@ -14,14 +14,17 @@ namespace Tendr.Controllers.Apis
 			{
 				new EventTemplate
 				{
+					Id = System.Guid.NewGuid(),
 					EventType = EventType.RequestForProposal,
 					Name = "Запрос предложений",
 					Description = "Some descriptive description"
 				},
 				new EventTemplate
 				{
+					Id = System.Guid.NewGuid(),
 					EventType = EventType.Proposal,
-					Name = "Предложение"
+					Name = "Предложение",
+					Description = "Руки и сердца"
 				}
 			};
 		}
