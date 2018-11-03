@@ -5,7 +5,7 @@ import { Layout, Menu, Icon } from 'antd';
 export class SideMenu extends React.Component {
     public render() {
         return (
-            <Layout.Sider style={{ overflow: 'auto', height: '100vh', position: 'fixed', left: 0 }}>
+            <Layout.Sider theme="dark" style={{ overflow: 'auto', height: '100vh', position: 'fixed', left: 0 }}>
                 <div className="logo" />
                 <Menu theme="dark" mode="inline" defaultSelectedKeys={['4']}>
                     <Menu.Item key="1">
@@ -13,7 +13,7 @@ export class SideMenu extends React.Component {
                         <span className="nav-text">nav 1</span>
                     </Menu.Item>
                     <Menu.Item key="2">
-                        <Icon type="video-camera" />
+                        <Icon type="check-circle" />
                         <span className="nav-text">nav 2</span>
                     </Menu.Item>
                     <Menu.Item key="3">
@@ -21,7 +21,7 @@ export class SideMenu extends React.Component {
                         <span className="nav-text">nav 3</span>
                     </Menu.Item>
                     <Menu.Item key="4">
-                        <Icon type="bar-chart" />
+                        <Icon type="heart" />
                         <span className="nav-text">События</span>
                     </Menu.Item>
                     <Menu.Item key="5">
