@@ -18,9 +18,9 @@ packages
 [Dd]ebugPublic/
 [Rr]elease/
 x64/
+assets/
 build/
 bld/
-dist/
 [Bb]in/
 [Oo]bj/
 
