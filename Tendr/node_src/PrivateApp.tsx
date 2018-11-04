@@ -9,11 +9,10 @@ import ru from "antd/lib/locale-provider/ru_RU";
 
 import "antd/dist/antd.css";
 
-import { SideMenu } from "./components/SideMenu";
+import { SideMenu } from "./components/";
 
 import { Hello } from "./pages/Hello";
-import { PrivateEvents } from "./pages/PrivateEvents";
-import { SelectEventTemplate } from "./pages/SelectEventTemplate";
+import { PrivateEvents, SelectEventTemplate } from "./pages/";
 
 export class PrivateApp extends React.Component {
     render() {
@@ -24,8 +23,8 @@ export class PrivateApp extends React.Component {
                         <SideMenu />
                         <Layout style={{ background: '#fff', marginLeft: 200 }}>
                             <Layout.Header style={{ background: '#fff' }}>
-                                <Input.Search placeholder="input search text" onSearch={value => console.log(value)}
-                                    style={{ marginTop: 20, width: 200, float: "right" }} />
+                                {/*<Input.Search placeholder="input search text" onSearch={value => console.log(value)}
+                                    style={{ marginTop: 20, width: 200, float: "right" }} />*/}
                             </Layout.Header>
                             <Layout.Content style={{ overflow: 'initial' }}>
                                 <div style={{ padding: "0 50px 16px 50px" }}>

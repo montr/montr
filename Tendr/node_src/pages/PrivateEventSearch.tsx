@@ -1,39 +1,36 @@
 import * as React from 'react';
-import { Table, Form, Select, Button, Divider } from "antd";
+import { Table, Form, Select, Button } from "antd";
 
-import { EventTemplate, API } from '../api/EventTemplates';
-import { PageHeader } from '../components/PageHeader';
+import { Event, EventAPI } from '../api';
+import { PageHeader } from '../components/';
 
 interface Props {
 }
 
 interface State {
-  data: EventTemplate[];
+  data: Event[];
 }
 
-const columns = [{
-  title: 'Номер',
-  dataIndex: 'name',
-  width: 100,
-}, {
-  title: 'Дата',
-  dataIndex: 'age',
-  width: 150,
-  sorter: (a, b) => a.age - b.age,
-}, {
-  title: 'Наименование',
-  dataIndex: 'address',
-}];
-
-const data = [];
-for (let i = 1; i < 10000; i++) {
-  data.push({
-    key: i,
-    name: `T-00${i}`,
-    age: 32 + i % 34,
-    address: `London, Park Lane no. ${i}`,
-  });
-}
+const columns = [
+  {
+    title: 'Номер',
+    dataIndex: 'number',
+    width: 100
+  },
+  {
+    title: 'Тип',
+    dataIndex: 'eventType',
+    width: 70
+  },
+  {
+    title: 'Наименование',
+    dataIndex: 'name'
+  },
+  {
+    title: 'Описание',
+    dataIndex: 'description'
+  }
+];
 
 export class PrivateEvents extends React.Component<Props, State> {
   constructor(props: Props) {
@@ -42,7 +39,7 @@ export class PrivateEvents extends React.Component<Props, State> {
   }
 
   public componentDidMount() {
-    API.fetchEventTemplates()
+    EventAPI.fetchData()
       .then((data) => {
         this.setState({ data });
       });
@@ -51,6 +48,10 @@ export class PrivateEvents extends React.Component<Props, State> {
   public render() {
     return (
       <div>
+        <div style={{ float: "right" }}>
+          <Button icon="plus">Создать</Button>
+        </div>
+
         <PageHeader>Торговые процедуры</PageHeader>
 
         <Form layout="inline">
@@ -61,13 +62,13 @@ export class PrivateEvents extends React.Component<Props, State> {
             </Select>
           </Form.Item>
           <Form.Item>
-            <Button type="primary">Искать</Button>
+            <Button type="primary" icon="search">Искать</Button>
           </Form.Item>
         </Form>
 
         <br />
 
-        <Table size="small" columns={columns} dataSource={data}
+        <Table size="small" columns={columns} dataSource={this.state.data}
           pagination={{ pageSize: 10 }} />
       </div>
     );
