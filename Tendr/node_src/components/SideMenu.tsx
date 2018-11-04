@@ -1,44 +1,33 @@
 import * as React from 'react';
 
+import { Link } from "react-router-dom";
+
 import { Layout, Menu, Icon } from 'antd';
 
 export class SideMenu extends React.Component {
     public render() {
         return (
-            <Layout.Sider theme="dark" style={{ overflow: 'auto', height: '100vh', position: 'fixed', left: 0 }}>
+            <Layout.Sider theme="dark" breakpoint="md"
+                style={{ overflow: 'auto', height: '100vh', position: 'fixed', left: 0 }}>
                 <div className="logo" />
-                <Menu theme="dark" mode="inline" defaultSelectedKeys={['4']}>
+                <Menu theme="dark" mode="inline">
                     <Menu.Item key="1">
-                        <Icon type="user" />
-                        <span className="nav-text">nav 1</span>
+                        <Link to="/">
+                            <Icon type="dashboard" />
+                            <span className="nav-text">Панель управления</span>
+                        </Link>
                     </Menu.Item>
                     <Menu.Item key="2">
-                        <Icon type="check-circle" />
-                        <span className="nav-text">nav 2</span>
-                    </Menu.Item>
-                    <Menu.Item key="3">
-                        <Icon type="upload" />
-                        <span className="nav-text">nav 3</span>
+                        <Link to="/events">
+                            <Icon type="project" />
+                            <span className="nav-text">Торговые процедуры</span>
+                        </Link>
                     </Menu.Item>
                     <Menu.Item key="4">
-                        <Icon type="heart" />
-                        <span className="nav-text">События</span>
-                    </Menu.Item>
-                    <Menu.Item key="5">
-                        <Icon type="cloud-o" />
-                        <span className="nav-text">nav 5</span>
-                    </Menu.Item>
-                    <Menu.Item key="6">
-                        <Icon type="appstore-o" />
-                        <span className="nav-text">nav 6</span>
-                    </Menu.Item>
-                    <Menu.Item key="7">
-                        <Icon type="team" />
-                        <span className="nav-text">nav 7</span>
-                    </Menu.Item>
-                    <Menu.Item key="8">
-                        <Icon type="shop" />
-                        <span className="nav-text">nav 8</span>
+                        <Link to="/selectEventTemplate">
+                            <Icon type="heart" />
+                            <span className="nav-text">Выбор шаблона</span>
+                        </Link>
                     </Menu.Item>
                 </Menu>
             </Layout.Sider>

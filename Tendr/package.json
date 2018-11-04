@@ -12,9 +12,11 @@
   "dependencies": {
     "@types/react": "^16.4.18",
     "@types/react-dom": "^16.0.9",
+    "@types/react-router-dom": "^4.3.1",
     "antd": "^3.10.3",
     "react": "^16.6.0",
-    "react-dom": "^16.6.0"
+    "react-dom": "^16.6.0",
+    "react-router-dom": "^4.3.1"
   },
   "devDependencies": {
     "awesome-typescript-loader": "^5.2.1",

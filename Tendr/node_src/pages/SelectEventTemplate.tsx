@@ -12,7 +12,7 @@ interface State {
 }
 
 export class SelectEventTemplate extends React.Component<Props, State> {
-  constructor(props : Props) {
+  constructor(props: Props) {
     super(props);
     this.state = { data: [] };
   }
@@ -26,19 +26,23 @@ export class SelectEventTemplate extends React.Component<Props, State> {
 
   public render() {
     return (
-      <div style={{ width: "50%" }}>
-        <List size="small" bordered dataSource={this.state.data} itemLayout="horizontal"
-          // pagination={{ pageSize: 10 }}
-          renderItem={(item:EventTemplate) => (
-            <List.Item
-              actions={[ <Badge status="success" text={item.eventType.toString()} /> ]}>
-              <List.Item.Meta
-                title={<a href="#">{item.name}</a>}
-                description={item.description}
-              />
-            </List.Item>
-          )}
-        />
+      <div>
+        <h2>Выберите шаблон</h2>
+        <div style={{ width: "50%" }}>
+
+          <List size="small" bordered dataSource={this.state.data} itemLayout="horizontal"
+            // pagination={{ pageSize: 10 }}
+            renderItem={(item: EventTemplate) => (
+              <List.Item
+                actions={[<Badge status="success" text={item.eventType.toString()} />]}>
+                <List.Item.Meta
+                  title={<a href="#">{item.name}</a>}
+                  description={item.description}
+                />
+              </List.Item>
+            )}
+          />
+        </div>
       </div>
     );
   }
