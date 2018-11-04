@@ -1,6 +1,13 @@
-import { EventTemplate } from "./EventTemplate";
+import Guid from "./Guid";
 
 const baseURL = "http://localhost:5000/api";
+
+export interface EventTemplate {
+    id: Guid;
+    eventType: number;
+    name: string;
+    description: string;
+}
 
 const fetchEventTemplates = async (): Promise<EventTemplate[]> => {
     const url = `${baseURL}/EventTemplates`;

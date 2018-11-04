@@ -1,8 +1,8 @@
 import * as React from 'react';
-import { List, Badge } from "antd";
+import { List, Badge, Tag } from "antd";
 
-import { EventTemplate } from '../api/EventTemplate';
-import { API } from '../api/EventTemplates';
+import { EventTemplate, API } from '../api/EventTemplates';
+import { PageHeader } from '../components/PageHeader';
 
 interface Props {
 }
@@ -27,14 +27,17 @@ export class SelectEventTemplate extends React.Component<Props, State> {
   public render() {
     return (
       <div>
-        <h2>Выберите шаблон</h2>
+        <PageHeader>Выберите шаблон</PageHeader>
         <div style={{ width: "50%" }}>
 
           <List size="small" bordered dataSource={this.state.data} itemLayout="horizontal"
             // pagination={{ pageSize: 10 }}
             renderItem={(item: EventTemplate) => (
               <List.Item
-                actions={[<Badge status="success" text={item.eventType.toString()} />]}>
+                actions={[
+                  <Badge status="success" text={item.eventType.toString()} />,
+                  <Tag>{item.eventType.toString()}</Tag>
+                ]}>
                 <List.Item.Meta
                   title={<a href="#">{item.name}</a>}
                   description={item.description}

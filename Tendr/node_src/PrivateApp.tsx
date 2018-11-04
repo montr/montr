@@ -28,7 +28,7 @@ export class PrivateApp extends React.Component {
                                     style={{ marginTop: 20, width: 200, float: "right" }} />
                             </Layout.Header>
                             <Layout.Content style={{ overflow: 'initial' }}>
-                                <div style={{ padding: "16px 50px" }}>
+                                <div style={{ padding: "0 50px 16px 50px" }}>
 
                                     <Route path="/" exact component={() => <Hello compiler="TypeScript" framework="React" />} />
                                     <Route path="/events" component={() => <PrivateEvents />} />
