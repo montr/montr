@@ -2,8 +2,7 @@ import * as React from "react";
 
 import { BrowserRouter as Router, Route } from "react-router-dom";
 
-import { Layout, LocaleProvider } from "antd";
-import { Input } from "antd";
+import { Layout, LocaleProvider, Input, message } from "antd";
 
 import ru from "antd/lib/locale-provider/ru_RU";
 

@@ -4,11 +4,11 @@ using Tendr.Models;
 
 namespace Tendr.Controllers.Apis
 {
-	[ApiController, Route("api/[controller]")]
+	[ApiController, Route("api/[controller]/[action]")]
 	public class EventTemplatesController : ControllerBase
 	{
-		[HttpGet]
-		public ActionResult<IEnumerable<EventTemplate>> Get()
+		[HttpPost]
+		public ActionResult<IEnumerable<EventTemplate>> Load()
 		{
 			return new[]
 			{

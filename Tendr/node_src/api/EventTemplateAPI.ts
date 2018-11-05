@@ -2,10 +2,11 @@ import { EventTemplate } from "./";
 import { Constants } from "./Constants";
 
 const fetchData = async (): Promise<EventTemplate[]> => {
-    const url = `${Constants.baseURL}/EventTemplates`;
 
-    const response = await fetch(url);
-    const data = await (response.json());
+    const response = await fetch(
+        `${Constants.baseURL}/EventTemplates/Load`, { method: "POST" });
+
+    const data = await response.json();
 
     return data.map(mapToModel);
 };
