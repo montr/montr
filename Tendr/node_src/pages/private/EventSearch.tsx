@@ -1,8 +1,9 @@
 import * as React from 'react';
+import { Link } from "react-router-dom";
 import { Table, Form, Select, Button } from "antd";
 
 import { DataColumn, MetadataAPI, Event, EventAPI, DataColumnAlign } from '../../api';
-import { PageHeader } from '../../components/';
+import { Page } from '../../components/';
 
 interface Props {
 }
@@ -52,12 +53,11 @@ export class PrivateEvents extends React.Component<Props, State> {
 
   public render() {
     return (
-      <div>
-        <div style={{ float: "right" }}>
-          <Button icon="plus">Создать</Button>
-        </div>
+      <Page title="Торговые процедуры">
 
-        <PageHeader>Торговые процедуры</PageHeader>
+        <div style={{ float: "right" }}>
+            <Link to="/events/new"><Button icon="plus">Создать</Button></Link>
+        </div>
 
         <Form layout="inline">
           <Form.Item>
@@ -76,7 +76,7 @@ export class PrivateEvents extends React.Component<Props, State> {
         <Table size="small" rowKey="id"
           columns={this.state.columns} dataSource={this.state.data}
           pagination={{ pageSize: 10 }} />
-      </div>
+      </Page>
     );
   }
 }

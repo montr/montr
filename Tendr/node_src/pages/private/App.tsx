@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { HashRouter as Router, Route } from "react-router-dom";
+import { BrowserRouter as Router, Route } from "react-router-dom";
 
 import { Layout, LocaleProvider, Input, message } from "antd";
 
@@ -8,12 +8,12 @@ import ru from "antd/lib/locale-provider/ru_RU";
 
 import { SideMenu } from "../../components";
 
-import { Dashboard, PrivateEvents, SelectEventTemplate } from "./";
+import { Dashboard, PrivateEvents, CreateEvent } from "./";
 
 export class App extends React.Component {
     render() {
         return (
-            <Router>
+            <Router basename="/#" >
                 <LocaleProvider locale={ru}>
                     <Layout hasSider>
                         <SideMenu />
@@ -23,15 +23,14 @@ export class App extends React.Component {
                                     style={{ marginTop: 20, width: 200, float: "right" }} />*/}
                             </Layout.Header>
                             <Layout.Content style={{ overflow: 'initial' }}>
-                                <div style={{ padding: "0 50px 16px 50px" }}>
 
-                                    <Route path="/" exact component={() => <Dashboard />} />
-                                    <Route path="/events" component={() => <PrivateEvents />} />
-                                    <Route path="/events/new" component={() => <SelectEventTemplate />} />
 
-                                </div>
+                                <Route path="/" exact component={() => <Dashboard />} />
+                                <Route path="/events" exact component={() => <PrivateEvents />} />
+                                <Route path="/events/new" component={() => <CreateEvent />} />
+
                             </Layout.Content>
-                            <Layout.Footer>© {new Date().getFullYear()}</Layout.Footer>
+                            <Layout.Footer style={{ background: '#fff' }}>© {new Date().getFullYear()}</Layout.Footer>
                         </Layout>
                     </Layout>
                 </LocaleProvider>

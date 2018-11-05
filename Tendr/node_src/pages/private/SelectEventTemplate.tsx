@@ -1,8 +1,8 @@
 import * as React from 'react';
-import { List, Badge, Tag } from "antd";
+import { Button, List, Badge, Tag } from "antd";
 
 import { EventTemplate, EventTemplateAPI } from '../../api';
-import { PageHeader } from '../../components';
+import { Page } from '../../components';
 
 interface Props {
 }
@@ -26,8 +26,7 @@ export class SelectEventTemplate extends React.Component<Props, State> {
 
   public render() {
     return (
-      <div>
-        <PageHeader>Выберите шаблон процедуры</PageHeader>
+      <Page title="Выберите шаблон процедуры">
 
         <div style={{ width: "50%" }}>
 
@@ -35,18 +34,18 @@ export class SelectEventTemplate extends React.Component<Props, State> {
             renderItem={(item: EventTemplate) => (
               <List.Item
                 actions={[
-                  <Badge status="success" text={item.eventType.toString()} />,
-                  <Tag>{item.eventType.toString()}</Tag>
+                  <Button onClick={() => console.log(item.id) }>Выбрать</Button>
                 ]}>
                 <List.Item.Meta
-                  title={<a href="#">{item.name}</a>}
+                  title={item.name}
                   description={item.description}
                 />
               </List.Item>
             )}
           />
         </div>
-      </div>
+
+      </Page>
     );
   }
 }
