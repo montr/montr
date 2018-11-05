@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import { HashRouter as Router, Route } from "react-router-dom";
 
 import { Layout, LocaleProvider, Input, message } from "antd";
 
@@ -16,11 +16,11 @@ import { PrivateEvents, SelectEventTemplate } from "./pages/";
 export class PrivateApp extends React.Component {
     render() {
         return (
-            <Router basename="#">
+            <Router>
                 <LocaleProvider locale={ru}>
                     <Layout hasSider>
                         <SideMenu />
-                        <Layout style={{ background: '#fff', marginLeft: 200 }}>
+                        <Layout style={{ background: '#fff' }}>
                             <Layout.Header style={{ background: '#fff' }}>
                                 {/*<Input.Search placeholder="input search text" onSearch={value => console.log(value)}
                                     style={{ marginTop: 20, width: 200, float: "right" }} />*/}
@@ -34,7 +34,7 @@ export class PrivateApp extends React.Component {
 
                                 </div>
                             </Layout.Content>
-                            <Layout.Footer>©{new Date().getFullYear()}</Layout.Footer>
+                            <Layout.Footer>© {new Date().getFullYear()}</Layout.Footer>
                         </Layout>
                     </Layout>
                 </LocaleProvider>

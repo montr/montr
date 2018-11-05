@@ -57,7 +57,7 @@ export class PrivateEvents extends React.Component<Props, State> {
           <Button icon="plus">Создать</Button>
         </div>
 
-        <PageHeader>Торговые процедуры .</PageHeader>
+        <PageHeader>Торговые процедуры</PageHeader>
 
         <Form layout="inline">
           <Form.Item>
