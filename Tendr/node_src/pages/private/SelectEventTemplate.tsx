@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { List, Badge, Tag } from "antd";
 
-import { EventTemplate, EventTemplateAPI } from '../api/';
-import { PageHeader } from '../components/';
+import { EventTemplate, EventTemplateAPI } from '../../api';
+import { PageHeader } from '../../components';
 
 interface Props {
 }
@@ -28,10 +28,10 @@ export class SelectEventTemplate extends React.Component<Props, State> {
     return (
       <div>
         <PageHeader>Выберите шаблон процедуры</PageHeader>
+
         <div style={{ width: "50%" }}>
 
           <List size="small" bordered dataSource={this.state.data} itemLayout="horizontal"
-            // pagination={{ pageSize: 10 }}
             renderItem={(item: EventTemplate) => (
               <List.Item
                 actions={[

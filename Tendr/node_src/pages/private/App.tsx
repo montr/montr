@@ -6,14 +6,11 @@ import { Layout, LocaleProvider, Input, message } from "antd";
 
 import ru from "antd/lib/locale-provider/ru_RU";
 
-import "antd/dist/antd.css";
+import { SideMenu } from "../../components";
 
-import { SideMenu } from "./components/";
+import { Dashboard, PrivateEvents, SelectEventTemplate } from "./";
 
-import { Hello } from "./pages/Hello";
-import { PrivateEvents, SelectEventTemplate } from "./pages/";
-
-export class PrivateApp extends React.Component {
+export class App extends React.Component {
     render() {
         return (
             <Router>
@@ -28,9 +25,9 @@ export class PrivateApp extends React.Component {
                             <Layout.Content style={{ overflow: 'initial' }}>
                                 <div style={{ padding: "0 50px 16px 50px" }}>
 
-                                    <Route path="/" exact component={() => <Hello compiler="TypeScript" framework="React" />} />
+                                    <Route path="/" exact component={() => <Dashboard />} />
                                     <Route path="/events" component={() => <PrivateEvents />} />
-                                    <Route path="/selectEventTemplate" component={() => <SelectEventTemplate />} />
+                                    <Route path="/events/new" component={() => <SelectEventTemplate />} />
 
                                 </div>
                             </Layout.Content>

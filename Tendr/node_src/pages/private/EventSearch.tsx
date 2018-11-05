@@ -1,8 +1,8 @@
 import * as React from 'react';
 import { Table, Form, Select, Button } from "antd";
 
-import { DataColumn, MetadataAPI, Event, EventAPI, DataColumnAlign } from '../api';
-import { PageHeader } from '../components/';
+import { DataColumn, MetadataAPI, Event, EventAPI, DataColumnAlign } from '../../api';
+import { PageHeader } from '../../components/';
 
 interface Props {
 }

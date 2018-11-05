@@ -23,12 +23,6 @@ export class SideMenu extends React.Component {
                             <span className="nav-text">Торговые процедуры</span>
                         </Link>
                     </Menu.Item>
-                    <Menu.Item key="4">
-                        <Link to="/selectEventTemplate">
-                            <Icon type="heart" />
-                            <span className="nav-text">Выбор шаблона</span>
-                        </Link>
-                    </Menu.Item>
                 </Menu>
             </Layout.Sider>
         );
