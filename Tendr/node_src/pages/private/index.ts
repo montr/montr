@@ -1,4 +1,4 @@
 export * from './Dashboard';
-export * from './EventSearch';
+export * from './SearchEvents';
 export * from './CreateEvent';
 export * from './SelectEventTemplate';

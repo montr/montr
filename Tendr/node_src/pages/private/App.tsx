@@ -8,7 +8,7 @@ import ru from "antd/lib/locale-provider/ru_RU";
 
 import { SideMenu } from "../../components";
 
-import { Dashboard, PrivateEvents, CreateEvent } from "./";
+import { Dashboard, SearchEvents, CreateEvent } from "./";
 
 export class App extends React.Component {
     render() {
@@ -26,7 +26,7 @@ export class App extends React.Component {
 
 
                                 <Route path="/" exact component={() => <Dashboard />} />
-                                <Route path="/events" exact component={() => <PrivateEvents />} />
+                                <Route path="/events" exact component={() => <SearchEvents />} />
                                 <Route path="/events/new" component={() => <CreateEvent />} />
 
                             </Layout.Content>

@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { Table, Form, Select, Button } from "antd";
 
 import { DataColumn, MetadataAPI, Event, EventAPI, DataColumnAlign } from '../../api';
-import { Page } from '../../components/';
+import { Page } from '../../components';
 
 interface Props {
 }
@@ -13,7 +13,7 @@ interface State {
   data: Event[];
 }
 
-export class PrivateEvents extends React.Component<Props, State> {
+export class SearchEvents extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
     this.state = { columns: [], data: [] };
