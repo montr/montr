@@ -7,8 +7,8 @@ import { Layout, Menu, Icon } from 'antd';
 export class SideMenu extends React.Component {
     public render() {
         return (
-            <Layout.Sider theme="dark" breakpoint="lg" collapsedWidth="0"
-                style={{ height: '100vh' }}>
+            <Layout.Sider theme="dark" breakpoint="lg" collapsedWidth="0" width="230"
+                style={{ height: '100vh', textTransform: "uppercase" }}>
                 <div className="logo" />
                 <Menu theme="dark" mode="inline">
                     <Menu.Item key="1">

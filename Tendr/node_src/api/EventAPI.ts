@@ -8,7 +8,7 @@ function checkStatus(response: Response) {
     return response;
 }
 
-const fetchData = async (): Promise<Event[]> => {
+const load = async (): Promise<Event[]> => {
 
     const response = await fetch(
         `${Constants.baseURL}/Events/Load`, { method: "POST" });
@@ -18,6 +18,24 @@ const fetchData = async (): Promise<Event[]> => {
     const data = await response.json();
 
     return data.map(mapToModel);
+};
+
+const create = async (item: Event): Promise<boolean> => {
+
+    const response = await fetch(
+        `${Constants.baseURL}/Events/Create`, {
+            method: "POST",
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(item)
+        });
+
+    checkStatus(response)
+
+    const data = await response.json();
+
+    return data;
 };
 
 const mapToModel = (data: any): Event => {
@@ -31,5 +49,5 @@ const mapToModel = (data: any): Event => {
 };
 
 export const EventAPI = {
-    fetchData
+    load, create
 };

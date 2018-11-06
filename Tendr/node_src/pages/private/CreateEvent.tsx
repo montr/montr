@@ -1,28 +1,49 @@
 import * as React from "react";
+import { Redirect } from 'react-router-dom'
 
-import { Form, Input, Tooltip, Icon, Cascader, Select, Row, Col, Checkbox, Button, AutoComplete } from 'antd';
+import { Form, Input, Tooltip, Icon, Cascader, Select, Row, Col, Checkbox, Button, AutoComplete, message } from 'antd';
 import { FormComponentProps } from 'antd/lib/form';
 
+import { Event, EventAPI } from '../../api';
 import { Page } from '../../components/';
 
 interface EventFormProps extends FormComponentProps {
-    age: number;
-    nickname: string;
-    email: string;
+    name: string;
+    description?: string;
 }
 
-class EventForm extends React.Component<EventFormProps, any> {
+interface EventFormState {
+    toSearch: boolean   
+}
+
+class EventForm extends React.Component<EventFormProps, EventFormState> {
+    constructor(props: EventFormProps) {
+        super(props);
+
+        this.state = { toSearch: false };
+    }
 
     handleSubmit = (e: any) => {
         e.preventDefault();
-        this.props.form.validateFieldsAndScroll((err, values) => {
-            if (!err) {
-                console.log('Received values of form: ', values);
+
+        this.props.form.validateFieldsAndScroll((errors, values: Event) => {
+            if (!errors) {
+                EventAPI
+                    .create(values)
+                    .then(() => this.setState({ toSearch: true }));
+            }
+            else {
+                message.error("Received errors: " + JSON.stringify(errors));
             }
         });
     }
 
     render() {
+
+        if (this.state.toSearch == true) {
+            return <Redirect to='/events' />
+        }
+
         const { getFieldDecorator } = this.props.form;
 
         const formItemLayout = {
@@ -40,60 +61,35 @@ class EventForm extends React.Component<EventFormProps, any> {
 
         const tailFormItemLayout = {
             wrapperCol: {
-                xs: {
-                    span: 24,
-                    offset: 0,
-                },
-                sm: {
-                    offset: 8,
-                    span: 16,
-                },
-                lg: {
-                    offset: 4,
-                    span: 20,
-                },
+                xs: { offset: 0, span: 24, },
+                sm: { offset: 8, span: 16, },
+                lg: { offset: 4, span: 20, },
             },
         };
 
         return (
             <Form onSubmit={this.handleSubmit}>
-                <Form.Item {...formItemLayout} label="E-mail">
-                    {getFieldDecorator('email', {
+                <Form.Item {...formItemLayout} label="Наименование">
+                    {getFieldDecorator("name", {
                         rules: [
-                            { type: 'email', message: 'The input is not valid E-mail!' },
-                            { required: true, message: 'Please input your E-mail!' }
+                            { required: true, whitespace: true, message: "Поле «Наименование» обязательно для заполнения" }
                         ],
-                        initialValue: this.props.email
+                        initialValue: this.props.name
                     })(
                         <Input />
                     )}
                 </Form.Item>
-                <Form.Item {...formItemLayout} label={(
-                    <span>
-                        Nickname &nbsp;
-                            <Tooltip title="What do you want others to call you?">
-                            <Icon type="question-circle-o" />
-                        </Tooltip>
-                    </span>
-                )}>
-                    {getFieldDecorator('nickname', {
-                        rules: [{ required: true, message: 'Please input your nickname!', whitespace: true }],
-                        initialValue: this.props.nickname
+                <Form.Item {...formItemLayout} label="Описание" extra="Как можно подробнее опишите что вы хотите купить.">
+                    {getFieldDecorator("description", {
+                        initialValue: this.props.description
                     })(
-                        <Input />
+                        <Input.TextArea rows={5} />
                     )}
                 </Form.Item>
                 <Form.Item {...tailFormItemLayout}>
-                    {getFieldDecorator('agreement', {
-                        valuePropName: 'checked',
-                    })(
-                        <Checkbox>I have read the <a href="">agreement</a></Checkbox>
-                    )}
+                    <Button type="primary" htmlType="submit" icon="check">Сохранить</Button>
                 </Form.Item>
-                <Form.Item {...tailFormItemLayout}>
-                    <Button type="primary" htmlType="submit">Register</Button>
-                </Form.Item>
-            </Form>
+            </Form >
         );
     }
 }
@@ -104,13 +100,11 @@ export class CreateEvent extends React.Component {
 
     render() {
         const data = {
-            age: 42,
-            nickname: "vasya",
-            email: "vpupkin@ya.ru"
+            name: "Новая процедура",
         }
 
         return (
-            <Page title="Create Event">
+            <Page title="Новая процедура">
                 <WrappedForm {...data} />
             </Page>
         );

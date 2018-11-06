@@ -4,27 +4,27 @@ using Tendr.Models;
 
 namespace Tendr.Controllers.Apis
 {
-	[ApiController, Route("api/[controller]/[action]")]
-	public class EventsController : ControllerBase
-	{
-		[HttpPost]
-		public ActionResult<IEnumerable<Event>> Load()
+    [ApiController, Route("api/[controller]/[action]")]
+    public class EventsController : ControllerBase
+    {
+		private static readonly List<Event> _events = new List<Event>();
+
+        [HttpPost]
+        public ActionResult<IEnumerable<Event>> Load()
+        {
+            return _events;
+        }
+
+        [HttpPost]
+        public ActionResult<bool> Create(Event item)
 		{
-			var result = new List<Event>();
+			item.Id = System.Guid.NewGuid();
+			item.EventType = EventType.RequestForProposal;
+			item.Number = $"RFP-{_events.Count + 1:D6}";
 
-			for (var i = 1; i < 1000; i++)
-			{
-				result.Add(new Event
-				{
-					Id = System.Guid.NewGuid(),
-					EventType = EventType.RequestForProposal,
-					Number = string.Format("T-{0:D8}", i),
-					Name = "Запрос предложений",
-					Description = "Mandatory bandwidth-monitored collaboration"
-				});
-			}
+			_events.Insert(0, item);
 
-			return result;
-		}
-	}
+            return true;
+        }
+    }
 }

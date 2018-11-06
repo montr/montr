@@ -25,6 +25,7 @@
 
 * Catch errors with componentDidCatch https://reactjs.org/blog/2017/07/26/error-handling-in-react-16.html
 * Server-side rendering & brawser (not hash) routing 
+* Add styles in components or on external less files. See SideMenu.tsx
 
 ## Featues
 

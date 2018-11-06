@@ -45,7 +45,7 @@ export class SearchEvents extends React.Component<Props, State> {
         this.setState({ columns });
       });
 
-    EventAPI.fetchData()
+    EventAPI.load()
       .then((data) => {
         this.setState({ data });
       });
