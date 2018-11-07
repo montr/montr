@@ -5,6 +5,7 @@
 ### Business
 
 1. Зарегистрировать пользователя и компанию (агента?)
+    -- https://www.smashingmagazine.com/2018/10/form-design-patterns-excerpt-a-registration-form/
 1. Личный кабинет (редактировать ФИО, компанию)
 1. (~) Cписок моих процедур
 1. Создать процедуру
