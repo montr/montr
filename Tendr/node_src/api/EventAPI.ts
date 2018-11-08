@@ -17,7 +17,9 @@ const load = async (): Promise<Event[]> => {
 
     const data = await response.json();
 
-    return data.map(mapToModel);
+    const models = data.map(mapToModel);
+    
+    return models;
 };
 
 const create = async (item: Event): Promise<boolean> => {

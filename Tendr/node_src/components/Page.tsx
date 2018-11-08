@@ -1,6 +1,6 @@
-import * as React from 'react';
+import * as React from "react";
 
-import { PageHeader } from './';
+import { PageHeader } from "./";
 
 interface PageProps { title?: string; }
 

@@ -1,8 +1,8 @@
-import * as React from 'react';
+import * as React from "react";
 import { Button, List, Badge, Tag } from "antd";
 
-import { EventTemplate, EventTemplateAPI } from '../../api';
-import { Page } from '../../components';
+import { EventTemplate, EventTemplateAPI } from "../../api";
+import { Page } from "../../components";
 
 interface Props {
 }

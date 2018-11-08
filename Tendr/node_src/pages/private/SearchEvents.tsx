@@ -1,9 +1,9 @@
-import * as React from 'react';
+import * as React from "react";
 import { Link } from "react-router-dom";
 import { Table, Form, Select, Button } from "antd";
 
-import { DataColumn, MetadataAPI, Event, EventAPI, DataColumnAlign } from '../../api';
-import { Page } from '../../components';
+import { DataColumn, MetadataAPI, Event, EventAPI, DataColumnAlign } from "../../api";
+import { Page } from "../../components";
 
 interface Props {
 }

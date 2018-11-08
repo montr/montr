@@ -1,5 +1,4 @@
 import * as React from "react";
-
 import { BrowserRouter as Router, Route } from "react-router-dom";
 
 import { Layout, LocaleProvider, Input, message } from "antd";
@@ -17,12 +16,12 @@ export class App extends React.Component {
                 <LocaleProvider locale={ru}>
                     <Layout hasSider>
                         <SideMenu />
-                        <Layout style={{ background: '#fff' }}>
-                            <Layout.Header style={{ background: '#fff' }}>
+                        <Layout style={{ background: "#fff" }}>
+                            <Layout.Header style={{ background: "#fff" }}>
                                 {/*<Input.Search placeholder="input search text" onSearch={value => console.log(value)}
                                     style={{ marginTop: 20, width: 200, float: "right" }} />*/}
                             </Layout.Header>
-                            <Layout.Content style={{ overflow: 'initial' }}>
+                            <Layout.Content style={{ overflow: "initial" }}>
 
 
                                 <Route path="/" exact component={() => <Dashboard />} />
@@ -30,7 +29,7 @@ export class App extends React.Component {
                                 <Route path="/events/new" component={() => <CreateEvent />} />
 
                             </Layout.Content>
-                            <Layout.Footer style={{ background: '#fff' }}>© {new Date().getFullYear()}</Layout.Footer>
+                            <Layout.Footer style={{ background: "#fff" }}>© {new Date().getFullYear()}</Layout.Footer>
                         </Layout>
                     </Layout>
                 </LocaleProvider>
