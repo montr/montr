@@ -10,12 +10,12 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
-    "@types/react": "^16.4.18",
+    "@types/react": "^16.7.2",
     "@types/react-dom": "^16.0.9",
     "@types/react-router-dom": "^4.3.1",
-    "antd": "^3.10.4",
-    "react": "^16.6.0",
-    "react-dom": "^16.6.0",
+    "antd": "^3.10.5",
+    "react": "^16.6.1",
+    "react-dom": "^16.6.1",
     "react-router-dom": "^4.3.1"
   },
   "devDependencies": {
@@ -27,7 +27,7 @@
     "source-map-loader": "^0.2.4",
     "style-loader": "^0.23.1",
     "typescript": "^3.1.6",
-    "webpack": "^4.24.0",
+    "webpack": "^4.25.1",
     "webpack-cli": "^3.1.2"
   }
 }
