@@ -13,8 +13,7 @@ const fetchData = async (): Promise<EventTemplate[]> => {
 
 const mapToModel = (data: any): EventTemplate => {
     return {
-        id: data.id,
-        eventType: data.eventType,
+        configCode: data.configCode,
         name: data.name,
         description: data.description,
     };

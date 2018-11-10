@@ -1,8 +1,7 @@
 import Guid from "./Guid";
 
 export interface EventTemplate {
-    id: Guid;
-    eventType: number;
+    configCode: string;
     name: string;
     description: string;
 }

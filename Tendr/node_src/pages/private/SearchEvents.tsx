@@ -1,9 +1,10 @@
 import * as React from "react";
 import { Link } from "react-router-dom";
-import { Table, Form, Select, Button } from "antd";
+import { Table, Form, Select, Modal, Button } from "antd";
 
 import { DataColumn, MetadataAPI, Event, EventAPI, DataColumnAlign } from "../../api";
 import { Page } from "../../components";
+import { SelectEventTemplate } from "./SelectEventTemplate";
 
 interface Props {
 }
@@ -56,7 +57,7 @@ export class SearchEvents extends React.Component<Props, State> {
       <Page title="Торговые процедуры">
 
         <div style={{ float: "right" }}>
-            <Link to="/events/new"><Button icon="plus">Создать</Button></Link>
+          <Link to="/events/new"><Button icon="plus">Создать</Button></Link>
         </div>
 
         <Form layout="inline">
@@ -75,7 +76,8 @@ export class SearchEvents extends React.Component<Props, State> {
 
         <Table size="small" rowKey="id"
           columns={this.state.columns} dataSource={this.state.data}
-          pagination={{ pageSize: 10 }} />
+          pagination={{ position: "both", pageSize: 10 }} />
+
       </Page>
     );
   }

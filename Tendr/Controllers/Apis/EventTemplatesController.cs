@@ -10,23 +10,7 @@ namespace Tendr.Controllers.Apis
 		[HttpPost]
 		public ActionResult<IEnumerable<EventTemplate>> Load()
 		{
-			return new[]
-			{
-				new EventTemplate
-				{
-					Id = System.Guid.NewGuid(),
-					EventType = EventType.RequestForProposal,
-					Name = "Запрос предложений",
-					Description = "Some descriptive description"
-				},
-				new EventTemplate
-				{
-					Id = System.Guid.NewGuid(),
-					EventType = EventType.Proposal,
-					Name = "Предложение",
-					Description = "Руки и сердца"
-				}
-			};
+			return EventTemplate.All;
 		}
 	}
 }

@@ -1,9 +1,10 @@
 import Guid from "./Guid";
 
 export interface Event {
-    id: Guid;
-    eventType: number;
-    number: string;
+    uid: Guid;
+    id: number;
+    configCode: string;
+    statusCode: string;
     name: string;
     description: string;
 }

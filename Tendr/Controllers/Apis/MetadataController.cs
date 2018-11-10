@@ -15,8 +15,9 @@ namespace Tendr.Controllers.Apis
 			{
 				return new List<DataColumn>
 				{
-					new DataColumn { Key = "number", Name = "Номер", Sortable = true, Width = 100 },
-					new DataColumn { Key = "eventType", Name = "Тип", Align = DataColumnAlign.Right, Width = 60 },
+					new DataColumn { Key = "id", Name = "Номер", Sortable = true, Width = 40 },
+					new DataColumn { Key = "configCode", Name = "Тип", Width = 60 },
+					new DataColumn { Key = "statusCode", Name = "Статус", Width = 60 },
 					new DataColumn { Key = "name", Name = "Наименование", Width = 200 },
 					new DataColumn { Key = "description", Name = "Описание", Width = 300 }
 				};

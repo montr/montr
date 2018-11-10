@@ -28,9 +28,9 @@ class EventForm extends React.Component<EventFormProps, EventFormState> {
 
         this.props.form.validateFieldsAndScroll((errors, values: Event) => {
             if (!errors) {
-                EventAPI
+                /* EventAPI
                     .create(values)
-                    .then(() => this.setState({ toSearch: true }));
+                    .then(() => this.setState({ toSearch: true })); */
             }
             else {
                 message.error("Received errors: " + JSON.stringify(errors));
@@ -76,7 +76,7 @@ class EventForm extends React.Component<EventFormProps, EventFormState> {
                         ],
                         initialValue: this.props.name
                     })(
-                        <Input />
+                        <Input.TextArea rows={3} />
                     )}
                 </Form.Item>
                 <Form.Item {...formItemLayout} label="Описание" extra="Как можно подробнее опишите что вы хотите купить.">

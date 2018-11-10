@@ -1,4 +1,8 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using System.Collections.Generic;
+using System.Linq;
+using LinqToDB.Configuration;
+using LinqToDB.Data;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -9,9 +13,15 @@ namespace Tendr
 {
 	public class Startup
 	{
-		public Startup(IConfiguration configuration)
+		public Startup(IHostingEnvironment env)
 		{
-			Configuration = configuration;
+			var builder = new ConfigurationBuilder()
+				.SetBasePath(env.ContentRootPath)
+				.AddUserSecrets<Startup>();
+
+			Configuration = builder.Build();
+
+			DataConnection.DefaultSettings = new DbSettings(Configuration);
 		}
 
 		public IConfiguration Configuration { get; }
@@ -46,13 +56,53 @@ namespace Tendr
 			app.UseStaticFiles();
 			app.UseCookiePolicy();
 
+			/*app.UseSpa(x =>
+			{
+				x.Options.DefaultPage = "/";
+			});*/
+
 			app.UseMvc(routes =>
 			{
 				routes.MapRoute(
 					name: "default",
 					template: "{controller=Home}/{action=Index}/{id?}");
 			});
+		}
+	}
 
+	public class ConnectionStringSettings : IConnectionStringSettings
+	{
+		public string ConnectionString { get; set; }
+
+		public string Name { get; set; }
+
+		public string ProviderName { get; set; }
+
+		public bool IsGlobal => false;
+	}
+
+	public class DbSettings : ILinqToDBSettings
+	{
+		private readonly IConfiguration _configuration;
+		public IEnumerable<IDataProviderSettings> DataProviders => Enumerable.Empty<IDataProviderSettings>();
+
+		public string DefaultConfiguration => "SqlServer";
+		public string DefaultDataProvider => "SqlServer";
+
+		public DbSettings(IConfiguration configuration)
+		{
+			_configuration = configuration;
+		}
+
+		public IEnumerable<IConnectionStringSettings> ConnectionStrings
+		{
+			get
+			{
+				var config = _configuration.GetSection("ConnectionString")
+					.Get<ConnectionStringSettings>();
+
+				yield return config;
+			}
 		}
 	}
 }

@@ -1,13 +1,15 @@
 import * as React from "react";
 import { Button, List, Badge, Tag } from "antd";
 
-import { EventTemplate, EventTemplateAPI } from "../../api";
+import { EventTemplate, EventTemplateAPI, EventAPI } from "../../api";
 import { Page } from "../../components";
+import { Redirect } from "react-router-dom";
 
 interface Props {
 }
 
 interface State {
+  newId?: number;
   data: EventTemplate[];
 }
 
@@ -17,14 +19,24 @@ export class SelectEventTemplate extends React.Component<Props, State> {
     this.state = { data: [] };
   }
 
-  public componentDidMount() {
+  componentDidMount() {
     EventTemplateAPI.fetchData()
       .then((data) => {
         this.setState({ data });
       });
   }
 
-  public render() {
+  handleSelect(configCode: string) {
+    EventAPI
+      .create(configCode)
+      .then((newId: number) => this.setState({ newId: newId }));
+  }
+
+  render() {
+    if (this.state.newId) {
+      return <Redirect to="/events" />
+    }
+
     return (
       <Page title="Выберите шаблон процедуры">
 
@@ -34,7 +46,7 @@ export class SelectEventTemplate extends React.Component<Props, State> {
             renderItem={(item: EventTemplate) => (
               <List.Item
                 actions={[
-                  <Button onClick={() => console.log(item.id) }>Выбрать</Button>
+                  <Button onClick={() => this.handleSelect(item.configCode)}>Выбрать</Button>
                 ]}>
                 <List.Item.Meta
                   title={item.name}

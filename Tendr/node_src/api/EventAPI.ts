@@ -1,10 +1,14 @@
 import { Event } from "./";
 import { Constants } from "./Constants";
 
+import { message } from 'antd';
+
 function checkStatus(response: Response) {
     if (!response.ok) {
+        message.error(`${response.status} (${response.statusText}) @ ${response.url}`);
         throw Error(`${response.status} (${response.statusText}) @ ${response.url}`);
     }
+
     return response;
 }
 
@@ -22,15 +26,17 @@ const load = async (): Promise<Event[]> => {
     return models;
 };
 
-const create = async (item: Event): Promise<boolean> => {
+const create = async (configCode: string): Promise<number> => {
 
     const response = await fetch(
         `${Constants.baseURL}/Events/Create`, {
             method: "POST",
             headers: {
-                'Content-Type': 'application/json'
+                "Content-Type": "application/json"
             },
-            body: JSON.stringify(item)
+            body: JSON.stringify({
+                configCode: configCode
+            })
         });
 
     checkStatus(response)
@@ -41,13 +47,15 @@ const create = async (item: Event): Promise<boolean> => {
 };
 
 const mapToModel = (data: any): Event => {
-    return {
+    return data;
+    /* return {
+        uid: data.uid,
         id: data.id,
         eventType: data.eventType,
         number: data.number,
         name: data.name,
         description: data.description,
-    };
+    }; */
 };
 
 export const EventAPI = {
