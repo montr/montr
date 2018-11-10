@@ -21,9 +21,7 @@ const load = async (): Promise<Event[]> => {
 
     const data = await response.json();
 
-    const models = data.map(mapToModel);
-    
-    return models;
+    return data;
 };
 
 const create = async (configCode: string): Promise<number> => {
@@ -44,18 +42,6 @@ const create = async (configCode: string): Promise<number> => {
     const data = await response.json();
 
     return data;
-};
-
-const mapToModel = (data: any): Event => {
-    return data;
-    /* return {
-        uid: data.uid,
-        id: data.id,
-        eventType: data.eventType,
-        number: data.number,
-        name: data.name,
-        description: data.description,
-    }; */
 };
 
 export const EventAPI = {

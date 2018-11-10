@@ -34,7 +34,7 @@ export class SelectEventTemplate extends React.Component<Props, State> {
 
   render() {
     if (this.state.newId) {
-      return <Redirect to="/events" />
+      return <Redirect to={`/events/edit/${this.state.newId}`} />
     }
 
     return (

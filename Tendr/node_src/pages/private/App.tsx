@@ -7,7 +7,7 @@ import ru from "antd/lib/locale-provider/ru_RU";
 
 import { SideMenu } from "../../components";
 
-import { Dashboard, SearchEvents, CreateEvent, SelectEventTemplate } from "./";
+import { Dashboard, SearchEvents, EditEvent, SelectEventTemplate } from "./";
 
 export class App extends React.Component {
     render() {
@@ -23,10 +23,11 @@ export class App extends React.Component {
                             </Layout.Header>
                             <Layout.Content style={{ overflow: "initial" }}>
 
-
                                 <Route path="/" exact component={() => <Dashboard />} />
                                 <Route path="/events" exact component={() => <SearchEvents />} />
                                 <Route path="/events/new" component={() => <SelectEventTemplate />} />
+                                <Route path="/events/edit/:id"
+                                    component={({ match }: any) => <EditEvent {...match} />} />
 
                             </Layout.Content>
                             <Layout.Footer style={{ background: "#fff" }}>© {new Date().getFullYear()}</Layout.Footer>
