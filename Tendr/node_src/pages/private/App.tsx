@@ -10,6 +10,11 @@ import { SideMenu } from "../../components";
 import { Dashboard, SearchEvents, EditEvent, SelectEventTemplate } from "./";
 
 export class App extends React.Component {
+
+    componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
+        message.error(error.message);
+    }
+
     render() {
         return (
             <Router basename="/#" >
@@ -17,11 +22,11 @@ export class App extends React.Component {
                     <Layout hasSider>
                         <SideMenu />
                         <Layout style={{ background: "#fff" }}>
-                            <Layout.Header style={{ background: "#fff" }}>
-                                {/*<Input.Search placeholder="input search text" onSearch={value => console.log(value)}
-                                    style={{ marginTop: 20, width: 200, float: "right" }} />*/}
-                            </Layout.Header>
-                            <Layout.Content style={{ overflow: "initial" }}>
+                            {/* <Layout.Header style={{ background: "#fff" }}>
+                                {<Input.Search placeholder="input search text" onSearch={value => console.log(value)}
+                                    style={{ marginTop: 20, width: 200, float: "right" }} />}
+                            </Layout.Header> */}
+                            <Layout.Content style={{ overflow: "initial", paddingTop: 24 }}>
 
                                 <Route path="/" exact component={() => <Dashboard />} />
                                 <Route path="/events" exact component={() => <SearchEvents />} />

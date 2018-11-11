@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using LinqToDB;
 using LinqToDB.Data;
 using Microsoft.AspNetCore.Mvc;
@@ -8,16 +7,41 @@ using Tendr.Models;
 
 namespace Tendr.Controllers.Apis
 {
-    [ApiController, Route("api/[controller]/[action]")]
-    public class EventsController : ControllerBase
-    {
-        [HttpPost]
-        public ActionResult<IEnumerable<Event>> Load()
-        {
+	[ApiController, Route("api/[controller]/[action]")]
+	public class EventsController : ControllerBase
+	{
+		[HttpPost]
+		public ActionResult<DataResult<Event>> Load(EventSearchRequest request)
+		{
+			if (request.PageNo <= 0)
+			{
+				request.PageNo = 1;
+			}
+
+			if (request.PageSize <= 0 || request.PageSize > 100)
+			{
+				request.PageSize = 10;
+			}
+
+			if (request.SortColumn == null)
+			{
+				request.SortColumn = "Id";
+			}
+
 			using (var db = new DbContext())
 			{
-				return db.GetTable<DbEvent>()
-					.OrderByDescending(x => x.Id)
+				var all = db.GetTable<DbEvent>();
+
+				var ordered =
+					request.SortOrder == SortOrder.Ascending
+						? all.OrderBy(request.SortColumn)
+						: all.OrderByDescending(request.SortColumn);
+
+				var paged = ordered
+					.Skip((request.PageNo - 1) * request.PageSize)
+					.Take(request.PageSize);
+
+				var date = paged
 					.Select(x => new Event
 					{
 						Uid = x.Uid,
@@ -27,12 +51,19 @@ namespace Tendr.Controllers.Apis
 						Name = x.Name,
 						Description = x.Description,
 						Url = "/events/edit/" + x.Id
-					}).ToList();
-			}
-        }
+					})
+					.ToList();
 
-        [HttpPost]
-        public ActionResult<long> Create(Event item)
+				return new DataResult<Event>
+				{
+					TotalCount = all.Count(),
+					Rows = date
+				};
+			}
+		}
+
+		[HttpPost]
+		public ActionResult<long> Create(Event item)
 		{
 			using (var db = new DbContext())
 			{
@@ -48,6 +79,6 @@ namespace Tendr.Controllers.Apis
 
 				return id;
 			}
-        }
-    }
+		}
+	}
 }
