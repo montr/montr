@@ -1,16 +1,11 @@
 import { EventTemplate } from "./";
 import { Constants } from "./Constants";
+import { Fetcher } from "./Fetcher";
 
-const fetchData = async (): Promise<EventTemplate[]> => {
-
-    const response = await fetch(
-        `${Constants.baseURL}/EventTemplates/Load`, { method: "POST" });
-
-    const data = await response.json();
-
-    return data;
+const load = async (): Promise<EventTemplate[]> => {
+    return Fetcher.post(`${Constants.baseURL}/EventTemplates/Load`);
 };
 
 export const EventTemplateAPI = {
-    fetchData
+    load
 };

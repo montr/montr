@@ -1,3 +1,7 @@
+export * from "./Fetcher";
+export * from "./Indexer";
+export * from "./Guid";
+
 export * from "./DataColumn";
 export * from "./MetadataAPI";
 

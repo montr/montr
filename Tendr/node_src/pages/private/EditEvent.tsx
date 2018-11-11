@@ -24,7 +24,7 @@ export class EditEvent extends React.Component<EditEventProps, {}> {
         }
 
         return (
-            <Page title={`Процедура #${this.props.params.id}`}>
+            <Page title={`№${this.props.params.id}`}>
 
                 <Tabs defaultActiveKey="1" onChange={callback}>
                     <Tabs.TabPane tab="Tab 1" key="1">Content of Tab Pane 1</Tabs.TabPane>

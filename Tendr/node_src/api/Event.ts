@@ -1,9 +1,6 @@
-import Guid from "./Guid";
+import { Indexer, Guid } from ".";
 
-export interface Event {
-
-	[key:string]: any; // Add index signature
-	
+export interface Event extends Indexer {
 	uid: Guid;
 	id: number;
 	configCode: string;

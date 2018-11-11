@@ -20,7 +20,7 @@ export class SelectEventTemplate extends React.Component<Props, State> {
   }
 
   componentDidMount() {
-    EventTemplateAPI.fetchData()
+    EventTemplateAPI.load()
       .then((data) => {
         this.setState({ data });
       });
