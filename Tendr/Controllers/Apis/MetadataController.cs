@@ -15,11 +15,12 @@ namespace Tendr.Controllers.Apis
 			{
 				return new List<DataColumn>
 				{
-					new DataColumn { Key = "id", Name = "Номер", Sortable = true, Width = 40 },
+					new DataColumn { Key = "id", Name = "Номер", Sortable = true, Width = 50, UrlProperty = "url" },
 					new DataColumn { Key = "configCode", Name = "Тип", Width = 60 },
-					new DataColumn { Key = "statusCode", Name = "Статус", Width = 60 },
-					new DataColumn { Key = "name", Name = "Наименование", Width = 200 },
-					new DataColumn { Key = "description", Name = "Описание", Width = 300 }
+					new DataColumn { Key = "statusCode", Name = "Статус", Width = 60, Align = DataColumnAlign.Center },
+					new DataColumn { Key = "name", Name = "Наименование", Width = 200, UrlProperty = "url" },
+					new DataColumn { Key = "description", Name = "Описание", Width = 300 },
+
 				};
 			}
 

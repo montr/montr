@@ -1,10 +1,11 @@
 import * as React from "react";
 import { Link } from "react-router-dom";
-import { Table, Form, Select, Modal, Button } from "antd";
+import { Table, Form, Select, Button } from "antd";
 
 import { DataColumn, MetadataAPI, Event, EventAPI, DataColumnAlign } from "../../api";
 import { Page } from "../../components";
-import { SelectEventTemplate } from "./SelectEventTemplate";
+
+import { ColumnProps } from "antd/lib/table";
 
 interface Props {
 }
@@ -24,7 +25,7 @@ export class SearchEvents extends React.Component<Props, State> {
     MetadataAPI.fetchData("PrivateEventSearch/Grid")
       .then((data) => {
 
-        function convertAlignToString(value: DataColumnAlign): string {
+        function convertAlignToString(value: DataColumnAlign): "left" | "right" | "center" {
           switch (value) {
             case DataColumnAlign.Left: return "left";
             case DataColumnAlign.Right: return "right";
@@ -33,14 +34,23 @@ export class SearchEvents extends React.Component<Props, State> {
           }
         }
 
-        const columns = data.map((item: DataColumn): any => {
+        const columns = data.map((item: DataColumn): ColumnProps<Event> => {
+          
+          var render: (text: any, record: Event, index: number) => React.ReactNode;
+          if (item.urlProperty) {
+            render = (text: any, record: Event, index: number): React.ReactNode => {
+              return (<Link to={record[item.urlProperty]}>{text}</Link>);
+            };
+          }
+
           return {
             key: item.key,
             dataIndex: item.path || item.key,
             title: item.name,
-            align: convertAlignToString(item.align),
+            align: item.align,
             sorter: item.sortable,
             width: item.width,
+            render: render
           };
         });
         this.setState({ columns });

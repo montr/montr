@@ -8,9 +8,11 @@
 
 		public string Name { get; set; }
 
+		public string UrlProperty { get; set; }
+
 		public DataColumnAlign Align { get; set; }
 
-		public DataColumnFixed Fixed { get; set; }
+		public DataColumnFixed? Fixed { get; set; }
 
 		public bool Sortable { get; set; }
 
@@ -26,7 +28,6 @@
 
 	public enum DataColumnFixed : byte
 	{
-		None,
 		Left,
 		Right
 	}

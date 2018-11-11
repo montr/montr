@@ -22,7 +22,9 @@ const fetchData = async (viewId: string): Promise<DataColumn[]> => {
 
     const data = await response.json();
 
-    return data.map((item: any): DataColumn => {
+    return data;
+    
+    /* return data.map((item: any): DataColumn => {
         return {
             key: item.key,
             path: item.path,
@@ -30,8 +32,9 @@ const fetchData = async (viewId: string): Promise<DataColumn[]> => {
             align: item.align,
             sortable: item.sortable,
             width: item.width,
+            urlProperty: item.urlProperty
         };
-    });
+    }); */
 };
 
 export const MetadataAPI = {

@@ -2,9 +2,10 @@ export interface DataColumn {
     key: string;
     path: string;
     name: string;
-    align: DataColumnAlign,
-    sortable: string;
+    align?: "left" | "right" | "center",
+    sortable: boolean;
     width?: number;
+    urlProperty?: string;
 }
 
 export enum DataColumnAlign {

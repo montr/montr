@@ -25,7 +25,8 @@ namespace Tendr.Controllers.Apis
 						ConfigCode = x.ConfigCode,
 						StatusCode = x.StatusCode,
 						Name = x.Name,
-						Description = x.Description
+						Description = x.Description,
+						Url = "/events/edit/" + x.Id
 					}).ToList();
 			}
         }
