@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Button, List, Badge, Tag } from "antd";
 
-import { EventTemplate, EventTemplateAPI, EventAPI } from "../../api";
+import { IEventTemplate, EventTemplateAPI, EventAPI } from "../../api";
 import { Page } from "../../components";
 import { Redirect } from "react-router-dom";
 
@@ -10,7 +10,7 @@ interface Props {
 
 interface State {
   newId?: number;
-  data: EventTemplate[];
+  data: IEventTemplate[];
 }
 
 export class SelectEventTemplate extends React.Component<Props, State> {
@@ -43,7 +43,7 @@ export class SelectEventTemplate extends React.Component<Props, State> {
         <div style={{ width: "50%" }}>
 
           <List size="small" bordered dataSource={this.state.data} itemLayout="horizontal"
-            renderItem={(item: EventTemplate) => (
+            renderItem={(item: IEventTemplate) => (
               <List.Item
                 actions={[
                   <Button onClick={() => this.handleSelect(item.configCode)}>Выбрать</Button>

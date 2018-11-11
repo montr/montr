@@ -4,7 +4,7 @@ import { Redirect } from "react-router-dom"
 import { Form, Input, Tooltip, Icon, Cascader, Select, Row, Col, Checkbox, Button, AutoComplete, message } from "antd";
 import { FormComponentProps } from "antd/lib/form";
 
-import { Event, EventAPI } from "../../api";
+import { IEvent, EventAPI } from "../../api";
 import { Page } from "../../components/";
 
 interface EventFormProps extends FormComponentProps {

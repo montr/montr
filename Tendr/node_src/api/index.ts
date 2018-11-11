@@ -1,12 +1,12 @@
 export * from "./Fetcher";
-export * from "./Indexer";
 export * from "./Guid";
 
-export * from "./DataColumn";
-export * from "./MetadataAPI";
+export * from "./IIndexer";
+export * from "./IDataColumn";
+export * from "./IEvent";
 
-export * from "./Event";
+export * from "./MetadataAPI";
 export * from "./EventAPI";
 
-export * from "./EventTemplate";
+export * from "./IEventTemplate";
 export * from "./EventTemplateAPI";

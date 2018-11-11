@@ -1,4 +1,4 @@
-import { Event } from "./";
+import { IEvent } from "./";
 import { Constants } from "./Constants";
 import { Fetcher } from "./Fetcher";
 
@@ -6,7 +6,7 @@ const getLoadUrl = (): string => {
     return `${Constants.baseURL}/Events/Load`;
 }
 
-const load = async (): Promise<Event[]> => {
+const load = async (): Promise<IEvent[]> => {
     return Fetcher.post(getLoadUrl());
 };
 

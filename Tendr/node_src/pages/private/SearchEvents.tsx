@@ -37,7 +37,9 @@ export class SearchEvents extends React.Component<Props, State> {
 
         <br />
 
-        <DataGrid loadUrl={EventAPI.getLoadUrl()} viewId="PrivateEventSearch/Grid" />
+        <DataGrid
+          viewId="PrivateEventSearch/Grid"
+          loadUrl={EventAPI.getLoadUrl()} />
 
       </Page>
     );

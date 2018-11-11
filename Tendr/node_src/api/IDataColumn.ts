@@ -1,4 +1,4 @@
-export interface DataColumn {
+export interface IDataColumn {
     key: string;
     path: string;
     name: string;
@@ -6,10 +6,4 @@ export interface DataColumn {
     sortable: boolean;
     width?: number;
     urlProperty?: string;
-}
-
-export enum DataColumnAlign {
-    Left,
-    Right,
-    Center
 }

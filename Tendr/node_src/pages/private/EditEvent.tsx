@@ -3,7 +3,7 @@ import * as React from "react";
 import { Tabs } from "antd";
 import { FormComponentProps } from "antd/lib/form";
 
-import { Event, EventAPI } from "../../api";
+import { IEvent, EventAPI } from "../../api";
 import { Page } from "../../components/";
 
 interface EditEventProps {
