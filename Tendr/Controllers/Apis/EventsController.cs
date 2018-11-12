@@ -4,6 +4,7 @@ using LinqToDB.Data;
 using Microsoft.AspNetCore.Mvc;
 using Tendr.Entities;
 using Tendr.Models;
+using Tendr.Services;
 
 namespace Tendr.Controllers.Apis
 {
