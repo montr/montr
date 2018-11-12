@@ -34,10 +34,14 @@ namespace Tendr.Services
 			Expression expr = arg;
 
 			var props = property.Split('.');
-			foreach (string prop in props)
+			foreach (var prop in props)
 			{
 				// use reflection (not ComponentModel) to mirror LINQ
-				var pi = type.GetProperty(prop, BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase);
+				var pi = type.GetProperty(prop,
+					BindingFlags.Public | BindingFlags.Instance | BindingFlags.IgnoreCase);
+
+				if (pi == null) throw new InvalidOperationException($"Property with name \"{prop}\" not found.");
+
 				expr = Expression.Property(expr, pi);
 				type = pi.PropertyType;
 			}

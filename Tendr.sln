@@ -5,6 +5,8 @@ VisualStudioVersion = 15.0.28010.2048
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tendr", "Tendr\Tendr.csproj", "{F6C5DC4D-C03C-4596-80B7-6C2D247C1ACA}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tendr.Tests", "Tendr.Tests\Tendr.Tests.csproj", "{CC8A49DD-417E-43CA-A1A5-245A3228F998}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{F6C5DC4D-C03C-4596-80B7-6C2D247C1ACA}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F6C5DC4D-C03C-4596-80B7-6C2D247C1ACA}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F6C5DC4D-C03C-4596-80B7-6C2D247C1ACA}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CC8A49DD-417E-43CA-A1A5-245A3228F998}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CC8A49DD-417E-43CA-A1A5-245A3228F998}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CC8A49DD-417E-43CA-A1A5-245A3228F998}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CC8A49DD-417E-43CA-A1A5-245A3228F998}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
