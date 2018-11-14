@@ -8,7 +8,7 @@ namespace Tendr.Models
 
 		public string SortColumn { get; set; }
 
-		public SortOrder SortOrder { get; set; }
+		public SortOrder? SortOrder { get; set; }
 	}
 
 	public enum SortOrder

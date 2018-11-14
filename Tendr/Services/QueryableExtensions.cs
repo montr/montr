@@ -2,11 +2,47 @@ using System;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
+using Tendr.Models;
 
 namespace Tendr.Services
 {
 	public static class QueryableExtensions
 	{
+		// todo: pass viewId instead of defaultSortColumn
+		public static IQueryable<T> Apply<T>(this IQueryable<T> source, Paging paging,
+			string defaultSortColumn, SortOrder defaultSortOrder)
+		{
+			if (paging.PageNo <= 0)
+			{
+				paging.PageNo = 1;
+			}
+
+			if (paging.PageSize <= 0 || paging.PageSize > 100)
+			{
+				paging.PageSize = 10;
+			}
+
+			if (paging.SortColumn == null)
+			{
+				paging.SortColumn = defaultSortColumn;
+			}
+
+			if (paging.SortOrder == null)
+			{
+				paging.SortOrder = defaultSortOrder;
+			}
+
+			var ordered = paging.SortOrder == SortOrder.Ascending
+				? source.OrderBy(paging.SortColumn)
+				: source.OrderByDescending(paging.SortColumn);
+
+			var paged = ordered
+				.Skip((paging.PageNo - 1) * paging.PageSize)
+				.Take(paging.PageSize);
+
+			return paged;
+		}
+
 		public static IOrderedQueryable<T> OrderBy<T>(this IQueryable<T> source, string property)
 		{
 			return ApplyOrder<T>(source, property, "OrderBy");

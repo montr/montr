@@ -14,35 +14,12 @@ namespace Tendr.Controllers.Apis
 		[HttpPost]
 		public ActionResult<DataResult<Event>> Load(EventSearchRequest request)
 		{
-			if (request.PageNo <= 0)
-			{
-				request.PageNo = 1;
-			}
-
-			if (request.PageSize <= 0 || request.PageSize > 100)
-			{
-				request.PageSize = 10;
-			}
-
-			if (request.SortColumn == null)
-			{
-				request.SortColumn = "Id";
-			}
-
 			using (var db = new DbContext())
 			{
 				var all = db.GetTable<DbEvent>();
 
-				var ordered =
-					request.SortOrder == SortOrder.Ascending
-						? all.OrderBy(request.SortColumn)
-						: all.OrderByDescending(request.SortColumn);
-
-				var paged = ordered
-					.Skip((request.PageNo - 1) * request.PageSize)
-					.Take(request.PageSize);
-
-				var date = paged
+				var date = all
+					.Apply(request, "Id", SortOrder.Descending)
 					.Select(x => new Event
 					{
 						Uid = x.Uid,

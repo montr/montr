@@ -3,8 +3,9 @@ export * from "./Guid";
 
 export * from "./IApiResult";
 export * from "./IDataResult";
-export * from "./IIndexer";
 export * from "./IDataColumn";
+export * from "./IDataView";
+export * from "./IIndexer";
 export * from "./IEvent";
 
 export * from "./MetadataAPI";

@@ -1,12 +1,12 @@
-import { IDataColumn } from "./";
+import { IDataView } from "./";
 import { Constants } from "./Constants";
 import { Fetcher } from "./Fetcher";
 
 const getLoadUrl = (): string => {
-    return `${Constants.baseURL}/Metadata/Columns`;
+    return `${Constants.baseURL}/Metadata/View`;
 }
 
-const load = async (viewId: string): Promise<IDataColumn[]> => {
+const load = async (viewId: string): Promise<IDataView> => {
     return Fetcher.post(getLoadUrl(), { viewId: viewId });
 };
 

@@ -4,6 +4,7 @@ export interface IDataColumn {
     name: string;
     align?: "left" | "right" | "center",
     sortable: boolean;
+    defaultSortOrder?: string;
     width?: number;
     urlProperty?: string;
 }
