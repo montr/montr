@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Link } from "react-router-dom";
-import { Form, Select, Button } from "antd";
+import { Form, Select, Button, DatePicker } from "antd";
 import { EventAPI } from "../../api";
 import { Page, DataGrid } from "../../components";
 
@@ -24,11 +24,14 @@ export class SearchEvents extends React.Component<Props, State> {
         </div>
 
         <Form layout="inline">
-          <Form.Item>
+        <Form.Item>
             <Select mode="multiple" placeholder="Выберите тип" style={{ minWidth: 200 }}>
               <Select.Option value="0">Запрос предложений</Select.Option>
               <Select.Option value="1">Предложение</Select.Option>
             </Select>
+          </Form.Item>
+          <Form.Item>
+            <DatePicker />
           </Form.Item>
           <Form.Item>
             <Button type="primary" icon="search">Искать</Button>

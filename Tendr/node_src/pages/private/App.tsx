@@ -1,9 +1,7 @@
 import * as React from "react";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 
-import { Layout, LocaleProvider, message } from "antd";
-
-import ru from "antd/lib/locale-provider/ru_RU";
+import { Layout, message } from "antd";
 
 import { SideMenu } from "../../components";
 
@@ -18,23 +16,21 @@ export class App extends React.Component {
     render() {
         return (
             <Router basename="/#" >
-                <LocaleProvider locale={ru}>
-                    <Layout hasSider>
-                        <SideMenu />
-                        <Layout className="bg-white">
-                            <Layout.Content>
+                <Layout hasSider>
+                    <SideMenu />
+                    <Layout className="bg-white">
+                        <Layout.Content>
 
-                                <Route path="/" exact component={() => <Dashboard />} />
-                                <Route path="/events" exact component={() => <SearchEvents />} />
-                                <Route path="/events/new" component={() => <SelectEventTemplate />} />
-                                <Route path="/events/edit/:id"
-                                    component={({ match }: any) => <EditEvent {...match} />} />
+                            <Route path="/" exact component={() => <Dashboard />} />
+                            <Route path="/events" exact component={() => <SearchEvents />} />
+                            <Route path="/events/new" component={() => <SelectEventTemplate />} />
+                            <Route path="/events/edit/:id"
+                                component={({ match }: any) => <EditEvent {...match} />} />
 
-                            </Layout.Content>
-                            <Layout.Footer className="bg-white">© {new Date().getFullYear()}</Layout.Footer>
-                        </Layout>
+                        </Layout.Content>
+                        <Layout.Footer className="bg-white">© {new Date().getFullYear()}</Layout.Footer>
                     </Layout>
-                </LocaleProvider>
+                </Layout>
             </Router>
         );
     }

@@ -1,10 +1,10 @@
 {
     "compilerOptions": {
-        "lib": [ "dom", "es2015" ],
-        "outDir": "./dist/",
+        "lib": [ "dom", "es7" ],
+        "outDir": "./assets/",
         "sourceMap": true,
         "noImplicitAny": true,
-        "module": "commonjs",
+        // "module": "commonjs",
         "target": "es5",
         "jsx": "react"
     },

@@ -27,7 +27,7 @@ export class DataGrid<TModel extends IIndexer> extends React.Component<DataGridP
 		this.state = {
 			columns: [],
 			data: [],
-			pagination: { position: "both", pageSize: 10 },
+			pagination: { position: "both", pageSize: 10, showSizeChanger: true, pageSizeOptions: ["10", "50", "100"] },
 			loading: false,
 		};
 	}
@@ -37,6 +37,7 @@ export class DataGrid<TModel extends IIndexer> extends React.Component<DataGridP
 		const pager = { ...this.state.pagination };
 
 		pager.current = pagination.current;
+		pager.pageSize = pagination.pageSize;
 
 		this.setState({
 			pagination: pager,
@@ -46,7 +47,7 @@ export class DataGrid<TModel extends IIndexer> extends React.Component<DataGridP
 			pageSize: pagination.pageSize,
 			pageNo: pagination.current,
 			sortColumn: sorter.field,
-			sortOrder: sorter.order == "ascend" 
+			sortOrder: sorter.order == "ascend"
 				? "ascending" : sorter.order == "descend" ? "descending" : null,
 			// ...filters,
 		});
