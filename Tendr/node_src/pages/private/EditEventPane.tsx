@@ -96,7 +96,7 @@ interface IEditEventTabProps {
 interface IEditEventTabState {
 }
 
-export class EditEventTab extends React.Component<IEditEventTabProps, IEditEventTabState> {
+export class EditEventPane extends React.Component<IEditEventTabProps, IEditEventTabState> {
 
     constructor(props: IEditEventTabProps) {
         super(props);

@@ -4,7 +4,7 @@ import { Tabs, Button } from "antd";
 
 import { IEvent, EventAPI, EventTemplateAPI, IEventTemplate } from "../../api";
 import { Page } from "../../components/";
-import { EditEventTab } from ".";
+import { EditEventPane } from ".";
 
 interface IEditEventProps {
 	params: {
@@ -59,15 +59,15 @@ export class EditEvent extends React.Component<IEditEventProps, IEditEventState>
 			data = this.state.data;
 
 		// todo: load from Metadata
-		const tabs = [
-			{ key: "tab_1", title: "Информация", component: <EditEventTab data={this.state.data} /> },
+		const panes = [
+			{ key: "tab_1", title: "Информация", component: <EditEventPane data={this.state.data} /> },
 			{ key: "tab_team", title: "Команда", component: null },
 			{ key: "tab_5", title: "Позиции", component: null },
+			{ key: "tab_4", title: "Тендерная комиссия (команда?)", component: null },
+			{ key: "tab_6", title: "Критерии оценки (анкета?)", component: null },
+			{ key: "tab_7", title: "История изменений", component: null },
 			{ key: "tab_2", title: "Документы (поле?)", component: null },
 			{ key: "tab_3", title: "Контактные лица (поле?)", component: null },
-			{ key: "tab_4", title: "Тендерная комиссия", component: null },
-			{ key: "tab_6", title: "Критерии оценки", component: null },
-			{ key: "tab_7", title: "История изменений", component: null },
 		]
 
 		function callback(key: string) {
@@ -86,7 +86,7 @@ export class EditEvent extends React.Component<IEditEventProps, IEditEventState>
 				<h2 title={data.name} style={{ overflow: "hidden", whiteSpace: "nowrap", textOverflow: "ellipsis" }}>{data.name}</h2>
 
 				<Tabs size="small" onChange={callback}>
-					{tabs.map(tab => {
+					{panes.map(tab => {
 						return (
 							<Tabs.TabPane tab={tab.title} key={tab.key}>{tab.component}</Tabs.TabPane>
 						);
