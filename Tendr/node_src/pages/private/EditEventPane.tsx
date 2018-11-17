@@ -3,7 +3,7 @@ import * as React from "react";
 import { Form, Input, Button, message } from "antd";
 import { FormComponentProps } from "antd/lib/form";
 
-import { IEvent, EventAPI, IApiResult } from "../../api";
+import { IEvent, EventAPI, IApiResult, IEventTemplate, IPaneProps } from "../../api";
 
 interface IEventFormProps extends FormComponentProps {
     data: IEvent,
@@ -89,16 +89,16 @@ class EventForm extends React.Component<IEventFormProps, IEventFormState> {
 
 const WrappedForm = Form.create<IEventFormProps>()(EventForm);
 
-interface IEditEventTabProps {
+interface IEditEventPaneProps extends IPaneProps<IEvent> {
     data: IEvent;
 }
 
 interface IEditEventTabState {
 }
 
-export class EditEventPane extends React.Component<IEditEventTabProps, IEditEventTabState> {
+export class EditEventPane extends React.Component<IEditEventPaneProps, IEditEventTabState> {
 
-    constructor(props: IEditEventTabProps) {
+    constructor(props: IEditEventPaneProps) {
         super(props);
         this.state = { data: { id: 0 } };
     }

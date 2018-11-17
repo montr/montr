@@ -7,6 +7,7 @@ export * from "./IDataColumn";
 export * from "./IDataView";
 export * from "./IIndexer";
 export * from "./IEvent";
+export * from "./IPane";
 
 export * from "./MetadataAPI";
 export * from "./EventAPI";
