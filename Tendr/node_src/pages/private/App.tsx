@@ -21,8 +21,8 @@ export class App extends React.Component {
                 <LocaleProvider locale={ru}>
                     <Layout hasSider>
                         <SideMenu />
-                        <Layout className="white-bg">
-                            <Layout.Content style={{ overflow: "initial", padding: "16px 24px 16px 24px" }}>
+                        <Layout className="bg-white">
+                            <Layout.Content>
 
                                 <Route path="/" exact component={() => <Dashboard />} />
                                 <Route path="/events" exact component={() => <SearchEvents />} />
@@ -31,7 +31,7 @@ export class App extends React.Component {
                                     component={({ match }: any) => <EditEvent {...match} />} />
 
                             </Layout.Content>
-                            <Layout.Footer style={{ background: "#fff" }}>© {new Date().getFullYear()}</Layout.Footer>
+                            <Layout.Footer className="bg-white">© {new Date().getFullYear()}</Layout.Footer>
                         </Layout>
                     </Layout>
                 </LocaleProvider>

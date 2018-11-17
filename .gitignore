@@ -5,6 +5,7 @@
 .vs/*
 packages
 *.lock.json
+package-lock.json
 
 # User-specific files
 *.suo
