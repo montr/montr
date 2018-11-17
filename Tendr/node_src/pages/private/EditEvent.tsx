@@ -1,37 +1,99 @@
 import * as React from "react";
 
-import { Tabs } from "antd";
-import { FormComponentProps } from "antd/lib/form";
+import { Tabs, Button } from "antd";
 
-import { IEvent, EventAPI } from "../../api";
+import { IEvent, EventAPI, EventTemplateAPI, IEventTemplate } from "../../api";
 import { Page } from "../../components/";
+import { EditEventTab } from ".";
 
-interface EditEventProps {
-    params: {
-        id: number
-    };
+interface IEditEventProps {
+	params: {
+		id: number
+	};
 }
 
-export class EditEvent extends React.Component<EditEventProps, {}> {
+interface IEditEventState {
+	data: IEvent;
+	configCodes: IEventTemplate[];
+}
 
-    render() {
-        const data = {
-            name: "Процедура",
-        }
+export class EditEvent extends React.Component<IEditEventProps, IEditEventState> {
 
-        function callback(key: any) {
-            console.log(key);
-        }
+	constructor(props: IEditEventProps) {
+		super(props);
 
-        return (
-            <Page title={`№${this.props.params.id}`}>
+		this.state = { data: {}, configCodes: [] };
+	}
 
-                <Tabs defaultActiveKey="1" onChange={callback}>
-                    <Tabs.TabPane tab="Tab 1" key="1">Content of Tab Pane 1</Tabs.TabPane>
-                    <Tabs.TabPane tab="Tab 2" key="2">Content of Tab Pane 2</Tabs.TabPane>
-                    <Tabs.TabPane tab="Tab 3" key="3">Content of Tab Pane 3</Tabs.TabPane>
-                </Tabs>
-            </Page>
-        );
-    }
+	componentWillMount() {
+		const id = this.props.params.id;
+
+		EventAPI.get(id)
+			.then(data => this.setState({ data }));
+
+		EventTemplateAPI.load()
+			.then((data) => this.setState({ configCodes: data }));
+	}
+
+	buildPageTitle(): string {
+		var result = "";
+
+		if (this.state.data.configCode) {
+			const item = this.state.configCodes
+				.find(x => x.configCode == this.state.data.configCode);
+
+			if (item) {
+				result += item.name + " ";
+			}
+		}
+
+		if (this.state.data.id) {
+			result += "№ " + this.state.data.id;
+		}
+
+		return result;
+	}
+
+	render() {
+		const id = this.props.params.id,
+			data = this.state.data;
+
+		// todo: load from Metadata
+		const tabs = [
+			{ key: "tab_1", title: "Информация", component: <EditEventTab data={this.state.data} /> },
+			{ key: "tab_team", title: "Команда", component: null },
+			{ key: "tab_5", title: "Позиции", component: null },
+			{ key: "tab_2", title: "Документы (поле?)", component: null },
+			{ key: "tab_3", title: "Контактные лица (поле?)", component: null },
+			{ key: "tab_4", title: "Тендерная комиссия", component: null },
+			{ key: "tab_6", title: "Критерии оценки", component: null },
+			{ key: "tab_7", title: "История изменений", component: null },
+		]
+
+		function callback(key: string) {
+			console.log(key);
+		}
+
+		const toolbar = (
+			<div>
+				<Button type="primary">Опубликовать</Button>&#xA0;
+				<Button icon="check">Сохранить</Button>
+			</div>
+		);
+
+		return (
+			<Page title={this.buildPageTitle()} toolbar={toolbar}>
+				<h2 title={data.name} style={{ overflow: "hidden", whiteSpace: "nowrap", textOverflow: "ellipsis" }}>{data.name}</h2>
+
+				<Tabs size="small" onChange={callback}>
+					{tabs.map(tab => {
+						return (
+							<Tabs.TabPane tab={tab.title} key={tab.key}>{tab.component}</Tabs.TabPane>
+						);
+					})}
+				</Tabs>
+
+			</Page>
+		);
+	}
 }

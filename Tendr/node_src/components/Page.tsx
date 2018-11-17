@@ -1,18 +1,29 @@
 import * as React from "react";
 
 import { PageHeader } from "./";
+import { Row, Col, Button } from "antd";
 
-interface PageProps { title?: string; }
+interface PageProps {
+	title?: string;
+	toolbar?: React.ReactNode;
+}
 
 export class Page extends React.Component<PageProps> {
-    render() {
-        return (
-            <div style={{ padding: "0 50px 16px 50px" }}>
+	render() {
+		return (
+			<div>
 
-                {this.props.title && <PageHeader>{this.props.title}</PageHeader>}
+				<Row>
+					<Col span={12}>
+						{this.props.title && <PageHeader>{this.props.title}</PageHeader>}
+					</Col>
+					<Col span={12} style={{ textAlign: "right" }}>
+						{this.props.toolbar}
+					</Col>
+				</Row>
 
-                {this.props.children}
-            </div>
-        );
-    }
+				{this.props.children}
+			</div>
+		);
+	}
 };
