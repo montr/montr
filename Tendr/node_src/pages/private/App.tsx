@@ -21,7 +21,7 @@ export class App extends React.Component {
                 <LocaleProvider locale={ru}>
                     <Layout hasSider>
                         <SideMenu />
-                        <Layout style={{ background: "#fff" }}>
+                        <Layout className="white-bg">
                             <Layout.Content style={{ overflow: "initial", padding: "16px 24px 16px 24px" }}>
 
                                 <Route path="/" exact component={() => <Dashboard />} />
