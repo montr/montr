@@ -41,7 +41,7 @@ namespace Tendr.Controllers.Apis
 		}
 
 		[HttpPost]
-		public ActionResult<Event> Get(Event item)
+		public ActionResult<Event> Get(Event item) // todo: pass only id
 		{
 			using (var db = new DbContext())
 			{
@@ -94,6 +94,34 @@ namespace Tendr.Controllers.Apis
 					.Update();
 
 				return new ApiResult();
+			}
+		}
+
+		[HttpPost]
+		public ActionResult<ApiResult> Publish(Event item) // todo: pass only id
+		{
+			using (var db = new DbContext())
+			{
+				var affected = db.GetTable<DbEvent>()
+					.Where(x => x.Id == item.Id)
+					.Set(x => x.StatusCode, "published")
+					.Update();
+
+				return new ApiResult { Success = (affected == 1) };
+			}
+		}
+
+		[HttpPost]
+		public ActionResult<ApiResult> Cancel(Event item) // todo: pass only id
+		{
+			using (var db = new DbContext())
+			{
+				var affected = db.GetTable<DbEvent>()
+					.Where(x => x.Id == item.Id)
+					.Set(x => x.StatusCode, "draft") // "cancelled"
+					.Update();
+
+				return new ApiResult { Success = (affected == 1) };
 			}
 		}
 	}

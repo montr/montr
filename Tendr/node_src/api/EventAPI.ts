@@ -13,16 +13,12 @@ const load = async (): Promise<IEvent[]> => {
 
 const get = async (id: number): Promise<IEvent> => {
     return Fetcher.post(
-        `${Constants.baseURL}/Events/Get`, {
-            id: id
-        });
+        `${Constants.baseURL}/Events/Get`, { id: id });
 };
 
 const create = async (configCode: string): Promise<number> => {
     return Fetcher.post(
-        `${Constants.baseURL}/Events/Create`, {
-            configCode: configCode
-        });
+        `${Constants.baseURL}/Events/Create`, { configCode: configCode });
 };
 
 const update = async (data: IEvent): Promise<IApiResult> => {
@@ -30,6 +26,16 @@ const update = async (data: IEvent): Promise<IApiResult> => {
         `${Constants.baseURL}/Events/Update`, data);
 };
 
+const publish = async (id: number): Promise<IApiResult> => {
+    return Fetcher.post(
+        `${Constants.baseURL}/Events/Publish`, { id: id });
+};
+
+const cancel = async (id: number): Promise<IApiResult> => {
+    return Fetcher.post(
+        `${Constants.baseURL}/Events/Cancel`, { id: id });
+};
+
 export const EventAPI = {
-    getLoadUrl, load, get, create, update
+    getLoadUrl, load, get, create, update, publish, cancel
 };

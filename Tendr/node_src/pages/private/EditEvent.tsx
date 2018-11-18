@@ -1,8 +1,8 @@
 import * as React from "react";
 
-import { Tabs, Button, Icon } from "antd";
+import { Tabs, Button, Icon, Modal, message } from "antd";
 
-import { IEvent, EventAPI, EventTemplateAPI, IEventTemplate, IPane, IPaneProps } from "../../api";
+import { IEvent, EventAPI, EventTemplateAPI, IEventTemplate, IPane, IPaneProps, IApiResult } from "../../api";
 import { Page } from "../../components/";
 import { EditEventPane } from ".";
 
@@ -32,11 +32,15 @@ export class EditEvent extends React.Component<IEditEventProps, IEditEventState>
 	}
 
 	componentWillMount() {
-		EventAPI.get(this.props.params.id)
-			.then(data => this.setState({ data }));
+		this.fetchData();
 
 		EventTemplateAPI.load()
 			.then((data) => this.setState({ configCodes: data }));
+	}
+
+	private fetchData() {
+		EventAPI.get(this.props.params.id)
+			.then(data => this.setState({ data }));
 	}
 
 	formatPageTitle(): string {
@@ -74,10 +78,42 @@ export class EditEvent extends React.Component<IEditEventProps, IEditEventState>
 	}
 
 	handlePublish() {
+		Modal.confirm({
+			title: "Подтверждение операции",
+			content: "Вы действительно хотите опубликовать событие?",
+			iconType: "question",
+			onOk: () => {
+				EventAPI
+					.publish(this.props.params.id)
+					.then((result: IApiResult) => {
+						message.success("Событие опубликовано: " + JSON.stringify(result));
+						this.fetchData();
+					});
+			}
+		});
+	}
+
+
+	handleCancel() {
+		Modal.confirm({
+			title: "Подтверждение операции",
+			content: "Вы действительно хотите отменить событие?",
+			iconType: "question",
+			onOk: () => {
+				EventAPI
+					.cancel(this.props.params.id)
+					.then((result: IApiResult) => {
+						message.success("Событие отменено: " + JSON.stringify(result));
+						this.fetchData();
+					});
+			}
+		});
 	}
 
 	render() {
 		const data = this.state.data;
+		
+		if (data.id == null) return null;
 
 		// todo: load from Metadata
 		const panes: IPane<IEvent>[] = [
@@ -91,25 +127,31 @@ export class EditEvent extends React.Component<IEditEventProps, IEditEventState>
 			{ key: "tab_3", title: "Контактные лица (поле?)", component: null },
 		]
 
-		function callback(key: string) {
-			console.log(key);
+		// todo: load from Configuration
+		let toolbar: any;
+
+		if (data.statusCode == "draft") {
+			toolbar = (
+				<div>
+					<Button type="primary" onClick={() => this.handlePublish()}>Опубликовать</Button>&#xA0;
+					<Button icon="check" onClick={() => this.handleSave()}>Сохранить</Button>
+				</div>
+			);
 		}
-
-		const toolbar = (
-			<div>
-				<Button type="primary" onClick={() => this.handlePublish()}>Опубликовать</Button>&#xA0;
-				<Button icon="check" onClick={() => this.handleSave()}>Сохранить</Button>
-			</div>
-		);
-
-		if (data.id == null) return null;
+		if (data.statusCode == "published") {
+			toolbar = (
+				<div>
+					<Button onClick={() => this.handleCancel()}>Отменить</Button>&#xA0;
+				</div>
+			);
+		}
 
 		return (
 			<Page title={this.formatPageTitle()} toolbar={toolbar}>
 
 				<h2 title={data.name} className="single-line-text">{data.name}</h2>
 
-				<Tabs size="small" onChange={callback}>
+				<Tabs size="small">
 					{panes.map(pane => {
 
 						let component: React.ReactElement<IPaneProps<IEvent>>;
