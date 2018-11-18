@@ -4,9 +4,10 @@ import { Form, Input, Button, message } from "antd";
 import { FormComponentProps } from "antd/lib/form";
 
 import { IEvent, EventAPI, IApiResult, IEventTemplate, IPaneProps } from "../../api";
+import { IPaneComponent } from "./EditEvent";
 
 interface IEventFormProps extends FormComponentProps {
-    data: IEvent,
+    data: IEvent;
 }
 
 interface IEventFormState {
@@ -15,16 +16,19 @@ interface IEventFormState {
 class EventForm extends React.Component<IEventFormProps, IEventFormState> {
     constructor(props: IEventFormProps) {
         super(props);
-        this.state = { };
+        this.state = {};
     }
 
-    handleSubmit = (e: any) => {
+    handleSubmit = (e: React.SyntheticEvent) => {
         e.preventDefault();
+        this.save();
+    }
 
+    save() {
         this.props.form.validateFieldsAndScroll((errors, values: IEvent) => {
             if (!errors) {
                 EventAPI
-                    .update({id: this.props.data.id, ...values})
+                    .update({ id: this.props.data.id, ...values })
                     .then((result: IApiResult) => {
                         message.success("Данные успешно сохранены");
                     });
@@ -79,9 +83,9 @@ class EventForm extends React.Component<IEventFormProps, IEventFormState> {
                         <Input.TextArea autosize={{ minRows: 4, maxRows: 10 }} />
                     )}
                 </Form.Item>
-                <Form.Item {...tailFormItemLayout}>
+               {/*  <Form.Item {...tailFormItemLayout}>
                     <Button type="primary" htmlType="submit" icon="check">Сохранить</Button>
-                </Form.Item>
+                </Form.Item> */}
             </Form >
         );
     }
@@ -98,14 +102,15 @@ interface IEditEventTabState {
 
 export class EditEventPane extends React.Component<IEditEventPaneProps, IEditEventTabState> {
 
-    constructor(props: IEditEventPaneProps) {
-        super(props);
-        this.state = { data: { id: 0 } };
+    private _formRef: IPaneComponent;
+
+    save() {
+        this._formRef.save();
     }
 
     render() {
         return (
-            <WrappedForm data={this.props.data} />
+            <WrappedForm data={this.props.data} wrappedComponentRef={(form: any) => this._formRef = form} />
         );
     }
 }

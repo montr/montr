@@ -7,4 +7,6 @@ export interface IPane<TEntity> {
 
 export interface IPaneProps<TEntity> {
 	data: TEntity;
+	ref?: any;
+	// [key: string]: any;
 }
