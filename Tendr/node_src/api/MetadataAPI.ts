@@ -1,15 +1,31 @@
-import { IDataView } from "./";
+import * as React from "react";
+
+import { IDataView, IPaneProps } from "./";
 import { Constants } from "./Constants";
 import { Fetcher } from "./Fetcher";
 
+import * as panes from "../panes/private"
+
 const getLoadUrl = (): string => {
-    return `${Constants.baseURL}/Metadata/View`;
+	return `${Constants.baseURL}/Metadata/View`;
 }
 
-const load = async (viewId: string): Promise<IDataView> => {
-    return Fetcher.post(getLoadUrl(), { viewId: viewId });
+const componentToClass: Map<string, React.ComponentClass> = new Map<string, React.ComponentClass>();
+componentToClass.set("panes/private/EditEventPane", panes.EditEventPane);
+
+const load = async<TEntity>(viewId: string): Promise<IDataView<TEntity>> => {
+	const data: IDataView<TEntity> = await Fetcher.post(getLoadUrl(), { viewId: viewId });
+
+	data.panes && data.panes.forEach((pane) => {
+		if (pane.component) {
+			pane.component = componentToClass
+				.get(pane.component.toString()) as React.ComponentClass<IPaneProps<TEntity>>;
+		}
+	});
+
+	return data;
 };
 
 export const MetadataAPI = {
-    getLoadUrl, load
+	getLoadUrl, load
 };

@@ -3,8 +3,8 @@ import * as React from "react";
 import { Form, Input, Button, message } from "antd";
 import { FormComponentProps } from "antd/lib/form";
 
-import { IEvent, EventAPI, IApiResult, IEventTemplate, IPaneProps } from "../../api";
-import { IPaneComponent } from "./EditEvent";
+import { IEvent, EventAPI, IApiResult, IPaneProps } from "../../api";
+import { IPaneComponent } from "../";
 
 interface IEventFormProps extends FormComponentProps {
     data: IEvent;

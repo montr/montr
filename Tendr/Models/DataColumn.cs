@@ -16,7 +16,7 @@
 
 		public bool Sortable { get; set; }
 
-		public SortOrder? DefaultSortOrder { get;set; }
+		public SortOrder? DefaultSortOrder { get; set; }
 
 		public short? Width { get; set; }
 	}

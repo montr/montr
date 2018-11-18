@@ -2,9 +2,9 @@ import * as React from "react";
 
 import { Tabs, Button, Icon, Modal, message } from "antd";
 
-import { IEvent, EventAPI, EventTemplateAPI, IEventTemplate, IPane, IPaneProps, IApiResult } from "../../api";
+import { IEvent, EventAPI, EventTemplateAPI, IEventTemplate, IPaneProps, IApiResult, MetadataAPI, IDataView } from "../../api";
 import { Page } from "../../components/";
-import { EditEventPane } from ".";
+import { IPaneComponent } from "../../panes/";
 
 interface IEditEventProps {
 	params: {
@@ -14,11 +14,8 @@ interface IEditEventProps {
 
 interface IEditEventState {
 	data: IEvent;
+	dataView: IDataView<IEvent>;
 	configCodes: IEventTemplate[];
-}
-
-export interface IPaneComponent {
-	save(): void;
 }
 
 export class EditEvent extends React.Component<IEditEventProps, IEditEventState> {
@@ -28,12 +25,16 @@ export class EditEvent extends React.Component<IEditEventProps, IEditEventState>
 	constructor(props: IEditEventProps) {
 		super(props);
 
-		this.state = { data: {}, configCodes: [] };
+		this.state = { data: {}, dataView: { id: "" }, configCodes: [] };
 	}
 
 	componentWillMount() {
+		this.fetchConfigCodes();
 		this.fetchData();
+		this.fetchMetadata();
+	}
 
+	private fetchConfigCodes() {
 		EventTemplateAPI.load()
 			.then((data) => this.setState({ configCodes: data }));
 	}
@@ -41,6 +42,11 @@ export class EditEvent extends React.Component<IEditEventProps, IEditEventState>
 	private fetchData() {
 		EventAPI.get(this.props.params.id)
 			.then(data => this.setState({ data }));
+	}
+
+	private fetchMetadata() {
+		MetadataAPI.load("PrivateEvent/Edit")
+			.then((dataView) => this.setState({ dataView }));
 	}
 
 	formatPageTitle(): string {
@@ -81,7 +87,6 @@ export class EditEvent extends React.Component<IEditEventProps, IEditEventState>
 		Modal.confirm({
 			title: "Подтверждение операции",
 			content: "Вы действительно хотите опубликовать событие?",
-			iconType: "question",
 			onOk: () => {
 				EventAPI
 					.publish(this.props.params.id)
@@ -93,12 +98,10 @@ export class EditEvent extends React.Component<IEditEventProps, IEditEventState>
 		});
 	}
 
-
 	handleCancel() {
 		Modal.confirm({
 			title: "Подтверждение операции",
 			content: "Вы действительно хотите отменить событие?",
-			iconType: "question",
 			onOk: () => {
 				EventAPI
 					.cancel(this.props.params.id)
@@ -112,20 +115,9 @@ export class EditEvent extends React.Component<IEditEventProps, IEditEventState>
 
 	render() {
 		const data = this.state.data;
-		
-		if (data.id == null) return null;
+		const dataView = this.state.dataView;
 
-		// todo: load from Metadata
-		const panes: IPane<IEvent>[] = [
-			{ key: "tab_1", title: "Информация", icon: "profile", component: EditEventPane },
-			{ key: "tab_team", title: "Команда", icon: "team", component: null },
-			{ key: "tab_5", title: "Позиции", icon: "table", component: null },
-			{ key: "tab_7", title: "История изменений", icon: "eye", component: null },
-			{ key: "tab_4", title: "Тендерная комиссия (команда?)", component: null },
-			{ key: "tab_6", title: "Критерии оценки (анкета?)", component: null },
-			{ key: "tab_2", title: "Документы (поле?)", component: null },
-			{ key: "tab_3", title: "Контактные лица (поле?)", component: null },
-		]
+		if (data.id == null) return null;
 
 		// todo: load from Configuration
 		let toolbar: any;
@@ -152,7 +144,7 @@ export class EditEvent extends React.Component<IEditEventProps, IEditEventState>
 				<h2 title={data.name} className="single-line-text">{data.name}</h2>
 
 				<Tabs size="small">
-					{panes.map(pane => {
+					{dataView && dataView.panes && dataView.panes.map(pane => {
 
 						let component: React.ReactElement<IPaneProps<IEvent>>;
 						if (pane.component) {
@@ -162,7 +154,7 @@ export class EditEvent extends React.Component<IEditEventProps, IEditEventState>
 
 						return (
 							<Tabs.TabPane key={pane.key}
-								tab={<span>{pane.icon && <Icon type={pane.icon} />} {pane.title}</span>}>
+								tab={<span>{pane.icon && <Icon type={pane.icon} />} {pane.name}</span>}>
 								{component}
 							</Tabs.TabPane>
 						);

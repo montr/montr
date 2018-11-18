@@ -7,5 +7,7 @@ namespace Tendr.Models
 		public string Id { get; set; }
 
 		public ICollection<DataColumn> Columns { get; set; }
+
+		public ICollection<DataPane> Panes { get; set; }
 	}
 }

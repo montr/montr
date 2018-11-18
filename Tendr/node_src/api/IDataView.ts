@@ -1,6 +1,7 @@
-import { IDataColumn } from "./";
+import { IDataColumn, IPane } from "./";
 
-export interface IDataView {
+export interface IDataView<TEntity> {
     id: string;
-    columns: IDataColumn[];
+    columns?: IDataColumn[];
+    panes?: IPane<TEntity>[]
 }

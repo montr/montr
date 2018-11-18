@@ -27,6 +27,22 @@ namespace Tendr.Service
 				};
 			}
 
+			if (viewId == "PrivateEvent/Edit")
+			{
+				result.Panes = new List<DataPane>
+				{
+					new DataPane { Key = "tab_info", Name = "Информация", Icon = "profile",
+						Component = "panes/private/EditEventPane" },
+					new DataPane { Key = "tab_team", Name = "Команда", Icon = "team" },
+					new DataPane { Key = "tab_items", Name = "Позиции", Icon = "table" },
+					new DataPane { Key = "tab_history", Name = "История изменений", Icon = "eye" },
+					new DataPane { Key = "tab_5", Name = "Тендерная комиссия (команда?)" },
+					new DataPane { Key = "tab_6", Name = "Критерии оценки (анкета?)" },
+					new DataPane { Key = "tab_7", Name = "Документы (поле?)" },
+					new DataPane { Key = "tab_8", Name = "Контактные лица (поле?)" },
+				};
+			}
+
 			return result;
 		}
 	}
