@@ -78,9 +78,9 @@ export class EditEvent extends React.Component<IEditEventProps, IEditEventState>
 
 	handleSave() {
 		this._refsByKey.forEach((ref) => {
-			let pane: IPaneComponent = ref.current;
-			pane.save();
+			(ref.current as IPaneComponent).save();
 		});
+		// this.fetchData();
 	}
 
 	handlePublish() {
