@@ -23,6 +23,12 @@ export class SideMenu extends React.Component {
                             <span className="nav-text">Торговые процедуры</span>
                         </Link>
                     </Menu.Item>
+                    <Menu.Item key="3">
+                        <a href="http://tendr.local:5000/">
+                            <Icon type="global" />
+                            <span className="nav-text">Public</span>
+                        </a>
+                    </Menu.Item>
                 </Menu>
             </Layout.Sider>
         );

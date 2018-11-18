@@ -8,6 +8,11 @@
 	</head>
 	<body>
 		<div id="root"></div>
-		<script src="./assets/bundle.js"></script>
+		@if(Context.Request.Host.Host == "app.tendr.local") {
+			<script src="./assets/app.js"></script>
+		}
+		else {
+			<script src="./assets/public.js"></script>
+		}
 	</body>
 </html>
