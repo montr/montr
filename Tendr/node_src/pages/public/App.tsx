@@ -5,13 +5,13 @@ import { Layout, Menu, Breadcrumb } from 'antd';
 export class App extends React.Component {
 	render() {
 		return (
-			<Layout className="layout">
+			<Layout className="public-layout">
 				<Layout.Header>
 					<div className="logo" />
 					<Menu
-						theme="dark"
+						theme="light"
 						mode="horizontal"
-						defaultSelectedKeys={['1']}
+						defaultSelectedKeys={['3']}
 						style={{ lineHeight: '64px' }}
 					>
 						<Menu.Item key="1">nav 1</Menu.Item>
@@ -27,7 +27,7 @@ export class App extends React.Component {
 						<Breadcrumb.Item>List</Breadcrumb.Item>
 						<Breadcrumb.Item>App</Breadcrumb.Item>
 					</Breadcrumb>
-					<div style={{ background: '#fff', padding: 24, minHeight: 280 }}>
+					<div style={{ minHeight: 280 }}>
 
 						<h1>PUBLIC</h1>
 

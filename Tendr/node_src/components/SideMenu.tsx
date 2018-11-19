@@ -9,7 +9,7 @@ export class SideMenu extends React.Component {
         return (
             <Layout.Sider theme="dark" breakpoint="lg" collapsedWidth="0" width="230"
                 style={{ height: "100vh" }}>
-                <div className="logo" />
+                {/* <div className="logo" /> */}
                 <Menu theme="dark" mode="inline">
                     <Menu.Item key="1">
                         <Link to="/">
