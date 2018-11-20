@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using Tendr.Models;
 
-namespace Tendr.Service
+namespace Tendr.Services
 {
 	public interface IMetadataProvider
 	{

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using Tendr.Models;
-using Tendr.Service;
+using Tendr.Services;
 
 namespace Tendr.Controllers.Apis
 {
