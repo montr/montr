@@ -1,4 +1,7 @@
+const tsImportPluginFactory = require("ts-import-plugin")
+
 module.exports = {
+	// mode: "production",
 	mode: "development",
 	entry: {
 		public: "./node_src/public.tsx",
@@ -20,7 +23,24 @@ module.exports = {
 	module: {
 		rules: [
 			// All files with a ".ts" or ".tsx" extension will be handled by "awesome-typescript-loader".
-			{ test: /\.tsx?$/, loader: "awesome-typescript-loader" },
+			{
+				test: /\.(jsx|tsx|js|ts)$/,
+				loader: "awesome-typescript-loader",
+				options: {
+					transpileOnly: true,
+					getCustomTransformers: () => ({
+						before: [tsImportPluginFactory({
+							libraryName: "antd",
+							libraryDirectory: "lib",
+							style: true
+						  })]
+					}),
+					/* compilerOptions: {
+						module: "es2015"
+					} */
+				},
+				exclude: /node_modules/
+			},
 
 			// All output ".js" files will have any sourcemaps re-processed by "source-map-loader".
 			{ enforce: "pre", test: /\.js$/, loader: "source-map-loader" },

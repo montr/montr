@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Button, List, Badge, Tag } from "antd";
+import { Button, List } from "antd";
 
 import { IEventTemplate, EventTemplateAPI, EventAPI } from "../../api";
 import { Page } from "../../components";
