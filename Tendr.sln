@@ -9,6 +9,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tendr.Tests", "Tendr.Tests\
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Idx", "Idx\Idx.csproj", "{2452B341-54A4-44AE-A10A-D71592B095D4}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MvcClient", "MvcClient\MvcClient.csproj", "{AFA34498-8655-4FBA-A991-56E433AD7C9E}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -27,6 +29,10 @@ Global
 		{2452B341-54A4-44AE-A10A-D71592B095D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2452B341-54A4-44AE-A10A-D71592B095D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2452B341-54A4-44AE-A10A-D71592B095D4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AFA34498-8655-4FBA-A991-56E433AD7C9E}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AFA34498-8655-4FBA-A991-56E433AD7C9E}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AFA34498-8655-4FBA-A991-56E433AD7C9E}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AFA34498-8655-4FBA-A991-56E433AD7C9E}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
