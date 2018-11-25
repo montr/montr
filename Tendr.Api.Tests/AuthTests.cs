@@ -12,27 +12,44 @@ namespace Tendr.Api.Tests
 	public class AuthTests
 	{
 		[TestMethod]
-		public async Task CallApi()
+		public async Task CallApiUsingClientCredentials()
 		{
+			var client = new HttpClient();
+
 			// discover endpoints from metadata
-			var disco = await DiscoveryClient.GetAsync("http://idx.local:5050");
+			// https://identitymodel.readthedocs.io/en/latest/client/discovery.html
+			var disco = await client.GetDiscoveryDocumentAsync(new DiscoveryDocumentRequest
+			{
+				Address = "http://idx.local:5050",
+				Policy =
+				{
+					RequireHttps = false
+				}
+			});
 
 			Assert.IsTrue(disco.IsError == false, disco.Error);
 
+			Console.WriteLine("DiscoveryResponse:\n" + disco.Json + "\n");
+
 			// request token
-			var tokenClient = new TokenClient(disco.TokenEndpoint, "tendr_client", "tendr_secret");
-			var tokenResponse = await tokenClient.RequestClientCredentialsAsync("tendr");
+			var tokenResponse = await client.RequestClientCredentialsTokenAsync(new ClientCredentialsTokenRequest
+			{
+				Address = disco.TokenEndpoint,
+
+				ClientId = "tendr_client",
+				ClientSecret = "tendr_secret",
+				Scope = "tendr"
+			});
 
 			Assert.IsTrue(tokenResponse.IsError == false, tokenResponse.Error);
 
-			Console.WriteLine(tokenResponse.Json);
-			Console.WriteLine("\n\n");
+			Console.WriteLine("TokenResponse:\n" + tokenResponse.Json + "\n");
 
 			// call api
-			var client = new HttpClient();
 			client.SetBearerToken(tokenResponse.AccessToken);
 
-			var httpContent = new ByteArrayContent(Encoding.UTF8.GetBytes("{\"sortColumn\":\"id\",\"sortOrder\":\"descending\"}"));
+			var httpContent = new ByteArrayContent(Encoding.UTF8.GetBytes(
+				"{\"sortColumn\":\"id\",\"sortOrder\":\"descending\"}"));
 			httpContent.Headers.Add("Content-Type", "application/json");
 
 			var response = await client.PostAsync("http://app.tendr.local:5000/api/events/load", httpContent);
@@ -40,7 +57,7 @@ namespace Tendr.Api.Tests
 			Assert.IsTrue(response.IsSuccessStatusCode, "Response status code: " + response.StatusCode);
 			
 			var content = await response.Content.ReadAsStringAsync();
-			Console.WriteLine(JObject.Parse(content));
+			Console.WriteLine("ApiResponse:\n" + JObject.Parse(content) + "\n");
 		}
 	}
 }

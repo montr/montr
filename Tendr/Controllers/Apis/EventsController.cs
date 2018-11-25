@@ -9,10 +9,10 @@ using Tendr.Services;
 
 namespace Tendr.Controllers.Apis
 {
-	[ApiController, Route("api/[controller]/[action]")]
+	[Authorize, ApiController, Route("api/[controller]/[action]")]
 	public class EventsController : ControllerBase
 	{
-		[Authorize, HttpPost]
+		[HttpPost]
 		public ActionResult<DataResult<Event>> Load(EventSearchRequest request)
 		{
 			using (var db = new DbContext())

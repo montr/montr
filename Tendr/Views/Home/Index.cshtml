@@ -1,4 +1,5 @@
-﻿@model object
+﻿@using Microsoft.AspNetCore.Authentication
+@model object
 
 <!DOCTYPE html>
 
@@ -22,6 +23,11 @@
 					<dt>@claim.Type</dt>
 					<dd>@claim.Value</dd>
 				}
+				<dt>access token</dt>
+				<dd>@await ViewContext.HttpContext.GetTokenAsync("access_token")</dd>
+
+				<dt>refresh token</dt>
+				<dd>@await ViewContext.HttpContext.GetTokenAsync("refresh_token")</dd>
 			</dl>
 		}
 	</body>

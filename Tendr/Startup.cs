@@ -4,6 +4,7 @@ using System.Linq;
 using IdentityServer4.AccessTokenValidation;
 using LinqToDB.Configuration;
 using LinqToDB.Data;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -58,6 +59,14 @@ namespace Tendr
 					options.ApiName = "tendr";
 				});*/
 
+			// https://github.com/IdentityServer/IdentityServer3/issues/487
+			// leastprivilege commented on Nov 4, 2014
+			// Just in general - i would recommend separating web app and api
+			// - that way you don't run into the whole cookie vs token isolation issue and the related configuration complexity.
+
+			// https://github.com/aspnetboilerplate/aspnetboilerplate/issues/2836
+			// Support both openId and bearer token of the identity server？
+
 			// for user login
 			JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
 			
@@ -77,13 +86,14 @@ namespace Tendr
 
 					options.ClientId = "tendr";
 					options.ClientSecret = "secret";
-					options.ResponseType = "code id_token";
+					options.ResponseType = "code id_token"; // code id_token token
 
 					options.SaveTokens = true;
 					options.GetClaimsFromUserInfoEndpoint = true;
 
 					options.Scope.Add("tendr");
 					options.Scope.Add("offline_access");
+					// options.ClaimActions.MapJsonKey("website", "website");
 				});
 
 			services.AddSingleton<IMetadataProvider, DefaultMetadataProvider>();

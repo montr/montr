@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Net.Http;
+using System.Text;
 using System.Threading.Tasks;
 using IdentityModel.Client;
 using Microsoft.AspNetCore.Authentication;
@@ -55,14 +56,21 @@ namespace MvcClient.Controllers
 
 		public async Task<IActionResult> CallApiUsingClientCredentials()
 		{
-			var tokenClient = new TokenClient("http://localhost:5000/connect/token", "mvc", "secret");
-			var tokenResponse = await tokenClient.RequestClientCredentialsAsync("api1");
+			var tokenClient = new TokenClient("http://idx.local:5050/connect/token", "tendr", "secret");
+			var tokenResponse = await tokenClient.RequestClientCredentialsAsync("tendr");
 
 			var client = new HttpClient();
 			client.SetBearerToken(tokenResponse.AccessToken);
-			var content = await client.GetStringAsync("http://localhost:5001/identity");
+			
+			var httpContent = new ByteArrayContent(Encoding.UTF8.GetBytes(
+				"{\"sortColumn\":\"id\",\"sortOrder\":\"descending\"}"));
+			httpContent.Headers.Add("Content-Type", "application/json");
 
-			ViewBag.Json = JArray.Parse(content).ToString();
+			var response = await client.PostAsync("http://app.tendr.local:5000/api/events/load", httpContent);
+
+			var content = await response.Content.ReadAsStringAsync();
+
+			ViewBag.Json = JObject.Parse(content).ToString();
 			return Content(ViewBag.Json);
 		}
 
@@ -72,9 +80,16 @@ namespace MvcClient.Controllers
 
 			var client = new HttpClient();
 			client.SetBearerToken(accessToken);
-			var content = await client.GetStringAsync("http://localhost:5001/identity");
+			
+			var httpContent = new ByteArrayContent(Encoding.UTF8.GetBytes(
+				"{\"sortColumn\":\"id\",\"sortOrder\":\"descending\"}"));
+			httpContent.Headers.Add("Content-Type", "application/json");
 
-			ViewBag.Json = JArray.Parse(content).ToString();
+			var response = await client.PostAsync("http://app.tendr.local:5000/api/events/load", httpContent);
+
+			var content = await response.Content.ReadAsStringAsync();
+
+			ViewBag.Json = JObject.Parse(content).ToString();
 			return Content(ViewBag.Json);
 		}
 	}
