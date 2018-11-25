@@ -1,8 +1,6 @@
 ﻿using IdentityServer4;
 using IdentityServer4.Models;
-using IdentityServer4.Test;
 using System.Collections.Generic;
-using System.Security.Claims;
 
 namespace Idx
 {
@@ -14,7 +12,7 @@ namespace Idx
             return new List<IdentityResource>
             {
                 new IdentityResources.OpenId(),
-                new IdentityResources.Profile(),
+                new IdentityResources.Profile()
             };
         }
 
@@ -23,7 +21,6 @@ namespace Idx
             return new List<ApiResource>
             {
                 new ApiResource("tendr", "Tendr"),
-                new ApiResource("api1", "My API")
             };
         }
 
@@ -33,70 +30,7 @@ namespace Idx
             // client credentials client
             return new List<Client>
             {
-				new Client
-				{
-					ClientId = "client",
-					AllowedGrantTypes = GrantTypes.ClientCredentials,
-
-					ClientSecrets = 
-					{
-						new Secret("secret".Sha256())
-					},
-					AllowedScopes = { "api1" }
-				},
-
-				new Client
-				{
-					ClientId = "tendr_client",
-					AllowedGrantTypes = GrantTypes.ClientCredentials,
-
-					ClientSecrets = 
-					{
-						new Secret("tendr_secret".Sha256())
-					},
-					AllowedScopes = { "tendr" }
-				},
-
-                // resource owner password grant client
-                new Client
-                {
-                    ClientId = "ro.client",
-                    AllowedGrantTypes = GrantTypes.ResourceOwnerPassword,
-
-                    ClientSecrets = 
-                    {
-                        new Secret("secret".Sha256())
-                    },
-                    AllowedScopes = { "api1" }
-                },
-
-                // OpenID Connect hybrid flow and client credentials client (MVC)
-                new Client
-                {
-                    ClientId = "mvc",
-                    ClientName = "MVC Client",
-                    AllowedGrantTypes = GrantTypes.HybridAndClientCredentials,
-
-					RequireConsent = false, // https://identityserver4.readthedocs.io/en/dev/quickstarts/6_aspnet_identity.html
-
-                    ClientSecrets = 
-                    {
-                        new Secret("secret".Sha256())
-                    },
-
-                    RedirectUris = { "http://localhost:5002/signin-oidc" },
-                    PostLogoutRedirectUris = { "http://localhost:5002/signout-callback-oidc" },
-
-                    AllowedScopes = 
-                    {
-                        IdentityServerConstants.StandardScopes.OpenId,
-                        IdentityServerConstants.StandardScopes.Profile,
-                        "api1"
-                    },
-                    AllowOfflineAccess = true
-                },
-
-                // OpenID Connect hybrid flow and client credentials client (MVC)
+                // OpenID Connect hybrid flow and client credentials client
                 new Client
                 {
                     ClientId = "tendr",
@@ -120,37 +54,6 @@ namespace Idx
                         "tendr"
                     },
                     AllowOfflineAccess = true
-                }
-            };
-        }
-
-        public static List<TestUser> GetUsers()
-        {
-            return new List<TestUser>
-            {
-                new TestUser
-                {
-                    SubjectId = "1",
-                    Username = "alice",
-                    Password = "password",
-
-                    Claims = new List<Claim>
-                    {
-                        new Claim("name", "Alice"),
-                        new Claim("website", "https://alice.com")
-                    }
-                },
-                new TestUser
-                {
-                    SubjectId = "2",
-                    Username = "bob",
-                    Password = "password",
-
-                    Claims = new List<Claim>
-                    {
-                        new Claim("name", "Bob"),
-                        new Claim("website", "https://bob.com")
-                    }
                 }
             };
         }
