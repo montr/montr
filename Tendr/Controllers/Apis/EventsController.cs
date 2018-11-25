@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using LinqToDB;
 using LinqToDB.Data;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Tendr.Entities;
 using Tendr.Models;
@@ -11,7 +12,7 @@ namespace Tendr.Controllers.Apis
 	[ApiController, Route("api/[controller]/[action]")]
 	public class EventsController : ControllerBase
 	{
-		[HttpPost]
+		[Authorize, HttpPost]
 		public ActionResult<DataResult<Event>> Load(EventSearchRequest request)
 		{
 			using (var db = new DbContext())

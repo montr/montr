@@ -22,6 +22,7 @@ namespace Idx
         {
             return new List<ApiResource>
             {
+                new ApiResource("tendr", "Tendr"),
                 new ApiResource("api1", "My API")
             };
         }
@@ -32,17 +33,29 @@ namespace Idx
             // client credentials client
             return new List<Client>
             {
-                new Client
-                {
-                    ClientId = "client",
-                    AllowedGrantTypes = GrantTypes.ClientCredentials,
+				new Client
+				{
+					ClientId = "client",
+					AllowedGrantTypes = GrantTypes.ClientCredentials,
 
-                    ClientSecrets = 
-                    {
-                        new Secret("secret".Sha256())
-                    },
-                    AllowedScopes = { "api1" }
-                },
+					ClientSecrets = 
+					{
+						new Secret("secret".Sha256())
+					},
+					AllowedScopes = { "api1" }
+				},
+
+				new Client
+				{
+					ClientId = "tendr_client",
+					AllowedGrantTypes = GrantTypes.ClientCredentials,
+
+					ClientSecrets = 
+					{
+						new Secret("tendr_secret".Sha256())
+					},
+					AllowedScopes = { "tendr" }
+				},
 
                 // resource owner password grant client
                 new Client
@@ -79,6 +92,32 @@ namespace Idx
                         IdentityServerConstants.StandardScopes.OpenId,
                         IdentityServerConstants.StandardScopes.Profile,
                         "api1"
+                    },
+                    AllowOfflineAccess = true
+                },
+
+                // OpenID Connect hybrid flow and client credentials client (MVC)
+                new Client
+                {
+                    ClientId = "tendr",
+                    ClientName = "Tendr",
+                    AllowedGrantTypes = GrantTypes.HybridAndClientCredentials,
+
+					RequireConsent = false, // https://identityserver4.readthedocs.io/en/dev/quickstarts/6_aspnet_identity.html
+
+                    ClientSecrets = 
+                    {
+                        new Secret("secret".Sha256())
+                    },
+
+                    RedirectUris = { "http://tendr.local:5000/signin-oidc", "http://app.tendr.local:5000/signin-oidc" },
+                    PostLogoutRedirectUris = { "http://app.tendr.local:5000/signout-callback-oidc" },
+
+                    AllowedScopes = 
+                    {
+                        IdentityServerConstants.StandardScopes.OpenId,
+                        IdentityServerConstants.StandardScopes.Profile,
+                        "tendr"
                     },
                     AllowOfflineAccess = true
                 }

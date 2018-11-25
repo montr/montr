@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
+using IdentityServer4.AccessTokenValidation;
 using LinqToDB.Configuration;
 using LinqToDB.Data;
 using Microsoft.AspNetCore.Builder;
@@ -45,6 +47,45 @@ namespace Tendr
 					options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
 				});
 
+			// for api login
+			/*services
+				.AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
+				.AddIdentityServerAuthentication(options =>
+				{
+					options.Authority = "http://idx.local:5050";
+					options.RequireHttpsMetadata = false;
+
+					options.ApiName = "tendr";
+				});*/
+
+			// for user login
+			JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
+			
+			services
+				.AddAuthentication(options =>
+				{
+					options.DefaultScheme = "Cookies";
+					options.DefaultChallengeScheme = "oidc";
+				})
+				.AddCookie("Cookies")
+				.AddOpenIdConnect("oidc", options =>
+				{
+					options.SignInScheme = "Cookies";
+
+					options.Authority = "http://idx.local:5050";
+					options.RequireHttpsMetadata = false;
+
+					options.ClientId = "tendr";
+					options.ClientSecret = "secret";
+					options.ResponseType = "code id_token";
+
+					options.SaveTokens = true;
+					options.GetClaimsFromUserInfoEndpoint = true;
+
+					options.Scope.Add("tendr");
+					options.Scope.Add("offline_access");
+				});
+
 			services.AddSingleton<IMetadataProvider, DefaultMetadataProvider>();
 		}
 
@@ -61,7 +102,7 @@ namespace Tendr
 				app.UseHsts();
 			}
 
-			app.UseHttpsRedirection();
+			// app.UseHttpsRedirection();
 			app.UseStaticFiles();
 			app.UseCookiePolicy();
 
@@ -69,6 +110,8 @@ namespace Tendr
 			{
 				x.Options.DefaultPage = "/";
 			});*/
+
+			app.UseAuthentication();
 
 			app.UseMvc(routes =>
 			{

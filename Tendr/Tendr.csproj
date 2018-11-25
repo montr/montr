@@ -38,7 +38,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="linq2db.PostgreSQL" Version="2.5.2" />
+    <PackageReference Include="IdentityModel" Version="3.10.2" />
+    <PackageReference Include="IdentityServer4.AccessTokenValidation" Version="2.7.0" />
+    <PackageReference Include="linq2db.PostgreSQL" Version="2.5.4" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.1.2" PrivateAssets="All" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.6" />
