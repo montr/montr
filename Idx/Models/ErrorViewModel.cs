@@ -1,5 +1,3 @@
-using System;
-
 namespace Idx.Models
 {
 	public class ErrorViewModel
