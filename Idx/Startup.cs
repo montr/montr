@@ -57,7 +57,14 @@ namespace Idx
 				.AddIdentity<DbUser, DbRole>(options =>
 				{
 				})
-				.AddLinqToDBStores(new DefaultConnectionFactory())
+				// .AddLinqToDBStores(new DefaultConnectionFactory())
+				.AddLinqToDBStores(new DefaultConnectionFactory(),
+					typeof(Guid),
+					typeof(LinqToDB.Identity.IdentityUserClaim<Guid>),
+					typeof(LinqToDB.Identity.IdentityUserRole<Guid>),
+					typeof(LinqToDB.Identity.IdentityUserLogin<Guid>),
+					typeof(LinqToDB.Identity.IdentityUserToken<Guid>),
+					typeof(LinqToDB.Identity.IdentityRoleClaim<Guid>))
 				.AddDefaultTokenProviders()
 				.AddDefaultUI();
 

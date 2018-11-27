@@ -4,7 +4,7 @@
 
 CREATE TABLE public.roles
 (
-  id character varying(128) NOT NULL, 
+  id uuid NOT NULL DEFAULT uuid_generate_v1(), 
   name character varying(128),
   normalized_name character varying(128),
   concurrency_stamp character varying(36) NOT NULL,

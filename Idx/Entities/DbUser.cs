@@ -5,10 +5,10 @@ using LinqToDB.Mapping;
 namespace Idx.Entities
 {
 	[Table(Schema = "public", Name = "users")]
-	public class DbUser : IdentityUser<string>
+	public class DbUser : IdentityUser<Guid>
 	{
-		[Column("id"), PrimaryKey, Identity, NotNull]
-		public override string Id { get; set; }
+		[Column("id"), PrimaryKey, /*Identity,*/ NotNull]
+		public override Guid Id { get; set; }
 
 		[Column("user_name")]
 		public override string UserName { get; set; }

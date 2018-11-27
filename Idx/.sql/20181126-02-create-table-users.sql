@@ -4,7 +4,7 @@
 
 CREATE TABLE public.users
 (
-  id character varying(128) NOT NULL,
+  id uuid NOT NULL DEFAULT uuid_generate_v1(),
   user_name character varying(128),
   first_name character varying(128),
   last_name character varying(128),
@@ -21,10 +21,10 @@ CREATE TABLE public.users
   normalized_user_name character varying(128),
   normalized_email character varying(128),
   concurrency_stamp character varying(36) NOT NULL,
-  created_at timestamp without time zone NOT NULL,
-  created_by character varying(128),
-  modified_at timestamp without time zone,
-  modified_by character varying(128),
+  --created_at timestamp without time zone NOT NULL,
+  --created_by character varying(128),
+  --modified_at timestamp without time zone,
+  --modified_by character varying(128),
   CONSTRAINT pk_user_id PRIMARY KEY (id)
 )
 WITH (
