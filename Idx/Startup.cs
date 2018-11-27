@@ -58,7 +58,8 @@ namespace Idx
 				{
 				})
 				.AddLinqToDBStores(new DefaultConnectionFactory())
-				.AddDefaultTokenProviders();
+				.AddDefaultTokenProviders()
+				.AddDefaultUI();
 
 			/*services.Configure<IdentityOptions>(options =>
 			{
@@ -84,7 +85,11 @@ namespace Idx
 			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
 			// configure identity server with in-memory stores, keys, clients and scopes
-			services.AddIdentityServer()
+			services.AddIdentityServer(options =>
+				{
+					options.UserInteraction.LoginUrl = "/Identity/Account/Login";
+					options.UserInteraction.LogoutUrl = "/Identity/Account/Logout";
+				})
 				.AddDeveloperSigningCredential() // tempkey.rsa
 				.AddInMemoryPersistedGrants()
 				.AddInMemoryIdentityResources(Config.GetIdentityResources())
