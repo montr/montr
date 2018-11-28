@@ -3,12 +3,9 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Idx.Data;
 using Idx.Entities;
 using LinqToDB.Data;
 using LinqToDB.DataProvider.PostgreSQL;
-using LinqToDB.Identity;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Extensions.Configuration;
@@ -39,11 +36,6 @@ namespace Idx
 			});
 
 			var connectionString = Configuration.GetSection("ConnectionString")["ConnectionString"];
-
-			/*services.AddDbContext<ApplicationDbContext>(options =>
-			{
-				options.UseSqlServer(connectionString);
-			});*/
 
 			// Set connection configuration
 			DataConnection
