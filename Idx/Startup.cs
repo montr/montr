@@ -10,8 +10,12 @@ using LinqToDB.Data;
 using LinqToDB.DataProvider.PostgreSQL;
 using LinqToDB.Identity;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Idx.Services;
+using LinqToDB.Mapping;
+using DbContext = Idx.Entities.DbContext;
 
 namespace Idx
 {
@@ -47,26 +51,20 @@ namespace Idx
 					"Default",
 					connectionString,
 					new PostgreSQLDataProvider("Default", PostgreSQLVersion.v95));
-					// new SqlServerDataProvider("Default", SqlServerVersion.v2012));
 
 			DataConnection.DefaultConfiguration = "Default";
+			DbContext.MapSchema(MappingSchema.Default);
 
 			services
-				// .AddDefaultIdentity<DbUser>()
-				// .AddEntityFrameworkStores<ApplicationDbContext>()
-				.AddIdentity<DbUser, DbRole>(options =>
-				{
-				})
-				// .AddLinqToDBStores(new DefaultConnectionFactory())
-				.AddLinqToDBStores(new DefaultConnectionFactory(),
+				.AddIdentity<DbUser, DbRole>()
+				.AddLinqToDBStores(new DbConnectionFactory(),
 					typeof(Guid),
 					typeof(LinqToDB.Identity.IdentityUserClaim<Guid>),
 					typeof(LinqToDB.Identity.IdentityUserRole<Guid>),
 					typeof(LinqToDB.Identity.IdentityUserLogin<Guid>),
 					typeof(LinqToDB.Identity.IdentityUserToken<Guid>),
 					typeof(LinqToDB.Identity.IdentityRoleClaim<Guid>))
-				.AddDefaultTokenProviders()
-				.AddDefaultUI();
+				.AddDefaultTokenProviders();
 
 			/*services.Configure<IdentityOptions>(options =>
 			{
@@ -89,7 +87,24 @@ namespace Idx
 				options.User.RequireUniqueEmail = false;
 			});*/
 
-			services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
+			services.AddMvc()
+				.SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
+				.AddRazorPagesOptions(options =>
+				{
+					options.AllowAreas = true;
+					options.Conventions.AuthorizeAreaFolder("Identity", "/Account/Manage");
+					options.Conventions.AuthorizeAreaPage("Identity", "/Account/Logout");
+				});
+
+			services.ConfigureApplicationCookie(options =>
+			{
+				options.LoginPath = $"/Identity/Account/Login";
+				options.LogoutPath = $"/Identity/Account/Logout";
+				options.AccessDeniedPath = $"/Identity/Account/AccessDenied";
+			});
+
+			// using Microsoft.AspNetCore.Identity.UI.Services;
+			services.AddSingleton<IEmailSender, EmailSender>();
 
 			// configure identity server with in-memory stores, keys, clients and scopes
 			services.AddIdentityServer(options =>
@@ -102,7 +117,7 @@ namespace Idx
 				.AddInMemoryIdentityResources(Config.GetIdentityResources())
 				.AddInMemoryApiResources(Config.GetApiResources())
 				.AddInMemoryClients(Config.GetClients())
-				.AddAspNetIdentity<DbUser>(); // ApplicationUser
+				.AddAspNetIdentity<DbUser>();
 		}
 
 		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

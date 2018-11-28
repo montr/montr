@@ -4,7 +4,7 @@
 
 CREATE TABLE public.roles
 (
-  id uuid NOT NULL DEFAULT uuid_generate_v1(), 
+  id uuid NOT NULL, -- DEFAULT uuid_generate_v1(), 
   name character varying(128),
   normalized_name character varying(128),
   concurrency_stamp character varying(36) NOT NULL,
@@ -13,10 +13,6 @@ CREATE TABLE public.roles
 WITH (
   OIDS=FALSE
 );
-ALTER TABLE public.roles
-  OWNER TO postgres;
-GRANT ALL ON TABLE public.roles TO postgres;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE public.roles TO web;
 
 -- Index: public.ix_roles_name
 

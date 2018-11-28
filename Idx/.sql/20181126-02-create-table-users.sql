@@ -4,7 +4,7 @@
 
 CREATE TABLE public.users
 (
-  id uuid NOT NULL DEFAULT uuid_generate_v1(),
+  id uuid NOT NULL, -- DEFAULT uuid_generate_v1(),
   user_name character varying(128),
   first_name character varying(128),
   last_name character varying(128),
@@ -30,10 +30,6 @@ CREATE TABLE public.users
 WITH (
   OIDS=FALSE
 );
-ALTER TABLE public.users
-  OWNER TO postgres;
-GRANT ALL ON TABLE public.users TO postgres;
-GRANT SELECT, UPDATE, INSERT, DELETE ON TABLE public.users TO web;
 
 -- Index: public.ix_users_email
 
