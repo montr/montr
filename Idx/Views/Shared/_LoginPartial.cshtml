@@ -1,7 +1,8 @@
+@using Idx.Entities
 @using Microsoft.AspNetCore.Identity
 
-@inject SignInManager<IdentityUser> SignInManager
-@inject UserManager<IdentityUser> UserManager
+@inject SignInManager<DbUser> SignInManager
+@inject UserManager<DbUser> UserManager
 
 @if (SignInManager.IsSignedIn(User))
 {
