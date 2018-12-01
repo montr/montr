@@ -7,21 +7,21 @@ import { ColumnProps, PaginationConfig, SorterResult, SortOrder } from "antd/lib
 
 import { MetadataAPI, IDataColumn, IIndexer, Fetcher, IDataResult } from "../api";
 
-interface DataGridProps {
+interface DataTableProps {
 	viewId: string
 	loadUrl: string; // todo: add load func or data[]
 }
 
-interface DataGridState<TModel> {
+interface DataTableState<TModel> {
 	columns: any[];
 	data: TModel[];
 	pagination: PaginationConfig,
 	loading: boolean
 }
 
-export class DataGrid<TModel extends IIndexer> extends React.Component<DataGridProps, DataGridState<TModel>> {
+export class DataTable<TModel extends IIndexer> extends React.Component<DataTableProps, DataTableState<TModel>> {
 
-	constructor(props: DataGridProps) {
+	constructor(props: DataTableProps) {
 		super(props);
 
 		this.state = {

@@ -2,7 +2,7 @@ import * as React from "react";
 import { Link } from "react-router-dom";
 import { Form, Select, Button, DatePicker } from "antd";
 import { EventAPI } from "../../api";
-import { Page, DataGrid } from "../../components";
+import { Page, DataTable } from "../../components";
 
 interface Props {
 }
@@ -40,7 +40,7 @@ export class SearchEvents extends React.Component<Props, State> {
 
         <br />
 
-        <DataGrid
+        <DataTable
           viewId="PrivateEventSearch/Grid"
           loadUrl={EventAPI.getLoadUrl()} />
 
