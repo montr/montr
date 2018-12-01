@@ -7,14 +7,14 @@ namespace Idx
 	{
 		public static void Main(string[] args)
 		{
-			CreateWebHostBuilder(args).Build().Run();
-		}
-
-		public static IWebHostBuilder CreateWebHostBuilder(string[] args)
-		{
-			return WebHost
+			var hostBuilder = WebHost
 				.CreateDefaultBuilder(args)
-				.UseStartup<Startup>();
+				.UseStartup<Startup>()
+				.UseSentry();
+
+			var host = hostBuilder.Build();
+
+			host.Run();
 		}
 	}
 }
