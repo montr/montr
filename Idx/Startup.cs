@@ -112,19 +112,19 @@ namespace Idx
 				.AddAspNetIdentity<DbUser>();
 		}
 
-		// This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
 		public void Configure(IApplicationBuilder app, IHostingEnvironment env)
 		{
-			if (env.IsDevelopment())
+			/* if (env.IsDevelopment())
 			{
 				app.UseDeveloperExceptionPage();
 				app.UseDatabaseErrorPage();
 			}
-			else
+			else */
 			{
 				app.UseExceptionHandler("/Home/Error");
 				app.UseHsts();
 			}
+			// app.UseStatusCodePages();
 
 			// app.UseHttpsRedirection();
 			app.UseStaticFiles();
