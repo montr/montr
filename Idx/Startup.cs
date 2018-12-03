@@ -58,6 +58,17 @@ namespace Idx
 					typeof(LinqToDB.Identity.IdentityRoleClaim<Guid>))
 				.AddDefaultTokenProviders();
 
+			services.AddCors(options =>
+			{
+				// this defines a CORS policy called "default"
+				options.AddPolicy("default", policy =>
+				{
+					policy.WithOrigins("http://app.tendr.local:5000")
+						.AllowAnyHeader()
+						.AllowAnyMethod();
+				});
+			});
+
 			/*services.Configure<IdentityOptions>(options =>
 			{
 				// Password settings.
@@ -128,6 +139,8 @@ namespace Idx
 			// app.UseHttpsRedirection();
 			app.UseStaticFiles();
 			app.UseCookiePolicy();
+
+			app.UseCors("default");
 
 			// app.UseAuthentication(); // not needed, since UseIdentityServer adds the authentication middleware
 			app.UseIdentityServer();

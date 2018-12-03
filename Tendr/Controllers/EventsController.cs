@@ -7,9 +7,9 @@ using Tendr.Entities;
 using Tendr.Models;
 using Tendr.Services;
 
-namespace Tendr.Controllers.Apis
+namespace Tendr.Controllers
 {
-	[Authorize, ApiController, Route("api/[controller]/[action]")]
+	[/*Authorize,*/ ApiController, Route("api/[controller]/[action]")]
 	public class EventsController : ControllerBase
 	{
 		[HttpPost]

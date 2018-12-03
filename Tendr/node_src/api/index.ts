@@ -7,10 +7,10 @@ export * from "./IDataColumn";
 export * from "./IDataView";
 export * from "./IIndexer";
 export * from "./IEvent";
+export * from "./IEventTemplate";
 export * from "./IPane";
 
+export * from "./AccountAPI";
 export * from "./MetadataAPI";
 export * from "./EventAPI";
-
-export * from "./IEventTemplate";
 export * from "./EventTemplateAPI";

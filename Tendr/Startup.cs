@@ -5,6 +5,8 @@ using IdentityServer4.AccessTokenValidation;
 using LinqToDB.Configuration;
 using LinqToDB.Data;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -17,13 +19,9 @@ namespace Tendr
 {
 	public class Startup
 	{
-		public Startup(IHostingEnvironment env)
+		public Startup(IConfiguration configuration)
 		{
-			var builder = new ConfigurationBuilder()
-				.SetBasePath(env.ContentRootPath)
-				.AddUserSecrets<Startup>();
-
-			Configuration = builder.Build();
+			Configuration = configuration;
 
 			DataConnection.DefaultSettings = new DbSettings(Configuration);
 		}
@@ -69,23 +67,25 @@ namespace Tendr
 
 			// for user login
 			JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
-			
+
+			var openIdOptions = Configuration.GetSection("OpenId").Get<OpenIdOptions>();
+
 			services
 				.AddAuthentication(options =>
 				{
-					options.DefaultScheme = "Cookies";
-					options.DefaultChallengeScheme = "oidc";
+					options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
+					options.DefaultChallengeScheme = OpenIdConnectDefaults.AuthenticationScheme;
 				})
-				.AddCookie("Cookies")
-				.AddOpenIdConnect("oidc", options =>
+				.AddCookie(CookieAuthenticationDefaults.AuthenticationScheme)
+				.AddOpenIdConnect(OpenIdConnectDefaults.AuthenticationScheme, options =>
 				{
-					options.SignInScheme = "Cookies";
+					options.SignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
 
-					options.Authority = "http://idx.local:5050";
+					options.Authority = openIdOptions.Authority;
 					options.RequireHttpsMetadata = false;
 
-					options.ClientId = "tendr";
-					options.ClientSecret = "secret";
+					options.ClientId = openIdOptions.ClientId;
+					options.ClientSecret = openIdOptions.ClientSecret;
 					options.ResponseType = "code id_token"; // code id_token token
 
 					options.SaveTokens = true;
@@ -130,6 +130,15 @@ namespace Tendr
 					template: "{controller=Home}/{action=Index}/{id?}");
 			});
 		}
+	}
+
+	public class OpenIdOptions
+	{
+		public string Authority { get; set; }
+
+		public string ClientId { get; set; }
+
+		public string ClientSecret { get; set; }
 	}
 
 	public class ConnectionStringSettings : IConnectionStringSettings

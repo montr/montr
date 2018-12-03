@@ -1,10 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Tendr.Models;
 using Tendr.Services;
 
-namespace Tendr.Controllers.Apis
+namespace Tendr.Controllers
 {
 	[ApiController, Route("api/[controller]/[action]")]
 	public class MetadataController : ControllerBase
