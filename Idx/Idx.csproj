@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <TargetFramework>netcoreapp2.2</TargetFramework>
     <UserSecretsId>aspnet-Idx-6521C15D-E645-4061-ADDD-F20EFBD5CDA1</UserSecretsId>
   </PropertyGroup>
 
@@ -11,11 +11,11 @@
     <PackageReference Include="linq2db.Identity" Version="2.0.1" />
     <PackageReference Include="linq2db.PostgreSQL" Version="2.5.4" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
-    <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.1.2" PrivateAssets="All" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.6" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.0" PrivateAssets="All" />
     <PackageReference Include="Npgsql" Version="4.0.3" />
-    <PackageReference Include="Sentry" Version="1.0.1-beta3" />
-    <PackageReference Include="Sentry.AspNetCore" Version="1.0.1-beta3" />
+    <PackageReference Include="Sentry" Version="1.0.1-beta4" />
+    <PackageReference Include="Sentry.AspNetCore" Version="1.0.1-beta4" />
   </ItemGroup>
 
 </Project>
