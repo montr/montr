@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Newtonsoft.Json;
 using Tendr.Services;
 
 namespace Tendr
@@ -42,6 +43,7 @@ namespace Tendr
 				.SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
 				.AddJsonOptions(options =>
 				{
+					options.SerializerSettings.Formatting = Formatting.None;
 					options.SerializerSettings.Converters.Add(new Newtonsoft.Json.Converters.StringEnumConverter(true));
 					options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
 				});

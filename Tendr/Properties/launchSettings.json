@@ -21,7 +21,7 @@
       "commandName": "Project",
       "launchBrowser": true,
       "launchUrl": "api/values",
-      "applicationUrl": "http://app.tendr.local:5000;https://app.tendr.local:5001/",
+      "applicationUrl": "http://app.tendr.montr.io:5000;https://app.tendr.montr.io:5001/",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }

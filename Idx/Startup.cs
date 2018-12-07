@@ -13,6 +13,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Idx.Services;
 using LinqToDB.Mapping;
 using DbContext = Idx.Entities.DbContext;
+using IdentityServer4;
 
 namespace Idx
 {
@@ -69,9 +70,11 @@ namespace Idx
 				});
 			});
 
-			/*services.Configure<IdentityOptions>(options =>
+			services.Configure<IdentityOptions>(options =>
 			{
-				// Password settings.
+				options.User.RequireUniqueEmail = false;
+
+				/* // Password settings.
 				options.Password.RequireDigit = true;
 				options.Password.RequireLowercase = true;
 				options.Password.RequireNonAlphanumeric = true;
@@ -86,9 +89,8 @@ namespace Idx
 
 				// User settings.
 				options.User.AllowedUserNameCharacters =
-					"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
-				options.User.RequireUniqueEmail = false;
-			});*/
+					"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+"; */
+			});
 
 			services.AddMvc()
 				.SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
@@ -121,6 +123,16 @@ namespace Idx
 				.AddInMemoryApiResources(Config.GetApiResources())
 				.AddInMemoryClients(Config.GetClients())
 				.AddAspNetIdentity<DbUser>();
+
+			services.AddAuthentication()
+				.AddGoogle("Google", options =>
+				{
+					// options.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
+					options.SignInScheme = IdentityConstants.ExternalScheme;
+
+					options.ClientId = Configuration["Authentication:Google:ClientId"];
+					options.ClientSecret = Configuration["Authentication:Google:ClientSecret"];
+				});
 		}
 
 		public void Configure(IApplicationBuilder app, IHostingEnvironment env)
@@ -135,7 +147,7 @@ namespace Idx
 				app.UseExceptionHandler("/Home/Error");
 				app.UseHsts();
 			}
-			
+
 			// app.UseHttpsRedirection();
 			app.UseStaticFiles();
 			app.UseCookiePolicy();

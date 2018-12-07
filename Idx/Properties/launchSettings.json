@@ -18,7 +18,7 @@
     "Idx": {
       "commandName": "Project",
       "launchBrowser": true,
-      "applicationUrl": "https://idx.local:5051;http://idx.local:5050",
+      "applicationUrl": "https://idx.montr.io:5051;http://idx.montr.io:5050",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       }

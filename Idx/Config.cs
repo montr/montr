@@ -44,9 +44,17 @@ namespace Idx
 						new Secret("secret".Sha256())
 					},
 
-					RedirectUris = { "http://tendr.local:5000/signin-oidc", "http://app.tendr.local:5000/signin-oidc" },
-					PostLogoutRedirectUris = { "http://app.tendr.local:5000/signout-callback-oidc" },
-					AllowedCorsOrigins = { "http://app.tendr.local:5000" },
+					RedirectUris =
+					{
+						"http://tendr.montr.io:5000/signin-oidc",
+						"http://app.tendr.montr.io:5000/signin-oidc"
+					},
+					PostLogoutRedirectUris =
+					{
+						"http://tendr.montr.io:5000/signout-callback-oidc",
+						"http://app.tendr.montr.io:5000/signout-callback-oidc",
+					},
+					AllowedCorsOrigins = { "http://app.tendr.montr.io:5000" },
 
 					AllowedScopes = 
 					{

@@ -26,9 +26,17 @@ const post = async (url: string, body?: any): Promise<any> => {
 
     checkStatus(response)
 
-    const data = await response.json();
+    const contentType = response.headers.get("Content-Type");
 
-    return data;
+    console.log(contentType);
+
+    if (contentType && contentType.startsWith("application/json")) {
+        const data = await response.json();
+
+        return data;
+    }
+
+    return null;
 };
 
 export const Fetcher = {

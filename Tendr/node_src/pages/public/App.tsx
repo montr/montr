@@ -17,7 +17,7 @@ export class App extends React.Component {
 						<Menu.Item key="1">nav 1</Menu.Item>
 						<Menu.Item key="2">nav 2</Menu.Item>
 						<Menu.Item key="3">
-							<a href="http://app.tendr.local:5000/">App</a>
+							<a href="http://app.tendr.montr.io:5000/">App</a>
 						</Menu.Item>
 					</Menu>
 				</Layout.Header>

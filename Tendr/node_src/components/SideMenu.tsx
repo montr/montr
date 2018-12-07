@@ -12,6 +12,7 @@ export class SideMenu extends React.Component {
 
 		AccountAPI.logout()
 			.then((data) => {
+				console.log("logged out...");
 				window.location.href = "/";
 			});
 	}
@@ -35,13 +36,13 @@ export class SideMenu extends React.Component {
 						</Link>
 					</Menu.Item>
 					<Menu.Item key="3">
-						<a href="http://idx.local:5050">
+						<a href="http://idx.montr.io:5050">
 							<Icon type="user" />
 							<span className="nav-text">Личные данные</span>
 						</a>
 					</Menu.Item>
 					<Menu.Item key="999">
-						<a href="http://tendr.local:5000/">
+						<a href="http://tendr.montr.io:5000/">
 							<Icon type="global" />
 							<span className="nav-text">Public</span>
 						</a>

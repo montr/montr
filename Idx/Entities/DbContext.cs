@@ -26,7 +26,7 @@ namespace Idx.Entities
 				.Property(x => x.ClaimValue).HasColumnName("claim_value").IsNullable(false)
 				
 				.Entity<IdentityUserClaim<Guid>>().HasTableName("user_claim")
-				.Property(x => x.Id).HasColumnName("id").IsPrimaryKey()
+				.Property(x => x.Id).HasColumnName("id").IsPrimaryKey().IsIdentity()
 				.Property(x => x.UserId).HasColumnName("user_id").IsNullable(false)
 				.Property(x => x.ClaimType).HasColumnName("claim_type").IsNullable(false)
 				.Property(x => x.ClaimValue).HasColumnName("claim_value").IsNullable(false)

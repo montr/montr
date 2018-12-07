@@ -33,13 +33,11 @@ namespace Tendr.Controllers
 		}
 
 		[HttpPost]
+		// [ValidateAntiForgeryToken]
 		public async Task<ActionResult<ApiResult>> Logout(string returnUrl = null)
 		{
 			await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
 			await HttpContext.SignOutAsync(OpenIdConnectDefaults.AuthenticationScheme);
-
-			/*await HttpContext.SignOutAsync("Cookies");
-			await HttpContext.SignOutAsync("oidc");*/
 
 			return new ApiResult { Success = true };
 		}

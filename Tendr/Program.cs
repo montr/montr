@@ -7,6 +7,8 @@ namespace Tendr
 	{
 		public static void Main(string[] args)
 		{
+			System.Console.Title = typeof(Startup).Namespace;
+
 			var hostBuilder = WebHost
 				.CreateDefaultBuilder(args)
 				.UseStartup<Startup>()

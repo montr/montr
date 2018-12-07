@@ -75,6 +75,8 @@ namespace Idx.Areas.Identity.Pages.Account.Manage
 
             // Request a redirect to the external login provider to link a login for the current user
             var redirectUrl = Url.Page("./ExternalLogins", pageHandler: "LinkLoginCallback");
+            // var redirectUrl = Url.Action("ExternalLoginCallback", "Account");
+
             var properties = _signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl, _userManager.GetUserId(User));
             return new ChallengeResult(provider, properties);
         }
@@ -87,7 +89,8 @@ namespace Idx.Areas.Identity.Pages.Account.Manage
                 return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
             }
 
-            var info = await _signInManager.GetExternalLoginInfoAsync(await _userManager.GetUserIdAsync(user));
+			var userId = await _userManager.GetUserIdAsync(user);
+			var info = await _signInManager.GetExternalLoginInfoAsync(userId);
             if (info == null)
             {
                 throw new InvalidOperationException($"Unexpected error occurred loading external login info for user with ID '{user.Id}'.");
