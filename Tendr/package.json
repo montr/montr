@@ -28,8 +28,8 @@
     "source-map-loader": "^0.2.4",
     "style-loader": "^0.23.1",
     "ts-import-plugin": "^1.5.5",
-    "typescript": "^3.2.1",
-    "webpack": "^4.27.0",
+    "typescript": "^3.2.2",
+    "webpack": "^4.27.1",
     "webpack-cli": "^3.1.2"
   }
 }

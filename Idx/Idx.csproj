@@ -13,9 +13,9 @@
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.0" PrivateAssets="All" />
-    <PackageReference Include="Npgsql" Version="4.0.3" />
-    <PackageReference Include="Sentry" Version="1.0.1-beta4" />
-    <PackageReference Include="Sentry.AspNetCore" Version="1.0.1-beta4" />
+    <PackageReference Include="Npgsql" Version="4.0.4" />
+    <PackageReference Include="Sentry" Version="1.1.0" />
+    <PackageReference Include="Sentry.AspNetCore" Version="1.1.0" />
   </ItemGroup>
 
 </Project>

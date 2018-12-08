@@ -20,7 +20,7 @@ namespace Tendr.Api.Tests
 			// https://identitymodel.readthedocs.io/en/latest/client/discovery.html
 			var disco = await client.GetDiscoveryDocumentAsync(new DiscoveryDocumentRequest
 			{
-				Address = "http://idx.local:5050",
+				Address = "http://idx.montr.io:5050",
 				Policy =
 				{
 					RequireHttps = false
@@ -36,8 +36,8 @@ namespace Tendr.Api.Tests
 			{
 				Address = disco.TokenEndpoint,
 
-				ClientId = "tendr_client",
-				ClientSecret = "tendr_secret",
+				ClientId = "tendr",
+				ClientSecret = "secret",
 				Scope = "tendr"
 			});
 
@@ -52,7 +52,7 @@ namespace Tendr.Api.Tests
 				"{\"sortColumn\":\"id\",\"sortOrder\":\"descending\"}"));
 			httpContent.Headers.Add("Content-Type", "application/json");
 
-			var response = await client.PostAsync("http://app.tendr.local:5000/api/events/load", httpContent);
+			var response = await client.PostAsync("http://app.tendr.montr.io:5000/api/events/load", httpContent);
 
 			Assert.IsTrue(response.IsSuccessStatusCode, "Response status code: " + response.StatusCode);
 			
