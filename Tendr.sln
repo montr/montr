@@ -9,7 +9,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tendr.Tests", "Tendr.Tests\
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Idx", "Idx\Idx.csproj", "{2452B341-54A4-44AE-A10A-D71592B095D4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tendr.Api.Tests", "Tendr.Api.Tests\Tendr.Api.Tests.csproj", "{EF211D05-1361-4E7C-B8F7-C22E466D21CD}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tendr.Api.Tests", "Tendr.Api.Tests\Tendr.Api.Tests.csproj", "{EF211D05-1361-4E7C-B8F7-C22E466D21CD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kompany", "Kompany\Kompany.csproj", "{BDDB5A15-4CF8-4018-BD05-5EE977207462}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Montr.Web", "Montr.Web\Montr.Web.csproj", "{F74B27B0-9F49-4B58-92E3-A7F0B591ED11}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Montr.Data.Linq2Db", "Montr.Data.Linq2Db\Montr.Data.Linq2Db.csproj", "{CD4ABC46-9522-42B3-838D-106D4EE7B85C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -33,6 +39,18 @@ Global
 		{EF211D05-1361-4E7C-B8F7-C22E466D21CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EF211D05-1361-4E7C-B8F7-C22E466D21CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EF211D05-1361-4E7C-B8F7-C22E466D21CD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BDDB5A15-4CF8-4018-BD05-5EE977207462}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BDDB5A15-4CF8-4018-BD05-5EE977207462}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BDDB5A15-4CF8-4018-BD05-5EE977207462}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BDDB5A15-4CF8-4018-BD05-5EE977207462}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F74B27B0-9F49-4B58-92E3-A7F0B591ED11}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F74B27B0-9F49-4B58-92E3-A7F0B591ED11}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F74B27B0-9F49-4B58-92E3-A7F0B591ED11}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F74B27B0-9F49-4B58-92E3-A7F0B591ED11}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CD4ABC46-9522-42B3-838D-106D4EE7B85C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CD4ABC46-9522-42B3-838D-106D4EE7B85C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CD4ABC46-9522-42B3-838D-106D4EE7B85C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CD4ABC46-9522-42B3-838D-106D4EE7B85C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

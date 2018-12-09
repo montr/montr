@@ -4,11 +4,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Montr.Data.Linq2Db;
 using Montr.Web;
-using Tendr.Services;
 
-namespace Tendr
+namespace Kompany
 {
 	public class Startup
 	{
@@ -18,19 +16,16 @@ namespace Tendr
 		}
 
 		public IConfiguration Configuration { get; }
-
+		
 		public void ConfigureServices(IServiceCollection services)
 		{
-			services.AddLinq2Db(
-				Configuration.GetSection("ConnectionString").Get<ConnectionStringSettings>());
-
 			services.Configure<CookiePolicyOptions>(options =>
 			{
 				// This lambda determines whether user consent for non-essential cookies is needed for a given request.
 				options.CheckConsentNeeded = context => true;
 				options.MinimumSameSitePolicy = SameSiteMode.None;
 			});
-
+			
 			services.AddMvc()
 				.SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
 				.AddJsonOptions(options =>
@@ -40,10 +35,8 @@ namespace Tendr
 					options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
 				});
 
-			services.AddOpenIdAuthentication(
-				Configuration.GetSection("OpenId").Get<OpenIdOptions>());
-
-			services.AddSingleton<IMetadataProvider, DefaultMetadataProvider>();
+			/*services.AddOpenIdAuthentication(
+				Configuration.GetSection("OpenId").Get<OpenIdOptions>());*/
 		}
 
 		public void Configure(IApplicationBuilder app, IHostingEnvironment env)
