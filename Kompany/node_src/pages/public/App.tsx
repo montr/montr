@@ -18,7 +18,7 @@ export class App extends React.Component {
 							<a href="http://idx.montr.io:5050/">idx</a>
 						</Menu.Item>
 						<Menu.Item key="2">
-							<a href="http://kompany.montr.io:5010/">kompany</a>
+							<a href="http://tendr.montr.io:5000/">tendr</a>
 						</Menu.Item>
 						<Menu.Item key="3">
 							<a href="http://app.tendr.montr.io:5000/">app.tendr</a>
@@ -33,7 +33,7 @@ export class App extends React.Component {
 					</Breadcrumb>
 					<div style={{ minHeight: 280 }}>
 
-						<h1>TENDR LANDING</h1>
+						<h1>KOMPANY LANDING</h1>
 
 
 					</div>

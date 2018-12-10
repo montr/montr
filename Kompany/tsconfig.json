@@ -1,0 +1,14 @@
+{
+    "compilerOptions": {
+        "lib": [ "dom", "es7" ],
+        "outDir": "./assets/",
+        "sourceMap": true,
+        "noImplicitAny": true,
+        "module": "ESNext",
+        "target": "es5",
+        "jsx": "react"
+    },
+    "include": [
+        "./src/**/*"
+    ]
+}
