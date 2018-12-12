@@ -1,7 +1,7 @@
 using System.Collections.Generic;
-using Tendr.Models;
+using Montr.Metadata.Models;
 
-namespace Tendr.Services
+namespace Montr.Metadata.Services
 {
 	public interface IMetadataProvider
 	{

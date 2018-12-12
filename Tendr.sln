@@ -5,17 +5,21 @@ VisualStudioVersion = 15.0.28010.2048
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tendr", "Tendr\Tendr.csproj", "{F6C5DC4D-C03C-4596-80B7-6C2D247C1ACA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tendr.Tests", "Tendr.Tests\Tendr.Tests.csproj", "{CC8A49DD-417E-43CA-A1A5-245A3228F998}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Montr.Metadata.Tests", "Tendr.Tests\Montr.Metadata.Tests.csproj", "{CC8A49DD-417E-43CA-A1A5-245A3228F998}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Idx", "Idx\Idx.csproj", "{2452B341-54A4-44AE-A10A-D71592B095D4}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tendr.Api.Tests", "Tendr.Api.Tests\Tendr.Api.Tests.csproj", "{EF211D05-1361-4E7C-B8F7-C22E466D21CD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Kompany", "Kompany\Kompany.csproj", "{BDDB5A15-4CF8-4018-BD05-5EE977207462}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kompany", "Kompany\Kompany.csproj", "{BDDB5A15-4CF8-4018-BD05-5EE977207462}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Montr.Web", "Montr.Web\Montr.Web.csproj", "{F74B27B0-9F49-4B58-92E3-A7F0B591ED11}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Montr.Web", "Montr.Web\Montr.Web.csproj", "{F74B27B0-9F49-4B58-92E3-A7F0B591ED11}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Montr.Data.Linq2Db", "Montr.Data.Linq2Db\Montr.Data.Linq2Db.csproj", "{CD4ABC46-9522-42B3-838D-106D4EE7B85C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Montr.Data.Linq2Db", "Montr.Data.Linq2Db\Montr.Data.Linq2Db.csproj", "{CD4ABC46-9522-42B3-838D-106D4EE7B85C}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Montr.Metadata", "Montr.Metadata\Montr.Metadata.csproj", "{B157C432-2DBD-4CED-B705-AD53045BCD43}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Montr.Modularity", "Montr.Modularity\Montr.Modularity.csproj", "{3383FE45-D40B-41F1-8035-5D8EAFB9E171}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,6 +55,14 @@ Global
 		{CD4ABC46-9522-42B3-838D-106D4EE7B85C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CD4ABC46-9522-42B3-838D-106D4EE7B85C}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CD4ABC46-9522-42B3-838D-106D4EE7B85C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B157C432-2DBD-4CED-B705-AD53045BCD43}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B157C432-2DBD-4CED-B705-AD53045BCD43}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B157C432-2DBD-4CED-B705-AD53045BCD43}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B157C432-2DBD-4CED-B705-AD53045BCD43}.Release|Any CPU.Build.0 = Release|Any CPU
+		{3383FE45-D40B-41F1-8035-5D8EAFB9E171}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3383FE45-D40B-41F1-8035-5D8EAFB9E171}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3383FE45-D40B-41F1-8035-5D8EAFB9E171}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3383FE45-D40B-41F1-8035-5D8EAFB9E171}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

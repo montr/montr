@@ -1,8 +1,8 @@
 ﻿using Microsoft.AspNetCore.Mvc;
-using Tendr.Models;
-using Tendr.Services;
+using Montr.Metadata.Models;
+using Montr.Metadata.Services;
 
-namespace Tendr.Controllers
+namespace Montr.Metadata.Controllers
 {
 	[ApiController, Route("api/[controller]/[action]")]
 	public class MetadataController : ControllerBase

@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 
-namespace Tendr.Models
+namespace Montr.Metadata.Models
 {
 	public class DataView
 	{

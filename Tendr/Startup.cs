@@ -5,8 +5,9 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Montr.Data.Linq2Db;
+using Montr.Metadata.Controllers;
+using Montr.Modularity;
 using Montr.Web;
-using Tendr.Services;
 
 namespace Tendr
 {
@@ -33,6 +34,7 @@ namespace Tendr
 
 			services.AddMvc()
 				.SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
+				.AddApplicationPart(typeof(MetadataController).Assembly)
 				.AddJsonOptions(options =>
 				{
 					options.SerializerSettings.Formatting = Newtonsoft.Json.Formatting.None;
@@ -43,12 +45,15 @@ namespace Tendr
 			services.AddOpenIdAuthentication(
 				Configuration.GetSection("OpenId").Get<OpenIdOptions>());
 
-			services.AddSingleton<IMetadataProvider, DefaultMetadataProvider>();
+			services.AddModules();
 		}
 
 		public void Configure(IApplicationBuilder app, IHostingEnvironment env)
 		{
-			app.UseExceptionHandler("/Home/Error");
+			app.UseWhen(
+				context => !context.Request.Path.StartsWithSegments("/api"),
+				a => a.UseExceptionHandler("/Home/Error")
+			);
 			app.UseHsts();
 
 			app.UseStaticFiles();

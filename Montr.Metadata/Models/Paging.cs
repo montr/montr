@@ -1,4 +1,4 @@
-namespace Tendr.Models
+namespace Montr.Metadata.Models
 {
 	public class Paging
 	{

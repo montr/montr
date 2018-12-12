@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Tendr\Tendr.csproj" />
+    <ProjectReference Include="..\Montr.Metadata\Montr.Metadata.csproj" />
   </ItemGroup>
 
 </Project>

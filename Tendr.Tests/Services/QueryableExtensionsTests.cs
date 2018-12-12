@@ -1,8 +1,8 @@
 using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Tendr.Services;
+using Montr.Metadata.Services;
 
-namespace Tendr.Tests.Services
+namespace Montr.Metadata.Tests.Services
 {
 	[TestClass]
 	public class QueryableExtensionsTests

@@ -2,9 +2,9 @@ using System;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using Tendr.Models;
+using Montr.Metadata.Models;
 
-namespace Tendr.Services
+namespace Montr.Metadata.Services
 {
 	public static class QueryableExtensions
 	{

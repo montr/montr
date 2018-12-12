@@ -4,9 +4,10 @@ using LinqToDB.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Montr.Data.Linq2Db;
+using Montr.Metadata.Models;
+using Montr.Metadata.Services;
 using Tendr.Entities;
 using Tendr.Models;
-using Tendr.Services;
 
 namespace Tendr.Controllers
 {
