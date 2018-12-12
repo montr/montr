@@ -2,6 +2,8 @@ import * as React from "react";
 
 import { Layout, Menu, Breadcrumb } from 'antd';
 
+import { Registration } from "./Registration";
+
 export class App extends React.Component {
 	render() {
 		return (
@@ -33,8 +35,9 @@ export class App extends React.Component {
 					</Breadcrumb>
 					<div style={{ minHeight: 280 }}>
 
-						<h1>KOMPANY LANDING</h1>
+						<h2>Регистрация компании</h2>
 
+						<Registration />
 
 					</div>
 				</Layout.Content>
