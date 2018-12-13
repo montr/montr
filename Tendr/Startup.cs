@@ -8,6 +8,7 @@ using Montr.Data.Linq2Db;
 using Montr.Metadata.Controllers;
 using Montr.Modularity;
 using Montr.Web;
+using Montrl.Web.Controllers;
 
 namespace Tendr
 {
@@ -34,6 +35,7 @@ namespace Tendr
 
 			services.AddMvc()
 				.SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
+				.AddApplicationPart(typeof(AccountController).Assembly)
 				.AddApplicationPart(typeof(MetadataController).Assembly)
 				.AddJsonOptions(options =>
 				{

@@ -1,6 +1,7 @@
 export * from "./Fetcher";
 export * from "./Guid";
 
+export * from "./IAccountInfo";
 export * from "./IApiResult";
 export * from "./IDataResult";
 export * from "./IDataColumn";

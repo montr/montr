@@ -28,8 +28,6 @@ const post = async (url: string, body?: any): Promise<any> => {
 
     const contentType = response.headers.get("Content-Type");
 
-    console.log(contentType);
-
     if (contentType && contentType.startsWith("application/json")) {
         const data = await response.json();
 

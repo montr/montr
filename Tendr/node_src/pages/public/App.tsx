@@ -1,29 +1,15 @@
 import * as React from "react";
 
-import { Layout, Menu, Breadcrumb } from 'antd';
+import { Layout, Menu, Breadcrumb, Icon } from "antd";
+
+import { TopMenu } from "../../components";
 
 export class App extends React.Component {
 	render() {
 		return (
 			<Layout className="public-layout">
 				<Layout.Header>
-					<div className="logo" />
-					<Menu
-						theme="light"
-						mode="horizontal"
-						defaultSelectedKeys={['3']}
-						style={{ lineHeight: '64px' }}
-					>
-						<Menu.Item key="1">
-							<a href="http://idx.montr.io:5050/">idx</a>
-						</Menu.Item>
-						<Menu.Item key="2">
-							<a href="http://kompany.montr.io:5010/">kompany</a>
-						</Menu.Item>
-						<Menu.Item key="3">
-							<a href="http://app.tendr.montr.io:5000/">app.tendr</a>
-						</Menu.Item>
-					</Menu>
+					<TopMenu />
 				</Layout.Header>
 				<Layout.Content style={{ padding: '0 50px' }}>
 					<Breadcrumb style={{ margin: '16px 0' }}>
@@ -33,8 +19,7 @@ export class App extends React.Component {
 					</Breadcrumb>
 					<div style={{ minHeight: 280 }}>
 
-						<h1>TENDR LANDING</h1>
-
+						<h1>TENDR</h1>
 
 					</div>
 				</Layout.Content>

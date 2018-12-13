@@ -1,4 +1,4 @@
-namespace Tendr.Models
+namespace Montrl.Web.Models
 {
 	public class ApiResult
 	{
