@@ -1,8 +1,8 @@
-import { message } from "antd";
+// import { message } from "antd";
 
 function checkStatus(response: Response) {
     if (!response.ok) {
-        message.error(`${response.status} (${response.statusText}) @ ${response.url}`);
+        // message.error(`${response.status} (${response.statusText}) @ ${response.url}`);
         throw Error(`${response.status} (${response.statusText}) @ ${response.url}`);
     }
 

@@ -4,9 +4,9 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
 using Microsoft.AspNetCore.Mvc;
-using Montrl.Web.Models;
+using Montr.Web.Models;
 
-namespace Montrl.Web.Controllers
+namespace Montr.Web.Controllers
 {
 	[ApiController, Route("api/[controller]/[action]")]
 	public class AccountController : ControllerBase

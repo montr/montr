@@ -8,15 +8,19 @@
 
   <ItemGroup>
     <Compile Remove="node_src\**" />
+    <Compile Remove="Services\**" />
     <Compile Remove="wwwroot\assets\**" />
     <Compile Remove="wwwroot\dist\**" />
     <Content Remove="node_src\**" />
+    <Content Remove="Services\**" />
     <Content Remove="wwwroot\assets\**" />
     <Content Remove="wwwroot\dist\**" />
     <EmbeddedResource Remove="node_src\**" />
+    <EmbeddedResource Remove="Services\**" />
     <EmbeddedResource Remove="wwwroot\assets\**" />
     <EmbeddedResource Remove="wwwroot\dist\**" />
     <None Remove="node_src\**" />
+    <None Remove="Services\**" />
     <None Remove="wwwroot\assets\**" />
     <None Remove="wwwroot\dist\**" />
   </ItemGroup>
@@ -33,14 +37,13 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Services\" />
     <Folder Include="wwwroot\" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="IdentityModel" Version="3.10.4" />
     <PackageReference Include="IdentityServer4.AccessTokenValidation" Version="2.7.0" />
-    <PackageReference Include="linq2db.PostgreSQL" Version="2.5.4" />
+    <PackageReference Include="linq2db.PostgreSQL" Version="2.6.0" />
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.0" />

@@ -1,5 +1,6 @@
+import { Fetcher } from "montr$core/api/";
+
 import { Constants } from "./Constants";
-import { Fetcher } from "./Fetcher";
 import { IApiResult } from "./IApiResult";
 import { IAccountInfo } from "./IAccountInfo";
 

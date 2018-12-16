@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using Montrl.Web.Models;
+using Montr.Web.Models;
 
 namespace Tendr.Models
 {

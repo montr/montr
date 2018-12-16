@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Montr.Web;
+using Montr.Data.Linq2Db;
 
 namespace Kompany
 {
@@ -19,6 +19,9 @@ namespace Kompany
 		
 		public void ConfigureServices(IServiceCollection services)
 		{
+			services.AddLinq2Db(
+				Configuration.GetSection("ConnectionString").Get<ConnectionStringSettings>());
+
 			services.Configure<CookiePolicyOptions>(options =>
 			{
 				// This lambda determines whether user consent for non-essential cookies is needed for a given request.
@@ -41,7 +44,10 @@ namespace Kompany
 
 		public void Configure(IApplicationBuilder app, IHostingEnvironment env)
 		{
-			app.UseExceptionHandler("/Home/Error");
+			app.UseWhen(
+				context => !context.Request.Path.StartsWithSegments("/api"),
+				a => a.UseExceptionHandler("/Home/Error")
+			);
 			app.UseHsts();
 
 			app.UseStaticFiles();

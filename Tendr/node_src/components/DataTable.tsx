@@ -5,7 +5,9 @@ import { Link } from "react-router-dom";
 import { Table } from "antd";
 import { ColumnProps, PaginationConfig, SorterResult, SortOrder } from "antd/lib/table";
 
-import { MetadataAPI, IDataColumn, IIndexer, Fetcher, IDataResult } from "../api";
+import { Fetcher } from "montr$core/api/";
+
+import { MetadataAPI, IDataColumn, IIndexer, IDataResult } from "../api";
 
 interface DataTableProps {
 	viewId: string

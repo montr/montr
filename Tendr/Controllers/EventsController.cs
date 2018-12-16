@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Montr.Data.Linq2Db;
 using Montr.Metadata.Models;
 using Montr.Metadata.Services;
-using Montrl.Web.Models;
+using Montr.Web.Models;
 using Tendr.Entities;
 using Tendr.Models;
 
@@ -77,7 +77,7 @@ namespace Tendr.Controllers
 				db.GetTable<DbEvent>()
 					.Value(x => x.Id, id)
 					.Value(x => x.ConfigCode, item.ConfigCode)
-					.Value(x => x.StatusCode, "draft")
+					.Value(x => x.StatusCode, EventStatusCode.Draft)
 					.Value(x => x.Name, item.Name)
 					.Value(x => x.Description, item.Description)
 					.Insert();
@@ -108,7 +108,7 @@ namespace Tendr.Controllers
 			{
 				var affected = db.GetTable<DbEvent>()
 					.Where(x => x.Id == item.Id)
-					.Set(x => x.StatusCode, "published")
+					.Set(x => x.StatusCode, EventStatusCode.Published)
 					.Update();
 
 				return new ApiResult { Success = (affected == 1) };
@@ -122,7 +122,7 @@ namespace Tendr.Controllers
 			{
 				var affected = db.GetTable<DbEvent>()
 					.Where(x => x.Id == item.Id)
-					.Set(x => x.StatusCode, "draft") // "cancelled"
+					.Set(x => x.StatusCode, EventStatusCode.Draft) // "cancelled"
 					.Update();
 
 				return new ApiResult { Success = (affected == 1) };

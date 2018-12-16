@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { Layout, Menu, Breadcrumb, Icon } from "antd";
+import { Layout, Breadcrumb } from "antd";
 
 import { TopMenu } from "../../components";
 

@@ -8,7 +8,7 @@ using Montr.Data.Linq2Db;
 using Montr.Metadata.Controllers;
 using Montr.Modularity;
 using Montr.Web;
-using Montrl.Web.Controllers;
+using Montr.Web.Controllers;
 
 namespace Tendr
 {

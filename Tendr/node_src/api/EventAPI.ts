@@ -1,6 +1,7 @@
+import { Fetcher } from "montr$core/api/";
+
 import { IEvent } from "./";
 import { Constants } from "./Constants";
-import { Fetcher } from "./Fetcher";
 import { IApiResult } from "./IApiResult";
 
 const getLoadUrl = (): string => {

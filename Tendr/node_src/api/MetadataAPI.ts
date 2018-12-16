@@ -1,8 +1,9 @@
 import * as React from "react";
 
+import { Fetcher } from "montr$core/api/";
+
 import { IDataView, IPaneProps } from "./";
 import { Constants } from "./Constants";
-import { Fetcher } from "./Fetcher";
 
 import * as panes from "../panes/private"
 

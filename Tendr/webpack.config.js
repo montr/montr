@@ -1,3 +1,4 @@
+const path = require("path");
 const tsImportPluginFactory = require("ts-import-plugin")
 
 module.exports = {
@@ -16,7 +17,9 @@ module.exports = {
 	devtool: "source-map",
 
 	resolve: {
-		// Add ".ts" and ".tsx" as resolvable extensions.
+		alias: {
+			montr$core: path.resolve(__dirname, "../Montr.Core/node_src/")
+		},
 		extensions: [".ts", ".tsx", ".js", ".json"]
 	},
 
@@ -33,7 +36,7 @@ module.exports = {
 							libraryName: "antd",
 							libraryDirectory: "lib",
 							style: true
-						  })]
+						})]
 					}),
 					/* compilerOptions: {
 						module: "es2015"

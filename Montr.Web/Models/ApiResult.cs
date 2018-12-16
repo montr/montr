@@ -1,4 +1,4 @@
-namespace Montrl.Web.Models
+namespace Montr.Web.Models
 {
 	public class ApiResult
 	{
