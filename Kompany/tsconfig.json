@@ -1,14 +1,28 @@
 {
-    "compilerOptions": {
-        "lib": [ "dom", "es7" ],
-        "outDir": "./assets/",
-        "sourceMap": true,
-        "noImplicitAny": true,
-        "module": "ESNext",
-        "target": "es5",
-        "jsx": "react"
-    },
-    "include": [
-        "./src/**/*"
-    ]
+	"compilerOptions": {
+		"lib": [
+			"dom",
+			"es7"
+		],
+		"outDir": "./assets/",
+		"sourceMap": true,
+		"noImplicitAny": true,
+		"module": "ESNext",
+		"target": "es6",
+		"jsx": "react",
+		"baseUrl": ".",
+		"paths": {
+			"@core/*": [
+				"../Montr.Core/node_src/*"
+			]
+		}
+	},
+	"include": [
+		// "*.d.ts",
+		// "./node_src/**/*",
+		// "./node_modules/**/*"
+	],
+	"exclude": [
+		"node_modules_"
+	]
 }

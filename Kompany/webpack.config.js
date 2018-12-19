@@ -18,14 +18,13 @@ module.exports = {
 
 	resolve: {
 		alias: {
-			montr$core: path.resolve(__dirname, "../Montr.Core/node_src/")
+			"montr$core": path.resolve(__dirname, "../Montr.Core/node_src/")
 		},
 		extensions: [".ts", ".tsx", ".js", ".json"]
 	},
 
 	module: {
 		rules: [
-			// All files with a ".ts" or ".tsx" extension will be handled by "awesome-typescript-loader".
 			{
 				test: /\.(jsx|tsx|js|ts)$/,
 				loader: "awesome-typescript-loader",
@@ -36,7 +35,7 @@ module.exports = {
 							libraryName: "antd",
 							libraryDirectory: "lib",
 							style: true
-						  })]
+						})]
 					}),
 					/* compilerOptions: {
 						module: "es2015"
