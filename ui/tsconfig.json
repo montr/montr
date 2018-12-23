@@ -1,0 +1,24 @@
+{
+	"compilerOptions": {
+		"lib": [ "dom", "es7" ],
+		"sourceMap": true,
+		"noImplicitAny": true,
+		"moduleResolution": "node",
+		"module": "esnext",
+		"target": "es5",
+		"jsx": "react",
+		"baseUrl": ".",
+		"paths": {
+			"@montr-core/*": [ "modules/montr-core/*" ]
+		}
+	},
+	"files": [
+		"modules/kompany/public.tsx"
+	],
+	"include": [
+		"modules/**/*"
+	],
+	"exclude": [
+		"node_modules"
+	]
+}

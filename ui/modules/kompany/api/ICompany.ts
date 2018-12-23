@@ -1,4 +1,4 @@
-import { IIndexer } from ".";
+import { IIndexer } from "@montr-core/.";
 
 export interface ICompany extends IIndexer {
 	id?: number;

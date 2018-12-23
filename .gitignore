@@ -3,7 +3,7 @@
 
 **/.logs/*
 .vs/*
-packages
+# packages
 *.lock.json
 package-lock.json
 

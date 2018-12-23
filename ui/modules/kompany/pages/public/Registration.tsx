@@ -1,10 +1,10 @@
 import * as React from "react";
 
-import { Guid } from "montr$core/api/";
+import { Guid } from "@montr-core/.";
 
 import { Form, Input, Checkbox, Button } from "antd";
 import { FormComponentProps } from "antd/lib/form";
-import { CompanyAPI } from "../../api";
+import { CompanyAPI } from "../../api/CompanyAPI";
 
 interface IProps extends FormComponentProps {
 }
@@ -31,7 +31,8 @@ class RegistrationForm extends React.Component<IProps, IState> {
 		});
 	}
 
-	checkIsChecked = (rule, value, callback) => {
+	// todo: use types
+	checkIsChecked = (rule: any, value: any, callback: any) => {
 		if (value === false) {
 			callback("You should agree with Terms of Service!");
 		} else {
@@ -99,7 +100,10 @@ const WrappedRegistrationForm = Form.create()(RegistrationForm);
 export class Registration extends React.Component {
 	render() {
 		return (
-			<WrappedRegistrationForm />
+			<div>
+				<h1>Регистрация компании</h1>
+				<WrappedRegistrationForm />
+			</div>
 		);
 	}
 }

@@ -3,7 +3,7 @@ import * as React from "react";
 import { LocaleProvider, Layout, Menu, Breadcrumb } from "antd";
 import * as ru_RU from "antd/lib/locale-provider/ru_RU";
 
-import { Registration } from "./Registration";
+import { Registration } from "./";
 
 export class App extends React.Component {
 	render() {
@@ -34,7 +34,7 @@ export class App extends React.Component {
 						</Breadcrumb>
 						<div style={{ minHeight: 280 }}>
 
-							<h1>Регистрация компании</h1>
+							
 
 							<Registration />
 

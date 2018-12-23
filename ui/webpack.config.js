@@ -5,12 +5,21 @@ module.exports = {
 	// mode: "production",
 	mode: "development",
 	entry: {
-		public: "./node_src/public.tsx",
-		// app: "./node_src/app.tsx",
+		tendr: "./modules/tendr/public.tsx",
+		"tendr.app": "./modules/tendr/app.tsx",
+		kompany: "./modules/kompany/public.tsx"
 	},
 	output: {
-		filename: "[name].js",
-		path: __dirname + "/wwwroot/assets"
+		path: __dirname,
+		filename: (chunkData) => {
+			if (chunkData.chunk.name.startsWith("tendr"))
+				return "../Tendr/wwwroot/assets/[name].js";
+
+			if (chunkData.chunk.name === "kompany")
+				return "../Kompany/wwwroot/assets/[name].js";
+
+			return null;
+		}
 	},
 
 	// Enable sourcemaps for debugging webpack"s output.
@@ -18,7 +27,7 @@ module.exports = {
 
 	resolve: {
 		alias: {
-			"montr$core": path.resolve(__dirname, "../Montr.Core/node_src/")
+			"@montr-core": path.resolve(__dirname, "modules/montr-core/")
 		},
 		extensions: [".ts", ".tsx", ".js", ".json"]
 	},
@@ -29,7 +38,7 @@ module.exports = {
 				test: /\.(jsx|tsx|js|ts)$/,
 				loader: "awesome-typescript-loader",
 				options: {
-					transpileOnly: true,
+					transpileOnly: false,
 					getCustomTransformers: () => ({
 						before: [tsImportPluginFactory({
 							libraryName: "antd",
@@ -60,7 +69,7 @@ module.exports = {
 							modifyVars: {
 								// https://github.com/ant-design/ant-design/blob/master/components/style/themes/default.less
 								// "primary-color": "#1DA57A",
-								// "primary-color": "#357ae8",
+								"primary-color": "#357ae8",
 								// "link-color": "#1DA57A",
 								// "border-radius-base": "4px",
 								// "font-size-base": "13px",

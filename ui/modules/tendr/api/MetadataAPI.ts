@@ -1,6 +1,4 @@
-import * as React from "react";
-
-import { Fetcher } from "montr$core/api/";
+import { Fetcher } from "@montr-core/.";
 
 import { IDataView, IPaneProps } from "./";
 import { Constants } from "./Constants";
