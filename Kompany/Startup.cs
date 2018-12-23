@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Montr.Data.Linq2Db;
+using Montr.Modularity;
+using Montr.Web.Controllers;
 
 namespace Kompany
 {
@@ -30,7 +32,8 @@ namespace Kompany
 			});
 			
 			services.AddMvc()
-				.SetCompatibilityVersion(CompatibilityVersion.Version_2_1)
+				.SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
+				.AddApplicationPart(typeof(AccountController).Assembly)
 				.AddJsonOptions(options =>
 				{
 					options.SerializerSettings.Formatting = Newtonsoft.Json.Formatting.None;
@@ -40,6 +43,8 @@ namespace Kompany
 
 			/*services.AddOpenIdAuthentication(
 				Configuration.GetSection("OpenId").Get<OpenIdOptions>());*/
+
+			services.AddModules();
 		}
 
 		public void Configure(IApplicationBuilder app, IHostingEnvironment env)

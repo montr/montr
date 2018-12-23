@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using Montr.Metadata.Models;
 using Montr.Metadata.Services;
 
@@ -15,9 +16,9 @@ namespace Montr.Metadata.Controllers
 		}
 
 		[HttpPost]
-		public ActionResult<DataView> View(MetadataRequest request)
+		public async Task<ActionResult<DataView>> View(MetadataRequest request)
 		{
-			return _metadataProvider.GetView(request.ViewId);
+			return await _metadataProvider.GetView(request.ViewId);
 		}
 	}
 }

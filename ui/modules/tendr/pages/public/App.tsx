@@ -2,7 +2,7 @@ import * as React from "react";
 
 import { Layout, Breadcrumb } from "antd";
 
-import { TopMenu } from "../../components";
+import { TopMenu } from "@montr-core/components";
 
 export class App extends React.Component {
 	render() {
@@ -18,8 +18,6 @@ export class App extends React.Component {
 						<Breadcrumb.Item>App</Breadcrumb.Item>
 					</Breadcrumb>
 					<div style={{ minHeight: 280 }}>
-
-						<h1>TENDR</h1>
 
 					</div>
 				</Layout.Content>

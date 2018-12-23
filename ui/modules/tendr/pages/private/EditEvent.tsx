@@ -2,7 +2,8 @@ import * as React from "react";
 
 import { Tabs, Button, Icon, Modal, message } from "antd";
 
-import { IEvent, EventAPI, EventTemplateAPI, IEventTemplate, IPaneProps, IApiResult, MetadataAPI, IDataView } from "../../api";
+import { IApiResult } from "@montr-core/api/";
+import { IEvent, EventAPI, EventTemplateAPI, IEventTemplate, IPaneProps, MetadataAPI, IDataView } from "../../api";
 import { Page } from "../../components/";
 import { IPaneComponent } from "../../panes/";
 
@@ -45,7 +46,8 @@ export class EditEvent extends React.Component<IEditEventProps, IEditEventState>
 	}
 
 	private fetchMetadata() {
-		MetadataAPI.load("PrivateEvent/Edit")
+		MetadataAPI
+			.load("PrivateEvent/Edit")
 			.then((dataView) => this.setState({ dataView }));
 	}
 

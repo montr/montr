@@ -9,4 +9,8 @@
     <PackageReference Include="IdentityModel" Version="3.10.4" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Montr.Modularity\Montr.Modularity.csproj" />
+  </ItemGroup>
+
 </Project>

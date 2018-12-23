@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 import { Layout, Menu, Icon } from "antd";
 
-import { AccountAPI } from "../api";
+import { AccountAPI } from "@montr-core/api";
 
 export class SideMenu extends React.Component {
 	handleLogout(e: React.SyntheticEvent): void {

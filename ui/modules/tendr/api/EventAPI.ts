@@ -1,8 +1,8 @@
 import { Fetcher } from "@montr-core/.";
 
-import { IEvent } from "./";
-import { Constants } from "./Constants";
-import { IApiResult } from "./IApiResult";
+import { IApiResult } from "@montr-core/api/IApiResult";
+
+import { IEvent, Constants } from "./";
 
 const getLoadUrl = (): string => {
     return `${Constants.baseURL}/Events/Load`;

@@ -1,16 +1,17 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Montr.Metadata.Models;
 
 namespace Montr.Metadata.Services
 {
 	public interface IMetadataProvider
 	{
-		DataView GetView(string viewId);
+		Task<DataView> GetView(string viewId);
 	}
 
 	public class DefaultMetadataProvider : IMetadataProvider
 	{
-		public DataView GetView(string viewId)
+		public async Task<DataView> GetView(string viewId)
 		{
 			var result = new DataView { Id = viewId };
 
@@ -43,7 +44,7 @@ namespace Montr.Metadata.Services
 				};
 			}
 
-			return result;
+			return await Task.FromResult(result);
 		}
 	}
 }
