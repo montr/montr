@@ -5,8 +5,10 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Montr.Data.Linq2Db;
+using Montr.Metadata.Controllers;
 using Montr.Modularity;
 using Montr.Web.Controllers;
+using Montr.Web.Services;
 
 namespace Kompany
 {
@@ -18,7 +20,7 @@ namespace Kompany
 		}
 
 		public IConfiguration Configuration { get; }
-		
+
 		public void ConfigureServices(IServiceCollection services)
 		{
 			services.AddLinq2Db(
@@ -30,10 +32,11 @@ namespace Kompany
 				options.CheckConsentNeeded = context => true;
 				options.MinimumSameSitePolicy = SameSiteMode.None;
 			});
-			
+
 			services.AddMvc()
 				.SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
 				.AddApplicationPart(typeof(AccountController).Assembly)
+				.AddApplicationPart(typeof(MetadataController).Assembly)
 				.AddJsonOptions(options =>
 				{
 					options.SerializerSettings.Formatting = Newtonsoft.Json.Formatting.None;
@@ -41,8 +44,8 @@ namespace Kompany
 					options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
 				});
 
-			/*services.AddOpenIdAuthentication(
-				Configuration.GetSection("OpenId").Get<OpenIdOptions>());*/
+			services.AddOpenIdAuthentication(
+				Configuration.GetSection("OpenId").Get<OpenIdOptions>());
 
 			services.AddModules();
 		}

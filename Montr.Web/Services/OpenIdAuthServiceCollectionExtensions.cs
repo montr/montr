@@ -68,7 +68,7 @@ namespace Montr.Web.Services
 					options.SaveTokens = true;
 					options.GetClaimsFromUserInfoEndpoint = true;
 
-					options.Scope.Add("tendr");
+					// options.Scope.Add("tendr");
 					options.Scope.Add("offline_access");
 					// options.ClaimActions.MapJsonKey("website", "website");
 				});

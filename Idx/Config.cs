@@ -27,7 +27,6 @@ namespace Idx
 		// clients want to access resources (aka scopes)
 		public static IEnumerable<Client> GetClients()
 		{
-			// client credentials client
 			return new List<Client>
 			{
 				// OpenID Connect hybrid flow and client credentials client
@@ -39,7 +38,7 @@ namespace Idx
 
 					RequireConsent = false, // https://identityserver4.readthedocs.io/en/dev/quickstarts/6_aspnet_identity.html
 
-					ClientSecrets = 
+					ClientSecrets =
 					{
 						new Secret("secret".Sha256())
 					},
@@ -56,11 +55,41 @@ namespace Idx
 					},
 					AllowedCorsOrigins = { "http://app.tendr.montr.io:5000" },
 
-					AllowedScopes = 
+					AllowedScopes =
 					{
 						IdentityServerConstants.StandardScopes.OpenId,
 						IdentityServerConstants.StandardScopes.Profile,
 						"tendr"
+					},
+					AllowOfflineAccess = true
+				},
+				new Client
+				{
+					ClientId = "kompany",
+					ClientName = "Kompany",
+					AllowedGrantTypes = GrantTypes.HybridAndClientCredentials,
+
+					RequireConsent = false,
+
+					ClientSecrets =
+					{
+						new Secret("secret".Sha256())
+					},
+
+					RedirectUris =
+					{
+						"http://kompany.montr.io:5010/signin-oidc"
+					},
+					PostLogoutRedirectUris =
+					{
+						"http://kompany.montr.io:5010/signout-callback-oidc",
+					},
+					AllowedCorsOrigins = { "http://kompany.montr.io:5010" },
+
+					AllowedScopes =
+					{
+						IdentityServerConstants.StandardScopes.OpenId,
+						IdentityServerConstants.StandardScopes.Profile,
 					},
 					AllowOfflineAccess = true
 				}
