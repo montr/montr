@@ -1,4 +1,4 @@
-import { Fetcher } from "@montr-core/.";
+import { Fetcher } from "@montr-core/services";
 
 import { IDataView, IPaneProps } from "./";
 import { Constants } from "./Constants";

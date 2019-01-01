@@ -1,4 +1,5 @@
-import { Fetcher, Guid } from "@montr-core/.";
+import { Guid } from "@montr-core/.";
+import { Fetcher } from "@montr-core/services";
 
 import { ICompany } from "./ICompany";
 import { Constants } from "./Constants";

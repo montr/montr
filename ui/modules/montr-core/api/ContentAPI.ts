@@ -1,4 +1,4 @@
-import { Fetcher } from "../";
+import { Fetcher } from "../services";
 
 import { Constants, IMenu } from "./";
 

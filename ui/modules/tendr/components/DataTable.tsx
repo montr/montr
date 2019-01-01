@@ -5,7 +5,8 @@ import { Link } from "react-router-dom";
 import { Table } from "antd";
 import { ColumnProps, PaginationConfig, SorterResult, SortOrder } from "antd/lib/table";
 
-import { Fetcher, IIndexer } from "@montr-core/.";
+import { IIndexer } from "@montr-core/.";
+import { Fetcher } from "@montr-core/services";
 
 import { MetadataAPI, IDataColumn, IDataResult } from "../api";
 
@@ -84,7 +85,7 @@ export class DataTable<TModel extends IIndexer> extends React.Component<DataTabl
 						defaultSortOrder: defaultSortOrder,
 						// wtf: not enought for antd to set defaultSortOrder,
 						// see getSortStateFromColumns() in https://github.com/ant-design/ant-design/blob/master/components/table/Table.tsx
-						// sortOrder: defaultSortOrder, 
+						// sortOrder: defaultSortOrder,
 						width: item.width,
 						render: render
 					};
