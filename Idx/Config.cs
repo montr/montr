@@ -76,22 +76,37 @@ namespace Idx
 						new Secret("secret".Sha256())
 					},
 
-					RedirectUris =
-					{
-						"http://kompany.montr.io:5010/signin-oidc"
-					},
-					PostLogoutRedirectUris =
-					{
-						"http://kompany.montr.io:5010/signout-callback-oidc",
-					},
+					RedirectUris = { "http://kompany.montr.io:5010/signin-oidc" },
+					PostLogoutRedirectUris = { "http://kompany.montr.io:5010/signout-callback-oidc" },
 					AllowedCorsOrigins = { "http://kompany.montr.io:5010" },
 
 					AllowedScopes =
 					{
 						IdentityServerConstants.StandardScopes.OpenId,
 						IdentityServerConstants.StandardScopes.Profile,
+						"tendr"
 					},
+
 					AllowOfflineAccess = true
+				},
+				new Client
+				{
+					ClientId = "ui",
+					AllowedGrantTypes = GrantTypes.Implicit,
+					AllowAccessTokensViaBrowser = true,
+					AlwaysIncludeUserClaimsInIdToken = true,
+					RequireConsent = false,
+
+					RedirectUris = { "http://kompany.montr.io:5010/signin-oidc" },
+					PostLogoutRedirectUris = { "http://kompany.montr.io:5010/signout-callback-oidc" },
+					AllowedCorsOrigins = { "http://tendr.montr.io:5000", "http://kompany.montr.io:5010" },
+
+					AllowedScopes =
+					{
+						IdentityServerConstants.StandardScopes.OpenId,
+						IdentityServerConstants.StandardScopes.Profile,
+						"tendr"
+					}
 				}
 			};
 		}

@@ -4,6 +4,8 @@ import { Guid } from "@montr-core/.";
 
 import { Form, Input, Checkbox, Button } from "antd";
 import { FormComponentProps } from "antd/lib/form";
+
+import { AuthService } from "@montr-core/services/AuthService";
 import { CompanyAPI } from "../../api/CompanyAPI";
 
 interface IProps extends FormComponentProps {
@@ -13,8 +15,17 @@ interface IState {
 }
 
 class RegistrationForm extends React.Component<IProps, IState> {
-	state = {
-	};
+
+	public authService: AuthService;
+
+	constructor(props: IProps) {
+		super(props);
+
+		this.state = {
+		};
+
+		this.authService = new AuthService();
+	}
 
 	handleSubmit = (e: React.SyntheticEvent) => {
 		e.preventDefault();
@@ -22,10 +33,18 @@ class RegistrationForm extends React.Component<IProps, IState> {
 			if (!err) {
 				console.log("Received values of form: ", values);
 
-				CompanyAPI
-					.create(values)
-					.then((uid: Guid) => {
-						console.log(uid);
+				this.authService
+					.getUser()
+					.then((user: any) => {
+
+						if (user && user.access_token) {
+							CompanyAPI
+								.create(Object.assign(values, { token: user.access_token }))
+								.then((uid: Guid) => {
+									console.log(uid);
+								});
+						}
+
 					});
 			}
 		});

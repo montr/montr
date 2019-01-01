@@ -64,7 +64,10 @@ namespace Idx
 				// this defines a CORS policy called "default"
 				options.AddPolicy("default", policy =>
 				{
-					policy.WithOrigins("http://app.tendr.local:5000")
+					policy.WithOrigins(
+							"http://kompany.montr.io:5010",
+							"http://tendr.montr.io:5000",
+							"http://app.tendr.montr.io:5000")
 						.AllowAnyHeader()
 						.AllowAnyMethod();
 				});

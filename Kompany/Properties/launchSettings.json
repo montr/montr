@@ -1,7 +1,7 @@
 ﻿{
 	"iisSettings": {
-		"windowsAuthentication": false, 
-		"anonymousAuthentication": true, 
+		"windowsAuthentication": false,
+		"anonymousAuthentication": true,
 		"iisExpress": {
 			"applicationUrl": "http://localhost:54470",
 			"sslPort": 0
@@ -18,7 +18,7 @@
 		"Kompany": {
 			"commandName": "Project",
 			"launchBrowser": true,
-			"applicationUrl": "http://app.kompany.montr.io:5010;https://app.kompany.montr.io:5011/",
+			"applicationUrl": "http://kompany.montr.io:5010;https://kompany.montr.io:5011/",
 			"environmentVariables": {
 				"ASPNETCORE_ENVIRONMENT": "Development"
 			}

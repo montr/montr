@@ -1,42 +1,50 @@
 // import { message } from "antd";
 
 function checkStatus(response: Response) {
-    if (!response.ok) {
-        // message.error(`${response.status} (${response.statusText}) @ ${response.url}`);
-        throw Error(`${response.status} (${response.statusText}) @ ${response.url}`);
-    }
+	if (!response.ok) {
+		// message.error(`${response.status} (${response.statusText}) @ ${response.url}`);
+		throw Error(`${response.status} (${response.statusText}) @ ${response.url}`);
+	}
 
-    return response;
+	return response;
 }
 
 const post = async (url: string, body?: any): Promise<any> => {
 
-    const options: RequestInit = {
-        method: "POST"
-    };
+	const options: RequestInit = {
+		method: "POST",
+		headers: {}
+	};
 
-    if (body) {
-        options.headers = {
-            'Content-Type': 'application/json'
-        }
-        options.body = JSON.stringify(body);
-    }
+	if (body) {
+		options.headers = Object.assign(options.headers, {
+			"Content-Type": "application/json"
+		});
 
-    const response = await fetch(url, options);
+		if (body.token) {
+			options.headers = Object.assign(options.headers, {
+				"Authorization": `Bearer ${body.token}`
+			});
+		}
 
-    checkStatus(response)
+		options.body = JSON.stringify(body);
+	}
 
-    const contentType = response.headers.get("Content-Type");
+	const response = await fetch(url, options);
 
-    if (contentType && contentType.startsWith("application/json")) {
-        const data = await response.json();
+	checkStatus(response)
 
-        return data;
-    }
+	const contentType = response.headers.get("Content-Type");
 
-    return null;
+	if (contentType && contentType.startsWith("application/json")) {
+		const data = await response.json();
+
+		return data;
+	}
+
+	return null;
 };
 
 export const Fetcher = {
-    post
+	post
 };

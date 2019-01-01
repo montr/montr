@@ -1,11 +1,12 @@
 ﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Montr.Metadata.Models;
 using Montr.Metadata.Services;
 
 namespace Montr.Metadata.Controllers
 {
-	[ApiController, Route("api/[controller]/[action]")]
+	[Authorize, ApiController, Route("api/[controller]/[action]")]
 	public class MetadataController : ControllerBase
 	{
 		private readonly IMetadataProvider _metadataProvider;

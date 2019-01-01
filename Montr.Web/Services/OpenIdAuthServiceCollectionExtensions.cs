@@ -1,8 +1,10 @@
 ﻿using System;
 using System.IdentityModel.Tokens.Jwt;
+using IdentityServer4.AccessTokenValidation;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.OpenIdConnect;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Montr.Web.Services
@@ -18,21 +20,21 @@ namespace Montr.Web.Services
 
 	public static class OpenIdAuthServiceCollectionExtensions
 	{
-		public static AuthenticationBuilder AddOpenIdAuthentication(this IServiceCollection services, OpenIdOptions openIdOptions)
+		public static AuthenticationBuilder AddOpenIdApiAuthentication(this IServiceCollection services, OpenIdOptions openIdOptions)
 		{
 			if (services == null) throw new ArgumentNullException(nameof(services));
 			if (openIdOptions == null) throw new ArgumentNullException(nameof(openIdOptions));
 
 			// for api login
-			/*services
+			return services
 				.AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
 				.AddIdentityServerAuthentication(options =>
 				{
-					options.Authority = "http://idx.local:5050";
+					options.Authority = openIdOptions.Authority;
 					options.RequireHttpsMetadata = false;
 
 					options.ApiName = "tendr";
-				});*/
+				});
 
 			// https://github.com/IdentityServer/IdentityServer3/issues/487
 			// leastprivilege commented on Nov 4, 2014
@@ -41,11 +43,15 @@ namespace Montr.Web.Services
 
 			// https://github.com/aspnetboilerplate/aspnetboilerplate/issues/2836
 			// Support both openId and bearer token of the identity server？
+		}
+
+		public static AuthenticationBuilder AddOpenIdAuthentication(this IServiceCollection services, OpenIdOptions openIdOptions)
+		{
+			if (services == null) throw new ArgumentNullException(nameof(services));
+			if (openIdOptions == null) throw new ArgumentNullException(nameof(openIdOptions));
 
 			// for user login
 			JwtSecurityTokenHandler.DefaultInboundClaimTypeMap.Clear();
-
-			// OpenIdOptions openIdOptions = configuration.GetSection("OpenId").Get<OpenIdOptions>();
 
 			return services
 				.AddAuthentication(options =>

@@ -2,12 +2,13 @@ using System;
 using Kompany.Entities;
 using Kompany.Models;
 using LinqToDB;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Montr.Data.Linq2Db;
 
 namespace Kompany.Controllers
 {
-	[/*Authorize,*/ ApiController, Route("api/[controller]/[action]")]
+	[Authorize, ApiController, Route("api/[controller]/[action]")]
 	public class CompanyController : ControllerBase
 	{
 		[HttpPost]

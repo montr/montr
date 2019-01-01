@@ -1,11 +1,12 @@
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Montr.Web.Models;
 using Montr.Web.Services;
 
 namespace Montr.Web.Controllers
 {
-	[ApiController, Route("api/[controller]/[action]")]
+	[Authorize, ApiController, Route("api/[controller]/[action]")]
 	public class ContentController : ControllerBase
 	{
 		private readonly IContentProvider _contentProvider;
