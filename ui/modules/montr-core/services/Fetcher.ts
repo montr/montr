@@ -1,50 +1,45 @@
-// import { message } from "antd";
+import axios from "axios"
 
-function checkStatus(response: Response) {
-	if (!response.ok) {
-		// message.error(`${response.status} (${response.statusText}) @ ${response.url}`);
-		throw Error(`${response.status} (${response.statusText}) @ ${response.url}`);
-	}
+import { AuthService } from "./AuthService"
 
-	return response;
-}
+const authService = new AuthService();
 
-const post = async (url: string, body?: any): Promise<any> => {
+const authenticated = axios.create();
 
-	const options: RequestInit = {
-		method: "POST",
-		headers: {}
-	};
+authenticated.interceptors.request.use(
+	async (config) => {
 
-	if (body) {
-		options.headers = Object.assign(options.headers, {
-			"Content-Type": "application/json"
-		});
+		const user = await authService.getUser();
 
-		if (body.token) {
-			options.headers = Object.assign(options.headers, {
-				"Authorization": `Bearer ${body.token}`
-			});
+		if (user && user.access_token) {
+			config.headers.Authorization = `Bearer ${user.access_token}`;
 		}
 
-		options.body = JSON.stringify(body);
+		return config;
+	}, (error) => {
+		return Promise.reject(error);
+	});
+
+authenticated.interceptors.response.use(null,
+	(error) => {
+		if (error.response.status === 401) {
+
+			// todo: renew token?
+
+			// hashHistory.push('/login');
+
+			authService.login();
+			return;
+		}
+
+		return Promise.reject(error);
+	});
+
+export class Fetcher {
+	public async post(url: string, body?: any): Promise<any> {
+
+		const response = await authenticated.post(url, body);
+
+		return response ? response.data : null;
 	}
-
-	const response = await fetch(url, options);
-
-	checkStatus(response)
-
-	const contentType = response.headers.get("Content-Type");
-
-	if (contentType && contentType.startsWith("application/json")) {
-		const data = await response.json();
-
-		return data;
-	}
-
-	return null;
-};
-
-export const Fetcher = {
-	post
 };

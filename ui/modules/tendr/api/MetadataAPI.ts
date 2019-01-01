@@ -13,7 +13,7 @@ const componentToClass: Map<string, React.ComponentClass> = new Map<string, Reac
 componentToClass.set("panes/private/EditEventPane", panes.EditEventPane);
 
 const load = async<TEntity>(viewId: string): Promise<IDataView<TEntity>> => {
-	const data: IDataView<TEntity> = await Fetcher.post(getLoadUrl(), { viewId: viewId });
+	const data: IDataView<TEntity> = await new Fetcher().post(getLoadUrl(), { viewId: viewId });
 
 	data.panes && data.panes.forEach((pane) => {
 		if (pane.component) {

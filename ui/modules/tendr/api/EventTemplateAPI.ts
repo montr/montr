@@ -4,7 +4,7 @@ import { IEventTemplate } from "./";
 import { Constants } from "./Constants";
 
 const load = async (): Promise<IEventTemplate[]> => {
-    return Fetcher.post(`${Constants.baseURL}/EventTemplates/Load`);
+    return new Fetcher().post(`${Constants.baseURL}/EventTemplates/Load`);
 };
 
 export const EventTemplateAPI = {

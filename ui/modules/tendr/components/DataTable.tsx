@@ -111,23 +111,21 @@ export class DataTable<TModel extends IIndexer> extends React.Component<DataTabl
 			loading: true
 		});
 
-		Fetcher
-			.post(this.props.loadUrl, {
-				// results: 10,
-				...params,
-			})
-			.then((data: IDataResult<TModel>) => {
+		new Fetcher().post(this.props.loadUrl, {
+			// results: 10,
+			...params,
+		}).then((data: IDataResult<TModel>) => {
 
-				const pagination = { ...this.state.pagination };
+			const pagination = { ...this.state.pagination };
 
-				pagination.total = data.totalCount;
+			pagination.total = data.totalCount;
 
-				this.setState({
-					loading: false,
-					pagination,
-					data: data.rows
-				});
+			this.setState({
+				loading: false,
+				pagination,
+				data: data.rows
 			});
+		});
 	}
 
 	componentDidMount() {

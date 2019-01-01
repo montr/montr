@@ -5,7 +5,7 @@ import { ICompany } from "./ICompany";
 import { Constants } from "./Constants";
 
 const create = async (item: ICompany): Promise<Guid> => {
-    return Fetcher.post(
+    return new Fetcher().post(
         `${Constants.baseURL}/Company/Create`, item);
 };
 
