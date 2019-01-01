@@ -35,7 +35,7 @@ namespace Kompany
 
 			services.AddMvc()
 				.SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
-				.AddApplicationPart(typeof(AccountController).Assembly)
+				.AddApplicationPart(typeof(ContentController).Assembly)
 				.AddApplicationPart(typeof(MetadataController).Assembly)
 				.AddJsonOptions(options =>
 				{

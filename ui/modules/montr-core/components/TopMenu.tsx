@@ -2,7 +2,7 @@ import * as React from "react";
 
 import { Menu, Icon } from "antd";
 
-import { IAccountInfo, AccountAPI, IMenu, ContentAPI } from "../api";
+import { IMenu, ContentAPI } from "../api";
 import { AuthService } from "../services/AuthService";
 
 interface Props {
@@ -10,7 +10,6 @@ interface Props {
 
 interface State {
 	menu: IMenu;
-	data: IAccountInfo;
 	user?: any;
 }
 
@@ -24,7 +23,6 @@ export class TopMenu extends React.Component<Props, State> {
 
 		this.state = {
 			menu: { items: [] },
-			data: { claims: {} }
 		};
 
 		this.authService = new AuthService();
@@ -32,7 +30,7 @@ export class TopMenu extends React.Component<Props, State> {
 	}
 
 	public componentDidMount() {
-		// todo: move to special route and component
+		// todo: move to special route and component for login
 		if (window.location.href.indexOf("/signin-oidc") != -1) {
 			this.authService.signinRedirectCallback().then((user) => {
 				window.location.href = "/";
@@ -41,23 +39,13 @@ export class TopMenu extends React.Component<Props, State> {
 			});
 		}
 
-		this.authService.getUser().then((user: any) => {
-			if (user && user.access_token) {
-				ContentAPI
-					.getMenu("TopMenu", user.access_token)
-					.then((data: IMenu) => {
-						this.setState({ menu: data });
-					});
-			}
-		});
+		ContentAPI
+			.getMenu("TopMenu")
+			.then((data: IMenu) => {
+				this.setState({ menu: data });
+			});
 
-		/* AccountAPI
-			.info()
-			.then((data) => {
-				this.setState({ data });
-			}); */
-
-		// this.getUser();
+		this.getUser();
 	}
 
 	public login = () => {
@@ -65,7 +53,6 @@ export class TopMenu extends React.Component<Props, State> {
 	};
 
 	public componentWillUnmount() {
-		console.log("componentWillUnmount");
 		this.shouldCancel = true;
 	}
 
@@ -86,16 +73,15 @@ export class TopMenu extends React.Component<Props, State> {
 	};
 
 	public getUser = () => {
-		this.authService.getUser().then(user => {
-			if (user) {
-				console.log("User has been successfully loaded from store.");
-			} else {
-				console.log("You are not logged in.");
-			}
+		this.authService.getUser().then((user: any) => {
 
 			if (!this.shouldCancel) {
 				this.setState({ user });
 			}
+
+			if (user && user.access_token) {
+			}
+
 		});
 	};
 

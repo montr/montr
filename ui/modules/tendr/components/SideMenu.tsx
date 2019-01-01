@@ -4,17 +4,17 @@ import { Link } from "react-router-dom";
 
 import { Layout, Menu, Icon } from "antd";
 
-import { AccountAPI } from "@montr-core/api";
+// import { AccountAPI } from "@montr-core/api";
 
 export class SideMenu extends React.Component {
 	handleLogout(e: React.SyntheticEvent): void {
 		e.preventDefault();
 
-		AccountAPI.logout()
+		/* AccountAPI.logout()
 			.then((data) => {
 				console.log("logged out...");
 				window.location.href = "/";
-			});
+			}); */
 	}
 
 	render() {
