@@ -25,8 +25,15 @@ export class TopMenu extends React.Component<Props, State> {
 			menu: { items: [] },
 		};
 
-		this.authService = new AuthService();
 		this.shouldCancel = false;
+
+		this.authService = new AuthService();
+		this.authService.addUserLoaded((user) => {
+			console.log("USER LOADED", window.frameElement, user);
+			//if (!this.shouldCancel) {
+			this.setState({ user });
+			//}
+		});
 	}
 
 	public componentDidMount() {
@@ -75,13 +82,17 @@ export class TopMenu extends React.Component<Props, State> {
 	public getUser = () => {
 		this.authService.getUser().then((user: any) => {
 
-			if (!this.shouldCancel) {
-				this.setState({ user });
+			if (user) {
+				if (!this.shouldCancel) {
+					this.setState({ user });
+				}
 			}
-
-			if (user && user.access_token) {
-			}
-
+			/* else {
+				console.log("LOGIN SILENT", window.frameElement, user);
+				this.authService.loginSilent().then((user) => {
+					console.log("LOGIN SILENT RESULT", window.frameElement, user);
+				});
+			} */
 		});
 	};
 
@@ -97,9 +108,7 @@ export class TopMenu extends React.Component<Props, State> {
 					<span><Icon type="user" />{user.profile.name}</span>
 				}>
 					<Menu.Item key="user:1"><a href="http://idx.montr.io:5050/">Личный кабинет</a></Menu.Item>
-					<Menu.Item key="user:rt">
-						<span><Icon type="sync" /><a onClick={this.renewToken}>Обновить токен</a></span>
-					</Menu.Item>
+
 					<Menu.Item key="user:logout">
 						<span><Icon type="logout" /><a onClick={this.logout}>Выйти</a></span>
 					</Menu.Item>
@@ -125,7 +134,9 @@ export class TopMenu extends React.Component<Props, State> {
 						</Menu.Item>
 					);
 				})}
-
+				<Menu.Item key="user:rt">
+					<span><Icon type="sync" /><a onClick={this.renewToken}>Обновить токен</a></span>
+				</Menu.Item>
 				{userMenu}
 			</Menu>
 		);

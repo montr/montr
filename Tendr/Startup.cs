@@ -44,7 +44,7 @@ namespace Tendr
 					options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
 				});
 
-			services.AddOpenIdAuthentication(
+			services.AddOpenIdApiAuthentication(
 				Configuration.GetSection("OpenId").Get<OpenIdOptions>());
 
 			services.AddModules();
@@ -65,6 +65,11 @@ namespace Tendr
 
 			app.UseMvc(routes =>
 			{
+				routes.MapRoute(
+					name: "signin-oidc",
+					template: "signin-oidc",
+					defaults: new { controller = "Home", action = "Index" });
+
 				routes.MapRoute(
 					name: "default",
 					template: "{controller=Home}/{action=Index}/{id?}");

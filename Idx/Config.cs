@@ -12,7 +12,10 @@ namespace Idx
 			return new List<IdentityResource>
 			{
 				new IdentityResources.OpenId(),
-				new IdentityResources.Profile()
+				new IdentityResources.Profile(),
+				new IdentityResources.Address(),
+				new IdentityResources.Email(),
+				new IdentityResources.Phone()
 			};
 		}
 
@@ -97,15 +100,34 @@ namespace Idx
 					AlwaysIncludeUserClaimsInIdToken = true,
 					RequireConsent = false,
 
-					RedirectUris = { "http://kompany.montr.io:5010/signin-oidc" },
-					PostLogoutRedirectUris = { "http://kompany.montr.io:5010/signout-callback-oidc" },
-					AllowedCorsOrigins = { "http://tendr.montr.io:5000", "http://kompany.montr.io:5010" },
+					RedirectUris =
+					{
+						"http://kompany.montr.io:5010/signin-oidc",
+						"http://tendr.montr.io:5000/signin-oidc",
+						"http://app.tendr.montr.io:5000/signin-oidc",
+					},
+
+					PostLogoutRedirectUris =
+					{
+						"http://kompany.montr.io:5010/signout-callback-oidc",
+						"http://tendr.montr.io:5000/signout-callback-oidc",
+						"http://app.tendr.montr.io:5000/signout-callback-oidc",
+					},
+
+					AllowedCorsOrigins = {
+						"http://kompany.montr.io:5010",
+						"http://tendr.montr.io:5000",
+						"http://app.tendr.montr.io:5000",
+					},
 
 					AllowedScopes =
 					{
 						IdentityServerConstants.StandardScopes.OpenId,
 						IdentityServerConstants.StandardScopes.Profile,
-						"tendr"
+						// IdentityServerConstants.StandardScopes.Address,
+						// IdentityServerConstants.StandardScopes.Email,
+						// IdentityServerConstants.StandardScopes.Phone,
+						// "tendr"
 					}
 				}
 			};
