@@ -7,6 +7,7 @@ import * as ru_RU from "antd/lib/locale-provider/ru_RU";
 import { SideMenu } from "../../components";
 
 import { Dashboard, SearchEvents, EditEvent, SelectEventTemplate } from "./";
+import { AuthHandler } from "@montr-core/components";
 
 export class App extends React.Component {
 
@@ -24,6 +25,7 @@ export class App extends React.Component {
 							<Layout.Content>
 
 								<Route path="/" exact component={() => <Dashboard />} />
+								<Route path="/signin-oidc" component={() => <AuthHandler />} />
 								<Route path="/events" exact component={() => <SearchEvents />} />
 								<Route path="/events/new" component={() => <SelectEventTemplate />} />
 								<Route path="/events/edit/:id"

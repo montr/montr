@@ -1,5 +1,4 @@
-﻿@using Microsoft.AspNetCore.Authentication
-@model object
+﻿@model object
 
 <!DOCTYPE html>
 
@@ -11,11 +10,11 @@
 		<div id="root"></div>
 		@if (Context.Request.Host.Host == "app.tendr.montr.io")
 		{
-			<script src="./assets/tendr.app.js"></script>
+			<script src="/assets/tendr.app.js"></script>
 		}
 		else
 		{
-			<script src="./assets/tendr.js"></script>
+			<script src="/assets/tendr.js"></script>
 		}
 	</body>
 </html>

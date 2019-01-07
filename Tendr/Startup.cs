@@ -76,7 +76,7 @@ namespace Tendr
 
 				routes.MapRoute(
 					name: "greedy",
-					template: "{*greedy}",
+					template: "{**greedy}",
 					defaults: new { controller = "Home", action = "Index" });
 			});
 		}
