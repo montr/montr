@@ -16,7 +16,7 @@ export class App extends React.Component {
 
 	render() {
 		return (
-			<Router basename="/#" >
+			<Router /* basename="/#" */ >
 				<LocaleProvider locale={ru_RU as any}>
 					<Layout hasSider>
 						<SideMenu />

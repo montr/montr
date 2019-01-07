@@ -137,7 +137,9 @@ export class TopMenu extends React.Component<Props, State> {
 				<Menu.Item key="user:rt">
 					<span><Icon type="sync" /><a onClick={this.renewToken}>Обновить токен</a></span>
 				</Menu.Item>
+
 				{userMenu}
+
 			</Menu>
 		);
 	}

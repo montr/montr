@@ -6,7 +6,7 @@ using Montr.Metadata.Services;
 
 namespace Montr.Metadata.Controllers
 {
-	[Authorize, ApiController, Route("api/[controller]/[action]")]
+	[/* Authorize, */ ApiController, Route("api/[controller]/[action]")]
 	public class MetadataController : ControllerBase
 	{
 		private readonly IMetadataProvider _metadataProvider;
