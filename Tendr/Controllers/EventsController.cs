@@ -12,7 +12,7 @@ using Tendr.Models;
 
 namespace Tendr.Controllers
 {
-	[/*Authorize,*/ ApiController, Route("api/[controller]/[action]")]
+	[Authorize, ApiController, Route("api/[controller]/[action]")]
 	public class EventsController : ControllerBase
 	{
 		[HttpPost]

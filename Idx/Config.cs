@@ -127,7 +127,7 @@ namespace Idx
 						// IdentityServerConstants.StandardScopes.Address,
 						// IdentityServerConstants.StandardScopes.Email,
 						// IdentityServerConstants.StandardScopes.Phone,
-						// "tendr"
+						"tendr"
 					}
 				}
 			};

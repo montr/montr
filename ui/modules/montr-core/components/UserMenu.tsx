@@ -62,14 +62,16 @@ export class UserMenu extends React.Component<MenuProps, State> {
 				<Menu.SubMenu {... this.props} title={
 					<span><Icon type="user" />{user.profile.name}</span>
 				}>
-					<Menu.Item key="user:1"><a href="http://idx.montr.io:5050/">Личный кабинет</a></Menu.Item>
+					<Menu.Item key="user:1">
+						<a href="http://idx.montr.io:5050/">Личный кабинет</a>
+					</Menu.Item>
 
 					<Menu.Item key="user:rt">
-						<span><Icon type="sync" /><a onClick={this.renewToken}>Обновить токен</a></span>
+						<a onClick={this.renewToken}>Обновить токен</a>
 					</Menu.Item>
 
 					<Menu.Item key="user:logout">
-						<span><Icon type="logout" /><a onClick={this.logout}>Выйти</a></span>
+						<a onClick={this.logout}>Выйти</a>
 					</Menu.Item>
 				</Menu.SubMenu>
 			);
