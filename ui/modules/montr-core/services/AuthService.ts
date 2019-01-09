@@ -19,6 +19,8 @@ export class AuthService {
 			return AuthService.instance;
 		}
 
+		// https://github.com/IdentityModel/oidc-client-js/wiki
+		// https://openid.net/specs/openid-connect-core-1_0.html#Authentication
 		const settings = {
 			authority: Constants.authority,
 			client_id: Constants.clientId,
@@ -28,10 +30,11 @@ export class AuthService {
 			// tslint:disable-next-line:object-literal-sort-keys
 			post_logout_redirect_uri: `${Constants.clientRoot}/signout-callback-oidc`,
 			// revokeAccessTokenOnSignout: true,
-			response_type: "id_token token",
-			// response_type: "code",
+			// response_type: "id_token token",
+			response_type: "code",
 			scope: Constants.clientScope,
 			automaticSilentRenew: true,
+			monitorSession: true
 		};
 
 		this._userManager = new UserManager(settings);
@@ -40,7 +43,7 @@ export class AuthService {
 			console.log("AUTH SERVICE --- USER LOADED", window.frameElement, user);
 		}); */
 
-		// Log.logger = console;
+		Log.logger = console;
 		Log.level = Log.INFO;
 
 		AuthService.instance = this;
