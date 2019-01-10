@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
+using Serilog;
+using Serilog.Events;
 
 namespace Idx
 {
@@ -7,10 +9,23 @@ namespace Idx
 	{
 		public static void Main(string[] args)
 		{
+			System.Console.Title = typeof(Startup).Namespace;
+
 			var hostBuilder = WebHost
 				.CreateDefaultBuilder(args)
 				.UseStartup<Startup>()
-				.UseSentry();
+				.UseSentry()
+				.UseSerilog((context, configuration) =>
+				{
+					configuration
+						.MinimumLevel.Debug()
+						.MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
+						.MinimumLevel.Override("System", LogEventLevel.Warning)
+						.MinimumLevel.Override("Microsoft.AspNetCore.Authentication", LogEventLevel.Information)
+						.Enrich.FromLogContext()
+						.WriteTo.File($"../../.logs/{typeof(Startup).Namespace}-{context.HostingEnvironment.EnvironmentName}.txt")
+						.WriteTo.Console(outputTemplate: "{Timestamp:o} [{Level:w4}] {SourceContext} - {Message:lj}{NewLine}{Exception}");
+				});
 
 			var host = hostBuilder.Build();
 

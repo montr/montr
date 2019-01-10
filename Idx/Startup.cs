@@ -1,5 +1,4 @@
 ﻿using System;
-using IdentityServer4;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -13,17 +12,19 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Idx.Services;
 using LinqToDB.Mapping;
-using Microsoft.IdentityModel.Tokens;
 using DbContext = Idx.Entities.DbContext;
 
 namespace Idx
 {
 	public class Startup
 	{
-		public Startup(IConfiguration configuration)
+		public Startup(IHostingEnvironment environment, IConfiguration configuration)
 		{
+			Environment = environment;
 			Configuration = configuration;
 		}
+
+		public IHostingEnvironment Environment { get; }
 
 		public IConfiguration Configuration { get; }
 
@@ -105,37 +106,48 @@ namespace Idx
 					options.Conventions.AuthorizeAreaPage("Identity", "/Account/Logout");
 				});
 
-			services.ConfigureApplicationCookie(options =>
+			/*services.ConfigureApplicationCookie(options =>
 			{
 				options.LoginPath = "/Identity/Account/Login";
 				// options.LogoutPath = "/Identity/Account/Logout";
 				options.LogoutPath = "/Account/Logout";
 				options.AccessDeniedPath = "/Identity/Account/AccessDenied";
-			});
+			});*/
 
 			// using Microsoft.AspNetCore.Identity.UI.Services;
 			services.AddSingleton<IEmailSender, EmailSender>();
 
-			// configure identity server with in-memory stores, keys, clients and scopes
-			services.AddIdentityServer(options =>
+			var builder = services.AddIdentityServer(options =>
 				{
 					options.Authentication.CookieAuthenticationScheme = IdentityConstants.ApplicationScheme;
+
 					options.Cors.CorsPolicyName = "default";
 
 					options.UserInteraction.LoginUrl = "/Identity/Account/Login";
-					// options.UserInteraction.LogoutUrl = "/Identity/Account/Logout";
 					options.UserInteraction.LogoutUrl = "/Account/Logout";
 				})
-				.AddDeveloperSigningCredential() // tempkey.rsa
-				.AddInMemoryPersistedGrants()
+				// .AddInMemoryPersistedGrants()
 				.AddInMemoryIdentityResources(Config.GetIdentityResources())
 				.AddInMemoryApiResources(Config.GetApiResources())
 				.AddInMemoryClients(Config.GetClients())
 				.AddAspNetIdentity<DbUser>();
 
-			services.AddAuthentication(x =>
+			if (Environment.IsDevelopment())
+			{
+				builder.AddDeveloperSigningCredential(); // tempkey.rsa
+			}
+			else
+			{
+				throw new Exception("need to configure key material");
+			}
+
+			services
+				.AddAuthentication(x =>
 				{
+					// x.DefaultAuthenticateScheme = IdentityServerConstants.DefaultCookieAuthenticationScheme;
 					x.DefaultAuthenticateScheme = IdentityConstants.ApplicationScheme;
+					x.DefaultSignInScheme = IdentityConstants.ApplicationScheme;
+					x.DefaultSignOutScheme = IdentityConstants.ApplicationScheme;
 				})
 				.AddGoogle("Google", options =>
 				{
@@ -144,22 +156,7 @@ namespace Idx
 
 					options.ClientId = Configuration["Authentication:Google:ClientId"];
 					options.ClientSecret = Configuration["Authentication:Google:ClientSecret"];
-				})
-				/*.AddOpenIdConnect("oidc", "OpenID Connect", options =>
-				{
-					options.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
-					options.SignOutScheme = IdentityServerConstants.SignoutScheme;
-					options.SaveTokens = true;
-
-					options.Authority = "https://demo.identityserver.io/";
-					options.ClientId = "implicit";
-
-					options.TokenValidationParameters = new TokenValidationParameters
-					{
-						NameClaimType = "name",
-						RoleClaimType = "role"
-					};
-				})*/;
+				});
 		}
 
 		public void Configure(IApplicationBuilder app, IHostingEnvironment env)

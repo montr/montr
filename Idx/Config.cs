@@ -95,12 +95,13 @@ namespace Idx
 				new Client
 				{
 					ClientId = "ui",
+					ClientName = "UI Client",
 					// AllowedGrantTypes = GrantTypes.Implicit,
 					AllowedGrantTypes = GrantTypes.Code,
-					AllowAccessTokensViaBrowser = true,
+					// AllowAccessTokensViaBrowser = true,
 					AlwaysIncludeUserClaimsInIdToken = true,
 					RequireConsent = false,
-					RequirePkce = true,
+					// RequirePkce = true,
 					RequireClientSecret = false,
 
 					RedirectUris =
