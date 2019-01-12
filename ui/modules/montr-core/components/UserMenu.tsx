@@ -1,18 +1,20 @@
 import * as React from "react";
 
-import { Menu, Icon } from "antd";
+import { User } from "oidc-client";
+
+import { Menu, Icon, message } from "antd";
 
 import { AuthService } from "../services/AuthService";
 import { MenuProps } from "antd/lib/menu";
 
 interface State {
 	// todo: create User class
-	user?: any;
+	user?: User;
 }
 
 export class UserMenu extends React.Component<MenuProps, State> {
 
-	public authService: AuthService;
+	_authService: AuthService;
 
 	constructor(props: MenuProps) {
 		super(props);
@@ -20,37 +22,52 @@ export class UserMenu extends React.Component<MenuProps, State> {
 		this.state = {
 		};
 
-		this.authService = new AuthService();
+		this._authService = new AuthService();
 	}
 
-	public componentDidMount() {
-		this.getUser();
+	componentDidMount() {
+		this.getUser(true);
+
+		this._authService.onAuthenticated((user: User) => {
+			this.setState({ user });
+			// this.getUser(false);
+		})
 	}
 
-	public login = () => {
-		this.authService.login();
-	};
-
-	public logout = () => {
-		this.authService.logout();
-	};
-
-	public renewToken = () => {
-		this.authService
-			.renewToken()
-			.then(user => {
-				console.log("Token has been sucessfully renewed. :-)");
-				this.getUser();
-			})
-			.catch(error => {
-				console.log(error);
+	login = () => {
+		this._authService.login()
+			.catch(error => { // todo: use logger here and below
+				console.log("login error", error);
 			});
 	};
 
-	public getUser = () => {
-		this.authService.getUser().then((user: any) => {
-			this.setState({ user });
-		});
+	loginSilent = () => {
+		this._authService.loginSilent()
+			.catch(error => {
+				console.log("loginSilent error", error);
+			});
+	};
+
+	logout = () => {
+		this._authService.logout()
+			.catch(error => {
+				console.log("logout error", error);
+			});
+	};
+
+	getUser = (withLoginSilent: boolean) => {
+		this._authService.getUser()
+			.then((user: User) => {
+				this.setState({ user });
+
+				if (withLoginSilent) {
+					if (!user || user.expired) {
+						this.loginSilent();
+					}
+				}
+			}).catch(error => {
+				console.log("getUser error", error);
+			});
 	};
 
 	render() {
@@ -63,11 +80,7 @@ export class UserMenu extends React.Component<MenuProps, State> {
 					<span><Icon type="user" />{user.profile.name}</span>
 				}>
 					<Menu.Item key="user:1">
-						<a href="http://idx.montr.io:5050/">Личный кабинет</a>
-					</Menu.Item>
-
-					<Menu.Item key="user:rt">
-						<a onClick={this.renewToken}>Обновить токен</a>
+						<a href="http://idx.montr.io:5050/Identity/Account/Manage">Личный кабинет</a>
 					</Menu.Item>
 
 					<Menu.Item key="user:logout">

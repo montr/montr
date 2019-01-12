@@ -106,13 +106,12 @@ namespace Idx
 					options.Conventions.AuthorizeAreaPage("Identity", "/Account/Logout");
 				});
 
-			/*services.ConfigureApplicationCookie(options =>
+			services.ConfigureApplicationCookie(options =>
 			{
 				options.LoginPath = "/Identity/Account/Login";
-				// options.LogoutPath = "/Identity/Account/Logout";
 				options.LogoutPath = "/Account/Logout";
 				options.AccessDeniedPath = "/Identity/Account/AccessDenied";
-			});*/
+			});
 
 			// using Microsoft.AspNetCore.Identity.UI.Services;
 			services.AddSingleton<IEmailSender, EmailSender>();

@@ -19,22 +19,23 @@ export class App extends React.Component {
 		return (
 			<Router /* basename="/#" */ >
 				<LocaleProvider locale={ru_RU as any}>
-					<Layout hasSider>
-						<SideMenu />
-						<Layout className="bg-white">
-							<Layout.Content>
+					<AuthHandler>
+						<Layout hasSider>
+							<SideMenu />
+							<Layout className="bg-white">
+								<Layout.Content>
 
-								<Route path="/" exact component={() => <Dashboard />} />
-								<Route path="/signin-oidc" component={() => <AuthHandler />} />
-								<Route path="/events" exact component={() => <SearchEvents />} />
-								<Route path="/events/new" component={() => <SelectEventTemplate />} />
-								<Route path="/events/edit/:id"
-									component={({ match }: any) => <EditEvent {...match} />} />
+									<Route path="/" exact component={() => <Dashboard />} />
+									<Route path="/events" exact component={() => <SearchEvents />} />
+									<Route path="/events/new" component={() => <SelectEventTemplate />} />
+									<Route path="/events/edit/:id"
+										component={({ match }: any) => <EditEvent {...match} />} />
 
-							</Layout.Content>
-							<Layout.Footer className="bg-white">© {new Date().getFullYear()}</Layout.Footer>
+								</Layout.Content>
+								<Layout.Footer className="bg-white">© {new Date().getFullYear()}</Layout.Footer>
+							</Layout>
 						</Layout>
-					</Layout>
+					</AuthHandler>
 				</LocaleProvider>
 			</Router >
 		);

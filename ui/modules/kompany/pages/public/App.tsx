@@ -18,25 +18,26 @@ export class App extends React.Component {
 		return (
 			<Router /* basename="/#" */ >
 				<LocaleProvider locale={ru_RU as any}>
-					<Layout className="public-layout">
-						<Layout.Header>
-							<TopMenu />
-						</Layout.Header>
-						<Layout.Content style={{ padding: "0 50px" }}>
-							<Breadcrumb style={{ margin: "16px 0" }}>
-								<Breadcrumb.Item>Home</Breadcrumb.Item>
-								<Breadcrumb.Item>List</Breadcrumb.Item>
-								<Breadcrumb.Item>App</Breadcrumb.Item>
-							</Breadcrumb>
-							<div style={{ minHeight: 280 }}>
+					<AuthHandler>
+						<Layout className="public-layout">
+							<Layout.Header>
+								<TopMenu />
+							</Layout.Header>
+							<Layout.Content style={{ padding: "0 50px" }}>
+								<Breadcrumb style={{ margin: "16px 0" }}>
+									<Breadcrumb.Item>Home</Breadcrumb.Item>
+									<Breadcrumb.Item>List</Breadcrumb.Item>
+									<Breadcrumb.Item>App</Breadcrumb.Item>
+								</Breadcrumb>
+								<div style={{ minHeight: 280 }}>
 
-								<Route path="/" exact component={() => <Registration />} />
-								<Route path="/signin-oidc" component={() => <AuthHandler />} />
+									<Route path="/" exact component={() => <Registration />} />
 
-							</div>
-						</Layout.Content>
-						<Layout.Footer>© {new Date().getFullYear()}</Layout.Footer>
-					</Layout>
+								</div>
+							</Layout.Content>
+							<Layout.Footer>© {new Date().getFullYear()}</Layout.Footer>
+						</Layout>
+					</AuthHandler>
 				</LocaleProvider>
 			</Router>
 		);

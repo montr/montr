@@ -98,17 +98,24 @@ namespace Idx
 					ClientName = "UI Client",
 					// AllowedGrantTypes = GrantTypes.Implicit,
 					AllowedGrantTypes = GrantTypes.Code,
-					// AllowAccessTokensViaBrowser = true,
+					AllowAccessTokensViaBrowser = true,
 					AlwaysIncludeUserClaimsInIdToken = true,
 					RequireConsent = false,
-					// RequirePkce = true,
+					RequirePkce = true,
 					RequireClientSecret = false,
+
+					AllowOfflineAccess = true, // This feature refresh token
+					AccessTokenLifetime = 100, // seconds
+					IdentityTokenLifetime = 100, // seconds
 
 					RedirectUris =
 					{
 						"http://kompany.montr.io:5010/signin-oidc",
+						"http://kompany.montr.io:5010/silent-renew-oidc",
 						"http://tendr.montr.io:5000/signin-oidc",
+						"http://tendr.montr.io:5000/silent-renew-oidc",
 						"http://app.tendr.montr.io:5000/signin-oidc",
+						"http://app.tendr.montr.io:5000/silent-renew-oidc",
 					},
 
 					PostLogoutRedirectUris =

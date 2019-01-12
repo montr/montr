@@ -19,16 +19,16 @@ export class AuthHandler extends React.Component<Props, State> {
 	}
 
 	public componentDidMount() {
-		this._authService.signinRedirectCallback().then((user) => {
-			window.location.href = "/";
-		}).catch(function (e) {
-			console.error(e);
-		});
+		if (this._authService.isOidcCallback()) {
+			this._authService.processOidcCallback();
+		}
 	}
 
 	render() {
-		return (
-			<span />
-		);
+		if (this._authService.isOidcCallback() == false) {
+			return this.props.children;
+		}
+
+		return null;
 	}
 }
