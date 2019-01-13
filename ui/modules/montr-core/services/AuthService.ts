@@ -96,21 +96,21 @@ export class AuthService {
 		const url = this._navigator.getUrl();
 
 		if (url.indexOf(Constants.RedirectUri) != -1) {
-			this._userManager.signinRedirectCallback()
-				.then((user) => {
-					this._navigator.navigate("/");
+			this._userManager.signinRedirectCallback(url)
+				.then((user: User) => {
+					this.redirectCallback(user);
 				}).catch(function (e) {
 					console.error(e);
 				});
 		} else if (url.indexOf(Constants.SilentRedirectUri) != -1) {
-			this._userManager.signinSilentCallback()
+			this._userManager.signinSilentCallback(url)
 				.catch(function (e) {
 					console.error(e);
 				});
 		} else if (url.indexOf(Constants.PostLogoutRedirectUri) != -1) {
-			this._userManager.signoutRedirectCallback()
-				.then((user) => {
-					this._navigator.navigate("/");
+			this._userManager.signoutRedirectCallback(url)
+				.then((user: User) => {
+					this.redirectCallback(user);
 				}).catch(function (e) {
 					console.error(e);
 				});
@@ -121,16 +121,34 @@ export class AuthService {
 		return this._userManager.getUser();
 	}
 
-	public login(): Promise<void> {
-		return this._userManager.signinRedirect();
+	public login(): Promise<any> {
+		const args = this.getRedirectArgs();
+		return this._userManager.signinRedirect(args);
 	}
 
 	public loginSilent(): Promise<User> {
 		return this._userManager.signinSilent();
 	}
 
-	public logout(): Promise<void> {
-		return this._userManager.signoutRedirect();
+	public logout(): Promise<any> {
+		const args = this.getRedirectArgs();
+		return this._userManager.signoutRedirect(args);
+	}
+
+	private getRedirectArgs() {
+		return {
+			state: {
+				return_uri: this._navigator.getUrl()
+			}
+		};
+	}
+
+	private redirectCallback(user: User) {
+		let return_uri;
+		if (user && user.state) {
+			return_uri = user.state.return_uri
+		}
+		this._navigator.navigate(return_uri || "/");
 	}
 
 	public onAuthenticated(callback: (user: User) => void): void {
