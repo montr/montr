@@ -15,7 +15,7 @@
 		"@types/react-dom": "^16.0.11",
 		"@types/react-router": "^4.4.3",
 		"@types/react-router-dom": "^4.3.1",
-		"antd": "^3.12.1",
+		"antd": "^3.12.2",
 		"axios": "^0.18.0",
 		"oidc-client": "^1.6.1",
 		"react": "^16.6.3",
@@ -32,7 +32,7 @@
 		"style-loader": "^0.23.1",
 		"ts-import-plugin": "^1.5.5",
 		"typescript": "^3.2.2",
-		"webpack": "^4.28.3",
+		"webpack": "^4.28.4",
 		"webpack-cli": "^3.2.1"
 	}
 }
