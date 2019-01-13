@@ -1,6 +1,5 @@
 import * as React from "react";
-
-import { AuthService } from "../services/AuthService";
+import { AuthService } from "../services/";
 
 interface Props {
 }
@@ -19,13 +18,13 @@ export class AuthHandler extends React.Component<Props, State> {
 	}
 
 	public componentDidMount() {
-		if (this._authService.isOidcCallback()) {
-			this._authService.processOidcCallback();
+		if (this._authService.isCallback()) {
+			this._authService.processCallback();
 		}
 	}
 
 	render() {
-		if (this._authService.isOidcCallback() == false) {
+		if (this._authService.isCallback() == false) {
 			return this.props.children;
 		}
 

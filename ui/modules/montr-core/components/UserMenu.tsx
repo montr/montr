@@ -1,10 +1,7 @@
 import * as React from "react";
-
 import { User } from "oidc-client";
-
-import { Menu, Icon, message } from "antd";
-
-import { AuthService } from "../services/AuthService";
+import { Menu, Icon } from "antd";
+import { AuthService } from "../services/";
 import { MenuProps } from "antd/lib/menu";
 
 interface State {

@@ -42,4 +42,4 @@ export class Fetcher {
 
 		return response ? response.data : null;
 	}
-};
+}

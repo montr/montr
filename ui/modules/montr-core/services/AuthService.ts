@@ -1,6 +1,6 @@
 import { Log, User, UserManager } from "oidc-client";
-
 import { message } from "antd";
+import { NavigationService } from "./NavigationService";
 
 class Constants {
 	public static authority = "http://idx.montr.io:5050";
@@ -17,6 +17,7 @@ export class AuthService {
 	static instance: AuthService;
 
 	private _userManager: UserManager;
+	private _navigator: NavigationService;
 
 	constructor() {
 		if (AuthService.instance) {
@@ -25,6 +26,9 @@ export class AuthService {
 
 		Log.logger = console;
 		Log.level = Log.WARN;
+
+		// todo: normal check, to prevent cancelled .well-known/openid-configuration requests in iframe
+		const runTasks = (window.frameElement == null)
 
 		// https://github.com/IdentityModel/oidc-client-js/wiki
 		// https://openid.net/specs/openid-connect-core-1_0.html#Authentication
@@ -38,76 +42,75 @@ export class AuthService {
 			// response_type: "id_token token",
 			response_type: "code",
 			scope: Constants.clientScope,
-			automaticSilentRenew: true,
-			monitorSession: true
+			automaticSilentRenew: runTasks,
+			monitorSession: runTasks
 		};
 
 		this._userManager = new UserManager(settings);
+		this._navigator = new NavigationService();
 
 		// todo: use logger here and below
 		this._userManager.events.addAccessTokenExpired((...args: any[]) => {
-			console.log("AccessTokenExpired", window.frameElement, args);
+			// console.log("AccessTokenExpired", window.frameElement, args);
 			message.error("AccessTokenExpired");
 		});
 		this._userManager.events.addAccessTokenExpiring((...args: any[]) => {
-			console.log("AccessTokenExpiring", window.frameElement, args);
+			// console.log("AccessTokenExpiring", window.frameElement, args);
 			message.warning("AccessTokenExpiring");
 		});
 		this._userManager.events.addSilentRenewError((...args: any[]) => {
-			console.log("SilentRenewError", window.frameElement, args);
+			// console.log("SilentRenewError", window.frameElement, args);
 			message.error("SilentRenewError");
 		});
 		this._userManager.events.addUserLoaded((...args: any[]) => {
-			console.log("UserLoaded", window.frameElement, args);
+			// console.log("UserLoaded", window.frameElement, args);
 			message.info("UserLoaded");
 		});
 		this._userManager.events.addUserSessionChanged((...args: any[]) => {
-			console.log("UserSessionChanged", window.frameElement, args);
+			// console.log("UserSessionChanged", window.frameElement, args);
 			message.info("UserSessionChanged");
 		});
 		this._userManager.events.addUserSignedOut((...args: any[]) => {
-			console.log("UserSignedOut", window.frameElement, args);
+			// console.log("UserSignedOut", window.frameElement, args);
 			message.info("UserSignedOut");
 		});
 		this._userManager.events.addUserUnloaded((...args: any[]) => {
-			console.log("UserUnloaded", window.frameElement, args);
+			// console.log("UserUnloaded", window.frameElement, args);
 			message.info("UserUnloaded");
 		});
 
 		AuthService.instance = this;
 	}
 
-	public isOidcCallback() {
-		// todo: make normal check
-		const location = window.location.href;
+	public isCallback() {
+		const url = this._navigator.getUrl();
 
 		return (
-			location.indexOf(Constants.RedirectUri) != -1 ||
-			location.indexOf(Constants.SilentRedirectUri) != -1 ||
-			location.indexOf(Constants.PostLogoutRedirectUri) != -1
+			url.indexOf(Constants.RedirectUri) != -1 ||
+			url.indexOf(Constants.SilentRedirectUri) != -1 ||
+			url.indexOf(Constants.PostLogoutRedirectUri) != -1
 		);
 	}
 
-	public processOidcCallback() {
-		// todo: make normal check
-		const location = window.location.href;
+	public processCallback() {
+		const url = this._navigator.getUrl();
 
-		if (location.indexOf(Constants.RedirectUri) != -1) {
+		if (url.indexOf(Constants.RedirectUri) != -1) {
 			this._userManager.signinRedirectCallback()
 				.then((user) => {
-					window.location.href = "/";
+					this._navigator.navigate("/");
 				}).catch(function (e) {
 					console.error(e);
 				});
-		} else if (location.indexOf(Constants.SilentRedirectUri) != -1) {
+		} else if (url.indexOf(Constants.SilentRedirectUri) != -1) {
 			this._userManager.signinSilentCallback()
 				.catch(function (e) {
 					console.error(e);
 				});
-		} else if (location.indexOf(Constants.PostLogoutRedirectUri) != -1) {
+		} else if (url.indexOf(Constants.PostLogoutRedirectUri) != -1) {
 			this._userManager.signoutRedirectCallback()
 				.then((user) => {
-					window.location.href = "/";
+					this._navigator.navigate("/");
 				}).catch(function (e) {
 					console.error(e);
 				});
