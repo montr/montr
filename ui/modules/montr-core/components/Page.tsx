@@ -1,7 +1,7 @@
 import * as React from "react";
 
 import { PageHeader } from "./";
-import { Row, Col, Button } from "antd";
+import { Row, Col } from "antd";
 
 interface PageProps {
 	title?: string;

@@ -5,9 +5,9 @@ module.exports = {
 	// mode: "production",
 	mode: "development",
 	entry: {
-		tendr: "./modules/tendr/public.tsx",
+		"tendr": "./modules/tendr/public.tsx",
 		"tendr.app": "./modules/tendr/app.tsx",
-		kompany: "./modules/kompany/public.tsx"
+		"kompany": "./modules/kompany/public.tsx"
 	},
 	output: {
 		path: __dirname,
@@ -27,7 +27,8 @@ module.exports = {
 
 	resolve: {
 		alias: {
-			"@montr-core": path.resolve(__dirname, "modules/montr-core/")
+			"@montr-core": path.resolve(__dirname, "modules/montr-core/"),
+			"@kompany": path.resolve(__dirname, "modules/kompany/"),
 		},
 		extensions: [".ts", ".tsx", ".js", ".json"]
 	},
@@ -56,7 +57,7 @@ module.exports = {
 			// All output ".js" files will have any sourcemaps re-processed by "source-map-loader".
 			{
 				test: /\.js$/, loader: "source-map-loader",
-				enforce: "pre", exclude: [ /mutationobserver-shim/g ]
+				enforce: "pre", exclude: [/mutationobserver-shim/g]
 			},
 
 			// { test: /\.css$/, use: [ "style-loader", "css-loader" ] },

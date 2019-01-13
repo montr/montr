@@ -57,6 +57,7 @@ export class UserMenu extends React.Component<MenuProps, State> {
 			.then((user: User) => {
 				this.setState({ user });
 
+				// todo: move to AuthService
 				if (withLoginSilent) {
 					if (!user || user.expired) {
 						this.loginSilent();

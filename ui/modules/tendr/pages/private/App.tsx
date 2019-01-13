@@ -1,14 +1,10 @@
 import * as React from "react";
 import { BrowserRouter as Router, Route } from "react-router-dom";
-
 import { LocaleProvider, Layout, message } from "antd";
 import * as ru_RU from "antd/lib/locale-provider/ru_RU";
-
 import { SideMenu } from "../../components";
-
 import { Dashboard, SearchEvents, EditEvent, SelectEventTemplate } from "./";
 import { AuthHandler } from "@montr-core/components";
-
 export class App extends React.Component {
 
 	componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {

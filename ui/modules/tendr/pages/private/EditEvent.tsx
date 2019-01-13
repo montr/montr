@@ -1,11 +1,9 @@
 import * as React from "react";
-
 import { Tabs, Button, Icon, Modal, message } from "antd";
-
 import { IApiResult } from "@montr-core/api/";
 import { IEvent, EventAPI, EventTemplateAPI, IEventTemplate, IPaneProps, MetadataAPI, IDataView } from "../../api";
-import { Page } from "../../components/";
 import { IPaneComponent } from "../../panes/";
+import { Page } from "@montr-core/components";
 
 interface IEditEventProps {
 	params: {
