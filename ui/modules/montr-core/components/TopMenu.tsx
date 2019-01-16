@@ -5,18 +5,13 @@ import { Menu, Icon } from "antd";
 import { IMenu, ContentAPI } from "../api";
 import { UserMenu } from "./";
 
-interface Props {
-}
-
 interface State {
 	menu: IMenu;
 }
 
-export class TopMenu extends React.Component<Props, State> {
+export class TopMenu extends React.Component<any, State> {
 
-	private menu: Menu;
-
-	constructor(props: Props) {
+	constructor(props: any) {
 		super(props);
 
 		this.state = {
@@ -33,7 +28,7 @@ export class TopMenu extends React.Component<Props, State> {
 	render() {
 
 		return (
-			<Menu ref={el => this.menu = el} theme="light" mode="horizontal" style={{ lineHeight: "64px" }}>
+			<Menu theme="light" mode="horizontal" style={{ lineHeight: "64px" }}>
 
 				{this.state.menu.items && this.state.menu.items.map((item) => {
 					return (

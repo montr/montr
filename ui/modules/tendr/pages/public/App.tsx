@@ -2,7 +2,7 @@ import * as React from "react";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import { LocaleProvider, Layout, Breadcrumb } from "antd";
 import * as ru_RU from "antd/lib/locale-provider/ru_RU";
-import { AuthHandler, TopMenu, UserContextProvider } from "@montr-core/components";
+import { AuthCallbackHandler, TopMenu, UserContextProvider } from "@montr-core/components";
 import { Registration } from "./Registration";
 
 export class App extends React.Component {
@@ -11,7 +11,7 @@ export class App extends React.Component {
 			<Router /* basename="/#" */ >
 				<LocaleProvider locale={ru_RU as any}>
 					<UserContextProvider>
-						<AuthHandler>
+						<AuthCallbackHandler>
 							<Layout className="public-layout">
 								<Layout.Header>
 									<TopMenu />
@@ -32,7 +32,7 @@ export class App extends React.Component {
 								</Layout.Content>
 								<Layout.Footer>© {new Date().getFullYear()}</Layout.Footer>
 							</Layout>
-						</AuthHandler>
+						</AuthCallbackHandler>
 					</UserContextProvider>
 				</LocaleProvider>
 			</Router>

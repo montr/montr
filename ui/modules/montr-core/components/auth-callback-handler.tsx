@@ -1,17 +1,11 @@
 import * as React from "react";
 import { AuthService } from "../services/";
 
-interface Props {
-}
-
-interface State {
-}
-
-export class AuthHandler extends React.Component<Props, State> {
+export class AuthCallbackHandler extends React.Component {
 
 	private _authService: AuthService;
 
-	constructor(props: Props) {
+	constructor(props: any) {
 		super(props);
 
 		this._authService = new AuthService();

@@ -12,13 +12,9 @@ class Constants {
 	public static CompanyRegisterUri = "http://kompany.montr.io:5010/Register";
 }
 
-interface RegistrationStepProps {
-	user: User;
-}
-
-class RegisterUser extends React.Component<RegistrationStepProps> {
+class RegisterUser extends React.Component<UserContextProps> {
 	render() {
-		const { user } = this.props;
+		const { user, login } = this.props;
 
 		if (user) {
 			return (
@@ -32,13 +28,13 @@ class RegisterUser extends React.Component<RegistrationStepProps> {
 		return (
 			<p>
 				Зарегистрируйте пользователя пройдя по <a href={Constants.UserRegisterUri}>ссылке</a>.<br />
-				Если вы уже зарегистрированы, войдите в систему пройдя по <a href={Constants.UserLoginUri}>ссылке</a>.
+				Если вы уже зарегистрированы, войдите в систему пройдя по <a onClick={login}>ссылке</a>.
 			</p>
 		);
 	}
 }
 
-class RegisterCompany extends React.Component<RegistrationStepProps> {
+class RegisterCompany extends React.Component<UserContextProps> {
 	render() {
 		const { user } = this.props;
 
@@ -95,8 +91,8 @@ class _Registration extends React.Component<RegistrationProps & UserContextProps
 		return (
 			<Page title="Регистрация">
 				<Steps current={currenStep} direction="vertical">
-					<Steps.Step title="Регистрация пользователя" description={<RegisterUser user={user} />} />
-					<Steps.Step title="Регистрация компании" description={<RegisterCompany user={user} />} />
+					<Steps.Step title="Регистрация пользователя" description={<RegisterUser {...this.props} />} />
+					<Steps.Step title="Регистрация компании" description={<RegisterCompany {...this.props} />} />
 					<Steps.Step title="Начало работы" description={<StartWork />} />
 					{/* <Steps.Step title="TEst" description={<TestWithUser />} /> */}
 				</Steps>
