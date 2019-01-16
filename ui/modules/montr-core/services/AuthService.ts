@@ -6,7 +6,7 @@ class Constants {
 	public static authority = "http://idx.montr.io:5050";
 	public static clientId = "ui";
 	public static clientRoot = window.location.origin;
-	public static clientScope = "openid profile tendr"; // email
+	public static clientScope = "openid profile email tendr";
 
 	public static RedirectUri = "/signin-oidc";
 	public static SilentRedirectUri = "/silent-renew-oidc";

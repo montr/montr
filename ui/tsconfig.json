@@ -1,6 +1,9 @@
 {
 	"compilerOptions": {
-		"lib": [ "dom", "es7" ],
+		"lib": [
+			"dom",
+			"es7"
+		],
 		"sourceMap": true,
 		"noImplicitAny": true,
 		"moduleResolution": "node",
@@ -9,7 +12,9 @@
 		"jsx": "react",
 		"baseUrl": ".",
 		"paths": {
-			"@montr-core/*": [ "modules/montr-core/*" ]
+			"@montr-core/*": [
+				"modules/montr-core/*"
+			]
 		}
 	},
 	"files": [

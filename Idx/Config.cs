@@ -105,8 +105,8 @@ namespace Idx
 					RequireClientSecret = false,
 
 					AllowOfflineAccess = true, // This feature refresh token
-					AccessTokenLifetime = 100, // seconds
-					IdentityTokenLifetime = 100, // seconds
+					AccessTokenLifetime = 360, // seconds
+					IdentityTokenLifetime = 360, // seconds
 
 					RedirectUris =
 					{
@@ -135,9 +135,9 @@ namespace Idx
 					{
 						IdentityServerConstants.StandardScopes.OpenId,
 						IdentityServerConstants.StandardScopes.Profile,
-						// IdentityServerConstants.StandardScopes.Address,
-						// IdentityServerConstants.StandardScopes.Email,
-						// IdentityServerConstants.StandardScopes.Phone,
+						IdentityServerConstants.StandardScopes.Address,
+						IdentityServerConstants.StandardScopes.Email,
+						IdentityServerConstants.StandardScopes.Phone,
 						"tendr"
 					}
 				}

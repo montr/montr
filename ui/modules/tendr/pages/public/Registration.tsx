@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Steps } from "antd";
 import { Page } from "@montr-core/components";
-import { AuthService } from "@montr-core/services";
+import { UserContextProps, withUserContext } from "@montr-core/components/"
 import { User } from "oidc-client";
 
 class Constants {
@@ -23,7 +23,7 @@ class RegisterUser extends React.Component<RegistrationStepProps> {
 		if (user) {
 			return (
 				<p>
-					Пользователь зарегистрирован.<br />
+					Пользователь <strong>{user.profile.name} ({user.profile.email})</strong> зарегистрирован.<br />
 					Вы можете изменить регистрационные данные в <a href={Constants.UserManageUri}>Личном кабинете</a>.
 				</p>
 			);
@@ -52,7 +52,7 @@ class RegisterCompany extends React.Component<RegistrationStepProps> {
 
 		return (
 			<p>
-				После регистрации пользовтеля будет доступна регистрация компании.
+				После регистрации пользователя будет доступна регистрация компании.
 			</p>
 		);
 	}
@@ -66,6 +66,14 @@ class StartWork extends React.Component {
 	}
 }
 
+/* const Test: React.FunctionComponent<UserContextProps> = ({ user }) => {
+	if (user)
+		return (<p>12345 {user.scope}</p>);
+	return (<p>NOP</p>)
+};
+
+const TestWithUser = withUserContext(Test); */
+
 interface RegistrationProps {
 }
 
@@ -73,32 +81,10 @@ interface RegistrationState {
 	user?: User;
 }
 
-export class Registration extends React.Component<RegistrationProps, RegistrationState> {
-
-	private _authService: AuthService;
-
-	constructor(props: RegistrationProps) {
-		super(props);
-
-		this.state = {
-		};
-
-		this._authService = new AuthService();
-	}
-
-	componentDidMount() {
-		this._authService.getUser().then((user: User) => {
-			this.setState({ user });
-		});
-
-		this._authService.onAuthenticated((user: User) => {
-			this.setState({ user });
-		})
-	}
-
+class _Registration extends React.Component<RegistrationProps & UserContextProps, RegistrationState> {
 	render() {
 
-		const { user } = this.state;
+		const { user } = this.props;
 
 		let currenStep = 0;
 
@@ -112,8 +98,11 @@ export class Registration extends React.Component<RegistrationProps, Registratio
 					<Steps.Step title="Регистрация пользователя" description={<RegisterUser user={user} />} />
 					<Steps.Step title="Регистрация компании" description={<RegisterCompany user={user} />} />
 					<Steps.Step title="Начало работы" description={<StartWork />} />
+					{/* <Steps.Step title="TEst" description={<TestWithUser />} /> */}
 				</Steps>
 			</Page>
 		);
 	}
 }
+
+export const Registration = withUserContext(_Registration);
