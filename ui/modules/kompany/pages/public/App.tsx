@@ -6,7 +6,7 @@ import * as ru_RU from "antd/lib/locale-provider/ru_RU";
 
 import { AuthCallbackHandler, TopMenu, UserContextProvider } from "@montr-core/components";
 
-import { Registration } from "./";
+import { Registration } from ".";
 
 export class App extends React.Component {
 
@@ -32,7 +32,7 @@ export class App extends React.Component {
 									</Breadcrumb>
 									<div style={{ minHeight: 280 }}>
 
-										<Route path="/" exact component={() => <Registration />} />
+										<Route path="/register" exact component={() => <Registration />} />
 
 									</div>
 								</Layout.Content>

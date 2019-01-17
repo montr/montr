@@ -3,7 +3,7 @@ import { BrowserRouter as Router, Route } from "react-router-dom";
 import { LocaleProvider, Layout, Breadcrumb } from "antd";
 import * as ru_RU from "antd/lib/locale-provider/ru_RU";
 import { AuthCallbackHandler, TopMenu, UserContextProvider } from "@montr-core/components";
-import { Registration } from "./Registration";
+import { Registration } from "./registration";
 
 export class App extends React.Component {
 	render() {
