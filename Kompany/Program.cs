@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Serilog;
 using Serilog.Events;
 
-namespace Kompany
+namespace Kompany.Web
 {
 	public class Program
 	{

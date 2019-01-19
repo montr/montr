@@ -1,34 +1,27 @@
-using System;
-using Kompany.Entities;
+﻿using System;
+using System.Threading.Tasks;
+using Kompany.Core.Requests;
 using Kompany.Models;
-using LinqToDB;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Montr.Data.Linq2Db;
 
-namespace Kompany.Controllers
+namespace Kompany.Web.Controllers
 {
-	[Authorize, ApiController, Route("api/[controller]/[action]")]
+	[ApiController, Route("api/[controller]/[action]")]
 	public class CompanyController : ControllerBase
 	{
-		[HttpPost]
-		public ActionResult<Guid> Create(Company item)
+		private readonly IMediator _mediator;
+
+		public CompanyController(IMediator mediator)
 		{
-			using (var db = new DbContext())
-			{
-				// var id = db.Execute<long>("select nextval('company_id_seq')");
+			_mediator = mediator;
+		}
 
-				var uid = Guid.NewGuid();
-
-				db.GetTable<DbCompany>()
-					.Value(x => x.Uid, uid)
-					.Value(x => x.ConfigCode, item.ConfigCode ?? "business")
-					.Value(x => x.StatusCode, CompanyStatusCode.Draft)
-					.Value(x => x.Name, item.Name)
-					.Insert();
-
-				return uid;
-			}
+		[Authorize, HttpPost]
+		public async Task<ActionResult<Guid>> Create(Company item)
+		{
+			return await _mediator.Send(new CreateCompany { Company = item });
 		}
 	}
 }

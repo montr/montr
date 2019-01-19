@@ -1,4 +1,7 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using System.Reflection;
+using Kompany.Implementation.Entities;
+using MediatR;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -10,7 +13,7 @@ using Montr.Modularity;
 using Montr.Web.Controllers;
 using Montr.Web.Services;
 
-namespace Kompany
+namespace Kompany.Web
 {
 	public class Startup
 	{
@@ -46,6 +49,8 @@ namespace Kompany
 
 			services.AddOpenIdApiAuthentication(
 				Configuration.GetSection("OpenId").Get<OpenIdOptions>());
+
+			services.AddMediatR(typeof(DbCompany).GetTypeInfo().Assembly);
 
 			services.AddModules();
 		}

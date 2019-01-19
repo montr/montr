@@ -16,7 +16,7 @@ interface IState {
 	modalVisible: boolean;
 }
 
-class RegistrationForm extends React.Component<IProps, IState> {
+class _RegistrationForm extends React.Component<IProps, IState> {
 
 	constructor(props: IProps) {
 		super(props);
@@ -114,7 +114,7 @@ class RegistrationForm extends React.Component<IProps, IState> {
 			<>
 				<Form onSubmit={this.handleSubmit} style={{ maxWidth: 600 }}>
 					<Form.Item {...tailFormItemLayout}>
-						{getFieldDecorator("config_code", {
+						{getFieldDecorator("configCode", {
 							rules: [{ required: true }],
 							initialValue: configCode
 						})(
@@ -127,7 +127,7 @@ class RegistrationForm extends React.Component<IProps, IState> {
 					<Form.Item
 						{...formItemLayout}
 						label={nameLabel}>
-						{getFieldDecorator("full_name", {
+						{getFieldDecorator("name", {
 							rules: [{ required: true, whitespace: true, message: nameRequiredMessage }],
 						})(
 							<Input />
@@ -161,14 +161,14 @@ class RegistrationForm extends React.Component<IProps, IState> {
 	}
 }
 
-const WrappedRegistrationForm = Form.create()(RegistrationForm);
+const RegistrationForm = Form.create()(_RegistrationForm);
 
 export class Registration extends React.Component {
 	render() {
 		return (
 			<div>
 				<h1>Регистрация</h1>
-				<WrappedRegistrationForm />
+				<RegistrationForm />
 			</div>
 		);
 	}
