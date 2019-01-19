@@ -2,7 +2,7 @@
 using Kompany.Models;
 using MediatR;
 
-namespace Kompany.Core.Requests
+namespace Kompany.Requests
 {
 	public class CreateCompany : IRequest<Guid>
 	{

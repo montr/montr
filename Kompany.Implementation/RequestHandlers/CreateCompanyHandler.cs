@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Kompany.Core.Requests;
 using Kompany.Implementation.Entities;
 using Kompany.Models;
+using Kompany.Requests;
 using LinqToDB;
 using MediatR;
 using Montr.Data.Linq2Db;

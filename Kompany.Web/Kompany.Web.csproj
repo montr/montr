@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
@@ -22,7 +22,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Kompany.Core\Kompany.csproj" />
+    <ProjectReference Include="..\Kompany\Kompany.csproj" />
     <ProjectReference Include="..\Kompany.Implementation\Kompany.Implementation.csproj" />
     <ProjectReference Include="..\Montr.Data.Linq2Db\Montr.Data.Linq2Db.csproj" />
 		<ProjectReference Include="..\Montr.Metadata\Montr.Metadata.csproj" />

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Kompany.Core.Requests;
+using Kompany.Requests;
 using Kompany.Models;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
