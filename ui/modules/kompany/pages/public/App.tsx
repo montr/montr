@@ -11,7 +11,7 @@ import { Registration } from ".";
 export class App extends React.Component {
 
 	componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
-		message.error("App.componentDidCatch " + error.message);
+		message.error("App.componentDidCatch - " + error.message);
 	}
 
 	render() {

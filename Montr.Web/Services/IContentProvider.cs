@@ -21,7 +21,7 @@ namespace Montr.Web.Services
 
 			if (menuId == "TopMenu")
 			{
-				result.Items.Add(new Menu { Id = "tender", Name = "Тендеры", Url = "http://tendr.montr.io:5000/registration/" });
+				result.Items.Add(new Menu { Id = "tender", Name = "Тендеры", Url = "http://tendr.montr.io:5000/register/" });
 				result.Items.Add(new Menu { Id = "tender.app", Name = "Тендеры (кабинет)", Url = "http://app.tendr.montr.io:5000/" });
 				result.Items.Add(new Menu { Id = "personal", Name = "Личный кабинет", Url = "http://idx.montr.io:5050/" });
 				result.Items.Add(new Menu { Id = "company", Name = "Компания", Url = "http://kompany.montr.io:5010/" });

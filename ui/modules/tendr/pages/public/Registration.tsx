@@ -8,7 +8,7 @@ class Constants {
 	// public static UserLoginUri = "http://idx.montr.io:5050/Identity/Account/Login";
 	public static UserManageUri = "http://idx.montr.io:5050/Identity/Account/Manage";
 
-	public static CompanyRegisterUri = "http://kompany.montr.io:5010/register";
+	public static CompanyRegisterUri = "http://kompany.montr.io:5010/register/";
 }
 
 const RegisterUser = (props: UserContextProps) => {

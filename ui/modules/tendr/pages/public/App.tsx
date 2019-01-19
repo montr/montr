@@ -26,7 +26,7 @@ export class App extends React.Component {
 
 									<div style={{ minHeight: 280 }}>
 
-										<Route path="/registration" exact component={Registration} />
+										<Route path="/register" exact component={Registration} />
 
 									</div>
 								</Layout.Content>
