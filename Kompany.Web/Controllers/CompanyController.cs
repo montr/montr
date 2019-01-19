@@ -1,6 +1,7 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
-using Kompany.Requests;
+using Kompany.Commands;
 using Kompany.Models;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -21,7 +22,11 @@ namespace Kompany.Web.Controllers
 		[Authorize, HttpPost]
 		public async Task<ActionResult<Guid>> Create(Company item)
 		{
-			return await _mediator.Send(new CreateCompany { Company = item });
+			return await _mediator.Send(new CreateCompany
+			{
+				UserUid = Guid.Parse(HttpContext.User.Claims.Single(x => x.Type == "sub").Value),
+				Company = item
+			});
 		}
 	}
 }

@@ -2,10 +2,12 @@
 using Kompany.Models;
 using MediatR;
 
-namespace Kompany.Requests
+namespace Kompany.Commands
 {
 	public class CreateCompany : IRequest<Guid>
 	{
+		public Guid UserUid { get; set; }
+
 		public Company Company { get; set; }
 	}
 }

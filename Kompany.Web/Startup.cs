@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Montr.Data.Linq2Db;
+using Montr.Data.Services;
 using Montr.Metadata.Controllers;
 using Montr.Modularity;
 using Montr.Web.Controllers;
@@ -46,6 +47,8 @@ namespace Kompany.Web
 					options.SerializerSettings.Converters.Add(new Newtonsoft.Json.Converters.StringEnumConverter(true));
 					options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
 				});
+
+			services.AddSingleton<IUnitOfWorkFactory, TransactionScopeUnitOfWorkFactory>();
 
 			services.AddOpenIdApiAuthentication(
 				Configuration.GetSection("OpenId").Get<OpenIdOptions>());
