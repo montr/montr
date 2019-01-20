@@ -1,11 +1,11 @@
 ﻿using System;
-using System.Linq;
 using System.Threading.Tasks;
 using Kompany.Commands;
 using Kompany.Models;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Montr.Web.Services;
 
 namespace Kompany.Web.Controllers
 {
@@ -13,10 +13,12 @@ namespace Kompany.Web.Controllers
 	public class CompanyController : ControllerBase
 	{
 		private readonly IMediator _mediator;
+		private readonly ICurrentUserProvider _currentUserProvider;
 
-		public CompanyController(IMediator mediator)
+		public CompanyController(IMediator mediator, ICurrentUserProvider currentUserProvider)
 		{
 			_mediator = mediator;
+			_currentUserProvider = currentUserProvider;
 		}
 
 		[Authorize, HttpPost]
@@ -24,7 +26,7 @@ namespace Kompany.Web.Controllers
 		{
 			return await _mediator.Send(new CreateCompany
 			{
-				UserUid = Guid.Parse(HttpContext.User.Claims.Single(x => x.Type == "sub").Value),
+				UserUid = _currentUserProvider.GetUserUid(),
 				Company = item
 			});
 		}

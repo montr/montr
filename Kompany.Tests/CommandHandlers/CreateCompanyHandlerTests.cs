@@ -1,11 +1,14 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Dokumento.Implementation.Services;
 using Kompany.Commands;
 using Kompany.Implementation.CommandHandlers;
 using Kompany.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Montr.Data.Services;
+using Montr.Core.Implementation.Services;
+using Montr.Core.Services;
+using Montr.Data.Linq2Db;
 
 namespace Kompany.Tests.CommandHandlers
 {
@@ -19,7 +22,14 @@ namespace Kompany.Tests.CommandHandlers
 			TestHelper.InitDb();
 
 			var unitOfWorkFactory = new TransactionScopeUnitOfWorkFactory { Commitable = false };
-			var handler = new CreateCompanyHandler(unitOfWorkFactory);
+			var dbContextFactory = new DefaultDbContextFactory();
+			var dateTimeProvider = new DefaultDateTimeProvider();
+			var documentRepository = new DbDocumentRepository(dbContextFactory);
+			var jsonSerializer = new DefaultJsonSerializer();
+			var auditLogService = new DbAuditLogService(dbContextFactory, jsonSerializer);
+
+			var handler = new CreateCompanyHandler(unitOfWorkFactory,
+				dbContextFactory, dateTimeProvider, documentRepository, auditLogService);
 
 			// act
 			var command = new CreateCompany
@@ -27,9 +37,10 @@ namespace Kompany.Tests.CommandHandlers
 				Company = new Company
 				{
 					ConfigCode = "company",
-					Name = "Tendr Inc."
+					Name = "Montr Inc."
 				}
 			};
+
 			var uid = await handler.Handle(command, CancellationToken.None);
 
 			// assert

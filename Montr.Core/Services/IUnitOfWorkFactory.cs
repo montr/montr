@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Transactions;
 
-namespace Montr.Data.Services
+namespace Montr.Core.Services
 {
 	public interface IUnitOfWork : IDisposable
 	{
@@ -43,7 +43,7 @@ namespace Montr.Data.Services
 				if (_commitable)
 				{
 					_scope.Complete();
-				};
+				}
 			}
 
 			public void Dispose()

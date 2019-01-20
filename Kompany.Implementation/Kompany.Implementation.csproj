@@ -10,9 +10,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Dokumento\Dokumento.csproj" />
     <ProjectReference Include="..\Kompany\Kompany.csproj" />
+    <ProjectReference Include="..\Montr.Core\Montr.Core.csproj" />
     <ProjectReference Include="..\Montr.Data.Linq2Db\Montr.Data.Linq2Db.csproj" />
-    <ProjectReference Include="..\Montr.Data\Montr.Data.csproj" />
   </ItemGroup>
 
 </Project>

@@ -12,8 +12,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Dokumento.Implementation\Dokumento.Implementation.csproj" />
     <ProjectReference Include="..\Kompany.Implementation\Kompany.Implementation.csproj" />
     <ProjectReference Include="..\Kompany\Kompany.csproj" />
+    <ProjectReference Include="..\Montr.Core.Implementation\Montr.Core.Implementation.csproj" />
   </ItemGroup>
 
 </Project>
