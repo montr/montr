@@ -4,7 +4,7 @@ using Montr.Modularity;
 
 namespace Montr.Metadata
 {
-	public class ModuleInitializer : IModuleInitializer
+	public class Module : IModule
 	{
 		public void ConfigureServices(IServiceCollection services)
 		{

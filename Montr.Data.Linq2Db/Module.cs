@@ -3,7 +3,7 @@ using Montr.Modularity;
 
 namespace Montr.Data.Linq2Db
 {
-	public class ModuleInitializer : IModuleInitializer
+	public class Module : IModule
 	{
 		public void ConfigureServices(IServiceCollection services)
 		{

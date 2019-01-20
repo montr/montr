@@ -5,7 +5,7 @@ using Montr.Modularity;
 
 namespace Montr.Core.Implementation
 {
-	public class ModuleInitializer : IModuleInitializer
+	public class Module : IModule
 	{
 		public void ConfigureServices(IServiceCollection services)
 		{

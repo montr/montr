@@ -5,7 +5,7 @@ using Montr.Modularity;
 
 namespace Dokumento.Implementation
 {
-	public class ModuleInitializer : IModuleInitializer
+	public class Module : IModule
 	{
 		public void ConfigureServices(IServiceCollection services)
 		{

@@ -1,5 +1,4 @@
-﻿using System.Reflection;
-using Kompany.Implementation.Entities;
+﻿using System.Linq;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -7,20 +6,26 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Montr.Data.Linq2Db;
 using Montr.Metadata.Controllers;
 using Montr.Modularity;
 using Montr.Web.Controllers;
 using Montr.Web.Services;
+using Newtonsoft.Json.Serialization;
 
 namespace Kompany.Web
 {
 	public class Startup
 	{
-		public Startup(IConfiguration configuration)
+		public Startup(ILoggerFactory loggerFactory, IConfiguration configuration)
 		{
+			Logger = loggerFactory.CreateLogger<Startup>();
+
 			Configuration = configuration;
 		}
+
+		public ILogger Logger { get; }
 
 		public IConfiguration Configuration { get; }
 
@@ -43,16 +48,16 @@ namespace Kompany.Web
 				.AddJsonOptions(options =>
 				{
 					options.SerializerSettings.Formatting = Newtonsoft.Json.Formatting.None;
-					options.SerializerSettings.Converters.Add(new Newtonsoft.Json.Converters.StringEnumConverter(true));
+					options.SerializerSettings.Converters.Add(new Newtonsoft.Json.Converters.StringEnumConverter(new DefaultNamingStrategy()));
 					options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
 				});
 
 			services.AddOpenIdApiAuthentication(
 				Configuration.GetSection("OpenId").Get<OpenIdOptions>());
 
-			services.AddMediatR(typeof(DbCompany).GetTypeInfo().Assembly);
+			var modules = services.AddModules(Logger);
 
-			services.AddModules();
+			services.AddMediatR(modules.Select(x => x.GetType().Assembly).ToArray());
 		}
 
 		public void Configure(IApplicationBuilder app, IHostingEnvironment env)
@@ -71,11 +76,6 @@ namespace Kompany.Web
 			app.UseMvc(routes =>
 			{
 				/* routes.MapRoute(
-					name: "signin-oidc",
-					template: "signin-oidc",
-					defaults: new { controller = "Home", action = "Index" });
-
-				routes.MapRoute(
 					name: "default",
 					template: "{controller=Home}/{action=Index}/{id?}"); */
 

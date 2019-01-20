@@ -4,10 +4,11 @@ using Montr.Web.Services;
 
 namespace Montr.Web
 {
-	public class ModuleInitializer : IModuleInitializer
+	public class Module : IModule
 	{
 		public void ConfigureServices(IServiceCollection services)
 		{
+			services.AddHttpContextAccessor();
 			services.AddSingleton<IContentProvider, DefaultContentProvider>();
 			services.AddSingleton<ICurrentUserProvider, DefaultCurrentUserProvider>();
 		}

@@ -1,9 +1,12 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using System.Linq;
+using MediatR;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Montr.Data.Linq2Db;
 using Montr.Metadata.Controllers;
 using Montr.Modularity;
@@ -14,10 +17,14 @@ namespace Tendr
 {
 	public class Startup
 	{
-		public Startup(IConfiguration configuration)
+		public Startup(ILoggerFactory loggerFactory, IConfiguration configuration)
 		{
+			Logger = loggerFactory.CreateLogger<Startup>();
+
 			Configuration = configuration;
 		}
+
+		public ILogger Logger { get; }
 
 		public IConfiguration Configuration { get; }
 
@@ -47,7 +54,9 @@ namespace Tendr
 			services.AddOpenIdApiAuthentication(
 				Configuration.GetSection("OpenId").Get<OpenIdOptions>());
 
-			services.AddModules();
+			var modules = services.AddModules(Logger);
+
+			services.AddMediatR(modules.Select(x => x.GetType().Assembly).ToArray());
 		}
 
 		public void Configure(IApplicationBuilder app, IHostingEnvironment env)
@@ -66,11 +75,6 @@ namespace Tendr
 			app.UseMvc(routes =>
 			{
 				/* routes.MapRoute(
-					name: "signin-oidc",
-					template: "signin-oidc",
-					defaults: new { controller = "Home", action = "Index" });
-
-				routes.MapRoute(
 					name: "default",
 					template: "{controller=Home}/{action=Index}/{id?}"); */
 

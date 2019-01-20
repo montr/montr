@@ -2,7 +2,7 @@
 
 namespace Montr.Modularity
 {
-	public interface IModuleInitializer
+	public interface IModule
 	{
 		void ConfigureServices(IServiceCollection services);
 	}
