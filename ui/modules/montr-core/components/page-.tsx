@@ -1,6 +1,6 @@
 import * as React from "react";
 
-import { PageHeader } from "./";
+import { PageHeader } from ".";
 import { Row, Col } from "antd";
 
 interface PageProps {

@@ -1,19 +1,19 @@
 import * as React from "react";
 import { Menu } from "antd";
 import { IMenu, ContentAPI } from "../api";
-import { UserMenu } from "./";
 import { MenuProps } from "antd/lib/menu";
 
 interface Props {
 	menuId: string;
 	head?: React.ReactElement<MenuProps>;
+	tail?: React.ReactElement<MenuProps>;
 }
 
 interface State {
 	menu: IMenu;
 }
 
-export class TopMenu extends React.Component<Props, State> {
+export class TopMenu extends React.Component<MenuProps & Props, State> {
 
 	constructor(props: any) {
 		super(props);
@@ -33,10 +33,13 @@ export class TopMenu extends React.Component<Props, State> {
 
 	render() {
 
+		const { menuId, head, tail, ...props } = this.props;
 		const { menu } = this.state;
 
 		return (
-			<Menu theme="light" mode="horizontal" style={{ lineHeight: "64px" }}>
+			<Menu {...props}>
+
+				{head}
 
 				{menu.items && menu.items.map((item) => {
 					return (
@@ -46,7 +49,7 @@ export class TopMenu extends React.Component<Props, State> {
 					);
 				})}
 
-				<UserMenu style={{ float: "right" }} head={this.props.head} />
+				{tail}
 
 			</Menu>
 		);

@@ -56,17 +56,17 @@ export class UserContextProvider extends React.Component<any, UserContextState> 
 		});
 	};
 
-	render() {
+	render = () => {
 		const { user } = this.state;
 
-		const userContext: UserContextProps = {
+		const context: UserContextProps = {
 			user: user,
 			login: this.login,
 			logout: this.logout
 		};
 
 		return (
-			<UserContext.Provider value={userContext}>
+			<UserContext.Provider value={context}>
 				{this.props.children}
 			</UserContext.Provider>
 		);

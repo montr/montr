@@ -30,6 +30,7 @@ namespace Kompany.Implementation.QueryHandlers
 				var query = from c in db.GetTable<DbCompany>()
 					join cu in db.GetTable<DbCompanyUser>()
 						on c.Uid equals cu.CompanyUid
+					orderby c.Name
 					where cu.UserUid == request.UserUid
 					select c;
 

@@ -1,30 +1,13 @@
 import * as React from "react";
 import Menu, { MenuProps } from "antd/lib/menu";
-import { ICompany, CompanyAPI } from "../api";
+import { ICompany } from "../api";
+import { withCompanyContext, CompanyContextProps } from ".";
 
-interface State {
-	items: ICompany[];
-}
-
-export class CompanyMenu extends React.Component<MenuProps, State> {
-	constructor(props: any) {
-		super(props);
-
-		this.state = {
-			items: [],
-		};
-	}
-
-	componentDidMount = async () => {
-		const data: ICompany[] = await CompanyAPI.list();
-
-		this.setState({ items: data });
-	}
+class _CompanyMenu extends React.Component<MenuProps & CompanyContextProps> {
 
 	render() {
 
-		const { ...props } = this.props;
-		const { items } = this.state;
+		const { currentCompany, companyList, switchCompany, ...props } = this.props;
 
 		return <>
 			<Menu.Item key="company:header" disabled {...props}>
@@ -36,10 +19,13 @@ export class CompanyMenu extends React.Component<MenuProps, State> {
 			</Menu.Item>
 			<Menu.SubMenu key="company:switch" {...props} title="Переключить организацию &#xA0; &#xA0;">
 
-				{items.map((item: ICompany) => {
+				{Array.isArray(companyList) && companyList.map((item: ICompany) => {
 					return (
 						<Menu.Item key={`company:${item.uid.toString()}`}>
-							<a href="">{item.name}</a>
+							<a href="" onClick={(e) => {
+								e.preventDefault();
+								switchCompany(item);
+							}}>{item.name}</a>
 						</Menu.Item>
 					);
 				})}
@@ -49,7 +35,9 @@ export class CompanyMenu extends React.Component<MenuProps, State> {
 				</Menu.Item>
 			</Menu.SubMenu>
 
-			<Menu.Divider  {...props} />
+			<Menu.Divider {...props} />
 		</>;
 	}
 }
+
+export const CompanyMenu = withCompanyContext(_CompanyMenu);

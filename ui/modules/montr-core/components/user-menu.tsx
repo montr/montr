@@ -3,15 +3,16 @@ import { Menu, Icon } from "antd";
 import { UserContextProps, withUserContext } from "./"
 import { MenuProps } from "antd/lib/menu";
 
-interface UserMenuProps {
+interface Props {
 	head?: React.ReactElement<MenuProps>;
+	tail?: React.ReactElement<MenuProps>;
 }
 
-class _UserMenu extends React.Component<MenuProps & UserContextProps & UserMenuProps> {
+class _UserMenu extends React.Component<MenuProps & UserContextProps & Props> {
 
-	render() {
+	render = () => {
 
-		let { user, login, logout, head, ...props } = this.props;
+		let { user, login, logout, head, tail, ...props } = this.props;
 
 		if (user) {
 			return (
@@ -36,6 +37,9 @@ class _UserMenu extends React.Component<MenuProps & UserContextProps & UserMenuP
 					<Menu.Item key="user:logout">
 						<a onClick={logout}>Выйти</a>
 					</Menu.Item>
+
+					{tail}
+
 				</Menu.SubMenu>
 			);
 		}

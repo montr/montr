@@ -14,7 +14,6 @@ const defaultState: UserContextProps = {
 
 export const UserContext = React.createContext<UserContextProps>(defaultState);
 
-
 /* type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 
 export function withUserContext2<
