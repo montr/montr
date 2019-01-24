@@ -1,5 +1,5 @@
 export * from "./auth-callback-handler";
-export * from "./page-";
+export * from "./page";
 export * from "./page-header";
 export * from "./top-menu";
 export * from "./user-context";
