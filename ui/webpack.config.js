@@ -16,7 +16,7 @@ module.exports = {
 				return "../Tendr/wwwroot/assets/[name].js";
 
 			if (chunkData.chunk.name === "kompany")
-				return "../Kompany/wwwroot/assets/[name].js";
+				return "../Kompany.Web/wwwroot/assets/[name].js";
 
 			return null;
 		}

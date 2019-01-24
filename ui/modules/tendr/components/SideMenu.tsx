@@ -13,7 +13,7 @@ export class SideMenu extends React.Component {
 			<Layout.Sider theme="dark" breakpoint="lg" collapsedWidth="0" width="230"
 				style={{ height: "100vh" }}>
 				{/* <div className="logo" /> */}
-				<Menu theme="dark" mode="inline">
+				<Menu theme="dark" mode="vertical">
 					<Menu.Item key="1">
 						<Link to="/">
 							<Icon type="dashboard" />
@@ -25,12 +25,6 @@ export class SideMenu extends React.Component {
 							<Icon type="project" />
 							<span className="nav-text">Торговые процедуры</span>
 						</Link>
-					</Menu.Item>
-					<Menu.Item key="3">
-						<a href="http://idx.montr.io:5050">
-							<Icon type="user" />
-							<span className="nav-text">Личные данные</span>
-						</a>
 					</Menu.Item>
 					<Menu.Item key="999">
 						<a href="http://tendr.montr.io:5000/">

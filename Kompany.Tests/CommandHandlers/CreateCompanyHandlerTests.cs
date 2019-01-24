@@ -34,6 +34,7 @@ namespace Kompany.Tests.CommandHandlers
 			// act
 			var command = new CreateCompany
 			{
+				UserUid = Guid.NewGuid(),
 				Company = new Company
 				{
 					ConfigCode = "company",

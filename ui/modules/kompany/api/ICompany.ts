@@ -1,7 +1,7 @@
-import { IIndexer } from "@montr-core/.";
+import { Guid } from "@montr-core/.";
 
-export interface ICompany extends IIndexer {
-	id?: number;
+export interface ICompany {
+	uid?: Guid;
 	configCode?: string;
 	statusCode?: string;
 	name?: string;

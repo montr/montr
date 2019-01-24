@@ -34,6 +34,9 @@ namespace Kompany.Implementation.CommandHandlers
 
 		public async Task<Guid> Handle(CreateCompany request, CancellationToken cancellationToken)
 		{
+			if (request.UserUid == Guid.Empty)
+				throw new InvalidOperationException("UserUid can't be empty guid.");
+
 			var now = _dateTimeProvider.GetUtcNow();
 
 			var company = request.Company;

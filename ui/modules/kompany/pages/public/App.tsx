@@ -7,6 +7,7 @@ import * as ru_RU from "antd/lib/locale-provider/ru_RU";
 import { AuthCallbackHandler, TopMenu, UserContextProvider } from "@montr-core/components";
 
 import { Registration } from ".";
+import { CompanyMenu } from "../../components/"
 
 export class App extends React.Component {
 
@@ -22,7 +23,11 @@ export class App extends React.Component {
 						<AuthCallbackHandler>
 							<Layout className="public-layout">
 								<Layout.Header>
-									<TopMenu />
+
+									<TopMenu menuId="TopMenu" head={
+										<CompanyMenu />
+									} />
+
 								</Layout.Header>
 								<Layout.Content style={{ padding: "0 50px" }}>
 									<Breadcrumb style={{ margin: "16px 0" }}>

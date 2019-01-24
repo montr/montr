@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Kompany.Commands;
 using Kompany.Models;
+using Kompany.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -9,7 +11,7 @@ using Montr.Web.Services;
 
 namespace Kompany.Web.Controllers
 {
-	[ApiController, Route("api/[controller]/[action]")]
+	[Authorize, ApiController, Route("api/[controller]/[action]")]
 	public class CompanyController : ControllerBase
 	{
 		private readonly IMediator _mediator;
@@ -21,7 +23,18 @@ namespace Kompany.Web.Controllers
 			_currentUserProvider = currentUserProvider;
 		}
 
-		[Authorize, HttpPost]
+		[HttpPost]
+		public async Task<ActionResult<IList<Company>>> List()
+		{
+			var result = await _mediator.Send(new GetCompanyList
+			{
+				UserUid = _currentUserProvider.GetUserUid()
+			});
+
+			return Ok(result);
+		}
+
+		[HttpPost]
 		public async Task<ActionResult<Guid>> Create(Company item)
 		{
 			return await _mediator.Send(new CreateCompany

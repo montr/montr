@@ -14,7 +14,7 @@ export class App extends React.Component {
 						<AuthCallbackHandler>
 							<Layout className="public-layout">
 								<Layout.Header>
-									<TopMenu />
+									<TopMenu menuId="TopMenu" />
 								</Layout.Header>
 								<Layout.Content style={{ padding: '0 50px' }}>
 
