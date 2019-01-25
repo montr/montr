@@ -1,6 +1,6 @@
 import axios from "axios"
 
-import { AuthService } from "./AuthService"
+import { AuthService } from "./auth-service"
 
 const authService = new AuthService();
 

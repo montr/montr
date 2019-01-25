@@ -11,7 +11,7 @@ using Montr.Web.Services;
 
 namespace Kompany.Web.Controllers
 {
-	[Authorize, ApiController, Route("api/[controller]/[action]")]
+	[ApiController, Route("api/[controller]/[action]")]
 	public class CompanyController : ControllerBase
 	{
 		private readonly IMediator _mediator;
@@ -34,7 +34,7 @@ namespace Kompany.Web.Controllers
 			return Ok(result);
 		}
 
-		[HttpPost]
+		[Authorize, HttpPost]
 		public async Task<ActionResult<Guid>> Create(Company item)
 		{
 			return await _mediator.Send(new CreateCompany

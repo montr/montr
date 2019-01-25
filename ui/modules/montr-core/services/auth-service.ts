@@ -1,6 +1,6 @@
 import { Log, User, UserManager } from "oidc-client";
 import { message } from "antd";
-import { NavigationService } from "./NavigationService";
+import { NavigationService } from "./navigation-service";
 
 class Constants {
 	public static authority = "http://idx.montr.io:5050";

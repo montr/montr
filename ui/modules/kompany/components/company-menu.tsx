@@ -9,34 +9,38 @@ class _CompanyMenu extends React.Component<MenuProps & CompanyContextProps> {
 
 		const { currentCompany, companyList, switchCompany, ...props } = this.props;
 
-		return <>
-			<Menu.Item key="company:header" disabled {...props}>
-				{/* <Icon type="team" /> */}
-				<strong>ООО "Булава"</strong>
-			</Menu.Item>
-			<Menu.Item key="company:settings" {...props}>
-				<a href="">Настройки организации</a>
-			</Menu.Item>
-			<Menu.SubMenu key="company:switch" {...props} title="Переключить организацию &#xA0; &#xA0;">
-
-				{Array.isArray(companyList) && companyList.map((item: ICompany) => {
-					return (
-						<Menu.Item key={`company:${item.uid.toString()}`}>
-							<a href="" onClick={(e) => {
-								e.preventDefault();
-								switchCompany(item);
-							}}>{item.name}</a>
-						</Menu.Item>
-					);
-				})}
-				<Menu.Divider />
-				<Menu.Item key="company:add">
-					<a href="http://kompany.montr.io:5010/register/">Добавить организацию</a>
+		if (currentCompany) {
+			return <>
+				<Menu.Item key="company:header" disabled {...props}>
+					{/* <Icon type="team" /> */}
+					<strong>{currentCompany.name}</strong>
 				</Menu.Item>
-			</Menu.SubMenu>
+				<Menu.Item key="company:settings" {...props}>
+					<a href="">Настройки организации</a>
+				</Menu.Item>
+				<Menu.SubMenu key="company:switch" {...props} title="Переключить организацию &#xA0; &#xA0;">
 
-			<Menu.Divider {...props} />
-		</>;
+					{Array.isArray(companyList) && companyList.map((item: ICompany) => {
+						return (
+							<Menu.Item key={`company:${item.uid.toString()}`}>
+								<a href="" onClick={(e) => {
+									e.preventDefault();
+									switchCompany(item);
+								}}>{item.name}</a>
+							</Menu.Item>
+						);
+					})}
+					<Menu.Divider />
+					<Menu.Item key="company:add">
+						<a href="http://kompany.montr.io:5010/register/">Добавить организацию</a>
+					</Menu.Item>
+				</Menu.SubMenu>
+
+				<Menu.Divider {...props} />
+			</>;
+		}
+
+		return null;
 	}
 }
 
