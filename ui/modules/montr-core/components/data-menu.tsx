@@ -1,7 +1,8 @@
 import * as React from "react";
-import { Menu } from "antd";
+import { Menu, Icon } from "antd";
 import { IMenu, ContentAPI } from "../api";
 import { MenuProps } from "antd/lib/menu";
+import { Link } from "react-router-dom";
 
 interface Props {
 	menuId: string;
@@ -13,7 +14,7 @@ interface State {
 	menu: IMenu;
 }
 
-export class TopMenu extends React.Component<MenuProps & Props, State> {
+export class DataMenu extends React.Component<MenuProps & Props, State> {
 
 	constructor(props: any) {
 		super(props);
@@ -42,9 +43,24 @@ export class TopMenu extends React.Component<MenuProps & Props, State> {
 				{head}
 
 				{menu.items && menu.items.map((item) => {
+
+					if (item.route) {
+						return (
+							<Menu.Item key={item.id}>
+								<Link to={item.route}>
+									{item.icon && <Icon type={item.icon} />}
+									<span className="nav-text">{item.name}</span>
+								</Link>
+							</Menu.Item>
+						);
+					}
+
 					return (
 						<Menu.Item key={item.id}>
-							<a href={item.url}>{item.name}</a>
+							<a href={item.url}>
+								{item.icon && <Icon type={item.icon} />}
+								<span className="nav-text">{item.name}</span>
+							</a>
 						</Menu.Item>
 					);
 				})}

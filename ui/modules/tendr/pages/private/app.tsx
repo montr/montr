@@ -2,10 +2,9 @@ import * as React from "react";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import { LocaleProvider, Layout, message } from "antd";
 import * as ru_RU from "antd/lib/locale-provider/ru_RU";
-import { SideMenu } from "../../components";
 import { Dashboard, SearchEvents, EditEvent, SelectEventTemplate } from ".";
-import { AuthCallbackHandler, UserContextProvider } from "@montr-core/components";
-import { CompanyContextProvider } from "@kompany/components";
+import { AuthCallbackHandler, UserContextProvider, DataMenu } from "@montr-core/components";
+import { CompanyContextProvider, UserWithCompanyMenu } from "@kompany/components";
 
 export class App extends React.Component {
 
@@ -26,7 +25,15 @@ export class App extends React.Component {
 										style={{ height: "100vh" }}>
 										{/* <div className="logo" /> */}
 
-										<SideMenu />
+										<DataMenu
+											menuId="SideMenu"
+											theme="dark"
+											mode="vertical"
+											tail={
+												<UserWithCompanyMenu />
+											}
+										/>
+
 									</Layout.Sider>
 
 									<Layout className="bg-white">

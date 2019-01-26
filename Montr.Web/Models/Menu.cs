@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Montr.Web.Models
 {
@@ -7,6 +7,8 @@ namespace Montr.Web.Models
 		public string Id { get; set; }
 
 		public string Name { get; set; }
+
+		public string Icon { get; set; }
 
 		public string Url { get; set; }
 

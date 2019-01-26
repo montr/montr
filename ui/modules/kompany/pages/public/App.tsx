@@ -2,7 +2,7 @@ import * as React from "react";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import { LocaleProvider, Layout, Breadcrumb, message } from "antd";
 import * as ru_RU from "antd/lib/locale-provider/ru_RU";
-import { AuthCallbackHandler, UserContextProvider, TopMenu } from "@montr-core/components";
+import { AuthCallbackHandler, UserContextProvider, DataMenu } from "@montr-core/components";
 import { Registration } from ".";
 import { CompanyContextProvider, UserWithCompanyMenu } from "../../components/"
 
@@ -22,7 +22,7 @@ export class App extends React.Component {
 								<Layout className="public-layout">
 									<Layout.Header>
 
-										<TopMenu
+										<DataMenu
 											menuId="TopMenu"
 											theme="light"
 											mode="horizontal"
