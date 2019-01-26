@@ -1,6 +1,5 @@
-import { Guid } from "@montr-core/.";
+import { Guid } from "@montr-core/models";
 import { Fetcher } from "@montr-core/services";
-
 import { ICompany } from "../models/company";
 import { Constants } from "../Constants";
 

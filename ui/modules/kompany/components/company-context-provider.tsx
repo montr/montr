@@ -3,7 +3,7 @@ import Cookies from "universal-cookie";
 import { ICompany } from "../models";
 import { CompanyAPI } from "../services";
 import { CompanyContextProps, CompanyContext } from "./";
-import { Guid } from "@montr-core/.";
+import { Guid } from "@montr-core/models";
 
 interface State {
 	currentCompany?: ICompany;

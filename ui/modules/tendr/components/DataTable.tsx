@@ -1,13 +1,9 @@
 import * as React from "react";
-
 import { Link } from "react-router-dom";
-
 import { Table } from "antd";
 import { ColumnProps, PaginationConfig, SorterResult, SortOrder } from "antd/lib/table";
-
-import { IIndexer } from "@montr-core/.";
+import { IIndexer } from "@montr-core/models";
 import { Fetcher } from "@montr-core/services";
-
 import { MetadataAPI, IDataColumn, IDataResult } from "../api";
 
 interface DataTableProps {

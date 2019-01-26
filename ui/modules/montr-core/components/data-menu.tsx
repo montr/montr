@@ -1,8 +1,9 @@
 import * as React from "react";
-import { Menu, Icon } from "antd";
-import { IMenu, ContentAPI } from "../api";
-import { MenuProps } from "antd/lib/menu";
 import { Link } from "react-router-dom";
+import { Menu, Icon } from "antd";
+import { IMenu } from "../models";
+import { MenuProps } from "antd/lib/menu";
+import { ContentAPI } from "@montr-core/services";
 
 interface Props {
 	menuId: string;

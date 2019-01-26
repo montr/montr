@@ -1,4 +1,4 @@
-import { IIndexer } from "@montr-core/.";
+import { IIndexer } from "@montr-core/models";
 
 export interface IEvent extends IIndexer {
 	id?: number;

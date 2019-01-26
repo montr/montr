@@ -1,4 +1,4 @@
-import { Guid } from "@montr-core/.";
+import { Guid } from "@montr-core/models";
 
 export interface ICompany {
 	uid?: Guid;

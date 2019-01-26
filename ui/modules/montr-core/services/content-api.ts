@@ -1,6 +1,6 @@
-import { Fetcher } from "../services";
-
-import { Constants, IMenu } from "./";
+import { Fetcher } from ".";
+import { Constants } from "../Constants";
+import { IMenu } from "@montr-core/models";
 
 const getMenu = async (menuId: string): Promise<IMenu> => {
 	const data: IMenu = await new Fetcher().post(

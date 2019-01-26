@@ -1,42 +1,42 @@
 import { Fetcher } from "@montr-core/services";
 
-import { IApiResult } from "@montr-core/api/IApiResult";
+import { IApiResult } from "@montr-core/models/api-result";
 
 import { IEvent, Constants } from "./";
 
 const getLoadUrl = (): string => {
-    return `${Constants.baseURL}/Events/Load`;
+	return `${Constants.baseURL}/Events/Load`;
 }
 
 const load = async (): Promise<IEvent[]> => {
-    return new Fetcher().post(getLoadUrl());
+	return new Fetcher().post(getLoadUrl());
 };
 
 const get = async (id: number): Promise<IEvent> => {
-    return new Fetcher().post(
-        `${Constants.baseURL}/Events/Get`, { id: id });
+	return new Fetcher().post(
+		`${Constants.baseURL}/Events/Get`, { id: id });
 };
 
 const create = async (configCode: string): Promise<number> => {
-    return new Fetcher().post(
-        `${Constants.baseURL}/Events/Create`, { configCode: configCode });
+	return new Fetcher().post(
+		`${Constants.baseURL}/Events/Create`, { configCode: configCode });
 };
 
 const update = async (data: IEvent): Promise<IApiResult> => {
-    return new Fetcher().post(
-        `${Constants.baseURL}/Events/Update`, data);
+	return new Fetcher().post(
+		`${Constants.baseURL}/Events/Update`, data);
 };
 
 const publish = async (id: number): Promise<IApiResult> => {
-    return new Fetcher().post(
-        `${Constants.baseURL}/Events/Publish`, { id: id });
+	return new Fetcher().post(
+		`${Constants.baseURL}/Events/Publish`, { id: id });
 };
 
 const cancel = async (id: number): Promise<IApiResult> => {
-    return new Fetcher().post(
-        `${Constants.baseURL}/Events/Cancel`, { id: id });
+	return new Fetcher().post(
+		`${Constants.baseURL}/Events/Cancel`, { id: id });
 };
 
 export const EventAPI = {
-    getLoadUrl, load, get, create, update, publish, cancel
+	getLoadUrl, load, get, create, update, publish, cancel
 };

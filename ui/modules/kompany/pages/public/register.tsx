@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Guid } from "@montr-core/.";
+import { Guid } from "@montr-core/models";
 import { Form, Input, Checkbox, Button, Radio, Modal } from "antd";
 import { FormComponentProps } from "antd/lib/form";
 import { CompanyAPI } from "../../services";
