@@ -2,8 +2,7 @@ import * as React from "react";
 import { Link } from "react-router-dom";
 import { Form, Select, Button, DatePicker } from "antd";
 import { EventAPI } from "../../api";
-import { DataTable } from "../../components";
-import { Page } from "@montr-core/components";
+import { Page, DataTable } from "@montr-core/components";
 
 interface Props {
 }

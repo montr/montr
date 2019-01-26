@@ -1,9 +1,9 @@
 import * as React from "react";
 import { Form, Input, Button, message } from "antd";
 import { FormComponentProps } from "antd/lib/form";
-import { IApiResult } from "@montr-core/models";
-import { IEvent, EventAPI, IPaneProps } from "../../api";
-import { IPaneComponent } from "../";
+import { IApiResult, IPaneProps } from "@montr-core/models";
+import { IEvent, EventAPI } from "../../api";
+import { IPaneComponent } from "@montr-core/components";
 
 interface IEventFormProps extends FormComponentProps {
 	data: IEvent;

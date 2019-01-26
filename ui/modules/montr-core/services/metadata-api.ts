@@ -1,9 +1,7 @@
 import { Fetcher } from "@montr-core/services";
-
-import { IDataView, IPaneProps } from "./";
-import { Constants } from "./Constants";
-
-import * as panes from "../panes/private"
+import { IDataView, IPaneProps } from "../models";
+import * as panes from "../../tendr/panes/private"
+import { Constants } from "..";
 
 const getLoadUrl = (): string => {
 	return `${Constants.baseURL}/Metadata/View`;
