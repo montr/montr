@@ -1,5 +1,5 @@
 import * as React from "react";
-import { ICompany } from "../api";
+import { ICompany } from "../models";
 
 export interface CompanyContextProps {
 	currentCompany?: ICompany,

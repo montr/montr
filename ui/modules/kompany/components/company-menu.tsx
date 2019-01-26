@@ -1,6 +1,6 @@
 import * as React from "react";
 import Menu, { MenuProps } from "antd/lib/menu";
-import { ICompany } from "../api";
+import { ICompany } from "../models";
 import { withCompanyContext, CompanyContextProps } from ".";
 
 class _CompanyMenu extends React.Component<MenuProps & CompanyContextProps> {
@@ -11,7 +11,7 @@ class _CompanyMenu extends React.Component<MenuProps & CompanyContextProps> {
 
 		if (currentCompany) {
 			return <>
-				<Menu.Item key="company:header" disabled {...props}>
+				<Menu.Item key="company:header" className="menu-header" disabled {...props}>
 					{/* <Icon type="team" /> */}
 					<strong>{currentCompany.name}</strong>
 				</Menu.Item>

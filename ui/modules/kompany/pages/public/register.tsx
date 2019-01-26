@@ -1,11 +1,8 @@
 import * as React from "react";
-
 import { Guid } from "@montr-core/.";
-
 import { Form, Input, Checkbox, Button, Radio, Modal } from "antd";
 import { FormComponentProps } from "antd/lib/form";
-
-import { CompanyAPI } from "../../api/CompanyAPI";
+import { CompanyAPI } from "../../services";
 import { RadioChangeEvent } from "antd/lib/radio/interface";
 
 interface IProps extends FormComponentProps {

@@ -2,9 +2,9 @@ import * as React from "react";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import { LocaleProvider, Layout, Breadcrumb } from "antd";
 import * as ru_RU from "antd/lib/locale-provider/ru_RU";
-import { AuthCallbackHandler, TopMenu, UserContextProvider, UserMenu } from "@montr-core/components";
-import { Registration } from "./registration";
-import { CompanyMenu, CompanyContextProvider } from "@kompany/components/.";
+import { AuthCallbackHandler, UserContextProvider, TopMenu } from "@montr-core/components";
+import { CompanyContextProvider, UserWithCompanyMenu } from "@kompany/components/.";
+import { Registration } from "./";
 
 export class App extends React.Component {
 	render() {
@@ -23,10 +23,7 @@ export class App extends React.Component {
 											mode="horizontal"
 											style={{ lineHeight: "64px" }}
 											tail={
-												<UserMenu style={{ float: "right" }}
-													head={
-														<CompanyMenu />
-													} />
+												<UserWithCompanyMenu style={{ float: "right" }} />
 											}
 										/>
 

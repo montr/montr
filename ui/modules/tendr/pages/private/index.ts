@@ -1,4 +1,4 @@
-export * from "./App";
+export * from "./app-";
 export * from "./Dashboard";
 export * from "./SearchEvents";
 export * from "./EditEvent";

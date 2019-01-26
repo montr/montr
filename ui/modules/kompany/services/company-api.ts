@@ -1,8 +1,8 @@
 import { Guid } from "@montr-core/.";
 import { Fetcher } from "@montr-core/services";
 
-import { ICompany } from "./ICompany";
-import { Constants } from "./Constants";
+import { ICompany } from "../models/company";
+import { Constants } from "../Constants";
 
 const list = async (): Promise<ICompany[]> => {
 	return new Fetcher().post(

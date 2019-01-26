@@ -63,7 +63,6 @@ namespace Idx
 
 			services.AddCors(options =>
 			{
-				// this defines a CORS policy called "default"
 				options.AddPolicy("default", policy =>
 				{
 					policy.WithOrigins(

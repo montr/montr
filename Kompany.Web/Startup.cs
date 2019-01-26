@@ -41,6 +41,18 @@ namespace Kompany.Web
 				options.MinimumSameSitePolicy = SameSiteMode.None;
 			});
 
+			services.AddCors(options =>
+			{
+				options.AddPolicy("default", policy =>
+				{
+					policy.WithOrigins(
+							"http://tendr.montr.io:5000",
+							"http://app.tendr.montr.io:5000")
+						.AllowAnyHeader()
+						.AllowAnyMethod();
+				});
+			});
+
 			services.AddMvc()
 				.SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
 				.AddApplicationPart(typeof(ContentController).Assembly)
@@ -71,6 +83,7 @@ namespace Kompany.Web
 			app.UseStaticFiles();
 			app.UseCookiePolicy();
 
+			app.UseCors("default");
 			app.UseAuthentication();
 
 			app.UseMvc(routes =>

@@ -26,11 +26,11 @@ class _UserMenu extends React.Component<MenuProps & UserContextProps & Props> {
 				</span>) : user.profile.name;
 
 			return (
-				<Menu.SubMenu {...props} title={title}>
+				<Menu.SubMenu {...props} className="user-menu" title={title}>
 
 					{head}
 
-					<Menu.Item key="user:0" disabled>
+					<Menu.Item key="user:0" className="menu-header" disabled>
 						{/* <Icon type="user" /> */}
 						<strong>{user.profile.name}</strong>
 					</Menu.Item>

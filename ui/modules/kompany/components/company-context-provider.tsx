@@ -1,6 +1,7 @@
 import * as React from "react";
 import Cookies from "universal-cookie";
-import { ICompany, CompanyAPI } from "../api";
+import { ICompany } from "../models";
+import { CompanyAPI } from "../services";
 import { CompanyContextProps, CompanyContext } from "./";
 import { Guid } from "@montr-core/.";
 
