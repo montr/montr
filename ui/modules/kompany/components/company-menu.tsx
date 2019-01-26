@@ -7,7 +7,7 @@ class _CompanyMenu extends React.Component<MenuProps & CompanyContextProps> {
 
 	render() {
 
-		const { currentCompany, companyList, switchCompany, ...props } = this.props;
+		const { currentCompany, companyList, switchCompany, onMouseEnter, ...props } = this.props;
 
 		if (currentCompany) {
 			return <>
