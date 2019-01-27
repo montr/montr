@@ -12,26 +12,34 @@ interface DataTableProps {
 }
 
 interface DataTableState<TModel> {
+	loading: boolean
 	columns: any[];
 	data: TModel[];
 	pagination: PaginationConfig,
-	loading: boolean
 }
 
 export class DataTable<TModel extends IIndexer> extends React.Component<DataTableProps, DataTableState<TModel>> {
+
+	private _fetcher = new Fetcher();
 
 	constructor(props: DataTableProps) {
 		super(props);
 
 		this.state = {
+			loading: false,
 			columns: [],
 			data: [],
-			pagination: { position: "both", pageSize: 10, showSizeChanger: true, pageSizeOptions: ["10", "50", "100"] },
-			loading: false,
+			pagination: {
+				position: "bottom",
+				pageSize: 50,
+				pageSizeOptions: ["50", "100", "500"],
+				showSizeChanger: true,
+			},
 		};
 	}
 
-	handleTableChange = (pagination: PaginationConfig, filters: Record<keyof TModel, string[]>, sorter: SorterResult<TModel>) => {
+	private handleTableChange = async (pagination: PaginationConfig,
+		filters: Record<keyof TModel, string[]>, sorter: SorterResult<TModel>) => {
 
 		const pager = { ...this.state.pagination };
 
@@ -42,7 +50,7 @@ export class DataTable<TModel extends IIndexer> extends React.Component<DataTabl
 			pagination: pager,
 		});
 
-		this.fetchData({
+		await this.fetchData({
 			pageSize: pagination.pageSize,
 			pageNo: pagination.current,
 			sortColumn: sorter.field,
@@ -52,90 +60,86 @@ export class DataTable<TModel extends IIndexer> extends React.Component<DataTabl
 		});
 	}
 
-	fetchMetadata() {
-		MetadataAPI
-			.load(this.props.viewId)
-			.then((dataView) => {
+	private fetchMetadata = async () => {
+		const dataView = await MetadataAPI.load(this.props.viewId);
 
-				const columns = dataView.columns.map((item: IDataColumn): ColumnProps<TModel> => {
+		const columns = dataView.columns.map((item: IDataColumn): ColumnProps<TModel> => {
 
-					var render: (text: any, record: TModel, index: number) => React.ReactNode;
+			var render: (text: any, record: TModel, index: number) => React.ReactNode;
 
-					if (item.urlProperty) {
-						render = (text: any, record: TModel, index: number): React.ReactNode => {
-							const cellUrl: string = record[item.urlProperty];
-							return (<Link to={cellUrl}>{text}</Link>);
-						};
-					}
+			if (item.urlProperty) {
+				render = (text: any, record: TModel, index: number): React.ReactNode => {
+					const cellUrl: string = record[item.urlProperty];
+					return (<Link to={cellUrl}>{text}</Link>);
+				};
+			}
 
-					var defaultSortOrder: SortOrder;
-					if (item.defaultSortOrder == "ascending") defaultSortOrder = "ascend";
-					else if (item.defaultSortOrder == "descending") defaultSortOrder = "descend";
+			var defaultSortOrder: SortOrder;
+			if (item.defaultSortOrder == "ascending") defaultSortOrder = "ascend";
+			else if (item.defaultSortOrder == "descending") defaultSortOrder = "descend";
 
-					return {
-						key: item.key,
-						dataIndex: item.path || item.key,
-						title: item.name,
-						align: item.align,
-						sorter: item.sortable,
-						defaultSortOrder: defaultSortOrder,
-						// wtf: not enought for antd to set defaultSortOrder,
-						// see getSortStateFromColumns() in https://github.com/ant-design/ant-design/blob/master/components/table/Table.tsx
-						// sortOrder: defaultSortOrder,
-						width: item.width,
-						render: render
-					};
-				});
-
-				this.setState({ columns });
-
-				const defaultSortColumn =
-					dataView.columns.filter((col: IDataColumn) => col.defaultSortOrder)[0];
-
-				this.fetchData({
-					sortColumn: defaultSortColumn && defaultSortColumn.key,
-					sortOrder: defaultSortColumn && defaultSortColumn.defaultSortOrder,
-				})
-			});
-	}
-
-	fetchData(params = {}) {
-
-		// console.log(params);
-
-		this.setState({
-			loading: true
+			return {
+				key: item.key,
+				dataIndex: item.path || item.key,
+				title: item.name,
+				align: item.align,
+				sorter: item.sortable,
+				defaultSortOrder: defaultSortOrder,
+				// wtf: not enought for antd to set defaultSortOrder,
+				// see getSortStateFromColumns() in https://github.com/ant-design/ant-design/blob/master/components/table/Table.tsx
+				// sortOrder: defaultSortOrder,
+				width: item.width,
+				render: render
+			};
 		});
 
-		new Fetcher().post(this.props.loadUrl, {
+		this.setState({ columns });
+
+		const defaultSortColumn =
+			dataView.columns.filter((col: IDataColumn) => col.defaultSortOrder)[0];
+
+		await this.fetchData({
+			sortColumn: defaultSortColumn && defaultSortColumn.key,
+			sortOrder: defaultSortColumn && defaultSortColumn.defaultSortOrder,
+		})
+	}
+
+	private fetchData = async (params = {}) => {
+
+		this.setState({ loading: true });
+
+		const data: IDataResult<TModel> = await this._fetcher.post(this.props.loadUrl, {
 			// results: 10,
 			...params,
-		}).then((data: IDataResult<TModel>) => {
+		});
 
-			const pagination = { ...this.state.pagination };
+		const pagination = { ...this.state.pagination };
 
-			pagination.total = data.totalCount;
+		pagination.total = data.totalCount;
 
-			this.setState({
-				loading: false,
-				pagination,
-				data: data.rows
-			});
+		this.setState({
+			loading: false,
+			pagination,
+			data: data.rows
 		});
 	}
 
 	componentDidMount() {
 		this.fetchMetadata();
-		// this.fetchData();
 	}
 
 	render() {
-		return (
-			<Table size="small" rowKey="id"
-				columns={this.state.columns} dataSource={this.state.data}
-				pagination={this.state.pagination}
-				loading={this.state.loading}
-				onChange={this.handleTableChange} />
-		);
+		const rowSelection = {
+			columnWidth: 1
+		};
+
+		return <Table size="small" rowKey="id"
+			columns={this.state.columns}
+			dataSource={this.state.data}
+			pagination={this.state.pagination}
+			loading={this.state.loading}
+			onChange={this.handleTableChange}
+			rowSelection={rowSelection}
+		/>
 	}
 }

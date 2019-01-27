@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
@@ -17,7 +17,7 @@ namespace Montr.Metadata.Services
 				paging.PageNo = 1;
 			}
 
-			if (paging.PageSize <= 0 || paging.PageSize > 100)
+			if (paging.PageSize <= 0 || paging.PageSize > 500)
 			{
 				paging.PageSize = 10;
 			}
