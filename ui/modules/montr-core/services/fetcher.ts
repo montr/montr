@@ -1,9 +1,8 @@
 import axios from "axios"
 
-import { AuthService } from "./auth-service"
+import { AuthService } from "./"
 
 const authService = new AuthService();
-
 const authenticated = axios.create();
 
 authenticated.interceptors.request.use(

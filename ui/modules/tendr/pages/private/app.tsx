@@ -1,7 +1,7 @@
 import * as React from "react";
 import { BrowserRouter as Router, Route } from "react-router-dom";
 import { LocaleProvider, Layout, message } from "antd";
-import * as ru_RU from "antd/lib/locale-provider/ru_RU";
+import ru_RU from "antd/lib/locale-provider/ru_RU";
 import { Dashboard, SearchEvents, EditEvent, SelectEventTemplate } from ".";
 import { AuthCallbackHandler, UserContextProvider, DataMenu } from "@montr-core/components";
 import { CompanyContextProvider, UserWithCompanyMenu } from "@kompany/components";
@@ -14,14 +14,14 @@ export class App extends React.Component {
 
 	render() {
 		return (
-			<Router /* basename="/#" */ >
-				<LocaleProvider locale={ru_RU as any}>
+			<Router>
+				<LocaleProvider locale={ru_RU}>
 					<UserContextProvider>
 						<CompanyContextProvider>
 							<AuthCallbackHandler>
 								<Layout hasSider className="private-layout">
 
-									<Layout.Sider theme="dark" breakpoint="lg" collapsedWidth="0" width="230"
+									<Layout.Sider theme="dark" breakpoint="lg" collapsedWidth="0" width="220"
 										style={{ height: "100vh" }}>
 										{/* <div className="logo" /> */}
 

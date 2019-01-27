@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { Table } from "antd";
 import { ColumnProps, PaginationConfig, SorterResult, SortOrder } from "antd/lib/table";
 import { IIndexer } from "@montr-core/models";
-import { Fetcher, MetadataAPI } from "@montr-core/services";
+import { Fetcher, MetadataAPI, NotificationService } from "@montr-core/services";
 import { IDataColumn, IDataResult } from "../models";
 
 interface DataTableProps {
@@ -12,7 +12,8 @@ interface DataTableProps {
 }
 
 interface DataTableState<TModel> {
-	loading: boolean
+	loading: boolean;
+	error?: any;
 	columns: any[];
 	data: TModel[];
 	pagination: PaginationConfig,
@@ -21,6 +22,7 @@ interface DataTableState<TModel> {
 export class DataTable<TModel extends IIndexer> extends React.Component<DataTableProps, DataTableState<TModel>> {
 
 	private _fetcher = new Fetcher();
+	private _notification = new NotificationService();
 
 	constructor(props: DataTableProps) {
 		super(props);
@@ -108,20 +110,28 @@ export class DataTable<TModel extends IIndexer> extends React.Component<DataTabl
 
 		this.setState({ loading: true });
 
-		const data: IDataResult<TModel> = await this._fetcher.post(this.props.loadUrl, {
-			// results: 10,
-			...params,
-		});
+		try {
+			const data: IDataResult<TModel> = await this._fetcher.post(this.props.loadUrl, {
+				pageSize: 50,
+				...params,
+			});
 
-		const pagination = { ...this.state.pagination };
+			const pagination = { ...this.state.pagination };
 
-		pagination.total = data.totalCount;
+			pagination.total = data.totalCount;
 
-		this.setState({
-			loading: false,
-			pagination,
-			data: data.rows
-		});
+			this.setState({
+				loading: false,
+				pagination,
+				data: data.rows
+			});
+		} catch (error) {
+			this.setState({ error, loading: false });
+			this._notification.error({
+				message: "Ошибка загрузки данных."
+			});
+			throw error;
+		}
 	}
 
 	componentDidMount() {
