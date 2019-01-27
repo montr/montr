@@ -4,8 +4,10 @@ import { Form, Input, Checkbox, Button, Radio, Modal } from "antd";
 import { FormComponentProps } from "antd/lib/form";
 import { CompanyAPI } from "../../services";
 import { RadioChangeEvent } from "antd/lib/radio/interface";
+import { NavigationService } from "@montr-core/services";
+import { withCompanyContext, CompanyContextProps } from "@kompany/components";
 
-interface IProps extends FormComponentProps {
+interface IProps extends CompanyContextProps, FormComponentProps {
 }
 
 interface IState {
@@ -14,6 +16,8 @@ interface IState {
 }
 
 class _RegistrationForm extends React.Component<IProps, IState> {
+
+	private _navigation = new NavigationService();
 
 	constructor(props: IProps) {
 		super(props);
@@ -26,15 +30,20 @@ class _RegistrationForm extends React.Component<IProps, IState> {
 
 	handleSubmit = (e: React.SyntheticEvent) => {
 		e.preventDefault();
-		this.props.form.validateFieldsAndScroll((err, values) => {
-			if (!err) {
-				console.log(values);
 
-				CompanyAPI
-					.create(values)
-					.then((uid: Guid) => {
-						console.log(uid);
-					});
+		const { loadCompanyList, switchCompany } = this.props;
+
+		this.props.form.validateFieldsAndScroll(async (err, values) => {
+			if (!err) {
+				console.log();
+
+				const companyUid = await CompanyAPI.create(values);
+
+				loadCompanyList();
+				switchCompany(companyUid)
+
+				const returnUrl = this._navigation.getUrlParameter("return_url")
+				this._navigation.navigate(returnUrl);
 			}
 		});
 	}
@@ -107,58 +116,56 @@ class _RegistrationForm extends React.Component<IProps, IState> {
 			nameRequiredMessage = `Поле «${nameLabel}» обязательно для заполнения`,
 			fieldRequiredMessage = `Поле обязательно для заполнения`;
 
-		return (
-			<>
-				<Form onSubmit={this.handleSubmit} style={{ maxWidth: 600 }}>
-					<Form.Item {...tailFormItemLayout}>
-						{getFieldDecorator("configCode", {
-							rules: [{ required: true }],
-							initialValue: configCode
-						})(
-							<Radio.Group buttonStyle="solid" onChange={this.onChange}>
-								<Radio.Button value="company">Организация</Radio.Button>
-								<Radio.Button value="person">Физическое лицо</Radio.Button>
-							</Radio.Group>
-						)}
-					</Form.Item>
-					<Form.Item
-						{...formItemLayout}
-						label={nameLabel}>
-						{getFieldDecorator("name", {
-							rules: [{ required: true, whitespace: true, message: nameRequiredMessage }],
-						})(
-							<Input />
-						)}
-					</Form.Item>
-					<Form.Item {...tailFormItemLayout}>
-						{getFieldDecorator("agreement", {
-							rules: [{ required: true, message: fieldRequiredMessage }, {
-								validator: this.checkIsChecked,
-							}],
-							initialValue: false,
-							valuePropName: "checked",
-						})(
-							<Checkbox>Прочитал и согласен с <a onClick={this.showModal}>Условиями использования</a></Checkbox>
-						)}
-					</Form.Item>
-					<Form.Item {...tailFormItemLayout}>
-						<Button type="primary" htmlType="submit">Зарегистрироваться</Button>
-					</Form.Item>
-				</Form>
-				<Modal
-					title="Условия использования" footer={null}
-					onCancel={this.handleModalCancel}
-					visible={this.state.modalVisible}>
-					<p>Some contents...</p>
-					<p>Some contents...</p>
-					<p>Some contents...</p>
-				</Modal>
-			</>
-		);
+		return <>
+			<Form onSubmit={this.handleSubmit} style={{ maxWidth: 600 }}>
+				<Form.Item {...tailFormItemLayout}>
+					{getFieldDecorator("configCode", {
+						rules: [{ required: true }],
+						initialValue: configCode
+					})(
+						<Radio.Group buttonStyle="solid" onChange={this.onChange}>
+							<Radio.Button value="company">Организация</Radio.Button>
+							<Radio.Button value="person">Физическое лицо</Radio.Button>
+						</Radio.Group>
+					)}
+				</Form.Item>
+				<Form.Item
+					{...formItemLayout}
+					label={nameLabel}>
+					{getFieldDecorator("name", {
+						rules: [{ required: true, whitespace: true, message: nameRequiredMessage }],
+					})(
+						<Input />
+					)}
+				</Form.Item>
+				<Form.Item {...tailFormItemLayout}>
+					{getFieldDecorator("agreement", {
+						rules: [{ required: true, message: fieldRequiredMessage }, {
+							validator: this.checkIsChecked,
+						}],
+						initialValue: false,
+						valuePropName: "checked",
+					})(
+						<Checkbox>Прочитал и согласен с <a onClick={this.showModal}>Условиями использования</a></Checkbox>
+					)}
+				</Form.Item>
+				<Form.Item {...tailFormItemLayout}>
+					<Button type="primary" htmlType="submit">Зарегистрироваться</Button>
+				</Form.Item>
+			</Form>
+			<Modal
+				title="Условия использования" footer={null}
+				onCancel={this.handleModalCancel}
+				visible={this.state.modalVisible}>
+				<p>Some contents...</p>
+				<p>Some contents...</p>
+				<p>Some contents...</p>
+			</Modal>
+		</>
 	}
 }
 
-const RegistrationForm = Form.create()(_RegistrationForm);
+const RegistrationForm = Form.create()(withCompanyContext(_RegistrationForm));
 
 export class Registration extends React.Component {
 	render() {

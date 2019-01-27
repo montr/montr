@@ -7,7 +7,7 @@ class _CompanyMenu extends React.Component<MenuProps & CompanyContextProps> {
 
 	render() {
 
-		const { currentCompany, companyList, switchCompany, onMouseEnter, ...props } = this.props;
+		const { currentCompany, companyList, loadCompanyList, switchCompany, registerCompany, onMouseEnter, ...props } = this.props;
 
 		if (currentCompany) {
 			return <>
@@ -25,14 +25,14 @@ class _CompanyMenu extends React.Component<MenuProps & CompanyContextProps> {
 							<Menu.Item key={`company:${item.uid.toString()}`}>
 								<a href="" onClick={(e) => {
 									e.preventDefault();
-									switchCompany(item);
+									switchCompany(item.uid);
 								}}>{item.name}</a>
 							</Menu.Item>
 						);
 					})}
 					<Menu.Divider />
 					<Menu.Item key="company:add">
-						<a href="http://kompany.montr.io:5010/register/">Добавить организацию</a>
+						<a onClick={registerCompany}>Зарегистрировать организацию</a>
 					</Menu.Item>
 				</Menu.SubMenu>
 

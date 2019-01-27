@@ -6,7 +6,7 @@ using Kompany.Queries;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Montr.Data.Linq2Db;
 
-namespace Kompany.Tests.CommandHandlers
+namespace Kompany.Tests.QueryHandlers
 {
 	[TestClass]
 	public class GetCompanyListHandlerTests

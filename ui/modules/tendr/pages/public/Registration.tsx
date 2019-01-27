@@ -2,13 +2,13 @@ import * as React from "react";
 import { Steps } from "antd";
 import { Page } from "@montr-core/components";
 import { UserContextProps, withUserContext } from "@montr-core/components/"
+import { CompanyContextProps, withCompanyContext } from "@kompany/components";
 
 class Constants {
 	public static UserRegisterUri = "http://idx.montr.io:5050/Identity/Account/Register";
-	// public static UserLoginUri = "http://idx.montr.io:5050/Identity/Account/Login";
 	public static UserManageUri = "http://idx.montr.io:5050/Identity/Account/Manage";
 
-	public static CompanyRegisterUri = "http://kompany.montr.io:5010/register/";
+	public static PrivateTenderUri = "http://app.tendr.montr.io:5000/";
 }
 
 const RegisterUser = (props: UserContextProps) => {
@@ -31,49 +31,67 @@ const RegisterUser = (props: UserContextProps) => {
 	);
 }
 
-const RegisterCompany = (props: UserContextProps) => {
-	const { user } = props;
+const RegisterCompany = (props: UserContextProps & CompanyContextProps) => {
+	const { user, currentCompany: company, registerCompany } = props;
 
 	if (user) {
+
+		if (company) {
+			return (
+				<p>
+					Организация <strong>{company.name}</strong> зарегистрирована.<br />
+				</p>
+			);
+		}
+
 		return (
 			<p>
-				Зарегистрируйте компанию  пройдя по <a href={Constants.CompanyRegisterUri}>ссылке</a>.
+				Зарегистрируйте организацию пройдя по <a onClick={registerCompany}>ссылке</a>.
 			</p>
 		);
 	}
 
 	return (
 		<p>
-			После регистрации пользователя будет доступна регистрация компании.
+			После регистрации пользователя будет доступна регистрация организации.
 		</p>
 	);
 }
 
-const StartWork = (props: UserContextProps) => {
+const StartWork = (props: UserContextProps & CompanyContextProps) => {
+	const { user, currentCompany: company } = props;
+
+	if (user && company) {
+		return (
+			<p>
+				Начните создавать свои события в <a href={Constants.PrivateTenderUri}>Личном кабинете</a>.
+			</p>
+		);
+	}
+
 	return (
-		<p>Начните создавать свои события.</p>
+		<p>
+			После регистрации пользователя и организации вы сможете создавать события -
+			запросы информации, предложений и цен.
+		</p>
 	);
 }
 
-interface RegistrationProps {
-}
-
-class _Registration extends React.Component<RegistrationProps & UserContextProps> {
+class _Registration extends React.Component<UserContextProps & CompanyContextProps> {
 	render() {
-
-		const { user } = this.props;
+		const { user, currentCompany: company } = this.props;
 
 		let currenStep = 0;
 
 		if (user) {
-			currenStep = 1;
+			currenStep = company ? 2 : 1;
 		}
 
 		return (
 			<Page title="Регистрация">
 				<Steps current={currenStep} direction="vertical">
 					<Steps.Step title="Регистрация пользователя" description={<RegisterUser {...this.props} />} />
-					<Steps.Step title="Регистрация компании" description={<RegisterCompany {...this.props} />} />
+					<Steps.Step title="Регистрация организации" description={<RegisterCompany {...this.props} />} />
 					<Steps.Step title="Начало работы" description={<StartWork {...this.props} />} />
 				</Steps>
 			</Page>
@@ -81,4 +99,4 @@ class _Registration extends React.Component<RegistrationProps & UserContextProps
 	}
 }
 
-export const Registration = withUserContext(_Registration);
+export const Registration = withCompanyContext(withUserContext(_Registration));
