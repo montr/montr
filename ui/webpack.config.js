@@ -3,7 +3,8 @@ const webpack = require("webpack");
 const tsImportPluginFactory = require("ts-import-plugin")
 
 const Globals = {
-	"KOMPANY_API_URL": JSON.stringify("http://kompany.montr.io:5010/api")
+	"COOKIE_DOMAIN": JSON.stringify(".montr.io"),
+	"KOMPANY_APP_URL": JSON.stringify("http://kompany.montr.io:5010")
 };
 
 module.exports = {

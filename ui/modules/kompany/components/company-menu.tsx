@@ -7,7 +7,7 @@ class _CompanyMenu extends React.Component<MenuProps & CompanyContextProps> {
 
 	render() {
 
-		const { currentCompany, companyList, loadCompanyList, switchCompany, registerCompany, onMouseEnter, ...props } = this.props;
+		const { currentCompany, companyList, registerCompany, manageCompany, switchCompany, onMouseEnter, ...props } = this.props;
 
 		if (currentCompany) {
 			return <>
@@ -16,14 +16,14 @@ class _CompanyMenu extends React.Component<MenuProps & CompanyContextProps> {
 					<strong>{currentCompany.name}</strong>
 				</Menu.Item>
 				<Menu.Item key="company:settings" {...props}>
-					<a href="">Настройки организации</a>
+					<a onClick={manageCompany}>Настройки организации</a>
 				</Menu.Item>
 				<Menu.SubMenu key="company:switch" {...props} title="Переключить организацию &#xA0; &#xA0;">
 
 					{Array.isArray(companyList) && companyList.map((item: ICompany) => {
 						return (
 							<Menu.Item key={`company:${item.uid.toString()}`}>
-								<a href="" onClick={(e) => {
+								<a onClick={(e) => {
 									e.preventDefault();
 									switchCompany(item.uid);
 								}}>{item.name}</a>

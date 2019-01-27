@@ -5,15 +5,15 @@ import { Guid } from "@montr-core/models";
 export interface CompanyContextProps {
 	currentCompany?: ICompany,
 	companyList: ICompany[],
-	loadCompanyList: () => void,
 	registerCompany: () => void,
+	manageCompany: () => void,
 	switchCompany: (companyUid: Guid) => void,
 }
 
 const defaultState: CompanyContextProps = {
 	companyList: [],
-	loadCompanyList: () => { },
 	registerCompany: () => { },
+	manageCompany: () => { },
 	switchCompany: (companyUid: Guid) => { },
 };
 

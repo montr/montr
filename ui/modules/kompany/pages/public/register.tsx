@@ -1,8 +1,7 @@
 import * as React from "react";
-import { Guid } from "@montr-core/models";
-import { Form, Input, Checkbox, Button, Radio, Modal } from "antd";
+import { Form, Input, Checkbox, Button, Radio, Modal, message } from "antd";
 import { FormComponentProps } from "antd/lib/form";
-import { CompanyAPI } from "../../services";
+import { CompanyAPI, Constants } from "../../services";
 import { RadioChangeEvent } from "antd/lib/radio/interface";
 import { NavigationService } from "@montr-core/services";
 import { withCompanyContext, CompanyContextProps } from "@kompany/components";
@@ -31,19 +30,24 @@ class _RegistrationForm extends React.Component<IProps, IState> {
 	handleSubmit = (e: React.SyntheticEvent) => {
 		e.preventDefault();
 
-		const { loadCompanyList, switchCompany } = this.props;
+		const { manageCompany, switchCompany } = this.props;
 
 		this.props.form.validateFieldsAndScroll(async (err, values) => {
 			if (!err) {
-				console.log();
-
 				const companyUid = await CompanyAPI.create(values);
 
-				loadCompanyList();
-				switchCompany(companyUid)
+				await switchCompany(companyUid)
 
-				const returnUrl = this._navigation.getUrlParameter("return_url")
-				this._navigation.navigate(returnUrl);
+				message.info(`Организация успешно зарегистрирована.`);
+
+				const returnUrl = this._navigation.getUrlParameter(Constants.returnUrlParam)
+
+				if (returnUrl) {
+					this._navigation.navigate(returnUrl);
+				}
+				else {
+					manageCompany();
+				}
 			}
 		});
 	}

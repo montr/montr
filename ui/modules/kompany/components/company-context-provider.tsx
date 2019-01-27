@@ -1,7 +1,7 @@
 import * as React from "react";
 import Cookies from "universal-cookie";
 import { ICompany } from "../models";
-import { CompanyAPI } from "../services";
+import { CompanyAPI, Constants } from "../services";
 import { CompanyContextProps, CompanyContext } from "./";
 import { Guid } from "@montr-core/models";
 import { NavigationService } from "@montr-core/services";
@@ -10,8 +10,6 @@ interface State {
 	currentCompany?: ICompany;
 	companyList: ICompany[];
 }
-
-const cookie_name = "current_company_uid";
 
 export class CompanyContextProvider extends React.Component<any, State> {
 
@@ -27,56 +25,62 @@ export class CompanyContextProvider extends React.Component<any, State> {
 	}
 
 	componentDidMount = async () => {
-		await this.loadCompanyList();
-	}
-
-	loadCompanyList = async () => {
-		const companyList: ICompany[] = await CompanyAPI.list();
-
-		this.setState({ companyList });
-
 		this.switchCompany();
 	}
 
 	registerCompany = (): void => {
-		const currentUrl = this._navigation.getUrl();
-
-		const redirectUrl = "http://kompany.montr.io:5010/register/?return_url=" + encodeURI(currentUrl);
-
-		this._navigation.navigate(redirectUrl);
+		const returnUrl = encodeURI(this._navigation.getUrl());
+		this._navigation.navigate(
+			`${Constants.baseURL}/register/?${Constants.returnUrlParam}=${returnUrl}`);
 	}
 
-	switchCompany = (companyUid?: Guid): void => {
-		const { companyList } = this.state;
+	manageCompany = (): void => {
+		this._navigation.navigate(`${Constants.baseURL}/manage/`);
+	}
 
-		let currentCompanyUid: Guid,
-			currentCompany: ICompany;
+	switchCompany = async (companyUid?: Guid) => {
+
+		await this._loadCompanyList();
+
+		const { companyList } = this.state;
 
 		if (companyList && Array.isArray(companyList) && companyList.length > 0) {
 
-			if (companyUid) {
-				currentCompanyUid = companyUid;
-			}
-			else {
-				var storageValue = this._cookies.get(cookie_name);
+			const cookieCompanyUid = this._getCookieCompanyUid();
 
-				if (Guid.isValid(storageValue)) {
-					currentCompanyUid = new Guid(storageValue);
-				}
-			}
+			const setCookieCompanyUid = companyUid || cookieCompanyUid;
 
-			currentCompany = companyList.find(x => x.uid == currentCompanyUid);
+			const company =
+				companyList.find(x => x.uid == setCookieCompanyUid) || companyList[0];
 
-			if (!currentCompany) {
-				currentCompany = companyList[0];
+			if (company && company.uid != cookieCompanyUid) {
+				this._setCookieCompanyUid(company.uid);
 			}
 
-			if (currentCompany /* && currentCompany.uid != currentCompanyUid */) {
-				this._cookies.set(cookie_name, currentCompany.uid.toString(), { domain: ".montr.io" });
-
-				this.setState({ currentCompany });
-			}
+			this.setState({ currentCompany: company });
 		}
+	}
+
+	private _loadCompanyList = async () => {
+		const companyList: ICompany[] = await CompanyAPI.list();
+
+		this.setState({ companyList });
+	}
+
+	private _getCookieCompanyUid = (): Guid => {
+		var storageValue = this._cookies.get(Constants.cookieName);
+
+		if (Guid.isValid(storageValue)) {
+			return new Guid(storageValue);
+		}
+
+		return null;
+	}
+
+	private _setCookieCompanyUid = (companyUid: Guid): void => {
+		this._cookies.set(Constants.cookieName, companyUid.toString(), {
+			domain: Constants.cookieDomain, path: "/"
+		});
 	}
 
 	render = () => {
@@ -85,8 +89,8 @@ export class CompanyContextProvider extends React.Component<any, State> {
 		const context: CompanyContextProps = {
 			currentCompany: currentCompany,
 			companyList: companyList,
-			loadCompanyList: this.loadCompanyList,
 			registerCompany: this.registerCompany,
+			manageCompany: this.manageCompany,
 			switchCompany: this.switchCompany
 		};
 

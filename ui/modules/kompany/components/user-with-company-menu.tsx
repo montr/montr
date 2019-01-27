@@ -6,7 +6,7 @@ import { CompanyContextProps, withCompanyContext, CompanyMenu } from ".";
 class _UserWithCompanyMenu extends React.Component<MenuProps & CompanyContextProps> {
 	render = () => {
 
-		const { currentCompany, companyList, loadCompanyList, switchCompany, registerCompany, onMouseEnter, ...props } = this.props,
+		const { currentCompany, companyList, registerCompany, manageCompany, switchCompany, onMouseEnter, ...props } = this.props,
 			companyTitle = currentCompany ? currentCompany.name : null;
 
 		return (
