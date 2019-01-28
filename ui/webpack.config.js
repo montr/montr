@@ -19,7 +19,7 @@ module.exports = {
 		path: __dirname,
 		filename: (chunkData) => {
 			if (chunkData.chunk.name.startsWith("tendr"))
-				return "../Tendr/wwwroot/assets/[name].js";
+				return "../Tendr.Web/wwwroot/assets/[name].js";
 
 			if (chunkData.chunk.name === "kompany")
 				return "../Kompany.Web/wwwroot/assets/[name].js";

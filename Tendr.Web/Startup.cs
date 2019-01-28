@@ -13,7 +13,7 @@ using Montr.Modularity;
 using Montr.Web.Controllers;
 using Montr.Web.Services;
 
-namespace Tendr
+namespace Tendr.Web
 {
 	public class Startup
 	{

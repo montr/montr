@@ -10,7 +10,7 @@ using Montr.Web.Models;
 using Tendr.Entities;
 using Tendr.Models;
 
-namespace Tendr.Controllers
+namespace Tendr.Web.Controllers
 {
 	[Authorize, ApiController, Route("api/[controller]/[action]")]
 	public class EventsController : ControllerBase

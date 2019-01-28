@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Hosting;
 using Serilog;
 using Serilog.Events;
 
-namespace Tendr
+namespace Tendr.Web
 {
 	public class Program
 	{
