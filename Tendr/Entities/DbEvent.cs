@@ -12,6 +12,9 @@ namespace Tendr.Entities
 		[Column(Name = "id"), DataType(DataType.Int64)]
 		public long Id { get; set; }
 
+		[Column(Name = "company_uid"), DataType(DataType.Guid)]
+		public System.Guid CompanyUid { get; set; }
+
 		[Column(Name = "config_code"), DataType(DataType.VarChar), NotNull]
 		public string ConfigCode { get; set; }
 
