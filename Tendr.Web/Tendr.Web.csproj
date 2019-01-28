@@ -62,6 +62,8 @@
     <ProjectReference Include="..\Montr.Metadata\Montr.Metadata.csproj" />
     <ProjectReference Include="..\Montr.Modularity\Montr.Modularity.csproj" />
     <ProjectReference Include="..\Montr.Web\Montr.Web.csproj" />
+    <ProjectReference Include="..\Tendr.Implementation\Tendr.Implementation.csproj" />
+    <ProjectReference Include="..\Tendr\Tendr.csproj" />
   </ItemGroup>
 
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">

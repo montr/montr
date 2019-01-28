@@ -12,6 +12,7 @@ using Montr.Metadata.Controllers;
 using Montr.Modularity;
 using Montr.Web.Controllers;
 using Montr.Web.Services;
+using Newtonsoft.Json.Serialization;
 
 namespace Tendr.Web
 {
@@ -47,7 +48,7 @@ namespace Tendr.Web
 				.AddJsonOptions(options =>
 				{
 					options.SerializerSettings.Formatting = Newtonsoft.Json.Formatting.None;
-					options.SerializerSettings.Converters.Add(new Newtonsoft.Json.Converters.StringEnumConverter(true));
+					options.SerializerSettings.Converters.Add(new Newtonsoft.Json.Converters.StringEnumConverter(new DefaultNamingStrategy()));
 					options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
 				});
 

@@ -12,7 +12,7 @@
 
         public string Description { get; set; }
 
-        public static readonly EventTemplate[] All = new[]
+        public static readonly EventTemplate[] All =
         {
 			new EventTemplate
 			{

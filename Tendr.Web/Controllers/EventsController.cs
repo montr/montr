@@ -1,13 +1,15 @@
 ﻿using System.Linq;
+using System.Threading.Tasks;
 using LinqToDB;
-using LinqToDB.Data;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Montr.Data.Linq2Db;
 using Montr.Metadata.Models;
 using Montr.Metadata.Services;
-using Montr.Web.Models;
-using Tendr.Entities;
+using Montr.Web.Services;
+using Tendr.Commands;
+using Tendr.Implementation.Entities;
 using Tendr.Models;
 
 namespace Tendr.Web.Controllers
@@ -15,6 +17,15 @@ namespace Tendr.Web.Controllers
 	[Authorize, ApiController, Route("api/[controller]/[action]")]
 	public class EventsController : ControllerBase
 	{
+		private readonly IMediator _mediator;
+		private readonly ICurrentUserProvider _currentUserProvider;
+
+		public EventsController(IMediator mediator, ICurrentUserProvider currentUserProvider)
+		{
+			_mediator = mediator;
+			_currentUserProvider = currentUserProvider;
+		}
+
 		[HttpPost]
 		public ActionResult<DataResult<Event>> Load(EventSearchRequest request)
 		{
@@ -68,22 +79,13 @@ namespace Tendr.Web.Controllers
 		}
 
 		[HttpPost]
-		public ActionResult<long> Create(Event item)
+		public async Task<ActionResult<long>> Create(Event item)
 		{
-			using (var db = new DbContext())
+			return await _mediator.Send(new CreateEvent
 			{
-				var id = db.Execute<long>("select nextval('event_id_seq')");
-
-				db.GetTable<DbEvent>()
-					.Value(x => x.Id, id)
-					.Value(x => x.ConfigCode, item.ConfigCode)
-					.Value(x => x.StatusCode, EventStatusCode.Draft)
-					.Value(x => x.Name, item.Name)
-					.Value(x => x.Description, item.Description)
-					.Insert();
-
-				return id;
-			}
+				UserUid = _currentUserProvider.GetUserUid(),
+				Event = item
+			});
 		}
 
 		[HttpPost]

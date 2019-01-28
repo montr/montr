@@ -2,7 +2,8 @@ import { Fetcher } from "@montr-core/services";
 
 import { IApiResult } from "@montr-core/models/api-result";
 
-import { IEvent, Constants } from "./";
+import { IEvent } from "./";
+import { Constants } from "../constants";
 
 const getLoadUrl = (): string => {
 	return `${Constants.baseURL}/Events/Load`;
@@ -17,9 +18,9 @@ const get = async (id: number): Promise<IEvent> => {
 		`${Constants.baseURL}/Events/Get`, { id: id });
 };
 
-const create = async (configCode: string): Promise<number> => {
+const create = async (data: IEvent): Promise<number> => {
 	return new Fetcher().post(
-		`${Constants.baseURL}/Events/Create`, { configCode: configCode });
+		`${Constants.baseURL}/Events/Create`, data);
 };
 
 const update = async (data: IEvent): Promise<IApiResult> => {

@@ -3,17 +3,15 @@ import { Button, List } from "antd";
 import { IEventTemplate, EventTemplateAPI, EventAPI } from "../../api";
 import { Redirect } from "react-router-dom";
 import { Page } from "@montr-core/components";
-
-interface Props {
-}
+import { withCompanyContext, CompanyContextProps } from "@kompany/components";
 
 interface State {
 	newId?: number;
 	data: IEventTemplate[];
 }
 
-export class SelectEventTemplate extends React.Component<Props, State> {
-	constructor(props: Props) {
+class _SelectEventTemplate extends React.Component<CompanyContextProps, State> {
+	constructor(props: CompanyContextProps) {
 		super(props);
 		this.state = { data: [] };
 	}
@@ -25,10 +23,13 @@ export class SelectEventTemplate extends React.Component<Props, State> {
 			});
 	}
 
-	handleSelect(configCode: string) {
-		EventAPI
-			.create(configCode)
-			.then((newId: number) => this.setState({ newId: newId }));
+	handleSelect = async (configCode: string) => {
+		const newId: number = await EventAPI.create({
+			configCode: configCode,
+			companyUid: this.props.currentCompany.uid
+		});
+
+		this.setState({ newId: newId });
 	}
 
 	render() {
@@ -60,3 +61,5 @@ export class SelectEventTemplate extends React.Component<Props, State> {
 		);
 	}
 }
+
+export const SelectEventTemplate = withCompanyContext(_SelectEventTemplate);

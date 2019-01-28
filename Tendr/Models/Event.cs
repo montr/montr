@@ -10,6 +10,8 @@
 
         public string StatusCode { get; set; }
 
+		public System.Guid CompanyUid  { get; set; }
+
         public string Name { get; set; }
 
         public string Description { get; set; }

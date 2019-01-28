@@ -1,7 +1,6 @@
-using System.Collections.Generic;
-using Montr.Web.Models;
+﻿using System.Collections.Generic;
 
-namespace Tendr.Models
+namespace Montr.Metadata.Models
 {
 	public class DataResult<TModel> : ApiResult
 	{

@@ -1,6 +1,4 @@
-using System.Collections.Generic;
-
-namespace Montr.Web.Models
+﻿namespace Montr.Web.Models
 {
 	public class ContentRequest
 	{

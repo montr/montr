@@ -1,4 +1,4 @@
-namespace Montr.Web.Models
+﻿namespace Montr.Metadata.Models
 {
 	public class ApiResult
 	{
