@@ -3,7 +3,7 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.28010.2048
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tendr.Web", "Tendr.Web\Tendr.Web.csproj", "{F6C5DC4D-C03C-4596-80B7-6C2D247C1ACA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dome.Web", "Dome.Web\Dome.Web.csproj", "{F6C5DC4D-C03C-4596-80B7-6C2D247C1ACA}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Montr.Metadata.Tests", "Montr.Metadata.Tests\Montr.Metadata.Tests.csproj", "{CC8A49DD-417E-43CA-A1A5-245A3228F998}"
 EndProject
@@ -41,7 +41,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tendr", "Tendr\Tendr.csproj
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tendr.Implementation", "Tendr.Implementation\Tendr.Implementation.csproj", "{51471CF8-D228-4FC6-A212-262D12A6D0C2}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tendr.Tests", "Tendr.Tests\Tendr.Tests.csproj", "{B45F5B7E-2B89-43E0-BFCE-54085D1CA05F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tendr.Tests", "Tendr.Tests\Tendr.Tests.csproj", "{B45F5B7E-2B89-43E0-BFCE-54085D1CA05F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
