@@ -1,4 +1,4 @@
-using Montr.Metadata.Models;
+﻿using Montr.Core.Models;
 
 namespace Tendr.Models
 {

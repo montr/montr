@@ -14,7 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Montr.Metadata\Montr.Metadata.csproj" />
+    <ProjectReference Include="..\Montr.Core\Montr.Core.csproj" />
   </ItemGroup>
 
 </Project>

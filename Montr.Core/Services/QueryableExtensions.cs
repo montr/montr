@@ -2,9 +2,9 @@
 using System.Linq;
 using System.Linq.Expressions;
 using System.Reflection;
-using Montr.Metadata.Models;
+using Montr.Core.Models;
 
-namespace Montr.Metadata.Services
+namespace Montr.Core.Services
 {
 	public static class QueryableExtensions
 	{

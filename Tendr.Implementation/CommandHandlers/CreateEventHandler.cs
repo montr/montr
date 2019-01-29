@@ -25,8 +25,7 @@ namespace Tendr.Implementation.CommandHandlers
 			_dateTimeProvider = dateTimeProvider;
 		}
 
-		public async Task<long> Handle(CreateEvent request,
-			CancellationToken cancellationToken)
+		public async Task<long> Handle(CreateEvent request, CancellationToken cancellationToken)
 		{
 			if (request.UserUid == Guid.Empty)
 				throw new InvalidOperationException("UserUid can't be empty guid.");

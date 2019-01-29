@@ -13,6 +13,7 @@ using Montr.Modularity;
 using Montr.Web.Controllers;
 using Montr.Web.Services;
 using Newtonsoft.Json.Serialization;
+using Tendr.Web.Controllers;
 
 namespace Tendr.Web
 {
@@ -45,6 +46,7 @@ namespace Tendr.Web
 				.SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
 				.AddApplicationPart(typeof(ContentController).Assembly)
 				.AddApplicationPart(typeof(MetadataController).Assembly)
+				.AddApplicationPart(typeof(EventsController).Assembly)
 				.AddJsonOptions(options =>
 				{
 					options.SerializerSettings.Formatting = Newtonsoft.Json.Formatting.None;

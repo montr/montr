@@ -5,7 +5,7 @@ VisualStudioVersion = 15.0.28010.2048
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Dome.Web", "Dome.Web\Dome.Web.csproj", "{F6C5DC4D-C03C-4596-80B7-6C2D247C1ACA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Montr.Metadata.Tests", "Montr.Metadata.Tests\Montr.Metadata.Tests.csproj", "{CC8A49DD-417E-43CA-A1A5-245A3228F998}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Montr.Core.Tests", "Montr.Metadata.Tests\Montr.Core.Tests.csproj", "{CC8A49DD-417E-43CA-A1A5-245A3228F998}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Idx", "Idx\Idx.csproj", "{2452B341-54A4-44AE-A10A-D71592B095D4}"
 EndProject
@@ -42,6 +42,8 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tendr.Implementation", "Tendr.Implementation\Tendr.Implementation.csproj", "{51471CF8-D228-4FC6-A212-262D12A6D0C2}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tendr.Tests", "Tendr.Tests\Tendr.Tests.csproj", "{B45F5B7E-2B89-43E0-BFCE-54085D1CA05F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tendr.Web", "Tendr.Web\Tendr.Web.csproj", "{CAE01002-27D3-4883-BA95-765D53331FC8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -129,6 +131,10 @@ Global
 		{B45F5B7E-2B89-43E0-BFCE-54085D1CA05F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B45F5B7E-2B89-43E0-BFCE-54085D1CA05F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B45F5B7E-2B89-43E0-BFCE-54085D1CA05F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CAE01002-27D3-4883-BA95-765D53331FC8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CAE01002-27D3-4883-BA95-765D53331FC8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CAE01002-27D3-4883-BA95-765D53331FC8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CAE01002-27D3-4883-BA95-765D53331FC8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

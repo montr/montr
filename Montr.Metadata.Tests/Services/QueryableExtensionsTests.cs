@@ -1,8 +1,8 @@
-using System.Linq;
+﻿using System.Linq;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Montr.Metadata.Services;
+using Montr.Core.Services;
 
-namespace Montr.Metadata.Tests.Services
+namespace Montr.Core.Tests.Services
 {
 	[TestClass]
 	public class QueryableExtensionsTests

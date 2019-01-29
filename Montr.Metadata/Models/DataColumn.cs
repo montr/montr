@@ -1,4 +1,6 @@
-﻿namespace Montr.Metadata.Models
+﻿using Montr.Core.Models;
+
+namespace Montr.Metadata.Models
 {
 	public class DataColumn
 	{

@@ -5,13 +5,13 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="MediatR" Version="6.0.0" />
+    <PackageReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Montr.Core\Montr.Core.csproj" />
-    <ProjectReference Include="..\Montr.Data.Linq2Db\Montr.Data.Linq2Db.csproj" />
+    <ProjectReference Include="..\Montr.Modularity\Montr.Modularity.csproj" />
+    <ProjectReference Include="..\Montr.Web\Montr.Web.csproj" />
     <ProjectReference Include="..\Tendr\Tendr.csproj" />
   </ItemGroup>
-
+  
 </Project>

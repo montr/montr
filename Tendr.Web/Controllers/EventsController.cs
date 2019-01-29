@@ -1,15 +1,11 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
-using LinqToDB;
+﻿using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Montr.Data.Linq2Db;
 using Montr.Metadata.Models;
-using Montr.Metadata.Services;
 using Montr.Web.Services;
 using Tendr.Commands;
-using Tendr.Implementation.Entities;
+using Tendr.Queries;
 using Tendr.Models;
 
 namespace Tendr.Web.Controllers
@@ -27,9 +23,14 @@ namespace Tendr.Web.Controllers
 		}
 
 		[HttpPost]
-		public ActionResult<DataResult<Event>> Load(EventSearchRequest request)
+		public async Task<ActionResult<DataResult<Event>>> Load(EventSearchRequest request)
 		{
-			using (var db = new DbContext())
+			return await _mediator.Send(new LoadEventList
+			{
+				Request = request
+			});
+
+			/*using (var db = new DbContext())
 			{
 				var all = db.GetTable<DbEvent>();
 
@@ -52,13 +53,18 @@ namespace Tendr.Web.Controllers
 					TotalCount = all.Count(),
 					Rows = date
 				};
-			}
+			}*/
 		}
 
 		[HttpPost]
-		public ActionResult<Event> Get(Event item) // todo: pass only id
+		public async Task<ActionResult<Event>> Get(Event item) // todo: pass only id
 		{
-			using (var db = new DbContext())
+			return await _mediator.Send(new GetEvent
+			{
+				EventId = item.Id
+			});
+
+			/*using (var db = new DbContext())
 			{
 				var result = db.GetTable<DbEvent>()
 					.Where(x => x.Id == item.Id)
@@ -75,7 +81,7 @@ namespace Tendr.Web.Controllers
 					.Single();
 
 				return result;
-			}
+			}*/
 		}
 
 		[HttpPost]
@@ -89,9 +95,17 @@ namespace Tendr.Web.Controllers
 		}
 
 		[HttpPost]
-		public ActionResult<ApiResult> Update(Event item)
+		public async Task<ActionResult> Update(Event item)
 		{
-			using (var db = new DbContext())
+			await _mediator.Send(new UpdateEvent
+			{
+				UserUid = _currentUserProvider.GetUserUid(),
+				Event = item
+			});
+
+			return Ok();
+
+			/*using (var db = new DbContext())
 			{
 				db.GetTable<DbEvent>()
 					.Where(x => x.Id == item.Id)
@@ -100,13 +114,21 @@ namespace Tendr.Web.Controllers
 					.Update();
 
 				return new ApiResult();
-			}
+			}*/
 		}
 
 		[HttpPost]
-		public ActionResult<ApiResult> Publish(Event item) // todo: pass only id
+		public async Task<ActionResult> Publish(Event item) // todo: pass only id
 		{
-			using (var db = new DbContext())
+			await _mediator.Send(new PublishEvent
+			{
+				UserUid = _currentUserProvider.GetUserUid(),
+				EventId = item.Id
+			});
+
+			return Ok();
+
+			/*using (var db = new DbContext())
 			{
 				var affected = db.GetTable<DbEvent>()
 					.Where(x => x.Id == item.Id)
@@ -114,13 +136,21 @@ namespace Tendr.Web.Controllers
 					.Update();
 
 				return new ApiResult { Success = (affected == 1) };
-			}
+			}*/
 		}
 
 		[HttpPost]
-		public ActionResult<ApiResult> Cancel(Event item) // todo: pass only id
+		public async Task<ActionResult> Cancel(Event item) // todo: pass only id
 		{
-			using (var db = new DbContext())
+			await _mediator.Send(new CancelEvent
+			{
+				UserUid = _currentUserProvider.GetUserUid(),
+				EventId = item.Id
+			});
+
+			return Ok();
+
+			/*using (var db = new DbContext())
 			{
 				var affected = db.GetTable<DbEvent>()
 					.Where(x => x.Id == item.Id)
@@ -128,7 +158,7 @@ namespace Tendr.Web.Controllers
 					.Update();
 
 				return new ApiResult { Success = (affected == 1) };
-			}
+			}*/
 		}
 	}
 }
