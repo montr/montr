@@ -1,5 +1,4 @@
 ﻿using System.Linq;
-using Kompany.Web.Controllers;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -9,12 +8,9 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Montr.Data.Linq2Db;
-using Montr.Metadata.Controllers;
 using Montr.Modularity;
-using Montr.Web.Controllers;
 using Montr.Web.Services;
 using Newtonsoft.Json.Serialization;
-using Tendr.Web.Controllers;
 
 namespace Host
 {
@@ -55,12 +51,11 @@ namespace Host
 				});
 			});
 
-			services.AddMvc()
+			var modules = services.AddModules(Logger);
+			var assemblies = modules.Select(x => x.GetType().Assembly).ToArray();
+
+			var mvc = services.AddMvc()
 				.SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
-				.AddApplicationPart(typeof(ContentController).Assembly)
-				.AddApplicationPart(typeof(MetadataController).Assembly)
-				.AddApplicationPart(typeof(CompanyController).Assembly)
-				.AddApplicationPart(typeof(EventsController).Assembly)
 				.AddJsonOptions(options =>
 				{
 					options.SerializerSettings.Formatting = Newtonsoft.Json.Formatting.None;
@@ -68,12 +63,15 @@ namespace Host
 					options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
 				});
 
+			foreach (var assembly in assemblies)
+			{
+				mvc.AddApplicationPart(assembly);
+			}
+
 			services.AddOpenIdApiAuthentication(
 				Configuration.GetSection("OpenId").Get<OpenIdOptions>());
 
-			var modules = services.AddModules(Logger);
-
-			services.AddMediatR(modules.Select(x => x.GetType().Assembly).ToArray());
+			services.AddMediatR(assemblies);
 		}
 
 		public void Configure(IApplicationBuilder app, IHostingEnvironment env)
@@ -83,7 +81,6 @@ namespace Host
 				a =>
 				{
 					a.UseExceptionHandler("/Home/Error");
-					
 				}
 			);
 			app.UseHsts();

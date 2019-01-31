@@ -11,8 +11,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Idx", "Idx\Idx.csproj", "{2
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tendr.Api.Tests", "Tendr.Api.Tests\Tendr.Api.Tests.csproj", "{EF211D05-1361-4E7C-B8F7-C22E466D21CD}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Kompany.Web", "Kompany.Web\Kompany.Web.csproj", "{BDDB5A15-4CF8-4018-BD05-5EE977207462}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Montr.Web", "Montr.Web\Montr.Web.csproj", "{F74B27B0-9F49-4B58-92E3-A7F0B591ED11}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Montr.Data.Linq2Db", "Montr.Data.Linq2Db\Montr.Data.Linq2Db.csproj", "{CD4ABC46-9522-42B3-838D-106D4EE7B85C}"
@@ -43,8 +41,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tendr.Implementation", "Ten
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tendr.Tests", "Tendr.Tests\Tendr.Tests.csproj", "{B45F5B7E-2B89-43E0-BFCE-54085D1CA05F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tendr.Web", "Tendr.Web\Tendr.Web.csproj", "{CAE01002-27D3-4883-BA95-765D53331FC8}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -67,10 +63,6 @@ Global
 		{EF211D05-1361-4E7C-B8F7-C22E466D21CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{EF211D05-1361-4E7C-B8F7-C22E466D21CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EF211D05-1361-4E7C-B8F7-C22E466D21CD}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BDDB5A15-4CF8-4018-BD05-5EE977207462}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BDDB5A15-4CF8-4018-BD05-5EE977207462}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BDDB5A15-4CF8-4018-BD05-5EE977207462}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BDDB5A15-4CF8-4018-BD05-5EE977207462}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F74B27B0-9F49-4B58-92E3-A7F0B591ED11}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{F74B27B0-9F49-4B58-92E3-A7F0B591ED11}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F74B27B0-9F49-4B58-92E3-A7F0B591ED11}.Release|Any CPU.ActiveCfg = Release|Any CPU
@@ -131,10 +123,6 @@ Global
 		{B45F5B7E-2B89-43E0-BFCE-54085D1CA05F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B45F5B7E-2B89-43E0-BFCE-54085D1CA05F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B45F5B7E-2B89-43E0-BFCE-54085D1CA05F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{CAE01002-27D3-4883-BA95-765D53331FC8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{CAE01002-27D3-4883-BA95-765D53331FC8}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{CAE01002-27D3-4883-BA95-765D53331FC8}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{CAE01002-27D3-4883-BA95-765D53331FC8}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Montr.Web.Services;
 
-namespace Kompany.Web.Controllers
+namespace Kompany.Controllers
 {
 	[ApiController, Route("api/[controller]/[action]")]
 	public class CompanyController : ControllerBase

@@ -8,7 +8,7 @@ using Tendr.Commands;
 using Tendr.Queries;
 using Tendr.Models;
 
-namespace Tendr.Web.Controllers
+namespace Tendr.Controllers
 {
 	[Authorize, ApiController, Route("api/[controller]/[action]")]
 	public class EventsController : ControllerBase

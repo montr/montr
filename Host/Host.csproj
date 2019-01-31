@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk.Web">
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.2</TargetFramework>
@@ -7,33 +7,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="node_src\**" />
-    <Compile Remove="Services\**" />
     <Compile Remove="wwwroot\assets\**" />
     <Compile Remove="wwwroot\dist\**" />
-    <Content Remove="node_src\**" />
-    <Content Remove="Services\**" />
-    <Content Remove="wwwroot\assets\**" />
-    <Content Remove="wwwroot\dist\**" />
-    <EmbeddedResource Remove="node_src\**" />
-    <EmbeddedResource Remove="Services\**" />
-    <EmbeddedResource Remove="wwwroot\assets\**" />
-    <EmbeddedResource Remove="wwwroot\dist\**" />
-    <None Remove="node_src\**" />
-    <None Remove="Services\**" />
-    <None Remove="wwwroot\assets\**" />
-    <None Remove="wwwroot\dist\**" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Remove="package-lock.json" />
-    <Content Remove="package.json" />
-    <Content Remove="tsconfig.json" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Remove=".babelrc" />
-    <None Remove="webpack.config.js" />
   </ItemGroup>
 
   <ItemGroup>
@@ -59,12 +34,12 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Kompany.Implementation\Kompany.Implementation.csproj" />
-    <ProjectReference Include="..\Kompany.Web\Kompany.Web.csproj" />
+    <ProjectReference Include="..\Kompany\Kompany.csproj" />
     <ProjectReference Include="..\Montr.Data.Linq2Db\Montr.Data.Linq2Db.csproj" />
     <ProjectReference Include="..\Montr.Modularity\Montr.Modularity.csproj" />
     <ProjectReference Include="..\Montr.Web\Montr.Web.csproj" />
     <ProjectReference Include="..\Tendr.Implementation\Tendr.Implementation.csproj" />
-    <ProjectReference Include="..\Tendr.Web\Tendr.Web.csproj" />
+    <ProjectReference Include="..\Tendr\Tendr.csproj" />
   </ItemGroup>
 
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">

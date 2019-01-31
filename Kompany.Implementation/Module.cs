@@ -7,7 +7,7 @@ namespace Kompany.Implementation
 	{
 		public void ConfigureServices(IServiceCollection services)
 		{
-			// no-op, to load assembly in domain for mediatr
+			// no-op, to load assembly in domain
 		}
 	}
 }
