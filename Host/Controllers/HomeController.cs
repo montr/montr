@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 
-namespace Tendr.Web.Controllers
+namespace Host.Controllers
 {
 	public class HomeController : Controller
 	{

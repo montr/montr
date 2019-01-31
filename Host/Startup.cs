@@ -15,7 +15,7 @@ using Montr.Web.Services;
 using Newtonsoft.Json.Serialization;
 using Tendr.Web.Controllers;
 
-namespace Tendr.Web
+namespace Host
 {
 	public class Startup
 	{
