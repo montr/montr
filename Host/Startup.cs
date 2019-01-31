@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Kompany.Web.Controllers;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -42,10 +43,23 @@ namespace Host
 				options.MinimumSameSitePolicy = SameSiteMode.None;
 			});
 
+			services.AddCors(options =>
+			{
+				options.AddPolicy("default", policy =>
+				{
+					policy.WithOrigins(
+							"http://tendr.montr.io:5000",
+							"http://app.tendr.montr.io:5000")
+						.AllowAnyHeader()
+						.AllowAnyMethod();
+				});
+			});
+
 			services.AddMvc()
 				.SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
 				.AddApplicationPart(typeof(ContentController).Assembly)
 				.AddApplicationPart(typeof(MetadataController).Assembly)
+				.AddApplicationPart(typeof(CompanyController).Assembly)
 				.AddApplicationPart(typeof(EventsController).Assembly)
 				.AddJsonOptions(options =>
 				{
@@ -65,14 +79,17 @@ namespace Host
 		public void Configure(IApplicationBuilder app, IHostingEnvironment env)
 		{
 			app.UseWhen(
-				context => !context.Request.Path.StartsWithSegments("/api"),
-				a => a.UseExceptionHandler("/Home/Error")
+				context => context.Request.Path.StartsWithSegments("/api") == false,
+				a =>
+				{
+					a.UseExceptionHandler("/Home/Error");
+					
+				}
 			);
 			app.UseHsts();
-
 			app.UseStaticFiles();
 			app.UseCookiePolicy();
-
+			app.UseCors("default");
 			app.UseAuthentication();
 
 			app.UseMvc(routes =>

@@ -4,7 +4,7 @@ import { ICompany } from "../models";
 import { CompanyAPI, Constants } from "../services";
 import { CompanyContextProps, CompanyContext } from "./";
 import { Guid } from "@montr-core/models";
-import { NavigationService } from "@montr-core/services";
+import { NavigationService, NotificationService } from "@montr-core/services";
 
 interface State {
 	currentCompany?: ICompany;
@@ -15,6 +15,7 @@ export class CompanyContextProvider extends React.Component<any, State> {
 
 	private _cookies = new Cookies();
 	private _navigation = new NavigationService();
+	private _notification = new NotificationService();
 
 	constructor(props: any) {
 		super(props);
@@ -31,7 +32,7 @@ export class CompanyContextProvider extends React.Component<any, State> {
 	registerCompany = (): void => {
 		const returnUrl = encodeURI(this._navigation.getUrl());
 		this._navigation.navigate(
-			`${Constants.baseURL}/register/?${Constants.returnUrlParam}=${returnUrl}`);
+			`${Constants.baseURL}/register/company/?${Constants.returnUrlParam}=${returnUrl}`);
 	}
 
 	manageCompany = (): void => {
@@ -62,9 +63,11 @@ export class CompanyContextProvider extends React.Component<any, State> {
 	}
 
 	private _loadCompanyList = async () => {
-		const companyList: ICompany[] = await CompanyAPI.list();
-
-		this.setState({ companyList });
+		try {
+			this.setState({ companyList: await CompanyAPI.list() });
+		} catch (error) {
+			this._notification.error({ message: `Ошибка при загрузке списка организаций`, description: error.message });
+		}
 	}
 
 	private _getCookieCompanyUid = (): Guid => {

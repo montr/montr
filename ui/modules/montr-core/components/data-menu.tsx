@@ -25,12 +25,10 @@ export class DataMenu extends React.Component<MenuProps & Props, State> {
 		};
 	}
 
-	public componentDidMount() {
+	componentDidMount = async () => {
 		const { menuId } = this.props;
 
-		ContentAPI.getMenu(menuId).then((data: IMenu) => {
-			this.setState({ menu: data });
-		});
+		this.setState({ menu: await ContentAPI.getMenu(menuId) });
 	}
 
 	render() {

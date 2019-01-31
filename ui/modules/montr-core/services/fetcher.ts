@@ -21,12 +21,7 @@ authenticated.interceptors.request.use(
 
 authenticated.interceptors.response.use(null,
 	(error) => {
-		if (error.response.status === 401) {
-
-			// todo: renew token?
-
-			// hashHistory.push('/login');
-
+		if (error.response && error.response.status === 401) {
 			authService.login();
 			return;
 		}

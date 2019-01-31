@@ -4,7 +4,7 @@ const tsImportPluginFactory = require("ts-import-plugin")
 
 const Globals = {
 	"COOKIE_DOMAIN": JSON.stringify(".montr.io"),
-	"KOMPANY_APP_URL": JSON.stringify("http://kompany.montr.io:5010")
+	"KOMPANY_APP_URL": JSON.stringify("http://tendr.montr.io:5000")
 };
 
 module.exports = {
@@ -13,18 +13,20 @@ module.exports = {
 	entry: {
 		"tendr": "./modules/tendr/public.tsx",
 		"tendr.app": "./modules/tendr/app.tsx",
-		"kompany": "./modules/kompany/public.tsx"
+		// "kompany": "./modules/kompany/public.tsx"
 	},
 	output: {
 		path: __dirname,
 		filename: (chunkData) => {
-			if (chunkData.chunk.name.startsWith("tendr"))
-				return "../Tendr.Web/wwwroot/assets/[name].js";
+			return "../Host/wwwroot/assets/[name].js";
+
+			/* if (chunkData.chunk.name.startsWith("tendr"))
+				return "../Host/wwwroot/assets/[name].js";
 
 			if (chunkData.chunk.name === "kompany")
 				return "../Kompany.Web/wwwroot/assets/[name].js";
 
-			return null;
+			return null; */
 		}
 	},
 

@@ -58,13 +58,13 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Kompany.Implementation\Kompany.Implementation.csproj" />
+    <ProjectReference Include="..\Kompany.Web\Kompany.Web.csproj" />
     <ProjectReference Include="..\Montr.Data.Linq2Db\Montr.Data.Linq2Db.csproj" />
-    <ProjectReference Include="..\Montr.Metadata\Montr.Metadata.csproj" />
     <ProjectReference Include="..\Montr.Modularity\Montr.Modularity.csproj" />
     <ProjectReference Include="..\Montr.Web\Montr.Web.csproj" />
     <ProjectReference Include="..\Tendr.Implementation\Tendr.Implementation.csproj" />
     <ProjectReference Include="..\Tendr.Web\Tendr.Web.csproj" />
-    <ProjectReference Include="..\Tendr\Tendr.csproj" />
   </ItemGroup>
 
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">

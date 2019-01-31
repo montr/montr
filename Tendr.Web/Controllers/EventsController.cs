@@ -29,31 +29,6 @@ namespace Tendr.Web.Controllers
 			{
 				Request = request
 			});
-
-			/*using (var db = new DbContext())
-			{
-				var all = db.GetTable<DbEvent>();
-
-				var date = all
-					.Apply(request, "Id", SortOrder.Descending)
-					.Select(x => new Event
-					{
-						Uid = x.Uid,
-						Id = x.Id,
-						ConfigCode = x.ConfigCode,
-						StatusCode = x.StatusCode,
-						Name = x.Name,
-						Description = x.Description,
-						Url = "/events/edit/" + x.Id
-					})
-					.ToList();
-
-				return new DataResult<Event>
-				{
-					TotalCount = all.Count(),
-					Rows = date
-				};
-			}*/
 		}
 
 		[HttpPost]
@@ -63,25 +38,6 @@ namespace Tendr.Web.Controllers
 			{
 				EventId = item.Id
 			});
-
-			/*using (var db = new DbContext())
-			{
-				var result = db.GetTable<DbEvent>()
-					.Where(x => x.Id == item.Id)
-					.Select(x => new Event
-					{
-						Uid = x.Uid,
-						Id = x.Id,
-						ConfigCode = x.ConfigCode,
-						StatusCode = x.StatusCode,
-						Name = x.Name,
-						Description = x.Description,
-						Url = "/events/edit/" + x.Id
-					})
-					.Single();
-
-				return result;
-			}*/
 		}
 
 		[HttpPost]
@@ -104,17 +60,6 @@ namespace Tendr.Web.Controllers
 			});
 
 			return Ok();
-
-			/*using (var db = new DbContext())
-			{
-				db.GetTable<DbEvent>()
-					.Where(x => x.Id == item.Id)
-					.Set(x => x.Name, item.Name)
-					.Set(x => x.Description, item.Description)
-					.Update();
-
-				return new ApiResult();
-			}*/
 		}
 
 		[HttpPost]
@@ -127,16 +72,6 @@ namespace Tendr.Web.Controllers
 			});
 
 			return Ok();
-
-			/*using (var db = new DbContext())
-			{
-				var affected = db.GetTable<DbEvent>()
-					.Where(x => x.Id == item.Id)
-					.Set(x => x.StatusCode, EventStatusCode.Published)
-					.Update();
-
-				return new ApiResult { Success = (affected == 1) };
-			}*/
 		}
 
 		[HttpPost]
@@ -149,16 +84,6 @@ namespace Tendr.Web.Controllers
 			});
 
 			return Ok();
-
-			/*using (var db = new DbContext())
-			{
-				var affected = db.GetTable<DbEvent>()
-					.Where(x => x.Id == item.Id)
-					.Set(x => x.StatusCode, EventStatusCode.Draft) // "cancelled"
-					.Update();
-
-				return new ApiResult { Success = (affected == 1) };
-			}*/
 		}
 	}
 }

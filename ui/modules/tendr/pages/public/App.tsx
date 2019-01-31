@@ -1,10 +1,10 @@
 import * as React from "react";
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import { BrowserRouter as Router } from "react-router-dom";
 import { LocaleProvider, Layout, Breadcrumb } from "antd";
 import ru_RU from "antd/lib/locale-provider/ru_RU";
 import { AuthCallbackHandler, UserContextProvider, DataMenu } from "@montr-core/components";
 import { CompanyContextProvider, UserWithCompanyMenu } from "@kompany/components/.";
-import { Registration } from "./";
+import { Routes } from "./routes";
 
 export class App extends React.Component {
 	render() {
@@ -38,7 +38,7 @@ export class App extends React.Component {
 
 										<div style={{ minHeight: 280 }}>
 
-											<Route path="/register" exact component={Registration} />
+											<Routes />
 
 										</div>
 									</Layout.Content>
