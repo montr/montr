@@ -29,12 +29,24 @@ namespace Montr.Metadata.Services
 				};
 			}
 
+			if (viewId == "PrivateEventCounterpartyList/Grid")
+			{
+				result.Columns = new List<DataColumn>
+				{
+					new DataColumn { Key = "name", Name = "Организация", Sortable = true, Width = 400 },
+					new DataColumn { Key = "email", Name = "E-mail", Sortable = true, Width = 100 },
+					// new DataColumn { Key = "description", Name = "Описание", Width = 300 },
+				};
+			}
+
 			if (viewId == "PrivateEvent/Edit")
 			{
 				result.Panes = new List<DataPane>
 				{
 					new DataPane { Key = "tab_info", Name = "Информация", Icon = "profile",
 						Component = "panes/private/EditEventPane" },
+					new DataPane { Key = "tab_counterparties", Name = "Контрагенты", Icon = "solution",
+						Component = "panes/private/EditCounterpartyListPane" },
 					new DataPane { Key = "tab_team", Name = "Команда", Icon = "team" },
 					new DataPane { Key = "tab_items", Name = "Позиции", Icon = "table" },
 					new DataPane { Key = "tab_history", Name = "История изменений", Icon = "eye" },

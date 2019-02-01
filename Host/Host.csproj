@@ -33,8 +33,11 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Dokumento.Implementation\Dokumento.Implementation.csproj" />
+    <ProjectReference Include="..\Dokumento\Dokumento.csproj" />
     <ProjectReference Include="..\Kompany.Implementation\Kompany.Implementation.csproj" />
     <ProjectReference Include="..\Kompany\Kompany.csproj" />
+    <ProjectReference Include="..\Montr.Core.Implementation\Montr.Core.Implementation.csproj" />
     <ProjectReference Include="..\Montr.Data.Linq2Db\Montr.Data.Linq2Db.csproj" />
     <ProjectReference Include="..\Montr.Modularity\Montr.Modularity.csproj" />
     <ProjectReference Include="..\Montr.Web\Montr.Web.csproj" />

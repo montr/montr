@@ -72,14 +72,14 @@ class EventForm extends React.Component<IEventFormProps, IEventFormState> {
 						],
 						initialValue: this.props.data.name
 					})(
-						<Input.TextArea autosize={{ minRows: 2, maxRows: 7 }} />
+						<Input.TextArea autosize={{ minRows: 4, maxRows: 24 }} />
 					)}
 				</Form.Item>
 				<Form.Item {...formItemLayout} label="Описание" extra="Как можно подробнее опишите что вы хотите купить.">
 					{getFieldDecorator("description", {
 						initialValue: this.props.data.description
 					})(
-						<Input.TextArea autosize={{ minRows: 4, maxRows: 10 }} />
+						<Input.TextArea autosize={{ minRows: 4, maxRows: 24 }} />
 					)}
 				</Form.Item>
 				{/*  <Form.Item {...tailFormItemLayout}>
