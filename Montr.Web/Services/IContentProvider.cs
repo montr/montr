@@ -29,7 +29,8 @@ namespace Montr.Web.Services
 			{
 				result.Items.Add(new Menu { Id = "m.0", Name = "Панель управления", Icon = "dashboard", Route = "/" });
 				result.Items.Add(new Menu { Id = "m.1", Name = "Торговые процедуры", Icon = "project", Route = "/events" });
-				result.Items.Add(new Menu { Id = "m.2", Name = "Настройки", Icon = "setting", Route = "/settings" });
+				result.Items.Add(new Menu { Id = "m.2", Name = "Контрагенты", Icon = "solution", Route = "/contractors" });
+				result.Items.Add(new Menu { Id = "m.3", Name = "Настройки", Icon = "setting", Route = "/settings" });
 
 				result.Items.Add(new Menu { Id = "tender", Name = "Промо", Icon = "global", Url = "http://tendr.montr.io:5000/register/" });
 			}

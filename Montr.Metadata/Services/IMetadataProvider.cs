@@ -45,8 +45,10 @@ namespace Montr.Metadata.Services
 				{
 					new DataPane { Key = "tab_info", Name = "Информация", Icon = "profile",
 						Component = "panes/private/EditEventPane" },
-					new DataPane { Key = "tab_counterparties", Name = "Контрагенты", Icon = "solution",
-						Component = "panes/private/EditCounterpartyListPane" },
+					new DataPane { Key = "tab_invitations", Name = "Приглашения (0)", Icon = "solution",
+						Component = "panes/private/InvitationPane" },
+					new DataPane { Key = "tab_proposals", Name = "Предложения", Icon = "solution" },
+					new DataPane { Key = "tab_questions", Name = "Разъяснения", Icon = "solution" },
 					new DataPane { Key = "tab_team", Name = "Команда", Icon = "team" },
 					new DataPane { Key = "tab_items", Name = "Позиции", Icon = "table" },
 					new DataPane { Key = "tab_history", Name = "История изменений", Icon = "eye" },

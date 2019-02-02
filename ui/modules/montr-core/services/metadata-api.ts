@@ -9,7 +9,7 @@ const getLoadUrl = (): string => {
 
 const componentToClass: Map<string, React.ComponentClass> = new Map<string, React.ComponentClass>();
 componentToClass.set("panes/private/EditEventPane", panes.EditEventPane);
-componentToClass.set("panes/private/EditCounterpartyListPane", panes.EditCounterpartyListPane);
+componentToClass.set("panes/private/InvitationPane", panes.InvitationPane);
 
 const load = async<TEntity>(viewId: string): Promise<IDataView<TEntity>> => {
 	const data: IDataView<TEntity> = await new Fetcher().post(getLoadUrl(), { viewId: viewId });

@@ -7,7 +7,7 @@ interface IEditEventPaneProps extends IPaneProps<IEvent> {
 	data: IEvent;
 }
 
-export class EditCounterpartyListPane extends React.Component<IEditEventPaneProps> {
+export class InvitationPane extends React.Component<IEditEventPaneProps> {
 
 	private _formRef: IPaneComponent;
 
@@ -16,10 +16,18 @@ export class EditCounterpartyListPane extends React.Component<IEditEventPaneProp
 	}
 
 	render() {
-		return (
+		return <>
+			<ol>
+				<li>Ручное добавление</li>
+				<li>Импорт xsl и т.д.</li>
+				<li>Выбор из зарегистрированных в системе</li>
+				<li>Выбор из своих контрагентов</li>
+				<li>Копирование приглашений из другой процедуры</li>
+			</ol>
+
 			<DataTable
 				viewId="PrivateEventCounterpartyList/Grid"
 				loadUrl="/api/Company/List" />
-		);
+		</>;
 	}
 }

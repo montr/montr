@@ -1,2 +1,2 @@
-export * from "./EditEventPane";
-export * from "./EditCounterpartyListPane";
+export * from "./edit-event-pane";
+export * from "./invitation-pane";
