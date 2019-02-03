@@ -1,9 +1,10 @@
 import * as React from "react";
-import { Form, Input, Button, message } from "antd";
+import { Form, Input, message } from "antd";
 import { FormComponentProps } from "antd/lib/form";
 import { IApiResult, IPaneProps } from "@montr-core/models";
-import { IEvent, EventAPI } from "../../api";
+import { EventService } from "../../services";
 import { IPaneComponent } from "@montr-core/components";
+import { IEvent } from "modules/tendr/models";
 
 interface IEventFormProps extends FormComponentProps {
 	data: IEvent;
@@ -13,9 +14,16 @@ interface IEventFormState {
 }
 
 class EventForm extends React.Component<IEventFormProps, IEventFormState> {
+
+	private _eventService = new EventService();
+
 	constructor(props: IEventFormProps) {
 		super(props);
 		this.state = {};
+	}
+
+	componentWillUnmount = async () => {
+		await this._eventService.abort();
 	}
 
 	handleSubmit = (e: React.SyntheticEvent) => {
@@ -26,7 +34,7 @@ class EventForm extends React.Component<IEventFormProps, IEventFormState> {
 	save() {
 		this.props.form.validateFieldsAndScroll((errors, values: IEvent) => {
 			if (!errors) {
-				EventAPI
+				this._eventService
 					.update({ id: this.props.data.id, ...values })
 					.then((result: IApiResult) => {
 						message.success("Данные успешно сохранены");

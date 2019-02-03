@@ -40,7 +40,7 @@ namespace Kompany.Implementation.QueryHandlers
 						Uid = x.Uid,
 						ConfigCode = x.ConfigCode,
 						StatusCode = x.StatusCode,
-						Name = x.Name,
+						Name = x.Name
 					}).ToList();
 
 				return Task.FromResult((IList<Company>)result);

@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { Menu, Icon } from "antd";
 import { IMenu } from "../models";
 import { MenuProps } from "antd/lib/menu";
-import { ContentAPI } from "@montr-core/services";
+import { ContentService } from "../services/content-service";
 
 interface Props {
 	menuId: string;
@@ -17,6 +17,8 @@ interface State {
 
 export class DataMenu extends React.Component<MenuProps & Props, State> {
 
+	private _contentService = new ContentService();
+
 	constructor(props: any) {
 		super(props);
 
@@ -28,7 +30,11 @@ export class DataMenu extends React.Component<MenuProps & Props, State> {
 	componentDidMount = async () => {
 		const { menuId } = this.props;
 
-		this.setState({ menu: await ContentAPI.getMenu(menuId) });
+		this.setState({ menu: await this._contentService.getMenu(menuId) });
+	}
+
+	componentWillUnmount = async () => {
+		await this._contentService.abort();
 	}
 
 	render() {
@@ -41,7 +47,7 @@ export class DataMenu extends React.Component<MenuProps & Props, State> {
 
 				{head}
 
-				{menu.items && menu.items.map((item) => {
+				{menu && menu.items && menu.items.map((item) => {
 
 					if (item.route) {
 						return (

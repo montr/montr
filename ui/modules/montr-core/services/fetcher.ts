@@ -16,24 +16,42 @@ authenticated.interceptors.request.use(
 
 		return config;
 	}, (error) => {
+
+		/* if (axios.isCancel(error)) {
+			return;
+		} */
+
 		return Promise.reject(error);
-	});
+	}
+);
 
 authenticated.interceptors.response.use(null,
 	(error) => {
+
+		/*  */
+
 		if (error.response && error.response.status === 401) {
 			authService.login();
 			return;
 		}
 
 		return Promise.reject(error);
-	});
+	}
+);
 
 export class Fetcher {
-	public async post(url: string, body?: any): Promise<any> {
 
-		const response = await authenticated.post(url, body);
+	private _cancelTokenSource = axios.CancelToken.source();
+
+	public post = async (url: string, body?: any): Promise<any> => {
+
+		const response = await authenticated
+			.post(url, body, { cancelToken: this._cancelTokenSource.token });
 
 		return response ? response.data : null;
+	}
+
+	public abort = async (message?: string): Promise<any> => {
+		this._cancelTokenSource.cancel(message || `${this.constructor.name} cancelled`);
 	}
 }

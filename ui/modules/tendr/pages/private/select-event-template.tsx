@@ -1,9 +1,10 @@
 import * as React from "react";
 import { Button, List } from "antd";
-import { IEventTemplate, EventTemplateAPI, EventAPI } from "../../api";
+import { EventTemplateService, EventService } from "../../services";
 import { Redirect } from "react-router-dom";
 import { Page } from "@montr-core/components";
 import { withCompanyContext, CompanyContextProps } from "@kompany/components";
+import { IEventTemplate } from "modules/tendr/models";
 
 interface State {
 	newId?: number;
@@ -11,20 +12,26 @@ interface State {
 }
 
 class _SelectEventTemplate extends React.Component<CompanyContextProps, State> {
+
+	private _eventTemplateService = new EventTemplateService();
+	private _eventService = new EventService();
+
 	constructor(props: CompanyContextProps) {
 		super(props);
 		this.state = { data: [] };
 	}
 
-	componentDidMount() {
-		EventTemplateAPI.load()
-			.then((data) => {
-				this.setState({ data });
-			});
+	componentDidMount = async () => {
+		this.setState({ data: await this._eventTemplateService.list() });
 	}
 
-	handleSelect = async (configCode: string) => {
-		const newId: number = await EventAPI.create({
+	componentWillUnmount = async () => {
+		await this._eventTemplateService.abort();
+		await this._eventService.abort();
+	}
+
+	private _handleSelect = async (configCode: string) => {
+		const newId: number = await this._eventService.create({
 			configCode: configCode,
 			companyUid: this.props.currentCompany.uid
 		});
@@ -32,7 +39,7 @@ class _SelectEventTemplate extends React.Component<CompanyContextProps, State> {
 		this.setState({ newId: newId });
 	}
 
-	render() {
+	render = () => {
 		if (this.state.newId) {
 			return <Redirect to={`/events/edit/${this.state.newId}`} />
 		}
@@ -46,7 +53,7 @@ class _SelectEventTemplate extends React.Component<CompanyContextProps, State> {
 						renderItem={(item: IEventTemplate) => (
 							<List.Item
 								actions={[
-									<Button onClick={() => this.handleSelect(item.configCode)}>Выбрать</Button>
+									<Button onClick={() => this._handleSelect(item.configCode)}>Выбрать</Button>
 								]}>
 								<List.Item.Meta
 									title={item.name}

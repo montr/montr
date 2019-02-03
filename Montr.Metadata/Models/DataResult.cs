@@ -2,7 +2,7 @@
 
 namespace Montr.Metadata.Models
 {
-	public class DataResult<TModel> : ApiResult
+	public class DataResult<TModel> // : ApiResult
 	{
 		public int TotalCount { get; set; }
 

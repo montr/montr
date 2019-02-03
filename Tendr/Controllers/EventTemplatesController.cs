@@ -8,7 +8,7 @@ namespace Tendr.Controllers
 	public class EventTemplatesController : ControllerBase
 	{
 		[HttpPost]
-		public ActionResult<IEnumerable<EventTemplate>> Load()
+		public ActionResult<IEnumerable<EventTemplate>> List()
 		{
 			return EventTemplate.All;
 		}

@@ -1,6 +1,6 @@
 import * as React from "react";
 import { IPaneProps } from "@montr-core/models";
-import { IEvent } from "../../api";
+import { IEvent } from "../../models";
 import { IPaneComponent, DataTable } from "@montr-core/components";
 
 interface IEditEventPaneProps extends IPaneProps<IEvent> {

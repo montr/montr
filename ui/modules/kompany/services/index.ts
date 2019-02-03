@@ -1,2 +1,2 @@
 export * from "./constants";
-export * from "./company-api";
+export * from "./company-service";

@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Link } from "react-router-dom";
 import { Form, Select, Button, DatePicker } from "antd";
-import { EventAPI } from "../../api";
+import { EventService } from "../../services";
 import { Page, DataTable } from "@montr-core/components";
 
 interface Props {
@@ -11,8 +11,15 @@ interface State {
 }
 
 export class SearchEvents extends React.Component<Props, State> {
+
+	private _eventService = new EventService();
+
 	constructor(props: Props) {
 		super(props);
+	}
+
+	componentWillUnmount = async () => {
+		await this._eventService.abort();
 	}
 
 	render() {
@@ -42,7 +49,7 @@ export class SearchEvents extends React.Component<Props, State> {
 
 				<DataTable
 					viewId="PrivateEventSearch/Grid"
-					loadUrl={EventAPI.getLoadUrl()} />
+					loadUrl={this._eventService.getLoadUrl()} />
 
 			</Page>
 		);

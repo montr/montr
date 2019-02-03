@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Form, Input, Checkbox, Button, Radio, Modal, message } from "antd";
 import { FormComponentProps } from "antd/lib/form";
-import { CompanyAPI, Constants } from "../../services";
+import { CompanyService, Constants } from "../../services";
 import { RadioChangeEvent } from "antd/lib/radio/interface";
 import { NavigationService } from "@montr-core/services";
 import { withCompanyContext, CompanyContextProps } from "@kompany/components";
@@ -17,6 +17,7 @@ interface IState {
 class _RegistrationForm extends React.Component<IProps, IState> {
 
 	private _navigation = new NavigationService();
+	private _companyService = new CompanyService();
 
 	constructor(props: IProps) {
 		super(props);
@@ -27,6 +28,10 @@ class _RegistrationForm extends React.Component<IProps, IState> {
 		};
 	}
 
+	componentWillUnmount = async () => {
+		await this._companyService.abort();
+	}
+
 	handleSubmit = (e: React.SyntheticEvent) => {
 		e.preventDefault();
 
@@ -34,7 +39,7 @@ class _RegistrationForm extends React.Component<IProps, IState> {
 
 		this.props.form.validateFieldsAndScroll(async (err, values) => {
 			if (!err) {
-				const companyUid = await CompanyAPI.create(values);
+				const companyUid = await this._companyService.create(values);
 
 				await switchCompany(companyUid)
 

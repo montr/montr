@@ -1,9 +1,10 @@
 import * as React from "react";
 import { Tabs, Button, Icon, Modal, message } from "antd";
 import { IApiResult, IDataView, IPaneProps } from "@montr-core/models";
-import { IEvent, EventAPI, EventTemplateAPI, IEventTemplate } from "../../api";
+import { EventService, EventTemplateService } from "../../services";
 import { Page, IPaneComponent } from "@montr-core/components";
-import { MetadataAPI } from "@montr-core/services";
+import { MetadataService } from "@montr-core/services";
+import { IEvent, IEventTemplate } from "modules/tendr/models";
 
 interface IEditEventProps {
 	params: {
@@ -19,6 +20,10 @@ interface IEditEventState {
 
 export class EditEvent extends React.Component<IEditEventProps, IEditEventState> {
 
+	private _metadataService = new MetadataService();
+	private _eventTemplateService = new EventTemplateService();
+	private _eventService = new EventService();
+
 	private _refsByKey: Map<string, any> = new Map<string, React.RefObject<any>>();
 
 	constructor(props: IEditEventProps) {
@@ -33,20 +38,22 @@ export class EditEvent extends React.Component<IEditEventProps, IEditEventState>
 		this.fetchMetadata();
 	}
 
-	private fetchConfigCodes() {
-		EventTemplateAPI.load()
-			.then((data) => this.setState({ configCodes: data }));
+	componentWillUnmount = async () => {
+		await this._metadataService.abort();
+		await this._eventTemplateService.abort();
+		await this._eventService.abort();
 	}
 
-	private fetchData() {
-		EventAPI.get(this.props.params.id)
-			.then(data => this.setState({ data }));
+	private fetchConfigCodes = async () => {
+		this.setState({ configCodes: await this._eventTemplateService.list() });
 	}
 
-	private fetchMetadata() {
-		MetadataAPI
-			.load("PrivateEvent/Edit")
-			.then((dataView) => this.setState({ dataView }));
+	private fetchData = async () => {
+		this.setState({ data: await this._eventService.get(this.props.params.id) });
+	}
+
+	private fetchMetadata = async () => {
+		this.setState({ dataView: await this._metadataService.load("PrivateEvent/Edit") });
 	}
 
 	formatPageTitle(): string {
@@ -88,7 +95,7 @@ export class EditEvent extends React.Component<IEditEventProps, IEditEventState>
 			title: "Подтверждение операции",
 			content: "Вы действительно хотите опубликовать событие?",
 			onOk: () => {
-				EventAPI
+				this._eventService
 					.publish(this.props.params.id)
 					.then((result: IApiResult) => {
 						message.success("Событие опубликовано: " + JSON.stringify(result));
@@ -103,7 +110,7 @@ export class EditEvent extends React.Component<IEditEventProps, IEditEventState>
 			title: "Подтверждение операции",
 			content: "Вы действительно хотите отменить событие?",
 			onOk: () => {
-				EventAPI
+				this._eventService
 					.cancel(this.props.params.id)
 					.then((result: IApiResult) => {
 						message.success("Событие отменено: " + JSON.stringify(result));

@@ -1,6 +1,7 @@
 ﻿using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using LinqToDB;
 using MediatR;
 using Montr.Core.Models;
 using Montr.Core.Services;
@@ -12,16 +13,16 @@ using Tendr.Queries;
 
 namespace Tendr.Implementation.QueryHandlers
 {
-	public class LoadEventListHandler : IRequestHandler<LoadEventList, DataResult<Event>>
+	public class GetEventListHandler : IRequestHandler<GetEventList, DataResult<Event>>
 	{
 		private readonly IDbContextFactory _dbContextFactory;
 
-		public LoadEventListHandler(IDbContextFactory dbContextFactory)
+		public GetEventListHandler(IDbContextFactory dbContextFactory)
 		{
 			_dbContextFactory = dbContextFactory;
 		}
 
-		public Task<DataResult<Event>> Handle(LoadEventList command, CancellationToken cancellationToken)
+		public async Task<DataResult<Event>> Handle(GetEventList command, CancellationToken cancellationToken)
 		{
 			var request = command.Request;
 
@@ -29,7 +30,7 @@ namespace Tendr.Implementation.QueryHandlers
 			{
 				var all = db.GetTable<DbEvent>();
 
-				var date = all
+				var date = await all
 					.Apply(request, "Id", SortOrder.Descending)
 					.Select(x => new Event
 					{
@@ -37,11 +38,12 @@ namespace Tendr.Implementation.QueryHandlers
 						Id = x.Id,
 						ConfigCode = x.ConfigCode,
 						StatusCode = x.StatusCode,
+						CompanyUid = x.CompanyUid,
 						Name = x.Name,
 						Description = x.Description,
 						Url = "/events/edit/" + x.Id
 					})
-					.ToList();
+					.ToListAsync(cancellationToken);
 
 				var result = new DataResult<Event>
 				{
@@ -49,7 +51,7 @@ namespace Tendr.Implementation.QueryHandlers
 					Rows = date
 				};
 
-				return Task.FromResult(result);
+				return result;
 			}
 		}
 	}

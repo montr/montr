@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { Table } from "antd";
 import { ColumnProps, PaginationConfig, SorterResult, SortOrder } from "antd/lib/table";
 import { IIndexer } from "@montr-core/models";
-import { Fetcher, MetadataAPI, NotificationService } from "@montr-core/services";
+import { Fetcher, NotificationService, MetadataService } from "@montr-core/services";
 import { IDataColumn, IDataResult } from "../models";
 
 interface DataTableProps {
@@ -22,6 +22,7 @@ interface DataTableState<TModel> {
 export class DataTable<TModel extends IIndexer> extends React.Component<DataTableProps, DataTableState<TModel>> {
 
 	private _fetcher = new Fetcher();
+	private _metadataService = new MetadataService();
 	private _notification = new NotificationService();
 
 	constructor(props: DataTableProps) {
@@ -38,6 +39,15 @@ export class DataTable<TModel extends IIndexer> extends React.Component<DataTabl
 				showSizeChanger: true,
 			},
 		};
+	}
+
+	componentDidMount = async () => {
+		await this.fetchMetadata();
+	}
+
+	componentWillUnmount = async () => {
+		await this._fetcher.abort();
+		await this._metadataService.abort();
 	}
 
 	private handleTableChange = async (pagination: PaginationConfig,
@@ -63,7 +73,7 @@ export class DataTable<TModel extends IIndexer> extends React.Component<DataTabl
 	}
 
 	private fetchMetadata = async () => {
-		const dataView = await MetadataAPI.load(this.props.viewId);
+		const dataView = await this._metadataService.load(this.props.viewId);
 
 		const columns = dataView.columns.map((item: IDataColumn): ColumnProps<TModel> => {
 
@@ -134,11 +144,7 @@ export class DataTable<TModel extends IIndexer> extends React.Component<DataTabl
 		}
 	}
 
-	componentDidMount() {
-		this.fetchMetadata();
-	}
-
-	render() {
+	render = () => {
 		const rowSelection = {
 			columnWidth: 1
 		};

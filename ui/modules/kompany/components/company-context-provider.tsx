@@ -1,7 +1,7 @@
 import * as React from "react";
 import Cookies from "universal-cookie";
 import { ICompany } from "../models";
-import { CompanyAPI, Constants } from "../services";
+import { CompanyService, Constants } from "../services";
 import { CompanyContextProps, CompanyContext } from "./";
 import { Guid } from "@montr-core/models";
 import { NavigationService, NotificationService } from "@montr-core/services";
@@ -16,6 +16,7 @@ export class CompanyContextProvider extends React.Component<any, State> {
 	private _cookies = new Cookies();
 	private _navigation = new NavigationService();
 	private _notification = new NotificationService();
+	private _companyService = new CompanyService();
 
 	constructor(props: any) {
 		super(props);
@@ -27,6 +28,10 @@ export class CompanyContextProvider extends React.Component<any, State> {
 
 	componentDidMount = async () => {
 		this.switchCompany();
+	}
+
+	componentWillUnmount = async () => {
+		await this._companyService.abort();
 	}
 
 	registerCompany = (): void => {
@@ -64,7 +69,7 @@ export class CompanyContextProvider extends React.Component<any, State> {
 
 	private _loadCompanyList = async () => {
 		try {
-			this.setState({ companyList: await CompanyAPI.list() });
+			this.setState({ companyList: await this._companyService.list() });
 		} catch (error) {
 			this._notification.error({ message: `Ошибка при загрузке списка организаций`, description: error.message });
 		}

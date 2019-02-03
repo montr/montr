@@ -23,10 +23,11 @@ namespace Tendr.Controllers
 		}
 
 		[HttpPost]
-		public async Task<ActionResult<DataResult<Event>>> Load(EventSearchRequest request)
+		public async Task<ActionResult<DataResult<Event>>> List(EventSearchRequest request)
 		{
-			return await _mediator.Send(new LoadEventList
+			return await _mediator.Send(new GetEventList
 			{
+				UserUid = _currentUserProvider.GetUserUid(),
 				Request = request
 			});
 		}
