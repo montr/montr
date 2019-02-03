@@ -24,6 +24,7 @@
     <PackageReference Include="Microsoft.AspNetCore.App" />
     <PackageReference Include="Microsoft.AspNetCore.Razor.Design" Version="2.2.0" PrivateAssets="All" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.2.1" />
+    <PackageReference Include="Npgsql" Version="4.0.4" />
     <PackageReference Include="Sentry" Version="1.1.2" />
     <PackageReference Include="Sentry.AspNetCore" Version="1.1.2" />
     <PackageReference Include="Serilog" Version="2.8.0" />
@@ -39,6 +40,7 @@
     <ProjectReference Include="..\Kompany\Kompany.csproj" />
     <ProjectReference Include="..\Montr.Core.Implementation\Montr.Core.Implementation.csproj" />
     <ProjectReference Include="..\Montr.Data.Linq2Db\Montr.Data.Linq2Db.csproj" />
+    <ProjectReference Include="..\Montr.Data.Npgsql\Montr.Data.Npgsql.csproj" />
     <ProjectReference Include="..\Montr.Modularity\Montr.Modularity.csproj" />
     <ProjectReference Include="..\Montr.Web\Montr.Web.csproj" />
     <ProjectReference Include="..\Tendr.Implementation\Tendr.Implementation.csproj" />

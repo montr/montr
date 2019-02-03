@@ -13,4 +13,6 @@ CREATE TABLE IF NOT EXISTS public.company
 )
 WITH (
 	OIDS = FALSE
-)
+);
+
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE public.company TO web;

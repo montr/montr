@@ -63,31 +63,31 @@ namespace Kompany.Implementation.CommandHandlers
 						.Value(x => x.CompanyUid, company.Uid)
 						.Value(x => x.UserUid, request.UserUid)
 						.InsertAsync(cancellationToken);
-
-					// todo: роли пользователя
-
-					// заявка на регистрацию + todo: дата изменения
-					await _documentRepository.Create(new Document
-					{
-						CompanyUid = company.Uid,
-						ConfigCode = CompanyRequestConfigCode.RegistrationRequest
-					});
-
-					// todo: история изменений всего
-					await _auditLogService.Save(new AuditEvent
-					{
-						EntityTypeCode = "company",
-						EntityUid = company.Uid,
-						CompanyUid = company.Uid,
-						UserUid = request.UserUid,
-						CreatedAtUtc = now,
-						MessageCode = "Company.Created"
-					});
-
-					// todo: (через события в фоне) авто-допуск заявки, оповещения для оператора и компании
-
-					scope.Commit();
 				}
+
+				// todo: роли пользователя
+
+				// заявка на регистрацию + todo: дата изменения
+				await _documentRepository.Create(new Document
+				{
+					CompanyUid = company.Uid,
+					ConfigCode = CompanyRequestConfigCode.RegistrationRequest
+				});
+
+				// todo: история изменений всего
+				await _auditLogService.Save(new AuditEvent
+				{
+					EntityTypeCode = "company",
+					EntityUid = company.Uid,
+					CompanyUid = company.Uid,
+					UserUid = request.UserUid,
+					CreatedAtUtc = now,
+					MessageCode = "Company.Created"
+				});
+
+				// todo: (через события в фоне) авто-допуск заявки, оповещения для оператора и компании
+
+				scope.Commit();
 
 				return company.Uid;
 			}

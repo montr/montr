@@ -19,4 +19,6 @@ CREATE TABLE IF NOT EXISTS public.audit_log
 )
 WITH (
 	OIDS = FALSE
-)
+);
+
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE public.audit_log TO web;

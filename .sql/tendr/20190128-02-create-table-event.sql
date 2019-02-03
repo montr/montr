@@ -4,6 +4,8 @@
 
 CREATE SEQUENCE public.event_id_seq;
 
+GRANT USAGE, SELECT, UPDATE ON SEQUENCE public.event_id_seq TO web;
+
 -- Table: public.event
 
 -- DROP TABLE public.event;
@@ -32,3 +34,11 @@ CREATE UNIQUE INDEX event_id_ux
     ON public.event USING btree
     (id)
     TABLESPACE pg_default;
+
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE public.event TO web;
+
+ALTER TABLE public.event
+    ADD CONSTRAINT fk_event_coompany_uid FOREIGN KEY (company_uid)
+    REFERENCES public.company (uid) MATCH SIMPLE
+    ON UPDATE NO ACTION
+    ON DELETE NO ACTION;
