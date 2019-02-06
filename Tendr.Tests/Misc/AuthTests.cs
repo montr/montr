@@ -6,9 +6,9 @@ using IdentityModel.Client;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json.Linq;
 
-namespace Tendr.Api.Tests
+namespace Tendr.Tests.Misc
 {
-	[TestClass]
+	[TestClass, Ignore]
 	public class AuthTests
 	{
 		[TestMethod]

@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Montr.Data.Linq2Db;
 using Montr.Modularity;
 using Montr.Web.Services;
 using Newtonsoft.Json.Serialization;
@@ -29,8 +28,8 @@ namespace Host
 
 		public void ConfigureServices(IServiceCollection services)
 		{
-			services.AddLinq2Db(
-				Configuration.GetSection("ConnectionString").Get<ConnectionStringSettings>());
+			/*services.AddLinq2Db(
+				Configuration.GetSection("ConnectionString").Get<ConnectionStringSettings>());*/
 
 			services.Configure<CookiePolicyOptions>(options =>
 			{
@@ -51,7 +50,7 @@ namespace Host
 				});
 			});
 
-			var modules = services.AddModules(Logger);
+			var modules = services.AddModules(Configuration, Logger);
 			var assemblies = modules.Select(x => x.GetType().Assembly).ToArray();
 
 			var mvc = services.AddMvc()

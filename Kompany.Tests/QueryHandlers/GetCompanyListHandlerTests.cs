@@ -15,8 +15,6 @@ namespace Kompany.Tests.QueryHandlers
 		public async Task GetCompanyList_Should_ReturnCompanyList()
 		{
 			// arrange
-			TestHelper.InitDb();
-
 			var dbContextFactory = new DefaultDbContextFactory();
 
 			var handler = new GetCompanyListHandler(dbContextFactory);

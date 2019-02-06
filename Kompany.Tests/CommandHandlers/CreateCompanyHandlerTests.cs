@@ -19,8 +19,6 @@ namespace Kompany.Tests.CommandHandlers
 		public async Task CreateCompany_Should_CreateCompany()
 		{
 			// arrange
-			TestHelper.InitDb();
-
 			var unitOfWorkFactory = new TransactionScopeUnitOfWorkFactory { Commitable = false };
 			var dbContextFactory = new DefaultDbContextFactory();
 			var dateTimeProvider = new DefaultDateTimeProvider();

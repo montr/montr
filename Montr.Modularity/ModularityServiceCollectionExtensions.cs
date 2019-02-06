@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 
@@ -10,7 +11,7 @@ namespace Montr.Modularity
 {
 	public static class ModularityServiceCollectionExtensions
 	{
-		public static ICollection<IModule> AddModules(this IServiceCollection services, ILogger logger)
+		public static ICollection<IModule> AddModules(this IServiceCollection services, IConfiguration configuration, ILogger logger)
 		{
 			var allAssemblies = AppDomain.CurrentDomain.GetAssemblies();
 
@@ -47,7 +48,7 @@ namespace Montr.Modularity
 					logger.LogInformation($"Initializing module {module}");
 				}
 
-				module.ConfigureServices(services);
+				module.ConfigureServices(configuration, services);
 
 				result.Add(module);
 			}

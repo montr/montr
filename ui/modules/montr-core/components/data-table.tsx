@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Link } from "react-router-dom";
-import { Table } from "antd";
+import { Table, Tag } from "antd";
 import { ColumnProps, PaginationConfig, SorterResult, SortOrder } from "antd/lib/table";
 import { IIndexer } from "@montr-core/models";
 import { Fetcher, NotificationService, MetadataService } from "@montr-core/services";
@@ -83,6 +83,18 @@ export class DataTable<TModel extends IIndexer> extends React.Component<DataTabl
 				render = (text: any, record: TModel, index: number): React.ReactNode => {
 					const cellUrl: string = record[item.urlProperty];
 					return (<Link to={cellUrl}>{text}</Link>);
+				};
+			}
+
+			if (item.key == "configCode") {
+				render = (text: any, record: TModel, index: number): React.ReactNode => {
+					return <Tag color="blue">{text}</Tag>;
+				};
+			}
+
+			if (item.key == "statusCode") {
+				render = (text: any, record: TModel, index: number): React.ReactNode => {
+					return <Tag color="green">{text}</Tag>;
 				};
 			}
 
