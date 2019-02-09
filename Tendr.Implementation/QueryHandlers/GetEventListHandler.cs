@@ -31,7 +31,7 @@ namespace Tendr.Implementation.QueryHandlers
 				var all = db.GetTable<DbEvent>();
 
 				var date = await all
-					.Apply(request, "Id", SortOrder.Descending)
+					.Apply(request, x => x.Id, SortOrder.Descending)
 					.Select(x => new Event
 					{
 						Uid = x.Uid,

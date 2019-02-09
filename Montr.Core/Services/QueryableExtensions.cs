@@ -8,23 +8,31 @@ namespace Montr.Core.Services
 {
 	public static class QueryableExtensions
 	{
+		private const int MaxPageSize = 1000;
+		private const int DefaultPageSize = 100;
+
 		// todo: pass viewId instead of defaultSortColumn
 		public static IQueryable<T> Apply<T>(this IQueryable<T> source, Paging paging,
-			string defaultSortColumn, SortOrder defaultSortOrder)
+			Expression<Func<T, object>> defaultSortColumn, SortOrder defaultSortOrder = SortOrder.Ascending)
 		{
+			if (paging == null)
+			{
+				paging = new Paging();
+			}
+
 			if (paging.PageNo <= 0)
 			{
 				paging.PageNo = 1;
 			}
 
-			if (paging.PageSize <= 0 || paging.PageSize > 500)
+			if (paging.PageSize <= 0 || paging.PageSize > MaxPageSize)
 			{
-				paging.PageSize = 10;
+				paging.PageSize = DefaultPageSize;
 			}
 
 			if (paging.SortColumn == null)
 			{
-				paging.SortColumn = defaultSortColumn;
+				paging.SortColumn = GetMemberName(defaultSortColumn);
 			}
 
 			if (paging.SortOrder == null)
@@ -45,22 +53,22 @@ namespace Montr.Core.Services
 
 		public static IOrderedQueryable<T> OrderBy<T>(this IQueryable<T> source, string property)
 		{
-			return ApplyOrder<T>(source, property, "OrderBy");
+			return ApplyOrder(source, property, "OrderBy");
 		}
 
 		public static IOrderedQueryable<T> OrderByDescending<T>(this IQueryable<T> source, string property)
 		{
-			return ApplyOrder<T>(source, property, "OrderByDescending");
+			return ApplyOrder(source, property, "OrderByDescending");
 		}
 
 		public static IOrderedQueryable<T> ThenBy<T>(this IOrderedQueryable<T> source, string property)
 		{
-			return ApplyOrder<T>(source, property, "ThenBy");
+			return ApplyOrder(source, property, "ThenBy");
 		}
 
 		public static IOrderedQueryable<T> ThenByDescending<T>(this IOrderedQueryable<T> source, string property)
 		{
-			return ApplyOrder<T>(source, property, "ThenByDescending");
+			return ApplyOrder(source, property, "ThenByDescending");
 		}
 
 		private static IOrderedQueryable<T> ApplyOrder<T>(IQueryable<T> source, string property, string methodName)
@@ -94,6 +102,31 @@ namespace Montr.Core.Services
 				.Invoke(null, new object[] { source, lambda });
 
 			return (IOrderedQueryable<T>)result;
+		}
+
+		private static string GetMemberName(Expression expression)
+		{
+			var lambda = expression as LambdaExpression;
+
+			if (lambda == null) throw new ArgumentNullException(nameof(expression));
+
+			MemberExpression memberExpression = null;
+
+			if (lambda.Body.NodeType == ExpressionType.Convert)
+			{
+				memberExpression = ((UnaryExpression)lambda.Body).Operand as MemberExpression;
+			}
+			else if (lambda.Body.NodeType == ExpressionType.MemberAccess)
+			{
+				memberExpression = lambda.Body as MemberExpression;
+			}
+			
+			if (memberExpression == null)
+			{
+				throw new ArgumentException(nameof(expression));
+			}
+			
+			return memberExpression.Member.Name;
 		}
 	}
 }

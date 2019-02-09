@@ -1,37 +1,37 @@
 ﻿using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Kompany.Implementation.Entities;
-using Kompany.Models;
-using Kompany.Queries;
 using LinqToDB;
 using MediatR;
 using Montr.Core.Services;
 using Montr.Data.Linq2Db;
+using Montr.MasterData.Impl.Entities;
+using Montr.MasterData.Models;
+using Montr.MasterData.Queries;
 using Montr.Metadata.Models;
 
-namespace Kompany.Implementation.QueryHandlers
+namespace Montr.MasterData.Impl.QueryHandlers
 {
-	public class GetContractorListHandler : IRequestHandler<GetContractorList, DataResult<Company>>
+	public class GetClassifierListHandler : IRequestHandler<GetClassifierList, DataResult<Classifier>>
 	{
 		private readonly IDbContextFactory _dbContextFactory;
 
-		public GetContractorListHandler(IDbContextFactory dbContextFactory)
+		public GetClassifierListHandler(IDbContextFactory dbContextFactory)
 		{
 			_dbContextFactory = dbContextFactory;
 		}
 
-		public async Task<DataResult<Company>> Handle(GetContractorList command, CancellationToken cancellationToken)
+		public async Task<DataResult<Classifier>> Handle(GetClassifierList command, CancellationToken cancellationToken)
 		{
 			var request = command.Request;
 
 			using (var db = _dbContextFactory.Create())
 			{
-				var all = db.GetTable<DbCompany>();
+				var all = db.GetTable<DbClassifier>();
 
 				var data = await all
 					.Apply(request, x => x.Name)
-					.Select(x => new Company
+					.Select(x => new Classifier
 					{
 						Uid = x.Uid,
 						ConfigCode = x.ConfigCode,
@@ -40,7 +40,7 @@ namespace Kompany.Implementation.QueryHandlers
 					})
 					.ToListAsync(cancellationToken);
 
-				return new DataResult<Company>
+				return new DataResult<Classifier>
 				{
 					TotalCount = all.Count(),
 					Rows = data

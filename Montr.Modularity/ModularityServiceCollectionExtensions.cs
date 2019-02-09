@@ -22,7 +22,7 @@ namespace Montr.Modularity
 				{
 					if (logger.IsEnabled(LogLevel.Information))
 					{
-						logger.LogDebug($"Preloading assembly from {file}");
+						logger.LogInformation($"Preloading assembly from {file}");
 					}
 
 					Assembly.LoadFrom(file);
