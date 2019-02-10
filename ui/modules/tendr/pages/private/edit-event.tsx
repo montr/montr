@@ -6,6 +6,13 @@ import { Page, IPaneComponent } from "@montr-core/components";
 import { MetadataService } from "@montr-core/services";
 import { IEvent, IEventTemplate } from "modules/tendr/models";
 
+import * as panes from "../../panes/private"
+
+const componentToClass: Map<string, React.ComponentClass> = new Map<string, React.ComponentClass>();
+
+componentToClass.set("panes/private/EditEventPane", panes.EditEventPane);
+componentToClass.set("panes/private/InvitationPane", panes.InvitationPane);
+
 interface IEditEventProps {
 	params: {
 		id: number
@@ -52,8 +59,14 @@ export class EditEvent extends React.Component<IEditEventProps, IEditEventState>
 		this.setState({ data: await this._eventService.get(this.props.params.id) });
 	}
 
+	private resolveComponent = (component: string): React.ComponentClass => {
+		return componentToClass.get(component);
+	}
+
 	private fetchMetadata = async () => {
-		this.setState({ dataView: await this._metadataService.load("PrivateEvent/Edit") });
+		const dataView = await this._metadataService.load("PrivateEvent/Edit", this.resolveComponent);
+
+		this.setState({ dataView: dataView });
 	}
 
 	formatPageTitle(): string {

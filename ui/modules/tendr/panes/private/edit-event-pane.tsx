@@ -3,7 +3,7 @@ import { Form, Input, message } from "antd";
 import { FormComponentProps } from "antd/lib/form";
 import { IApiResult, IPaneProps } from "@montr-core/models";
 import { EventService } from "../../services";
-import { IPaneComponent } from "@montr-core/components";
+import { IPaneComponent, FormDefaults } from "@montr-core/components";
 import { IEvent } from "modules/tendr/models";
 
 interface IEventFormProps extends FormComponentProps {
@@ -19,6 +19,7 @@ class EventForm extends React.Component<IEventFormProps, IEventFormState> {
 
 	constructor(props: IEventFormProps) {
 		super(props);
+
 		this.state = {};
 	}
 
@@ -26,12 +27,13 @@ class EventForm extends React.Component<IEventFormProps, IEventFormState> {
 		await this._eventService.abort();
 	}
 
-	handleSubmit = (e: React.SyntheticEvent) => {
+	private handleSubmit = async (e: React.SyntheticEvent) => {
 		e.preventDefault();
-		this.save();
+
+		await this.save();
 	}
 
-	save() {
+	private save = async () => {
 		this.props.form.validateFieldsAndScroll((errors, values: IEvent) => {
 			if (!errors) {
 				this._eventService
@@ -46,34 +48,13 @@ class EventForm extends React.Component<IEventFormProps, IEventFormState> {
 		});
 	}
 
-	render() {
+	render = () => {
 
 		const { getFieldDecorator } = this.props.form;
 
-		const formItemLayout = {
-			labelCol: {
-				xs: { span: 24 },
-				sm: { span: 8 },
-				lg: { span: 4 },
-			},
-			wrapperCol: {
-				xs: { span: 24 },
-				sm: { span: 16 },
-				lg: { span: 20 },
-			},
-		};
-
-		const tailFormItemLayout = {
-			wrapperCol: {
-				xs: { offset: 0, span: 24, },
-				sm: { offset: 8, span: 16, },
-				lg: { offset: 4, span: 20, },
-			},
-		};
-
 		return (
 			<Form onSubmit={this.handleSubmit}>
-				<Form.Item {...formItemLayout} label="Наименование">
+				<Form.Item {...FormDefaults.formItemLayout} label="Наименование">
 					{getFieldDecorator("name", {
 						rules: [
 							{ required: true, whitespace: true, message: "Поле «Наименование» обязательно для заполнения" }
@@ -83,7 +64,7 @@ class EventForm extends React.Component<IEventFormProps, IEventFormState> {
 						<Input.TextArea autosize={{ minRows: 4, maxRows: 24 }} />
 					)}
 				</Form.Item>
-				<Form.Item {...formItemLayout} label="Описание" extra="Как можно подробнее опишите что вы хотите купить.">
+				<Form.Item {...FormDefaults.formItemLayout} label="Описание" extra="Как можно подробнее опишите что вы хотите купить.">
 					{getFieldDecorator("description", {
 						initialValue: this.props.data.description
 					})(

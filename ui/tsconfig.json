@@ -15,6 +15,9 @@
 			"@montr-core/*": [
 				"modules/montr-core/*"
 			],
+			"@montr-master-data/*": [
+				"modules/montr-master-data/*"
+			],
 			"@kompany/*": [
 				"modules/kompany/*"
 			]

@@ -27,9 +27,19 @@ namespace Montr.Web.Services
 
 			if (menuId == "SideMenu")
 			{
+				var classifiers = new Menu { Id = "m.class", Name = "Справочники", Icon = "solution" };
+				classifiers.Items = new List<Menu>
+				{
+					new Menu { Id = "c.1", Name = "Контрагенты", Route = "/classifiers/contractor" },
+					new Menu { Id = "c.2", Name = "Виды деятельности", Route = "/classifiers/activity" },
+					new Menu { Id = "c.3", Name = "Номенклатура", Route = "/classifiers/product" },
+					new Menu { Id = "c.4", Name = "Единицы измерения", Route = "/classifiers/unit" },
+					new Menu { Id = "c.5", Name = "Регионы", Route = "/classifiers/region" },
+				};
+
 				result.Items.Add(new Menu { Id = "m.0", Name = "Панель управления", Icon = "dashboard", Route = "/" });
 				result.Items.Add(new Menu { Id = "m.1", Name = "Торговые процедуры", Icon = "project", Route = "/events" });
-				result.Items.Add(new Menu { Id = "m.2", Name = "Контрагенты", Icon = "solution", Route = "/contractors" });
+				result.Items.Add(classifiers);
 				result.Items.Add(new Menu { Id = "m.3", Name = "Настройки", Icon = "setting", Route = "/settings" });
 
 				result.Items.Add(new Menu { Id = "tender", Name = "Промо", Icon = "global", Url = "http://tendr.montr.io:5000/register/" });

@@ -29,6 +29,25 @@ namespace Montr.Metadata.Services
 				};
 			}
 
+			if (viewId.StartsWith("Classifier/"))
+			{
+				result.Columns = new List<DataColumn>
+				{
+					new DataColumn { Key = "statusCode", Name = "Статус", Sortable = true, Width = 10 },
+					new DataColumn { Key = "code", Name = "Код", Sortable = true, Width = 10 },
+					new DataColumn { Key = "name", Name = "Наименование", Sortable = true, Width = 400 },
+				};
+			}
+			if (viewId.StartsWith("ClassifierList/Grid"))
+			{
+				result.Columns = new List<DataColumn>
+				{
+					new DataColumn { Key = "statusCode", Name = "Статус", Sortable = true, Width = 10 },
+					new DataColumn { Key = "code", Name = "Код", Sortable = true, Width = 10 },
+					new DataColumn { Key = "name", Name = "Наименование", Sortable = true, Width = 400 },
+				};
+			}
+
 			if (viewId == "PrivateEventCounterpartyList/Grid")
 			{
 				result.Columns = new List<DataColumn>

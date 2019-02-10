@@ -37,6 +37,44 @@ export class DataMenu extends React.Component<MenuProps & Props, State> {
 		await this._contentService.abort();
 	}
 
+	private buildItems = (menu: IMenu) => {
+		return menu && menu.items && menu.items.map((item) => {
+
+			if (item.items) {
+				return (
+					<Menu.SubMenu key={item.id} title={
+						<span>
+							{item.icon && <Icon type={item.icon} />}
+							<span>{item.name}</span>
+						</span>
+					}>
+						{this.buildItems(item)}
+					</Menu.SubMenu>
+				);
+			}
+
+			if (item.route) {
+				return (
+					<Menu.Item key={item.id}>
+						<Link to={item.route}>
+							{item.icon && <Icon type={item.icon} />}
+							<span className="nav-text">{item.name}</span>
+						</Link>
+					</Menu.Item>
+				);
+			}
+
+			return (
+				<Menu.Item key={item.id}>
+					<a href={item.url}>
+						{item.icon && <Icon type={item.icon} />}
+						<span className="nav-text">{item.name}</span>
+					</a>
+				</Menu.Item>
+			);
+		});
+	}
+
 	render() {
 
 		const { menuId, head, tail, ...props } = this.props;
@@ -47,28 +85,7 @@ export class DataMenu extends React.Component<MenuProps & Props, State> {
 
 				{head}
 
-				{menu && menu.items && menu.items.map((item) => {
-
-					if (item.route) {
-						return (
-							<Menu.Item key={item.id}>
-								<Link to={item.route}>
-									{item.icon && <Icon type={item.icon} />}
-									<span className="nav-text">{item.name}</span>
-								</Link>
-							</Menu.Item>
-						);
-					}
-
-					return (
-						<Menu.Item key={item.id}>
-							<a href={item.url}>
-								{item.icon && <Icon type={item.icon} />}
-								<span className="nav-text">{item.name}</span>
-							</a>
-						</Menu.Item>
-					);
-				})}
+				{this.buildItems(menu)}
 
 				{tail}
 

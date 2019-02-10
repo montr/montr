@@ -24,14 +24,14 @@ export class App extends React.Component {
 							<AuthCallbackHandler>
 								<Layout hasSider className="private-layout">
 
-									<Layout.Sider theme="light" breakpoint="lg" collapsedWidth="0" width="220"
+									<Layout.Sider theme="light" breakpoint="lg" collapsible width="220"
 										style={{ height: "100vh" }}>
 										{/* <div className="logo" /> */}
 
 										<DataMenu
 											menuId="SideMenu"
 											theme="light"
-											mode="vertical"
+											mode="inline"
 											tail={
 												<UserWithCompanyMenu />
 											}

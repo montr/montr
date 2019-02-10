@@ -36,6 +36,7 @@ module.exports = {
 	resolve: {
 		alias: {
 			"@montr-core": path.resolve(__dirname, "modules/montr-core/"),
+			"@montr-master-data": path.resolve(__dirname, "modules/montr-master-data/"),
 			"@kompany": path.resolve(__dirname, "modules/kompany/"),
 		},
 		extensions: [".ts", ".tsx", ".js", ".json"]
@@ -87,10 +88,11 @@ module.exports = {
 							modifyVars: {
 								// https://github.com/ant-design/ant-design/blob/master/components/style/themes/default.less
 								// "primary-color": "#1DA57A",
-								"primary-color": "#357ae8",
+								// "primary-color": "#357ae8", // (?)
 								// "link-color": "#1DA57A",
 								// "border-radius-base": "4px",
 								// "font-size-base": "13px",
+								// "font-family": "'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif"
 							},
 						}
 					}

@@ -124,10 +124,14 @@ namespace Idx
 					options.UserInteraction.LoginUrl = "/Identity/Account/Login";
 					options.UserInteraction.LogoutUrl = "/Account/Logout";
 				})
-				// .AddInMemoryPersistedGrants()
+				// https://www.scottbrady91.com/Identity-Server/Creating-Your-Own-IdentityServer4-Storage-Library
+				// https://damienbod.com/2017/12/30/using-an-ef-core-database-for-the-identityserver4-configuration-data/
+				// .AddPersistedGrantStore<>()
+				.AddInMemoryPersistedGrants()
 				.AddInMemoryIdentityResources(Config.GetIdentityResources())
 				.AddInMemoryApiResources(Config.GetApiResources())
 				.AddInMemoryClients(Config.GetClients())
+
 				.AddAspNetIdentity<DbUser>();
 
 			if (Environment.IsDevelopment())
