@@ -31,13 +31,14 @@ namespace Montr.Metadata.Services
 
 			if (viewId.StartsWith("Classifier/"))
 			{
-				result.Columns = new List<DataColumn>
+				result.Fields = new List<FormField>
 				{
-					new DataColumn { Key = "statusCode", Name = "Статус", Sortable = true, Width = 10 },
-					new DataColumn { Key = "code", Name = "Код", Sortable = true, Width = 10 },
-					new DataColumn { Key = "name", Name = "Наименование", Sortable = true, Width = 400 },
+					new StringField { Key = "statusCode", Name = "Статус" },
+					new StringField { Key = "code", Name = "Код" },
+					new TextAreaField { Key = "name", Name = "Наименование", Rows = 10 }
 				};
 			}
+
 			if (viewId.StartsWith("ClassifierList/Grid"))
 			{
 				result.Columns = new List<DataColumn>

@@ -4,7 +4,7 @@ import { RouteComponentProps } from "react-router";
 import { Form, Input, Button, Spin } from "antd";
 import { FormComponentProps } from "antd/lib/form";
 import { MetadataService, NotificationService } from "@montr-core/services";
-import { IDataColumn } from "@montr-core/models";
+import { IFormField } from "@montr-core/models";
 
 interface IRouteProps {
 	configCode: string;
@@ -16,7 +16,7 @@ interface IProps extends FormComponentProps {
 
 interface IState {
 	loading: boolean;
-	columns: IDataColumn[];
+	fields: IFormField[];
 }
 
 class _EditClassifierForm extends React.Component<IProps, IState> {
@@ -29,14 +29,14 @@ class _EditClassifierForm extends React.Component<IProps, IState> {
 
 		this.state = {
 			loading: true,
-			columns: []
+			fields: []
 		};
 	}
 
 	componentDidMount = async () => {
 		const dataView = await this._metadataService.load(`Classifier/${this.props.configCode}`);
 
-		this.setState({ loading: false, columns: dataView.columns });
+		this.setState({ loading: false, fields: dataView.fields });
 	}
 
 	componentWillUnmount = async () => {
@@ -63,27 +63,51 @@ class _EditClassifierForm extends React.Component<IProps, IState> {
 		});
 	}
 
-	render = () => {
+	private create = (field: IFormField): React.ReactNode => {
+
 		const { getFieldDecorator } = this.props.form;
 
+		let node: React.ReactNode = null;
+
+		if (field.type == "string") {
+			node = getFieldDecorator(field.key, {
+				rules: [{
+					required: field.required,
+					whitespace: field.required,
+					message: `Поле «${field.name}» обязательно для заполнения`
+				}],
+				initialValue: field.key
+			})(
+				<Input />
+			);
+		}
+
+		if (field.type == "textarea") {
+			node = getFieldDecorator(field.key, {
+				rules: [{
+					required: field.required,
+					whitespace: field.required,
+					message: `Поле «${field.name}» обязательно для заполнения`
+				}],
+				initialValue: field.key
+			})(
+				<Input.TextArea autosize={{ minRows: 4, maxRows: 24 }} />
+			);
+		}
+
+		return (
+			<Form.Item key={field.key} label={field.name} {...FormDefaults.formItemLayout}>
+				{node}
+			</Form.Item>
+		);;
+	}
+
+	render = () => {
 		return (
 			<Spin spinning={this.state.loading}>
 				<Form onSubmit={this.handleSubmit}>
-					{this.state.columns.map((column) => {
-						return (
-							<Form.Item key={column.key} label={column.name} {...FormDefaults.formItemLayout}>
-								{getFieldDecorator(column.key, {
-									rules: [{
-										required: true,
-										whitespace: true,
-										message: `Поле «${column.name}» обязательно для заполнения`
-									}],
-									initialValue: column.key
-								})(
-									<Input.TextArea autosize={{ minRows: 4, maxRows: 24 }} />
-								)}
-							</Form.Item>
-						);
+					{this.state.fields.map((field) => {
+						return this.create(field);
 					})}
 					<Form.Item {...FormDefaults.tailFormItemLayout}>
 						<Button type="primary" htmlType="submit" icon="check">Сохранить</Button>

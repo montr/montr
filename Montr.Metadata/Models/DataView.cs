@@ -1,4 +1,4 @@
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace Montr.Metadata.Models
 {
@@ -9,5 +9,7 @@ namespace Montr.Metadata.Models
 		public ICollection<DataColumn> Columns { get; set; }
 
 		public ICollection<DataPane> Panes { get; set; }
+
+		public ICollection<FormField> Fields { get; set; }
 	}
 }

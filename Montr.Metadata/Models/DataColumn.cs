@@ -2,6 +2,7 @@
 
 namespace Montr.Metadata.Models
 {
+	// todo: remove to TableColumn (?)
 	public class DataColumn
 	{
 		public string Key { get; set; }
