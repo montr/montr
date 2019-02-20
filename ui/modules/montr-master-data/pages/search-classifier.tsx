@@ -4,28 +4,39 @@ import { RouteComponentProps } from "react-router";
 import { Constants } from "@montr-core/.";
 import { Icon, Button } from "antd";
 import { Link } from "react-router-dom";
+import { withCompanyContext, CompanyContextProps } from "@kompany/components";
 
 interface IRouteProps {
 	configCode: string;
 }
 
-interface IProps {
+interface IProps extends CompanyContextProps, RouteComponentProps<IRouteProps> {
 }
 
-export const SearchClassifier = (props: IProps & RouteComponentProps<IRouteProps>) => {
+class _SearchClassifier extends React.Component<IProps> {
+	render() {
+		const { currentCompany } = this.props,
+			{ configCode } = this.props.match.params;
 
-	return (
-		<Page title={props.match.params.configCode} toolbar={
-			<Link to={`/classifiers/${props.match.params.configCode}/new`}>
-				<Button type="primary"><Icon type="plus" /> Добавить элемент</Button>
-			</Link>
-		}>
+		if (!currentCompany) return null;
 
-			<DataTable
-				viewId="ClassifierList/Grid"
-				loadUrl={`${Constants.baseURL}/classifier/list/?configCode=${props.match.params.configCode}`}
-			/>
+		return (
+			<Page title={configCode} toolbar={
+				<Link to={`/classifiers/${configCode}/new`}>
+					<Button type="primary"><Icon type="plus" /> Добавить элемент</Button>
+				</Link>
+			}>
 
-		</Page>
-	);
+				<DataTable
+					viewId={`ClassifierList/Grid/${configCode}`}
+					loadUrl={`${Constants.baseURL}/classifier/list/`}
+					postParams={{ configCode, companyUid: currentCompany.uid }}
+					rowKey="uid"
+				/>
+
+			</Page>
+		);
+	}
 }
+
+export const SearchClassifier = withCompanyContext(_SearchClassifier);

@@ -27,7 +27,9 @@ namespace Montr.MasterData.Impl.QueryHandlers
 
 			using (var db = _dbContextFactory.Create())
 			{
-				var all = db.GetTable<DbClassifier>();
+				var all = db.GetTable<DbClassifier>()
+					.Where(x => x.ConfigCode == request.ConfigCode &&
+								x.CompanyUid == request.CompanyUid);
 
 				var data = await all
 					.Apply(request, x => x.Name)
@@ -36,6 +38,7 @@ namespace Montr.MasterData.Impl.QueryHandlers
 						Uid = x.Uid,
 						ConfigCode = x.ConfigCode,
 						StatusCode = x.StatusCode,
+						Code = x.Code,
 						Name = x.Name
 					})
 					.ToListAsync(cancellationToken);

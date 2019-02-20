@@ -4,13 +4,15 @@ import { RouteComponentProps } from "react-router";
 import { Form, Input, Button, Spin } from "antd";
 import { FormComponentProps } from "antd/lib/form";
 import { MetadataService, NotificationService } from "@montr-core/services";
-import { IFormField } from "@montr-core/models";
+import { IFormField, Guid } from "@montr-core/models";
+import { ClassifierService } from "@montr-master-data/services";
+import { CompanyContextProps, withCompanyContext } from "@kompany/components";
 
 interface IRouteProps {
 	configCode: string;
 }
 
-interface IProps extends FormComponentProps {
+interface IProps extends FormComponentProps, CompanyContextProps {
 	configCode: string;
 }
 
@@ -23,6 +25,7 @@ class _EditClassifierForm extends React.Component<IProps, IState> {
 
 	private _metadataService = new MetadataService();
 	private _notificationService = new NotificationService();
+	private _classifierService = new ClassifierService();
 
 	constructor(props: IProps) {
 		super(props);
@@ -45,17 +48,22 @@ class _EditClassifierForm extends React.Component<IProps, IState> {
 
 	private handleSubmit = async (e: React.SyntheticEvent) => {
 		e.preventDefault();
+
 		await this.save();
 	}
 
 	private save = async () => {
 		this.props.form.validateFieldsAndScroll((errors, values: any) => {
 			if (!errors) {
-				/* this._eventService
-					.update({ id: this.props.data.id, ...values })
-					.then((result: IApiResult) => {
-						message.success("Данные успешно сохранены");
-					}); */
+				this._classifierService
+					.insert({
+						companyUid: this.props.currentCompany.uid,
+						configCode: this.props.configCode,
+						...values
+					})
+					.then((result: Guid) => {
+						this._notificationService.success("Данные успешно сохранены");
+					});
 			}
 			else {
 				console.log(errors);
@@ -99,7 +107,7 @@ class _EditClassifierForm extends React.Component<IProps, IState> {
 			<Form.Item key={field.key} label={field.name} {...FormDefaults.formItemLayout}>
 				{node}
 			</Form.Item>
-		);;
+		);
 	}
 
 	render = () => {
@@ -118,7 +126,7 @@ class _EditClassifierForm extends React.Component<IProps, IState> {
 	}
 }
 
-const EditClassifierForm = Form.create()(_EditClassifierForm);
+const EditClassifierForm = withCompanyContext(Form.create()(_EditClassifierForm));
 
 export class EditClassifier extends React.Component<RouteComponentProps<IRouteProps>> {
 	render = () => {

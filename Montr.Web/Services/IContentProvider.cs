@@ -38,7 +38,7 @@ namespace Montr.Web.Services
 				};
 
 				result.Items.Add(new Menu { Id = "m.0", Name = "Панель управления", Icon = "dashboard", Route = "/" });
-				result.Items.Add(new Menu { Id = "m.1", Name = "Торговые процедуры", Icon = "project", Route = "/events" });
+				result.Items.Add(new Menu { Id = "m.1", Name = "Процедуры", Icon = "project", Route = "/events" });
 				result.Items.Add(classifiers);
 				result.Items.Add(new Menu { Id = "m.3", Name = "Настройки", Icon = "setting", Route = "/settings" });
 

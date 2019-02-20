@@ -8,7 +8,9 @@
 
 		public string StatusCode { get; set; }
 
-		// public System.Guid CompanyUid { get; set; }
+		public System.Guid CompanyUid { get; set; }
+
+		public string Code { get; set; }
 
 		public string Name { get; set; }
 	}

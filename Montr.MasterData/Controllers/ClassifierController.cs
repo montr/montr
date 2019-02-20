@@ -1,7 +1,9 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Montr.MasterData.Commands;
 using Montr.MasterData.Models;
 using Montr.MasterData.Queries;
 using Montr.Metadata.Models;
@@ -28,6 +30,27 @@ namespace Montr.MasterData.Controllers
 			{
 				UserUid = _currentUserProvider.GetUserUid(),
 				Request = request
+			});
+		}
+
+		[HttpPost]
+		public async Task<ActionResult<Guid>> Insert(Classifier item)
+		{
+			return await _mediator.Send(new InsertClassifier
+			{
+				UserUid = _currentUserProvider.GetUserUid(),
+				CompanyUid = item.CompanyUid,
+				Item = item
+			});
+		}
+
+		[HttpPost]
+		public async Task<ActionResult<Guid>> Update(Classifier item)
+		{
+			return await _mediator.Send(new UpdateClassifier
+			{
+				UserUid = _currentUserProvider.GetUserUid(),
+				Item = item
 			});
 		}
 	}

@@ -7,8 +7,10 @@ import { Fetcher, NotificationService, MetadataService } from "@montr-core/servi
 import { IDataColumn, IDataResult } from "../models";
 
 interface DataTableProps {
+	rowKey?: string
 	viewId: string
-	loadUrl: string; // todo: add load func or data[]
+	loadUrl: string; // todo: (?) add load func or data[]
+	postParams?: any;
 }
 
 interface DataTableState<TModel> {
@@ -43,6 +45,12 @@ export class DataTable<TModel extends IIndexer> extends React.Component<DataTabl
 
 	componentDidMount = async () => {
 		await this.fetchMetadata();
+	}
+
+	componentDidUpdate = async (prevProps: DataTableProps) => {
+		if (this.props.postParams !== prevProps.postParams) {
+			await this.fetchMetadata();
+		}
 	}
 
 	componentWillUnmount = async () => {
@@ -133,10 +141,16 @@ export class DataTable<TModel extends IIndexer> extends React.Component<DataTabl
 		this.setState({ loading: true });
 
 		try {
-			const data: IDataResult<TModel> = await this._fetcher.post(this.props.loadUrl, {
+			let postParams = {
 				pageSize: 50,
 				...params,
-			});
+			};
+
+			if (this.props.postParams) {
+				postParams = Object.assign(postParams, this.props.postParams);
+			}
+
+			const data: IDataResult<TModel> = await this._fetcher.post(this.props.loadUrl, postParams);
 
 			const pagination = { ...this.state.pagination };
 
@@ -161,7 +175,8 @@ export class DataTable<TModel extends IIndexer> extends React.Component<DataTabl
 			columnWidth: 1
 		};
 
-		return <Table size="small" rowKey="id"
+		return <Table size="middle"
+			rowKey={this.props.rowKey || "id"}
 			columns={this.state.columns}
 			dataSource={this.state.data}
 			pagination={this.state.pagination}

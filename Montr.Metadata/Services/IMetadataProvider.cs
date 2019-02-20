@@ -33,9 +33,9 @@ namespace Montr.Metadata.Services
 			{
 				result.Fields = new List<FormField>
 				{
-					new StringField { Key = "statusCode", Name = "Статус" },
-					new StringField { Key = "code", Name = "Код" },
-					new TextAreaField { Key = "name", Name = "Наименование", Rows = 10 }
+					// new StringField { Key = "statusCode", Name = "Статус", Readonly = true },
+					new StringField { Key = "code", Name = "Код", Required = true },
+					new TextAreaField { Key = "name", Name = "Наименование", Rows = 10 },
 				};
 			}
 
@@ -43,9 +43,9 @@ namespace Montr.Metadata.Services
 			{
 				result.Columns = new List<DataColumn>
 				{
-					new DataColumn { Key = "statusCode", Name = "Статус", Sortable = true, Width = 10 },
 					new DataColumn { Key = "code", Name = "Код", Sortable = true, Width = 10 },
 					new DataColumn { Key = "name", Name = "Наименование", Sortable = true, Width = 400 },
+					new DataColumn { Key = "statusCode", Name = "Статус", Sortable = true, Width = 10 },
 				};
 			}
 
