@@ -32,14 +32,15 @@ namespace Montr.MasterData.Impl.QueryHandlers
 								x.CompanyUid == request.CompanyUid);
 
 				var data = await all
-					.Apply(request, x => x.Name)
+					.Apply(request, x => x.Code)
 					.Select(x => new Classifier
 					{
 						Uid = x.Uid,
 						ConfigCode = x.ConfigCode,
 						StatusCode = x.StatusCode,
 						Code = x.Code,
-						Name = x.Name
+						Name = x.Name,
+						Url = $"/classifiers/{x.ConfigCode}/edit/{x.Uid}"
 					})
 					.ToListAsync(cancellationToken);
 

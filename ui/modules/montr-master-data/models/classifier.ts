@@ -7,4 +7,5 @@ export interface IClassifier {
 	companyUid?: Guid,
 	code?: string;
 	name?: string;
+	url?: string;
 }

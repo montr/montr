@@ -11,5 +11,6 @@ export const Routes = () => {
 		<Route path="/events/edit/:id" component={({ match }: any) => <EditEvent {...match} />} />
 		<Route path="/classifiers/:configCode" exact component={SearchClassifier} />
 		<Route path="/classifiers/:configCode/new" exact component={EditClassifier} />
+		<Route path="/classifiers/:configCode/edit/:uid" exact component={EditClassifier} />
 	</>
 }

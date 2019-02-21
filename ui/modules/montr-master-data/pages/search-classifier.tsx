@@ -1,8 +1,8 @@
 import * as React from "react";
-import { Page, DataTable } from "@montr-core/components";
+import { Page, DataTable, PageHeader } from "@montr-core/components";
 import { RouteComponentProps } from "react-router";
 import { Constants } from "@montr-core/.";
-import { Icon, Button } from "antd";
+import { Icon, Button, Breadcrumb } from "antd";
 import { Link } from "react-router-dom";
 import { withCompanyContext, CompanyContextProps } from "@kompany/components";
 
@@ -21,11 +21,23 @@ class _SearchClassifier extends React.Component<IProps> {
 		if (!currentCompany) return null;
 
 		return (
-			<Page title={configCode} toolbar={
-				<Link to={`/classifiers/${configCode}/new`}>
-					<Button type="primary"><Icon type="plus" /> Добавить элемент</Button>
-				</Link>
-			}>
+			<Page
+				title={
+					<>
+						<Breadcrumb>
+							<Breadcrumb.Item><Icon type="home" /></Breadcrumb.Item>
+							<Breadcrumb.Item><Link to={`/classifiers`}>Классификаторы</Link></Breadcrumb.Item>
+							<Breadcrumb.Item><Link to={`/classifiers/${configCode}`}>{configCode}</Link></Breadcrumb.Item>
+						</Breadcrumb>
+
+						<PageHeader>{configCode}</PageHeader>
+					</>
+				}
+				toolbar={
+					<Link to={`/classifiers/${configCode}/new`}>
+						<Button type="primary"><Icon type="plus" /> Добавить</Button>
+					</Link>
+				}>
 
 				<DataTable
 					viewId={`ClassifierList/Grid/${configCode}`}

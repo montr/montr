@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Page, FormDefaults } from "@montr-core/components";
-import { RouteComponentProps } from "react-router";
+import { RouteComponentProps, Redirect } from "react-router";
 import { Form, Input, Button, Spin } from "antd";
 import { FormComponentProps } from "antd/lib/form";
 import { MetadataService, NotificationService } from "@montr-core/services";
@@ -10,15 +10,19 @@ import { CompanyContextProps, withCompanyContext } from "@kompany/components";
 
 interface IRouteProps {
 	configCode: string;
+	uid?: string;
 }
 
 interface IProps extends FormComponentProps, CompanyContextProps {
 	configCode: string;
+	uid?: string;
 }
 
 interface IState {
 	loading: boolean;
 	fields: IFormField[];
+	data: any;
+	newUid?: Guid;
 }
 
 class _EditClassifierForm extends React.Component<IProps, IState> {
@@ -32,14 +36,28 @@ class _EditClassifierForm extends React.Component<IProps, IState> {
 
 		this.state = {
 			loading: true,
-			fields: []
+			fields: [],
+			data: {}
 		};
 	}
 
 	componentDidMount = async () => {
-		const dataView = await this._metadataService.load(`Classifier/${this.props.configCode}`);
 
-		this.setState({ loading: false, fields: dataView.fields });
+		const { configCode, uid } = this.props;
+
+		const dataView = await this._metadataService.load(`Classifier/${configCode}`);
+
+		let data = {};
+		if (this.props.uid) {
+			try {
+				data = await this._classifierService.get(new Guid(uid));
+			} catch (error) {
+				console.log(error);
+				throw error;
+			}
+		}
+
+		this.setState({ loading: false, fields: dataView.fields, data });
 	}
 
 	componentWillUnmount = async () => {
@@ -53,17 +71,29 @@ class _EditClassifierForm extends React.Component<IProps, IState> {
 	}
 
 	private save = async () => {
-		this.props.form.validateFieldsAndScroll((errors, values: any) => {
+		this.props.form.validateFieldsAndScroll(async (errors, values: any) => {
 			if (!errors) {
-				this._classifierService
-					.insert({
+				if (this.props.uid) {
+					const uid: Guid = await this._classifierService.update({
+						companyUid: this.props.currentCompany.uid,
+						uid: this.props.uid,
+						...values
+					});
+
+					this._notificationService.success("Данные успешно сохранены.");
+				}
+				else {
+					const uid: Guid = await this._classifierService.insert({
 						companyUid: this.props.currentCompany.uid,
 						configCode: this.props.configCode,
 						...values
-					})
-					.then((result: Guid) => {
-						this._notificationService.success("Данные успешно сохранены");
 					});
+
+					// todo: redirect to edit
+					this._notificationService.success("Данные успешно добавлены.");
+
+					this.setState({ newUid: uid });
+				}
 			}
 			else {
 				console.log(errors);
@@ -75,6 +105,8 @@ class _EditClassifierForm extends React.Component<IProps, IState> {
 
 		const { getFieldDecorator } = this.props.form;
 
+		const initialValue = this.state.data[field.key];
+
 		let node: React.ReactNode = null;
 
 		if (field.type == "string") {
@@ -84,7 +116,7 @@ class _EditClassifierForm extends React.Component<IProps, IState> {
 					whitespace: field.required,
 					message: `Поле «${field.name}» обязательно для заполнения`
 				}],
-				initialValue: field.key
+				initialValue: initialValue
 			})(
 				<Input />
 			);
@@ -97,7 +129,7 @@ class _EditClassifierForm extends React.Component<IProps, IState> {
 					whitespace: field.required,
 					message: `Поле «${field.name}» обязательно для заполнения`
 				}],
-				initialValue: field.key
+				initialValue: initialValue
 			})(
 				<Input.TextArea autosize={{ minRows: 4, maxRows: 24 }} />
 			);
@@ -111,6 +143,12 @@ class _EditClassifierForm extends React.Component<IProps, IState> {
 	}
 
 	render = () => {
+		const { configCode } = this.props;
+
+		if (this.state.newUid) {
+			return <Redirect to={`/classifiers/${configCode}/edit/${this.state.newUid}`} />
+		}
+
 		return (
 			<Spin spinning={this.state.loading}>
 				<Form onSubmit={this.handleSubmit}>
@@ -130,9 +168,12 @@ const EditClassifierForm = withCompanyContext(Form.create()(_EditClassifierForm)
 
 export class EditClassifier extends React.Component<RouteComponentProps<IRouteProps>> {
 	render = () => {
+
+		const { configCode, uid } = this.props.match.params;
+
 		return (
-			<Page title={this.props.match.params.configCode}>
-				<EditClassifierForm configCode={this.props.match.params.configCode} />
+			<Page title={configCode}>
+				<EditClassifierForm configCode={configCode} uid={uid} />
 			</Page >
 		)
 	}
