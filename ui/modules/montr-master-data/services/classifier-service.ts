@@ -15,4 +15,8 @@ export class ClassifierService extends Fetcher {
 	update = async (data: IClassifier): Promise<Guid> => {
 		return this.post(`${Constants.baseURL}/classifier/update`, data);
 	};
+
+	delete = async (companyUid: Guid, uids: string[] | number[]): Promise<number> => {
+		return this.post(`${Constants.baseURL}/classifier/delete`, { companyUid, uids });
+	};
 }

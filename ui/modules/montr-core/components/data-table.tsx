@@ -6,32 +6,35 @@ import { IIndexer } from "@montr-core/models";
 import { Fetcher, NotificationService, MetadataService } from "@montr-core/services";
 import { IDataColumn, IDataResult } from "../models";
 
-interface DataTableProps {
+interface IProps<TModel> {
 	rowKey?: string
 	viewId: string
 	loadUrl: string; // todo: (?) add load func or data[]
 	postParams?: any;
+	onSelectionChange?: (selectedRowKeys: string[] | number[], selectedRows: TModel[]) => void
 }
 
-interface DataTableState<TModel> {
+interface IState<TModel> {
 	loading: boolean;
+	selectedRowKeys: string[] | number[],
 	error?: any;
 	columns: any[];
 	data: TModel[];
 	pagination: PaginationConfig,
 }
 
-export class DataTable<TModel extends IIndexer> extends React.Component<DataTableProps, DataTableState<TModel>> {
+export class DataTable<TModel extends IIndexer> extends React.Component<IProps<TModel>, IState<TModel>> {
 
 	private _fetcher = new Fetcher();
 	private _metadataService = new MetadataService();
 	private _notification = new NotificationService();
 
-	constructor(props: DataTableProps) {
+	constructor(props: IProps<TModel>) {
 		super(props);
 
 		this.state = {
 			loading: false,
+			selectedRowKeys: [],
 			columns: [],
 			data: [],
 			pagination: {
@@ -47,7 +50,7 @@ export class DataTable<TModel extends IIndexer> extends React.Component<DataTabl
 		await this.fetchMetadata();
 	}
 
-	componentDidUpdate = async (prevProps: DataTableProps) => {
+	componentDidUpdate = async (prevProps: IProps<TModel>) => {
 		if (this.props.postParams !== prevProps.postParams) {
 			await this.fetchMetadata();
 		}
@@ -170,19 +173,42 @@ export class DataTable<TModel extends IIndexer> extends React.Component<DataTabl
 		}
 	}
 
+	private onSelectionChange = async (selectedRowKeys: string[] | number[], selectedRows: TModel[]) => {
+		this.setState({ selectedRowKeys });
+
+		if (this.props.onSelectionChange) {
+			this.props.onSelectionChange(selectedRowKeys, selectedRows);
+		}
+	}
+
 	render = () => {
+		const { selectedRowKeys, data } = this.state;
+
 		const rowSelection = {
-			columnWidth: 1
+			columnWidth: 1,
+			// selectedRowKeys,
+			onChange: this.onSelectionChange
 		};
 
-		return <Table size="middle"
-			rowKey={this.props.rowKey || "id"}
-			columns={this.state.columns}
-			dataSource={this.state.data}
-			pagination={this.state.pagination}
-			loading={this.state.loading}
-			onChange={this.handleTableChange}
-			rowSelection={rowSelection}
-		/>
+		const hasSelected = selectedRowKeys.length > 0;
+
+		return (
+			<>
+				<div style={{ paddingBottom: "0.5em" }}>
+					<span>Всего записей: <strong>{data.length}</strong></span>
+					{hasSelected && (<span style={{ marginLeft: "1em" }}>Выбрано записей: <strong>{selectedRowKeys.length}</strong></span>)}
+				</div>
+
+				<Table size="middle"
+					rowKey={this.props.rowKey || "id"}
+					columns={this.state.columns}
+					dataSource={this.state.data}
+					pagination={this.state.pagination}
+					loading={this.state.loading}
+					onChange={this.handleTableChange}
+					rowSelection={rowSelection}
+				/>
+			</>
+		)
 	}
 }

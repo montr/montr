@@ -65,5 +65,13 @@ namespace Montr.MasterData.Controllers
 
 			return Ok();
 		}
+
+		[HttpPost]
+		public async Task<int> Delete(DeleteClassifierList request)
+		{
+			request.UserUid = _currentUserProvider.GetUserUid();
+
+			return await _mediator.Send(request);
+		}
 	}
 }
