@@ -4,7 +4,7 @@ using Montr.MasterData.Models;
 
 namespace Montr.MasterData.Commands
 {
-	public class UpdateClassifier: IRequest
+	public class UpdateClassifier: IRequest<int>
 	{
 		public Guid UserUid { get; set; }
 

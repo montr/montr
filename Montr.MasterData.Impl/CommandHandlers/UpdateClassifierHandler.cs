@@ -11,7 +11,7 @@ using Montr.MasterData.Impl.Entities;
 
 namespace Montr.MasterData.Impl.CommandHandlers
 {
-	public class UpdateClassifierHandler : IRequestHandler<UpdateClassifier>
+	public class UpdateClassifierHandler : IRequestHandler<UpdateClassifier, int>
 	{
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IDbContextFactory _dbContextFactory;
@@ -22,7 +22,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 			_dbContextFactory = dbContextFactory;
 		}
 
-		public async Task<Unit> Handle(UpdateClassifier request, CancellationToken cancellationToken)
+		public async Task<int> Handle(UpdateClassifier request, CancellationToken cancellationToken)
 		{
 			if (request.UserUid == Guid.Empty)
 				throw new InvalidOperationException("UserUid can't be empty guid.");
@@ -31,18 +31,22 @@ namespace Montr.MasterData.Impl.CommandHandlers
 
 			using (var scope = _unitOfWorkFactory.Create())
 			{
+				int result;
+
 				using (var db = _dbContextFactory.Create())
 				{
-					await db.GetTable<DbClassifier>()
+					result = await db.GetTable<DbClassifier>()
 						.Where(x => x.Uid == item.Uid)
 						.Set(x => x.Code, item.Code)
 						.Set(x => x.Name, item.Name)
 						.UpdateAsync(cancellationToken);
-
-					scope.Commit();
-
-					return Unit.Value;
 				}
+
+				// todo: (события)
+
+				scope.Commit();
+
+				return result;
 			}
 		}
 	}

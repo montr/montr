@@ -4,7 +4,7 @@ export interface IClassifier {
 	uid?: Guid;
 	configCode?: string;
 	statusCode?: string;
-	companyUid?: Guid,
+	// companyUid?: Guid,
 	code?: string;
 	name?: string;
 	url?: string;

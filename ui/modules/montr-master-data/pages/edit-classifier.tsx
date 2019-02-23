@@ -73,21 +73,21 @@ class _EditClassifierForm extends React.Component<IProps, IState> {
 	private save = async () => {
 		this.props.form.validateFieldsAndScroll(async (errors, values: any) => {
 			if (!errors) {
-				if (this.props.uid) {
-					const uid: Guid = await this._classifierService.update({
-						companyUid: this.props.currentCompany.uid,
+
+				const { uid: companyUid } = this.props.currentCompany,
+					item = {
 						uid: this.props.uid,
+						configCode: this.props.configCode,
 						...values
-					});
+					};
+
+				if (this.props.uid) {
+					const uid: Guid = await this._classifierService.update(companyUid, item);
 
 					this._notificationService.success("Данные успешно сохранены.");
 				}
 				else {
-					const uid: Guid = await this._classifierService.insert({
-						companyUid: this.props.currentCompany.uid,
-						configCode: this.props.configCode,
-						...values
-					});
+					const uid: Guid = await this._classifierService.insert(companyUid, item);
 
 					// todo: redirect to edit
 					this._notificationService.success("Данные успешно добавлены.");

@@ -20,6 +20,7 @@ interface IState<TModel> {
 	error?: any;
 	columns: any[];
 	data: TModel[];
+	totalCount: number;
 	pagination: PaginationConfig,
 }
 
@@ -37,10 +38,11 @@ export class DataTable<TModel extends IIndexer> extends React.Component<IProps<T
 			selectedRowKeys: [],
 			columns: [],
 			data: [],
+			totalCount: 0,
 			pagination: {
 				position: "bottom",
-				pageSize: 50,
-				pageSizeOptions: ["50", "100", "500"],
+				pageSize: 10,
+				pageSizeOptions: ["10", "50", "100", "500"],
 				showSizeChanger: true,
 			},
 		};
@@ -162,6 +164,7 @@ export class DataTable<TModel extends IIndexer> extends React.Component<IProps<T
 			this.setState({
 				loading: false,
 				pagination,
+				totalCount: data.totalCount,
 				data: data.rows
 			});
 		} catch (error) {
@@ -182,7 +185,7 @@ export class DataTable<TModel extends IIndexer> extends React.Component<IProps<T
 	}
 
 	render = () => {
-		const { selectedRowKeys, data } = this.state;
+		const { selectedRowKeys, totalCount } = this.state;
 
 		const rowSelection = {
 			columnWidth: 1,
@@ -195,7 +198,7 @@ export class DataTable<TModel extends IIndexer> extends React.Component<IProps<T
 		return (
 			<>
 				<div style={{ paddingBottom: "0.5em" }}>
-					<span>Всего записей: <strong>{data.length}</strong></span>
+					{(totalCount != 0) && (<span>Всего записей: <strong>{totalCount}</strong></span>)}
 					{hasSelected && (<span style={{ marginLeft: "1em" }}>Выбрано записей: <strong>{selectedRowKeys.length}</strong></span>)}
 				</div>
 

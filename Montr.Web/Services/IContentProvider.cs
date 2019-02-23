@@ -35,6 +35,8 @@ namespace Montr.Web.Services
 					new Menu { Id = "c.3", Name = "Номенклатура", Route = "/classifiers/product" },
 					new Menu { Id = "c.4", Name = "Единицы измерения", Route = "/classifiers/unit" },
 					new Menu { Id = "c.5", Name = "Регионы", Route = "/classifiers/region" },
+					new Menu { Id = "c.6", Name = "ОК видов экономической деятельности (ОКВЭД2)", Route = "/classifiers/okved2" },
+					new Menu { Id = "c.7", Name = "ОК единиц измерения", Route = "/classifiers/okei" },
 				};
 
 				result.Items.Add(new Menu { Id = "m.0", Name = "Панель управления", Icon = "dashboard", Route = "/" });

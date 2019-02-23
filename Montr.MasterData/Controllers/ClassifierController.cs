@@ -24,7 +24,7 @@ namespace Montr.MasterData.Controllers
 		}
 
 		[HttpPost]
-		public async Task<ActionResult<DataResult<Classifier>>> List(ClassifierSearchRequest request)
+		public async Task<DataResult<Classifier>> List(ClassifierSearchRequest request)
 		{
 			return await _mediator.Send(new GetClassifierList
 			{
@@ -34,7 +34,7 @@ namespace Montr.MasterData.Controllers
 		}
 
 		[HttpPost]
-		public async Task<ActionResult<Classifier>> Get(Classifier item) // todo: pass only id
+		public async Task<Classifier> Get(Classifier item) // todo: pass only id
 		{
 			return await _mediator.Send(new GetClassifier
 			{
@@ -44,26 +44,19 @@ namespace Montr.MasterData.Controllers
 		}
 
 		[HttpPost]
-		public async Task<ActionResult<Guid>> Insert(Classifier item)
+		public async Task<Guid> Insert(InsertClassifier request)
 		{
-			return await _mediator.Send(new InsertClassifier
-			{
-				UserUid = _currentUserProvider.GetUserUid(),
-				CompanyUid = item.CompanyUid,
-				Item = item
-			});
+			request.UserUid = _currentUserProvider.GetUserUid();
+
+			return await _mediator.Send(request);
 		}
 
 		[HttpPost]
-		public async Task<ActionResult> Update(Classifier item)
+		public async Task<int> Update(UpdateClassifier request)
 		{
-			await _mediator.Send(new UpdateClassifier
-			{
-				UserUid = _currentUserProvider.GetUserUid(),
-				Item = item
-			});
+			request.UserUid = _currentUserProvider.GetUserUid();
 
-			return Ok();
+			return await _mediator.Send(request);
 		}
 
 		[HttpPost]

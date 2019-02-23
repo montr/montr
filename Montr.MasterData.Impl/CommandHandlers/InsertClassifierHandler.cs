@@ -46,7 +46,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 					// компания + todo: дата изменения
 					await db.GetTable<DbClassifier>()
 						.Value(x => x.Uid, item.Uid)
-						.Value(x => x.CompanyUid, item.CompanyUid)
+						.Value(x => x.CompanyUid, request.CompanyUid)
 						.Value(x => x.ConfigCode, item.ConfigCode)
 						.Value(x => x.StatusCode, item.StatusCode)
 						.Value(x => x.Code, item.Code)
