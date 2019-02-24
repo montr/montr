@@ -12,19 +12,21 @@ export class Page extends React.Component<PageProps> {
 
 		const { title, toolbar, children } = this.props;
 
-		return <div>
+		return (
+			<div>
 
-			<Row>
-				<Col span={12}>
-					{(typeof title === "string") ? <PageHeader>{title}</PageHeader> : title}
-				</Col>
-				<Col span={12} style={{ textAlign: "right" }}>
-					{toolbar}
-				</Col>
-			</Row>
+				<Row>
+					<Col span={12}>
+						{(typeof title === "string") ? <PageHeader>{title}</PageHeader> : title}
+					</Col>
+					<Col span={12} style={{ textAlign: "right" }}>
+						{toolbar}
+					</Col>
+				</Row>
 
-			{children}
+				{children}
 
-		</div>;
+			</div>
+		);
 	}
 };

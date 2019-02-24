@@ -4,7 +4,7 @@ using Kompany.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Montr.Metadata.Models;
+using Montr.Core.Models;
 using Montr.Web.Services;
 
 namespace Kompany.Controllers

@@ -65,6 +65,13 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 		this.setPostParams(); // to force table refresh
 	}
 
+	private export = async () => {
+		// todo: show export dialog: all pages, current page, export format
+		await this._classifierService.export(this.props.currentCompany.uid, {
+			configCode: this.props.match.params.configCode
+		});
+	}
+
 	private onSelectionChange = async (selectedRowKeys: string[] | number[]) => {
 		this.setState({ selectedRowKeys });
 	}
@@ -108,6 +115,7 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 							<Button type="primary"><Icon type="plus" /> Добавить</Button>
 						</Link>
 						&#xA0;<Button onClick={this.delete}><Icon type="delete" /> Удалить</Button>
+						&#xA0;<Button onClick={this.export}><Icon type="export" /> Экспорт</Button>
 					</>
 				}>
 

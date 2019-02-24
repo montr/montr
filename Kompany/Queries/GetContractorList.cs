@@ -1,7 +1,7 @@
 ﻿using System;
 using Kompany.Models;
 using MediatR;
-using Montr.Metadata.Models;
+using Montr.Core.Models;
 
 namespace Kompany.Queries
 {

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Montr.Metadata.Models
+namespace Montr.Core.Models
 {
 	public class DataResult<TModel> // : ApiResult
 	{

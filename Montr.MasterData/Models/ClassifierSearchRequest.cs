@@ -2,7 +2,7 @@
 
 namespace Montr.MasterData.Models
 {
-	public class ClassifierSearchRequest : Paging
+	public class ClassifierSearchRequest : SearchRequest
 	{
 		public string ConfigCode { get; set; }
 

@@ -8,9 +8,6 @@ namespace Montr.Core.Services
 {
 	public static class QueryableExtensions
 	{
-		private const int MaxPageSize = 1000;
-		private const int DefaultPageSize = 100;
-
 		// todo: pass viewId instead of defaultSortColumn
 		public static IQueryable<T> Apply<T>(this IQueryable<T> source, Paging paging,
 			Expression<Func<T, object>> defaultSortColumn, SortOrder defaultSortOrder = SortOrder.Ascending)
@@ -25,9 +22,9 @@ namespace Montr.Core.Services
 				paging.PageNo = 1;
 			}
 
-			if (paging.PageSize <= 0 || paging.PageSize > MaxPageSize)
+			if (paging.PageSize <= 0 || paging.PageSize > Paging.MaxPageSize)
 			{
-				paging.PageSize = DefaultPageSize;
+				paging.PageSize = Paging.DefaultPageSize;
 			}
 
 			if (paging.SortColumn == null)

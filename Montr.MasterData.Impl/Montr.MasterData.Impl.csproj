@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="EPPlus" Version="4.5.3.1" />
     <PackageReference Include="linq2db" Version="2.6.4" />
     <PackageReference Include="MediatR" Version="6.0.0" />
 	<PackageReference Include="Microsoft.AspNetCore.App" />

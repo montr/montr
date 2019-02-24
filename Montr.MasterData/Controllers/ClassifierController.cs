@@ -3,10 +3,10 @@ using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Montr.Core.Models;
 using Montr.MasterData.Commands;
 using Montr.MasterData.Models;
 using Montr.MasterData.Queries;
-using Montr.Metadata.Models;
 using Montr.Web.Services;
 
 namespace Montr.MasterData.Controllers
@@ -31,6 +31,20 @@ namespace Montr.MasterData.Controllers
 				UserUid = _currentUserProvider.GetUserUid(),
 				Request = request
 			});
+		}
+
+		[HttpPost]
+		public async Task<FileStreamResult> Export(ClassifierSearchRequest request)
+		{
+			var result = await _mediator.Send(new ExportClassifierList
+			{
+				UserUid = _currentUserProvider.GetUserUid(),
+				Request = request
+			});
+
+			// http://blog.stephencleary.com/2016/11/streaming-zip-on-aspnet-core.html
+
+			return File(result.Stream, result.ContentType, result.FileName);
 		}
 
 		[HttpPost]

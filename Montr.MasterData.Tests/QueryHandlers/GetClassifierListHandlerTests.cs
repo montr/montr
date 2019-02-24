@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Montr.Data.Linq2Db;
 using Montr.MasterData.Impl.QueryHandlers;
+using Montr.MasterData.Impl.Services;
 using Montr.MasterData.Queries;
 
 namespace Montr.MasterData.Tests.QueryHandlers
@@ -14,10 +15,13 @@ namespace Montr.MasterData.Tests.QueryHandlers
 		[TestMethod]
 		public async Task GetClassifierList_Should_ReturnList()
 		{
+			// todo: split test
+
 			// arrange
 			var dbContextFactory = new DefaultDbContextFactory();
+			var repository = new ClassifierRepository(dbContextFactory);
 
-			var handler = new GetClassifierListHandler(dbContextFactory);
+			var handler = new GetClassifierListHandler(repository);
 
 			// act
 			var command = new GetClassifierList

@@ -2,6 +2,10 @@
 {
 	public class Paging
 	{
+		public const int DefaultPageSize = 10;
+
+		public const int MaxPageSize = 1000;
+
 		public int PageNo { get; set; }
 
 		public int PageSize { get; set; }

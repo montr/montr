@@ -1,6 +1,6 @@
 ﻿using System;
 using MediatR;
-using Montr.Metadata.Models;
+using Montr.Core.Models;
 using Tendr.Models;
 
 namespace Tendr.Queries

@@ -6,9 +6,9 @@ using Kompany.Models;
 using Kompany.Queries;
 using LinqToDB;
 using MediatR;
+using Montr.Core.Models;
 using Montr.Core.Services;
 using Montr.Data.Linq2Db;
-using Montr.Metadata.Models;
 
 namespace Kompany.Implementation.QueryHandlers
 {

@@ -10,6 +10,7 @@ using Montr.MasterData.Services;
 
 namespace Montr.MasterData.Impl.Services
 {
+	// todo: move to ...Impl.GovRu project
 	public abstract class OkParser : IClassifierParser
 	{
 		public const string NsUri = "http://zakupki.gov.ru/223fz/reference/1";
