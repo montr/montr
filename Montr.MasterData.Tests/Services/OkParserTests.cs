@@ -15,14 +15,13 @@ using Montr.MasterData.Models;
 namespace Montr.MasterData.Tests.Services
 {
 	[TestClass]
-	public class OkeiParserTests
+	public class OkParserTests
 	{
 		[TestMethod]
-		public async Task Parser_Should_ParseRealFile()
+		public async Task Parser_Should_ParseOkeiFile()
 		{
 			// arrange
 			var path = "../../../Content/nsiOkei_all_20190217_022439_001.xml";
-			path = "../../../Content/nsiOkved2_all_20190217_022436_001.xml";
 			var parser = new OkeiParser();
 
 			// act
@@ -34,27 +33,45 @@ namespace Montr.MasterData.Tests.Services
 
 			// assert
 			Assert.IsNotNull(result);
-			// Assert.AreEqual(583, result.Count);
-			// Assert.AreEqual("728", result.Single(x => x.Name == "Пачка").Code);
+			Assert.AreEqual(583, result.Count);
+			Assert.AreEqual("728", result.Single(x => x.Name == "Пачка").Code);
 
+			// await DumpToDb(result);
+		}
 
-			//
-			//
-			// temp insert all...
-			//
-			//
+		[TestMethod]
+		public async Task Parser_Should_ParseOkved2File()
+		{
+			// arrange
+			var path = "../../../Content/nsiOkved2_all_20190217_022436_001.xml";
+			var parser = new Okved2Parser();
 
+			// act
+			ICollection<Classifier> result;
+			using (var stream = File.Open(path, FileMode.Open, FileAccess.Read))
+			{
+				result = await parser.Parse(stream, CancellationToken.None);
+			}
+
+			// assert
+			Assert.IsNotNull(result);
+			Assert.AreEqual(2794, result.Count);
+			Assert.AreEqual("66.19.7", result.Single(x => x.Name == "Рейтинговая деятельность").Code);
+
+			// await DumpToDb(result);
+		}
+
+		private static async Task DumpToDb(IEnumerable<Classifier> result)
+		{
 			var unitOfWorkFactory = new TransactionScopeUnitOfWorkFactory();
 			var dbContextFactory = new DefaultDbContextFactory();
 			var dateTimeProvider = new DefaultDateTimeProvider();
 
-			var handler = new InsertClassifierHandler(unitOfWorkFactory, dbContextFactory, dateTimeProvider);
+			var handler = new InsertClassifierHandler(unitOfWorkFactory,
+				dbContextFactory, dateTimeProvider);
 
 			foreach (var classifier in result)
 			{
-				classifier.ConfigCode = "okei";
-				classifier.ConfigCode = "okved2";
-
 				var command = new InsertClassifier
 				{
 					UserUid = Guid.NewGuid(),
