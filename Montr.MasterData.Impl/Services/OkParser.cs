@@ -50,7 +50,7 @@ namespace Montr.MasterData.Impl.Services
 		{
 			return new Classifier
 			{
-				ConfigCode = ConfigCode,
+				TypeCode = ConfigCode,
 				Code = element.XPathSelectElement($"{NsPrefix}:{OkCode}/{NsPrefix}:code", _nsManager).Value,
 				Name = element.XPathSelectElement($"{NsPrefix}:{OkCode}/{NsPrefix}:name", _nsManager).Value
 			};

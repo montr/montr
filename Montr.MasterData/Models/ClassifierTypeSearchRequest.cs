@@ -2,7 +2,7 @@
 
 namespace Montr.MasterData.Models
 {
-	public class ClassifierSearchRequest : SearchRequest
+	public class ClassifierTypeSearchRequest : SearchRequest
 	{
 		public System.Guid CompanyUid { get; set; }
 

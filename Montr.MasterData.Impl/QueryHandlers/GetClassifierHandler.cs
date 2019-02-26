@@ -28,7 +28,7 @@ namespace Montr.MasterData.Impl.QueryHandlers
 					.Select(x => new Classifier
 					{
 						Uid = x.Uid,
-						ConfigCode = x.ConfigCode,
+						TypeCode = x.ConfigCode,
 						StatusCode = x.StatusCode,
 						Code = x.Code,
 						Name = x.Name,

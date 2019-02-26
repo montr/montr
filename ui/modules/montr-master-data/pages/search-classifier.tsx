@@ -1,12 +1,15 @@
 import * as React from "react";
 import { Page, DataTable, PageHeader } from "@montr-core/components";
+import { NotificationService } from "@montr-core/services";
 import { RouteComponentProps } from "react-router";
 import { Constants } from "@montr-core/.";
-import { Icon, Button, Breadcrumb, Menu, Dropdown } from "antd";
+import { Icon, Button, Breadcrumb, Menu, Dropdown, Tree, Row, Col } from "antd";
+const { TreeNode } = Tree;
 import { Link } from "react-router-dom";
 import { withCompanyContext, CompanyContextProps } from "@kompany/components";
 import { ClassifierService } from "../services";
-import { NotificationService } from "@montr-core/services";
+import { IClassifierType } from "../models";
+
 
 interface IRouteProps {
 	configCode: string;
@@ -16,6 +19,7 @@ interface IProps extends CompanyContextProps, RouteComponentProps<IRouteProps> {
 }
 
 interface IState {
+	type: IClassifierType;
 	selectedRowKeys: string[] | number[];
 	postParams: any;
 }
@@ -29,6 +33,9 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 		super(props);
 
 		this.state = {
+			type: {
+				hierarchyType: "None"
+			},
 			selectedRowKeys: [],
 			postParams: {}
 		};
@@ -49,11 +56,20 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 		const { currentCompany } = this.props,
 			{ configCode } = this.props.match.params;
 
+		const type = await this.fetchClassifierType(configCode);
+
 		this.setState({
+			type: type,
 			postParams: {
-				configCode, companyUid: currentCompany ? currentCompany.uid : null
+				typeCode: configCode, companyUid: currentCompany ? currentCompany.uid : null
 			}
 		});
+	}
+
+	private fetchClassifierType = async (typeCode: string): Promise<IClassifierType> => {
+		const data = await this._classifierService.types();
+
+		return data.rows.find(x => x.code == typeCode);
 	}
 
 	private delete = async () => {
@@ -78,17 +94,39 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 
 	render() {
 		const { currentCompany } = this.props,
-			{ configCode } = this.props.match.params;
+			{ configCode } = this.props.match.params,
+			{ type, postParams } = this.state;
 
 		if (!currentCompany) return null;
 
 		const menu = (
 			<Menu>
 				<Menu.Item key="0">
-					<Link to={`/classifiers/${configCode}`}>{configCode}</Link>
+					<Link to={`/classifiers/${type.code}`}>{type.name}</Link>
 				</Menu.Item>
 			</Menu>
 		);
+
+		let tree;
+		if (type.hierarchyType == "Folders") {
+			tree = (
+				<Tree.DirectoryTree
+					multiple
+					defaultExpandAll
+				//onSelect={this.onSelect}
+				//onExpand={this.onExpand}
+				>
+					<TreeNode title="parent 0" key="0-0">
+						<TreeNode title="leaf 0-0" key="0-0-0" isLeaf />
+						<TreeNode title="leaf 0-1" key="0-0-1" isLeaf />
+					</TreeNode>
+					<TreeNode title="parent 1" key="0-1">
+						<TreeNode title="leaf 1-0" key="0-1-0" isLeaf />
+						<TreeNode title="leaf 1-1" key="0-1-1" isLeaf />
+					</TreeNode>
+				</Tree.DirectoryTree>
+			);
+		}
 
 		return (
 			<Page
@@ -100,13 +138,13 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 							<Breadcrumb.Item>
 								<Dropdown overlay={menu} trigger={['click']}>
 									<a className="ant-dropdown-link" href="#">
-										{configCode} <Icon type="down" />
+										{type.name} <Icon type="down" />
 									</a>
 								</Dropdown>
 							</Breadcrumb.Item>
 						</Breadcrumb>
 
-						<PageHeader>{configCode}</PageHeader>
+						<PageHeader>{type.name}</PageHeader>
 					</>
 				}
 				toolbar={
@@ -119,13 +157,20 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 					</>
 				}>
 
-				<DataTable
-					viewId={`ClassifierList/Grid/${configCode}`}
-					loadUrl={`${Constants.baseURL}/classifier/list/`}
-					postParams={this.state.postParams}
-					rowKey="uid"
-					onSelectionChange={this.onSelectionChange}
-				/>
+				<Row>
+					<Col span={tree ? 4 : 0}>
+						{tree}
+					</Col>
+					<Col span={tree ? 20 : 24}>
+						<DataTable
+							viewId={`ClassifierList/Grid/${configCode}`}
+							loadUrl={`${Constants.baseURL}/classifier/list/`}
+							postParams={postParams}
+							rowKey="uid"
+							onSelectionChange={this.onSelectionChange}
+						/>
+					</Col>
+				</Row>
 
 			</Page>
 		);

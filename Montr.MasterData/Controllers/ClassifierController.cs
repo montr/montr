@@ -24,6 +24,16 @@ namespace Montr.MasterData.Controllers
 		}
 
 		[HttpPost]
+		public async Task<DataResult<ClassifierType>> Types(ClassifierTypeSearchRequest request)
+		{
+			return await _mediator.Send(new GetClassifierTypeList
+			{
+				UserUid = _currentUserProvider.GetUserUid(),
+				Request = request
+			});
+		}
+
+		[HttpPost]
 		public async Task<DataResult<Classifier>> List(ClassifierSearchRequest request)
 		{
 			return await _mediator.Send(new GetClassifierList

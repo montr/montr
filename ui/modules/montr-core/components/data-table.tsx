@@ -54,6 +54,11 @@ export class DataTable<TModel extends IIndexer> extends React.Component<IProps<T
 
 	componentDidUpdate = async (prevProps: IProps<TModel>) => {
 		if (this.props.postParams !== prevProps.postParams) {
+
+			this.setState({
+				selectedRowKeys: []
+			});
+
 			await this.fetchMetadata();
 		}
 	}

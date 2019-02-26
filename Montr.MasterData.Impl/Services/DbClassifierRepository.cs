@@ -10,11 +10,11 @@ using Montr.MasterData.Models;
 
 namespace Montr.MasterData.Impl.Services
 {
-	public class ClassifierRepository : IEntityRepository<Classifier>
+	public class DbClassifierRepository : IEntityRepository<Classifier>
 	{
 		private readonly IDbContextFactory _dbContextFactory;
 
-		public ClassifierRepository(IDbContextFactory dbContextFactory)
+		public DbClassifierRepository(IDbContextFactory dbContextFactory)
 		{
 			_dbContextFactory = dbContextFactory;
 		}
@@ -26,7 +26,7 @@ namespace Montr.MasterData.Impl.Services
 			using (var db = _dbContextFactory.Create())
 			{
 				var all = db.GetTable<DbClassifier>()
-					.Where(x => x.ConfigCode == request.ConfigCode &&
+					.Where(x => x.ConfigCode == request.TypeCode &&
 								x.CompanyUid == request.CompanyUid);
 
 				var data = await all
@@ -34,7 +34,7 @@ namespace Montr.MasterData.Impl.Services
 					.Select(x => new Classifier
 					{
 						Uid = x.Uid,
-						ConfigCode = x.ConfigCode,
+						TypeCode = x.ConfigCode,
 						StatusCode = x.StatusCode,
 						Code = x.Code,
 						Name = x.Name,

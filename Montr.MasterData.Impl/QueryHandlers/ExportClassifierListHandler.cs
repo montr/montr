@@ -38,7 +38,7 @@ namespace Montr.MasterData.Impl.QueryHandlers
 
 			using (var package = new ExcelPackage())
 			{
-				var ws = package.Workbook.Worksheets.Add(command.Request.ConfigCode ?? typeof(Classifier).Name);
+				var ws = package.Workbook.Worksheets.Add(command.Request.TypeCode ?? typeof(Classifier).Name);
 
 				// header
 				var col = FirstDataCol;
@@ -99,7 +99,7 @@ namespace Montr.MasterData.Impl.QueryHandlers
 				return new FileResult
 				{
 					ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-					FileName = $"{command.Request.ConfigCode ?? typeof(Classifier).Name}-{DateTime.Now.ToString("u").Replace(':', '-').Replace(' ', '-')}.xlsx",
+					FileName = $"{command.Request.TypeCode ?? typeof(Classifier).Name}-{DateTime.Now.ToString("u").Replace(':', '-').Replace(' ', '-')}.xlsx",
 					Stream = new MemoryStream(package.GetAsByteArray())
 				};
 			}

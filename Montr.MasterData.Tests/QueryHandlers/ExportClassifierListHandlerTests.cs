@@ -19,7 +19,7 @@ namespace Montr.MasterData.Tests.QueryHandlers
 		{
 			// arrange
 			var dbContextFactory = new DefaultDbContextFactory();
-			var repository = new ClassifierRepository(dbContextFactory);
+			var repository = new DbClassifierRepository(dbContextFactory);
 
 			var handler = new ExportClassifierListHandler(repository);
 
@@ -30,7 +30,7 @@ namespace Montr.MasterData.Tests.QueryHandlers
 				Request = new ClassifierSearchRequest
 				{
 					CompanyUid = Guid.Parse("6465dd4c-8664-4433-ba6a-14effd40ebed"),
-					ConfigCode = "okved2"
+					TypeCode = "okved2"
 				}
 			};
 

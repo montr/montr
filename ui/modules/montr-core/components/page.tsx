@@ -1,6 +1,6 @@
 import * as React from "react";
 import { PageHeader } from ".";
-import { Row, Col } from "antd";
+import { Row, Col, Affix } from "antd";
 
 interface PageProps {
 	title?: string | React.ReactNode;
@@ -15,14 +15,16 @@ export class Page extends React.Component<PageProps> {
 		return (
 			<div>
 
-				<Row>
-					<Col span={12}>
-						{(typeof title === "string") ? <PageHeader>{title}</PageHeader> : title}
-					</Col>
-					<Col span={12} style={{ textAlign: "right" }}>
-						{toolbar}
-					</Col>
-				</Row>
+				<Affix>
+					<Row>
+						<Col span={16}>
+							{(typeof title === "string") ? <PageHeader>{title}</PageHeader> : title}
+						</Col>
+						<Col span={8} style={{ textAlign: "right" }}>
+							{toolbar}
+						</Col>
+					</Row>
+				</Affix>
 
 				{children}
 

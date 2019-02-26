@@ -3,20 +3,23 @@
 namespace Montr.MasterData.Models
 {
 	[DebuggerDisplay("{" + nameof(DebuggerDisplay) + ",nq}")]
-	public class Classifier
+	public class ClassifierType
 	{
-		public System.Guid Uid { get; set; }
-
-		public string TypeCode { get; set; }
-
-		public string StatusCode { get; set; }
-
 		public string Code { get; set; }
 
 		public string Name { get; set; }
 
-		public string Url { get; set; }
+		public bool IsSystem { get; set; }
+
+		public HierarchyType HierarchyType { get; set; }
 
 		private string DebuggerDisplay => $"{Code}, {Name}";
+	}
+	
+	public enum HierarchyType
+	{
+		None = 0,
+		Folders = 1,
+		Items = 2
 	}
 }
