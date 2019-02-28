@@ -55,7 +55,9 @@ export class DataTable<TModel extends IIndexer> extends React.Component<IProps<T
 	componentDidUpdate = async (prevProps: IProps<TModel>) => {
 		if (this.props.postParams !== prevProps.postParams) {
 
+			// todo: reset other state
 			this.setState({
+				data: [],
 				selectedRowKeys: []
 			});
 
@@ -190,7 +192,7 @@ export class DataTable<TModel extends IIndexer> extends React.Component<IProps<T
 	}
 
 	render = () => {
-		const { selectedRowKeys, totalCount } = this.state;
+		const { selectedRowKeys } = this.state;
 
 		const rowSelection = {
 			columnWidth: 1,
@@ -198,20 +200,25 @@ export class DataTable<TModel extends IIndexer> extends React.Component<IProps<T
 			onChange: this.onSelectionChange
 		};
 
-		const hasSelected = selectedRowKeys.length > 0;
+		const pagination = {
+			showTotal: (total: number, range: [number, number]) => {
+				return (
+					<>
+						{selectedRowKeys.length > 0 && (<span style={{ marginRight: "1em" }}>Выбрано: <strong>{selectedRowKeys.length}</strong></span>)}
+						{(total != 0) && (<span>Записи <strong>{range[0]}</strong> &mdash; <strong>{range[1]}</strong> из <strong>{total}</strong></span>)}
+					</>
+				);
+			},
+			...this.state.pagination
+		};
 
 		return (
 			<>
-				<div style={{ paddingBottom: "0.5em" }}>
-					{(totalCount != 0) && (<span>Всего записей: <strong>{totalCount}</strong></span>)}
-					{hasSelected && (<span style={{ marginLeft: "1em" }}>Выбрано записей: <strong>{selectedRowKeys.length}</strong></span>)}
-				</div>
-
-				<Table size="middle"
+				<Table size="small"
 					rowKey={this.props.rowKey || "id"}
 					columns={this.state.columns}
 					dataSource={this.state.data}
-					pagination={this.state.pagination}
+					pagination={pagination}
 					loading={this.state.loading}
 					onChange={this.handleTableChange}
 					rowSelection={rowSelection}

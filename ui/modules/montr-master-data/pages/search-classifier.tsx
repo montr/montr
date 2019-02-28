@@ -94,10 +94,9 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 
 	render() {
 		const { currentCompany } = this.props,
-			{ configCode } = this.props.match.params,
 			{ type, postParams } = this.state;
 
-		if (!currentCompany) return null;
+		if (!currentCompany || !type) return null;
 
 		const menu = (
 			<Menu>
@@ -111,18 +110,18 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 		if (type.hierarchyType == "Folders") {
 			tree = (
 				<Tree.DirectoryTree
-					multiple
+					multiple={false}
 					defaultExpandAll
 				//onSelect={this.onSelect}
 				//onExpand={this.onExpand}
 				>
-					<TreeNode title="parent 0" key="0-0">
-						<TreeNode title="leaf 0-0" key="0-0-0" isLeaf />
-						<TreeNode title="leaf 0-1" key="0-0-1" isLeaf />
+					<TreeNode title="parent 0" key="0-0" >
+						<TreeNode title="leaf 0-0" key="0-0-0" />
+						<TreeNode title="leaf 0-1" key="0-0-1" />
 					</TreeNode>
 					<TreeNode title="parent 1" key="0-1">
-						<TreeNode title="leaf 1-0" key="0-1-0" isLeaf />
-						<TreeNode title="leaf 1-1" key="0-1-1" isLeaf />
+						<TreeNode title="leaf 1-0" key="0-1-0" />
+						<TreeNode title="leaf 1-1" key="0-1-1" />
 					</TreeNode>
 				</Tree.DirectoryTree>
 			);
@@ -149,7 +148,7 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 				}
 				toolbar={
 					<>
-						<Link to={`/classifiers/${configCode}/new`}>
+						<Link to={`/classifiers/${type.code}/new`}>
 							<Button type="primary"><Icon type="plus" /> Добавить</Button>
 						</Link>
 						&#xA0;<Button onClick={this.delete}><Icon type="delete" /> Удалить</Button>
@@ -163,7 +162,7 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 					</Col>
 					<Col span={tree ? 20 : 24}>
 						<DataTable
-							viewId={`ClassifierList/Grid/${configCode}`}
+							viewId={`ClassifierList/Grid/${type.code}`}
 							loadUrl={`${Constants.baseURL}/classifier/list/`}
 							postParams={postParams}
 							rowKey="uid"
