@@ -5,7 +5,7 @@ using Tendr.Models;
 
 namespace Tendr.Queries
 {
-	public class GetEventList : IRequest<DataResult<Event>>
+	public class GetEventList : IRequest<SearchResult<Event>>
 	{
 		public Guid UserUid { get; set; }
 

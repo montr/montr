@@ -10,7 +10,7 @@ using Montr.MasterData.Models;
 
 namespace Montr.MasterData.Impl.Services
 {
-	public class DbClassifierRepository : IEntityRepository<Classifier>
+	public class DbClassifierRepository : IRepository<Classifier>
 	{
 		private readonly IDbContextFactory _dbContextFactory;
 
@@ -19,30 +19,30 @@ namespace Montr.MasterData.Impl.Services
 			_dbContextFactory = dbContextFactory;
 		}
 
-		public async Task<DataResult<Classifier>> Search(SearchRequest searchRequest, CancellationToken cancellationToken)
+		public async Task<SearchResult<Classifier>> Search(SearchRequest searchRequest, CancellationToken cancellationToken)
 		{
 			var request = (ClassifierSearchRequest)searchRequest;
 
 			using (var db = _dbContextFactory.Create())
 			{
-				var all = db.GetTable<DbClassifier>()
-					.Where(x => x.ConfigCode == request.TypeCode &&
-								x.CompanyUid == request.CompanyUid);
+				var all = from c in db.GetTable<DbClassifier>()
+					join ct in db.GetTable<DbClassifierType>() on c.TypeUid equals ct.Uid
+					where c.CompanyUid == request.CompanyUid && ct.Code == request.TypeCode
+					select c;
 
 				var data = await all
 					.Apply(request, x => x.Code)
 					.Select(x => new Classifier
 					{
 						Uid = x.Uid,
-						TypeCode = x.ConfigCode,
 						StatusCode = x.StatusCode,
 						Code = x.Code,
 						Name = x.Name,
-						Url = $"/classifiers/{x.ConfigCode}/edit/{x.Uid}"
+						// Url = $"/classifiers/{x.ConfigCode}/edit/{x.Uid}"
 					})
 					.ToListAsync(cancellationToken);
 
-				return new DataResult<Classifier>
+				return new SearchResult<Classifier>
 				{
 					TotalCount = all.Count(),
 					Rows = data

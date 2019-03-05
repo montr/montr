@@ -22,9 +22,9 @@ namespace Montr.MasterData.Impl.QueryHandlers
 		private static readonly int FirstDataRow = 3;
 		private static readonly int FirstDataCol = 1;
 
-		private readonly IEntityRepository<Classifier> _repository;
+		private readonly IRepository<Classifier> _repository;
 
-		public ExportClassifierListHandler(IEntityRepository<Classifier> repository)
+		public ExportClassifierListHandler(IRepository<Classifier> repository)
 		{
 			_repository = repository;
 		}

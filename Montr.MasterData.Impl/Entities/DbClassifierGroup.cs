@@ -4,10 +4,10 @@ using LinqToDB.Mapping;
 
 namespace Montr.MasterData.Impl.Entities
 {
-	[Table(Name = "classifier")]
-	public class DbClassifier
+	[Table(Name = "classifier_group")]
+	public class DbClassifierGroup
 	{
-		[Column(Name = "uid"), DataType(DataType.Guid), PrimaryKey /*, Identity*/]
+		[Column(Name = "uid"), DataType(DataType.Guid), PrimaryKey, Identity]
 		public Guid Uid { get; set; }
 
 		[Column(Name = "company_uid"), DataType(DataType.Guid), NotNull]
@@ -16,8 +16,8 @@ namespace Montr.MasterData.Impl.Entities
 		[Column(Name = "type_uid"), DataType(DataType.Guid), NotNull]
 		public Guid TypeUid { get; set; }
 
-		[Column(Name = "status_code"), DataType(DataType.VarChar), NotNull]
-		public string StatusCode { get; set; }
+		[Column(Name = "tree_uid"), DataType(DataType.Guid), NotNull]
+		public Guid TreeUid { get; set; }
 
 		[Column(Name = "parent_uid"), DataType(DataType.Guid), Nullable]
 		public Guid? ParentUid { get; set; }

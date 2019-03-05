@@ -13,7 +13,7 @@ using Tendr.Queries;
 
 namespace Tendr.Implementation.QueryHandlers
 {
-	public class GetEventListHandler : IRequestHandler<GetEventList, DataResult<Event>>
+	public class GetEventListHandler : IRequestHandler<GetEventList, SearchResult<Event>>
 	{
 		private readonly IDbContextFactory _dbContextFactory;
 
@@ -22,7 +22,7 @@ namespace Tendr.Implementation.QueryHandlers
 			_dbContextFactory = dbContextFactory;
 		}
 
-		public async Task<DataResult<Event>> Handle(GetEventList command, CancellationToken cancellationToken)
+		public async Task<SearchResult<Event>> Handle(GetEventList command, CancellationToken cancellationToken)
 		{
 			var request = command.Request;
 
@@ -45,7 +45,7 @@ namespace Tendr.Implementation.QueryHandlers
 					})
 					.ToListAsync(cancellationToken);
 
-				var result = new DataResult<Event>
+				var result = new SearchResult<Event>
 				{
 					TotalCount = all.Count(),
 					Rows = date

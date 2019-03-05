@@ -1,11 +1,14 @@
-﻿using Montr.Core.Models;
+﻿using System;
+using Montr.Core.Models;
 
 namespace Montr.MasterData.Models
 {
 	public class ClassifierTypeSearchRequest : SearchRequest
 	{
-		public System.Guid CompanyUid { get; set; }
+		public Guid CompanyUid { get; set; }
 
-		public string TypeCode { get; set; }
+		public Guid UserUid { get; set; }
+
+		public string Code { get; set; }
 	}
 }

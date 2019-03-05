@@ -8,6 +8,8 @@ namespace Montr.MasterData.Queries
 	{
 		public Guid UserUid { get; set; }
 
+		public Guid CompanyUid { get; set; }
+
 		public Guid EntityUid { get; set; }
 	}
 }

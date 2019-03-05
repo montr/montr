@@ -12,7 +12,7 @@ using Montr.Data.Linq2Db;
 
 namespace Kompany.Implementation.QueryHandlers
 {
-	public class GetContractorListHandler : IRequestHandler<GetContractorList, DataResult<Company>>
+	public class GetContractorListHandler : IRequestHandler<GetContractorList, SearchResult<Company>>
 	{
 		private readonly IDbContextFactory _dbContextFactory;
 
@@ -21,7 +21,7 @@ namespace Kompany.Implementation.QueryHandlers
 			_dbContextFactory = dbContextFactory;
 		}
 
-		public async Task<DataResult<Company>> Handle(GetContractorList command, CancellationToken cancellationToken)
+		public async Task<SearchResult<Company>> Handle(GetContractorList command, CancellationToken cancellationToken)
 		{
 			var request = command.Request;
 
@@ -40,7 +40,7 @@ namespace Kompany.Implementation.QueryHandlers
 					})
 					.ToListAsync(cancellationToken);
 
-				return new DataResult<Company>
+				return new SearchResult<Company>
 				{
 					TotalCount = all.Count(),
 					Rows = data

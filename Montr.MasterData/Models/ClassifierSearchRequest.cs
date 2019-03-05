@@ -1,4 +1,5 @@
-﻿using Montr.Core.Models;
+﻿using System;
+using Montr.Core.Models;
 
 namespace Montr.MasterData.Models
 {
@@ -7,5 +8,7 @@ namespace Montr.MasterData.Models
 		public System.Guid CompanyUid { get; set; }
 
 		public string TypeCode { get; set; }
+
+		public Guid? Uid { get; set; }
 	}
 }

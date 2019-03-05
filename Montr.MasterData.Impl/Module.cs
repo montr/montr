@@ -11,8 +11,8 @@ namespace Montr.MasterData.Impl
 	{
 		public void ConfigureServices(IConfiguration configuration, IServiceCollection services)
 		{
-			services.AddTransient<IEntityRepository<ClassifierType>, DbClassifierTypeRepository>();
-			services.AddTransient<IEntityRepository<Classifier>, DbClassifierRepository>();
+			services.AddTransient<IRepository<ClassifierType>, DbClassifierTypeRepository>();
+			services.AddTransient<IRepository<Classifier>, DbClassifierRepository>();
 		}
 	}
 }

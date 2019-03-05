@@ -5,11 +5,11 @@ import { RouteComponentProps } from "react-router";
 import { Constants } from "@montr-core/.";
 import { Icon, Button, Breadcrumb, Menu, Dropdown, Tree, Row, Col } from "antd";
 const { TreeNode } = Tree;
+import { AntTreeNodeSelectedEvent } from "antd/lib/tree";
 import { Link } from "react-router-dom";
 import { withCompanyContext, CompanyContextProps } from "@kompany/components";
 import { ClassifierService } from "../services";
 import { IClassifierType } from "../models";
-
 
 interface IRouteProps {
 	configCode: string;
@@ -52,6 +52,10 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 		}
 	}
 
+	componentWillUnmount = async () => {
+		await this._classifierService.abort();
+	}
+
 	private setPostParams = async () => {
 		const { currentCompany } = this.props,
 			{ configCode } = this.props.match.params;
@@ -92,6 +96,10 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 		this.setState({ selectedRowKeys });
 	}
 
+	private onTreeSelect = async (selectedKeys: string[], e: AntTreeNodeSelectedEvent) => {
+		console.log(selectedKeys, e);
+	}
+
 	render() {
 		const { currentCompany } = this.props,
 			{ type, postParams } = this.state;
@@ -106,14 +114,18 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 			</Menu>
 		);
 
+		// todo: настройки
+		// 1. как выглядит дерево - списком или деревом
+		// 2. прятать дерево
+		// 3. показывать или нет группы в таблице
+		// 4. показывать планарную таблицу без групп
 		let tree;
-		if (type.hierarchyType == "Folders") {
+		if (type.hierarchyType == "Groups") {
 			tree = (
 				<Tree.DirectoryTree
 					multiple={false}
 					defaultExpandAll
-				//onSelect={this.onSelect}
-				//onExpand={this.onExpand}
+					onSelect={this.onTreeSelect}
 				>
 					<TreeNode title="parent 0" key="0-0" >
 						<TreeNode title="leaf 0-0" key="0-0-0" />
@@ -126,6 +138,29 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 				</Tree.DirectoryTree>
 			);
 		}
+
+		const table = (
+			<DataTable
+				viewId={`ClassifierList/Grid/${type.code}`}
+				loadUrl={`${Constants.baseURL}/classifier/list/`}
+				postParams={postParams}
+				rowKey="uid"
+				onSelectionChange={this.onSelectionChange}
+			/>
+		);
+
+		const content = (tree)
+			? (
+				<Row>
+					<Col span={4}>
+						{tree}
+					</Col>
+					<Col span={20}>
+						{table}
+					</Col>
+				</Row>
+			)
+			: (table);
 
 		return (
 			<Page
@@ -156,20 +191,7 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 					</>
 				}>
 
-				<Row>
-					<Col span={tree ? 4 : 0}>
-						{tree}
-					</Col>
-					<Col span={tree ? 20 : 24}>
-						<DataTable
-							viewId={`ClassifierList/Grid/${type.code}`}
-							loadUrl={`${Constants.baseURL}/classifier/list/`}
-							postParams={postParams}
-							rowKey="uid"
-							onSelectionChange={this.onSelectionChange}
-						/>
-					</Col>
-				</Row>
+				{content}
 
 			</Page>
 		);

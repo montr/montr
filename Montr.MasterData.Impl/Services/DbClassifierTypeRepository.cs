@@ -1,46 +1,57 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using LinqToDB;
 using Montr.Core.Models;
 using Montr.Core.Services;
+using Montr.Data.Linq2Db;
+using Montr.MasterData.Impl.Entities;
 using Montr.MasterData.Models;
 
 namespace Montr.MasterData.Impl.Services
 {
-	public class DbClassifierTypeRepository : IEntityRepository<ClassifierType>
+	public class DbClassifierTypeRepository : IRepository<ClassifierType>
 	{
-		public async Task<DataResult<ClassifierType>> Search(SearchRequest searchRequest, CancellationToken cancellationToken)
+		private readonly IDbContextFactory _dbContextFactory;
+
+		public DbClassifierTypeRepository(IDbContextFactory dbContextFactory)
+		{
+			_dbContextFactory = dbContextFactory;
+		}
+
+		public async Task<SearchResult<ClassifierType>> Search(SearchRequest searchRequest, CancellationToken cancellationToken)
 		{
 			var request = (ClassifierTypeSearchRequest)searchRequest;
 
-			var result = new List<ClassifierType>
+			using (var db = _dbContextFactory.Create())
 			{
-				new ClassifierType
+				var query = db.GetTable<DbClassifierType>()
+					.Where(x => x.CompanyUid == request.CompanyUid);
+
+				if (request.Code != null)
 				{
-					IsSystem = true,
-					Code = "okved2",
-					Name = "ОК видов экономической деятельности (ОКВЭД2)",
-					HierarchyType = HierarchyType.Folders
-				},
-				new ClassifierType
-				{
-					IsSystem = true,
-					Code = "okei",
-					Name = "ОК единиц измерения"
+					query = query.Where(x => x.Code == request.Code);
 				}
-			};
 
-			if (request.TypeCode != null)
-			{
-				result = result.Where(x => x.Code == request.TypeCode).ToList();
+				var data = await query
+					.Apply(request, x => x.Code)
+					.Select(x => new ClassifierType
+					{
+						Uid = x.Uid,
+						Code = x.Code,
+						Name = x.Name,
+						HierarchyType = Enum.Parse<HierarchyType>(x.HierarchyType),
+						IsSystem = true
+					})
+					.ToListAsync(cancellationToken);
+
+				return new SearchResult<ClassifierType>
+				{
+					TotalCount = query.Count(),
+					Rows = data
+				};
 			}
-
-			return await Task.FromResult(new DataResult<ClassifierType>
-			{
-				Rows = result,
-				TotalCount = result.Count
-			});
 		}
 	}
 }

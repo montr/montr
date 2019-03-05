@@ -22,7 +22,7 @@ namespace Kompany.Controllers
 		}
 
 		[HttpPost]
-		public async Task<ActionResult<DataResult<Company>>> List(ContractorSearchRequest request)
+		public async Task<ActionResult<SearchResult<Company>>> List(ContractorSearchRequest request)
 		{
 			return await _mediator.Send(new GetContractorList
 			{

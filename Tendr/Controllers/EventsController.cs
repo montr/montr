@@ -23,7 +23,7 @@ namespace Tendr.Controllers
 		}
 
 		[HttpPost]
-		public async Task<ActionResult<DataResult<Event>>> List(EventSearchRequest request)
+		public async Task<ActionResult<SearchResult<Event>>> List(EventSearchRequest request)
 		{
 			return await _mediator.Send(new GetEventList
 			{

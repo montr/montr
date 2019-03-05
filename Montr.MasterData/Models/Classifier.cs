@@ -1,13 +1,15 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 
 namespace Montr.MasterData.Models
 {
 	[DebuggerDisplay("{" + nameof(DebuggerDisplay) + ",nq}")]
 	public class Classifier
 	{
-		public System.Guid Uid { get; set; }
+		private string DebuggerDisplay => $"{Code}, {Name}";
 
-		public string TypeCode { get; set; }
+		// todo: remove?
+		public Guid Uid { get; set; }
 
 		public string StatusCode { get; set; }
 
@@ -16,7 +18,5 @@ namespace Montr.MasterData.Models
 		public string Name { get; set; }
 
 		public string Url { get; set; }
-
-		private string DebuggerDisplay => $"{Code}, {Name}";
 	}
 }

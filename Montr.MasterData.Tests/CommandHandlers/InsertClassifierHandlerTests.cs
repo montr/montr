@@ -6,6 +6,7 @@ using Montr.Core.Services;
 using Montr.Data.Linq2Db;
 using Montr.MasterData.Commands;
 using Montr.MasterData.Impl.CommandHandlers;
+using Montr.MasterData.Impl.Services;
 using Montr.MasterData.Models;
 
 namespace Montr.MasterData.Tests.CommandHandlers
@@ -20,20 +21,24 @@ namespace Montr.MasterData.Tests.CommandHandlers
 			var unitOfWorkFactory = new TransactionScopeUnitOfWorkFactory { Commitable = false };
 			var dbContextFactory = new DefaultDbContextFactory();
 			var dateTimeProvider = new DefaultDateTimeProvider();
+			var classifierTypeRepository = new DbClassifierTypeRepository(dbContextFactory);
 
 			var handler = new InsertClassifierHandler(unitOfWorkFactory,
-				dbContextFactory, dateTimeProvider);
+				dbContextFactory, dateTimeProvider, classifierTypeRepository);
 
 			// act
 			var command = new InsertClassifier
 			{
 				UserUid = Guid.NewGuid(),
 				CompanyUid = Guid.Parse("6465dd4c-8664-4433-ba6a-14effd40ebed"),
-				Item = new Classifier
+				Items = new[]
 				{
-					TypeCode = "test",
-					Code = "001",
-					Name = "Test Classifier"
+					new Classifier
+					{
+						// TypeCode = "test",
+						Code = "001",
+						Name = "Test Classifier"
+					}
 				}
 			};
 

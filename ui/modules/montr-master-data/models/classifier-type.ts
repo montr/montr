@@ -2,5 +2,5 @@ export interface IClassifierType {
 	code?: string;
 	name?: string;
 	isSystem?: boolean;
-	hierarchyType: "None" | "Folders" | "Items";
+	hierarchyType: "None" | "Groups" | "Items";
 }

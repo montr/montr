@@ -8,16 +8,16 @@ using Montr.MasterData.Queries;
 
 namespace Montr.MasterData.Impl.QueryHandlers
 {
-	public class GetClassifierListHandler : IRequestHandler<GetClassifierList, DataResult<Classifier>>
+	public class GetClassifierListHandler : IRequestHandler<GetClassifierList, SearchResult<Classifier>>
 	{
-		private readonly IEntityRepository<Classifier> _repository;
+		private readonly IRepository<Classifier> _repository;
 
-		public GetClassifierListHandler(IEntityRepository<Classifier> repository)
+		public GetClassifierListHandler(IRepository<Classifier> repository)
 		{
 			_repository = repository;
 		}
 
-		public async Task<DataResult<Classifier>> Handle(GetClassifierList command, CancellationToken cancellationToken)
+		public async Task<SearchResult<Classifier>> Handle(GetClassifierList command, CancellationToken cancellationToken)
 		{
 			return await _repository.Search(command.Request, cancellationToken);
 		}

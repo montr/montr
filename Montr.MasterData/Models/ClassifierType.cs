@@ -1,10 +1,15 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 
 namespace Montr.MasterData.Models
 {
 	[DebuggerDisplay("{" + nameof(DebuggerDisplay) + ",nq}")]
 	public class ClassifierType
 	{
+		private string DebuggerDisplay => $"{Code}, {Name}";
+
+		public Guid Uid { get; set; }
+
 		public string Code { get; set; }
 
 		public string Name { get; set; }
@@ -12,14 +17,12 @@ namespace Montr.MasterData.Models
 		public bool IsSystem { get; set; }
 
 		public HierarchyType HierarchyType { get; set; }
-
-		private string DebuggerDisplay => $"{Code}, {Name}";
 	}
 	
 	public enum HierarchyType
 	{
 		None = 0,
-		Folders = 1,
+		Groups = 1,
 		Items = 2
 	}
 }

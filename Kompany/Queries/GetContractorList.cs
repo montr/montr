@@ -5,7 +5,7 @@ using Montr.Core.Models;
 
 namespace Kompany.Queries
 {
-	public class GetContractorList : IRequest<DataResult<Company>>
+	public class GetContractorList : IRequest<SearchResult<Company>>
 	{
 		public Guid UserUid { get; set; }
 

@@ -1,6 +1,6 @@
 ﻿namespace Montr.Core.Models
 {
-	public class SearchRequest : Paging
+	public abstract class SearchRequest : Paging
 	{
 	}
 }

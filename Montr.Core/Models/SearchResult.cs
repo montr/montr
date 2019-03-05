@@ -2,7 +2,7 @@
 
 namespace Montr.Core.Models
 {
-	public class DataResult<TModel> // : ApiResult
+	public class SearchResult<TModel> // : ApiResult
 	{
 		public int TotalCount { get; set; }
 
