@@ -3,7 +3,6 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using LinqToDB;
-using LinqToDB.Data;
 using MediatR;
 using Montr.Core.Services;
 using Montr.Data.Linq2Db;
@@ -13,7 +12,7 @@ using Montr.MasterData.Models;
 
 namespace Montr.MasterData.Impl.CommandHandlers
 {
-	public class InsertClassifierHandler: IRequestHandler<InsertClassifier, int>
+	public class InsertClassifierHandler: IRequestHandler<InsertClassifier, Guid>
 	{
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IDbContextFactory _dbContextFactory;
@@ -29,7 +28,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 			_classifierTypeRepository = classifierTypeRepository;
 		}
 
-		public async Task<int> Handle(InsertClassifier request, CancellationToken cancellationToken)
+		public async Task<Guid> Handle(InsertClassifier request, CancellationToken cancellationToken)
 		{
 			if (request.UserUid == Guid.Empty)
 				throw new InvalidOperationException("UserUid can't be empty guid.");
@@ -41,56 +40,38 @@ namespace Montr.MasterData.Impl.CommandHandlers
 				{
 					CompanyUid = request.CompanyUid,
 					UserUid = request.UserUid,
-					Code = request.TypeCode,
-					/*PageNo = 1,
-					PageSize = 1*/
+					Code = request.TypeCode
 				}, cancellationToken);
 
-			var type = types.Rows.Single();
+			var dbType = types.Rows.Single();
 
-			var count = 0;
-			
+			var item = request.Item;
+
 			using (var scope = _unitOfWorkFactory.Create())
 			{
+				var itemUid = Guid.NewGuid();
+
+				// todo: валидация и ограничения
+
 				using (var db = _dbContextFactory.Create())
 				{
-					// todo: валидация и ограничения
-
 					// компания + todo: дата изменения
 
-					/*foreach (var item in request.Items)
-					{
-						// item.Uid = Guid.NewGuid();
-						item.StatusCode = ClassifierStatusCode.Draft;
-
-						await db.GetTable<DbClassifier>()
-							.Value(x => x.Uid, Guid.NewGuid())
-							.Value(x => x.CompanyUid, request.CompanyUid)
-							.Value(x => x.TypeUid, type.Uid)
-							.Value(x => x.StatusCode, item.StatusCode)
-							.Value(x => x.Code, item.Code)
-							.Value(x => x.Name, item.Name)
-							.InsertAsync(cancellationToken);
-
-						count++;
-					}*/
-
-					db.BulkCopy(request.Items.Select(x => new DbClassifier
-					{
-						Uid = Guid.NewGuid(),
-						Name = x.Name,
-						Code = x.Code,
-						StatusCode = ClassifierStatusCode.Draft,
-						CompanyUid = request.CompanyUid,
-						TypeUid = type.Uid,
-					}));
+					await db.GetTable<DbClassifier>()
+						.Value(x => x.Uid, itemUid)
+						.Value(x => x.CompanyUid, request.CompanyUid)
+						.Value(x => x.TypeUid, dbType.Uid)
+						.Value(x => x.StatusCode, ClassifierStatusCode.Draft)
+						.Value(x => x.Code, item.Code)
+						.Value(x => x.Name, item.Name)
+						.InsertAsync(cancellationToken);
 				}
 
 				// todo: (события)
 
 				scope.Commit();
 
-				return count;
+				return itemUid;
 			}
 		}
 	}

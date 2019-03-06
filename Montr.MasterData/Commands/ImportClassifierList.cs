@@ -4,7 +4,7 @@ using Montr.MasterData.Models;
 
 namespace Montr.MasterData.Commands
 {
-	public class InsertClassifier : IRequest<Guid>
+	public class ImportClassifierList : IRequest<Guid>
 	{
 		public Guid UserUid { get; set; }
 
@@ -12,6 +12,6 @@ namespace Montr.MasterData.Commands
 
 		public string TypeCode { get; set; }
 
-		public Classifier Item { get; set; }
+		public ParseResult Data { get; set; }
 	}
 }

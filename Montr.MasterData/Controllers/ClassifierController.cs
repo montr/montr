@@ -58,17 +58,15 @@ namespace Montr.MasterData.Controllers
 		}
 
 		[HttpPost]
-		public async Task<Classifier> Get(Classifier item) // todo: pass only id
+		public async Task<Classifier> Get(GetClassifier request)
 		{
-			return await _mediator.Send(new GetClassifier
-			{
-				UserUid = _currentUserProvider.GetUserUid(),
-				EntityUid = item.Uid
-			});
+			request.UserUid = _currentUserProvider.GetUserUid();
+
+			return await _mediator.Send(request);
 		}
 
 		[HttpPost]
-		public async Task<int> Insert(InsertClassifier request)
+		public async Task<Guid> Insert(InsertClassifier request)
 		{
 			request.UserUid = _currentUserProvider.GetUserUid();
 

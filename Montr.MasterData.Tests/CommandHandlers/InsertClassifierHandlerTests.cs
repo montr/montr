@@ -31,14 +31,11 @@ namespace Montr.MasterData.Tests.CommandHandlers
 			{
 				UserUid = Guid.NewGuid(),
 				CompanyUid = Guid.Parse("6465dd4c-8664-4433-ba6a-14effd40ebed"),
-				Items = new[]
+				Item = new Classifier
 				{
-					new Classifier
-					{
-						// TypeCode = "test",
-						Code = "001",
-						Name = "Test Classifier"
-					}
+					// TypeCode = "test",
+					Code = "001",
+					Name = "Test Classifier"
 				}
 			};
 
