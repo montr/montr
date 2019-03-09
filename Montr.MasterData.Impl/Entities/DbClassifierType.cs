@@ -1,7 +1,6 @@
 ﻿using System;
 using LinqToDB;
 using LinqToDB.Mapping;
-using Montr.MasterData.Models;
 
 namespace Montr.MasterData.Impl.Entities
 {

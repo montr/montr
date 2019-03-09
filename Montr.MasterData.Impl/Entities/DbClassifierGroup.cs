@@ -10,9 +10,11 @@ namespace Montr.MasterData.Impl.Entities
 		[Column(Name = "uid"), DataType(DataType.Guid), PrimaryKey, Identity]
 		public Guid Uid { get; set; }
 
+		// todo: remove?
 		[Column(Name = "company_uid"), DataType(DataType.Guid), NotNull]
 		public Guid CompanyUid { get; set; }
 
+		// todo: remove?
 		[Column(Name = "type_uid"), DataType(DataType.Guid), NotNull]
 		public Guid TypeUid { get; set; }
 

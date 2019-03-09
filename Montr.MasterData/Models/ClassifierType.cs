@@ -18,7 +18,7 @@ namespace Montr.MasterData.Models
 
 		public HierarchyType HierarchyType { get; set; }
 	}
-	
+
 	public enum HierarchyType
 	{
 		None = 0,

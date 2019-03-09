@@ -3,13 +3,13 @@ import { Page, DataTable, PageHeader } from "@montr-core/components";
 import { NotificationService } from "@montr-core/services";
 import { RouteComponentProps } from "react-router";
 import { Constants } from "@montr-core/.";
-import { Icon, Button, Breadcrumb, Menu, Dropdown, Tree, Row, Col } from "antd";
+import { Icon, Button, Breadcrumb, Menu, Dropdown, Tree, Row, Col, Select } from "antd";
 const { TreeNode } = Tree;
 import { AntTreeNodeSelectedEvent } from "antd/lib/tree";
 import { Link } from "react-router-dom";
 import { withCompanyContext, CompanyContextProps } from "@kompany/components";
 import { ClassifierService } from "../services";
-import { IClassifierType } from "../models";
+import { IClassifierType, IClassifierTree, IClassifierGroup } from "../models";
 
 interface IRouteProps {
 	configCode: string;
@@ -20,6 +20,8 @@ interface IProps extends CompanyContextProps, RouteComponentProps<IRouteProps> {
 
 interface IState {
 	type: IClassifierType;
+	trees: IClassifierTree[];
+	groups: IClassifierGroup[];
 	selectedRowKeys: string[] | number[];
 	postParams: any;
 }
@@ -36,6 +38,8 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 			type: {
 				hierarchyType: "None"
 			},
+			trees: [],
+			groups: [],
 			selectedRowKeys: [],
 			postParams: {}
 		};
@@ -62,8 +66,21 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 
 		const type = await this.fetchClassifierType(configCode);
 
+		let trees: IClassifierTree[] = [],
+			groups: IClassifierGroup[] = [];
+
+		if (type && type.hierarchyType == "Groups") {
+			trees = await this.fetchClassifierTrees(configCode);
+
+			if (trees && trees.length > 0) {
+				groups = await this.fetchClassifierGroups(configCode, trees[0].code)
+			}
+		}
+
 		this.setState({
 			type: type,
+			trees: trees,
+			groups: groups,
 			postParams: {
 				typeCode: configCode, companyUid: currentCompany ? currentCompany.uid : null
 			}
@@ -71,9 +88,33 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 	}
 
 	private fetchClassifierType = async (typeCode: string): Promise<IClassifierType> => {
-		const data = await this._classifierService.types();
+		const { currentCompany } = this.props;
+
+		if (!currentCompany) return null;
+
+		const data = await this._classifierService.types(currentCompany.uid);
 
 		return data.rows.find(x => x.code == typeCode);
+	}
+
+	private fetchClassifierTrees = async (typeCode: string): Promise<IClassifierTree[]> => {
+		const { currentCompany } = this.props,
+			{ type } = this.state;
+
+		if (!currentCompany || !type) return null;
+
+		const data = await this._classifierService.trees(currentCompany.uid, typeCode);
+
+		return data.rows;
+	}
+
+	private fetchClassifierGroups = async (typeCode: string, treeCode: string): Promise<IClassifierGroup[]> => {
+		const { currentCompany } = this.props,
+			{ type } = this.state;
+
+		if (!currentCompany || !type) return null;
+
+		return await this._classifierService.groups(currentCompany.uid, typeCode, treeCode);
 	}
 
 	private delete = async () => {
@@ -102,7 +143,7 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 
 	render() {
 		const { currentCompany } = this.props,
-			{ type, postParams } = this.state;
+			{ type, trees, groups, postParams } = this.state;
 
 		if (!currentCompany || !type) return null;
 
@@ -121,22 +162,21 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 		// 4. показывать планарную таблицу без групп
 		let tree;
 		if (type.hierarchyType == "Groups") {
-			tree = (
+			tree = <div style={{ overflowX: "auto" }}>
+				<Select defaultValue="default">
+					{trees && trees.map(x => <Select.Option key={x.code}>{x.name || x.code}</Select.Option>)}
+				</Select>
 				<Tree.DirectoryTree
 					multiple={false}
 					defaultExpandAll
 					onSelect={this.onTreeSelect}
+					showIcon={false}
 				>
-					<TreeNode title="parent 0" key="0-0" >
-						<TreeNode title="leaf 0-0" key="0-0-0" />
-						<TreeNode title="leaf 0-1" key="0-0-1" />
-					</TreeNode>
-					<TreeNode title="parent 1" key="0-1">
-						<TreeNode title="leaf 1-0" key="0-1-0" />
-						<TreeNode title="leaf 1-1" key="0-1-1" />
+					<TreeNode>
+						{groups && groups.map(x => <TreeNode title={x.name} key={x.code} />)}
 					</TreeNode>
 				</Tree.DirectoryTree>
-			);
+			</div>;
 		}
 
 		const table = (
@@ -152,10 +192,10 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 		const content = (tree)
 			? (
 				<Row>
-					<Col span={4}>
+					<Col span={5}>
 						{tree}
 					</Col>
-					<Col span={20}>
+					<Col span={19}>
 						{table}
 					</Col>
 				</Row>

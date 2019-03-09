@@ -213,17 +213,15 @@ export class DataTable<TModel extends IIndexer> extends React.Component<IProps<T
 		};
 
 		return (
-			<>
-				<Table size="small"
-					rowKey={this.props.rowKey || "id"}
-					columns={this.state.columns}
-					dataSource={this.state.data}
-					pagination={pagination}
-					loading={this.state.loading}
-					onChange={this.handleTableChange}
-					rowSelection={rowSelection}
-				/>
-			</>
+			<Table size="small"
+				rowKey={this.props.rowKey || "id"}
+				columns={this.state.columns}
+				dataSource={this.state.data}
+				pagination={pagination}
+				loading={this.state.loading}
+				onChange={this.handleTableChange}
+				rowSelection={rowSelection}
+			/>
 		)
 	}
 }
