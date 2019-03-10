@@ -43,7 +43,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 					Code = request.TypeCode
 				}, cancellationToken);
 
-			var dbType = types.Rows.Single();
+			var type = types.Rows.Single();
 
 			var item = request.Item;
 
@@ -59,8 +59,8 @@ namespace Montr.MasterData.Impl.CommandHandlers
 
 					await db.GetTable<DbClassifier>()
 						.Value(x => x.Uid, itemUid)
-						.Value(x => x.CompanyUid, request.CompanyUid)
-						.Value(x => x.TypeUid, dbType.Uid)
+						// .Value(x => x.CompanyUid, request.CompanyUid)
+						.Value(x => x.TypeUid, type.Uid)
 						.Value(x => x.StatusCode, ClassifierStatusCode.Draft)
 						.Value(x => x.Code, item.Code)
 						.Value(x => x.Name, item.Name)

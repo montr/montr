@@ -4,24 +4,17 @@
 CREATE TABLE IF NOT EXISTS public.classifier_tree
 (
 	uid uuid NOT NULL DEFAULT uuid_generate_v1(), 
-	company_uid uuid NOT NULL,
 	type_uid uuid NOT NULL,
     code character varying(32) NOT NULL COLLATE pg_catalog."default",
     name character varying(2048) COLLATE pg_catalog."default", 
 	CONSTRAINT classifier_tree_pk PRIMARY KEY (uid),
-	UNIQUE (company_uid, type_uid, code)
+	UNIQUE (type_uid, code)
 )
 WITH (
 	OIDS = FALSE
 );
 
 GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE public.classifier_tree TO web;
-
-ALTER TABLE public.classifier_tree
-    ADD CONSTRAINT fk_classifier_tree_company_uid FOREIGN KEY (company_uid)
-    REFERENCES public.company (uid) MATCH SIMPLE
-    ON UPDATE NO ACTION
-    ON DELETE NO ACTION;
 
 ALTER TABLE public.classifier_tree
     ADD CONSTRAINT fk_classifier_tree_type_code FOREIGN KEY (type_uid)
@@ -35,32 +28,18 @@ ALTER TABLE public.classifier_tree
 CREATE TABLE IF NOT EXISTS public.classifier_group
 (
 	uid uuid NOT NULL DEFAULT uuid_generate_v1(), 
-	company_uid uuid NOT NULL,
-	type_uid uuid NOT NULL,
 	tree_uid uuid NOT NULL,
 	parent_uid uuid NULL,
     code character varying(32) NOT NULL COLLATE pg_catalog."default", 
     name character varying(2048) COLLATE pg_catalog."default", 
 	CONSTRAINT classifier_group_pk PRIMARY KEY (uid),
-	UNIQUE (company_uid, type_uid, tree_uid, code)
+	UNIQUE (tree_uid, code)
 )
 WITH (
 	OIDS = FALSE
 );
 
 GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE public.classifier_group TO web;
-
-ALTER TABLE public.classifier_group
-    ADD CONSTRAINT fk_classifier_group_company_uid FOREIGN KEY (company_uid)
-    REFERENCES public.company (uid) MATCH SIMPLE
-    ON UPDATE NO ACTION
-    ON DELETE NO ACTION;
-
-ALTER TABLE public.classifier_group
-    ADD CONSTRAINT fk_classifier_group_type_uid FOREIGN KEY (type_uid)
-    REFERENCES public.classifier_type (uid) MATCH SIMPLE
-    ON UPDATE NO ACTION
-    ON DELETE NO ACTION;
 
 ALTER TABLE public.classifier_group
     ADD CONSTRAINT fk_classifier_group_tree_uid FOREIGN KEY (tree_uid)
@@ -80,26 +59,19 @@ ALTER TABLE public.classifier_group
 CREATE TABLE IF NOT EXISTS public.classifier
 (
 	uid uuid NOT NULL DEFAULT uuid_generate_v1(), 
-	company_uid uuid NOT NULL,
 	type_uid uuid NOT NULL,
     status_code character varying(16) NOT NULL COLLATE pg_catalog."default", 
 	parent_uid uuid NULL,
     code character varying(32) NOT NULL COLLATE pg_catalog."default", 
     name character varying(2048) COLLATE pg_catalog."default", 
 	CONSTRAINT classifier_pk PRIMARY KEY (uid),
-	UNIQUE (company_uid, type_uid, code)
+	UNIQUE (type_uid, code)
 )
 WITH (
 	OIDS = FALSE
 );
 
 GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE public.classifier TO web;
-
-ALTER TABLE public.classifier
-    ADD CONSTRAINT fk_classifier_company_uid FOREIGN KEY (company_uid)
-    REFERENCES public.company (uid) MATCH SIMPLE
-    ON UPDATE NO ACTION
-    ON DELETE NO ACTION;
 
 ALTER TABLE public.classifier
     ADD CONSTRAINT fk_classifier_type_uid FOREIGN KEY (type_uid)
@@ -140,20 +112,19 @@ ALTER TABLE public.classifier_link
     ON UPDATE NO ACTION
     ON DELETE NO ACTION;
 	
+-- DROP TABLE public.classifier_closure;
+-- SELECT * FROM information_schema.tables WHERE table_name = 'classifier_closure'
 
--- DROP TABLE public.classifier_hierarchy;
--- SELECT * FROM information_schema.tables WHERE table_name = 'classifier_hierarchy'
-
-CREATE TABLE IF NOT EXISTS public.classifier_hierarchy
+CREATE TABLE IF NOT EXISTS public.classifier_closure
 (
 	parent_uid uuid NOT NULL, 
 	child_uid uuid NOT NULL,
 	level smallint NOT NULL,
-	CONSTRAINT classifier_hierarchy_pk PRIMARY KEY (parent_uid, child_uid, level)
+	CONSTRAINT classifier_closure_pk PRIMARY KEY (parent_uid, child_uid, level)
 )
 WITH (
 	OIDS = FALSE
 );
 
-GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE public.classifier_hierarchy TO web;
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE public.classifier_closure TO web;
 	

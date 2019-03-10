@@ -168,7 +168,7 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 		// 3. показывать или нет группы в таблице
 		// 4. показывать планарную таблицу без групп
 		let tree;
-		if (type.hierarchyType == "Groups" && trees) {
+		if (type.hierarchyType == "Groups" && trees && trees.length > 0) {
 			tree = <div style={{ overflowX: "auto", height: "90vh" }}>
 				{<Select defaultValue="default" style={{ width: "95%" }}>
 					{trees.map(x => <Select.Option key={x.code}>{x.name || x.code}</Select.Option>)}

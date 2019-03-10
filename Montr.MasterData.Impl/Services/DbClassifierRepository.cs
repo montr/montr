@@ -27,7 +27,8 @@ namespace Montr.MasterData.Impl.Services
 			{
 				var all = from c in db.GetTable<DbClassifier>()
 					join ct in db.GetTable<DbClassifierType>() on c.TypeUid equals ct.Uid
-					where c.CompanyUid == request.CompanyUid && ct.Code == request.TypeCode
+					where ct.CompanyUid == request.CompanyUid &&
+						ct.Code == request.TypeCode
 					select c;
 
 				var data = await all

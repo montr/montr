@@ -57,37 +57,12 @@ namespace Montr.MasterData.Impl.CommandHandlers
 			{
 				using (var db = _dbContextFactory.Create())
 				{
-					Guid treeUid;
-
-					var tree = db.GetTable<DbClassifierTree>()
-						.SingleOrDefault(x =>
-							x.CompanyUid == companyUid &&
-							x.TypeUid == type.Uid &&
-							x.Code == DefaultTreeCode);
-
-					if (tree == null)
-					{
-						// todo: set default tree name
-						await db.GetTable<DbClassifierTree>()
-							.Value(x => x.Uid, treeUid = Guid.NewGuid())
-							.Value(x => x.CompanyUid, companyUid)
-							.Value(x => x.TypeUid, type.Uid)
-							.Value(x => x.Code, DefaultTreeCode)
-							.Value(x => x.Name, type.Name)
-							.InsertAsync(cancellationToken);
-					}
-					else
-					{
-						treeUid = tree.Uid;
-					}
-
 					if (data.Items != null)
 					{
 						foreach (var item in data.Items)
 						{
 							var dbItem = db.GetTable<DbClassifier>()
 								.SingleOrDefault(x =>
-									x.CompanyUid == companyUid &&
 									x.TypeUid == type.Uid &&
 									x.Code == item.Code);
 
@@ -95,7 +70,6 @@ namespace Montr.MasterData.Impl.CommandHandlers
 							{
 								var stmt = db.GetTable<DbClassifier>()
 									.Value(x => x.Uid, Guid.NewGuid())
-									.Value(x => x.CompanyUid, companyUid)
 									.Value(x => x.TypeUid, type.Uid)
 									.Value(x => x.StatusCode, ClassifierStatusCode.Draft)
 									.Value(x => x.Code, item.Code)
@@ -105,7 +79,6 @@ namespace Montr.MasterData.Impl.CommandHandlers
 								{
 									var dbParentItem = db.GetTable<DbClassifier>()
 										.Single(x =>
-											x.CompanyUid == companyUid &&
 											x.TypeUid == type.Uid &&
 											x.Code == item.ParentCode);
 
@@ -137,95 +110,110 @@ namespace Montr.MasterData.Impl.CommandHandlers
 						}
 					}
 
-					if (type.HierarchyType == HierarchyType.Groups && data.Groups != null)
+					if (type.HierarchyType == HierarchyType.Groups)
 					{
-						foreach (var group in data.Groups)
+						Guid treeUid;
+
+						var tree = db.GetTable<DbClassifierTree>()
+							.SingleOrDefault(x =>
+								x.TypeUid == type.Uid &&
+								x.Code == DefaultTreeCode);
+
+						if (tree == null)
 						{
-							var dbGroup = db
-								.GetTable<DbClassifierGroup>()
-								.SingleOrDefault(x =>
-									x.CompanyUid == companyUid &&
-									x.TypeUid == type.Uid &&
-									x.TreeUid == treeUid &&
-									x.Code == group.Code);
+							await db.GetTable<DbClassifierTree>()
+								.Value(x => x.Uid, treeUid = Guid.NewGuid())
+								.Value(x => x.TypeUid, type.Uid)
+								.Value(x => x.Code, DefaultTreeCode)
+								.Value(x => x.Name, type.Name)
+								.InsertAsync(cancellationToken);
+						}
+						else
+						{
+							treeUid = tree.Uid;
+						}
 
-							if (dbGroup == null)
+						if (data.Groups != null)
+						{
+							foreach (var group in data.Groups)
 							{
-								Guid? parentUid = null;
+								var dbGroup = db
+									.GetTable<DbClassifierGroup>()
+									.SingleOrDefault(x =>
+										x.TreeUid == treeUid &&
+										x.Code == group.Code);
 
-								if (group.ParentCode != null)
+								if (dbGroup == null)
 								{
-									var parentGroup = db
-										.GetTable<DbClassifierGroup>()
-										.Single(x =>
-											x.CompanyUid == companyUid &&
-											x.TypeUid == type.Uid &&
-											x.TreeUid == treeUid &&
-											x.Code == group.ParentCode);
+									Guid? parentUid = null;
 
-									parentUid = parentGroup.Uid;
+									if (group.ParentCode != null)
+									{
+										var parentGroup = db
+											.GetTable<DbClassifierGroup>()
+											.Single(x =>
+												x.TreeUid == treeUid &&
+												x.Code == group.ParentCode);
+
+										parentUid = parentGroup.Uid;
+									}
+
+									await db.GetTable<DbClassifierGroup>()
+										.Value(x => x.Uid, Guid.NewGuid())
+										.Value(x => x.TreeUid, treeUid)
+										.Value(x => x.Code, group.Code)
+										.Value(x => x.Name, group.Name)
+										.Value(x => x.ParentUid, parentUid)
+										.InsertAsync(cancellationToken);
 								}
-
-								await db.GetTable<DbClassifierGroup>()
-									.Value(x => x.Uid, Guid.NewGuid())
-									.Value(x => x.CompanyUid, companyUid)
-									.Value(x => x.TreeUid, treeUid)
-									.Value(x => x.TypeUid, type.Uid)
-									.Value(x => x.Code, group.Code)
-									.Value(x => x.Name, group.Name)
-									.Value(x => x.ParentUid, parentUid)
-									.InsertAsync(cancellationToken);
-							}
-							else
-							{
-								var stmt = db.GetTable<DbClassifierGroup>()
-									.Where(x => x.Uid == dbGroup.Uid)
-									.AsUpdatable();
-
-								var changed = false;
-
-								if (dbGroup.Name != group.Name)
+								else
 								{
-									stmt = stmt.Set(x => x.Name, group.Name);
-									changed = true;
-								}
+									var stmt = db.GetTable<DbClassifierGroup>()
+										.Where(x => x.Uid == dbGroup.Uid)
+										.AsUpdatable();
 
-								if (changed)
-								{
-									await stmt.UpdateAsync(cancellationToken);
+									var changed = false;
+
+									if (dbGroup.Name != group.Name)
+									{
+										stmt = stmt.Set(x => x.Name, group.Name);
+										changed = true;
+									}
+
+									if (changed)
+									{
+										await stmt.UpdateAsync(cancellationToken);
+									}
 								}
 							}
 						}
-					}
-					
-					if (type.HierarchyType == HierarchyType.Groups && data.Links != null)
-					{
-						foreach (var itemInGroup in data.Links)
+
+						if (data.Links != null)
 						{
-							var dbGroup = db.GetTable<DbClassifierGroup>()
-								.Single(x =>
-									x.CompanyUid == companyUid &&
-									x.TypeUid == type.Uid &&
-									x.TreeUid == treeUid &&
-									x.Code == itemInGroup.GroupCode);
-
-							var dbItem = db.GetTable<DbClassifier>()
-								.Single(x =>
-									x.CompanyUid == companyUid &&
-									x.TypeUid == type.Uid &&
-									x.Code == itemInGroup.ItemCode);
-
-							var dbLink = db.GetTable<DbClassifierLink>()
-								.SingleOrDefault(x =>
-									x.GroupUid == dbGroup.Uid &&
-									x.ItemUid == dbItem.Uid);
-
-							if (dbLink == null)
+							foreach (var itemInGroup in data.Links)
 							{
-								await db.GetTable<DbClassifierLink>()
-									.Value(x => x.GroupUid, dbGroup.Uid)
-									.Value(x => x.ItemUid, dbItem.Uid)
-									.InsertAsync(cancellationToken);
+								var dbGroup = db.GetTable<DbClassifierGroup>()
+									.Single(x =>
+										x.TreeUid == treeUid &&
+										x.Code == itemInGroup.GroupCode);
+
+								var dbItem = db.GetTable<DbClassifier>()
+									.Single(x =>
+										x.TypeUid == type.Uid &&
+										x.Code == itemInGroup.ItemCode);
+
+								var dbLink = db.GetTable<DbClassifierLink>()
+									.SingleOrDefault(x =>
+										x.GroupUid == dbGroup.Uid &&
+										x.ItemUid == dbItem.Uid);
+
+								if (dbLink == null)
+								{
+									await db.GetTable<DbClassifierLink>()
+										.Value(x => x.GroupUid, dbGroup.Uid)
+										.Value(x => x.ItemUid, dbItem.Uid)
+										.InsertAsync(cancellationToken);
+								}
 							}
 						}
 					}

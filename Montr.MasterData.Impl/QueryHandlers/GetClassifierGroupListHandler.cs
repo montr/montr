@@ -32,7 +32,7 @@ namespace Montr.MasterData.Impl.QueryHandlers
 				var all = from g in db.GetTable<DbClassifierGroup>()
 					join tree in db.GetTable<DbClassifierTree>() on g.TreeUid equals tree.Uid
 					join type in db.GetTable<DbClassifierType>() on tree.TypeUid equals type.Uid
-					where g.CompanyUid == request.CompanyUid &&
+					where type.CompanyUid == request.CompanyUid &&
 						type.Code == request.TypeCode &&
 						tree.Code == request.TreeCode
 					orderby g.Code, g.Name
