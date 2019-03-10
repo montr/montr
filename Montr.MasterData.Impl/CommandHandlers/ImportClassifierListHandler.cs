@@ -16,7 +16,6 @@ namespace Montr.MasterData.Impl.CommandHandlers
 	public class ImportClassifierListHandler : IRequestHandler<ImportClassifierList, Guid>
 	{
 		private const string DefaultTreeCode = "default";
-		private const string DefaultTreeName = "<Default>";
 
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IDbContextFactory _dbContextFactory;
@@ -74,7 +73,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 							.Value(x => x.CompanyUid, companyUid)
 							.Value(x => x.TypeUid, type.Uid)
 							.Value(x => x.Code, DefaultTreeCode)
-							.Value(x => x.Name, DefaultTreeName)
+							.Value(x => x.Name, type.Name)
 							.InsertAsync(cancellationToken);
 					}
 					else
