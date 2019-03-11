@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using LinqToDB;
+using LinqToDB.Data;
 using MediatR;
 using Montr.Core.Services;
 using Montr.Data.Linq2Db;
@@ -57,6 +58,8 @@ namespace Montr.MasterData.Impl.CommandHandlers
 			{
 				using (var db = _dbContextFactory.Create())
 				{
+					var closure = new ClosureTable(db);
+
 					if (data.Items != null)
 					{
 						foreach (var item in data.Items)
@@ -158,13 +161,17 @@ namespace Montr.MasterData.Impl.CommandHandlers
 										parentUid = parentGroup.Uid;
 									}
 
+									var groupUid = Guid.NewGuid();
+
 									await db.GetTable<DbClassifierGroup>()
-										.Value(x => x.Uid, Guid.NewGuid())
+										.Value(x => x.Uid, groupUid)
 										.Value(x => x.TreeUid, treeUid)
 										.Value(x => x.Code, group.Code)
 										.Value(x => x.Name, group.Name)
 										.Value(x => x.ParentUid, parentUid)
 										.InsertAsync(cancellationToken);
+
+									await closure.Insert(groupUid, parentUid, cancellationToken);
 								}
 								else
 								{
@@ -224,5 +231,41 @@ namespace Montr.MasterData.Impl.CommandHandlers
 
 			return Guid.Empty;
 		}
+
+		public class ClosureTable
+		{
+			private readonly DbContext _db;
+
+			public ClosureTable(DbContext db)
+			{
+				_db = db;
+			}
+
+			public async Task Insert(Guid itemUid, Guid? parentUid, CancellationToken cancellationToken)
+			{
+				// insert self closure with level 0
+				await _db.GetTable<DbClassifierClosure>()
+					.Value(x => x.ParentUid, itemUid)
+					.Value(x => x.ChildUid, itemUid)
+					.Value(x => x.Level, 0)
+					.InsertAsync(cancellationToken);
+
+				if (parentUid.HasValue)
+				{
+					// insert parent closures with level + 1
+					var closures = await _db.GetTable<DbClassifierClosure>()
+						.Where(x => x.ChildUid == parentUid.Value)
+						.Select(x => new DbClassifierClosure
+						{
+							ParentUid = x.ParentUid,
+							ChildUid = itemUid,
+							Level = (short)(x.Level + 1)
+						})
+						.ToListAsync(cancellationToken);
+
+					/*var copied =*/ _db.BulkCopy(closures);
+				}
+			}
+		} 
 	}
 }

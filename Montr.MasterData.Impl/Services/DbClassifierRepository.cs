@@ -13,23 +13,55 @@ namespace Montr.MasterData.Impl.Services
 	public class DbClassifierRepository : IRepository<Classifier>
 	{
 		private readonly IDbContextFactory _dbContextFactory;
+		private readonly IRepository<ClassifierType> _classifierTypeRepository;
 
-		public DbClassifierRepository(IDbContextFactory dbContextFactory)
+		public DbClassifierRepository(IDbContextFactory dbContextFactory, IRepository<ClassifierType> classifierTypeRepository)
 		{
 			_dbContextFactory = dbContextFactory;
+			_classifierTypeRepository = classifierTypeRepository;
 		}
 
 		public async Task<SearchResult<Classifier>> Search(SearchRequest searchRequest, CancellationToken cancellationToken)
 		{
 			var request = (ClassifierSearchRequest)searchRequest;
 
+			var typez = await _classifierTypeRepository.Search(
+				new ClassifierTypeSearchRequest
+				{
+					CompanyUid = request.CompanyUid,
+					Code = request.TypeCode
+				}, cancellationToken);
+
+			var type = typez.Rows.Single();
+
 			using (var db = _dbContextFactory.Create())
 			{
-				var all = from c in db.GetTable<DbClassifier>()
-					join ct in db.GetTable<DbClassifierType>() on c.TypeUid equals ct.Uid
-					where ct.CompanyUid == request.CompanyUid &&
-						ct.Code == request.TypeCode
-					select c;
+				IQueryable<DbClassifier> all;
+
+				if (type.HierarchyType == HierarchyType.Groups)
+				{
+					all = from types in db.GetTable<DbClassifierType>()
+						join trees in db.GetTable<DbClassifierTree>() on types.Uid equals trees.TypeUid
+						join parent_groups in db.GetTable<DbClassifierGroup>() on trees.Uid equals parent_groups.TreeUid
+						join closures in db.GetTable<DbClassifierClosure>() on parent_groups.Uid equals closures.ParentUid
+						join children_groups in db.GetTable<DbClassifierGroup>() on closures.ChildUid equals children_groups.Uid
+						join links in db.GetTable<DbClassifierLink>() on children_groups.Uid equals links.GroupUid
+						join c in db.GetTable<DbClassifier>() on links.ItemUid equals c.Uid
+						where types.CompanyUid == request.CompanyUid &&
+							types.Code == request.TypeCode &&
+							trees.Code == request.TreeCode &&
+							parent_groups.Code == request.GroupCode
+						select c;
+				}
+				else
+				{
+					all = from c in db.GetTable<DbClassifier>()
+						join ct in db.GetTable<DbClassifierType>()
+							on c.TypeUid equals ct.Uid
+						where ct.CompanyUid == request.CompanyUid &&
+							ct.Code == request.TypeCode
+						select c;
+				}
 
 				var data = await all
 					.Apply(request, x => x.Code)

@@ -81,7 +81,9 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 			trees: trees,
 			groups: groups,
 			postParams: {
-				typeCode: typeCode, companyUid: currentCompany ? currentCompany.uid : null
+				companyUid: currentCompany ? currentCompany.uid : null,
+				typeCode: typeCode,
+				treeCode: (trees && trees.length > 0) ? trees[0].code : null,
 			}
 		});
 	}
@@ -134,8 +136,13 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 		this.setState({ selectedRowKeys });
 	}
 
-	private onTreeSelect = async (selectedKeys: string[]) => {
+	private onTreeSelect = (selectedKeys: string[]) => {
+
 		console.log(selectedKeys);
+
+		const { postParams } = this.state;
+
+		this.setState({ postParams: { ...postParams, groupCode: selectedKeys[0] } });
 	}
 
 	private buildGroupsTree = (groups: IClassifierGroup[]) => {

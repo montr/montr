@@ -177,7 +177,7 @@ namespace Montr.MasterData.Impl.Services
 
 				itemsInGroups.Add(new ClassifierLink
 				{
-					GroupCode = sectionCode,
+					GroupCode = groupCode,
 					ItemCode = item.Code
 				});
 			}
