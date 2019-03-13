@@ -3,12 +3,12 @@ import { Page, DataTable, PageHeader } from "@montr-core/components";
 import { NotificationService } from "@montr-core/services";
 import { RouteComponentProps } from "react-router";
 import { Constants } from "@montr-core/.";
-import { Icon, Button, Breadcrumb, Menu, Dropdown, Tree, Row, Col, Select } from "antd";
-const { TreeNode } = Tree;
+import { Icon, Button, Breadcrumb, Menu, Dropdown, Tree, Row, Col, Select, Radio } from "antd";
 import { Link } from "react-router-dom";
 import { withCompanyContext, CompanyContextProps } from "@kompany/components";
 import { ClassifierService } from "../services";
 import { IClassifierType, IClassifierTree, IClassifierGroup } from "../models";
+import { RadioChangeEvent } from "antd/lib/radio";
 
 interface IRouteProps {
 	typeCode: string;
@@ -40,7 +40,9 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 			trees: [],
 			groups: [],
 			selectedRowKeys: [],
-			postParams: {}
+			postParams: {
+				depth: "0"
+			}
 		};
 	}
 
@@ -137,20 +139,21 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 	}
 
 	private onTreeSelect = (selectedKeys: string[]) => {
-
-		console.log(selectedKeys);
-
 		const { postParams } = this.state;
-
 		this.setState({ postParams: { ...postParams, groupCode: selectedKeys[0] } });
+	}
+
+	private onDepthChange = (e: RadioChangeEvent) => {
+		const { postParams } = this.state;
+		this.setState({ postParams: { ...postParams, depth: e.target.value } });
 	}
 
 	private buildGroupsTree = (groups: IClassifierGroup[]) => {
 		return groups && groups.map(x => {
 			return (
-				<TreeNode title={`${x.code} - ${x.name}`} key={x.code} isLeaf={!x.children}>
+				<Tree.TreeNode title={`${x.code} - ${x.name}`} key={x.code} isLeaf={!x.children}>
 					{this.buildGroupsTree(x.children)}
-				</TreeNode>
+				</Tree.TreeNode>
 			);
 		});
 	}
@@ -176,20 +179,15 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 		// 4. показывать планарную таблицу без групп
 		let tree;
 		if (type.hierarchyType == "Groups" && trees && trees.length > 0) {
-			tree = <div style={{ overflowX: "auto", height: "90vh" }}>
-				{<Select defaultValue="default" style={{ width: "95%" }}>
+			tree = <div style={{ overflowX: "auto" }}>
+				{<Select defaultValue="default" size="small">
 					{trees.map(x => <Select.Option key={x.code}>{x.name || x.code}</Select.Option>)}
 				</Select>}
-				<Tree.DirectoryTree
-					multiple={false}
-					defaultExpandAll
-					onSelect={this.onTreeSelect}
-					showIcon={false}
-				>
-					<TreeNode title={trees[0].name || trees[0].code}>
+				<Tree blockNode defaultExpandAll onSelect={this.onTreeSelect}>
+					<Tree.TreeNode title={trees[0].name || trees[0].code} key=".">
 						{this.buildGroupsTree(groups)}
-					</TreeNode>
-				</Tree.DirectoryTree>
+					</Tree.TreeNode>
+				</Tree>
 			</div>;
 		}
 
@@ -244,6 +242,13 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 						&#xA0;<Button onClick={this.export}><Icon type="export" /> Экспорт</Button>
 					</>
 				}>
+
+				<div style={{ textAlign: "right", paddingBottom: "8px" }}>
+					<Radio.Group defaultValue="0" size="small" onChange={this.onDepthChange}>
+						<Radio.Button value="0"><Icon type="folder" /> Группа</Radio.Button>
+						<Radio.Button value="1"><Icon type="cluster" /> Иерархия</Radio.Button>
+					</Radio.Group>
+				</div>
 
 				{content}
 

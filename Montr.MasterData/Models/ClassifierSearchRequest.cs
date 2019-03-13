@@ -13,6 +13,8 @@ namespace Montr.MasterData.Models
 
 		public string GroupCode { get; set; }
 
+		public string Depth { get; set; }
+
 		public Guid? Uid { get; set; }
 	}
 }
