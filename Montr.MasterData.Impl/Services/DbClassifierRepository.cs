@@ -7,38 +7,36 @@ using Montr.Core.Services;
 using Montr.Data.Linq2Db;
 using Montr.MasterData.Impl.Entities;
 using Montr.MasterData.Models;
+using Montr.MasterData.Services;
 
 namespace Montr.MasterData.Impl.Services
 {
 	public class DbClassifierRepository : IRepository<Classifier>
 	{
 		private readonly IDbContextFactory _dbContextFactory;
-		private readonly IRepository<ClassifierType> _classifierTypeRepository;
+		private readonly IClassifierTypeService _classifierTypeService;
 
-		public DbClassifierRepository(IDbContextFactory dbContextFactory, IRepository<ClassifierType> classifierTypeRepository)
+		public DbClassifierRepository(IDbContextFactory dbContextFactory, IClassifierTypeService classifierTypeService)
 		{
 			_dbContextFactory = dbContextFactory;
-			_classifierTypeRepository = classifierTypeRepository;
+			_classifierTypeService = classifierTypeService;
 		}
 
 		public async Task<SearchResult<Classifier>> Search(SearchRequest searchRequest, CancellationToken cancellationToken)
 		{
 			var request = (ClassifierSearchRequest)searchRequest;
 
-			var typez = await _classifierTypeRepository.Search(
-				new ClassifierTypeSearchRequest
-				{
-					CompanyUid = request.CompanyUid,
-					Code = request.TypeCode
-				}, cancellationToken);
-
-			var type = typez.Rows.Single();
+			var type = await _classifierTypeService.GetClassifierType(request.CompanyUid, request.TypeCode, cancellationToken);
 
 			using (var db = _dbContextFactory.Create())
 			{
-				IQueryable<DbClassifier> all;
+				IQueryable<DbClassifier> all = null;
 
-				if (type.HierarchyType == HierarchyType.Groups && request.GroupCode != null && request.GroupCode != ".")
+				if (type.HierarchyType == HierarchyType.None || request.GroupCode == null || request.GroupCode == ".")
+				{
+					// no-op
+				}
+				else if (type.HierarchyType == HierarchyType.Groups)
 				{
 					if (request.Depth == null || request.Depth == "0")
 					{
@@ -69,7 +67,26 @@ namespace Montr.MasterData.Impl.Services
 							select c;
 					}
 				}
-				else
+				else if (type.HierarchyType == HierarchyType.Items)
+				{
+					if (request.Depth == null || request.Depth == "0")
+					{
+						all = from parent in db.GetTable<DbClassifier>()
+							join @class in db.GetTable<DbClassifier>() on parent.Uid equals @class.ParentUid
+							where parent.TypeUid == type.Uid && parent.Code == request.GroupCode
+							select @class;
+					}
+					else
+					{
+						all = from parent in db.GetTable<DbClassifier>() 
+							join closures in db.GetTable<DbClassifierClosure>() on parent.Uid equals closures.ParentUid 
+							join @class in db.GetTable<DbClassifier>() on closures.ChildUid equals @class.Uid
+							where parent.TypeUid == type.Uid && parent.Code == request.GroupCode && closures.Level > 0
+							select @class;
+					}
+				}
+
+				if (all == null)
 				{
 					all = from types in db.GetTable<DbClassifierType>()
 						join c in db.GetTable<DbClassifier>() on types.Uid equals c.TypeUid

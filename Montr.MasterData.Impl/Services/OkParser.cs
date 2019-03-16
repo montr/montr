@@ -215,6 +215,21 @@ namespace Montr.MasterData.Impl.Services
 
 			return item;
 		}
+
+		protected override ParseResult Convert(IList<Okved2Item> items)
+		{
+			var result = base.Convert(items);
+
+			foreach (var item in items)
+			{
+				if (item.ParentCode != null)
+				{
+					result.Items.Single(x => x.Code == item.Code).ParentCode = item.ParentCode;
+				}
+			}
+
+			return result;
+		}
 	}
 	
 	public class Okved2Item : OkItem

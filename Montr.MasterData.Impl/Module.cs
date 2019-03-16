@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Montr.Core.Services;
 using Montr.MasterData.Impl.Services;
 using Montr.MasterData.Models;
+using Montr.MasterData.Services;
 using Montr.Modularity;
 
 namespace Montr.MasterData.Impl
@@ -14,6 +15,8 @@ namespace Montr.MasterData.Impl
 			services.AddTransient<IRepository<ClassifierTree>, DbClassifierTreeRepository>();
 			services.AddTransient<IRepository<ClassifierType>, DbClassifierTypeRepository>();
 			services.AddTransient<IRepository<Classifier>, DbClassifierRepository>();
+
+			services.AddTransient<IClassifierTypeService, DefaultClassifierTypeService>();
 		}
 	}
 }

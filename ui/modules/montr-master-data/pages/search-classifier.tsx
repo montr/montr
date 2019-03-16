@@ -78,6 +78,10 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 			}
 		}
 
+		if (type && type.hierarchyType == "Items") {
+			groups = await this.fetchClassifierGroups(typeCode, null)
+		}
+
 		this.setState({
 			type: type,
 			trees: trees,
@@ -178,17 +182,30 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 		// 3. показывать или нет группы в таблице
 		// 4. показывать планарную таблицу без групп
 		let tree;
-		if (type.hierarchyType == "Groups" && trees && trees.length > 0) {
+		if (type.hierarchyType != "None") {
+
+			const getRootName = () => {
+				if (type.hierarchyType == "Groups") {
+					if (trees && trees.length > 0) return trees[0].name || trees[0].code;
+				}
+
+				if (type.hierarchyType == "Items") {
+					return type.name || type.code;
+				}
+
+				return null;
+			};
+
 			tree = <div style={{ overflowX: "auto" }}>
-				{<Select defaultValue="default" size="small">
+				{trees && trees.length > 0 && <Select defaultValue="default" size="small">
 					{trees.map(x => <Select.Option key={x.code}>{x.name || x.code}</Select.Option>)}
 				</Select>}
-				<Tree blockNode defaultExpandAll onSelect={this.onTreeSelect}>
-					<Tree.TreeNode title={trees[0].name || trees[0].code} key=".">
+				<Tree blockNode defaultExpandedKeys={["."]} onSelect={this.onTreeSelect}>
+					<Tree.TreeNode title={getRootName()} key=".">
 						{this.buildGroupsTree(groups)}
 					</Tree.TreeNode>
 				</Tree>
-			</div>;
+			</div >;
 		}
 
 		const table = (

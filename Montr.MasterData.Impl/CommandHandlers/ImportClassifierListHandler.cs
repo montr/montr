@@ -10,6 +10,7 @@ using Montr.Data.Linq2Db;
 using Montr.MasterData.Commands;
 using Montr.MasterData.Impl.Entities;
 using Montr.MasterData.Models;
+using Montr.MasterData.Services;
 
 namespace Montr.MasterData.Impl.CommandHandlers
 {
@@ -20,49 +21,42 @@ namespace Montr.MasterData.Impl.CommandHandlers
 
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IDbContextFactory _dbContextFactory;
-		private readonly IRepository<ClassifierType> _classifierTypeRepository;
+		private readonly IClassifierTypeService _classifierTypeService;
 
 		public ImportClassifierListHandler(IUnitOfWorkFactory unitOfWorkFactory, IDbContextFactory dbContextFactory,
-			IRepository<ClassifierType> classifierTypeRepository)
+			IClassifierTypeService classifierTypeService)
 		{
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_dbContextFactory = dbContextFactory;
-			_classifierTypeRepository = classifierTypeRepository;
+			_classifierTypeService = classifierTypeService;
 		}
 
 		public async Task<Guid> Handle(ImportClassifierList request, CancellationToken cancellationToken)
 		{
-			var companyUid = request.CompanyUid;
-			var userUid = request.UserUid;
-			var data = request.Data;
-
 			// todo: start with unit test for each todo
-			// todo: build DAG for groups and items
+			// (+) todo: build DAG for groups and items
 			// todo: build dictionaries
 			// todo: generate codes for new entities
-			// todo: add new items to default tree
-			// todo: build tree of items
-			// todo: build closure table for groups or item
+			// (+) todo: add new items to default tree
+			// (+) todo: build tree of items
+			// (+) todo: build closure table for groups or item
 
-			var types = await _classifierTypeRepository.Search(
-				new ClassifierTypeSearchRequest
-				{
-					CompanyUid = companyUid,
-					UserUid = userUid,
-					Code = request.TypeCode
-				}, cancellationToken);
-
-			var type = types.Rows.Single();
+			var type = await _classifierTypeService.GetClassifierType(request.CompanyUid, request.TypeCode, cancellationToken);
 			
 			using (var scope = _unitOfWorkFactory.Create())
 			{
 				using (var db = _dbContextFactory.Create())
 				{
+					var data = request.Data;
+
 					var closure = new ClosureTable(db);
 
 					if (data.Items != null)
 					{
-						foreach (var item in data.Items)
+						var sortedItems = DirectedAcyclicGraphVerifier.Sort(data.Items,
+							node => node.Code, node => node.ParentCode != null ? new [] { node.ParentCode } : null );
+
+						foreach (var item in sortedItems)
 						{
 							var dbItem = db.GetTable<DbClassifier>()
 								.SingleOrDefault(x =>
@@ -71,16 +65,20 @@ namespace Montr.MasterData.Impl.CommandHandlers
 
 							if (dbItem == null)
 							{
+								var itemUid = Guid.NewGuid();
+
 								var stmt = db.GetTable<DbClassifier>()
-									.Value(x => x.Uid, Guid.NewGuid())
+									.Value(x => x.Uid, itemUid)
 									.Value(x => x.TypeUid, type.Uid)
 									.Value(x => x.StatusCode, ClassifierStatusCode.Draft)
 									.Value(x => x.Code, item.Code)
 									.Value(x => x.Name, item.Name);
 
+								DbClassifier dbParentItem = null;
+
 								if (type.HierarchyType == HierarchyType.Items && item.ParentCode != null)
 								{
-									var dbParentItem = db.GetTable<DbClassifier>()
+									dbParentItem = db.GetTable<DbClassifier>()
 										.Single(x =>
 											x.TypeUid == type.Uid &&
 											x.Code == item.ParentCode);
@@ -89,6 +87,11 @@ namespace Montr.MasterData.Impl.CommandHandlers
 								}
 
 								await stmt.InsertAsync(cancellationToken);
+
+								if (dbParentItem != null)
+								{
+									await closure.Insert(itemUid, dbParentItem.Uid, cancellationToken);
+								}
 							}
 							else
 							{
@@ -138,7 +141,10 @@ namespace Montr.MasterData.Impl.CommandHandlers
 
 						if (data.Groups != null)
 						{
-							foreach (var group in data.Groups)
+							var sortedGroups = DirectedAcyclicGraphVerifier.Sort(data.Groups,
+								node => node.Code, node => node.ParentCode != null ? new [] { node.ParentCode } : null );
+
+							foreach (var group in sortedGroups)
 							{
 								var dbGroup = db
 									.GetTable<DbClassifierGroup>()
@@ -232,7 +238,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 			return Guid.Empty;
 		}
 
-		public class ClosureTable
+		private class ClosureTable
 		{
 			private readonly DbContext _db;
 

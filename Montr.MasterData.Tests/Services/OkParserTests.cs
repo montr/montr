@@ -57,6 +57,7 @@ namespace Montr.MasterData.Tests.Services
 			Assert.IsNotNull(result);
 			Assert.IsNotNull(result.Items);
 			Assert.IsTrue(result.Items.Count > 2500 && result.Items.Count < 3000);
+			Assert.AreEqual(2771, result.Items.Count(x => x.ParentCode != null));
 			Assert.AreEqual("66.19.7", result.Items.Single(x => x.Name == "Рейтинговая деятельность").Code);
 
 			await DumpToDb(result, "okved2");
@@ -67,8 +68,9 @@ namespace Montr.MasterData.Tests.Services
 			var unitOfWorkFactory = new TransactionScopeUnitOfWorkFactory();
 			var dbContextFactory = new DefaultDbContextFactory();
 			var classifierTypeRepository = new DbClassifierTypeRepository(dbContextFactory);
+			var classifierTypeService = new DefaultClassifierTypeService(classifierTypeRepository);
 
-			var handler = new ImportClassifierListHandler(unitOfWorkFactory, dbContextFactory, classifierTypeRepository);
+			var handler = new ImportClassifierListHandler(unitOfWorkFactory, dbContextFactory, classifierTypeService);
 
 			await handler.Handle(new ImportClassifierList
 			{
