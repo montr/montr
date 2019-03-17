@@ -7,13 +7,11 @@ using System.Threading.Tasks;
 using System.Xml;
 using System.Xml.Linq;
 using System.Xml.XPath;
-using LinqToDB.Extensions;
 using Montr.MasterData.Models;
 using Montr.MasterData.Services;
 
-namespace Montr.MasterData.Impl.Services
+namespace Montr.MasterData.Plugin.GovRu.Services
 {
-	// todo: move to ...Impl.GovRu project
 	public abstract class OkParser<TItem> : IClassifierParser where TItem : OkItem, new()
 	{
 		public const string DefaultNsUri = "http://zakupki.gov.ru/223fz/types/1";
@@ -72,7 +70,7 @@ namespace Montr.MasterData.Impl.Services
 
 			if (child != null)
 			{
-				var destinationType = typeof(T).ToNullableUnderlying();
+				var destinationType = Nullable.GetUnderlyingType(typeof(T)) ?? typeof(T);
 
 				if (destinationType == typeof(Guid))
 				{

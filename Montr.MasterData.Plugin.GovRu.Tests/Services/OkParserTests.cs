@@ -10,8 +10,9 @@ using Montr.MasterData.Commands;
 using Montr.MasterData.Impl.CommandHandlers;
 using Montr.MasterData.Impl.Services;
 using Montr.MasterData.Models;
+using Montr.MasterData.Plugin.GovRu.Services;
 
-namespace Montr.MasterData.Tests.Services
+namespace Montr.MasterData.Plugin.GovRu.Tests.Services
 {
 	[TestClass]
 	public class OkParserTests
