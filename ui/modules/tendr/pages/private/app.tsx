@@ -22,10 +22,10 @@ export class App extends React.Component {
 					<UserContextProvider>
 						<CompanyContextProvider>
 							<AuthCallbackHandler>
-								<Layout hasSider className="private-layout">
+								<Layout hasSider className="private-layout bg-white">
 
-									<Layout.Sider theme="light" breakpoint="lg" collapsible width="220"
-										style={{ height: "100vh" }}>
+									<Layout.Sider theme="light" collapsible={false} width="220"
+										style={{ overflow: 'auto', height: "100vh", position: 'fixed', left: 0 }}>
 										{/* <div className="logo" /> */}
 
 										<DataMenu
@@ -39,8 +39,8 @@ export class App extends React.Component {
 
 									</Layout.Sider>
 
-									<Layout className="bg-white">
-										<Layout.Content>
+									<Layout style={{ marginLeft: 220 }} className="bg-white">
+										<Layout.Content className="bg-white">
 
 											<Routes />
 

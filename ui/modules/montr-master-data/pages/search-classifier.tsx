@@ -3,7 +3,7 @@ import { Page, DataTable, PageHeader } from "@montr-core/components";
 import { NotificationService } from "@montr-core/services";
 import { RouteComponentProps } from "react-router";
 import { Constants } from "@montr-core/.";
-import { Icon, Button, Breadcrumb, Menu, Dropdown, Tree, Row, Col, Select, Radio } from "antd";
+import { Icon, Button, Breadcrumb, Menu, Dropdown, Tree, Row, Col, Select, Radio, Layout } from "antd";
 import { Link } from "react-router-dom";
 import { withCompanyContext, CompanyContextProps } from "@kompany/components";
 import { ClassifierService } from "../services";
@@ -181,6 +181,15 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 		// 2. прятать дерево
 		// 3. показывать или нет группы в таблице
 		// 4. показывать планарную таблицу без групп
+		let treeSelect;
+		if (trees && trees.length > 0) {
+			treeSelect = (
+				<Select defaultValue="default" size="small">
+					{trees.map(x => <Select.Option key={x.code}>{x.name || x.code}</Select.Option>)}
+				</Select>
+			);
+		}
+
 		let tree;
 		if (type.hierarchyType != "None") {
 
@@ -196,16 +205,13 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 				return null;
 			};
 
-			tree = <div style={{ overflowX: "auto" }}>
-				{trees && trees.length > 0 && <Select defaultValue="default" size="small">
-					{trees.map(x => <Select.Option key={x.code}>{x.name || x.code}</Select.Option>)}
-				</Select>}
+			tree = (
 				<Tree blockNode defaultExpandedKeys={["."]} onSelect={this.onTreeSelect}>
 					<Tree.TreeNode title={getRootName()} key=".">
 						{this.buildGroupsTree(groups)}
 					</Tree.TreeNode>
 				</Tree>
-			</div >;
+			);
 		}
 
 		const table = (
@@ -219,16 +225,14 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 		);
 
 		const content = (tree)
-			? (
-				<Row>
-					<Col span={6}>
-						{tree}
-					</Col>
-					<Col span={18}>
-						{table}
-					</Col>
-				</Row>
-			)
+			? (<>
+				<Layout.Sider width="360" theme="light" collapsible={false} style={{ overflowX: "auto", height: "100vh" }}>
+					{tree}
+				</Layout.Sider>
+				<Layout.Content className="bg-white" style={{ paddingTop: 0, paddingRight: 0 }}>
+					{table}
+				</Layout.Content>
+			</>)
 			: (table);
 
 		return (
@@ -260,15 +264,21 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 					</>
 				}>
 
-				<div style={{ textAlign: "right", paddingBottom: "8px" }}>
-					<Radio.Group defaultValue="0" size="small" onChange={this.onDepthChange}>
-						<Radio.Button value="0"><Icon type="folder" /> Группа</Radio.Button>
-						<Radio.Button value="1"><Icon type="cluster" /> Иерархия</Radio.Button>
-					</Radio.Group>
-				</div>
-
-				{content}
-
+				<Layout>
+					<Layout.Header className="bg-white" style={{ padding: "0" }}>
+						{treeSelect}
+						&#xA0;
+						<div style={{ float: "right" }}>
+							<Radio.Group defaultValue="0" size="small" onChange={this.onDepthChange}>
+								<Radio.Button value="0"><Icon type="folder" /> Группа</Radio.Button>
+								<Radio.Button value="1"><Icon type="cluster" /> Иерархия</Radio.Button>
+							</Radio.Group>
+						</div>
+					</Layout.Header>
+					<Layout hasSider className="bg-white">
+						{content}
+					</Layout>
+				</Layout>
 			</Page>
 		);
 	}
