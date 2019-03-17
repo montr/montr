@@ -16,6 +16,9 @@ export class App extends React.Component {
 	}
 
 	render() {
+
+		const siderWidth = 220;
+
 		return (
 			<Router>
 				<LocaleProvider locale={ru_RU}>
@@ -24,7 +27,7 @@ export class App extends React.Component {
 							<AuthCallbackHandler>
 								<Layout hasSider className="private-layout bg-white">
 
-									<Layout.Sider theme="light" collapsible={false} width="220"
+									<Layout.Sider theme="light" collapsible={false} width={siderWidth}
 										style={{ overflow: 'auto', height: "100vh", position: 'fixed', left: 0 }}>
 										{/* <div className="logo" /> */}
 
@@ -39,7 +42,7 @@ export class App extends React.Component {
 
 									</Layout.Sider>
 
-									<Layout style={{ marginLeft: 220 }} className="bg-white">
+									<Layout style={{ marginLeft: siderWidth }} className="bg-white">
 										<Layout.Content className="bg-white">
 
 											<Routes />

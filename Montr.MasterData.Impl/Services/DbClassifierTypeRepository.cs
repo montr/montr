@@ -42,7 +42,8 @@ namespace Montr.MasterData.Impl.Services
 						Code = x.Code,
 						Name = x.Name,
 						HierarchyType = Enum.Parse<HierarchyType>(x.HierarchyType),
-						IsSystem = true
+						IsSystem = true,
+						Url = $"/classifiers/{x.Code}/"
 					})
 					.ToListAsync(cancellationToken);
 

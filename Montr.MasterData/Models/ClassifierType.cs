@@ -17,6 +17,8 @@ namespace Montr.MasterData.Models
 		public bool IsSystem { get; set; }
 
 		public HierarchyType HierarchyType { get; set; }
+
+		public string Url { get; set; }
 	}
 
 	public enum HierarchyType

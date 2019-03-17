@@ -103,7 +103,7 @@ namespace Montr.MasterData.Impl.Services
 						StatusCode = x.StatusCode,
 						Code = x.Code,
 						Name = x.Name,
-						// Url = $"/classifiers/{x.ConfigCode}/edit/{x.Uid}"
+						Url = $"/classifiers/{type.Code}/edit/{x.Uid}"
 					})
 					.ToListAsync(cancellationToken);
 

@@ -18,6 +18,7 @@ interface IProps extends CompanyContextProps, RouteComponentProps<IRouteProps> {
 }
 
 interface IState {
+	types: IClassifierType[];
 	type: IClassifierType;
 	trees: IClassifierTree[];
 	groups: IClassifierGroup[];
@@ -34,6 +35,7 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 		super(props);
 
 		this.state = {
+			types: [],
 			type: {
 				hierarchyType: "None"
 			},
@@ -65,7 +67,8 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 		const { currentCompany } = this.props,
 			{ typeCode } = this.props.match.params;
 
-		const type = await this.fetchClassifierType(typeCode);
+		const types = await this.fetchClassifierType();
+		const type = types.find(x => x.code == typeCode);
 
 		let trees: IClassifierTree[] = [],
 			groups: IClassifierGroup[] = [];
@@ -83,6 +86,7 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 		}
 
 		this.setState({
+			types: types,
 			type: type,
 			trees: trees,
 			groups: groups,
@@ -94,14 +98,14 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 		});
 	}
 
-	private fetchClassifierType = async (typeCode: string): Promise<IClassifierType> => {
+	private fetchClassifierType = async (): Promise<IClassifierType[]> => {
 		const { currentCompany } = this.props;
 
 		if (!currentCompany) return null;
 
 		const data = await this._classifierService.types(currentCompany.uid);
 
-		return data.rows.find(x => x.code == typeCode);
+		return data.rows;
 	}
 
 	private fetchClassifierTrees = async (typeCode: string): Promise<IClassifierTree[]> => {
@@ -164,17 +168,9 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 
 	render() {
 		const { currentCompany } = this.props,
-			{ type, trees, groups, postParams } = this.state;
+			{ types, type, trees, groups, postParams } = this.state;
 
 		if (!currentCompany || !type) return null;
-
-		const menu = (
-			<Menu>
-				<Menu.Item key="0">
-					<Link to={`/classifiers/${type.code}`}>{type.name}</Link>
-				</Menu.Item>
-			</Menu>
-		);
 
 		// todo: настройки
 		// 1. как выглядит дерево - списком или деревом
@@ -235,34 +231,43 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 			</>)
 			: (table);
 
+
+		const typeSelectorMenu = (
+			<Menu>
+				{types.map(x => <Menu.Item key={x.code}>
+					<Link to={`/classifiers/${x.code}/`}>{x.name}</Link>
+				</Menu.Item>)}
+			</Menu>
+		);
+
+		const typeSelector = (
+			<Dropdown overlay={typeSelectorMenu} trigger={['click']}>
+				<a className="ant-dropdown-link" href="#">
+					{type.name} <Icon type="down" />
+				</a>
+			</Dropdown>
+		);
+
 		return (
 			<Page
-				title={
-					<>
-						<Breadcrumb>
-							<Breadcrumb.Item><Icon type="home" /></Breadcrumb.Item>
-							<Breadcrumb.Item><Link to={`/classifiers`}>Справочники</Link></Breadcrumb.Item>
-							<Breadcrumb.Item>
-								<Dropdown overlay={menu} trigger={['click']}>
-									<a className="ant-dropdown-link" href="#">
-										{type.name} <Icon type="down" />
-									</a>
-								</Dropdown>
-							</Breadcrumb.Item>
-						</Breadcrumb>
+				title={<>
+					<Breadcrumb>
+						<Breadcrumb.Item><Icon type="home" /></Breadcrumb.Item>
+						<Breadcrumb.Item><Link to={`/classifiers/`}>Справочники</Link></Breadcrumb.Item>
+						<Breadcrumb.Item>
+							{typeSelector}
+						</Breadcrumb.Item>
+					</Breadcrumb>
 
-						<PageHeader>{type.name}</PageHeader>
-					</>
-				}
-				toolbar={
-					<>
-						<Link to={`/classifiers/${type.code}/new`}>
-							<Button type="primary"><Icon type="plus" /> Добавить</Button>
-						</Link>
-						&#xA0;<Button onClick={this.delete}><Icon type="delete" /> Удалить</Button>
-						&#xA0;<Button onClick={this.export}><Icon type="export" /> Экспорт</Button>
-					</>
-				}>
+					<PageHeader>{type.name}</PageHeader>
+				</>}
+				toolbar={<>
+					<Link to={`/classifiers/${type.code}/new`}>
+						<Button type="primary"><Icon type="plus" /> Добавить</Button>
+					</Link>
+					&#xA0;<Button onClick={this.delete}><Icon type="delete" /> Удалить</Button>
+					&#xA0;<Button onClick={this.export}><Icon type="export" /> Экспорт</Button>
+				</>}>
 
 				<Layout>
 					<Layout.Header className="bg-white" style={{ padding: "0" }}>

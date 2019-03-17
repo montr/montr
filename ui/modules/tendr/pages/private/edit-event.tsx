@@ -161,7 +161,7 @@ export class EditEvent extends React.Component<IEditEventProps, IEditEventState>
 		return (
 			<Page title={this.formatPageTitle()} toolbar={toolbar}>
 
-				<h2 title={data.name} className="single-line-text">{data.name}</h2>
+				<h3 title={data.name} className="single-line-text">{data.name}</h3>
 
 				<Tabs size="small">
 					{dataView && dataView.panes && dataView.panes.map(pane => {
