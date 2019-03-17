@@ -88,10 +88,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 
 								await stmt.InsertAsync(cancellationToken);
 
-								if (dbParentItem != null)
-								{
-									await closure.Insert(itemUid, dbParentItem.Uid, cancellationToken);
-								}
+								await closure.Insert(itemUid, dbParentItem?.Uid, cancellationToken);
 							}
 							else
 							{
