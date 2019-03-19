@@ -43,7 +43,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 
 			var type = await _classifierTypeService.GetClassifierType(request.CompanyUid, request.TypeCode, cancellationToken);
 			
-			using (var scope = _unitOfWorkFactory.Create())
+			// using (var scope = _unitOfWorkFactory.Create())
 			{
 				using (var db = _dbContextFactory.Create())
 				{
@@ -53,7 +53,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 
 					if (data.Items != null)
 					{
-						var sortedItems = DirectedAcyclicGraphVerifier.Sort(data.Items,
+						var sortedItems = DirectedAcyclicGraphVerifier.TopologicalSort(data.Items,
 							node => node.Code, node => node.ParentCode != null ? new [] { node.ParentCode } : null );
 
 						foreach (var item in sortedItems)
@@ -70,7 +70,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 								var stmt = db.GetTable<DbClassifier>()
 									.Value(x => x.Uid, itemUid)
 									.Value(x => x.TypeUid, type.Uid)
-									.Value(x => x.StatusCode, ClassifierStatusCode.Draft)
+									.Value(x => x.StatusCode, item.StatusCode)
 									.Value(x => x.Code, item.Code)
 									.Value(x => x.Name, item.Name);
 
@@ -101,7 +101,12 @@ namespace Montr.MasterData.Impl.CommandHandlers
 								if (dbItem.Name != item.Name)
 								{
 									stmt = stmt.Set(x => x.Name, item.Name);
+									changed = true;
+								}
 
+								if (dbItem.StatusCode != item.StatusCode)
+								{
+									stmt = stmt.Set(x => x.StatusCode, item.StatusCode);
 									changed = true;
 								}
 
@@ -138,7 +143,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 
 						if (data.Groups != null)
 						{
-							var sortedGroups = DirectedAcyclicGraphVerifier.Sort(data.Groups,
+							var sortedGroups = DirectedAcyclicGraphVerifier.TopologicalSort(data.Groups,
 								node => node.Code, node => node.ParentCode != null ? new [] { node.ParentCode } : null );
 
 							foreach (var group in sortedGroups)
@@ -229,7 +234,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 					}
 				}
 
-				scope.Commit();
+				// scope.Commit();
 			}
 
 			return Guid.Empty;

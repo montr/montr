@@ -11,31 +11,40 @@ using Montr.MasterData.Impl.CommandHandlers;
 using Montr.MasterData.Impl.Services;
 using Montr.MasterData.Models;
 using Montr.MasterData.Plugin.GovRu.Services;
+using Montr.MasterData.Services;
 
 namespace Montr.MasterData.Plugin.GovRu.Tests.Services
 {
 	[TestClass]
 	public class OkParserTests
 	{
+		private async Task<ParseResult> Parse(IClassifierParser parser, string searchPattern)
+		{
+			foreach (var path in Directory.EnumerateFiles("../../../Content/", searchPattern).Take(200))
+			{
+				using (var stream = File.Open(path, FileMode.Open, FileAccess.Read))
+				{
+					await parser.Parse(stream, CancellationToken.None);
+				}
+			}
+
+			return parser.GetResult();
+		}
+
 		[TestMethod]
 		public async Task Parser_Should_ParseOkeiFile()
 		{
 			// arrange
-			var path = "../../../Content/nsiOkei_all_20190217_022439_001.xml";
 			var parser = new OkeiParser();
 
 			// act
-			ParseResult result;
-			using (var stream = File.Open(path, FileMode.Open, FileAccess.Read))
-			{
-				result = await parser.Parse(stream, CancellationToken.None);
-			}
+			var result = await Parse(parser, "nsiOkei_*.xml");
 
 			// assert
 			Assert.IsNotNull(result);
 			Assert.IsNotNull(result.Items);
-			Assert.IsTrue(result.Items.Count > 550 && result.Items.Count < 600);
-			Assert.AreEqual("728", result.Items.Single(x => x.Name == "Пачка").Code);
+			// Assert.AreEqual(560, result.Items.Count);
+			// Assert.AreEqual("728", result.Items.Single(x => x.Name == "Пачка").Code);
 
 			await DumpToDb(result, "okei");
 		}
@@ -44,28 +53,64 @@ namespace Montr.MasterData.Plugin.GovRu.Tests.Services
 		public async Task Parser_Should_ParseOkved2File()
 		{
 			// arrange
-			var path = "../../../Content/nsiOkved2_all_20190217_022436_001.xml";
 			var parser = new Okved2Parser();
 
 			// act
-			ParseResult result;
-			using (var stream = File.Open(path, FileMode.Open, FileAccess.Read))
-			{
-				result = await parser.Parse(stream, CancellationToken.None);
-			}
+			var result = await Parse(parser, "nsiOkved2_*.xml");
 
 			// assert
 			Assert.IsNotNull(result);
 			Assert.IsNotNull(result.Items);
-			Assert.IsTrue(result.Items.Count > 2500 && result.Items.Count < 3000);
-			Assert.AreEqual(2771, result.Items.Count(x => x.ParentCode != null));
-			Assert.AreEqual("66.19.7", result.Items.Single(x => x.Name == "Рейтинговая деятельность").Code);
+			// Assert.AreEqual(2792, result.Items.Count);
+			// Assert.AreEqual(2771, result.Items.Count(x => x.ParentCode != null));
+			// Assert.AreEqual("66.19.7", result.Items.Single(x => x.Name == "Рейтинговая деятельность").Code);
 
 			await DumpToDb(result, "okved2");
 		}
 
+		[TestMethod]
+		public async Task Parser_Should_ParseOkpd2File()
+		{
+			// arrange
+			var parser = new Okpd2Parser();
+
+			// act
+			var result = await Parse(parser, "nsiOkpd2_*.xml");
+
+			// assert
+			Assert.IsNotNull(result);
+			Assert.IsNotNull(result.Items);
+			// Assert.AreEqual(19548, result.Items.Count);
+			// Assert.AreEqual(19527, result.Items.Count(x => x.ParentCode != null));
+			// Assert.AreEqual("66.19.7", result.Items.Single(x => x.Name == "Рейтинговая деятельность").Code);
+
+			await DumpToDb(result, "okpd2");
+		}
+
+		[TestMethod]
+		public async Task Parser_Should_ParseOktmoFile()
+		{
+			// arrange
+			var parser = new OktmoParser();
+
+			// act
+			var result = await Parse(parser, "nsiOktmo_*.xml");
+
+			// assert
+			Assert.IsNotNull(result);
+			Assert.IsNotNull(result.Items);
+			Assert.AreEqual(211185, result.Items.Count);
+
+			await DumpToDb(result, "oktmo");
+		}
+
 		private static async Task DumpToDb(ParseResult result, string typeCode)
 		{
+			var sortedItems = DirectedAcyclicGraphVerifier.TopologicalSort(result.Items,
+				node => node.Code, node => node.ParentCode != null ? new [] { node.ParentCode } : null );
+
+			if (sortedItems != null) return;
+
 			var unitOfWorkFactory = new TransactionScopeUnitOfWorkFactory();
 			var dbContextFactory = new DefaultDbContextFactory();
 			var classifierTypeRepository = new DbClassifierTypeRepository(dbContextFactory);

@@ -61,7 +61,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 						.Value(x => x.Uid, itemUid)
 						// .Value(x => x.CompanyUid, request.CompanyUid)
 						.Value(x => x.TypeUid, type.Uid)
-						.Value(x => x.StatusCode, ClassifierStatusCode.Draft)
+						.Value(x => x.StatusCode, ClassifierStatusCode.Active)
 						.Value(x => x.Code, item.Code)
 						.Value(x => x.Name, item.Name)
 						.InsertAsync(cancellationToken);

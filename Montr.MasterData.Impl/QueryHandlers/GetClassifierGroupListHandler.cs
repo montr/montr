@@ -50,7 +50,7 @@ namespace Montr.MasterData.Impl.QueryHandlers
 					dbGroupsByUid = await all.ToDictionaryAsync(x => x.Uid, x => x, cancellationToken);
 				}
 
-				var sorted = DirectedAcyclicGraphVerifier.Sort(dbGroupsByUid.Values,
+				var sorted = DirectedAcyclicGraphVerifier.TopologicalSort(dbGroupsByUid.Values,
 					node => node.Uid, node => node.ParentUid != null ? new [] { node.ParentUid } : null );
 
 				groupsByCode = sorted.ToDictionary(x => x.Code, x =>
@@ -81,12 +81,13 @@ namespace Montr.MasterData.Impl.QueryHandlers
 							where item.TypeUid == type.Uid
 							select item.ParentUid).Distinct()
 						join item in db.GetTable<DbClassifier>() on parentUid equals item.Uid
+						orderby item.StatusCode, item.Code, item.Name
 						select item;
 
 					dbItemByUid = await all.ToDictionaryAsync(x => x.Uid, x => x, cancellationToken);
 				}
 
-				var sorted = DirectedAcyclicGraphVerifier.Sort(dbItemByUid.Values,
+				var sorted = DirectedAcyclicGraphVerifier.TopologicalSort(dbItemByUid.Values,
 					node => node.Uid, node => node.ParentUid != null ? new [] { node.ParentUid } : null );
 
 				groupsByCode = sorted.ToDictionary(x => x.Code, x =>

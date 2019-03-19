@@ -7,6 +7,10 @@ namespace Montr.MasterData.Services
 {
 	public interface IClassifierParser
 	{
-		Task<ParseResult> Parse(Stream stream, CancellationToken cancellationToken);
+		void Reset();
+
+		Task Parse(Stream stream, CancellationToken cancellationToken);
+
+		ParseResult GetResult();
 	}
 }

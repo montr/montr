@@ -24,6 +24,8 @@ ALTER TABLE public.classifier_type
     ON DELETE NO ACTION;
 
 /*
+-- select uuid_generate_v1()
+
 insert into classifier_type (uid, company_uid, code, name, hierarchy_type) values (
 	'7d5d9c56-3ddc-11e9-8c57-00ff279ba9e1',
 	'6465dd4c-8664-4433-ba6a-14effd40ebed', 'okei', 'ОКЕИ — Общероссийский классификатор единиц измерения',
@@ -42,6 +44,11 @@ insert into classifier_type (uid, company_uid, code, name, hierarchy_type) value
 insert into classifier_type (uid, company_uid, code, name, hierarchy_type) values (
 	'9afcae3c-3ddc-11e9-8c5a-00ff279ba9e1',
 	'6465dd4c-8664-4433-ba6a-14effd40ebed', 'okato', 'ОКАТО — Общероссийский классификатор объектов административно-территориального деления',
+	'Items'
+);
+insert into classifier_type (uid, company_uid, code, name, hierarchy_type) values (
+	'ba229b6e-49bc-11e9-8cc9-00ff279ba9e1',
+	'6465dd4c-8664-4433-ba6a-14effd40ebed', 'oktmo', 'ОКТМО — Общероссийский классификатор территорий муниципальных образований',
 	'Items'
 );
 */
