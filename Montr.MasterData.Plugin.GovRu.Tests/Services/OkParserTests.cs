@@ -106,11 +106,6 @@ namespace Montr.MasterData.Plugin.GovRu.Tests.Services
 
 		private static async Task DumpToDb(ParseResult result, string typeCode)
 		{
-			var sortedItems = DirectedAcyclicGraphVerifier.TopologicalSort(result.Items,
-				node => node.Code, node => node.ParentCode != null ? new [] { node.ParentCode } : null );
-
-			if (sortedItems != null) return;
-
 			var unitOfWorkFactory = new TransactionScopeUnitOfWorkFactory();
 			var dbContextFactory = new DefaultDbContextFactory();
 			var classifierTypeRepository = new DbClassifierTypeRepository(dbContextFactory);
