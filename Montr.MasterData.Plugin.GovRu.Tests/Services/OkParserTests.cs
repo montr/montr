@@ -43,7 +43,7 @@ namespace Montr.MasterData.Plugin.GovRu.Tests.Services
 			// assert
 			Assert.IsNotNull(result);
 			Assert.IsNotNull(result.Items);
-			// Assert.AreEqual(560, result.Items.Count);
+			Assert.AreEqual(561, result.Items.Count);
 			// Assert.AreEqual("728", result.Items.Single(x => x.Name == "Пачка").Code);
 
 			await DumpToDb(result, "okei");
@@ -61,7 +61,7 @@ namespace Montr.MasterData.Plugin.GovRu.Tests.Services
 			// assert
 			Assert.IsNotNull(result);
 			Assert.IsNotNull(result.Items);
-			// Assert.AreEqual(2792, result.Items.Count);
+			Assert.AreEqual(2794, result.Items.Count);
 			// Assert.AreEqual(2771, result.Items.Count(x => x.ParentCode != null));
 			// Assert.AreEqual("66.19.7", result.Items.Single(x => x.Name == "Рейтинговая деятельность").Code);
 
@@ -80,7 +80,7 @@ namespace Montr.MasterData.Plugin.GovRu.Tests.Services
 			// assert
 			Assert.IsNotNull(result);
 			Assert.IsNotNull(result.Items);
-			// Assert.AreEqual(19548, result.Items.Count);
+			Assert.AreEqual(57561, result.Items.Count);
 			// Assert.AreEqual(19527, result.Items.Count(x => x.ParentCode != null));
 			// Assert.AreEqual("66.19.7", result.Items.Single(x => x.Name == "Рейтинговая деятельность").Code);
 
