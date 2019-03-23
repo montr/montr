@@ -98,7 +98,7 @@ namespace Montr.MasterData.Plugin.GovRu.Services
 
 			itemMap = items.ToLookup(x => x.Code)
 				.ToDictionary(x => x.Key, g => g
-					.OrderBy(i => i.BusinessStatus == BusinessStatus.Included)
+					.OrderBy(i => i.BusinessStatus == BusinessStatus.Included ? 0 : 1)
 					.ThenByDescending(i => i.ChangeDateTime)
 					.First());
 

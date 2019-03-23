@@ -52,8 +52,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 
 			ImportResult result;
 
-			if ((_existingItems == null || _existingItems.Count == 0) &&
-			    (_existingGroups == null || _existingGroups.Count == 0))
+			if (_existingItems.IsNullOrEmpty() && _existingGroups.IsNullOrEmpty())
 			{
 				result = BulkImport(request);
 			}
@@ -117,6 +116,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 			var inactiveItems = new Dictionary<string, DbClassifier>();
 			var groups = new Dictionary<string, DbClassifierGroup>();
 			var links = new List<DbClassifierLink>();
+			var closures = new ClosureMap();
 
 			if (request.Data.Items != null)
 			{
@@ -127,27 +127,35 @@ namespace Montr.MasterData.Impl.CommandHandlers
 
 				foreach (var item in sortedItems)
 				{
-					var items =
-						item.StatusCode == ClassifierStatusCode.Active
-							? activeItems : inactiveItems;
+					var itemUid = Guid.NewGuid();
 
 					Guid? parentUid = null;
 
-					if (item.ParentCode != null)
+					if (_type.HierarchyType == HierarchyType.Items)
 					{
-						if (activeItems.TryGetValue(item.ParentCode, out var parent))
+						if (item.ParentCode != null)
 						{
-							parentUid = parent.Uid;
+							if (activeItems.TryGetValue(item.ParentCode, out var parent))
+							{
+								parentUid = parent.Uid;
+							}
+							else if (inactiveItems.TryGetValue(item.ParentCode, out parent))
+							{
+								parentUid = parent.Uid;
+							}
 						}
-						else if (inactiveItems.TryGetValue(item.ParentCode, out parent))
-						{
-							parentUid = parent.Uid;
-						}
+
+						closures.Insert(itemUid, parentUid);
 					}
+
+					var items =
+						item.StatusCode == ClassifierStatusCode.Active
+							? activeItems
+							: inactiveItems;
 
 					items[item.Code] = new DbClassifier
 					{
-						Uid = Guid.NewGuid(),
+						Uid = itemUid,
 						TypeUid = _type.Uid,
 						StatusCode = item.StatusCode,
 						Code = item.Code,
@@ -168,14 +176,25 @@ namespace Montr.MasterData.Impl.CommandHandlers
 
 					foreach (var group in sortedGroups)
 					{
+						var groupUid = Guid.NewGuid();
+
+						Guid? parentUid = null;
+
+						if (group.ParentCode != null)
+						{
+							parentUid = groups[group.ParentCode].Uid;
+						}
+
 						groups[group.Code] = new DbClassifierGroup
 						{
-							Uid = Guid.NewGuid(),
+							Uid = groupUid,
 							TreeUid = _tree.Uid,
 							Code = group.Code,
 							Name = group.Name,
-							ParentUid = group.ParentCode != null ? groups[group.ParentCode].Uid : (Guid?) null
+							ParentUid = parentUid
 						};
+
+						closures.Insert(groupUid, parentUid);
 					}
 				}
 
@@ -199,6 +218,8 @@ namespace Montr.MasterData.Impl.CommandHandlers
 			using (var db = _dbContextFactory.Create())
 			{
 				var copyOptions = new BulkCopyOptions { BulkCopyType = BulkCopyType.ProviderSpecific };
+
+				// todo: move heavy operations outside of open connection
 
 				if (activeItems.Values.Count > 0 || inactiveItems.Values.Count > 0)
 				{
@@ -224,6 +245,8 @@ namespace Montr.MasterData.Impl.CommandHandlers
 				{
 					db.BulkCopy(copyOptions, links);
 				}
+
+				db.BulkCopy(copyOptions, closures.GetAll());
 			}
 
 			return new ImportResult();
@@ -425,6 +448,49 @@ namespace Montr.MasterData.Impl.CommandHandlers
 			}
 
 			return new ImportResult { Errors = errors };
+		}
+
+		private class ClosureMap
+		{
+			readonly IDictionary<Guid, IList<DbClassifierClosure>> _closuresByChildUid = new Dictionary<Guid, IList<DbClassifierClosure>>();
+
+			public IEnumerable<DbClassifierClosure> GetAll()
+			{
+				return _closuresByChildUid.SelectMany(x => x.Value);
+			}
+
+			public long Insert(Guid itemUid, Guid? parentUid)
+			{
+				// insert self closure with level 0
+				var itemClosures = new List<DbClassifierClosure>
+				{
+					new DbClassifierClosure
+					{
+						ParentUid = itemUid,
+						ChildUid = itemUid,
+						Level = 0
+					}
+				};
+
+				if (parentUid.HasValue)
+				{
+					// insert parent closures with level + 1
+					if (_closuresByChildUid.TryGetValue(parentUid.Value, out var parentClosures))
+					{
+						itemClosures.AddRange(parentClosures
+							.Select(x => new DbClassifierClosure
+							{
+								ParentUid = x.ParentUid,
+								ChildUid = itemUid,
+								Level = (short) (x.Level + 1)
+							}));
+					}
+				}
+
+				_closuresByChildUid.Add(itemUid, itemClosures);
+
+				return itemClosures.Count;
+			}
 		}
 
 		private class ClosureTable
