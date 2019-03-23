@@ -56,11 +56,7 @@ namespace Montr.MasterData.Plugin.GovRu.Services
 
 		public ParseResult GetResult()
 		{
-			var result = Convert(
-				_items // .Where(x => x.BusinessStatus == BusinessStatus.Included).ToList()
-			);
-
-			return result;
+			return Convert(_items, out _);
 		}
 
 		protected virtual TItem Parse(XElement element)
@@ -95,36 +91,41 @@ namespace Montr.MasterData.Plugin.GovRu.Services
 			return default(T);
 		}
 
-		protected virtual ParseResult Convert(IList<TItem> items)
+		protected virtual ParseResult Convert(IList<TItem> items, out IDictionary<string, TItem> itemMap)
 		{
+			// take last modified item if multiple items with same code exists
+			// (only one item with the same code can exists in classifier)
+
+			itemMap = items.ToLookup(x => x.Code)
+				.ToDictionary(x => x.Key, g => g
+					.OrderBy(i => i.BusinessStatus == BusinessStatus.Included)
+					.ThenByDescending(i => i.ChangeDateTime)
+					.First());
+
 			var result = new ParseResult
 			{
 				Items = new List<Classifier>()
 			};
 
-			// take last modified item if multiple items with same code exists
-			var dict = items.ToLookup(x => x.Code)
-				.ToDictionary(x => x.Key,
-					g => g.OrderBy(i => i.BusinessStatus == BusinessStatus.Included ? 0 : 1)
-						.ThenByDescending(i => i.ChangeDateTime)
-						.First());
-
-			foreach (var item in dict.Values)
+			foreach (var item in itemMap.Values)
 			{
-				var @class = new Classifier
+				result.Items.Add(new Classifier
 				{
 					Code = item.Code,
 					Name = item.Name,
-					StatusCode = item.BusinessStatus == BusinessStatus.Included
-						? ClassifierStatusCode.Active
-						: ClassifierStatusCode.Inactive,
+					StatusCode = ToStatusCode(item.BusinessStatus),
 					ParentCode = item.ParentCode
-				};
-
-				result.Items.Add(@class);
+				});
 			}
 
 			return result;
+		}
+
+		protected string ToStatusCode(string businessStatus)
+		{
+			return businessStatus == BusinessStatus.Included
+				? ClassifierStatusCode.Active
+				: ClassifierStatusCode.Inactive;
 		}
 	}
 }

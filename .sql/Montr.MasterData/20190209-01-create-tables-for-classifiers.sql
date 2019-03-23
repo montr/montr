@@ -1,9 +1,9 @@
--- DROP TABLE public.classifier_tree;
+-- DROP TABLE public.classifier_tree CASCADE;
 -- SELECT * FROM information_schema.tables WHERE table_name = 'classifier_tree'
 
 CREATE TABLE IF NOT EXISTS public.classifier_tree
 (
-	uid uuid NOT NULL DEFAULT uuid_generate_v1(), 
+	uid uuid NOT NULL, -- DEFAULT uuid_generate_v1(), 
 	type_uid uuid NOT NULL,
     code character varying(32) NOT NULL COLLATE pg_catalog."default",
     name character varying(2048) COLLATE pg_catalog."default", 
@@ -22,12 +22,12 @@ ALTER TABLE public.classifier_tree
     ON UPDATE NO ACTION
     ON DELETE NO ACTION;
 
--- DROP TABLE public.classifier_group;
+-- DROP TABLE public.classifier_group CASCADE;
 -- SELECT * FROM information_schema.tables WHERE table_name = 'classifier_group'
 
 CREATE TABLE IF NOT EXISTS public.classifier_group
 (
-	uid uuid NOT NULL DEFAULT uuid_generate_v1(), 
+	uid uuid NOT NULL, -- DEFAULT uuid_generate_v1(), 
 	tree_uid uuid NOT NULL,
 	parent_uid uuid NULL,
     code character varying(32) NOT NULL COLLATE pg_catalog."default", 
@@ -53,12 +53,12 @@ ALTER TABLE public.classifier_group
     ON UPDATE NO ACTION
     ON DELETE NO ACTION;
 
--- DROP TABLE public.classifier;
+-- DROP TABLE public.classifier CASCADE;
 -- SELECT * FROM information_schema.tables WHERE table_name = 'classifier'
 
 CREATE TABLE IF NOT EXISTS public.classifier
 (
-	uid uuid NOT NULL DEFAULT uuid_generate_v1(), 
+	uid uuid NOT NULL, -- DEFAULT uuid_generate_v1(), 
 	type_uid uuid NOT NULL,
     status_code character varying(16) NOT NULL COLLATE pg_catalog."default", 
 	parent_uid uuid NULL,
@@ -127,4 +127,3 @@ WITH (
 );
 
 GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE public.classifier_closure TO web;
-	

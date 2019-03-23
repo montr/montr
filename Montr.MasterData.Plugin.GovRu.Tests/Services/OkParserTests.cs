@@ -42,9 +42,9 @@ namespace Montr.MasterData.Plugin.GovRu.Tests.Services
 
 			// assert
 			Assert.IsNotNull(result);
-			Assert.IsNotNull(result.Items);
 			Assert.AreEqual(561, result.Items.Count);
-			// Assert.AreEqual("728", result.Items.Single(x => x.Name == "Пачка").Code);
+			Assert.AreEqual(28, result.Groups.Count);
+			Assert.AreEqual(561, result.Links.Count);
 
 			await DumpToDb(result, "okei");
 		}

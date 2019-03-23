@@ -1,13 +1,17 @@
 ﻿using System;
+using System.Diagnostics;
 using LinqToDB;
 using LinqToDB.Mapping;
 
 namespace Montr.MasterData.Impl.Entities
 {
 	[Table(Name = "classifier_group")]
+	[DebuggerDisplay("{" + nameof(DebuggerDisplay) + ",nq}")]
 	public class DbClassifierGroup
 	{
-		[Column(Name = "uid"), DataType(DataType.Guid), PrimaryKey, Identity]
+		private string DebuggerDisplay => $"{Code}, {Name}";
+
+		[Column(Name = "uid"), DataType(DataType.Guid), PrimaryKey]
 		public Guid Uid { get; set; }
 
 		[Column(Name = "tree_uid"), DataType(DataType.Guid), NotNull]

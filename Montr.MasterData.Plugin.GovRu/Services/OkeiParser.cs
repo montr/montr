@@ -23,16 +23,16 @@ namespace Montr.MasterData.Plugin.GovRu.Services
 			return item;
 		}
 
-		protected override ParseResult Convert(IList<OkeiItem> items)
+		protected override ParseResult Convert(IList<OkeiItem> items, out IDictionary<string, OkeiItem> itemMap)
 		{
-			var result = base.Convert(items);
+			var result = base.Convert(items, out itemMap);
 
 			var sections = new Dictionary<string, ClassifierGroup>();
 			var groups = new Dictionary<string, ClassifierGroup>();
 
 			var itemsInGroups = new List<ClassifierLink>();
 
-			foreach (var item in items)
+			foreach (var item in itemMap.Values)
 			{
 				var sectionCode = item.SectionCode;
 				var groupCode = item.SectionCode + "." + item.GroupCode;
@@ -59,7 +59,8 @@ namespace Montr.MasterData.Plugin.GovRu.Services
 				itemsInGroups.Add(new ClassifierLink
 				{
 					GroupCode = groupCode,
-					ItemCode = item.Code
+					ItemCode = item.Code,
+					ItemStatusCode = ToStatusCode(item.BusinessStatus) 
 				});
 			}
 

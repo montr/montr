@@ -14,6 +14,7 @@ namespace Montr.MasterData.Models
 
 		public string Name { get; set; }
 
+		// todo: remove, use lazy children load
 		public IList<ClassifierGroup> Children { get; set; }
 	}
 }

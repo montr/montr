@@ -7,7 +7,7 @@ namespace Montr.MasterData.Impl.Entities
 	[Table(Name = "classifier_tree")]
 	public class DbClassifierTree
 	{
-		[Column(Name = "uid"), DataType(DataType.Guid), PrimaryKey, Identity]
+		[Column(Name = "uid"), DataType(DataType.Guid), PrimaryKey]
 		public Guid Uid { get; set; }
 
 		[Column(Name = "type_uid"), DataType(DataType.Guid), NotNull]
