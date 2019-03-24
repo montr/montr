@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 
 namespace Montr.MasterData.Models
 {
@@ -13,8 +12,5 @@ namespace Montr.MasterData.Models
 		public string ParentCode { get; set; }
 
 		public string Name { get; set; }
-
-		// todo: remove, use lazy children load
-		public IList<ClassifierGroup> Children { get; set; }
 	}
 }

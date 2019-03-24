@@ -3,12 +3,13 @@ import { Page, DataTable, PageHeader } from "@montr-core/components";
 import { NotificationService } from "@montr-core/services";
 import { RouteComponentProps } from "react-router";
 import { Constants } from "@montr-core/.";
-import { Icon, Button, Breadcrumb, Menu, Dropdown, Tree, Row, Col, Select, Radio, Layout } from "antd";
+import { Icon, Button, Breadcrumb, Menu, Dropdown, Tree, Select, Radio, Layout } from "antd";
 import { Link } from "react-router-dom";
 import { withCompanyContext, CompanyContextProps } from "@kompany/components";
 import { ClassifierService } from "../services";
 import { IClassifierType, IClassifierTree, IClassifierGroup } from "../models";
 import { RadioChangeEvent } from "antd/lib/radio";
+import { AntTreeNode } from "antd/lib/tree";
 
 interface IRouteProps {
 	typeCode: string;
@@ -20,8 +21,9 @@ interface IProps extends CompanyContextProps, RouteComponentProps<IRouteProps> {
 interface IState {
 	types: IClassifierType[];
 	type: IClassifierType;
-	trees: IClassifierTree[];
-	groups: IClassifierGroup[];
+	trees?: IClassifierTree[];
+	treeCode?: string,
+	groups?: IClassifierGroup[];
 	selectedRowKeys: string[] | number[];
 	postParams: any;
 }
@@ -39,8 +41,6 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 			type: {
 				hierarchyType: "None"
 			},
-			trees: [],
-			groups: [],
 			selectedRowKeys: [],
 			postParams: {
 				depth: "0"
@@ -67,41 +67,46 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 		const { currentCompany } = this.props,
 			{ typeCode } = this.props.match.params;
 
-		const types = await this.fetchClassifierType();
+		if (!currentCompany) return;
+
+		const types = await this.fetchClassifierTypes();
 		const type = types.find(x => x.code == typeCode);
 
 		let trees: IClassifierTree[] = [],
+			treeCode: string,
 			groups: IClassifierGroup[] = [];
 
-		if (type && type.hierarchyType == "Groups") {
-			trees = await this.fetchClassifierTrees(typeCode);
+		if (type) {
+			if (type.hierarchyType == "Groups") {
+				trees = await this.fetchClassifierTrees(typeCode);
 
-			if (trees && trees.length > 0) {
-				groups = await this.fetchClassifierGroups(typeCode, trees[0].code)
+				if (trees && trees.length > 0) {
+					treeCode = trees[0].code;
+					groups = await this.fetchClassifierGroups(typeCode, treeCode)
+				}
 			}
-		}
 
-		if (type && type.hierarchyType == "Items") {
-			groups = await this.fetchClassifierGroups(typeCode, null)
-		}
-
-		this.setState({
-			types: types,
-			type: type,
-			trees: trees,
-			groups: groups,
-			postParams: {
-				companyUid: currentCompany ? currentCompany.uid : null,
-				typeCode: typeCode,
-				treeCode: (trees && trees.length > 0) ? trees[0].code : null,
+			if (type.hierarchyType == "Items") {
+				groups = await this.fetchClassifierGroups(typeCode, null)
 			}
-		});
+
+			this.setState({
+				types: types,
+				type: type,
+				trees: trees,
+				treeCode: treeCode,
+				groups: groups,
+				postParams: {
+					companyUid: currentCompany ? currentCompany.uid : null,
+					typeCode: typeCode,
+					treeCode: treeCode
+				}
+			});
+		}
 	}
 
-	private fetchClassifierType = async (): Promise<IClassifierType[]> => {
+	private fetchClassifierTypes = async (): Promise<IClassifierType[]> => {
 		const { currentCompany } = this.props;
-
-		if (!currentCompany) return null;
 
 		const data = await this._classifierService.types(currentCompany.uid);
 
@@ -111,19 +116,15 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 	private fetchClassifierTrees = async (typeCode: string): Promise<IClassifierTree[]> => {
 		const { currentCompany } = this.props;
 
-		if (!currentCompany) return null;
-
 		const data = await this._classifierService.trees(currentCompany.uid, typeCode);
 
 		return data.rows;
 	}
 
-	private fetchClassifierGroups = async (typeCode: string, treeCode: string): Promise<IClassifierGroup[]> => {
+	private fetchClassifierGroups = async (typeCode: string, treeCode: string, parentCode?: string): Promise<IClassifierGroup[]> => {
 		const { currentCompany } = this.props
 
-		if (!currentCompany) return null;
-
-		return await this._classifierService.groups(currentCompany.uid, typeCode, treeCode);
+		return await this._classifierService.groups(currentCompany.uid, typeCode, treeCode, parentCode);
 	}
 
 	private delete = async () => {
@@ -146,6 +147,22 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 		this.setState({ selectedRowKeys });
 	}
 
+	private onTreeLoadData = async (node: AntTreeNode) => new Promise(async (resolve) => {
+		const group: IClassifierGroup = node.props.dataRef;
+
+		const { type, treeCode } = this.state;
+
+		const children = await this.fetchClassifierGroups(type.code, treeCode, group.code)
+
+		group.children = children;
+
+		this.setState({
+			groups: [...this.state.groups],
+		});
+
+		resolve();
+	})
+
 	private onTreeSelect = (selectedKeys: string[]) => {
 		const { postParams } = this.state;
 		this.setState({ postParams: { ...postParams, groupCode: selectedKeys[0] } });
@@ -159,8 +176,8 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 	private buildGroupsTree = (groups: IClassifierGroup[]) => {
 		return groups && groups.map(x => {
 			return (
-				<Tree.TreeNode title={`${x.code} - ${x.name}`} key={x.code} isLeaf={!x.children}>
-					{this.buildGroupsTree(x.children)}
+				<Tree.TreeNode title={`${x.code} - ${x.name}`} key={x.code} dataRef={x}>
+					{x.children && this.buildGroupsTree(x.children)}
 				</Tree.TreeNode>
 			);
 		});
@@ -170,10 +187,10 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 		const { currentCompany } = this.props,
 			{ types, type, trees, groups, postParams } = this.state;
 
-		if (!currentCompany || !type) return null;
+		if (!currentCompany || !type || !postParams.typeCode) return null;
 
-		// todo: настройки
-		// 1. как выглядит дерево - списком или деревом
+		// todo: настройки:
+		// 1. как выглядит дерево - списком или деревом (?)
 		// 2. прятать дерево
 		// 3. показывать или нет группы в таблице
 		// 4. показывать планарную таблицу без групп
@@ -187,26 +204,13 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 		}
 
 		let tree;
-		if (type.hierarchyType != "None") {
-
-			const getRootName = () => {
-				if (type.hierarchyType == "Groups") {
-					if (trees && trees.length > 0) return trees[0].name || trees[0].code;
-				}
-
-				if (type.hierarchyType == "Items") {
-					return type.name || type.code;
-				}
-
-				return null;
-			};
-
+		if (type.hierarchyType != "None" && groups.length > 0) {
 			tree = (
-				<Tree blockNode defaultExpandedKeys={["."]} onSelect={this.onTreeSelect}>
-					<Tree.TreeNode title={getRootName()} key=".">
-						{this.buildGroupsTree(groups)}
-					</Tree.TreeNode>
-				</Tree>
+				<Tree blockNode
+					loadData={this.onTreeLoadData}
+					onSelect={this.onTreeSelect}>
+					{this.buildGroupsTree(groups)}
+				</ Tree>
 			);
 		}
 

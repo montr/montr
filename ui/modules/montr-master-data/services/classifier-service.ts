@@ -12,8 +12,8 @@ export class ClassifierService extends Fetcher {
 		return this.post(`${Constants.baseURL}/classifier/trees`, { companyUid, typeCode });
 	};
 
-	groups = async (companyUid: Guid, typeCode: string, treeCode: string): Promise<IClassifierGroup[]> => {
-		return this.post(`${Constants.baseURL}/classifier/groups`, { companyUid, typeCode, treeCode });
+	groups = async (companyUid: Guid, typeCode: string, treeCode: string, parentCode: string): Promise<IClassifierGroup[]> => {
+		return this.post(`${Constants.baseURL}/classifier/groups`, { companyUid, typeCode, treeCode, parentCode });
 	};
 
 	get = async (uid: Guid): Promise<IClassifier> => {

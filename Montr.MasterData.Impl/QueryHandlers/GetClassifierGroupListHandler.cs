@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using LinqToDB;
 using MediatR;
-using Montr.Core.Services;
+using Montr.Core.Models;
 using Montr.Data.Linq2Db;
 using Montr.MasterData.Impl.Entities;
 using Montr.MasterData.Models;
@@ -30,107 +28,82 @@ namespace Montr.MasterData.Impl.QueryHandlers
 		{
 			var request = command.Request;
 
-			IDictionary<string, ClassifierGroup> groupsByCode;
-
 			var type = await _classifierTypeService.GetClassifierType(request.CompanyUid, request.TypeCode, cancellationToken);
 
 			if (type.HierarchyType == HierarchyType.Groups)
 			{
-				IDictionary<Guid, DbClassifierGroup> dbGroupsByUid;
-
 				using (var db = _dbContextFactory.Create())
 				{
-					var all = from tree in db.GetTable<DbClassifierTree>() 
-						join g in db.GetTable<DbClassifierGroup>() on tree.Uid equals g.TreeUid  
-						where tree.TypeUid == type.Uid &&
-							tree.Code == request.TreeCode
-						orderby g.Code, g.Name
-						select g;
+					IQueryable<DbClassifierGroup> query;
 
-					dbGroupsByUid = await all.ToDictionaryAsync(x => x.Uid, x => x, cancellationToken);
-				}
-
-				var sorted = DirectedAcyclicGraphVerifier.TopologicalSort(dbGroupsByUid.Values,
-					node => node.Uid, node => node.ParentUid != null ? new [] { node.ParentUid } : null );
-
-				groupsByCode = sorted.ToDictionary(x => x.Code, x =>
-				{
-					var group = new ClassifierGroup
+					if (request.ParentCode == null)
 					{
-						Code = x.Code,
-						Name = x.Name
-					};
-
-					if (x.ParentUid.HasValue)
+						query = from tree in db.GetTable<DbClassifierTree>()
+							join item in db.GetTable<DbClassifierGroup>() on tree.Uid equals item.TreeUid
+							where tree.TypeUid == type.Uid
+								&& tree.Code == request.TreeCode
+								&& item.ParentUid == null
+							select item;
+					}
+					else
 					{
-						group.ParentCode = dbGroupsByUid[x.ParentUid.Value].Code;
+						query = from tree in db.GetTable<DbClassifierTree>()
+							join item in db.GetTable<DbClassifierGroup>() on tree.Uid equals item.TreeUid
+							join parent in db.GetTable<DbClassifierGroup>() on item.ParentUid equals parent.Uid
+							where tree.TypeUid == type.Uid
+								&& tree.Code == request.TreeCode
+								&& parent.Code == request.ParentCode
+							select item;
 					}
 
-					return group;
-				});
+					return query
+						.OrderBy(x => x.Code).ThenBy(x => x.Name)
+						.Take(Paging.MaxPageSize)
+						.Select(x => new ClassifierGroup
+						{
+							Code = x.Code,
+							Name = x.Name
+						})
+						.ToList();
+				}
 			}
-			else if (type.HierarchyType == HierarchyType.Items)
-			{
-				IDictionary<Guid, DbClassifier> dbItemByUid;
 
+			if (type.HierarchyType == HierarchyType.Items)
+			{
 				using (var db = _dbContextFactory.Create())
 				{
-					var all =
-						from parentUid in (
-							from item in db.GetTable<DbClassifier>()
+					IQueryable<DbClassifier> query;
+
+					if (request.ParentCode == null)
+					{
+						query = from item in db.GetTable<DbClassifier>()
 							where item.TypeUid == type.Uid
-							select item.ParentUid).Distinct()
-						join item in db.GetTable<DbClassifier>() on parentUid equals item.Uid
-						orderby item.StatusCode, item.Code, item.Name
-						select item;
-
-					dbItemByUid = await all.ToDictionaryAsync(x => x.Uid, x => x, cancellationToken);
-				}
-
-				var sorted = DirectedAcyclicGraphVerifier.TopologicalSort(dbItemByUid.Values,
-					node => node.Uid, node => node.ParentUid != null ? new [] { node.ParentUid } : null );
-
-				groupsByCode = sorted.ToDictionary(x => x.Code, x =>
-				{
-					var group = new ClassifierGroup
+								&& item.ParentUid == null
+							orderby item.StatusCode, item.Code, item.Name
+							select item;
+					}
+					else
 					{
-						Code = x.Code,
-						Name = x.Name
-					};
-
-					if (x.ParentUid.HasValue)
-					{
-						group.ParentCode = dbItemByUid[x.ParentUid.Value].Code;
+						query = from item in db.GetTable<DbClassifier>()
+							join parent in db.GetTable<DbClassifier>() on item.ParentUid equals parent.Uid
+							where item.TypeUid == type.Uid
+								&& parent.Code == request.ParentCode
+							select item;
 					}
 
-					return group;
-				});
-			}
-			else
-			{
-				groupsByCode = ImmutableDictionary<string, ClassifierGroup>.Empty;
-			}
-			
-			BuildTree(groupsByCode);
-
-			var result = groupsByCode.Values.Where(x => x.ParentCode == null).ToList();
-
-			return result;
-		}
-
-		private static void BuildTree(IDictionary<string, ClassifierGroup> groupsByCode)
-		{
-			foreach (var group in groupsByCode.Values.Where(x => x.ParentCode != null))
-			{
-				var parentGroup = groupsByCode[group.ParentCode];
-
-				if (parentGroup.Children == null)
-				{
-					parentGroup.Children = new List<ClassifierGroup>();
+					return query
+						.OrderBy(x => x.StatusCode).ThenBy(x => x.Code).ThenBy(x => x.Name)
+						.Take(Paging.MaxPageSize)
+						.Select(x => new ClassifierGroup
+						{
+							Code = x.Code,
+							Name = x.Name
+						})
+						.ToList();
 				}
-
-				parentGroup.Children.Add(group);
 			}
+
+			return ImmutableList<ClassifierGroup>.Empty;
 		}
 	}
 }

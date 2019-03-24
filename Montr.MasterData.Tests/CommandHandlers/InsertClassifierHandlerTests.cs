@@ -30,7 +30,7 @@ namespace Montr.MasterData.Tests.CommandHandlers
 			var command = new InsertClassifier
 			{
 				UserUid = Guid.NewGuid(),
-				CompanyUid = Guid.Parse("6465dd4c-8664-4433-ba6a-14effd40ebed"),
+				CompanyUid = Constants.OperatorCompanyUid,
 				Item = new Classifier
 				{
 					// TypeCode = "test",
