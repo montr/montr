@@ -104,6 +104,40 @@ namespace Montr.MasterData.Plugin.GovRu.Tests.Services
 			await DumpToDb(result, "oktmo");
 		}
 
+		[TestMethod]
+		public async Task Parser_Should_ParseOkvFile()
+		{
+			// arrange
+			var parser = new OkvParser();
+
+			// act
+			var result = await Parse(parser, "nsiOkv_*.xml");
+
+			// assert
+			Assert.IsNotNull(result);
+			Assert.IsNotNull(result.Items);
+			Assert.AreEqual(163, result.Items.Count);
+
+			await DumpToDb(result, "okv");
+		}
+
+		[TestMethod]
+		public async Task Parser_Should_ParseOkopfFile()
+		{
+			// arrange
+			var parser = new OkopfParser();
+
+			// act
+			var result = await Parse(parser, "nsiOkopf_*.xml");
+
+			// assert
+			Assert.IsNotNull(result);
+			Assert.IsNotNull(result.Items);
+			Assert.AreEqual(223, result.Items.Count);
+
+			await DumpToDb(result, "okopf");
+		}
+
 		private static async Task DumpToDb(ParseResult result, string typeCode)
 		{
 			var unitOfWorkFactory = new TransactionScopeUnitOfWorkFactory();

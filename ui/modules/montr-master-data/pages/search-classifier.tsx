@@ -284,7 +284,7 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 							</Radio.Group>
 						</div>
 					</Layout.Header>
-					<Layout hasSider className="bg-white">
+					<Layout hasSider={!!tree} className="bg-white">
 						{content}
 					</Layout>
 				</Layout>
