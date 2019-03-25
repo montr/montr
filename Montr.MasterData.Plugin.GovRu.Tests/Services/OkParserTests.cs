@@ -87,8 +87,8 @@ namespace Montr.MasterData.Plugin.GovRu.Tests.Services
 			await DumpToDb(result, "okpd2");
 		}
 
-		[TestMethod]
-		public async Task Parser_Should_ParseOktmoFile()
+		[TestMethod, Ignore]
+		public async Task Parser_Should_ParseOktmoXmlFile()
 		{
 			// arrange
 			var parser = new OktmoParser();
@@ -100,6 +100,23 @@ namespace Montr.MasterData.Plugin.GovRu.Tests.Services
 			Assert.IsNotNull(result);
 			Assert.IsNotNull(result.Items);
 			Assert.AreEqual(211185, result.Items.Count);
+
+			await DumpToDb(result, "oktmo");
+		}
+
+		[TestMethod]
+		public async Task Parser_Should_ParseOktmoCsvFile()
+		{
+			// arrange
+			var parser = new CsvOktmoParser();
+
+			// act
+			var result = await Parse(parser, "data-20190314t000000-structure-20150128t000000.csv");
+
+			// assert
+			Assert.IsNotNull(result);
+			Assert.IsNotNull(result.Items);
+			Assert.AreEqual(200313, result.Items.Count);
 
 			await DumpToDb(result, "oktmo");
 		}

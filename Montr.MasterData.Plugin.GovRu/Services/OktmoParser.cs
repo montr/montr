@@ -4,7 +4,7 @@ using Montr.MasterData.Plugin.GovRu.Models;
 
 namespace Montr.MasterData.Plugin.GovRu.Services
 {
-	public class OktmoParser : OkParser<OktmoItem>
+	public class OktmoParser : XmlOkParser<OktmoItem>
 	{
 		protected override string OkCode => "nsiOktmoData";
 
