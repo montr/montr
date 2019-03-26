@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Montr.Data.Linq2Db;
@@ -14,7 +13,7 @@ namespace Montr.MasterData.Tests.QueryHandlers
 	public class GetClassifierGroupListHandlerTests
 	{
 		[TestMethod]
-		public async Task GetClassifierGroupList_ForGroupHierarchy_ReturnTree()
+		public async Task GetGroups_ForNullParent_ReturnItems()
 		{
 			// arrange
 			var dbContextFactory = new DefaultDbContextFactory();
@@ -28,7 +27,7 @@ namespace Montr.MasterData.Tests.QueryHandlers
 			{
 				Request = new ClassifierGroupSearchRequest
 				{
-					CompanyUid = Guid.Parse("6465dd4c-8664-4433-ba6a-14effd40ebed"),
+					CompanyUid = Constants.OperatorCompanyUid,
 					TypeCode = "okei",
 					TreeCode = "default"
 				}
@@ -39,15 +38,10 @@ namespace Montr.MasterData.Tests.QueryHandlers
 			// assert
 			Assert.IsNotNull(result);
 			Assert.AreEqual(4, result.Count);
-			foreach (var group in result)
-			{
-				Assert.IsNotNull(group.Children);
-				Assert.IsTrue(group.Children.Count >= 3);
-			}
 		}
 
 		[TestMethod]
-		public async Task GetClassifierGroupList_ForItemsHierarchy_ReturnTree()
+		public async Task GetGroups_ForNotNullParent_ReturnItems()
 		{
 			// arrange
 			var dbContextFactory = new DefaultDbContextFactory();
@@ -61,7 +55,36 @@ namespace Montr.MasterData.Tests.QueryHandlers
 			{
 				Request = new ClassifierGroupSearchRequest
 				{
-					CompanyUid = Guid.Parse("6465dd4c-8664-4433-ba6a-14effd40ebed"),
+					CompanyUid = Constants.OperatorCompanyUid,
+					TypeCode = "okei",
+					TreeCode = "default",
+					ParentCode = "1"
+				}
+			};
+
+			var result = await handler.Handle(command, CancellationToken.None);
+
+			// assert
+			Assert.IsNotNull(result);
+			Assert.AreEqual(7, result.Count);
+		}
+
+		[TestMethod]
+		public async Task GetItems_ForNullParent_ReturnItems()
+		{
+			// arrange
+			var dbContextFactory = new DefaultDbContextFactory();
+			var classifierTypeRepository = new DbClassifierTypeRepository(dbContextFactory);
+			var classifierTypeService = new DefaultClassifierTypeService(classifierTypeRepository);
+
+			var handler = new GetClassifierGroupListHandler(dbContextFactory, classifierTypeService);
+
+			// act
+			var command = new GetClassifierGroupList
+			{
+				Request = new ClassifierGroupSearchRequest
+				{
+					CompanyUid = Constants.OperatorCompanyUid,
 					TypeCode = "okved2"
 				}
 			};
@@ -71,11 +94,61 @@ namespace Montr.MasterData.Tests.QueryHandlers
 			// assert
 			Assert.IsNotNull(result);
 			Assert.AreEqual(21, result.Count);
-			/*foreach (var group in result)
+		}
+
+		[TestMethod]
+		public async Task GetItems_ForNotNullParent_ReturnItems()
+		{
+			// arrange
+			var dbContextFactory = new DefaultDbContextFactory();
+			var classifierTypeRepository = new DbClassifierTypeRepository(dbContextFactory);
+			var classifierTypeService = new DefaultClassifierTypeService(classifierTypeRepository);
+
+			var handler = new GetClassifierGroupListHandler(dbContextFactory, classifierTypeService);
+
+			// act
+			var command = new GetClassifierGroupList
 			{
-				Assert.IsNotNull(group.Children);
-				Assert.IsTrue(group.Children.Count >= 3);
-			}*/
+				Request = new ClassifierGroupSearchRequest
+				{
+					CompanyUid = Constants.OperatorCompanyUid,
+					TypeCode = "okved2",
+					ParentCode = "F"
+				}
+			};
+
+			var result = await handler.Handle(command, CancellationToken.None);
+
+			// assert
+			Assert.IsNotNull(result);
+			Assert.AreEqual(3, result.Count);
+		}
+
+		[TestMethod]
+		public async Task GetItems_ForBigGroups_ReturnNoMoreThan1000Items()
+		{
+			// arrange
+			var dbContextFactory = new DefaultDbContextFactory();
+			var classifierTypeRepository = new DbClassifierTypeRepository(dbContextFactory);
+			var classifierTypeService = new DefaultClassifierTypeService(classifierTypeRepository);
+
+			var handler = new GetClassifierGroupListHandler(dbContextFactory, classifierTypeService);
+
+			// act
+			var command = new GetClassifierGroupList
+			{
+				Request = new ClassifierGroupSearchRequest
+				{
+					CompanyUid = Constants.OperatorCompanyUid,
+					TypeCode = "oktmo"
+				}
+			};
+
+			var result = await handler.Handle(command, CancellationToken.None);
+
+			// assert
+			Assert.IsNotNull(result);
+			Assert.AreEqual(1000, result.Count);
 		}
 	}
 }

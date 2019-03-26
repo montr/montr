@@ -35,7 +35,7 @@ namespace Montr.MasterData.Plugin.GovRu.Tests.Services
 		public async Task Parser_Should_ParseOkeiFile()
 		{
 			// arrange
-			var parser = new OkeiParser();
+			var parser = new XmlOkeiParser();
 
 			// act
 			var result = await Parse(parser, "nsiOkei_*.xml");
@@ -53,7 +53,7 @@ namespace Montr.MasterData.Plugin.GovRu.Tests.Services
 		public async Task Parser_Should_ParseOkved2File()
 		{
 			// arrange
-			var parser = new Okved2Parser();
+			var parser = new XmlOkved2Parser();
 
 			// act
 			var result = await Parse(parser, "nsiOkved2_*.xml");
@@ -72,7 +72,7 @@ namespace Montr.MasterData.Plugin.GovRu.Tests.Services
 		public async Task Parser_Should_ParseOkpd2File()
 		{
 			// arrange
-			var parser = new Okpd2Parser();
+			var parser = new XmlOkpd2Parser();
 
 			// act
 			var result = await Parse(parser, "nsiOkpd2_*.xml");
@@ -87,11 +87,11 @@ namespace Montr.MasterData.Plugin.GovRu.Tests.Services
 			await DumpToDb(result, "okpd2");
 		}
 
-		[TestMethod]
-		public async Task Parser_Should_ParseOktmoFile()
+		[TestMethod, Ignore]
+		public async Task Parser_Should_ParseOktmoXmlFile()
 		{
 			// arrange
-			var parser = new OktmoParser();
+			var parser = new XmlOktmoParser();
 
 			// act
 			var result = await Parse(parser, "nsiOktmo_*.xml");
@@ -102,6 +102,57 @@ namespace Montr.MasterData.Plugin.GovRu.Tests.Services
 			Assert.AreEqual(211185, result.Items.Count);
 
 			await DumpToDb(result, "oktmo");
+		}
+
+		[TestMethod]
+		public async Task Parser_Should_ParseOktmoCsvFile()
+		{
+			// arrange
+			var parser = new CsvOktmoParser();
+
+			// act
+			var result = await Parse(parser, "data-20190314t000000-structure-20150128t000000.csv");
+
+			// assert
+			Assert.IsNotNull(result);
+			Assert.IsNotNull(result.Items);
+			Assert.AreEqual(200313, result.Items.Count);
+
+			await DumpToDb(result, "oktmo");
+		}
+
+		[TestMethod]
+		public async Task Parser_Should_ParseOkvFile()
+		{
+			// arrange
+			var parser = new XmlOkvParser();
+
+			// act
+			var result = await Parse(parser, "nsiOkv_*.xml");
+
+			// assert
+			Assert.IsNotNull(result);
+			Assert.IsNotNull(result.Items);
+			Assert.AreEqual(163, result.Items.Count);
+
+			await DumpToDb(result, "okv");
+		}
+
+		[TestMethod]
+		public async Task Parser_Should_ParseOkopfFile()
+		{
+			// arrange
+			var parser = new XmlOkopfParser();
+
+			// act
+			var result = await Parse(parser, "nsiOkopf_*.xml");
+
+			// assert
+			Assert.IsNotNull(result);
+			Assert.IsNotNull(result.Items);
+			Assert.AreEqual(223, result.Items.Count);
+
+			await DumpToDb(result, "okopf");
 		}
 
 		private static async Task DumpToDb(ParseResult result, string typeCode)

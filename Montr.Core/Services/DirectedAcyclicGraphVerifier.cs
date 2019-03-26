@@ -58,7 +58,9 @@ namespace Montr.Core.Services
 
 			return item =>
 			{
-				return getDependencies(item)?.Select(key => map[key]);
+				var dependencies = getDependencies(item);
+
+				return dependencies?.Select(key => map[key]);
 			};
 		}
 	}
