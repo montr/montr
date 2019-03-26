@@ -6,7 +6,7 @@ using Montr.MasterData.Plugin.GovRu.Models;
 
 namespace Montr.MasterData.Plugin.GovRu.Services
 {
-	public class OkeiParser : XmlOkParser<OkeiItem>
+	public class XmlOkeiParser : XmlOkParser<OkeiItem>
 	{
 		protected override string OkCode => "nsiOkeiData";
 

@@ -15,20 +15,23 @@ namespace Montr.MasterData.Plugin.GovRu.Services
 	{
 		private readonly List<Column> _columns = new List<Column>();
 
+		protected char Delimiter = ';';
+		protected char Quote = '"';
+		protected char Escape = '\\';
+		protected char Comment = '#';
+
 		protected void Map(Expression<Func<TItem, object>> column, string pattern = null)
 		{
-			_columns.Add(new Column { Expr = column, Pattern = pattern });
+			_columns.Add(new Column { Info = GetPropertyInfo(column), Pattern = pattern });
 		}
 
 		public override Task Parse(Stream stream, CancellationToken cancellationToken)
 		{
-			var encoding = CodePagesEncodingProvider.Instance.GetEncoding(1251);
-
-			using (var reader = new CsvReader(stream, false, encoding, ';', '"', '\\', '#', ValueTrimmingOptions.All))
+			using (var reader = new CsvReader(stream, false, Encoding.UTF8, Delimiter, Quote, Escape, Comment, ValueTrimmingOptions.All))
 			{
 				reader.ParseError += (sender, args) =>
 				{
-					Console.WriteLine(args.Error.Message);
+					// Console.WriteLine(args.Error.Message);
 					// args.Action = ParseErrorAction.AdvanceToNextLine;
 				};
 
@@ -49,20 +52,18 @@ namespace Montr.MasterData.Plugin.GovRu.Services
 
 			for (var i = 0; i < Math.Min(record.Length, _columns.Count); i++)
 			{
-				var pi = GetMemberName(_columns[i].Expr);
-
 				if (record[i] != null)
 				{
-					var value = Convert(record[i], pi.PropertyType);
+					var value = Convert(record[i], _columns[i].Info.PropertyType);
 
-					pi.SetValue(item, value);
+					_columns[i].Info.SetValue(item, value);
 				}
 			}
 			
 			return item;
 		}
 
-		private static PropertyInfo GetMemberName(Expression expression)
+		private static PropertyInfo GetPropertyInfo(Expression expression)
 		{
 			var lambda = expression as LambdaExpression;
 
@@ -87,9 +88,11 @@ namespace Montr.MasterData.Plugin.GovRu.Services
 			return (PropertyInfo)memberExpression.Member;
 		}
 
-		protected class Column
+		private class Column
 		{
-			public Expression<Func<TItem, object>> Expr { get; set; }
+			public PropertyInfo Info { get; set; }
+
+			// public Expression<Func<TItem, object>> Expr { get; set; }
 
 			public string Pattern { get; set; }
 		}

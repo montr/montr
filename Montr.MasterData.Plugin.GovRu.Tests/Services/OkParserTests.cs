@@ -35,7 +35,7 @@ namespace Montr.MasterData.Plugin.GovRu.Tests.Services
 		public async Task Parser_Should_ParseOkeiFile()
 		{
 			// arrange
-			var parser = new OkeiParser();
+			var parser = new XmlOkeiParser();
 
 			// act
 			var result = await Parse(parser, "nsiOkei_*.xml");
@@ -53,7 +53,7 @@ namespace Montr.MasterData.Plugin.GovRu.Tests.Services
 		public async Task Parser_Should_ParseOkved2File()
 		{
 			// arrange
-			var parser = new Okved2Parser();
+			var parser = new XmlOkved2Parser();
 
 			// act
 			var result = await Parse(parser, "nsiOkved2_*.xml");
@@ -72,7 +72,7 @@ namespace Montr.MasterData.Plugin.GovRu.Tests.Services
 		public async Task Parser_Should_ParseOkpd2File()
 		{
 			// arrange
-			var parser = new Okpd2Parser();
+			var parser = new XmlOkpd2Parser();
 
 			// act
 			var result = await Parse(parser, "nsiOkpd2_*.xml");
@@ -91,7 +91,7 @@ namespace Montr.MasterData.Plugin.GovRu.Tests.Services
 		public async Task Parser_Should_ParseOktmoXmlFile()
 		{
 			// arrange
-			var parser = new OktmoParser();
+			var parser = new XmlOktmoParser();
 
 			// act
 			var result = await Parse(parser, "nsiOktmo_*.xml");
@@ -125,7 +125,7 @@ namespace Montr.MasterData.Plugin.GovRu.Tests.Services
 		public async Task Parser_Should_ParseOkvFile()
 		{
 			// arrange
-			var parser = new OkvParser();
+			var parser = new XmlOkvParser();
 
 			// act
 			var result = await Parse(parser, "nsiOkv_*.xml");
@@ -142,7 +142,7 @@ namespace Montr.MasterData.Plugin.GovRu.Tests.Services
 		public async Task Parser_Should_ParseOkopfFile()
 		{
 			// arrange
-			var parser = new OkopfParser();
+			var parser = new XmlOkopfParser();
 
 			// act
 			var result = await Parse(parser, "nsiOkopf_*.xml");

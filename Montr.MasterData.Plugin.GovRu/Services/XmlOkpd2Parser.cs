@@ -2,8 +2,8 @@
 
 namespace Montr.MasterData.Plugin.GovRu.Services
 {
-	public class OkopfParser : XmlOkParser<OkItem>
+	public class XmlOkpd2Parser : XmlOkParser<OkItem>
 	{
-		protected override string OkCode => "nsiOkopfData";
+		protected override string OkCode => "nsiOkpd2Data";
 	}
 }

@@ -3,7 +3,7 @@ using Montr.MasterData.Plugin.GovRu.Models;
 
 namespace Montr.MasterData.Plugin.GovRu.Services
 {
-	public class Okved2Parser : XmlOkParser<Okved2Item>
+	public class XmlOkved2Parser : XmlOkParser<Okved2Item>
 	{
 		protected override string OkCode => "nsiOkved2Data";
 

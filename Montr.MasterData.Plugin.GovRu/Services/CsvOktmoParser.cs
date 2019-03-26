@@ -1,4 +1,8 @@
-﻿using Montr.MasterData.Plugin.GovRu.Models;
+﻿using System.IO;
+using System.Text;
+using System.Threading;
+using System.Threading.Tasks;
+using Montr.MasterData.Plugin.GovRu.Models;
 
 namespace Montr.MasterData.Plugin.GovRu.Services
 {
@@ -19,6 +23,53 @@ namespace Montr.MasterData.Plugin.GovRu.Services
 			Map(x => x.StatusNo);
 			// Map(x => x.DateAccepted, "dd.MM.yyyy");
 			// Map(x => x.StartDateActive, "dd.MM.yyyy");
+		}
+
+		public override async Task Parse(Stream stream, CancellationToken cancellationToken)
+		{
+			var memoryStream = await FixStream(stream, CodePagesEncodingProvider.Instance.GetEncoding(1251));
+
+			await base.Parse(memoryStream, cancellationToken);
+		}
+
+		private async Task<Stream> FixStream(Stream stream, Encoding encoding)
+		{
+			var stringBuilder = new StringBuilder();
+			var memoryStream = new MemoryStream();
+
+			using (var reader = new StreamReader(stream, encoding))
+			{
+				using (var writer = new StreamWriter(memoryStream, Encoding.UTF8, 4096, true))
+				{
+					string line;
+					while ((line = await reader.ReadLineAsync()) != null)
+					{
+						var quoteStarted = false;
+						var prevChar = '\0';
+
+						foreach (var currChar in line)
+						{
+							if ((!quoteStarted && currChar == Quote && prevChar == ' ')
+								|| (quoteStarted && currChar == Quote))
+							{
+								quoteStarted = !quoteStarted;
+								stringBuilder.Append(Escape);
+							}
+
+							stringBuilder.Append(currChar);
+
+							prevChar = currChar;
+						}
+
+						writer.WriteLine(stringBuilder.ToString());
+						stringBuilder.Clear();
+					}
+				}
+			}
+
+			memoryStream.Position = 0;
+
+			return memoryStream;
 		}
 
 		protected override OktmoItem Parse(string[] record)
