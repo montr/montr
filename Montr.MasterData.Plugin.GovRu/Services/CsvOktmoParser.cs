@@ -25,6 +25,7 @@ namespace Montr.MasterData.Plugin.GovRu.Services
 			// Map(x => x.StartDateActive, "dd.MM.yyyy");
 		}
 
+		// todo: make all not-imported items as inactive
 		public override async Task Parse(Stream stream, CancellationToken cancellationToken)
 		{
 			var memoryStream = await FixStream(stream, CodePagesEncodingProvider.Instance.GetEncoding(1251));
