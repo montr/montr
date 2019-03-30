@@ -5,16 +5,17 @@ import { Form, Input, Button, Spin } from "antd";
 import { FormComponentProps } from "antd/lib/form";
 import { MetadataService, NotificationService } from "@montr-core/services";
 import { IFormField, Guid } from "@montr-core/models";
-import { ClassifierService } from "@montr-master-data/services";
+import { ClassifierService } from "../services";
 import { CompanyContextProps, withCompanyContext } from "@kompany/components";
+import { IClassifier } from "../models";
 
 interface IRouteProps {
-	configCode: string;
+	typeCode: string;
 	uid?: string;
 }
 
 interface IProps extends FormComponentProps, CompanyContextProps {
-	configCode: string;
+	typeCode: string;
 	uid?: string;
 }
 
@@ -43,25 +44,44 @@ class _EditClassifierForm extends React.Component<IProps, IState> {
 
 	componentDidMount = async () => {
 
-		const { configCode, uid } = this.props;
+		const { typeCode } = this.props;
 
-		const dataView = await this._metadataService.load(`Classifier/${configCode}`);
+		const dataView = await this._metadataService.load(`Classifier/${typeCode}`);
 
-		let data = {};
-		if (this.props.uid) {
-			try {
-				data = await this._classifierService.get(new Guid(uid));
-			} catch (error) {
-				console.log(error);
-				throw error;
-			}
-		}
+		const data = await this.fetchData();
 
 		this.setState({ loading: false, fields: dataView.fields, data });
 	}
 
+	componentDidUpdate = async (prevProps: IProps) => {
+		if (this.props.typeCode !== prevProps.typeCode ||
+			this.props.currentCompany !== prevProps.currentCompany) {
+
+			const data = await this.fetchData();
+
+			this.setState({ data });
+		}
+	}
+
 	componentWillUnmount = async () => {
 		await this._metadataService.abort();
+		await this._classifierService.abort();
+	}
+
+	private fetchData = async (): Promise<IClassifier> => {
+		const { typeCode, currentCompany, uid } = this.props;
+
+		let data = {};
+		if (currentCompany && this.props.uid) {
+			//try {
+			data = await this._classifierService.get(currentCompany.uid, typeCode, new Guid(uid));
+			//} catch (error) {
+			//	console.log(error);
+			//	throw error;
+			//}
+		}
+
+		return data;
 	}
 
 	private handleSubmit = async (e: React.SyntheticEvent) => {
@@ -77,7 +97,7 @@ class _EditClassifierForm extends React.Component<IProps, IState> {
 				const { uid: companyUid } = this.props.currentCompany,
 					item = {
 						uid: this.props.uid,
-						configCode: this.props.configCode,
+						typeCode: this.props.typeCode,
 						...values
 					};
 
@@ -143,10 +163,10 @@ class _EditClassifierForm extends React.Component<IProps, IState> {
 	}
 
 	render = () => {
-		const { configCode } = this.props;
+		const { typeCode } = this.props;
 
 		if (this.state.newUid) {
-			return <Redirect to={`/classifiers/${configCode}/edit/${this.state.newUid}`} />
+			return <Redirect to={`/classifiers/${typeCode}/edit/${this.state.newUid}`} />
 		}
 
 		return (
@@ -169,11 +189,11 @@ const EditClassifierForm = withCompanyContext(Form.create()(_EditClassifierForm)
 export class EditClassifier extends React.Component<RouteComponentProps<IRouteProps>> {
 	render = () => {
 
-		const { configCode, uid } = this.props.match.params;
+		const { typeCode, uid } = this.props.match.params;
 
 		return (
-			<Page title={configCode}>
-				<EditClassifierForm configCode={configCode} uid={uid} />
+			<Page title={typeCode}>
+				<EditClassifierForm typeCode={typeCode} uid={uid} />
 			</Page >
 		)
 	}
