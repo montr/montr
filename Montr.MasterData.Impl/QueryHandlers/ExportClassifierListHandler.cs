@@ -127,8 +127,9 @@ namespace Montr.MasterData.Impl.QueryHandlers
 			col1.Style.Font.Color.SetColor(Color.Gray);
 			col1.Style.Font.Size = 8;
 
-			ws.Column(1).AutoFit(6, 12); // Id
-			ws.Column(2).AutoFit(12, 24); // Name
+			ws.Column(1).Width = 0; // Id
+			ws.Column(2).AutoFit(12, 24); // Code
+			ws.Column(3).AutoFit(12, 96); // Name
 			ws.View.FreezePanes(3, 3);
 		}
 	}

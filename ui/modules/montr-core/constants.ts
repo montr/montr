@@ -1,3 +1,5 @@
 export const Constants = {
-	baseURL: "/api"
+	baseURL: "/api",
+
+	defaultPageSize: 10
 };

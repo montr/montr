@@ -3,8 +3,9 @@ import { Link } from "react-router-dom";
 import { Table, Tag } from "antd";
 import { ColumnProps, PaginationConfig, SorterResult, SortOrder } from "antd/lib/table";
 import { IIndexer } from "@montr-core/models";
-import { Fetcher, NotificationService, MetadataService } from "@montr-core/services";
+import { Fetcher, NotificationService, MetadataService } from "../services";
 import { IDataColumn, IDataResult } from "../models";
+import { Constants } from "..";
 
 interface IProps<TModel> {
 	rowKey?: string
@@ -41,7 +42,7 @@ export class DataTable<TModel extends IIndexer> extends React.Component<IProps<T
 			totalCount: 0,
 			pagination: {
 				position: "bottom",
-				pageSize: 10,
+				pageSize: Constants.defaultPageSize,
 				pageSizeOptions: ["10", "50", "100", "500"],
 				showSizeChanger: true,
 			},
@@ -154,7 +155,7 @@ export class DataTable<TModel extends IIndexer> extends React.Component<IProps<T
 
 		try {
 			let postParams = {
-				pageSize: 50,
+				pageSize: Constants.defaultPageSize,
 				...params,
 			};
 

@@ -139,7 +139,7 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 	private export = async () => {
 		// todo: show export dialog: all pages, current page, export format
 		await this._classifierService.export(this.props.currentCompany.uid, {
-			configCode: this.props.match.params.typeCode
+			typeCode: this.props.match.params.typeCode
 		});
 	}
 
