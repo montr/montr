@@ -32,7 +32,7 @@ export class ClassifierService extends Fetcher {
 		return this.post(`${Constants.baseURL}/classifier/update`, { companyUid, item: data });
 	};
 
-	delete = async (companyUid: Guid, uids: string[] | number[]): Promise<number> => {
-		return this.post(`${Constants.baseURL}/classifier/delete`, { companyUid, uids });
+	delete = async (companyUid: Guid, typeCode: string, uids: string[] | number[]): Promise<number> => {
+		return this.post(`${Constants.baseURL}/classifier/delete`, { companyUid, typeCode, uids });
 	};
 }

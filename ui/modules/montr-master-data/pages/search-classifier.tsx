@@ -129,7 +129,9 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 
 	private delete = async () => {
 		const rowsAffected = await this._classifierService
-			.delete(this.props.currentCompany.uid, this.state.selectedRowKeys);
+			.delete(this.props.currentCompany.uid,
+				this.props.match.params.typeCode,
+				this.state.selectedRowKeys);
 
 		this._notificationService.success("Выбранные записи удалены. " + rowsAffected);
 

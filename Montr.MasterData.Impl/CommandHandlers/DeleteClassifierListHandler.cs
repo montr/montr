@@ -9,6 +9,7 @@ using Montr.Data.Linq2Db;
 using Montr.MasterData.Commands;
 using Montr.MasterData.Impl.Entities;
 using Montr.MasterData.Models;
+using Montr.MasterData.Services;
 
 namespace Montr.MasterData.Impl.CommandHandlers
 {
@@ -16,23 +17,26 @@ namespace Montr.MasterData.Impl.CommandHandlers
 	{
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IDbContextFactory _dbContextFactory;
+		private readonly IClassifierTypeService _classifierTypeService;
 		private readonly IRepository<ClassifierType> _classifierTypeRepository;
 
 		public DeleteClassifierListHandler(IUnitOfWorkFactory unitOfWorkFactory, IDbContextFactory dbContextFactory,
-			IRepository<ClassifierType> classifierTypeRepository)
+			IClassifierTypeService classifierTypeService, IRepository<ClassifierType> classifierTypeRepository)
 		{
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_dbContextFactory = dbContextFactory;
+			_classifierTypeService = classifierTypeService;
 			_classifierTypeRepository = classifierTypeRepository;
 		}
 
 		public async Task<int> Handle(DeleteClassifierList request, CancellationToken cancellationToken)
 		{
-			if (request.UserUid == Guid.Empty)
-				throw new InvalidOperationException("UserUid can't be empty guid.");
+			if (request.UserUid == Guid.Empty) throw new InvalidOperationException("User uid can't be empty guid.");
 
 			// todo: check company belongs to user
-			var types = await _classifierTypeRepository.Search(
+			var type = await _classifierTypeService.GetClassifierType(request.CompanyUid, request.TypeCode, cancellationToken);
+
+			/*var types = await _classifierTypeRepository.Search(
 				new ClassifierTypeSearchRequest
 				{
 					CompanyUid = request.CompanyUid,
@@ -40,7 +44,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 					Code = request.TypeCode
 				}, cancellationToken);
 
-			var type = types.Rows.Single();
+			var type = types.Rows.Single();*/
 
 			using (var scope = _unitOfWorkFactory.Create())
 			{
