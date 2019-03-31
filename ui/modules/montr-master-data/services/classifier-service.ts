@@ -24,8 +24,8 @@ export class ClassifierService extends Fetcher {
 		return this.download(`${Constants.baseURL}/classifier/export`, { companyUid, ...request });
 	};
 
-	insert = async (companyUid: Guid, data: IClassifier): Promise<Guid> => {
-		return this.post(`${Constants.baseURL}/classifier/insert`, { companyUid, item: data });
+	insert = async (companyUid: Guid, typeCode: string, data: IClassifier): Promise<Guid> => {
+		return this.post(`${Constants.baseURL}/classifier/insert`, { companyUid, typeCode, item: data });
 	};
 
 	update = async (companyUid: Guid, data: IClassifier): Promise<Guid> => {

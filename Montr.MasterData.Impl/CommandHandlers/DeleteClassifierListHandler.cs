@@ -8,7 +8,6 @@ using Montr.Core.Services;
 using Montr.Data.Linq2Db;
 using Montr.MasterData.Commands;
 using Montr.MasterData.Impl.Entities;
-using Montr.MasterData.Models;
 using Montr.MasterData.Services;
 
 namespace Montr.MasterData.Impl.CommandHandlers
@@ -18,15 +17,13 @@ namespace Montr.MasterData.Impl.CommandHandlers
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IDbContextFactory _dbContextFactory;
 		private readonly IClassifierTypeService _classifierTypeService;
-		private readonly IRepository<ClassifierType> _classifierTypeRepository;
 
 		public DeleteClassifierListHandler(IUnitOfWorkFactory unitOfWorkFactory, IDbContextFactory dbContextFactory,
-			IClassifierTypeService classifierTypeService, IRepository<ClassifierType> classifierTypeRepository)
+			IClassifierTypeService classifierTypeService)
 		{
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_dbContextFactory = dbContextFactory;
 			_classifierTypeService = classifierTypeService;
-			_classifierTypeRepository = classifierTypeRepository;
 		}
 
 		public async Task<int> Handle(DeleteClassifierList request, CancellationToken cancellationToken)
@@ -35,16 +32,6 @@ namespace Montr.MasterData.Impl.CommandHandlers
 
 			// todo: check company belongs to user
 			var type = await _classifierTypeService.GetClassifierType(request.CompanyUid, request.TypeCode, cancellationToken);
-
-			/*var types = await _classifierTypeRepository.Search(
-				new ClassifierTypeSearchRequest
-				{
-					CompanyUid = request.CompanyUid,
-					UserUid = request.UserUid,
-					Code = request.TypeCode
-				}, cancellationToken);
-
-			var type = types.Rows.Single();*/
 
 			using (var scope = _unitOfWorkFactory.Create())
 			{

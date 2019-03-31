@@ -1,14 +1,8 @@
 import * as React from "react";
 import { Page, DataTable, PageHeader } from "@montr-core/components";
-import { NotificationService } from "@montr-core/services";
-import { RouteComponentProps } from "react-router";
 import { Constants } from "@montr-core/.";
-import { Icon, Button, Breadcrumb, Menu, Dropdown, Tree, Row, Col, Select, Radio, Layout } from "antd";
-import { Link } from "react-router-dom";
 import { withCompanyContext, CompanyContextProps } from "@kompany/components";
-import { ClassifierService } from "../services";
-import { IClassifierType, IClassifierTree, IClassifierGroup } from "../models";
-import { RadioChangeEvent } from "antd/lib/radio";
+import { ClassifierBreadcrumb } from "../components";
 
 interface IProps extends CompanyContextProps {
 }
@@ -59,11 +53,7 @@ class _SearchClassifierType extends React.Component<IProps, IState> {
 
 		return (
 			<Page title={<>
-				<Breadcrumb>
-					<Breadcrumb.Item><Icon type="home" /></Breadcrumb.Item>
-					<Breadcrumb.Item>Справочники</Breadcrumb.Item>
-				</Breadcrumb>
-
+				<ClassifierBreadcrumb />
 				<PageHeader>Справочники</PageHeader>
 			</>}>
 

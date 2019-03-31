@@ -2,12 +2,12 @@ import * as React from "react";
 import { PageHeader } from ".";
 import { Row, Col, Affix } from "antd";
 
-interface PageProps {
+interface IProps {
 	title?: string | React.ReactNode;
 	toolbar?: React.ReactNode;
 }
 
-export class Page extends React.Component<PageProps> {
+export class Page extends React.Component<IProps> {
 	render() {
 
 		const { title, toolbar, children } = this.props;

@@ -3,13 +3,14 @@ import { Page, DataTable, PageHeader } from "@montr-core/components";
 import { NotificationService } from "@montr-core/services";
 import { RouteComponentProps } from "react-router";
 import { Constants } from "@montr-core/.";
-import { Icon, Button, Breadcrumb, Menu, Dropdown, Tree, Select, Radio, Layout } from "antd";
+import { Icon, Button, Tree, Select, Radio, Layout } from "antd";
 import { Link } from "react-router-dom";
 import { withCompanyContext, CompanyContextProps } from "@kompany/components";
 import { ClassifierService } from "../services";
 import { IClassifierType, IClassifierTree, IClassifierGroup } from "../models";
 import { RadioChangeEvent } from "antd/lib/radio";
 import { AntTreeNode } from "antd/lib/tree";
+import { ClassifierBreadcrumb } from "../components";
 
 interface IRouteProps {
 	typeCode: string;
@@ -82,12 +83,12 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 
 				if (trees && trees.length > 0) {
 					treeCode = trees[0].code;
-					groups = await this.fetchClassifierGroups(typeCode, treeCode)
+					groups = await this.fetchClassifierGroups(typeCode, treeCode);
 				}
 			}
 
 			if (type.hierarchyType == "Items") {
-				groups = await this.fetchClassifierGroups(typeCode, null)
+				groups = await this.fetchClassifierGroups(typeCode, null);
 			}
 
 			this.setState({
@@ -212,7 +213,7 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 					loadData={this.onTreeLoadData}
 					onSelect={this.onTreeSelect}>
 					{this.buildGroupsTree(groups)}
-				</ Tree>
+				</Tree>
 			);
 		}
 
@@ -237,34 +238,10 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 			</>)
 			: (table);
 
-
-		const typeSelectorMenu = (
-			<Menu>
-				{types.map(x => <Menu.Item key={x.code}>
-					<Link to={`/classifiers/${x.code}/`}>{x.name}</Link>
-				</Menu.Item>)}
-			</Menu>
-		);
-
-		const typeSelector = (
-			<Dropdown overlay={typeSelectorMenu} trigger={['click']}>
-				<a className="ant-dropdown-link" href="#">
-					{type.name} <Icon type="down" />
-				</a>
-			</Dropdown>
-		);
-
 		return (
 			<Page
 				title={<>
-					<Breadcrumb>
-						<Breadcrumb.Item><Icon type="home" /></Breadcrumb.Item>
-						<Breadcrumb.Item><Link to={`/classifiers/`}>Справочники</Link></Breadcrumb.Item>
-						<Breadcrumb.Item>
-							{typeSelector}
-						</Breadcrumb.Item>
-					</Breadcrumb>
-
+					<ClassifierBreadcrumb type={type} types={types} />
 					<PageHeader>{type.name}</PageHeader>
 				</>}
 				toolbar={<>
