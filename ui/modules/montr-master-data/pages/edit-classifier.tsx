@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Page, FormDefaults, PageHeader } from "@montr-core/components";
 import { RouteComponentProps, Redirect } from "react-router";
-import { Form, Input, Button, Spin } from "antd";
+import { Form, Input, Button, Spin, Tabs } from "antd";
 import { FormComponentProps } from "antd/lib/form";
 import { MetadataService, NotificationService } from "@montr-core/services";
 import { IFormField, Guid } from "@montr-core/models";
@@ -22,8 +22,9 @@ interface IProps extends FormComponentProps, CompanyContextProps {
 
 interface IState {
 	loading: boolean;
-	fields: IFormField[];
+	fields?: IFormField[];
 	type?: IClassifierType;
+	types?: IClassifierType[];
 	data: IClassifier;
 	newUid?: Guid;
 }
@@ -39,7 +40,6 @@ class _EditClassifierForm extends React.Component<IProps, IState> {
 
 		this.state = {
 			loading: true,
-			fields: [],
 			data: {}
 		};
 	}
@@ -66,15 +66,12 @@ class _EditClassifierForm extends React.Component<IProps, IState> {
 		await this._classifierService.abort();
 	}
 
-	private fetchClassifierTypes = async (): Promise<IClassifierType> => {
-		const { typeCode, currentCompany } = this.props;
+	private fetchClassifierTypes = async (): Promise<IClassifierType[]> => {
+		const { currentCompany } = this.props;
 
 		const data = await this._classifierService.types(currentCompany.uid);
-		const types = data.rows;
 
-		const type = types.find(x => x.code == typeCode);
-
-		return type;
+		return data.rows;
 	}
 
 	private fetchData = async () => {
@@ -82,7 +79,8 @@ class _EditClassifierForm extends React.Component<IProps, IState> {
 
 		if (currentCompany) {
 
-			var type = await this.fetchClassifierTypes();
+			const types = await this.fetchClassifierTypes();
+			const type = types.find(x => x.code == typeCode);
 
 			const dataView = await this._metadataService.load(`Classifier/${typeCode}`);
 
@@ -96,7 +94,7 @@ class _EditClassifierForm extends React.Component<IProps, IState> {
 				//}
 			}
 
-			this.setState({ loading: false, type, fields: dataView.fields, data });
+			this.setState({ loading: false, type, types, fields: dataView.fields, data });
 		}
 	}
 
@@ -180,26 +178,34 @@ class _EditClassifierForm extends React.Component<IProps, IState> {
 
 	render = () => {
 		const { typeCode } = this.props,
-			{ type, data } = this.state;
+			{ type, types, data } = this.state;
 
 		if (this.state.newUid) {
 			return <Redirect to={`/classifiers/${typeCode}/edit/${this.state.newUid}`} />
 		}
 
+		const form = (this.state.fields &&
+			<Form onSubmit={this.handleSubmit}>
+				{this.state.fields.map((field) => {
+					return this.create(field);
+				})}
+				<Form.Item {...FormDefaults.tailFormItemLayout}>
+					<Button type="primary" htmlType="submit" icon="check">Сохранить</Button>
+				</Form.Item>
+			</Form>);
+
 		return (
 			<Page title={<>
-				<ClassifierBreadcrumb type={type} />
+				<ClassifierBreadcrumb type={type} types={types} item={data} />
 				<PageHeader>{data.name}</PageHeader>
 			</>}>
 				<Spin spinning={this.state.loading}>
-					<Form onSubmit={this.handleSubmit}>
-						{this.state.fields.map((field) => {
-							return this.create(field);
-						})}
-						<Form.Item {...FormDefaults.tailFormItemLayout}>
-							<Button type="primary" htmlType="submit" icon="check">Сохранить</Button>
-						</Form.Item>
-					</Form>
+					<Tabs>
+						<Tabs.TabPane key="1" tab="Информация">{form}</Tabs.TabPane>
+						<Tabs.TabPane key="2" tab="Иерархия"></Tabs.TabPane>
+						<Tabs.TabPane key="3" tab="Ссылки"></Tabs.TabPane>
+						<Tabs.TabPane key="4" tab="История изменений"></Tabs.TabPane>
+					</Tabs>
 				</Spin>
 			</Page>
 		);

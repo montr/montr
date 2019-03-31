@@ -34,7 +34,11 @@ export class DataBreadcrumb extends React.Component<IProps> {
 
 		return (
 			<Breadcrumb.Item key={index}>
-				<Link to={value.route}>{value.name}</Link>
+				{
+					value.route
+						? <Link to={value.route}>{value.name}</Link>
+						: (value.name)
+				}
 			</Breadcrumb.Item>
 		)
 	}

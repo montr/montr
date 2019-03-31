@@ -219,7 +219,7 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 
 		const table = (
 			<DataTable
-				viewId={`ClassifierList/Grid/${type.code}`}
+				viewId={`Classifier/Grid/${type.code}`}
 				loadUrl={`${Constants.baseURL}/classifier/list/`}
 				postParams={postParams}
 				rowKey="uid"

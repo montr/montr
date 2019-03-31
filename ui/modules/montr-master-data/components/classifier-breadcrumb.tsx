@@ -1,16 +1,17 @@
 import * as React from "react";
 import { DataBreadcrumb } from "@montr-core/components";
 import { IMenu } from "@montr-core/models";
-import { IClassifierType } from "../models";
+import { IClassifierType, IClassifier } from "../models";
 
 interface IProps {
 	type?: IClassifierType;
 	types?: IClassifierType[];
+	item?: IClassifier;
 }
 
 export class ClassifierBreadcrumb extends React.Component<IProps> {
 	public render() {
-		const { type, types } = this.props;
+		const { type, types, item } = this.props;
 
 		const items: IMenu[] = [
 			{ name: "Справочники", route: `/classifiers/` }
@@ -26,6 +27,10 @@ export class ClassifierBreadcrumb extends React.Component<IProps> {
 			}
 
 			items.push(typeItem);
+		}
+
+		if (item) {
+			items.push({ name: item.name });
 		}
 
 		return (

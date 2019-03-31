@@ -31,12 +31,25 @@ namespace Montr.Metadata.Services
 
 			if (viewId.StartsWith("Classifier/"))
 			{
-				result.Fields = new List<FormField>
+				if (viewId.EndsWith("/okv"))
 				{
-					// new StringField { Key = "statusCode", Name = "Статус", Readonly = true },
-					new StringField { Key = "code", Name = "Код", Required = true },
-					new TextAreaField { Key = "name", Name = "Наименование", Rows = 10 }
-				};
+					result.Fields = new List<FormField>
+					{
+						new StringField { Key = "code", Name = "Код", Required = true },
+						new TextAreaField { Key = "name", Name = "Наименование", Rows = 10 },
+						new StringField { Key = "digitalCode", Name = "Цифровой код", Required = true },
+						new StringField { Key = "shortName", Name = "Краткое наименование" }
+					};
+				}
+				else
+				{
+					result.Fields = new List<FormField>
+					{
+						// new StringField { Key = "statusCode", Name = "Статус", Readonly = true },
+						new StringField { Key = "code", Name = "Код", Required = true },
+						new TextAreaField { Key = "name", Name = "Наименование", Rows = 10 }
+					};
+				}
 			}
 
 			if (viewId.StartsWith("ClassifierType/Grid"))
@@ -49,7 +62,7 @@ namespace Montr.Metadata.Services
 				};
 			}
 
-			if (viewId.StartsWith("ClassifierList/Grid"))
+			if (viewId.StartsWith("Classifier/Grid"))
 			{
 				result.Columns = new List<DataColumn>
 				{

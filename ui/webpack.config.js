@@ -1,6 +1,7 @@
 const path = require("path");
 const webpack = require("webpack");
 const tsImportPluginFactory = require("ts-import-plugin")
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 const Globals = {
 	"COOKIE_DOMAIN": JSON.stringify(".montr.io"),
@@ -45,7 +46,8 @@ module.exports = {
 	plugins: [
 		new webpack.DefinePlugin({
 			...Globals
-		})
+		}),
+		// new BundleAnalyzerPlugin()
 	],
 
 	module: {
