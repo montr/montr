@@ -32,7 +32,8 @@ namespace Montr.MasterData.Plugin.GovRu.Tests.Services
 		}
 
 		[TestMethod]
-		public async Task Parser_Should_ParseOkeiFile()
+		[DataRow(false)]
+		public async Task Parser_Should_ParseOkeiFile(bool dumpToDb)
 		{
 			// arrange
 			var parser = new XmlOkeiParser();
@@ -46,11 +47,12 @@ namespace Montr.MasterData.Plugin.GovRu.Tests.Services
 			Assert.AreEqual(28, result.Groups.Count);
 			Assert.AreEqual(561, result.Links.Count);
 
-			await DumpToDb(result, "okei");
+			if (dumpToDb) await DumpToDb(result, "okei");
 		}
 
 		[TestMethod]
-		public async Task Parser_Should_ParseOkved2File()
+		[DataRow(false)]
+		public async Task Parser_Should_ParseOkved2File(bool dumpToDb)
 		{
 			// arrange
 			var parser = new XmlOkved2Parser();
@@ -65,11 +67,12 @@ namespace Montr.MasterData.Plugin.GovRu.Tests.Services
 			// Assert.AreEqual(2771, result.Items.Count(x => x.ParentCode != null));
 			// Assert.AreEqual("66.19.7", result.Items.Single(x => x.Name == "Рейтинговая деятельность").Code);
 
-			await DumpToDb(result, "okved2");
+			if (dumpToDb) await DumpToDb(result, "okved2");
 		}
 
 		[TestMethod]
-		public async Task Parser_Should_ParseOkpd2File()
+		[DataRow(false)]
+		public async Task Parser_Should_ParseOkpd2File(bool dumpToDb)
 		{
 			// arrange
 			var parser = new XmlOkpd2Parser();
@@ -84,11 +87,12 @@ namespace Montr.MasterData.Plugin.GovRu.Tests.Services
 			// Assert.AreEqual(19527, result.Items.Count(x => x.ParentCode != null));
 			// Assert.AreEqual("66.19.7", result.Items.Single(x => x.Name == "Рейтинговая деятельность").Code);
 
-			await DumpToDb(result, "okpd2");
+			if (dumpToDb) await DumpToDb(result, "okpd2");
 		}
 
-		[TestMethod, Ignore]
-		public async Task Parser_Should_ParseOktmoXmlFile()
+		[TestMethod]
+		[DataRow(false)]
+		public async Task Parser_Should_ParseOktmoXmlFile(bool dumpToDb)
 		{
 			// arrange
 			var parser = new XmlOktmoParser();
@@ -101,11 +105,12 @@ namespace Montr.MasterData.Plugin.GovRu.Tests.Services
 			Assert.IsNotNull(result.Items);
 			Assert.AreEqual(211185, result.Items.Count);
 
-			await DumpToDb(result, "oktmo");
+			if (dumpToDb) await DumpToDb(result, "oktmo");
 		}
 
 		[TestMethod]
-		public async Task Parser_Should_ParseOktmoCsvFile()
+		[DataRow(false)]
+		public async Task Parser_Should_ParseOktmoCsvFile(bool dumpToDb)
 		{
 			// arrange
 			var parser = new CsvOktmoParser();
@@ -118,11 +123,12 @@ namespace Montr.MasterData.Plugin.GovRu.Tests.Services
 			Assert.IsNotNull(result.Items);
 			Assert.AreEqual(200313, result.Items.Count);
 
-			await DumpToDb(result, "oktmo");
+			if (dumpToDb) await DumpToDb(result, "oktmo");
 		}
 
 		[TestMethod]
-		public async Task Parser_Should_ParseOkvFile()
+		[DataRow(false)]
+		public async Task Parser_Should_ParseOkvFile(bool dumpToDb)
 		{
 			// arrange
 			var parser = new XmlOkvParser();
@@ -135,11 +141,12 @@ namespace Montr.MasterData.Plugin.GovRu.Tests.Services
 			Assert.IsNotNull(result.Items);
 			Assert.AreEqual(163, result.Items.Count);
 
-			await DumpToDb(result, "okv");
+			if (dumpToDb) await DumpToDb(result, "okv");
 		}
 
 		[TestMethod]
-		public async Task Parser_Should_ParseOkopfFile()
+		[DataRow(false)]
+		public async Task Parser_Should_ParseOkopfFile(bool dumpToDb)
 		{
 			// arrange
 			var parser = new XmlOkopfParser();
@@ -152,7 +159,7 @@ namespace Montr.MasterData.Plugin.GovRu.Tests.Services
 			Assert.IsNotNull(result.Items);
 			Assert.AreEqual(223, result.Items.Count);
 
-			await DumpToDb(result, "okopf");
+			if (dumpToDb) await DumpToDb(result, "okopf");
 		}
 
 		private static async Task DumpToDb(ParseResult result, string typeCode)

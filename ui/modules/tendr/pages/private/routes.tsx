@@ -6,9 +6,11 @@ import { SearchClassifier, EditClassifier, SearchClassifierType } from "@montr-m
 export const Routes = () => {
 	return <>
 		<Route path="/" exact component={() => <Dashboard />} />
+
 		<Route path="/events" exact component={() => <SearchEvents />} />
 		<Route path="/events/new" component={() => <SelectEventTemplate />} />
 		<Route path="/events/edit/:id" component={({ match }: any) => <EditEvent {...match} />} />
+
 		<Route path="/classifiers/" exact component={SearchClassifierType} />
 		<Route path="/classifiers/:typeCode" exact component={SearchClassifier} />
 		<Route path="/classifiers/:typeCode/new" exact component={EditClassifier} />
