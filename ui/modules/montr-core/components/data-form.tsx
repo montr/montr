@@ -46,7 +46,8 @@ class _DataForm extends React.Component<IProps, IState> {
 		const fieldNode = fieldFactory.createNode(field, data);
 
 		return (
-			<Form.Item key={field.key} label={field.name} {...FormDefaults.formItemLayout}>
+			<Form.Item key={field.key} label={field.name} extra={field.description}
+				{...FormDefaults.formItemLayout}>
 				{getFieldDecorator(field.key, fieldOptions)(fieldNode)}
 			</Form.Item>
 		);

@@ -1,8 +1,7 @@
 import * as React from "react";
 import { Page, PageHeader, DataForm } from "@montr-core/components";
 import { RouteComponentProps, Redirect } from "react-router";
-import { Form, Spin, Tabs } from "antd";
-import { FormComponentProps } from "antd/lib/form";
+import { Spin, Tabs } from "antd";
 import { MetadataService, NotificationService } from "@montr-core/services";
 import { IFormField, Guid } from "@montr-core/models";
 import { ClassifierService } from "../services";
@@ -10,14 +9,9 @@ import { CompanyContextProps, withCompanyContext } from "@kompany/components";
 import { IClassifier, IClassifierType } from "../models";
 import { ClassifierBreadcrumb } from "../components";
 
-interface IRouteProps {
+interface IProps extends CompanyContextProps {
 	typeCode: string;
-	uid?: string;
-}
-
-interface IProps extends FormComponentProps, CompanyContextProps {
-	typeCode: string;
-	uid?: string;
+	uid?: Guid;
 }
 
 interface IState {
@@ -45,12 +39,7 @@ class _EditClassifierForm extends React.Component<IProps, IState> {
 	}
 
 	componentDidMount = async () => {
-
-		const { currentCompany } = this.props;
-
-		if (currentCompany) {
-			await this.fetchData();
-		}
+		await this.fetchData();
 	}
 
 	componentDidUpdate = async (prevProps: IProps) => {
@@ -66,38 +55,31 @@ class _EditClassifierForm extends React.Component<IProps, IState> {
 		await this._classifierService.abort();
 	}
 
-	private fetchClassifierTypes = async (): Promise<IClassifierType[]> => {
-		const { currentCompany } = this.props;
-
-		const data = await this._classifierService.types(currentCompany.uid);
-
-		return data.rows;
-	}
-
 	private fetchData = async () => {
 		const { typeCode, currentCompany, uid } = this.props;
 
 		if (currentCompany) {
 
-			const types = await this.fetchClassifierTypes();
-			const type = types.find(x => x.code == typeCode);
+			const types = await this._classifierService.types(currentCompany.uid);
+			const type = types.rows.find(x => x.code == typeCode);
 
 			const dataView = await this._metadataService.load(`Classifier/${typeCode}`);
 
-			const data = (this.props.uid)
-				? await this._classifierService.get(currentCompany.uid, typeCode, new Guid(uid))
+			const data = (uid)
+				? await this._classifierService.get(currentCompany.uid, typeCode, uid)
 				: {};
 
-			this.setState({ loading: false, type, types, fields: dataView.fields, data });
+			this.setState({ loading: false, type, types: types.rows, fields: dataView.fields, data });
 		}
 	}
 
 	private save = async (values: IClassifier) => {
 
+		const { uid } = this.props;
 		const { uid: companyUid } = this.props.currentCompany;
 
-		if (this.props.uid) {
-			await this._classifierService.update(companyUid, { uid: new Guid(this.props.uid), ...values });
+		if (uid) {
+			await this._classifierService.update(companyUid, { uid, ...values });
 
 			this._notificationService.success("Данные успешно сохранены.");
 		}
@@ -118,10 +100,6 @@ class _EditClassifierForm extends React.Component<IProps, IState> {
 			return <Redirect to={`/classifiers/${typeCode}/edit/${this.state.newUid}`} />
 		}
 
-		const dataForm = (fields &&
-			<DataForm fields={fields} data={data} onSave={this.save} />
-		);
-
 		return (
 			<Page title={<>
 				<ClassifierBreadcrumb type={type} types={types} item={data} />
@@ -129,7 +107,9 @@ class _EditClassifierForm extends React.Component<IProps, IState> {
 			</>}>
 				<Spin spinning={this.state.loading}>
 					<Tabs>
-						<Tabs.TabPane key="1" tab="Информация">{dataForm}</Tabs.TabPane>
+						<Tabs.TabPane key="1" tab="Информация">
+							{fields && <DataForm fields={fields} data={data} onSave={this.save} />}
+						</Tabs.TabPane>
 						<Tabs.TabPane key="2" tab="Иерархия"></Tabs.TabPane>
 						<Tabs.TabPane key="3" tab="Ссылки"></Tabs.TabPane>
 						<Tabs.TabPane key="4" tab="История изменений"></Tabs.TabPane>
@@ -140,13 +120,18 @@ class _EditClassifierForm extends React.Component<IProps, IState> {
 	}
 }
 
-const EditClassifierForm = withCompanyContext(Form.create()(_EditClassifierForm));
+const EditClassifierForm = withCompanyContext(_EditClassifierForm);
+
+interface IRouteProps {
+	typeCode: string;
+	uid?: string;
+}
 
 export class EditClassifier extends React.Component<RouteComponentProps<IRouteProps>> {
 	render = () => {
 
 		const { typeCode, uid } = this.props.match.params;
 
-		return <EditClassifierForm typeCode={typeCode} uid={uid} />
+		return <EditClassifierForm typeCode={typeCode} uid={uid ? new Guid(uid) : null} />
 	}
 }

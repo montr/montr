@@ -247,9 +247,12 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 				toolbar={<>
 					<Link to={`/classifiers/${type.code}/new`}>
 						<Button type="primary"><Icon type="plus" /> Добавить</Button>
+					</Link>&#xA0;
+					<Button onClick={this.delete}><Icon type="delete" /> Удалить</Button>&#xA0;
+					<Button onClick={this.export}><Icon type="export" /> Экспорт</Button>&#xA0;
+					<Link to={`/classifiers/${type.code}/manage/`}>
+						<Button><Icon type="setting" /></Button>
 					</Link>
-					&#xA0;<Button onClick={this.delete}><Icon type="delete" /> Удалить</Button>
-					&#xA0;<Button onClick={this.export}><Icon type="export" /> Экспорт</Button>
 				</>}>
 
 				<Layout>
