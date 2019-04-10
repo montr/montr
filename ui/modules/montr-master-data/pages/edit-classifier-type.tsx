@@ -1,12 +1,12 @@
 import * as React from "react";
 import { CompanyContextProps, withCompanyContext } from "@kompany/components";
 import { Page, DataForm, PageHeader } from "@montr-core/components";
-import { Guid, IFormField, ISelectField, IOption } from "@montr-core/models";
+import { Guid } from "@montr-core/models";
 import { RouteComponentProps } from "react-router";
-import { ClassifierService } from "../services";
+import { ClassifierTypeService } from "../services";
 import { IClassifierType } from "../models";
 import { ClassifierBreadcrumb } from "../components";
-import { Spin } from "antd";
+import { Spin, Tabs } from "antd";
 
 
 interface IProps extends CompanyContextProps {
@@ -22,7 +22,7 @@ interface IState {
 
 class _EditClassifierTypeForm extends React.Component<IProps, IState> {
 
-	private _classifierService = new ClassifierService();
+	private _classifierTypeService = new ClassifierTypeService();
 
 	constructor(props: IProps) {
 		super(props);
@@ -47,12 +47,16 @@ class _EditClassifierTypeForm extends React.Component<IProps, IState> {
 		}
 	}
 
+	componentWillUnmount = async () => {
+		await this._classifierTypeService.abort();
+	}
+
 	private fetchData = async () => {
 		const { typeCode, currentCompany, uid } = this.props;
 
 		if (currentCompany) {
 
-			const types = await this._classifierService.types(currentCompany.uid);
+			const types = await this._classifierTypeService.list(currentCompany.uid);
 			const type = types.rows.find(x => x.code == typeCode);
 
 			this.setState({ loading: false, type, types: types.rows });
@@ -68,7 +72,8 @@ class _EditClassifierTypeForm extends React.Component<IProps, IState> {
 
 		const fields = [
 			{ key: "code", type: "string", name: "Код", required: true },
-			{ key: "name", type: "textarea", name: "Наименование", required: true },
+			{ key: "name", type: "textarea", name: "Наименование", rows: 2, required: true },
+			{ key: "description", type: "textarea", name: "Описание" },
 			{
 				key: "hierarchyType", type: "select", name: "Иерархия", required: true,
 				options: [
@@ -85,7 +90,14 @@ class _EditClassifierTypeForm extends React.Component<IProps, IState> {
 				<PageHeader>{type.name}</PageHeader>
 			</>}>
 				<Spin spinning={this.state.loading}>
-					{fields && <DataForm fields={fields} data={type} onSave={this.save} />}
+					<Tabs>
+						<Tabs.TabPane key="1" tab="Информация">
+							{fields && <DataForm fields={fields} data={type} onSave={this.save} />}
+						</Tabs.TabPane>
+						<Tabs.TabPane key="2" tab="Иерархия"></Tabs.TabPane>
+						<Tabs.TabPane key="3" tab="Поля"></Tabs.TabPane>
+						<Tabs.TabPane key="4" tab="История изменений"></Tabs.TabPane>
+					</Tabs>
 				</Spin>
 			</Page>
 		)

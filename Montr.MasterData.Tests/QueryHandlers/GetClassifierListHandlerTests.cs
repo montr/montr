@@ -15,7 +15,7 @@ namespace Montr.MasterData.Tests.QueryHandlers
 		[TestMethod]
 		public async Task GetClassifierList_Should_ReturnList()
 		{
-			// todo: split test
+			// todo: convert to classifier repository tests
 
 			// arrange
 			var dbContextFactory = new DefaultDbContextFactory();

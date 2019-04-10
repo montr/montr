@@ -59,7 +59,7 @@ class _SearchClassifierType extends React.Component<IProps, IState> {
 
 				<DataTable
 					viewId={`ClassifierType/Grid/`}
-					loadUrl={`${Constants.baseURL}/classifier/types/`}
+					loadUrl={`${Constants.baseURL}/classifierType/list/`}
 					postParams={this.state.postParams}
 					rowKey="code"
 				/>

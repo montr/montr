@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using LinqToDB;
@@ -8,44 +7,26 @@ using Montr.Core.Services;
 using Montr.Data.Linq2Db;
 using Montr.MasterData.Commands;
 using Montr.MasterData.Impl.Entities;
-using Montr.MasterData.Models;
 
 namespace Montr.MasterData.Impl.CommandHandlers
 {
-	public class InsertClassifierHandler: IRequestHandler<InsertClassifier, Guid>
+	public class InsertClassifierTypeHandler : IRequestHandler<InsertClassifierType, Guid>
 	{
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IDbContextFactory _dbContextFactory;
-		private readonly IDateTimeProvider _dateTimeProvider;
-		private readonly IRepository<ClassifierType> _classifierTypeRepository;
 
-		public InsertClassifierHandler(IUnitOfWorkFactory unitOfWorkFactory, IDbContextFactory dbContextFactory,
-			IDateTimeProvider dateTimeProvider, IRepository<ClassifierType> classifierTypeRepository)
+		public InsertClassifierTypeHandler(IUnitOfWorkFactory unitOfWorkFactory, IDbContextFactory dbContextFactory)
 		{
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_dbContextFactory = dbContextFactory;
-			_dateTimeProvider = dateTimeProvider;
-			_classifierTypeRepository = classifierTypeRepository;
 		}
 
-		public async Task<Guid> Handle(InsertClassifier request, CancellationToken cancellationToken)
+		public async Task<Guid> Handle(InsertClassifierType request, CancellationToken cancellationToken)
 		{
 			if (request.UserUid == Guid.Empty) throw new InvalidOperationException("User is required.");
 			if (request.CompanyUid == Guid.Empty) throw new InvalidOperationException("Company is required.");
 
 			var item = request.Item ?? throw new ArgumentNullException(nameof(request.Item));
-
-			// var now = _dateTimeProvider.GetUtcNow();
-
-			var types = await _classifierTypeRepository.Search(
-				new ClassifierTypeSearchRequest
-				{
-					CompanyUid = request.CompanyUid,
-					UserUid = request.UserUid,
-					Code = request.TypeCode
-				}, cancellationToken);
-
-			var type = types.Rows.Single();
 
 			using (var scope = _unitOfWorkFactory.Create())
 			{
@@ -57,13 +38,12 @@ namespace Montr.MasterData.Impl.CommandHandlers
 				{
 					// компания + todo: дата изменения
 
-					await db.GetTable<DbClassifier>()
+					await db.GetTable<DbClassifierType>()
 						.Value(x => x.Uid, itemUid)
-						// .Value(x => x.CompanyUid, request.CompanyUid)
-						.Value(x => x.TypeUid, type.Uid)
-						.Value(x => x.StatusCode, ClassifierStatusCode.Active)
+						.Value(x => x.CompanyUid, request.CompanyUid)
 						.Value(x => x.Code, item.Code)
 						.Value(x => x.Name, item.Name)
+						.Value(x => x.Description, item.Description)
 						.InsertAsync(cancellationToken);
 				}
 

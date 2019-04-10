@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Input, Select } from "antd";
-import { IFormField, IIndexer, ISelectField } from "../models";
+import { IFormField, IIndexer, ISelectField, ITextAreaField } from "../models";
 
 export abstract class FormFieldFactory {
 	private static Map: { [key: string]: FormFieldFactory; } = {};
@@ -24,7 +24,12 @@ class StringFieldFactory implements FormFieldFactory {
 
 class TextAreaFieldFactory implements FormFieldFactory {
 	createNode(field: IFormField, data: IIndexer): React.ReactNode {
-		return <Input.TextArea placeholder={field.placeholder} autosize={{ minRows: 4, maxRows: 24 }} />;
+
+		const textAreaField = field as ITextAreaField;
+
+		const minRows = textAreaField.rows || 4;
+
+		return <Input.TextArea placeholder={field.placeholder} autosize={{ minRows: minRows, maxRows: 24 }} />;
 	}
 }
 

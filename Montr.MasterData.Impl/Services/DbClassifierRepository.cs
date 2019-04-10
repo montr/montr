@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using LinqToDB;
@@ -24,7 +25,7 @@ namespace Montr.MasterData.Impl.Services
 
 		public async Task<SearchResult<Classifier>> Search(SearchRequest searchRequest, CancellationToken cancellationToken)
 		{
-			var request = (ClassifierSearchRequest)searchRequest;
+			var request = (ClassifierSearchRequest)searchRequest ?? throw new ArgumentNullException(nameof(searchRequest));
 
 			var type = await _classifierTypeService.GetClassifierType(request.CompanyUid, request.TypeCode, cancellationToken);
 
@@ -78,8 +79,8 @@ namespace Montr.MasterData.Impl.Services
 					}
 					else
 					{
-						query = from parent in db.GetTable<DbClassifier>() 
-							join closures in db.GetTable<DbClassifierClosure>() on parent.Uid equals closures.ParentUid 
+						query = from parent in db.GetTable<DbClassifier>()
+							join closures in db.GetTable<DbClassifierClosure>() on parent.Uid equals closures.ParentUid
 							join @class in db.GetTable<DbClassifier>() on closures.ChildUid equals @class.Uid
 							where parent.TypeUid == type.Uid && parent.Code == request.GroupCode && closures.Level > 0
 							select @class;

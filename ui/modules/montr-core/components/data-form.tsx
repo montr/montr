@@ -62,7 +62,8 @@ class _DataForm extends React.Component<IProps, IState> {
 					return this.createItem(field);
 				})}
 				<Form.Item {...FormDefaults.tailFormItemLayout}>
-					<Button type="primary" htmlType="submit" icon="check">Сохранить</Button>
+					<Button type="primary" htmlType="submit" icon="check">Сохранить</Button>&#xA0;
+					{/* <Button htmlType="reset">Отменить</Button> */}
 				</Form.Item>
 			</Form>
 		);

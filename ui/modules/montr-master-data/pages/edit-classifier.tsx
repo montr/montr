@@ -4,7 +4,7 @@ import { RouteComponentProps, Redirect } from "react-router";
 import { Spin, Tabs } from "antd";
 import { MetadataService, NotificationService } from "@montr-core/services";
 import { IFormField, Guid } from "@montr-core/models";
-import { ClassifierService } from "../services";
+import { ClassifierService, ClassifierTypeService } from "../services";
 import { CompanyContextProps, withCompanyContext } from "@kompany/components";
 import { IClassifier, IClassifierType } from "../models";
 import { ClassifierBreadcrumb } from "../components";
@@ -27,6 +27,7 @@ class _EditClassifierForm extends React.Component<IProps, IState> {
 
 	private _metadataService = new MetadataService();
 	private _notificationService = new NotificationService();
+	private _classifierTypeService = new ClassifierTypeService();
 	private _classifierService = new ClassifierService();
 
 	constructor(props: IProps) {
@@ -52,6 +53,7 @@ class _EditClassifierForm extends React.Component<IProps, IState> {
 
 	componentWillUnmount = async () => {
 		await this._metadataService.abort();
+		await this._classifierTypeService.abort();
 		await this._classifierService.abort();
 	}
 
@@ -60,7 +62,7 @@ class _EditClassifierForm extends React.Component<IProps, IState> {
 
 		if (currentCompany) {
 
-			const types = await this._classifierService.types(currentCompany.uid);
+			const types = await this._classifierTypeService.list(currentCompany.uid);
 			const type = types.rows.find(x => x.code == typeCode);
 
 			const dataView = await this._metadataService.load(`Classifier/${typeCode}`);
@@ -100,6 +102,8 @@ class _EditClassifierForm extends React.Component<IProps, IState> {
 			return <Redirect to={`/classifiers/${typeCode}/edit/${this.state.newUid}`} />
 		}
 
+		const otherTabsDisabled = !data.uid;
+
 		return (
 			<Page title={<>
 				<ClassifierBreadcrumb type={type} types={types} item={data} />
@@ -110,9 +114,11 @@ class _EditClassifierForm extends React.Component<IProps, IState> {
 						<Tabs.TabPane key="1" tab="Информация">
 							{fields && <DataForm fields={fields} data={data} onSave={this.save} />}
 						</Tabs.TabPane>
-						<Tabs.TabPane key="2" tab="Иерархия"></Tabs.TabPane>
-						<Tabs.TabPane key="3" tab="Ссылки"></Tabs.TabPane>
-						<Tabs.TabPane key="4" tab="История изменений"></Tabs.TabPane>
+						<Tabs.TabPane key="2" tab="Иерархия" disabled={otherTabsDisabled}></Tabs.TabPane>
+						<Tabs.TabPane key="3" tab="Ссылки" disabled={otherTabsDisabled}>
+							usages of classifier
+						</Tabs.TabPane>
+						<Tabs.TabPane key="4" tab="История изменений" disabled={otherTabsDisabled}></Tabs.TabPane>
 					</Tabs>
 				</Spin>
 			</Page>

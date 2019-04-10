@@ -25,16 +25,6 @@ namespace Montr.MasterData.Controllers
 		}
 
 		[HttpPost]
-		public async Task<SearchResult<ClassifierType>> Types(ClassifierTypeSearchRequest request)
-		{
-			return await _mediator.Send(new GetClassifierTypeList
-			{
-				UserUid = _currentUserProvider.GetUserUid(),
-				Request = request
-			});
-		}
-
-		[HttpPost]
 		public async Task<SearchResult<ClassifierTree>> Trees(ClassifierTreeSearchRequest request)
 		{
 			return await _mediator.Send(new GetClassifierTreeList
@@ -43,7 +33,7 @@ namespace Montr.MasterData.Controllers
 				Request = request
 			});
 		}
-		
+
 		[HttpPost]
 		public async Task<IEnumerable<ClassifierGroup>> Groups(ClassifierGroupSearchRequest request)
 		{

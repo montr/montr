@@ -3,11 +3,13 @@ import { Constants } from "@montr-core/.";
 import { Guid, IDataResult } from "@montr-core/models";
 import { IClassifier, IClassifierType, IClassifierGroup } from "../models";
 
-export class ClassifierService extends Fetcher {
-	types = async (companyUid: Guid): Promise<IDataResult<IClassifierType>> => {
-		return this.post(`${Constants.baseURL}/classifier/types`, { companyUid });
+export class ClassifierTypeService extends Fetcher {
+	list = async (companyUid: Guid): Promise<IDataResult<IClassifierType>> => {
+		return this.post(`${Constants.baseURL}/classifierType/list`, { companyUid });
 	};
+}
 
+export class ClassifierService extends Fetcher {
 	trees = async (companyUid: Guid, typeCode: string): Promise<IDataResult<IClassifierType>> => {
 		return this.post(`${Constants.baseURL}/classifier/trees`, { companyUid, typeCode });
 	};

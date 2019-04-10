@@ -6,7 +6,7 @@ import { Constants } from "@montr-core/.";
 import { Icon, Button, Tree, Select, Radio, Layout } from "antd";
 import { Link } from "react-router-dom";
 import { withCompanyContext, CompanyContextProps } from "@kompany/components";
-import { ClassifierService } from "../services";
+import { ClassifierService, ClassifierTypeService } from "../services";
 import { IClassifierType, IClassifierTree, IClassifierGroup } from "../models";
 import { RadioChangeEvent } from "antd/lib/radio";
 import { AntTreeNode } from "antd/lib/tree";
@@ -31,6 +31,7 @@ interface IState {
 
 class _SearchClassifier extends React.Component<IProps, IState> {
 
+	private _classifierTypeService = new ClassifierTypeService();
 	private _classifierService = new ClassifierService();
 	private _notificationService = new NotificationService();
 
@@ -61,6 +62,7 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 	}
 
 	componentWillUnmount = async () => {
+		await this._classifierTypeService.abort();
 		await this._classifierService.abort();
 	}
 
@@ -109,7 +111,7 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 	private fetchClassifierTypes = async (): Promise<IClassifierType[]> => {
 		const { currentCompany } = this.props;
 
-		const data = await this._classifierService.types(currentCompany.uid);
+		const data = await this._classifierTypeService.list(currentCompany.uid);
 
 		return data.rows;
 	}
