@@ -7,12 +7,25 @@ import { AuthCallbackHandler, UserContextProvider, DataMenu } from "@montr-core/
 import { CompanyContextProvider, UserWithCompanyMenu } from "@kompany/components";
 import { NotificationService } from "@montr-core/services";
 
-export class App extends React.Component {
+interface IProps {
+}
+
+interface IState {
+}
+
+export class App extends React.Component<IProps, IState> {
 
 	private _notification = new NotificationService();
 
+	constructor(props: IProps) {
+		super(props);
+
+		this.state = {
+		};
+	}
+
 	componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
-		this._notification.error({ message: "App.componentDidCatch " + error.message });
+		this._notification.error("App.componentDidCatch ", error.message);
 	}
 
 	render() {

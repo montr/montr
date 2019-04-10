@@ -30,7 +30,7 @@ export class ClassifierBreadcrumb extends React.Component<IProps> {
 		}
 
 		if (item) {
-			items.push({ name: item.code });
+			items.push({ name: item.name });
 		}
 
 		return (

@@ -41,8 +41,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 				using (var db = _dbContextFactory.Create())
 				{
 					result = await db.GetTable<DbClassifier>()
-						.Where(x => x.TypeUid == type.Uid &&
-									request.Uids.Contains(x.Uid))
+						.Where(x => x.TypeUid == type.Uid && request.Uids.Contains(x.Uid))
 						.DeleteAsync(cancellationToken);
 				}
 

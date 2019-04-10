@@ -41,6 +41,7 @@ namespace Montr.MasterData.Impl.Services
 						Uid = x.Uid,
 						Code = x.Code,
 						Name = x.Name,
+						Description = x.Description,
 						HierarchyType = Enum.Parse<HierarchyType>(x.HierarchyType),
 						IsSystem = true,
 						Url = $"/classifiers/{x.Code}/"

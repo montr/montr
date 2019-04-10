@@ -12,9 +12,11 @@ export const Routes = () => {
 		<Route path="/events/edit/:id" component={({ match }: any) => <EditEvent {...match} />} />
 
 		<Route path="/classifiers/" exact component={SearchClassifierType} />
+		<Route path="/classifiers/add" exact component={EditClassifierType} />
+		<Route path="/classifiers/edit/:uid" exact component={EditClassifierType} />
+
 		<Route path="/classifiers/:typeCode/" exact component={SearchClassifier} />
-		<Route path="/classifiers/:typeCode/manage" exact component={EditClassifierType} />
-		<Route path="/classifiers/:typeCode/new" exact component={EditClassifier} />
+		<Route path="/classifiers/:typeCode/add" exact component={EditClassifier} />
 		<Route path="/classifiers/:typeCode/edit/:uid" exact component={EditClassifier} />
 	</>
 }

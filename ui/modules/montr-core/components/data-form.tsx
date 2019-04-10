@@ -1,8 +1,9 @@
 import * as React from "react";
 import { Form, Button } from "antd";
-import { IFormField, IIndexer } from "../models";
-import { FormDefaults, FormFieldFactory } from ".";
 import { FormComponentProps } from "antd/lib/form";
+import { IFormField, IIndexer } from "../models";
+import { NotificationService } from "../services/notification-service";
+import { FormDefaults, FormFieldFactory } from ".";
 
 interface IProps extends FormComponentProps {
 	fields: IFormField[];
@@ -15,6 +16,8 @@ interface IState {
 
 class _DataForm extends React.Component<IProps, IState> {
 
+	private _notificationService = new NotificationService();
+
 	private handleSubmit = async (e: React.SyntheticEvent) => {
 		e.preventDefault();
 
@@ -23,7 +26,12 @@ class _DataForm extends React.Component<IProps, IState> {
 				// console.log(errors);
 			}
 			else {
-				this.props.onSave(values);
+				try {
+					await this.props.onSave(values);
+					this._notificationService.success("Данные успешно сохранены");
+				} catch (error) {
+					this._notificationService.error("Ошибка при сохранении данных", error.message);
+				}
 			}
 		});
 	}

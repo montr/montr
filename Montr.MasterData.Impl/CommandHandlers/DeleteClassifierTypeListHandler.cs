@@ -11,18 +11,18 @@ using Montr.MasterData.Impl.Entities;
 
 namespace Montr.MasterData.Impl.CommandHandlers
 {
-	public class DeleteClassifierTypeHandler : IRequestHandler<DeleteClassifierType, int>
+	public class DeleteClassifierTypeListHandler : IRequestHandler<DeleteClassifierTypeList, int>
 	{
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IDbContextFactory _dbContextFactory;
 
-		public DeleteClassifierTypeHandler(IUnitOfWorkFactory unitOfWorkFactory, IDbContextFactory dbContextFactory)
+		public DeleteClassifierTypeListHandler(IUnitOfWorkFactory unitOfWorkFactory, IDbContextFactory dbContextFactory)
 		{
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_dbContextFactory = dbContextFactory;
 		}
 
-		public async Task<int> Handle(DeleteClassifierType request, CancellationToken cancellationToken)
+		public async Task<int> Handle(DeleteClassifierTypeList request, CancellationToken cancellationToken)
 		{
 			if (request.UserUid == Guid.Empty) throw new InvalidOperationException("User is required.");
 			if (request.CompanyUid == Guid.Empty) throw new InvalidOperationException("Company is required.");
@@ -36,8 +36,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 				using (var db = _dbContextFactory.Create())
 				{
 					result = await db.GetTable<DbClassifierType>()
-						.Where(x => x.CompanyUid == request.CompanyUid
-									&& x.Code == request.TypeCode)
+						.Where(x => x.CompanyUid == request.CompanyUid && request.Uids.Contains(x.Uid))
 						.DeleteAsync(cancellationToken);
 				}
 

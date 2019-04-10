@@ -33,6 +33,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 				var itemUid = Guid.NewGuid();
 
 				// todo: валидация и ограничения
+				// todo: reserved codes (add, new etc. can conflict with routing)
 
 				using (var db = _dbContextFactory.Create())
 				{
@@ -44,6 +45,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 						.Value(x => x.Code, item.Code)
 						.Value(x => x.Name, item.Name)
 						.Value(x => x.Description, item.Description)
+						.Value(x => x.HierarchyType, item.HierarchyType.ToString())
 						.InsertAsync(cancellationToken);
 				}
 

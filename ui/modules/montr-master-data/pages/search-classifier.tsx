@@ -246,16 +246,18 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 					<ClassifierBreadcrumb type={type} types={types} />
 					<PageHeader>{type.name}</PageHeader>
 				</>}
-				toolbar={<>
-					<Link to={`/classifiers/${type.code}/new`}>
-						<Button type="primary"><Icon type="plus" /> Добавить</Button>
-					</Link>&#xA0;
-					<Button onClick={this.delete}><Icon type="delete" /> Удалить</Button>&#xA0;
-					<Button onClick={this.export}><Icon type="export" /> Экспорт</Button>&#xA0;
-					<Link to={`/classifiers/${type.code}/manage/`}>
-						<Button><Icon type="setting" /></Button>
-					</Link>
-				</>}>
+				toolbar={
+					<div className="toolbar">
+						<Link to={`/classifiers/${type.code}/add`}>
+							<Button type="primary"><Icon type="plus" /> Добавить</Button>
+						</Link>
+						<Button onClick={this.delete}><Icon type="delete" /> Удалить</Button>
+						<Button onClick={this.export}><Icon type="export" /> Экспорт</Button>
+						<Link to={`/classifiers/edit/${type.uid}`}>
+							<Button><Icon type="setting" /></Button>
+						</Link>
+					</div>
+				}>
 
 				<Layout>
 					<Layout.Header className="bg-white" style={{ padding: "0" }}>

@@ -36,10 +36,10 @@ namespace Montr.MasterData.Impl.CommandHandlers
 				using (var db = _dbContextFactory.Create())
 				{
 					result = await db.GetTable<DbClassifierType>()
-						.Where(x => x.Uid == item.Uid)
+						.Where(x => x.Uid == item.Uid && x.CompanyUid == request.CompanyUid)
 						.Set(x => x.Code, item.Code)
-						.Set(x => x.Name, item.Description)
-						.Set(x => x.Description, item.Name)
+						.Set(x => x.Name, item.Name)
+						.Set(x => x.Description, item.Description)
 						.Set(x => x.HierarchyType, item.HierarchyType.ToString())
 						.UpdateAsync(cancellationToken);
 				}

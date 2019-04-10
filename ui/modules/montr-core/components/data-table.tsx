@@ -177,9 +177,7 @@ export class DataTable<TModel extends IIndexer> extends React.Component<IProps<T
 			});
 		} catch (error) {
 			this.setState({ error, loading: false });
-			this._notification.error({
-				message: "Ошибка загрузки данных."
-			});
+			this._notification.error("Ошибка загрузки данных.", error.message);
 			throw error;
 		}
 	}

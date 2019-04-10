@@ -2,7 +2,7 @@ import * as React from "react";
 import { Page, PageHeader, DataForm } from "@montr-core/components";
 import { RouteComponentProps, Redirect } from "react-router";
 import { Spin, Tabs } from "antd";
-import { MetadataService, NotificationService } from "@montr-core/services";
+import { MetadataService } from "@montr-core/services";
 import { IFormField, Guid } from "@montr-core/models";
 import { ClassifierService, ClassifierTypeService } from "../services";
 import { CompanyContextProps, withCompanyContext } from "@kompany/components";
@@ -20,13 +20,12 @@ interface IState {
 	type?: IClassifierType;
 	types?: IClassifierType[];
 	data: IClassifier;
-	newUid?: Guid;
+	redirect?: string;
 }
 
 class _EditClassifierForm extends React.Component<IProps, IState> {
 
 	private _metadataService = new MetadataService();
-	private _notificationService = new NotificationService();
 	private _classifierTypeService = new ClassifierTypeService();
 	private _classifierService = new ClassifierService();
 
@@ -46,7 +45,6 @@ class _EditClassifierForm extends React.Component<IProps, IState> {
 	componentDidUpdate = async (prevProps: IProps) => {
 		if (this.props.typeCode !== prevProps.typeCode ||
 			this.props.currentCompany !== prevProps.currentCompany) {
-
 			await this.fetchData();
 		}
 	}
@@ -77,30 +75,29 @@ class _EditClassifierForm extends React.Component<IProps, IState> {
 
 	private save = async (values: IClassifier) => {
 
-		const { uid } = this.props;
+		const { typeCode, uid } = this.props;
 		const { uid: companyUid } = this.props.currentCompany;
 
 		if (uid) {
-			await this._classifierService.update(companyUid, { uid, ...values });
+			const data = { uid, ...values };
+			const rowsUpdated = await this._classifierService.update(companyUid, { uid, ...values });
 
-			this._notificationService.success("Данные успешно сохранены.");
+			if (rowsUpdated != 1) throw new Error();
+			this.setState({ data });
 		}
 		else {
 			const uid: Guid = await this._classifierService.insert(companyUid, this.props.typeCode, values);
 
-			this._notificationService.success("Данные успешно добавлены.");
-
-			this.setState({ newUid: uid });
+			this.setState({ redirect: `/classifiers/${typeCode}/edit/${uid}` });
 		}
 	}
 
 	render = () => {
-		const { typeCode } = this.props,
-			{ type, types, fields, data } = this.state;
-
-		if (this.state.newUid) {
-			return <Redirect to={`/classifiers/${typeCode}/edit/${this.state.newUid}`} />
+		if (this.state.redirect) {
+			return <Redirect to={this.state.redirect} />
 		}
+
+		const { type, types, fields, data } = this.state;
 
 		const otherTabsDisabled = !data.uid;
 
