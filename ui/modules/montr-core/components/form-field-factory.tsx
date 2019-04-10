@@ -34,7 +34,7 @@ class SelectFieldFactory implements FormFieldFactory {
 		const selectField = field as ISelectField;
 
 		return (
-			<Select>
+			<Select placeholder={field.placeholder}>
 				{selectField && selectField.options && selectField.options.map(x => {
 					return <Select.Option key={x.value} value={x.value}>{x.name || x.value}</Select.Option>
 				})}

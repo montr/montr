@@ -72,9 +72,9 @@ class _EditClassifierTypeForm extends React.Component<IProps, IState> {
 			{
 				key: "hierarchyType", type: "select", name: "Иерархия", required: true,
 				options: [
-					{ value: "None", name: "None" },
-					{ value: "Items", name: "Items" },
-					{ value: "Groups", name: "Groups" },
+					{ value: "None", name: "Нет" },
+					{ value: "Groups", name: "Группы" },
+					{ value: "Items", name: "Элементы" },
 				]
 			},
 		];
