@@ -18,8 +18,6 @@ namespace Montr.MasterData.Impl.CommandHandlers
 	// todo: move to service? should recieve stream?
 	public class ImportClassifierListHandler : IRequestHandler<ImportClassifierList, ImportResult>
 	{
-		private const string DefaultTreeCode = "default";
-
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IDbContextFactory _dbContextFactory;
 		private readonly IClassifierTypeService _classifierTypeService;
@@ -47,7 +45,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 			// (+) todo: add new items to default tree
 			// (+) todo: build tree of items
 			// (+) todo: build closure table for groups or item
-			
+
 			await Preload(request, cancellationToken);
 
 			ImportResult result;
@@ -83,7 +81,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 					_tree = db.GetTable<DbClassifierTree>()
 						.SingleOrDefault(x =>
 							x.TypeUid == _type.Uid &&
-							x.Code == DefaultTreeCode);
+							x.Code == ClassifierTree.DefaultTreeCode);
 
 					if (_tree == null)
 					{
@@ -91,7 +89,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 						{
 							Uid = Guid.NewGuid(),
 							TypeUid = _type.Uid,
-							Code = DefaultTreeCode,
+							Code = ClassifierTree.DefaultTreeCode,
 							Name = _type.Name
 						};
 
@@ -529,6 +527,6 @@ namespace Montr.MasterData.Impl.CommandHandlers
 
 				return 1;
 			}
-		} 
+		}
 	}
 }

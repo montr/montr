@@ -5,6 +5,8 @@ namespace Montr.MasterData.Models
 	[DebuggerDisplay("{" + nameof(DebuggerDisplay) + ",nq}")]
 	public class ClassifierTree
 	{
+		public const string DefaultTreeCode = "default";
+
 		private string DebuggerDisplay => $"{Code}, {Name}";
 
 		// todo: remove?

@@ -7,6 +7,7 @@ using Montr.Core.Services;
 using Montr.Data.Linq2Db;
 using Montr.MasterData.Commands;
 using Montr.MasterData.Impl.Entities;
+using Montr.MasterData.Models;
 
 namespace Montr.MasterData.Impl.CommandHandlers
 {
@@ -47,6 +48,16 @@ namespace Montr.MasterData.Impl.CommandHandlers
 						.Value(x => x.Description, item.Description)
 						.Value(x => x.HierarchyType, item.HierarchyType.ToString())
 						.InsertAsync(cancellationToken);
+
+					if (item.HierarchyType == HierarchyType.Groups)
+					{
+						await db.GetTable<DbClassifierTree>()
+							.Value(x => x.Uid, Guid.NewGuid())
+							.Value(x => x.TypeUid, itemUid)
+							.Value(x => x.Code, ClassifierTree.DefaultTreeCode)
+							.Value(x => x.Name, item.Name)
+							.InsertAsync(cancellationToken);
+					}
 				}
 
 				// todo: (события)
