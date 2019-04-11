@@ -3,6 +3,7 @@ import { BrowserRouter as Router } from "react-router-dom";
 import { LocaleProvider, Layout } from "antd";
 import ru_RU from "antd/lib/locale-provider/ru_RU";
 import { Routes } from ".";
+import { Routes as MasterDataRoutes } from "@montr-master-data/.";
 import { AuthCallbackHandler, UserContextProvider, DataMenu } from "@montr-core/components";
 import { CompanyContextProvider, UserWithCompanyMenu } from "@kompany/components";
 import { NotificationService } from "@montr-core/services";
@@ -59,6 +60,7 @@ export class App extends React.Component<IProps, IState> {
 										<Layout.Content className="bg-white">
 
 											<Routes />
+											<MasterDataRoutes />
 
 										</Layout.Content>
 										<Layout.Footer className="bg-white">© {new Date().getFullYear()}</Layout.Footer>

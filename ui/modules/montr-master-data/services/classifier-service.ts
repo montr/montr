@@ -3,28 +3,6 @@ import { Constants } from "@montr-core/.";
 import { Guid, IDataResult } from "@montr-core/models";
 import { IClassifier, IClassifierType, IClassifierGroup } from "../models";
 
-export class ClassifierTypeService extends Fetcher {
-	list = async (companyUid: Guid): Promise<IDataResult<IClassifierType>> => {
-		return this.post(`${Constants.baseURL}/classifierType/list`, { companyUid });
-	};
-
-	get = async (companyUid: Guid, uid: Guid): Promise<IClassifier> => {
-		return this.post(`${Constants.baseURL}/classifierType/get`, { companyUid, uid });
-	};
-
-	insert = async (companyUid: Guid, data: IClassifierType): Promise<Guid> => {
-		return this.post(`${Constants.baseURL}/classifierType/insert`, { companyUid, item: data });
-	};
-
-	update = async (companyUid: Guid, data: IClassifierType): Promise<number> => {
-		return this.post(`${Constants.baseURL}/classifierType/update`, { companyUid, item: data });
-	};
-
-	delete = async (companyUid: Guid, uids: string[] | number[]): Promise<number> => {
-		return this.post(`${Constants.baseURL}/classifierType/delete`, { companyUid, uids });
-	};
-}
-
 export class ClassifierService extends Fetcher {
 	trees = async (companyUid: Guid, typeCode: string): Promise<IDataResult<IClassifierType>> => {
 		return this.post(`${Constants.baseURL}/classifier/trees`, { companyUid, typeCode });
@@ -34,7 +12,7 @@ export class ClassifierService extends Fetcher {
 		return this.post(`${Constants.baseURL}/classifier/groups`, { companyUid, typeCode, treeCode, parentCode });
 	};
 
-	get = async (companyUid: Guid, typeCode: string, uid: Guid): Promise<IClassifier> => {
+	get = async (companyUid: Guid, typeCode: string, uid: Guid | string): Promise<IClassifier> => {
 		return this.post(`${Constants.baseURL}/classifier/get`, { companyUid, typeCode, uid });
 	};
 
