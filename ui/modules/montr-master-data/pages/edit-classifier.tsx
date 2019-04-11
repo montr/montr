@@ -23,10 +23,12 @@ interface IState {
 	loading: boolean;
 	fields?: IFormField[];
 	type?: IClassifierType;
-	types?: IClassifierType[];
 	data: IClassifier;
 	redirect?: string;
 }
+
+/* class _TabEditClassifier extends React.Component<IProps, IState> {
+} */
 
 class _EditClassifier extends React.Component<IProps, IState> {
 
@@ -66,16 +68,15 @@ class _EditClassifier extends React.Component<IProps, IState> {
 
 		if (currentCompany) {
 
-			const types = await this._classifierTypeService.list(currentCompany.uid);
-			const type = types.rows.find(x => x.code == typeCode);
+			const type = await this._classifierTypeService.get(currentCompany.uid, typeCode);
 
 			const dataView = await this._metadataService.load(`Classifier/${typeCode}`);
 
 			const data = (uid)
 				? await this._classifierService.get(currentCompany.uid, typeCode, uid)
-				: {};
+				: this.state.data;
 
-			this.setState({ loading: false, type, types: types.rows, fields: dataView.fields, data });
+			this.setState({ loading: false, type, fields: dataView.fields, data });
 		}
 	}
 
@@ -115,13 +116,13 @@ class _EditClassifier extends React.Component<IProps, IState> {
 		}
 
 		const { tabKey } = this.props.match.params;
-		const { type, types, fields, data } = this.state;
+		const { type, fields, data } = this.state;
 
 		const otherTabsDisabled = !data.uid;
 
 		return (
 			<Page title={<>
-				<ClassifierBreadcrumb type={type} /* types={types} */ item={data} />
+				<ClassifierBreadcrumb type={type} item={data} />
 				<PageHeader>{data.name}</PageHeader>
 			</>}>
 				<Spin spinning={this.state.loading}>
@@ -130,9 +131,7 @@ class _EditClassifier extends React.Component<IProps, IState> {
 							{fields && <DataForm fields={fields} data={data} onSave={this.save} />}
 						</Tabs.TabPane>
 						<Tabs.TabPane key="hierarchy" tab="Иерархия" disabled={otherTabsDisabled}></Tabs.TabPane>
-						<Tabs.TabPane key="dependencies" tab="Зависимости" disabled={otherTabsDisabled}>
-							usages of classifier
-						</Tabs.TabPane>
+						<Tabs.TabPane key="dependencies" tab="Зависимости" disabled={otherTabsDisabled}></Tabs.TabPane>
 						<Tabs.TabPane key="history" tab="История изменений" disabled={otherTabsDisabled}></Tabs.TabPane>
 					</Tabs>
 				</Spin>

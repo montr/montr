@@ -8,8 +8,8 @@ export class ClassifierTypeService extends Fetcher {
 		return this.post(`${Constants.baseURL}/classifierType/list`, { companyUid });
 	};
 
-	get = async (companyUid: Guid, uid: Guid): Promise<IClassifier> => {
-		return this.post(`${Constants.baseURL}/classifierType/get`, { companyUid, uid });
+	get = async (companyUid: Guid, typeCode: string): Promise<IClassifierType> => {
+		return this.post(`${Constants.baseURL}/classifierType/get`, { companyUid, typeCode });
 	};
 
 	insert = async (companyUid: Guid, data: IClassifierType): Promise<Guid> => {
