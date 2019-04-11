@@ -34,6 +34,11 @@ namespace Montr.MasterData.Impl.Services
 					query = query.Where(x => x.Code == request.Code);
 				}
 
+				if (request.Uid != null)
+				{
+					query = query.Where(x => x.Uid == request.Uid);
+				}
+
 				var data = await query
 					.Apply(request, x => x.Code)
 					.Select(x => new ClassifierType

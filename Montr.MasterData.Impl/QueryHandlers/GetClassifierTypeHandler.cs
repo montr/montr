@@ -23,7 +23,8 @@ namespace Montr.MasterData.Impl.QueryHandlers
 			{
 				UserUid = command.UserUid,
 				CompanyUid = command.CompanyUid,
-				Code = command.TypeCode
+				Code = command.TypeCode,
+				Uid = command.Uid
 			};
 
 			var types = await _repository.Search(request, cancellationToken);

@@ -7,6 +7,7 @@ import { Guid } from "@montr-core/models";
 import { ClassifierTypeService } from "../services";
 import { IClassifierType } from "../models";
 import { ClassifierBreadcrumb } from "../components";
+import { RouteBuilder } from "..";
 
 interface IProps extends CompanyContextProps {
 	uid?: Guid;
@@ -41,7 +42,8 @@ class _EditClassifierTypeForm extends React.Component<IProps, IState> {
 	}
 
 	componentDidUpdate = async (prevProps: IProps) => {
-		if (this.props.currentCompany !== prevProps.currentCompany) {
+		if (this.props.uid !== prevProps.uid ||
+			this.props.currentCompany !== prevProps.currentCompany) {
 			await this.fetchData();
 		}
 	}
@@ -57,7 +59,7 @@ class _EditClassifierTypeForm extends React.Component<IProps, IState> {
 
 			const types = await this._classifierTypeService.list(currentCompany.uid);
 
-			const data = (uid) ? types.rows.find(x => x.uid == uid) : this.state.data;
+			const data = (uid) ? await this._classifierTypeService.get(currentCompany.uid, { uid }) : this.state.data;
 
 			this.setState({ loading: false, data, types: types.rows });
 		}
@@ -78,17 +80,20 @@ class _EditClassifierTypeForm extends React.Component<IProps, IState> {
 		else {
 			const uid: Guid = await this._classifierTypeService.insert(companyUid, values);
 
-			this.setState({ redirect: `/classifiers/edit/${uid}` });
+			const path = RouteBuilder.editClassifierType(uid);
+
+			this.setState({ redirect: path });
 		}
 	}
 
 	render = () => {
-		if (this.state.redirect) {
-			return <Redirect to={this.state.redirect} />
-		}
-
 		const { uid } = this.props,
-			{ loading, data, types } = this.state;
+			{ loading, redirect, data, types } = this.state;
+
+		if (redirect) {
+			this.setState({ redirect: null });
+			return <Redirect to={redirect} />
+		}
 
 		// todo: fetch from metadata api
 		const fields = [
@@ -126,7 +131,7 @@ class _EditClassifierTypeForm extends React.Component<IProps, IState> {
 
 		return (
 			<Page title={title}>
-				<Spin spinning={this.state.loading}>
+				<Spin spinning={loading}>
 					<Tabs>
 						<Tabs.TabPane key="1" tab="Информация">
 							{fields && <DataForm fields={fields} data={data} onSave={this.save} />}

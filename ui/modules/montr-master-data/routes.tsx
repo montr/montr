@@ -4,13 +4,17 @@ import { SearchClassifier, EditClassifierType, EditClassifier, SearchClassifierT
 import { Guid } from "@montr-core/models";
 
 export const Patterns = {
-	edit: "/classifiers/:typeCode/edit/:uid/:tabKey?",
+	editClassifierType: "/classifiers/edit/:uid/:tabKey?",
+	editClassifier: "/classifiers/:typeCode/edit/:uid/:tabKey?",
 };
 
 export const RouteBuilder = {
-	edit: (typeCode: string, uid: Guid | string, tabKey?: string) => {
-		return generatePath(Patterns.edit, { typeCode, uid: uid.toString(), tabKey });
-	}
+	editClassifierType: (uid: Guid | string, tabKey?: string) => {
+		return generatePath(Patterns.editClassifierType, { uid: uid.toString(), tabKey });
+	},
+	editClassifier: (typeCode: string, uid: Guid | string, tabKey?: string) => {
+		return generatePath(Patterns.editClassifier, { typeCode, uid: uid.toString(), tabKey });
+	},
 };
 
 export const Routes = () => {
@@ -22,7 +26,7 @@ export const Routes = () => {
 
 			<Route path="/classifiers/:typeCode/" exact component={SearchClassifier} />
 			<Route path="/classifiers/:typeCode/add" exact component={EditClassifier} />
-			<Route path={Patterns.edit} exact component={EditClassifier} />
+			<Route path={Patterns.editClassifier} exact component={EditClassifier} />
 		</Switch>
 	)
 }

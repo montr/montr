@@ -72,8 +72,8 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 
 		if (!currentCompany) return;
 
-		const types = await this.fetchClassifierTypes();
-		const type = types.find(x => x.code == typeCode);
+		const types = (await this._classifierTypeService.list(currentCompany.uid)).rows;
+		const type = await this._classifierTypeService.get(currentCompany.uid, { typeCode });
 
 		let trees: IClassifierTree[] = [],
 			treeCode: string,
@@ -81,7 +81,7 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 
 		if (type) {
 			if (type.hierarchyType == "Groups") {
-				trees = await this.fetchClassifierTrees(typeCode);
+				trees = (await this._classifierService.trees(currentCompany.uid, typeCode)).rows;
 
 				if (trees && trees.length > 0) {
 					treeCode = trees[0].code;
@@ -106,22 +106,6 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 				}
 			});
 		}
-	}
-
-	private fetchClassifierTypes = async (): Promise<IClassifierType[]> => {
-		const { currentCompany } = this.props;
-
-		const data = await this._classifierTypeService.list(currentCompany.uid);
-
-		return data.rows;
-	}
-
-	private fetchClassifierTrees = async (typeCode: string): Promise<IClassifierTree[]> => {
-		const { currentCompany } = this.props;
-
-		const data = await this._classifierService.trees(currentCompany.uid, typeCode);
-
-		return data.rows;
 	}
 
 	private fetchClassifierGroups = async (typeCode: string, treeCode: string, parentCode?: string): Promise<IClassifierGroup[]> => {
@@ -209,7 +193,7 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 		}
 
 		let tree;
-		if (type.hierarchyType != "None" && groups.length > 0) {
+		if (type.hierarchyType != "None" /* && groups.length > 0 */) {
 			tree = (
 				<Tree blockNode
 					loadData={this.onTreeLoadData}

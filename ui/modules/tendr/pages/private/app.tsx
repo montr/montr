@@ -26,7 +26,7 @@ export class App extends React.Component<IProps, IState> {
 	}
 
 	componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
-		this._notification.error("App.componentDidCatch ", error.message);
+		this._notification.error("Ошибка в приложении", error.message);
 	}
 
 	render() {
