@@ -8,6 +8,7 @@ import { FormDefaults, FormFieldFactory } from ".";
 interface IProps extends FormComponentProps {
 	fields: IFormField[];
 	data: IIndexer;
+	showControls?: boolean;
 	onSave: (values: IIndexer) => void
 }
 
@@ -15,7 +16,6 @@ interface IState {
 }
 
 class _DataForm extends React.Component<IProps, IState> {
-
 	private _notificationService = new NotificationService();
 
 	private handleSubmit = async (e: React.SyntheticEvent) => {
@@ -62,17 +62,19 @@ class _DataForm extends React.Component<IProps, IState> {
 	}
 
 	render = () => {
-		const { fields } = this.props;
+		const { fields, showControls } = this.props;
 
 		return (
-			<Form onSubmit={this.handleSubmit}>
-				{fields.map((field) => {
+			<Form layout="horizontal" onSubmit={this.handleSubmit}>
+				{fields && fields.map((field) => {
 					return this.createItem(field);
 				})}
-				<Form.Item {...FormDefaults.tailFormItemLayout}>
-					<Button type="primary" htmlType="submit" icon="check">Сохранить</Button>&#xA0;
+				{fields && showControls !== false &&
+					<Form.Item {...FormDefaults.tailFormItemLayout}>
+						<Button type="primary" htmlType="submit" icon="check">Сохранить</Button>&#xA0;
 					{/* <Button htmlType="reset">Отменить</Button> */}
-				</Form.Item>
+					</Form.Item>
+				}
 			</Form>
 		);
 	}

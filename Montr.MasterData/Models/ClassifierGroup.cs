@@ -1,4 +1,5 @@
-﻿using System.Diagnostics;
+﻿using System;
+using System.Diagnostics;
 
 namespace Montr.MasterData.Models
 {
@@ -7,7 +8,11 @@ namespace Montr.MasterData.Models
 	{
 		private string DebuggerDisplay => $"{Code}, {Name}";
 
+		public Guid Uid { get; set; }
+
 		public string Code { get; set; }
+
+		public Guid? ParentUid { get; set; }
 
 		public string ParentCode { get; set; }
 

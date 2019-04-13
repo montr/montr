@@ -61,8 +61,10 @@ namespace Montr.MasterData.Impl.QueryHandlers
 						.Take(Paging.MaxPageSize)
 						.Select(x => new ClassifierGroup
 						{
+							Uid = x.Uid,
 							Code = x.Code,
-							Name = x.Name
+							Name = x.Name,
+							ParentUid = x.ParentUid
 						})
 						.ToList();
 				}

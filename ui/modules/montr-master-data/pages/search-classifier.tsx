@@ -1,16 +1,18 @@
 import * as React from "react";
-import { Page, DataTable, PageHeader } from "@montr-core/components";
-import { NotificationService } from "@montr-core/services";
+import { Page, DataTable, PageHeader, Toolbar } from "@montr-core/components";
 import { RouteComponentProps } from "react-router";
-import { Constants } from "@montr-core/.";
-import { Icon, Button, Tree, Select, Radio, Layout } from "antd";
 import { Link } from "react-router-dom";
+import { Icon, Button, Tree, Select, Radio, Layout } from "antd";
+import { Constants } from "@montr-core/.";
+import { Guid } from "@montr-core/models";
+import { NotificationService } from "@montr-core/services";
 import { withCompanyContext, CompanyContextProps } from "@kompany/components";
-import { ClassifierService, ClassifierTypeService } from "../services";
+import { ClassifierService, ClassifierTypeService, ClassifierGroupService } from "../services";
 import { IClassifierType, IClassifierTree, IClassifierGroup } from "../models";
 import { RadioChangeEvent } from "antd/lib/radio";
-import { AntTreeNode } from "antd/lib/tree";
-import { ClassifierBreadcrumb } from "../components";
+import { AntTreeNode, AntTreeNodeSelectedEvent } from "antd/lib/tree";
+import { ClassifierBreadcrumb, ModalEditClassifierGroup } from "../components";
+
 
 interface IRouteProps {
 	typeCode: string;
@@ -25,13 +27,15 @@ interface IState {
 	trees?: IClassifierTree[];
 	treeCode?: string,
 	groups?: IClassifierGroup[];
+	selectedGroupUid?: Guid;
+	groupEditData?: { parentUid?: Guid, uid?: Guid },
 	selectedRowKeys: string[] | number[];
 	postParams: any;
 }
 
 class _SearchClassifier extends React.Component<IProps, IState> {
-
 	private _classifierTypeService = new ClassifierTypeService();
+	private _classifierGroupService = new ClassifierGroupService();
 	private _classifierService = new ClassifierService();
 	private _notificationService = new NotificationService();
 
@@ -63,6 +67,7 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 
 	componentWillUnmount = async () => {
 		await this._classifierTypeService.abort();
+		await this._classifierGroupService.abort();
 		await this._classifierService.abort();
 	}
 
@@ -111,7 +116,7 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 	private fetchClassifierGroups = async (typeCode: string, treeCode: string, parentCode?: string): Promise<IClassifierGroup[]> => {
 		const { currentCompany } = this.props
 
-		return await this._classifierService.groups(currentCompany.uid, typeCode, treeCode, parentCode);
+		return await this._classifierGroupService.list(currentCompany.uid, typeCode, treeCode, parentCode);
 	}
 
 	private delete = async () => {
@@ -152,9 +157,12 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 		resolve();
 	})
 
-	private onTreeSelect = (selectedKeys: string[]) => {
+	private onTreeSelect = (selectedKeys: string[], e: AntTreeNodeSelectedEvent) => {
 		const { postParams } = this.state;
-		this.setState({ postParams: { ...postParams, groupCode: selectedKeys[0] } });
+		this.setState({
+			selectedGroupUid: (e.selected) ? e.node.props.dataRef.uid : null,
+			postParams: { ...postParams, groupCode: selectedKeys[0] }
+		});
 	}
 
 	private onDepthChange = (e: RadioChangeEvent) => {
@@ -172,9 +180,24 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 		});
 	}
 
+	private showAddGroupModal = () => {
+		this.setState({ groupEditData: { parentUid: this.state.selectedGroupUid } });
+	}
+
+	private showEditGroupModal = () => {
+		this.setState({ groupEditData: { uid: this.state.selectedGroupUid } });
+	}
+
+	private showDeleteGroupConfirm = () => {
+	}
+
+	private hideGroupModal = () => {
+		this.setState({ groupEditData: null });
+	}
+
 	render() {
 		const { currentCompany } = this.props,
-			{ types, type, trees, groups, postParams } = this.state;
+			{ types, type, treeCode, trees, groups, selectedGroupUid, groupEditData, postParams } = this.state;
 
 		if (!currentCompany || !type || !postParams.typeCode) return null;
 
@@ -183,13 +206,19 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 		// 2. прятать дерево
 		// 3. показывать или нет группы в таблице
 		// 4. показывать планарную таблицу без групп
-		let treeSelect;
-		if (trees && trees.length > 0) {
-			treeSelect = (
+
+		let groupControls;
+		if (type.hierarchyType == "Groups") {
+			groupControls = <>
 				<Select defaultValue="default" size="small">
 					{trees.map(x => <Select.Option key={x.code}>{x.name || x.code}</Select.Option>)}
 				</Select>
-			);
+				<Button.Group size="small">
+					<Button icon="plus" onClick={this.showAddGroupModal} />
+					<Button icon="edit" onClick={this.showEditGroupModal} disabled={!selectedGroupUid} />
+					<Button icon="delete" onClick={this.showDeleteGroupConfirm} disabled={!selectedGroupUid} />
+				</Button.Group>
+			</>
 		}
 
 		let tree;
@@ -215,7 +244,7 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 
 		const content = (tree)
 			? (<>
-				<Layout.Sider width="360" theme="light" collapsible={false} style={{ overflowX: "auto", height: "100vh" }}>
+				<Layout.Sider width="360" theme="light" collapsible={false} style={{ overflowX: "auto", height: "80vh" }}>
 					{tree}
 				</Layout.Sider>
 				<Layout.Content className="bg-white" style={{ paddingTop: 0, paddingRight: 0 }}>
@@ -227,37 +256,52 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 		return (
 			<Page
 				title={<>
-					<ClassifierBreadcrumb type={type} types={types} />
-					<PageHeader>{type.name}</PageHeader>
-				</>}
-				toolbar={
-					<div className="toolbar">
+					<Toolbar float="right">
 						<Link to={`/classifiers/${type.code}/add`}>
 							<Button type="primary"><Icon type="plus" /> Добавить</Button>
 						</Link>
 						<Button onClick={this.delete}><Icon type="delete" /> Удалить</Button>
 						<Button onClick={this.export}><Icon type="export" /> Экспорт</Button>
-						<Link to={`/classifiers/edit/${type.uid}`}>
-							<Button><Icon type="setting" /></Button>
-						</Link>
-					</div>
-				}>
+					</Toolbar>
+
+					<ClassifierBreadcrumb type={type} types={types} />
+					<PageHeader>{type.name}</PageHeader>
+				</>}>
 
 				<Layout>
-					<Layout.Header className="bg-white" style={{ padding: "0" }}>
-						{treeSelect}
-						&#xA0;
-						<div style={{ float: "right" }}>
+					<Layout.Header className="bg-white" style={{ padding: "0", lineHeight: 1.5, height: 36 }}>
+
+						<Toolbar size="small">
+							<Button size="small" icon="left" />
+							{groupControls}
+							{/* <Button size="small" icon="search" /> */}
+						</Toolbar>
+
+						<Toolbar size="small" float="right">
+							{/* <Input.Search size="small" allowClear style={{ width: 200 }} /> */}
 							<Radio.Group defaultValue="0" size="small" onChange={this.onDepthChange}>
 								<Radio.Button value="0"><Icon type="folder" /> Группа</Radio.Button>
 								<Radio.Button value="1"><Icon type="cluster" /> Иерархия</Radio.Button>
 							</Radio.Group>
-						</div>
+							<Link to={`/classifiers/edit/${type.uid}`}>
+								<Button size="small"><Icon type="setting" /></Button>
+							</Link>
+						</Toolbar>
+
 					</Layout.Header>
 					<Layout hasSider={!!tree} className="bg-white">
 						{content}
 					</Layout>
 				</Layout>
+
+				{groupEditData &&
+					<ModalEditClassifierGroup
+						typeCode={type.code}
+						treeCode={treeCode}
+						uid={groupEditData.uid}
+						parentUid={groupEditData.parentUid}
+						onCancel={this.hideGroupModal} />}
+
 			</Page>
 		);
 	}

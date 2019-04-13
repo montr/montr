@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Page, DataTable, PageHeader } from "@montr-core/components";
+import { Page, DataTable, PageHeader, Toolbar } from "@montr-core/components";
 import { Constants } from "@montr-core/.";
 import { withCompanyContext, CompanyContextProps } from "@kompany/components";
 import { ClassifierBreadcrumb } from "../components";
@@ -84,17 +84,16 @@ class _SearchClassifierType extends React.Component<IProps, IState> {
 		return (
 			<Page
 				title={<>
-					<ClassifierBreadcrumb />
-					<PageHeader>Справочники</PageHeader>
-				</>}
-				toolbar={
-					<div className="toolbar">
+					<Toolbar float="right">
 						<Link to={`/classifiers/add`}>
 							<Button type="primary"><Icon type="plus" /> Добавить</Button>
 						</Link>
 						<Button onClick={this.delete}><Icon type="delete" /> Удалить</Button>
-					</div>
-				}>
+					</Toolbar>
+
+					<ClassifierBreadcrumb />
+					<PageHeader>Справочники</PageHeader>
+				</>}>
 
 				<DataTable
 					viewId={`ClassifierType/Grid/`}

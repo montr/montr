@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -28,16 +27,6 @@ namespace Montr.MasterData.Controllers
 		public async Task<SearchResult<ClassifierTree>> Trees(ClassifierTreeSearchRequest request)
 		{
 			return await _mediator.Send(new GetClassifierTreeList
-			{
-				UserUid = _currentUserProvider.GetUserUid(),
-				Request = request
-			});
-		}
-
-		[HttpPost]
-		public async Task<IEnumerable<ClassifierGroup>> Groups(ClassifierGroupSearchRequest request)
-		{
-			return await _mediator.Send(new GetClassifierGroupList
 			{
 				UserUid = _currentUserProvider.GetUserUid(),
 				Request = request

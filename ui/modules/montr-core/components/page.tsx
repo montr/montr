@@ -4,30 +4,19 @@ import { Row, Col, Affix } from "antd";
 
 interface IProps {
 	title?: string | React.ReactNode;
-	toolbar?: React.ReactNode;
 }
 
 export class Page extends React.Component<IProps> {
-	render() {
+	render = () => {
 
-		const { title, toolbar, children } = this.props;
+		const { title, children } = this.props;
 
 		return (
 			<div>
-
 				<Affix>
-					<Row>
-						<Col span={16}>
-							{(typeof title === "string") ? <PageHeader>{title}</PageHeader> : title}
-						</Col>
-						<Col span={8} style={{ textAlign: "right" }}>
-							{toolbar}
-						</Col>
-					</Row>
+					{(typeof title === "string") ? <PageHeader>{title}</PageHeader> : title}
 				</Affix>
-
 				{children}
-
 			</div>
 		);
 	}

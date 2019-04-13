@@ -3,3 +3,46 @@
 		cursor: default;
 	}
 }
+
+.toolbar {
+
+	&.toolbar-left {
+		float: left;
+
+		.ant-btn, .ant-btn-group, .ant-radio-group, .ant-select {
+			margin-right: 4px;
+			margin-bottom: 4px;
+		}
+
+		.ant-btn-group .ant-btn {
+			margin-right: 0;
+		}
+	}
+
+	&.toolbar-right {
+		float: right;
+
+		.ant-btn, .ant-btn-group, .ant-radio-group, .ant-select {
+			margin-left: 4px;
+			margin-bottom: 4px;
+		}
+
+		.ant-btn-group .ant-btn {
+			margin-left: 0;
+		}
+	}
+
+	.ant-btn-group, .ant-radio-group {
+		line-height: 1.5;
+	}
+}
+
+.bg-white {
+	background-color: #fff;
+}
+
+.single-line-text {
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}

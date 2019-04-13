@@ -2,9 +2,8 @@ import * as React from "react";
 import { Link } from "react-router-dom";
 import { Table, Tag } from "antd";
 import { ColumnProps, PaginationConfig, SorterResult, SortOrder } from "antd/lib/table";
-import { IIndexer } from "@montr-core/models";
 import { Fetcher, NotificationService, MetadataService } from "../services";
-import { IDataColumn, IDataResult } from "../models";
+import { IIndexer, IDataColumn, IDataResult } from "../models";
 import { Constants } from "..";
 
 interface IProps<TModel> {
@@ -107,12 +106,14 @@ export class DataTable<TModel extends IIndexer> extends React.Component<IProps<T
 				};
 			}
 
+			// todo: remove
 			if (item.key == "configCode") {
 				render = (text: any, record: TModel, index: number): React.ReactNode => {
 					return <Tag color="blue">{text}</Tag>;
 				};
 			}
 
+			// todo: remove
 			if (item.key == "statusCode") {
 				render = (text: any, record: TModel, index: number): React.ReactNode => {
 					return <Tag color="green">{text}</Tag>;
@@ -159,6 +160,7 @@ export class DataTable<TModel extends IIndexer> extends React.Component<IProps<T
 				...params,
 			};
 
+			// todo: remove, use onLoadData(params): IDataResult
 			if (this.props.postParams) {
 				postParams = Object.assign(postParams, this.props.postParams);
 			}

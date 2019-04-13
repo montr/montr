@@ -52,6 +52,16 @@ namespace Montr.Metadata.Services
 				}
 			}
 
+			if (viewId.StartsWith("ClassifierGroup/"))
+			{
+				result.Fields = new List<FormField>
+				{
+					// new StringField { Key = "statusCode", Name = "Статус", Readonly = true },
+					new StringField { Key = "code", Name = "Код", Required = true },
+					new TextAreaField { Key = "name", Name = "Наименование", Rows = 4 }
+				};
+			}
+
 			if (viewId.StartsWith("ClassifierType/Grid"))
 			{
 				result.Columns = new List<DataColumn>

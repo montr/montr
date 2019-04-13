@@ -1,35 +1,24 @@
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
-using Montr.Core.Services;
 using Montr.MasterData.Models;
 using Montr.MasterData.Queries;
+using Montr.MasterData.Services;
 
 namespace Montr.MasterData.Impl.QueryHandlers
 {
 	public class GetClassifierTypeHandler : IRequestHandler<GetClassifierType, ClassifierType>
 	{
-		private readonly IRepository<ClassifierType> _repository;
+		private readonly IClassifierTypeService _classifierTypeService;
 
-		public GetClassifierTypeHandler(IRepository<ClassifierType> repository)
+		public GetClassifierTypeHandler(IClassifierTypeService classifierTypeService)
 		{
-			_repository = repository;
+			_classifierTypeService = classifierTypeService;
 		}
 
 		public async Task<ClassifierType> Handle(GetClassifierType command, CancellationToken cancellationToken)
 		{
-			var request = new ClassifierTypeSearchRequest
-			{
-				UserUid = command.UserUid,
-				CompanyUid = command.CompanyUid,
-				Code = command.TypeCode,
-				Uid = command.Uid
-			};
-
-			var types = await _repository.Search(request, cancellationToken);
-
-			return types.Rows.Single();
+			return await _classifierTypeService.GetClassifierType(command.CompanyUid, command.TypeCode, cancellationToken);
 		}
 	}
 }

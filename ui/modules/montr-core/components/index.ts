@@ -8,6 +8,7 @@ export * from "./form-field-factory";
 export * from "./page";
 export * from "./page-header";
 export * from "./pane-component";
+export * from "./toolbar";
 export * from "./user-context";
 export * from "./user-context-provider";
 export * from "./user-menu";
