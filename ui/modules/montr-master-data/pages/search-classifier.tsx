@@ -191,6 +191,12 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 	private showDeleteGroupConfirm = () => {
 	}
 
+	private handleGroupModalSuccess = () => {
+		this.setState({ groupEditData: null });
+
+		// todo: refresh tree and focus inserted/updated item
+		this.setPostParams(); // to force refresh
+	}
 	private hideGroupModal = () => {
 		this.setState({ groupEditData: null });
 	}
@@ -272,7 +278,7 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 					<Layout.Header className="bg-white" style={{ padding: "0", lineHeight: 1.5, height: 36 }}>
 
 						<Toolbar size="small">
-							<Button size="small" icon="left" />
+							{/* <Button size="small" icon="left" /> */}
 							{groupControls}
 							{/* <Button size="small" icon="search" /> */}
 						</Toolbar>
@@ -300,6 +306,7 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 						treeCode={treeCode}
 						uid={groupEditData.uid}
 						parentUid={groupEditData.parentUid}
+						onSuccess={this.handleGroupModalSuccess}
 						onCancel={this.hideGroupModal} />}
 
 			</Page>

@@ -61,7 +61,6 @@ class _TabEditClassifier extends React.Component<IProps, IState> {
 	}
 
 	private save = async (values: IClassifier) => {
-
 		const { type, data, onDataChange } = this.props;
 		const { uid: companyUid } = this.props.currentCompany;
 
@@ -93,7 +92,7 @@ class _TabEditClassifier extends React.Component<IProps, IState> {
 
 		return (
 			<Spin spinning={this.state.loading}>
-				{fields && <DataForm fields={fields} data={data} onSave={this.save} />}
+				<DataForm fields={fields} data={data} onSave={this.save} />
 			</Spin>
 		);
 	}

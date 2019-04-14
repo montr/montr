@@ -5,13 +5,14 @@ import { withCompanyContext, CompanyContextProps } from "@kompany/components";
 import { ClassifierGroupService } from "../services";
 import { IClassifierGroup } from "@montr-master-data/models";
 import { NotificationService, MetadataService } from "@montr-core/services";
-import { DataForm } from "@montr-core/components";
+import { DataForm, WrappedDataForm } from "@montr-core/components";
 
 interface IProps extends CompanyContextProps {
 	typeCode: string;
 	treeCode: string,
 	uid?: Guid;
 	parentUid?: Guid;
+	onSuccess?: () => void
 	onCancel?: () => void;
 }
 
@@ -26,6 +27,8 @@ class _ModalEditClassifierGroup extends React.Component<IProps, IState> {
 	private _notificationService = new NotificationService();
 	private _metadataService = new MetadataService();
 	private _classifierGroupService = new ClassifierGroupService();
+
+	_formRef: WrappedDataForm;
 
 	constructor(props: IProps) {
 		super(props);
@@ -74,20 +77,51 @@ class _ModalEditClassifierGroup extends React.Component<IProps, IState> {
 		}
 	}
 
+	saveFormRef = (formRef: WrappedDataForm) => {
+		this._formRef = formRef;
+	}
+
+	onOk = (e: React.MouseEvent<any>) => {
+		this._formRef.handleSubmit(e);
+	}
+
 	onCancel = () => {
 		if (this.props.onCancel) this.props.onCancel();
 	}
 
-	private save = async (values: IClassifierGroup) => {
+	save = async (values: IClassifierGroup) => {
+		const { typeCode, treeCode, uid, onSuccess } = this.props;
+		const { uid: companyUid } = this.props.currentCompany;
+
+		if (uid) {
+			const updated = { uid: uid, ...values };
+			const rowsUpdated = await this._classifierGroupService.update(companyUid, updated);
+
+			if (rowsUpdated != 1) throw new Error();
+		}
+		else {
+			const uid: Guid = await this._classifierGroupService.insert(companyUid, typeCode, treeCode, values);
+		}
+
+		if (onSuccess) await onSuccess();
 	}
 
 	render = () => {
 		const { loading, fields, data } = this.state;
 
 		return (
-			<Modal visible={!loading} title={data.name} onCancel={this.onCancel}>
+			<Modal visible={!loading} title={data.name}
+				onOk={this.onOk} onCancel={this.onCancel}
+				okText="Сохранить" width="640px">
 				<Spin spinning={this.state.loading}>
-					<DataForm fields={fields} data={data} showControls={false} onSave={this.save} />
+					<DataForm
+						layout="vertical"
+						wrappedComponentRef={this.saveFormRef}
+						fields={fields}
+						data={data}
+						showControls={false}
+						onSave={this.save}
+					/>
 				</Spin>
 			</Modal>
 		);

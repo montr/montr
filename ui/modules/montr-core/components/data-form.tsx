@@ -5,7 +5,10 @@ import { IFormField, IIndexer } from "../models";
 import { NotificationService } from "../services/notification-service";
 import { FormDefaults, FormFieldFactory } from ".";
 
+declare const FormLayouts: ["horizontal", "inline", "vertical"];
+
 interface IProps extends FormComponentProps {
+	layout?: (typeof FormLayouts)[number];
 	fields: IFormField[];
 	data: IIndexer;
 	showControls?: boolean;
@@ -15,10 +18,10 @@ interface IProps extends FormComponentProps {
 interface IState {
 }
 
-class _DataForm extends React.Component<IProps, IState> {
+export class WrappedDataForm extends React.Component<IProps, IState> {
 	private _notificationService = new NotificationService();
 
-	private handleSubmit = async (e: React.SyntheticEvent) => {
+	public handleSubmit = async (e: React.SyntheticEvent) => {
 		e.preventDefault();
 
 		this.props.form.validateFieldsAndScroll(async (errors, values: any) => {
@@ -36,8 +39,8 @@ class _DataForm extends React.Component<IProps, IState> {
 		});
 	}
 
-	private createItem = (field: IFormField): React.ReactNode => {
-		const { data } = this.props;
+	createItem = (field: IFormField): React.ReactNode => {
+		const { layout, data } = this.props;
 		const { getFieldDecorator } = this.props.form;
 
 		const fieldOptions = {
@@ -53,24 +56,27 @@ class _DataForm extends React.Component<IProps, IState> {
 
 		const fieldNode = fieldFactory.createNode(field, data);
 
+		const itemLayout = (layout == null || layout == "horizontal") ? FormDefaults.formItemLayout : null;
+
 		return (
-			<Form.Item key={field.key} label={field.name} extra={field.description}
-				{...FormDefaults.formItemLayout}>
+			<Form.Item key={field.key} label={field.name} extra={field.description} {...itemLayout}>
 				{getFieldDecorator(field.key, fieldOptions)(fieldNode)}
 			</Form.Item>
 		);
 	}
 
 	render = () => {
-		const { fields, showControls } = this.props;
+		const { layout, fields, showControls } = this.props;
+
+		const itemLayout = (layout == null || layout == "horizontal") ? FormDefaults.tailFormItemLayout : null;
 
 		return (
-			<Form layout="horizontal" onSubmit={this.handleSubmit}>
+			<Form layout={layout || "horizontal"} onSubmit={this.handleSubmit}>
 				{fields && fields.map((field) => {
 					return this.createItem(field);
 				})}
 				{fields && showControls !== false &&
-					<Form.Item {...FormDefaults.tailFormItemLayout}>
+					<Form.Item {...itemLayout}>
 						<Button type="primary" htmlType="submit" icon="check">Сохранить</Button>&#xA0;
 					{/* <Button htmlType="reset">Отменить</Button> */}
 					</Form.Item>
@@ -80,4 +86,4 @@ class _DataForm extends React.Component<IProps, IState> {
 	}
 }
 
-export const DataForm = Form.create()(_DataForm);
+export const DataForm = Form.create()(WrappedDataForm);
