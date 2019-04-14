@@ -20,7 +20,7 @@ export class ClassifierGroupService extends Fetcher {
 		return this.post(`${Constants.baseURL}/classifierGroup/update`, { companyUid, item: data });
 	};
 
-	delete = async (companyUid: Guid, typeCode: string, treeCode: string, uid: string | number): Promise<number> => {
+	delete = async (companyUid: Guid, typeCode: string, treeCode: string, uid: Guid | string | number): Promise<number> => {
 		return this.post(`${Constants.baseURL}/classifierGroup/delete`, { companyUid, typeCode, treeCode, uid });
 	};
 }

@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using LinqToDB;
@@ -11,13 +12,13 @@ using Montr.MasterData.Services;
 
 namespace Montr.MasterData.Impl.CommandHandlers
 {
-	public class InsertClassifierGroupHandler : IRequestHandler<InsertClassifierGroup, Guid>
+	public class DeleteClassifierGroupHandler : IRequestHandler<DeleteClassifierGroup, int>
 	{
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IDbContextFactory _dbContextFactory;
 		private readonly IClassifierTypeService _classifierTypeService;
 
-		public InsertClassifierGroupHandler(IUnitOfWorkFactory unitOfWorkFactory, IDbContextFactory dbContextFactory,
+		public DeleteClassifierGroupHandler(IUnitOfWorkFactory unitOfWorkFactory, IDbContextFactory dbContextFactory,
 			IClassifierTypeService classifierTypeService)
 		{
 			_unitOfWorkFactory = unitOfWorkFactory;
@@ -25,41 +26,33 @@ namespace Montr.MasterData.Impl.CommandHandlers
 			_classifierTypeService = classifierTypeService;
 		}
 
-		public async Task<Guid> Handle(InsertClassifierGroup request, CancellationToken cancellationToken)
+		public async Task<int> Handle(DeleteClassifierGroup request, CancellationToken cancellationToken)
 		{
 			if (request.UserUid == Guid.Empty) throw new InvalidOperationException("User is required.");
 			if (request.CompanyUid == Guid.Empty) throw new InvalidOperationException("Company is required.");
 
-			var item = request.Item ?? throw new ArgumentNullException(nameof(request.Item));
-
+			// todo: check company belongs to user
 			var type = await _classifierTypeService.GetClassifierType(request.CompanyUid, request.TypeCode, cancellationToken);
 
 			using (var scope = _unitOfWorkFactory.Create())
 			{
-				var itemUid = Guid.NewGuid();
-
-				// todo: валидация и ограничения
+				int result;
 
 				using (var db = _dbContextFactory.Create())
 				{
 					var tree = await db.GetTable<DbClassifierTree>()
 						.SingleAsync(x => x.TypeUid == type.Uid && x.Code == request.TreeCode, cancellationToken);
-
-					await db.GetTable<DbClassifierGroup>()
-						.Value(x => x.Uid, itemUid)
-						.Value(x => x.TreeUid, tree.Uid)
-						// todo: validate parent belongs to the same tree
-						.Value(x => x.ParentUid, item.ParentUid)
-						.Value(x => x.Code, item.Code)
-						.Value(x => x.Name, item.Name)
-						.InsertAsync(cancellationToken);
+					
+					result = await db.GetTable<DbClassifierGroup>()
+						.Where(x => x.TreeUid == tree.Uid && x.Uid == request.Uid)
+						.DeleteAsync(cancellationToken);
 				}
 
 				// todo: (события)
 
 				scope.Commit();
 
-				return itemUid;
+				return result;
 			}
 		}
 	}

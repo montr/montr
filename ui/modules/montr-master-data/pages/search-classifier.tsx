@@ -2,7 +2,7 @@ import * as React from "react";
 import { Page, DataTable, PageHeader, Toolbar } from "@montr-core/components";
 import { RouteComponentProps } from "react-router";
 import { Link } from "react-router-dom";
-import { Icon, Button, Tree, Select, Radio, Layout } from "antd";
+import { Icon, Button, Tree, Select, Radio, Layout, Modal } from "antd";
 import { Constants } from "@montr-core/.";
 import { Guid } from "@montr-core/models";
 import { NotificationService } from "@montr-core/services";
@@ -12,7 +12,6 @@ import { IClassifierType, IClassifierTree, IClassifierGroup } from "../models";
 import { RadioChangeEvent } from "antd/lib/radio";
 import { AntTreeNode, AntTreeNodeSelectedEvent } from "antd/lib/tree";
 import { ClassifierBreadcrumb, ModalEditClassifierGroup } from "../components";
-
 
 interface IRouteProps {
 	typeCode: string;
@@ -71,7 +70,7 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 		await this._classifierService.abort();
 	}
 
-	private setPostParams = async () => {
+	setPostParams = async () => {
 		const { currentCompany } = this.props,
 			{ typeCode } = this.props.match.params;
 
@@ -113,13 +112,13 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 		}
 	}
 
-	private fetchClassifierGroups = async (typeCode: string, treeCode: string, parentCode?: string): Promise<IClassifierGroup[]> => {
+	fetchClassifierGroups = async (typeCode: string, treeCode: string, parentCode?: string): Promise<IClassifierGroup[]> => {
 		const { currentCompany } = this.props
 
 		return await this._classifierGroupService.list(currentCompany.uid, typeCode, treeCode, parentCode);
 	}
 
-	private delete = async () => {
+	delete = async () => {
 		const rowsAffected = await this._classifierService
 			.delete(this.props.currentCompany.uid,
 				this.props.match.params.typeCode,
@@ -130,18 +129,18 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 		this.setPostParams(); // to force table refresh
 	}
 
-	private export = async () => {
+	export = async () => {
 		// todo: show export dialog: all pages, current page, export format
 		await this._classifierService.export(this.props.currentCompany.uid, {
 			typeCode: this.props.match.params.typeCode
 		});
 	}
 
-	private onSelectionChange = async (selectedRowKeys: string[] | number[]) => {
+	onSelectionChange = async (selectedRowKeys: string[] | number[]) => {
 		this.setState({ selectedRowKeys });
 	}
 
-	private onTreeLoadData = async (node: AntTreeNode) => new Promise(async (resolve) => {
+	onTreeLoadData = async (node: AntTreeNode) => new Promise(async (resolve) => {
 		const group: IClassifierGroup = node.props.dataRef;
 
 		const { type, treeCode } = this.state;
@@ -157,7 +156,7 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 		resolve();
 	})
 
-	private onTreeSelect = (selectedKeys: string[], e: AntTreeNodeSelectedEvent) => {
+	onTreeSelect = (selectedKeys: string[], e: AntTreeNodeSelectedEvent) => {
 		const { postParams } = this.state;
 		this.setState({
 			selectedGroupUid: (e.selected) ? e.node.props.dataRef.uid : null,
@@ -165,12 +164,12 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 		});
 	}
 
-	private onDepthChange = (e: RadioChangeEvent) => {
+	onDepthChange = (e: RadioChangeEvent) => {
 		const { postParams } = this.state;
 		this.setState({ postParams: { ...postParams, depth: e.target.value } });
 	}
 
-	private buildGroupsTree = (groups: IClassifierGroup[]) => {
+	buildGroupsTree = (groups: IClassifierGroup[]) => {
 		return groups && groups.map(x => {
 			return (
 				<Tree.TreeNode title={`${x.code} - ${x.name}`} key={x.code} dataRef={x}>
@@ -180,24 +179,43 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 		});
 	}
 
-	private showAddGroupModal = () => {
+	showAddGroupModal = () => {
 		this.setState({ groupEditData: { parentUid: this.state.selectedGroupUid } });
 	}
 
-	private showEditGroupModal = () => {
+	showEditGroupModal = () => {
 		this.setState({ groupEditData: { uid: this.state.selectedGroupUid } });
 	}
 
-	private showDeleteGroupConfirm = () => {
+	showDeleteGroupConfirm = () => {
+		Modal.confirm({
+			title: "Вы действительно хотите удалить выбранную группу?",
+			content: "Дочерние группы и элементы будут перенесены к родительской группе.",
+			onOk: this.deleteSelectedGroup
+		});
 	}
 
-	private handleGroupModalSuccess = () => {
-		this.setState({ groupEditData: null });
+	deleteSelectedGroup = async () => {
+		const { currentCompany } = this.props
+		const { type, treeCode, selectedGroupUid } = this.state;
 
-		// todo: refresh tree and focus inserted/updated item
+		await this._classifierGroupService.delete(currentCompany.uid, type.code, treeCode, selectedGroupUid);
+		this.setState({ selectedGroupUid: null });
+		this.refreshTree();
+	}
+
+	refreshTree = () => {
+		// todo: refresh only tree and focus on inserted/updated item
 		this.setPostParams(); // to force refresh
 	}
-	private hideGroupModal = () => {
+
+	handleGroupModalSuccess = () => {
+		this.setState({ groupEditData: null });
+
+		this.refreshTree();
+	}
+
+	hideGroupModal = () => {
 		this.setState({ groupEditData: null });
 	}
 
