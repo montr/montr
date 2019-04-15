@@ -58,7 +58,8 @@ namespace Montr.Metadata.Services
 				{
 					// new StringField { Key = "statusCode", Name = "Статус", Readonly = true },
 					new StringField { Key = "code", Name = "Код", Required = true },
-					new TextAreaField { Key = "name", Name = "Наименование", Rows = 4 }
+					new StringField { Key = "name", Name = "Наименование", Required = true },
+					new ClassifierField { Key = "parentUid", Name = "Родительская группа" },
 				};
 			}
 

@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Modal, Spin } from "antd";
-import { Guid, IFormField } from "@montr-core/models";
+import { Guid, IFormField, IClassifierField } from "@montr-core/models";
 import { withCompanyContext, CompanyContextProps } from "@kompany/components";
 import { ClassifierGroupService } from "../services";
 import { IClassifierGroup } from "@montr-master-data/models";
@@ -57,16 +57,23 @@ class _ModalEditClassifierGroup extends React.Component<IProps, IState> {
 
 				const dataView = await this._metadataService.load(`ClassifierGroup/${typeCode}`);
 
+				const parentUidField = dataView.fields.find(x => x.key == "parentUid") as IClassifierField;
+				parentUidField.typeCode = typeCode;
+				parentUidField.treeCode = treeCode;
+
 				let data, parent, { parentUid } = this.props;
 
 				if (uid) {
 					data = await this._classifierGroupService.get(currentCompany.uid, typeCode, treeCode, uid);
 					parentUid = data.parentUid;
 				}
-
-				if (parentUid) {
-					parent = await this._classifierGroupService.get(currentCompany.uid, typeCode, treeCode, parentUid);
+				else {
+					data = { parentUid: parentUid };
 				}
+
+				/* if (parentUid) {
+					parent = await this._classifierGroupService.get(currentCompany.uid, typeCode, treeCode, parentUid);
+				} */
 
 				this.setState({ loading: false, fields: dataView.fields, data: data || {}, parent });
 
@@ -81,8 +88,8 @@ class _ModalEditClassifierGroup extends React.Component<IProps, IState> {
 		this._formRef = formRef;
 	}
 
-	onOk = (e: React.MouseEvent<any>) => {
-		this._formRef.handleSubmit(e);
+	onOk = async (e: React.MouseEvent<any>) => {
+		await this._formRef.handleSubmit(e);
 	}
 
 	onCancel = () => {
@@ -113,9 +120,9 @@ class _ModalEditClassifierGroup extends React.Component<IProps, IState> {
 			<Modal visible={!loading} title={data.name}
 				onOk={this.onOk} onCancel={this.onCancel}
 				okText="Сохранить" width="640px">
-				<Spin spinning={this.state.loading}>
+				<Spin spinning={loading}>
 					<DataForm
-						layout="vertical"
+						/* layout="vertical" */
 						wrappedComponentRef={this.saveFormRef}
 						fields={fields}
 						data={data}

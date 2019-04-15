@@ -22,9 +22,10 @@ namespace Montr.MasterData.Tests.CommandHandlers
 			var dbContextFactory = new DefaultDbContextFactory();
 			var dateTimeProvider = new DefaultDateTimeProvider();
 			var classifierTypeRepository = new DbClassifierTypeRepository(dbContextFactory);
+			var classifierTypeService = new DefaultClassifierTypeService(classifierTypeRepository);
 
 			var handler = new InsertClassifierHandler(unitOfWorkFactory,
-				dbContextFactory, dateTimeProvider, classifierTypeRepository);
+				dbContextFactory, dateTimeProvider, classifierTypeService);
 
 			// act
 			var command = new InsertClassifier

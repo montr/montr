@@ -18,14 +18,14 @@
 
 		public bool Required { get; set; }
 	}
-	
+
 	public class StringField : FormField
 	{
 		public override string Type => "string";
 
 		public bool Autosize { get; set; }
 	}
-		
+
 	public class TextAreaField : StringField
 	{
 		public override string Type => "textarea";
@@ -76,6 +76,10 @@
 	public class ClassifierField : FormField
 	{
 		public override string Type => "classifier";
+
+		public string TypeCode { get; set; }
+
+		public string TreeCode { get; set; }
 	}
 
 	public class FileField : FormField

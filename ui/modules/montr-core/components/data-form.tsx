@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Form, Button } from "antd";
+import { Form, Button, Spin } from "antd";
 import { FormComponentProps } from "antd/lib/form";
 import { IFormField, IIndexer } from "../models";
 import { NotificationService } from "../services/notification-service";
@@ -16,10 +16,19 @@ interface IProps extends FormComponentProps {
 }
 
 interface IState {
+	loading: boolean;
 }
 
 export class WrappedDataForm extends React.Component<IProps, IState> {
 	private _notificationService = new NotificationService();
+
+	constructor(props: IProps) {
+		super(props);
+
+		this.state = {
+			loading: false
+		};
+	}
 
 	public handleSubmit = async (e: React.SyntheticEvent) => {
 		e.preventDefault();
@@ -66,22 +75,23 @@ export class WrappedDataForm extends React.Component<IProps, IState> {
 	}
 
 	render = () => {
-		const { layout, fields, showControls } = this.props;
+		const { layout, fields, showControls } = this.props,
+			{ loading } = this.state;
 
 		const itemLayout = (layout == null || layout == "horizontal") ? FormDefaults.tailFormItemLayout : null;
 
 		return (
-			<Form layout={layout || "horizontal"} onSubmit={this.handleSubmit}>
-				{fields && fields.map((field) => {
-					return this.createItem(field);
-				})}
-				{fields && showControls !== false &&
-					<Form.Item {...itemLayout}>
-						<Button type="primary" htmlType="submit" icon="check">Сохранить</Button>&#xA0;
+			<Spin spinning={loading}>
+				<Form layout={layout || "horizontal"} onSubmit={this.handleSubmit}>
+					{fields && fields.map(x => this.createItem(x))}
+					{fields && showControls !== false &&
+						<Form.Item {...itemLayout}>
+							<Button type="primary" htmlType="submit" icon="check">Сохранить</Button>&#xA0;
 					{/* <Button htmlType="reset">Отменить</Button> */}
-					</Form.Item>
-				}
-			</Form>
+						</Form.Item>
+					}
+				</Form>
+			</Spin>
 		);
 	}
 }
