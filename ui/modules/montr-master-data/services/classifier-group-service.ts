@@ -3,9 +3,16 @@ import { Constants } from "@montr-core/.";
 import { Guid } from "@montr-core/models";
 import { IClassifierGroup } from "../models";
 
+interface ClassifierGroupSearchRequest {
+	typeCode: string;
+	treeCode: string;
+	parentCode?: string
+	focusUid?: string;
+}
+
 export class ClassifierGroupService extends Fetcher {
-	list = async (companyUid: Guid, typeCode: string, treeCode: string, parentCode: string): Promise<IClassifierGroup[]> => {
-		return this.post(`${Constants.baseURL}/classifierGroup/list`, { companyUid, typeCode, treeCode, parentCode });
+	list = async (companyUid: Guid, request: ClassifierGroupSearchRequest): Promise<IClassifierGroup[]> => {
+		return this.post(`${Constants.baseURL}/classifierGroup/list`, { companyUid, ...request });
 	};
 
 	get = async (companyUid: Guid, typeCode: string, treeCode: string, uid: Guid | string): Promise<IClassifierGroup> => {

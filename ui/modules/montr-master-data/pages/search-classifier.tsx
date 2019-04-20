@@ -115,7 +115,7 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 	fetchClassifierGroups = async (typeCode: string, treeCode: string, parentCode?: string): Promise<IClassifierGroup[]> => {
 		const { currentCompany } = this.props
 
-		return await this._classifierGroupService.list(currentCompany.uid, typeCode, treeCode, parentCode);
+		return await this._classifierGroupService.list(currentCompany.uid, { typeCode, treeCode, parentCode });
 	}
 
 	delete = async () => {
@@ -172,7 +172,7 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 	buildGroupsTree = (groups: IClassifierGroup[]) => {
 		return groups && groups.map(x => {
 			return (
-				<Tree.TreeNode title={`${x.code} - ${x.name}`} key={x.code} dataRef={x}>
+				<Tree.TreeNode title={`${x.code}. ${x.name}`} key={x.code} dataRef={x}>
 					{x.children && this.buildGroupsTree(x.children)}
 				</Tree.TreeNode>
 			);

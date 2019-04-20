@@ -7,12 +7,12 @@ namespace Montr.MasterData.Models
 	{
 		public Guid CompanyUid { get; set; }
 
-		public Guid UserUid { get; set; }
-
 		public string TypeCode { get; set; }
 
 		public string TreeCode { get; set; }
 
 		public string ParentCode { get; set; }
+
+		public Guid? FocusUid { get; set; }
 	}
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace Montr.MasterData.Models
@@ -17,5 +18,7 @@ namespace Montr.MasterData.Models
 		public string ParentCode { get; set; }
 
 		public string Name { get; set; }
+
+		public IList<ClassifierGroup> Children { get; set; }
 	}
 }

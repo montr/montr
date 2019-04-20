@@ -1,5 +1,5 @@
 import * as React from "react";
-import { TreeSelect } from "antd";
+import { TreeSelect, Spin } from "antd";
 import { IClassifierField, Guid } from "@montr-core/models";
 import { ClassifierGroupService } from "../services";
 import { IClassifierGroup } from "../models";
@@ -12,6 +12,7 @@ interface IProps {
 }
 
 interface IState {
+	loading: boolean;
 	value: string;
 	groups: IClassifierGroup[];
 	treeData: TreeNode[];
@@ -22,16 +23,12 @@ interface IState {
 
 export class ClassifierSelect extends React.Component<IProps, IState> {
 	static getDerivedStateFromProps(nextProps: any) {
-
-		console.log("getDerivedStateFromProps", nextProps);
-
 		// Should be a controlled component.
 		if ('value' in nextProps) {
 			return {
 				...(nextProps.value || {}),
 			};
 		}
-
 		return null;
 	}
 
@@ -41,22 +38,41 @@ export class ClassifierSelect extends React.Component<IProps, IState> {
 		super(props);
 
 		this.state = {
+			loading: true,
 			value: props.value,
 			groups: [],
 			treeData: []
 		};
 	}
 
+	buildTree = (groups: IClassifierGroup[]): TreeNode[] => {
+		return groups && groups.map(x => {
+			const result: TreeNode = {
+				value: x.uid,
+				title: x.name,
+				// isLeaf: false
+			};
+
+			if (x.children) {
+				result.children = this.buildTree(x.children);
+			}
+
+			return result;
+		});
+	}
+
 	componentDidMount = async () => {
-		const { field } = this.props;
+		const { field } = this.props,
+			{ value } = this.state;
 
 		// todo: load all groups to show selected value
 		const groups = await this._classifierGroupService.list(
-			new Guid("6465dd4c-8664-4433-ba6a-14effd40ebed"), field.typeCode, field.treeCode, null);
+			new Guid("6465dd4c-8664-4433-ba6a-14effd40ebed"),
+			{ typeCode: field.typeCode, treeCode: field.treeCode, focusUid: value });
 
-		const treeData = groups.map(x => { return { value: x.uid, title: x.name } });
+		const treeData = this.buildTree(groups);
 
-		this.setState({ groups, treeData });
+		this.setState({ loading: false, groups, treeData });
 	}
 
 	handleChange = (value: any, label: any, extra: any) => {
@@ -73,16 +89,19 @@ export class ClassifierSelect extends React.Component<IProps, IState> {
 
 	render = () => {
 		const { value, field } = this.props,
-			{ treeData } = this.state;
+			{ loading, treeData } = this.state;
 
 		return (
-			<TreeSelect
-				onChange={this.handleChange}
-				allowClear showSearch
-				placeholder={field.placeholder}
-				treeData={treeData}
-				value={value}
-			/>
+			<Spin spinning={loading}>
+				<TreeSelect
+					onChange={this.handleChange}
+					allowClear showSearch
+					placeholder={field.placeholder}
+					treeDefaultExpandAll
+					treeData={treeData}
+					value={value}
+				/>
+			</Spin>
 		);
 	}
 }

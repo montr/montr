@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using System.Threading;
@@ -13,7 +14,7 @@ using Montr.MasterData.Services;
 
 namespace Montr.MasterData.Impl.QueryHandlers
 {
-	public class GetClassifierGroupListHandler : IRequestHandler<GetClassifierGroupList, ICollection<ClassifierGroup>>
+	public class GetClassifierGroupListHandler : IRequestHandler<GetClassifierGroupList, IList<ClassifierGroup>>
 	{
 		private readonly IDbContextFactory _dbContextFactory;
 		private readonly IClassifierTypeService _classifierTypeService;
@@ -24,9 +25,9 @@ namespace Montr.MasterData.Impl.QueryHandlers
 			_classifierTypeService = classifierTypeService;
 		}
 
-		public async Task<ICollection<ClassifierGroup>> Handle(GetClassifierGroupList command, CancellationToken cancellationToken)
+		public async Task<IList<ClassifierGroup>> Handle(GetClassifierGroupList command, CancellationToken cancellationToken)
 		{
-			var request = command.Request;
+			var request = command.Request ?? throw new ArgumentNullException(nameof(command.Request));
 
 			var type = await _classifierTypeService.GetClassifierType(request.CompanyUid, request.TypeCode, cancellationToken);
 
@@ -36,37 +37,52 @@ namespace Montr.MasterData.Impl.QueryHandlers
 				{
 					IQueryable<DbClassifierGroup> query;
 
-					if (request.ParentCode == null)
+					if (request.FocusUid != null)
 					{
 						query = from tree in db.GetTable<DbClassifierTree>()
-							join item in db.GetTable<DbClassifierGroup>() on tree.Uid equals item.TreeUid
+							join focus in db.GetTable<DbClassifierGroup>() on tree.Uid equals focus.TreeUid
+							join closureUp in db.GetTable<DbClassifierClosure>() on focus.Uid equals closureUp.ChildUid
+							join closureDown in db.GetTable<DbClassifierClosure>() on closureUp.ParentUid equals closureDown.ParentUid
+							join result in db.GetTable<DbClassifierGroup>() on closureDown.ChildUid equals result.Uid
 							where tree.TypeUid == type.Uid
 								&& tree.Code == request.TreeCode
-								&& item.ParentUid == null
-							select item;
-					}
-					else
-					{
-						query = from tree in db.GetTable<DbClassifierTree>()
-							join item in db.GetTable<DbClassifierGroup>() on tree.Uid equals item.TreeUid
-							join parent in db.GetTable<DbClassifierGroup>() on item.ParentUid equals parent.Uid
-							where tree.TypeUid == type.Uid
-								&& tree.Code == request.TreeCode
-								&& parent.Code == request.ParentCode
-							select item;
+								&& focus.Uid == request.FocusUid
+								&& closureUp.Level > 0
+							select result;
+
+						var children = Materialize(query);
+						var roots = GetGroupsByParent(db, type, request.TreeCode, null);
+
+						var map = children.ToDictionary(x => x.Uid);
+
+						foreach (var child in children)
+						{
+							if (child.ParentUid.HasValue)
+							{
+								var parent = map[child.ParentUid.Value];
+
+								if (parent.Children == null)
+								{
+									parent.Children = new List<ClassifierGroup>();
+								}
+
+								parent.Children.Add(child);
+							}
+							else
+							{
+								if (child.Children == null)
+								{
+									var root = roots.Single(x => x.Uid == child.Uid);
+
+									root.Children = child.Children = new List<ClassifierGroup>();
+								}
+							}
+						}
+
+						return roots;
 					}
 
-					return query
-						.OrderBy(x => x.Code).ThenBy(x => x.Name)
-						.Take(Paging.MaxPageSize)
-						.Select(x => new ClassifierGroup
-						{
-							Uid = x.Uid,
-							Code = x.Code,
-							Name = x.Name,
-							ParentUid = x.ParentUid
-						})
-						.ToList();
+					return GetGroupsByParent(db, type, request.TreeCode, request.ParentCode);
 				}
 			}
 
@@ -94,7 +110,9 @@ namespace Montr.MasterData.Impl.QueryHandlers
 					}
 
 					return query
-						.OrderBy(x => x.StatusCode).ThenBy(x => x.Code).ThenBy(x => x.Name)
+						.OrderBy(x => x.StatusCode)
+						.ThenBy(x => x.Code)
+						.ThenBy(x => x.Name)
 						.Take(Paging.MaxPageSize)
 						.Select(x => new ClassifierGroup
 						{
@@ -106,6 +124,49 @@ namespace Montr.MasterData.Impl.QueryHandlers
 			}
 
 			return ImmutableList<ClassifierGroup>.Empty;
+		}
+
+		private static IList<ClassifierGroup> GetGroupsByParent(DbContext db, 	ClassifierType type, string treeCode, string parentCode)
+		{
+			IQueryable<DbClassifierGroup> query;
+
+			if (parentCode != null)
+			{
+				query = from tree in db.GetTable<DbClassifierTree>()
+					join item in db.GetTable<DbClassifierGroup>() on tree.Uid equals item.TreeUid
+					join parent in db.GetTable<DbClassifierGroup>() on item.ParentUid equals parent.Uid
+					where tree.TypeUid == type.Uid
+						&& tree.Code == treeCode
+						&& parent.Code == parentCode
+					select item;
+			}
+			else
+			{
+				query = from tree in db.GetTable<DbClassifierTree>()
+					join item in db.GetTable<DbClassifierGroup>() on tree.Uid equals item.TreeUid
+					where tree.TypeUid == type.Uid
+						&& tree.Code == treeCode
+						&& item.ParentUid == null
+					select item;
+			}
+
+			return Materialize(query);
+		}
+
+		private static IList<ClassifierGroup> Materialize(IQueryable<DbClassifierGroup> query)
+		{
+			return query
+				.OrderBy(x => x.Code)
+				.ThenBy(x => x.Name)
+				.Take(Paging.MaxPageSize)
+				.Select(x => new ClassifierGroup
+				{
+					Uid = x.Uid,
+					Code = x.Code,
+					Name = x.Name,
+					ParentUid = x.ParentUid
+				})
+				.ToList();
 		}
 	}
 }

@@ -20,7 +20,7 @@ interface IState {
 	loading: boolean;
 	fields?: IFormField[];
 	data: IClassifierGroup;
-	parent?: IClassifierGroup;
+	// parent?: IClassifierGroup;
 }
 
 class _ModalEditClassifierGroup extends React.Component<IProps, IState> {
@@ -61,11 +61,11 @@ class _ModalEditClassifierGroup extends React.Component<IProps, IState> {
 				parentUidField.typeCode = typeCode;
 				parentUidField.treeCode = treeCode;
 
-				let data, parent, { parentUid } = this.props;
+				let data, /* parent, */ { parentUid } = this.props;
 
 				if (uid) {
 					data = await this._classifierGroupService.get(currentCompany.uid, typeCode, treeCode, uid);
-					parentUid = data.parentUid;
+					// parentUid = data.parentUid;
 				}
 				else {
 					data = { parentUid: parentUid };
@@ -75,7 +75,7 @@ class _ModalEditClassifierGroup extends React.Component<IProps, IState> {
 					parent = await this._classifierGroupService.get(currentCompany.uid, typeCode, treeCode, parentUid);
 				} */
 
-				this.setState({ loading: false, fields: dataView.fields, data: data || {}, parent });
+				this.setState({ loading: false, fields: dataView.fields, data/* : data || {}, parent */ });
 
 			} catch (error) {
 				this._notificationService.error("Ошибка при загрузке данных", error.message);
@@ -122,7 +122,7 @@ class _ModalEditClassifierGroup extends React.Component<IProps, IState> {
 				okText="Сохранить" width="640px">
 				<Spin spinning={loading}>
 					<DataForm
-						/* layout="vertical" */
+						layout="vertical"
 						wrappedComponentRef={this.saveFormRef}
 						fields={fields}
 						data={data}

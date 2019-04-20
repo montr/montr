@@ -5,7 +5,7 @@ using Montr.MasterData.Models;
 
 namespace Montr.MasterData.Queries
 {
-	public class GetClassifierGroupList : IRequest<ICollection<ClassifierGroup>>
+	public class GetClassifierGroupList : IRequest<IList<ClassifierGroup>>
 	{
 		public Guid UserUid { get; set; }
 
