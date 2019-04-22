@@ -112,10 +112,10 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 		}
 	}
 
-	fetchClassifierGroups = async (typeCode: string, treeCode: string, parentCode?: string): Promise<IClassifierGroup[]> => {
+	fetchClassifierGroups = async (typeCode: string, treeCode: string, parentUid?: Guid): Promise<IClassifierGroup[]> => {
 		const { currentCompany } = this.props
 
-		return await this._classifierGroupService.list(currentCompany.uid, { typeCode, treeCode, parentCode });
+		return await this._classifierGroupService.list(currentCompany.uid, { typeCode, treeCode, parentUid });
 	}
 
 	delete = async () => {
@@ -145,7 +145,7 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 
 		const { type, treeCode } = this.state;
 
-		const children = await this.fetchClassifierGroups(type.code, treeCode, group.code)
+		const children = await this.fetchClassifierGroups(type.code, treeCode, group.uid)
 
 		group.children = children;
 
@@ -205,7 +205,7 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 	}
 
 	refreshTree = () => {
-		// todo: refresh only tree and focus on inserted/updated item
+		// todo: refresh only tree and **focus** on inserted/updated item
 		this.setPostParams(); // to force refresh
 	}
 

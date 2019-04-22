@@ -10,6 +10,7 @@ using Montr.Core.Services;
 using Montr.Data.Linq2Db;
 using Montr.MasterData.Commands;
 using Montr.MasterData.Impl.Entities;
+using Montr.MasterData.Impl.Services;
 using Montr.MasterData.Models;
 using Montr.MasterData.Services;
 
@@ -266,7 +267,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 			{
 				using (var db = _dbContextFactory.Create())
 				{
-					var closure = new ClosureTable(db);
+					var closureTable = new ClosureTableHandler(db);
 
 					if (sortedItems != null)
 					{
@@ -299,7 +300,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 									.Value(x => x.ParentUid, parentUid)
 									.InsertAsync(cancellationToken);
 
-								await closure.Insert(itemUid, parentUid, cancellationToken);
+								await closureTable.Insert(itemUid, parentUid, cancellationToken);
 
 								_existingItems.Add(item.Code, new DbClassifier
 								{
@@ -371,7 +372,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 										.Value(x => x.ParentUid, parentUid)
 										.InsertAsync(cancellationToken);
 
-									await closure.Insert(groupUid, parentUid, cancellationToken);
+									await closureTable.Insert(groupUid, parentUid, cancellationToken);
 
 									_existingGroups.Add(group.Code, new DbClassifierGroup
 									{
@@ -488,44 +489,6 @@ namespace Montr.MasterData.Impl.CommandHandlers
 				_closuresByChildUid.Add(itemUid, itemClosures);
 
 				return itemClosures.Count;
-			}
-		}
-
-		private class ClosureTable
-		{
-			private readonly DbContext _db;
-
-			public ClosureTable(DbContext db)
-			{
-				_db = db;
-			}
-
-			public async Task<long> Insert(Guid itemUid, Guid? parentUid, CancellationToken cancellationToken)
-			{
-				// insert self closure with level 0
-				await _db.GetTable<DbClassifierClosure>()
-					.Value(x => x.ParentUid, itemUid)
-					.Value(x => x.ChildUid, itemUid)
-					.Value(x => x.Level, 0)
-					.InsertAsync(cancellationToken);
-
-				if (parentUid.HasValue)
-				{
-					// insert parent closures with level + 1
-					var closures = await _db.GetTable<DbClassifierClosure>()
-						.Where(x => x.ChildUid == parentUid.Value)
-						.Select(x => new DbClassifierClosure
-						{
-							ParentUid = x.ParentUid,
-							ChildUid = itemUid,
-							Level = (short)(x.Level + 1)
-						})
-						.ToListAsync(cancellationToken);
-
-					return _db.BulkCopy(closures).RowsCopied + 1;
-				}
-
-				return 1;
 			}
 		}
 	}

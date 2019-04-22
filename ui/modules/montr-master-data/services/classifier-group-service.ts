@@ -6,7 +6,7 @@ import { IClassifierGroup } from "../models";
 interface ClassifierGroupSearchRequest {
 	typeCode: string;
 	treeCode: string;
-	parentCode?: string
+	parentUid?: Guid
 	focusUid?: string;
 }
 

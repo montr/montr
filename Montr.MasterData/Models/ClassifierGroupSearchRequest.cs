@@ -11,7 +11,7 @@ namespace Montr.MasterData.Models
 
 		public string TreeCode { get; set; }
 
-		public string ParentCode { get; set; }
+		public Guid? ParentUid { get; set; }
 
 		public Guid? FocusUid { get; set; }
 	}

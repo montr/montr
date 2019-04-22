@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
 using LinqToDB;
@@ -7,6 +7,7 @@ using Montr.Core.Services;
 using Montr.Data.Linq2Db;
 using Montr.MasterData.Commands;
 using Montr.MasterData.Impl.Entities;
+using Montr.MasterData.Impl.Services;
 using Montr.MasterData.Services;
 
 namespace Montr.MasterData.Impl.CommandHandlers
@@ -42,6 +43,8 @@ namespace Montr.MasterData.Impl.CommandHandlers
 
 				using (var db = _dbContextFactory.Create())
 				{
+					var closureTable = new ClosureTableHandler(db);
+
 					var tree = await db.GetTable<DbClassifierTree>()
 						.SingleAsync(x => x.TypeUid == type.Uid && x.Code == request.TreeCode, cancellationToken);
 
@@ -53,9 +56,11 @@ namespace Montr.MasterData.Impl.CommandHandlers
 						.Value(x => x.Code, item.Code)
 						.Value(x => x.Name, item.Name)
 						.InsertAsync(cancellationToken);
+
+					await closureTable.Insert(itemUid, item.ParentUid, cancellationToken);
 				}
 
-				// todo: (события)
+				// todo: (events)
 
 				scope.Commit();
 

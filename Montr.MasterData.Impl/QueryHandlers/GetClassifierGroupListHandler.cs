@@ -31,15 +31,13 @@ namespace Montr.MasterData.Impl.QueryHandlers
 
 			var type = await _classifierTypeService.GetClassifierType(request.CompanyUid, request.TypeCode, cancellationToken);
 
-			if (type.HierarchyType == HierarchyType.Groups)
+			using (var db = _dbContextFactory.Create())
 			{
-				using (var db = _dbContextFactory.Create())
+				if (type.HierarchyType == HierarchyType.Groups)
 				{
-					IQueryable<DbClassifierGroup> query;
-
 					if (request.FocusUid != null)
 					{
-						query = from tree in db.GetTable<DbClassifierTree>()
+						var query = from tree in db.GetTable<DbClassifierTree>()
 							join focus in db.GetTable<DbClassifierGroup>() on tree.Uid equals focus.TreeUid
 							join closureUp in db.GetTable<DbClassifierClosure>() on focus.Uid equals closureUp.ChildUid
 							join closureDown in db.GetTable<DbClassifierClosure>() on closureUp.ParentUid equals closureDown.ParentUid
@@ -47,97 +45,97 @@ namespace Montr.MasterData.Impl.QueryHandlers
 							where tree.TypeUid == type.Uid
 								&& tree.Code == request.TreeCode
 								&& focus.Uid == request.FocusUid
-								&& closureUp.Level > 0
+								&& closureUp.Level > 0 // to exclude just focused group
+								&& (closureDown.Level == 0 && result.ParentUid == null ||
+									closureDown.Level == 1 && result.ParentUid != null)
 							select result;
 
 						var children = Materialize(query);
+
 						var roots = GetGroupsByParent(db, type, request.TreeCode, null);
 
-						var map = children.ToDictionary(x => x.Uid);
-
-						foreach (var child in children)
-						{
-							if (child.ParentUid.HasValue)
-							{
-								var parent = map[child.ParentUid.Value];
-
-								if (parent.Children == null)
-								{
-									parent.Children = new List<ClassifierGroup>();
-								}
-
-								parent.Children.Add(child);
-							}
-							else
-							{
-								if (child.Children == null)
-								{
-									var root = roots.Single(x => x.Uid == child.Uid);
-
-									root.Children = child.Children = new List<ClassifierGroup>();
-								}
-							}
-						}
+						LinkChildrenToRoots(children, roots);
 
 						return roots;
 					}
 
-					return GetGroupsByParent(db, type, request.TreeCode, request.ParentCode);
+					return GetGroupsByParent(db, type, request.TreeCode, request.ParentUid);
 				}
-			}
-
-			if (type.HierarchyType == HierarchyType.Items)
-			{
-				using (var db = _dbContextFactory.Create())
+				
+				if (type.HierarchyType == HierarchyType.Items)
 				{
-					IQueryable<DbClassifier> query;
-
-					if (request.ParentCode == null)
-					{
-						query = from item in db.GetTable<DbClassifier>()
-							where item.TypeUid == type.Uid
-								&& item.ParentUid == null
-							orderby item.StatusCode, item.Code, item.Name
-							select item;
-					}
-					else
-					{
-						query = from item in db.GetTable<DbClassifier>()
-							join parent in db.GetTable<DbClassifier>() on item.ParentUid equals parent.Uid
-							where item.TypeUid == type.Uid
-								&& parent.Code == request.ParentCode
-							select item;
-					}
-
-					return query
-						.OrderBy(x => x.StatusCode)
-						.ThenBy(x => x.Code)
-						.ThenBy(x => x.Name)
-						.Take(Paging.MaxPageSize)
-						.Select(x => new ClassifierGroup
-						{
-							Code = x.Code,
-							Name = x.Name
-						})
-						.ToList();
+					return GetItemsByParent(db, type, request.ParentUid);
 				}
 			}
 
 			return ImmutableList<ClassifierGroup>.Empty;
 		}
 
-		private static IList<ClassifierGroup> GetGroupsByParent(DbContext db, 	ClassifierType type, string treeCode, string parentCode)
+		private static void LinkChildrenToRoots(IList<ClassifierGroup> children, IList<ClassifierGroup> roots)
+		{
+			var map = children.ToDictionary(x => x.Uid);
+
+			foreach (var child in children)
+			{
+				if (child.ParentUid.HasValue)
+				{
+					var parent = map[child.ParentUid.Value];
+
+					if (parent.Children == null)
+					{
+						parent.Children = new List<ClassifierGroup>();
+					}
+
+					parent.Children.Add(child);
+				}
+				else
+				{
+					if (child.Children == null)
+					{
+						var root = roots.Single(x => x.Uid == child.Uid);
+
+						root.Children = child.Children = new List<ClassifierGroup>();
+					}
+				}
+			}
+		}
+
+		private static IList<ClassifierGroup> GetItemsByParent(DbContext db, ClassifierType type, Guid? parentUid)
+		{
+			IQueryable<DbClassifier> query;
+
+			if (parentUid != null)
+			{
+				query = from item in db.GetTable<DbClassifier>()
+					join parent in db.GetTable<DbClassifier>() on item.ParentUid equals parent.Uid
+					where item.TypeUid == type.Uid
+						&& parent.Uid == parentUid
+					select item;
+			}
+			else
+			{
+				query = from item in db.GetTable<DbClassifier>()
+					where item.TypeUid == type.Uid
+						&& item.ParentUid == null
+					orderby item.StatusCode, item.Code, item.Name
+					select item;
+			}
+
+			return Materialize(query);
+		}
+
+		private static IList<ClassifierGroup> GetGroupsByParent(DbContext db, ClassifierType type, string treeCode, Guid? parentUid)
 		{
 			IQueryable<DbClassifierGroup> query;
 
-			if (parentCode != null)
+			if (parentUid != null)
 			{
 				query = from tree in db.GetTable<DbClassifierTree>()
 					join item in db.GetTable<DbClassifierGroup>() on tree.Uid equals item.TreeUid
 					join parent in db.GetTable<DbClassifierGroup>() on item.ParentUid equals parent.Uid
 					where tree.TypeUid == type.Uid
 						&& tree.Code == treeCode
-						&& parent.Code == parentCode
+						&& parent.Uid == parentUid
 					select item;
 			}
 			else
@@ -157,6 +155,23 @@ namespace Montr.MasterData.Impl.QueryHandlers
 		{
 			return query
 				.OrderBy(x => x.Code)
+				.ThenBy(x => x.Name)
+				.Take(Paging.MaxPageSize)
+				.Select(x => new ClassifierGroup
+				{
+					Uid = x.Uid,
+					Code = x.Code,
+					Name = x.Name,
+					ParentUid = x.ParentUid
+				})
+				.ToList();
+		}
+
+		private static IList<ClassifierGroup> Materialize(IQueryable<DbClassifier> query)
+		{
+			return query
+				.OrderBy(x => x.StatusCode)
+				.ThenBy(x => x.Code)
 				.ThenBy(x => x.Name)
 				.Take(Paging.MaxPageSize)
 				.Select(x => new ClassifierGroup
