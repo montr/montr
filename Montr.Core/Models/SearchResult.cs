@@ -6,6 +6,6 @@ namespace Montr.Core.Models
 	{
 		public int TotalCount { get; set; }
 
-		public IEnumerable<TModel> Rows { get; set; }
+		public IList<TModel> Rows { get; set; }
 	}
 }

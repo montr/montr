@@ -59,7 +59,7 @@ namespace Montr.MasterData.Tests.QueryHandlers
 					CompanyUid = Constants.OperatorCompanyUid,
 					TypeCode = "okei",
 					TreeCode = "default",
-					ParentCode = "1"
+					ParentUid = Guid.NewGuid() // ParentCode = "1"
 				}
 			};
 
@@ -114,7 +114,7 @@ namespace Montr.MasterData.Tests.QueryHandlers
 				{
 					CompanyUid = Constants.OperatorCompanyUid,
 					TypeCode = "okved2",
-					ParentCode = "F"
+					ParentUid = Guid.NewGuid() // ParentCode = "F"
 				}
 			};
 

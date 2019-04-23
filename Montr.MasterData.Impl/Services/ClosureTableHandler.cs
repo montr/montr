@@ -45,5 +45,51 @@ namespace Montr.MasterData.Impl.Services
 
 			return 1;
 		}
+
+		public async Task Delete(Guid itemUid, Guid? parentUid, CancellationToken cancellationToken)
+		{
+			// reset parent of groups
+			await _db.GetTable<DbClassifierGroup>()
+				.Where(x => x.ParentUid == itemUid)
+				.Set(x => x.ParentUid, parentUid)
+				.UpdateAsync(cancellationToken);
+
+			// reset parent of items
+			if (parentUid != null)
+			{
+				await _db.GetTable<DbClassifierLink>()
+					.Where(x => x.GroupUid == itemUid)
+					.Set(x => x.GroupUid, parentUid)
+					.UpdateAsync(cancellationToken);
+			}
+			else
+			{
+				await _db.GetTable<DbClassifierLink>()
+					.Where(x => x.GroupUid == itemUid)
+					.DeleteAsync(cancellationToken);
+			}
+
+			// move children to parent with level - 1
+			// (if no parent - all children stay the same)
+			if (parentUid != null)
+			{
+				await (from parent in _db.GetTable<DbClassifierClosure>()
+						where parent.ChildUid == itemUid && parent.Level > 0
+						from child in _db.GetTable<DbClassifierClosure>()
+						where child.ParentUid == itemUid && child.Level > 0
+						join updatable in _db.GetTable<DbClassifierClosure>()
+							on new { parent.ParentUid, child.ChildUid }
+							equals new { updatable.ParentUid, updatable.ChildUid }
+						select updatable)
+					.AsUpdatable()
+					.Set(x => x.Level, x => x.Level - 1)
+					.UpdateAsync(cancellationToken);
+			}
+
+			// delete unused closure
+			await _db.GetTable<DbClassifierClosure>()
+				.Where(x => x.ParentUid == itemUid)
+				.DeleteAsync(cancellationToken);
+		}
 	}
 }

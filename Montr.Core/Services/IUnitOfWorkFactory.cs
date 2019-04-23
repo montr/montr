@@ -15,6 +15,7 @@ namespace Montr.Core.Services
 
 	public class TransactionScopeUnitOfWorkFactory : IUnitOfWorkFactory
 	{
+		// todo: remove
 		public bool Commitable { get; set; } = true;
 
 		public IUnitOfWork Create()

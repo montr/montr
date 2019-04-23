@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -8,6 +8,8 @@ using Montr.Core.Services;
 using Montr.Data.Linq2Db;
 using Montr.MasterData.Commands;
 using Montr.MasterData.Impl.Entities;
+using Montr.MasterData.Impl.Services;
+using Montr.MasterData.Models;
 using Montr.MasterData.Services;
 
 namespace Montr.MasterData.Impl.CommandHandlers
@@ -36,16 +38,26 @@ namespace Montr.MasterData.Impl.CommandHandlers
 
 			using (var scope = _unitOfWorkFactory.Create())
 			{
-				int result;
+				int result = 0;
 
 				using (var db = _dbContextFactory.Create())
 				{
-					var tree = await db.GetTable<DbClassifierTree>()
-						.SingleAsync(x => x.TypeUid == type.Uid && x.Code == request.TreeCode, cancellationToken);
-					
-					result = await db.GetTable<DbClassifierGroup>()
-						.Where(x => x.TreeUid == tree.Uid && x.Uid == request.Uid)
-						.DeleteAsync(cancellationToken);
+					if (type.HierarchyType == HierarchyType.Groups)
+					{
+						var closureTable = new ClosureTableHandler(db);
+
+						var tree = await db.GetTable<DbClassifierTree>()
+							.SingleAsync(x => x.TypeUid == type.Uid && x.Code == request.TreeCode, cancellationToken);
+
+						var group = await db.GetTable<DbClassifierGroup>()
+							.SingleAsync(x => x.TreeUid == tree.Uid && x.Uid == request.Uid, cancellationToken);
+
+						await closureTable.Delete(group.Uid, group.ParentUid, cancellationToken);
+
+						result = await db.GetTable<DbClassifierGroup>()
+							.Where(x => x.Uid == group.Uid)
+							.DeleteAsync(cancellationToken);
+					}
 				}
 
 				// todo: (события)
