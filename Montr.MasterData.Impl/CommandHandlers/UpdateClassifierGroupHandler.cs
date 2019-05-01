@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -8,6 +8,7 @@ using Montr.Core.Services;
 using Montr.Data.Linq2Db;
 using Montr.MasterData.Commands;
 using Montr.MasterData.Impl.Entities;
+using Montr.MasterData.Impl.Services;
 
 namespace Montr.MasterData.Impl.CommandHandlers
 {
@@ -37,6 +38,10 @@ namespace Montr.MasterData.Impl.CommandHandlers
 
 				using (var db = _dbContextFactory.Create())
 				{
+					var closureTable = new ClosureTableHandler(db);
+
+					await closureTable.Update(item.Uid, item.ParentUid, cancellationToken);
+
 					result = await db.GetTable<DbClassifierGroup>()
 						.Where(x => x.Uid == item.Uid)
 						.Set(x => x.Code, item.Code)

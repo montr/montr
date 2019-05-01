@@ -54,6 +54,27 @@ namespace Montr.MasterData.Impl.CommandHandlers
 
 						await closureTable.Delete(group.Uid, group.ParentUid, cancellationToken);
 
+						// reset parent of groups
+						await db.GetTable<DbClassifierGroup>()
+							.Where(x => x.ParentUid == group.Uid)
+							.Set(x => x.ParentUid, group.ParentUid)
+							.UpdateAsync(cancellationToken);
+
+						// reset parent of items
+						if (group.ParentUid != null)
+						{
+							await db.GetTable<DbClassifierLink>()
+								.Where(x => x.GroupUid == group.Uid)
+								.Set(x => x.GroupUid, group.ParentUid)
+								.UpdateAsync(cancellationToken);
+						}
+						else
+						{
+							await db.GetTable<DbClassifierLink>()
+								.Where(x => x.GroupUid == group.Uid)
+								.DeleteAsync(cancellationToken);
+						}
+
 						result = await db.GetTable<DbClassifierGroup>()
 							.Where(x => x.Uid == group.Uid)
 							.DeleteAsync(cancellationToken);

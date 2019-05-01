@@ -44,10 +44,72 @@ namespace Montr.MasterData.Tests.Services
 
 				// assert
 				var closure = PrintClosure(dbContextFactory);
-
 				Assert.AreEqual(File.ReadAllText("../../../Content/closure.2x3.txt"), closure);
 			}
 		}
+
+		[TestMethod]
+		public async Task UpdateGroup_ShouldThrow_WhenCyclicDependencyDetected()
+		{
+			// arrange
+			var unitOfWorkFactory = new TransactionScopeUnitOfWorkFactory();
+			var dbContextFactory = new DefaultDbContextFactory();
+			var classifierTypeRepository = new DbClassifierTypeRepository(dbContextFactory);
+			var classifierTypeService = new DefaultClassifierTypeService(classifierTypeRepository);
+
+			var insertClassifierTypeHandler = new InsertClassifierTypeHandler(unitOfWorkFactory, dbContextFactory);
+			var insertClassifierGroupHandler = new InsertClassifierGroupHandler(unitOfWorkFactory, dbContextFactory, classifierTypeService);
+			var updateClassifierGroupHandler = new UpdateClassifierGroupHandler(unitOfWorkFactory, dbContextFactory);
+			var cancellationToken = new CancellationToken();
+
+			using (var _ = unitOfWorkFactory.Create())
+			{
+				// act & assert
+				await InsertType(insertClassifierTypeHandler, cancellationToken);
+				await InsertGroups(3, 3, null, null, insertClassifierGroupHandler, cancellationToken);
+				Assert.AreEqual(File.ReadAllText("../../../Content/closure.3x3.txt"), PrintClosure(dbContextFactory));
+
+				// act & assert - cyclic dependency
+				await Assert.ThrowsExceptionAsync<InvalidOperationException>(
+					() => UpdateGroup("1.1", "1.1.1", updateClassifierGroupHandler, dbContextFactory, cancellationToken));
+			}
+		}
+
+		[TestMethod]
+		public async Task UpdateGroup_Should_RebuildClosureTable()
+		{
+			// arrange
+			var unitOfWorkFactory = new TransactionScopeUnitOfWorkFactory();
+			var dbContextFactory = new DefaultDbContextFactory();
+			var classifierTypeRepository = new DbClassifierTypeRepository(dbContextFactory);
+			var classifierTypeService = new DefaultClassifierTypeService(classifierTypeRepository);
+
+			var insertClassifierTypeHandler = new InsertClassifierTypeHandler(unitOfWorkFactory, dbContextFactory);
+			var insertClassifierGroupHandler = new InsertClassifierGroupHandler(unitOfWorkFactory, dbContextFactory, classifierTypeService);
+			var updateClassifierGroupHandler = new UpdateClassifierGroupHandler(unitOfWorkFactory, dbContextFactory);
+			var cancellationToken = new CancellationToken();
+
+			using (var _ = unitOfWorkFactory.Create())
+			{
+				// act & assert
+				await InsertType(insertClassifierTypeHandler, cancellationToken);
+				await InsertGroups(3, 3, null, null, insertClassifierGroupHandler, cancellationToken);
+				Assert.AreEqual(File.ReadAllText("../../../Content/closure.3x3.txt"), PrintClosure(dbContextFactory));
+
+				// act & assert - from null to not null parent
+				await UpdateGroup("1", "2.1", updateClassifierGroupHandler, dbContextFactory, cancellationToken);
+				Assert.AreEqual(File.ReadAllText("../../../Content/closure.3x3~1to2.1.txt"), PrintClosure(dbContextFactory));
+
+				// act & assert - from not null to null parent
+				await UpdateGroup("2.2", null, updateClassifierGroupHandler, dbContextFactory, cancellationToken);
+				Assert.AreEqual(File.ReadAllText("../../../Content/closure.3x3~1to2.1~2.2toRoot.txt"), PrintClosure(dbContextFactory));
+
+				// act & assert - from not null to not null parent
+				await UpdateGroup("3.3", "1.3", updateClassifierGroupHandler, dbContextFactory, cancellationToken);
+				Assert.AreEqual(File.ReadAllText("../../../Content/closure.3x3~1to2.1~2.2toRoot~3.3to1.3.txt"), PrintClosure(dbContextFactory));
+			}
+		}
+
 		[TestMethod]
 		public async Task DeleteGroup_Should_RebuildClosureTable()
 		{
@@ -64,29 +126,26 @@ namespace Montr.MasterData.Tests.Services
 
 			using (var _ = unitOfWorkFactory.Create())
 			{
-				// act
+				// act & assert
 				await InsertType(insertClassifierTypeHandler, cancellationToken);
 				await InsertGroups(3, 3, null, null, insertClassifierGroupHandler, cancellationToken);
-
-				// assert
 				Assert.AreEqual(File.ReadAllText("../../../Content/closure.3x3.txt"), PrintClosure(dbContextFactory));
 
 				// act & assert
-				await DeleteGroup(deleteClassifierGroupHandler, dbContextFactory, cancellationToken, "1");
+				await DeleteGroup("1", deleteClassifierGroupHandler, dbContextFactory, cancellationToken);
 				Assert.AreEqual(File.ReadAllText("../../../Content/closure.3x3-1.txt"), PrintClosure(dbContextFactory));
 
 				// act & assert
-				await DeleteGroup(deleteClassifierGroupHandler, dbContextFactory, cancellationToken, "2.2");
+				await DeleteGroup("2.2", deleteClassifierGroupHandler, dbContextFactory, cancellationToken);
 				Assert.AreEqual(File.ReadAllText("../../../Content/closure.3x3-1-2.2.txt"), PrintClosure(dbContextFactory));
 
 				// act & assert
-				await DeleteGroup(deleteClassifierGroupHandler, dbContextFactory, cancellationToken, "3.1.2");
+				await DeleteGroup("3.1.2", deleteClassifierGroupHandler, dbContextFactory, cancellationToken);
 				Assert.AreEqual(File.ReadAllText("../../../Content/closure.3x3-1-2.2-3.1.2.txt"), PrintClosure(dbContextFactory));
 			}
 		}
 
-		private async Task InsertType(
-			InsertClassifierTypeHandler insertClassifierTypeHandler, CancellationToken cancellationToken)
+		private async Task InsertType(InsertClassifierTypeHandler insertClassifierTypeHandler, CancellationToken cancellationToken)
 		{
 			await insertClassifierTypeHandler.Handle(new InsertClassifierType
 			{
@@ -123,22 +182,48 @@ namespace Montr.MasterData.Tests.Services
 			}
 		}
 
-		private async Task DeleteGroup(
-			DeleteClassifierGroupHandler deleteClassifierGroupHandler,
-			DefaultDbContextFactory dbContextFactory,
-			CancellationToken cancellationToken, string groupCode)
+		private async Task UpdateGroup(string groupCode, string newParentGroupCode,
+			UpdateClassifierGroupHandler updateClassifierGroupHandler, DefaultDbContextFactory dbContextFactory, CancellationToken cancellationToken)
 		{
+			var dbGroup = await FindGroup(dbContextFactory, groupCode);
+
+			var item = new ClassifierGroup
+			{
+				Uid = dbGroup.Uid,
+				Code = dbGroup.Code,
+				Name = dbGroup.Name
+			};
+
+			if (newParentGroupCode != null)
+			{
+				var dbParentGroup = await FindGroup(dbContextFactory, newParentGroupCode);
+				item.ParentUid = dbParentGroup.Uid;
+			}
+			
+			await updateClassifierGroupHandler.Handle(new UpdateClassifierGroup
+			{
+				CompanyUid = Constants.OperatorCompanyUid,
+				UserUid = UserUid,
+				Item = item
+			}, cancellationToken);
+		}
+
+		private async Task DeleteGroup(string groupCode,
+			DeleteClassifierGroupHandler deleteClassifierGroupHandler, IDbContextFactory dbContextFactory, CancellationToken cancellationToken)
+		{
+			var group = await FindGroup(dbContextFactory, groupCode);
+
 			await deleteClassifierGroupHandler.Handle(new DeleteClassifierGroup
 			{
 				CompanyUid = Constants.OperatorCompanyUid,
 				UserUid = UserUid,
 				TypeCode = TypeCode,
 				TreeCode = TreeCode,
-				Uid = await FindGroup(dbContextFactory, groupCode)
+				Uid = group.Uid
 			}, cancellationToken);
 		}
 
-		private async Task<Guid> FindGroup(IDbContextFactory dbContextFactory, string groupCode)
+		private async Task<DbClassifierGroup> FindGroup(IDbContextFactory dbContextFactory, string groupCode)
 		{
 			using (var db = dbContextFactory.Create())
 			{
@@ -150,9 +235,7 @@ namespace Montr.MasterData.Tests.Services
 						&& g.Code == groupCode
 					select g;
 
-				var group = await query.SingleAsync();
-
-				return group.Uid;
+				return await query.SingleAsync();
 			}
 		}
 
