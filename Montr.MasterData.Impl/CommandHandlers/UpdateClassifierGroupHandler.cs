@@ -44,6 +44,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 
 					result = await db.GetTable<DbClassifierGroup>()
 						.Where(x => x.Uid == item.Uid)
+						.Set(x => x.ParentUid, item.ParentUid)
 						.Set(x => x.Code, item.Code)
 						.Set(x => x.Name, item.Name)
 						.UpdateAsync(cancellationToken);

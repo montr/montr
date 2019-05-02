@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -35,6 +35,13 @@ namespace Montr.MasterData.Impl.CommandHandlers
 
 				using (var db = _dbContextFactory.Create())
 				{
+					await (
+						from tree in db.GetTable<DbClassifierTree>()
+						join type in db.GetTable<DbClassifierType>() on tree.TypeUid equals type.Uid
+						where type.CompanyUid == request.CompanyUid && request.Uids.Contains(type.Uid)
+						select tree
+					).DeleteAsync(cancellationToken);
+
 					result = await db.GetTable<DbClassifierType>()
 						.Where(x => x.CompanyUid == request.CompanyUid && request.Uids.Contains(x.Uid))
 						.DeleteAsync(cancellationToken);
