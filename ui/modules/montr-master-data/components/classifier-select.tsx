@@ -109,6 +109,7 @@ class _ClassifierSelect extends React.Component<IProps, IState> {
 			group.children = await this._classifierGroupService.list(
 				currentCompany.uid, { typeCode: field.typeCode, treeCode: field.treeCode, parentUid: group.uid });
 
+			// todo: store in state real data and build tree nodes in render (like in search-classifier.tsx)
 			this.setState({ treeData: this.buildTree(groups) });
 
 			resolve();
