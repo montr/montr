@@ -5,8 +5,10 @@ import { withCompanyContext, CompanyContextProps } from "@kompany/components";
 import { ClassifierBreadcrumb } from "../components";
 import { Link } from "react-router-dom";
 import { Button, Icon } from "antd";
-import { ClassifierTypeService } from "@montr-master-data/services";
+import { ClassifierTypeService } from "../services";
 import { NotificationService } from "@montr-core/services";
+import { IClassifierType } from "../models";
+import { IDataResult } from "@montr-core/models";
 
 interface IProps extends CompanyContextProps {
 }
@@ -76,6 +78,10 @@ class _SearchClassifierType extends React.Component<IProps, IState> {
 		}
 	}
 
+	onLoadTableData = async (loadUrl: string, postParams: any): Promise<IDataResult<{}>> => {
+		return await this._classifierTypeService.post(loadUrl, Object.assign(postParams, this.state.postParams));
+	}
+
 	render = () => {
 		const { postParams } = this.state;
 
@@ -96,10 +102,11 @@ class _SearchClassifierType extends React.Component<IProps, IState> {
 				</>}>
 
 				<DataTable
+					rowKey="uid"
 					viewId={`ClassifierType/Grid/`}
 					loadUrl={`${Constants.baseURL}/classifierType/list/`}
-					postParams={this.state.postParams}
-					rowKey="uid"
+					// postParams={this.state.postParams}
+					onLoadData={this.onLoadTableData}
 					onSelectionChange={this.onSelectionChange}
 				/>
 

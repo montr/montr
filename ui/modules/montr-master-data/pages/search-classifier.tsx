@@ -4,11 +4,11 @@ import { RouteComponentProps } from "react-router";
 import { Link } from "react-router-dom";
 import { Icon, Button, Tree, Select, Radio, Layout, Modal } from "antd";
 import { Constants } from "@montr-core/.";
-import { Guid } from "@montr-core/models";
+import { Guid, IDataResult } from "@montr-core/models";
 import { NotificationService } from "@montr-core/services";
 import { withCompanyContext, CompanyContextProps } from "@kompany/components";
 import { ClassifierService, ClassifierTypeService, ClassifierGroupService } from "../services";
-import { IClassifierType, IClassifierTree, IClassifierGroup } from "../models";
+import { IClassifierType, IClassifierTree, IClassifierGroup, IClassifier } from "../models";
 import { RadioChangeEvent } from "antd/lib/radio";
 import { AntTreeNode, AntTreeNodeSelectedEvent } from "antd/lib/tree";
 import { ClassifierBreadcrumb, ModalEditClassifierGroup } from "../components";
@@ -30,6 +30,7 @@ interface IState {
 	groupEditData?: { parentUid?: Guid, uid?: Guid },
 	selectedRowKeys: string[] | number[];
 	postParams: any;
+	updateTableDate?: Date;
 }
 
 class _SearchClassifier extends React.Component<IProps, IState> {
@@ -74,6 +75,7 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 		const { currentCompany } = this.props,
 			{ typeCode } = this.props.match.params;
 
+		// debugger;
 		if (!currentCompany) return;
 
 		const types = (await this._classifierTypeService.list(currentCompany.uid)).rows;
@@ -107,7 +109,8 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 					companyUid: currentCompany ? currentCompany.uid : null,
 					typeCode: typeCode,
 					treeCode: treeCode
-				}
+				},
+				updateTableDate: new Date()
 			});
 		}
 	}
@@ -160,13 +163,17 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 		const { postParams } = this.state;
 		this.setState({
 			selectedGroupUid: (e.selected) ? e.node.props.dataRef.uid : null,
-			postParams: { ...postParams, groupCode: selectedKeys[0] }
+			postParams: { ...postParams, groupCode: selectedKeys[0] },
+			updateTableDate: new Date()
 		});
 	}
 
 	onDepthChange = (e: RadioChangeEvent) => {
 		const { postParams } = this.state;
-		this.setState({ postParams: { ...postParams, depth: e.target.value } });
+		this.setState({
+			postParams: { ...postParams, depth: e.target.value },
+			updateTableDate: new Date()
+		});
 	}
 
 	buildGroupsTree = (groups: IClassifierGroup[]) => {
@@ -204,24 +211,30 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 		this.refreshTree();
 	}
 
-	refreshTree = () => {
+	refreshTree = async () => {
 		// todo: refresh only tree and **focus** on inserted/updated item
-		this.setPostParams(); // to force refresh
+		await this.setPostParams(); // to force refresh
 	}
 
-	handleGroupModalSuccess = () => {
+	handleGroupModalSuccess = async (data: IClassifierGroup) => {
+		console.log(data);
+
 		this.setState({ groupEditData: null });
 
-		this.refreshTree();
+		await this.refreshTree();
 	}
 
 	hideGroupModal = () => {
 		this.setState({ groupEditData: null });
 	}
 
+	onLoadTableData = async (loadUrl: string, postParams: any): Promise<IDataResult<{}>> => {
+		return await this._classifierService.post(loadUrl, Object.assign(postParams, this.state.postParams));
+	}
+
 	render() {
 		const { currentCompany } = this.props,
-			{ types, type, treeCode, trees, groups, selectedGroupUid, groupEditData, postParams } = this.state;
+			{ types, type, treeCode, trees, groups, selectedGroupUid, groupEditData, postParams, updateTableDate } = this.state;
 
 		if (!currentCompany || !type || !postParams.typeCode) return null;
 
@@ -258,11 +271,13 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 
 		const table = (
 			<DataTable
+				rowKey="uid"
 				viewId={`Classifier/Grid/${type.code}`}
 				loadUrl={`${Constants.baseURL}/classifier/list/`}
-				postParams={postParams}
-				rowKey="uid"
+				onLoadData={this.onLoadTableData}
+				// postParams={postParams}
 				onSelectionChange={this.onSelectionChange}
+				updateDate={updateTableDate}
 			/>
 		);
 

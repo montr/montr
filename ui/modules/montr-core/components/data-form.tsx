@@ -96,4 +96,4 @@ export class WrappedDataForm extends React.Component<IProps, IState> {
 	}
 }
 
-export const DataForm = Form.create()(WrappedDataForm);
+export const DataForm = Form.create<IProps>()(WrappedDataForm);

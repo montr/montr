@@ -12,7 +12,7 @@ interface IProps extends CompanyContextProps {
 	treeCode: string,
 	uid?: Guid;
 	parentUid?: Guid;
-	onSuccess?: () => void
+	onSuccess?: (data: IClassifierGroup) => void
 	onCancel?: () => void;
 }
 
@@ -100,17 +100,19 @@ class _ModalEditClassifierGroup extends React.Component<IProps, IState> {
 		const { typeCode, treeCode, uid, onSuccess } = this.props;
 		const { uid: companyUid } = this.props.currentCompany;
 
+		let data: IClassifierGroup;
 		if (uid) {
-			const updated = { uid: uid, ...values };
-			const rowsUpdated = await this._classifierGroupService.update(companyUid, updated);
+			data = { uid: uid, ...values };
+			const rowsUpdated = await this._classifierGroupService.update(companyUid, data);
 
 			if (rowsUpdated != 1) throw new Error();
 		}
 		else {
 			const uid: Guid = await this._classifierGroupService.insert(companyUid, typeCode, treeCode, values);
+			data = { uid: uid, ...values };
 		}
 
-		if (onSuccess) await onSuccess();
+		if (onSuccess) await onSuccess(data);
 	}
 
 	render = () => {

@@ -10,8 +10,11 @@ interface IProps<TModel> {
 	rowKey?: string
 	viewId: string
 	loadUrl: string; // todo: (?) add load func or data[]
-	postParams?: any;
-	onSelectionChange?: (selectedRowKeys: string[] | number[], selectedRows: TModel[]) => void
+	// postParams?: any;
+	// todo: add type for post params
+	onLoadData?: (loadUrl: string, postParams: any) => Promise<IDataResult<TModel>>;
+	onSelectionChange?: (selectedRowKeys: string[] | number[], selectedRows: TModel[]) => void;
+	updateDate?: Date;
 }
 
 interface IState<TModel> {
@@ -53,7 +56,9 @@ export class DataTable<TModel extends IIndexer> extends React.Component<IProps<T
 	}
 
 	componentDidUpdate = async (prevProps: IProps<TModel>) => {
-		if (this.props.postParams !== prevProps.postParams) {
+		console.log(prevProps);
+		// await this.fetchData();
+		/* if (this.props.postParams !== prevProps.postParams) {
 
 			// todo: reset other state
 			this.setState({
@@ -62,6 +67,17 @@ export class DataTable<TModel extends IIndexer> extends React.Component<IProps<T
 			});
 
 			await this.fetchMetadata();
+		} */
+		if (this.props.updateDate !== prevProps.updateDate) {
+			const pager = { ...this.state.pagination };
+
+			pager.current = 0;
+
+			this.setState({
+				pagination: pager,
+			});
+
+			await this.fetchData();
 		}
 	}
 
@@ -147,7 +163,7 @@ export class DataTable<TModel extends IIndexer> extends React.Component<IProps<T
 		await this.fetchData({
 			sortColumn: defaultSortColumn && defaultSortColumn.key,
 			sortOrder: defaultSortColumn && defaultSortColumn.defaultSortOrder,
-		})
+		});
 	}
 
 	private fetchData = async (params = {}) => {
@@ -156,16 +172,20 @@ export class DataTable<TModel extends IIndexer> extends React.Component<IProps<T
 
 		try {
 			let postParams = {
-				pageSize: Constants.defaultPageSize,
+				// pageSize: Constants.defaultPageSize,
 				...params,
 			};
 
-			// todo: remove, use onLoadData(params): IDataResult
-			if (this.props.postParams) {
-				postParams = Object.assign(postParams, this.props.postParams);
-			}
+			const { loadUrl, onLoadData } = this.props;
 
-			const data: IDataResult<TModel> = await this._fetcher.post(this.props.loadUrl, postParams);
+			// todo: remove, use onLoadData(params): IDataResult
+			/* if (this.props.postParams) {
+				postParams = Object.assign(postParams, this.props.postParams);
+			} */
+
+			const data: IDataResult<TModel> = onLoadData
+				? await onLoadData(loadUrl, postParams)
+				: await this._fetcher.post(loadUrl, postParams);
 
 			const pagination = { ...this.state.pagination };
 
