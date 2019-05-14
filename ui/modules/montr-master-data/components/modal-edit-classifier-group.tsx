@@ -49,7 +49,7 @@ class _ModalEditClassifierGroup extends React.Component<IProps, IState> {
 	}
 
 	fetchData = async () => {
-		const { currentCompany, typeCode, treeCode, uid } = this.props;
+		const { currentCompany, typeCode, treeCode, uid, parentUid } = this.props;
 
 		if (currentCompany) {
 
@@ -58,24 +58,23 @@ class _ModalEditClassifierGroup extends React.Component<IProps, IState> {
 				const dataView = await this._metadataService.load(`ClassifierGroup/${typeCode}`);
 
 				const parentUidField = dataView.fields.find(x => x.key == "parentUid") as IClassifierField;
-				parentUidField.typeCode = typeCode;
-				parentUidField.treeCode = treeCode;
 
-				let data, /* parent, */ { parentUid } = this.props;
+				if (parentUidField) {
+					parentUidField.typeCode = typeCode;
+					parentUidField.treeCode = treeCode;
+				}
+
+				let data;
 
 				if (uid) {
 					data = await this._classifierGroupService.get(currentCompany.uid, typeCode, treeCode, uid);
-					// parentUid = data.parentUid;
 				}
 				else {
+					// todo: load defaults from server
 					data = { parentUid: parentUid };
 				}
 
-				/* if (parentUid) {
-					parent = await this._classifierGroupService.get(currentCompany.uid, typeCode, treeCode, parentUid);
-				} */
-
-				this.setState({ loading: false, fields: dataView.fields, data/* : data || {}, parent */ });
+				this.setState({ loading: false, fields: dataView.fields, data });
 
 			} catch (error) {
 				this._notificationService.error("Ошибка при загрузке данных", error.message);

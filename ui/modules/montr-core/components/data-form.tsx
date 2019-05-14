@@ -65,7 +65,7 @@ export class WrappedDataForm extends React.Component<IProps, IState> {
 
 		const fieldNode = fieldFactory.createNode(field, data);
 
-		const itemLayout = (layout == null || layout == "horizontal") ? FormDefaults.formItemLayout : null;
+		const itemLayout = (layout == null || layout == "horizontal") ? FormDefaults.formItemLayout : {};
 
 		return (
 			<Form.Item key={field.key} label={field.name} extra={field.description} {...itemLayout}>

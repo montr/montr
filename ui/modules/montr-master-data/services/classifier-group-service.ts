@@ -7,7 +7,7 @@ interface ClassifierGroupSearchRequest {
 	typeCode: string;
 	treeCode: string;
 	parentUid?: Guid
-	focusUid?: string;
+	focusUid?: Guid | string;
 }
 
 export class ClassifierGroupService extends Fetcher {

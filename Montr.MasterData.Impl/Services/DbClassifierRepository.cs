@@ -33,7 +33,7 @@ namespace Montr.MasterData.Impl.Services
 			{
 				IQueryable<DbClassifier> query = null;
 
-				if (type.HierarchyType == HierarchyType.None || request.GroupCode == null || request.GroupCode == ".")
+				if (type.HierarchyType == HierarchyType.None || request.GroupUid == null /* || request.GroupCode == "."  wtf? */)
 				{
 					// no-op
 				}
@@ -49,7 +49,7 @@ namespace Montr.MasterData.Impl.Services
 							where types.CompanyUid == request.CompanyUid &&
 								types.Code == request.TypeCode &&
 								trees.Code == request.TreeCode &&
-								children_groups.Code == request.GroupCode
+								children_groups.Uid == request.GroupUid
 							select c;
 					}
 					else
@@ -64,8 +64,8 @@ namespace Montr.MasterData.Impl.Services
 							where types.CompanyUid == request.CompanyUid &&
 								types.Code == request.TypeCode &&
 								trees.Code == request.TreeCode &&
-								parent_groups.Code == request.GroupCode
-							select c;
+								parent_groups.Uid == request.GroupUid
+								select c;
 					}
 				}
 				else if (type.HierarchyType == HierarchyType.Items)
@@ -74,15 +74,15 @@ namespace Montr.MasterData.Impl.Services
 					{
 						query = from parent in db.GetTable<DbClassifier>()
 							join @class in db.GetTable<DbClassifier>() on parent.Uid equals @class.ParentUid
-							where parent.TypeUid == type.Uid && parent.Code == request.GroupCode
-							select @class;
+							where parent.TypeUid == type.Uid && parent.Uid == request.GroupUid
+								select @class;
 					}
 					else
 					{
 						query = from parent in db.GetTable<DbClassifier>()
 							join closures in db.GetTable<DbClassifierClosure>() on parent.Uid equals closures.ParentUid
 							join @class in db.GetTable<DbClassifier>() on closures.ChildUid equals @class.Uid
-							where parent.TypeUid == type.Uid && parent.Code == request.GroupCode && closures.Level > 0
+							where parent.TypeUid == type.Uid && parent.Uid == request.GroupUid && closures.Level > 0
 							select @class;
 					}
 				}

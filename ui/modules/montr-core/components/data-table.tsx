@@ -56,25 +56,16 @@ export class DataTable<TModel extends IIndexer> extends React.Component<IProps<T
 	}
 
 	componentDidUpdate = async (prevProps: IProps<TModel>) => {
-		console.log(prevProps);
-		// await this.fetchData();
-		/* if (this.props.postParams !== prevProps.postParams) {
-
-			// todo: reset other state
-			this.setState({
-				data: [],
-				selectedRowKeys: []
-			});
-
-			await this.fetchMetadata();
-		} */
 		if (this.props.updateDate !== prevProps.updateDate) {
-			const pager = { ...this.state.pagination };
 
-			pager.current = 0;
+			const { pagination } = this.state;
+
+			pagination.current = 0;
 
 			this.setState({
-				pagination: pager,
+				pagination,
+				// todo: selected keys should be controlled outside? (e.g. reset on classifier type change)
+				// selectedRowKeys: [],
 			});
 
 			await this.fetchData();
@@ -187,16 +178,19 @@ export class DataTable<TModel extends IIndexer> extends React.Component<IProps<T
 				? await onLoadData(loadUrl, postParams)
 				: await this._fetcher.post(loadUrl, postParams);
 
-			const pagination = { ...this.state.pagination };
+			if (data) {
+				const pagination = { ...this.state.pagination };
 
-			pagination.total = data.totalCount;
+				pagination.total = data.totalCount;
 
-			this.setState({
-				loading: false,
-				pagination,
-				totalCount: data.totalCount,
-				data: data.rows
-			});
+				this.setState({
+					loading: false,
+					pagination,
+					totalCount: data.totalCount,
+					data: data.rows
+				});
+			}
+
 		} catch (error) {
 			this.setState({ error, loading: false });
 			this._notification.error("Ошибка загрузки данных.", error.message);

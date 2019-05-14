@@ -1,10 +1,11 @@
 import * as React from "react";
-import { TreeSelect, Spin } from "antd";
+import { Tree, TreeSelect, Spin } from "antd";
 import { IClassifierField, Guid } from "@montr-core/models";
 import { ClassifierGroupService } from "../services";
 import { IClassifierGroup } from "../models";
-import { TreeNode } from "antd/lib/tree-select";
+// import { TreeNode } from "antd/lib/tree-select";
 import { CompanyContextProps, withCompanyContext } from "@kompany/components";
+import { TreeNode } from "antd/lib/tree-select";
 
 interface IProps extends CompanyContextProps {
 	value?: string;
@@ -17,7 +18,7 @@ interface IState {
 	value: string;
 	groups: IClassifierGroup[];
 	expanded: Guid[];
-	treeData: TreeNode[];
+	// treeData: TreeNode[];
 }
 
 // http://ant.design/components/form/?locale=en-US#components-form-demo-customized-form-controls
@@ -44,7 +45,7 @@ class _ClassifierSelect extends React.Component<IProps, IState> {
 			value: props.value,
 			groups: [],
 			expanded: [],
-			treeData: []
+			// treeData: []
 		};
 	}
 
@@ -79,9 +80,10 @@ class _ClassifierSelect extends React.Component<IProps, IState> {
 				currentCompany.uid, { typeCode: field.typeCode, treeCode: field.treeCode, focusUid: value });
 
 			const expanded: Guid[] = [];
-			const treeData = this.buildTree(groups, expanded);
+			// todo: only to detect expanded nodes
+			/* const treeData = */ this.buildTree(groups, expanded);
 
-			this.setState({ loading: false, groups, expanded, treeData });
+			this.setState({ loading: false, groups, expanded /* , treeData */ });
 		}
 	}
 
@@ -110,7 +112,8 @@ class _ClassifierSelect extends React.Component<IProps, IState> {
 				currentCompany.uid, { typeCode: field.typeCode, treeCode: field.treeCode, parentUid: group.uid });
 
 			// todo: store in state real data and build tree nodes in render (like in search-classifier.tsx)
-			this.setState({ treeData: this.buildTree(groups) });
+			// this.setState({ treeData: this.buildTree(groups) });
+			this.setState({ groups });
 
 			resolve();
 		});
@@ -118,7 +121,9 @@ class _ClassifierSelect extends React.Component<IProps, IState> {
 
 	render() {
 		const { value, field } = this.props,
-			{ loading, expanded, treeData } = this.state;
+			{ loading, expanded, groups } = this.state;
+
+		const treeData = this.buildTree(groups);
 
 		return (
 			<Spin spinning={loading}>

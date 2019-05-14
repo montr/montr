@@ -2,15 +2,15 @@ import * as React from "react";
 import { Page, DataTable, PageHeader, Toolbar } from "@montr-core/components";
 import { RouteComponentProps } from "react-router";
 import { Link } from "react-router-dom";
-import { Icon, Button, Tree, Select, Radio, Layout, Modal } from "antd";
+import { Icon, Button, Tree, Select, Radio, Layout, Modal, Spin } from "antd";
 import { Constants } from "@montr-core/.";
 import { Guid, IDataResult } from "@montr-core/models";
 import { NotificationService } from "@montr-core/services";
 import { withCompanyContext, CompanyContextProps } from "@kompany/components";
 import { ClassifierService, ClassifierTypeService, ClassifierGroupService } from "../services";
-import { IClassifierType, IClassifierTree, IClassifierGroup, IClassifier } from "../models";
+import { IClassifierType, IClassifierTree, IClassifierGroup } from "../models";
 import { RadioChangeEvent } from "antd/lib/radio";
-import { AntTreeNode, AntTreeNodeSelectedEvent } from "antd/lib/tree";
+import { AntTreeNode, AntTreeNodeSelectedEvent, AntTreeNodeExpandedEvent } from "antd/lib/tree";
 import { ClassifierBreadcrumb, ModalEditClassifierGroup } from "../components";
 
 interface IRouteProps {
@@ -26,10 +26,11 @@ interface IState {
 	trees?: IClassifierTree[];
 	treeCode?: string,
 	groups?: IClassifierGroup[];
-	selectedGroupUid?: Guid;
+	selectedGroup?: IClassifierGroup;
 	groupEditData?: { parentUid?: Guid, uid?: Guid },
 	selectedRowKeys: string[] | number[];
-	postParams: any;
+	depth: string;
+	// postParams: any;
 	updateTableDate?: Date;
 }
 
@@ -48,9 +49,10 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 				hierarchyType: "None"
 			},
 			selectedRowKeys: [],
-			postParams: {
+			depth: "0",
+			/* postParams: {
 				depth: "0"
-			}
+			} */
 		};
 	}
 
@@ -75,7 +77,6 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 		const { currentCompany } = this.props,
 			{ typeCode } = this.props.match.params;
 
-		// debugger;
 		if (!currentCompany) return;
 
 		const types = (await this._classifierTypeService.list(currentCompany.uid)).rows;
@@ -87,16 +88,16 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 
 		if (type) {
 			if (type.hierarchyType == "Groups") {
-				trees = (await this._classifierService.trees(currentCompany.uid, typeCode)).rows;
+				trees = (await this._classifierService.trees(currentCompany.uid, type.code)).rows;
 
 				if (trees && trees.length > 0) {
 					treeCode = trees[0].code;
-					groups = await this.fetchClassifierGroups(typeCode, treeCode);
+					groups = await this.fetchClassifierGroups(type.code, treeCode);
 				}
 			}
 
 			if (type.hierarchyType == "Items") {
-				groups = await this.fetchClassifierGroups(typeCode, null);
+				groups = await this.fetchClassifierGroups(type.code, null);
 			}
 
 			this.setState({
@@ -105,22 +106,25 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 				trees: trees,
 				treeCode: treeCode,
 				groups: groups,
-				postParams: {
+				/* postParams: {
 					companyUid: currentCompany ? currentCompany.uid : null,
 					typeCode: typeCode,
 					treeCode: treeCode
-				},
-				updateTableDate: new Date()
+				}, */
+				// updateTableDate: new Date()
 			});
+
+			await this.refreshTable();
 		}
 	}
 
-	fetchClassifierGroups = async (typeCode: string, treeCode: string, parentUid?: Guid): Promise<IClassifierGroup[]> => {
+	fetchClassifierGroups = async (typeCode: string, treeCode: string, parentUid?: Guid, focusUid?: Guid): Promise<IClassifierGroup[]> => {
 		const { currentCompany } = this.props
 
-		return await this._classifierGroupService.list(currentCompany.uid, { typeCode, treeCode, parentUid });
+		return await this._classifierGroupService.list(currentCompany.uid, { typeCode, treeCode, parentUid, focusUid });
 	}
 
+	// todo: move button to separate class?
 	delete = async () => {
 		const rowsAffected = await this._classifierService
 			.delete(this.props.currentCompany.uid,
@@ -129,9 +133,11 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 
 		this._notificationService.success("Выбранные записи удалены. " + rowsAffected);
 
-		this.setPostParams(); // to force table refresh
+		// this.setPostParams(); // to force table refresh
+		await this.refreshTable();
 	}
 
+	// todo: move button to separate class?
 	export = async () => {
 		// todo: show export dialog: all pages, current page, export format
 		await this._classifierService.export(this.props.currentCompany.uid, {
@@ -139,7 +145,7 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 		});
 	}
 
-	onSelectionChange = async (selectedRowKeys: string[] | number[]) => {
+	onTableSelectionChange = async (selectedRowKeys: string[] | number[]) => {
 		this.setState({ selectedRowKeys });
 	}
 
@@ -159,39 +165,59 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 		resolve();
 	})
 
-	onTreeSelect = (selectedKeys: string[], e: AntTreeNodeSelectedEvent) => {
-		const { postParams } = this.state;
+	onTreeSelect = async (selectedKeys: string[], e: AntTreeNodeSelectedEvent) => {
+		// const { postParams } = this.state;
+
 		this.setState({
-			selectedGroupUid: (e.selected) ? e.node.props.dataRef.uid : null,
-			postParams: { ...postParams, groupCode: selectedKeys[0] },
-			updateTableDate: new Date()
+			selectedGroup: (e.selected) ? e.node.props.dataRef : null,
+			// postParams: { ...postParams, groupCode: selectedKeys[0] },
+			// updateTableDate: new Date()
 		});
+
+		await this.refreshTable();
 	}
 
-	onDepthChange = (e: RadioChangeEvent) => {
-		const { postParams } = this.state;
-		this.setState({
-			postParams: { ...postParams, depth: e.target.value },
-			updateTableDate: new Date()
-		});
+	onTreeExpand = (expandedKeys: string[], e: AntTreeNodeExpandedEvent) => {
+		// todo: save all expanded kes before refresh tree?
 	}
 
-	buildGroupsTree = (groups: IClassifierGroup[]) => {
+	onDepthChange = async (e: RadioChangeEvent) => {
+		// const { postParams } = this.state;
+
+		this.setState({
+			depth: e.target.value,
+			// postParams: { ...postParams, depth: e.target.value },
+			// updateTableDate: new Date()
+		});
+
+		await this.refreshTable();
+	}
+
+	buildGroupsTree = (groups: IClassifierGroup[], expanded?: Guid[]) => {
 		return groups && groups.map(x => {
+
+			if (expanded && x.children) {
+				expanded.push(x.uid);
+			}
+
 			return (
-				<Tree.TreeNode title={`${x.code}. ${x.name}`} key={x.code} dataRef={x}>
-					{x.children && this.buildGroupsTree(x.children)}
+				<Tree.TreeNode title={`${x.code}. ${x.name}`} key={`${x.uid}`} dataRef={x}>
+					{x.children && this.buildGroupsTree(x.children, expanded)}
 				</Tree.TreeNode>
 			);
 		});
 	}
 
 	showAddGroupModal = () => {
-		this.setState({ groupEditData: { parentUid: this.state.selectedGroupUid } });
+		const { selectedGroup } = this.state;
+
+		this.setState({ groupEditData: { parentUid: selectedGroup ? selectedGroup.uid : null } });
 	}
 
 	showEditGroupModal = () => {
-		this.setState({ groupEditData: { uid: this.state.selectedGroupUid } });
+		const { selectedGroup } = this.state;
+
+		this.setState({ groupEditData: { uid: selectedGroup ? selectedGroup.uid : null } });
 	}
 
 	showDeleteGroupConfirm = () => {
@@ -204,39 +230,83 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 
 	deleteSelectedGroup = async () => {
 		const { currentCompany } = this.props
-		const { type, treeCode, selectedGroupUid } = this.state;
+		const { type, treeCode, selectedGroup } = this.state;
 
-		await this._classifierGroupService.delete(currentCompany.uid, type.code, treeCode, selectedGroupUid);
-		this.setState({ selectedGroupUid: null });
-		this.refreshTree();
+		await this._classifierGroupService.delete(currentCompany.uid, type.code, treeCode, selectedGroup.uid);
+
+		this.setState({ selectedGroup: null });
+
+		// todo: select deleted group parent?
+		this.refreshTree(selectedGroup.parentUid);
 	}
 
-	refreshTree = async () => {
-		// todo: refresh only tree and **focus** on inserted/updated item
-		await this.setPostParams(); // to force refresh
+	refreshTree = async (focusUid?: Guid) => {
+		// to re-render page w/o groups tree, otherwise tree not refreshed
+		this.setState({ groups: null });
+
+		const { type, trees, treeCode } = this.state;
+
+		if (type) {
+			let groups: IClassifierGroup[] = [];
+
+			if (type.hierarchyType == "Groups") {
+				if (trees && trees.length > 0) {
+					groups = await this.fetchClassifierGroups(type.code, treeCode, null, focusUid);
+				}
+			}
+
+			if (type.hierarchyType == "Items") {
+				groups = await this.fetchClassifierGroups(type.code, null, null, focusUid);
+			}
+
+			this.setState({ groups });
+
+			await this.refreshTable();
+		}
 	}
 
-	handleGroupModalSuccess = async (data: IClassifierGroup) => {
-		console.log(data);
-
-		this.setState({ groupEditData: null });
-
-		await this.refreshTree();
+	refreshTable = async () => {
+		this.setState({
+			updateTableDate: new Date()
+		});
 	}
 
-	hideGroupModal = () => {
+	onGroupModalSuccess = async (data: IClassifierGroup) => {
+		this.setState({ groupEditData: null, selectedGroup: data });
+
+		await this.refreshTree(data.uid);
+	}
+
+	onGroupModalCancel = () => {
 		this.setState({ groupEditData: null });
 	}
 
 	onLoadTableData = async (loadUrl: string, postParams: any): Promise<IDataResult<{}>> => {
-		return await this._classifierService.post(loadUrl, Object.assign(postParams, this.state.postParams));
+		const { currentCompany } = this.props,
+			{ type, treeCode, depth, selectedGroup } = this.state;
+
+		if (currentCompany && type.code) {
+
+			const params = {
+				companyUid: currentCompany.uid,
+				typeCode: type.code,
+				treeCode,
+				depth,
+				groupUid: selectedGroup ? selectedGroup.uid : null,
+				...postParams
+			};
+
+			return await this._classifierService.post(loadUrl, params);
+		}
+
+		return null;
 	}
 
 	render() {
 		const { currentCompany } = this.props,
-			{ types, type, treeCode, trees, groups, selectedGroupUid, groupEditData, postParams, updateTableDate } = this.state;
+			{ types, type, treeCode, trees, groups, selectedGroup, groupEditData, /* postParams, */ updateTableDate } = this.state;
 
-		if (!currentCompany || !type || !postParams.typeCode) return null;
+		if (!currentCompany || !type /* || !postParams.typeCode */) return null;
 
 		// todo: настройки:
 		// 1. как выглядит дерево - списком или деревом (?)
@@ -252,21 +322,38 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 				</Select>
 				<Button.Group size="small">
 					<Button icon="plus" onClick={this.showAddGroupModal} />
-					<Button icon="edit" onClick={this.showEditGroupModal} disabled={!selectedGroupUid} />
-					<Button icon="delete" onClick={this.showDeleteGroupConfirm} disabled={!selectedGroupUid} />
+					<Button icon="edit" onClick={this.showEditGroupModal} disabled={!selectedGroup} />
+					<Button icon="delete" onClick={this.showDeleteGroupConfirm} disabled={!selectedGroup} />
 				</Button.Group>
 			</>
 		}
 
 		let tree;
-		if (type.hierarchyType != "None" /* && groups.length > 0 */) {
-			tree = (
-				<Tree blockNode
-					loadData={this.onTreeLoadData}
-					onSelect={this.onTreeSelect}>
-					{this.buildGroupsTree(groups)}
-				</Tree>
-			);
+		if (type.hierarchyType != "None") {
+			if (groups) {
+				const expandedKeys: Guid[] = [],
+					selectedKeys: Guid[] = [];
+
+				const nodes = this.buildGroupsTree(groups, expandedKeys);
+
+				if (selectedGroup) {
+					selectedKeys.push(selectedGroup.uid);
+				}
+
+				tree = (
+					<Tree blockNode
+						defaultExpandedKeys={expandedKeys.map(x => x.toString())}
+						defaultSelectedKeys={selectedKeys.map(x => x.toString())}
+						loadData={this.onTreeLoadData}
+						onSelect={this.onTreeSelect}
+						onExpand={this.onTreeExpand}>
+						{nodes}
+					</Tree>
+				);
+			}
+			else {
+				tree = <Spin />;
+			}
 		}
 
 		const table = (
@@ -275,8 +362,7 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 				viewId={`Classifier/Grid/${type.code}`}
 				loadUrl={`${Constants.baseURL}/classifier/list/`}
 				onLoadData={this.onLoadTableData}
-				// postParams={postParams}
-				onSelectionChange={this.onSelectionChange}
+				onSelectionChange={this.onTableSelectionChange}
 				updateDate={updateTableDate}
 			/>
 		);
@@ -339,8 +425,8 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 						treeCode={treeCode}
 						uid={groupEditData.uid}
 						parentUid={groupEditData.parentUid}
-						onSuccess={this.handleGroupModalSuccess}
-						onCancel={this.hideGroupModal} />}
+						onSuccess={this.onGroupModalSuccess}
+						onCancel={this.onGroupModalCancel} />}
 
 			</Page>
 		);
