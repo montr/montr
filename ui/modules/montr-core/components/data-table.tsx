@@ -9,12 +9,11 @@ import { Constants } from "..";
 interface IProps<TModel> {
 	rowKey?: string
 	viewId: string
-	loadUrl: string; // todo: (?) add load func or data[]
-	// postParams?: any;
+	loadUrl: string; // todo: (?) add data[]
 	// todo: add type for post params
 	onLoadData?: (loadUrl: string, postParams: any) => Promise<IDataResult<TModel>>;
 	onSelectionChange?: (selectedRowKeys: string[] | number[], selectedRows: TModel[]) => void;
-	updateDate?: Date;
+	updateToken?: { date: Date, resetSelectedRows?: boolean };
 }
 
 interface IState<TModel> {
@@ -56,16 +55,15 @@ export class DataTable<TModel extends IIndexer> extends React.Component<IProps<T
 	}
 
 	componentDidUpdate = async (prevProps: IProps<TModel>) => {
-		if (this.props.updateDate !== prevProps.updateDate) {
+		if (this.props.updateToken !== prevProps.updateToken) {
 
-			const { pagination } = this.state;
+			const { pagination, selectedRowKeys } = this.state;
 
 			pagination.current = 0;
 
 			this.setState({
 				pagination,
-				// todo: selected keys should be controlled outside? (e.g. reset on classifier type change)
-				// selectedRowKeys: [],
+				selectedRowKeys: this.props.updateToken.resetSelectedRows ? [] : selectedRowKeys
 			});
 
 			await this.fetchData();
@@ -169,11 +167,6 @@ export class DataTable<TModel extends IIndexer> extends React.Component<IProps<T
 
 			const { loadUrl, onLoadData } = this.props;
 
-			// todo: remove, use onLoadData(params): IDataResult
-			/* if (this.props.postParams) {
-				postParams = Object.assign(postParams, this.props.postParams);
-			} */
-
 			const data: IDataResult<TModel> = onLoadData
 				? await onLoadData(loadUrl, postParams)
 				: await this._fetcher.post(loadUrl, postParams);
@@ -206,23 +199,21 @@ export class DataTable<TModel extends IIndexer> extends React.Component<IProps<T
 		}
 	}
 
-	render = () => {
+	render() {
 		const { selectedRowKeys } = this.state;
 
 		const rowSelection = {
 			columnWidth: 1,
-			// selectedRowKeys,
+			selectedRowKeys,
 			onChange: this.onSelectionChange
 		};
 
 		const pagination = {
 			showTotal: (total: number, range: [number, number]) => {
-				return (
-					<>
-						{selectedRowKeys.length > 0 && (<span style={{ marginRight: "1em" }}>Выбрано: <strong>{selectedRowKeys.length}</strong></span>)}
-						{(total != 0) && (<span>Записи <strong>{range[0]}</strong> &mdash; <strong>{range[1]}</strong> из <strong>{total}</strong></span>)}
-					</>
-				);
+				return (<>
+					{selectedRowKeys.length > 0 && (<span style={{ marginRight: "1em" }}>Выбрано: <strong>{selectedRowKeys.length}</strong></span>)}
+					{(total != 0) && (<span>Записи <strong>{range[0]}</strong> &mdash; <strong>{range[1]}</strong> из <strong>{total}</strong></span>)}
+				</>);
 			},
 			...this.state.pagination
 		};

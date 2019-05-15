@@ -22,16 +22,15 @@ interface IProps extends CompanyContextProps, RouteComponentProps<IRouteProps> {
 
 interface IState {
 	types: IClassifierType[];
-	type: IClassifierType;
+	type?: IClassifierType;
 	trees?: IClassifierTree[];
 	treeCode?: string,
 	groups?: IClassifierGroup[];
 	selectedGroup?: IClassifierGroup;
-	groupEditData?: { parentUid?: Guid, uid?: Guid },
+	groupEditData?: IClassifierGroup;
 	selectedRowKeys: string[] | number[];
 	depth: string;
-	// postParams: any;
-	updateTableDate?: Date;
+	updateTableToken: { date: Date, resetSelectedRows?: boolean };
 }
 
 class _SearchClassifier extends React.Component<IProps, IState> {
@@ -45,25 +44,30 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 
 		this.state = {
 			types: [],
-			type: {
-				hierarchyType: "None"
-			},
 			selectedRowKeys: [],
 			depth: "0",
-			/* postParams: {
-				depth: "0"
-			} */
+			updateTableToken: { date: new Date() }
 		};
 	}
 
 	componentDidMount = async () => {
-		this.setPostParams();
+		await this.loadClassifierTypes();
 	}
 
 	componentDidUpdate = async (prevProps: IProps) => {
-		if (this.props.match.params.typeCode !== prevProps.match.params.typeCode ||
-			this.props.currentCompany !== prevProps.currentCompany) {
-			this.setPostParams();
+		if (this.props.currentCompany !== prevProps.currentCompany) {
+			// todo: check if selected type belongs to company (show 404)
+			await this.loadClassifierTypes();
+		}
+		else if (this.props.match.params.typeCode !== prevProps.match.params.typeCode) {
+
+			this.setState({
+				selectedRowKeys: [],
+				selectedGroup: null
+			});
+
+			await this.loadClassifierType();
+			await this.refreshTable(true);
 		}
 	}
 
@@ -73,48 +77,75 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 		await this._classifierService.abort();
 	}
 
-	setPostParams = async () => {
+	loadClassifierTypes = async () => {
+		const { currentCompany } = this.props;
+
+		if (currentCompany) {
+			const types = (await this._classifierTypeService.list(currentCompany.uid)).rows;
+
+			this.setState({ types });
+
+			await this.loadClassifierType();
+		}
+	}
+
+	loadClassifierType = async () => {
 		const { currentCompany } = this.props,
 			{ typeCode } = this.props.match.params;
 
-		if (!currentCompany) return;
+		if (currentCompany) {
+			const type = await this._classifierTypeService.get(currentCompany.uid, { typeCode });
 
-		const types = (await this._classifierTypeService.list(currentCompany.uid)).rows;
-		const type = await this._classifierTypeService.get(currentCompany.uid, { typeCode });
+			this.setState({ type });
 
-		let trees: IClassifierTree[] = [],
-			treeCode: string,
-			groups: IClassifierGroup[] = [];
+			await this.loadClassifierTrees();
+		}
+	}
 
-		if (type) {
+	loadClassifierTrees = async () => {
+		const { currentCompany } = this.props,
+			{ type } = this.state;
+
+		if (currentCompany && type) {
+			let trees: IClassifierTree[] = [],
+				treeCode: string;
+
 			if (type.hierarchyType == "Groups") {
 				trees = (await this._classifierService.trees(currentCompany.uid, type.code)).rows;
 
 				if (trees && trees.length > 0) {
 					treeCode = trees[0].code;
-					groups = await this.fetchClassifierGroups(type.code, treeCode);
 				}
 			}
 
-			if (type.hierarchyType == "Items") {
-				groups = await this.fetchClassifierGroups(type.code, null);
-			}
-
 			this.setState({
-				types: types,
-				type: type,
-				trees: trees,
-				treeCode: treeCode,
-				groups: groups,
-				/* postParams: {
-					companyUid: currentCompany ? currentCompany.uid : null,
-					typeCode: typeCode,
-					treeCode: treeCode
-				}, */
-				// updateTableDate: new Date()
+				trees,
+				treeCode
 			});
 
-			await this.refreshTable();
+			await this.loadClassifierGroups();
+		}
+	}
+
+	loadClassifierGroups = async (focusGroupUid?: Guid) => {
+		// to re-render page w/o groups tree, otherwise tree not refreshed
+		this.setState({ groups: null });
+
+		const { currentCompany } = this.props,
+			{ type, treeCode } = this.state;
+
+		if (currentCompany && type) {
+			let groups: IClassifierGroup[] = [];
+
+			if (type.hierarchyType == "Groups") {
+				groups = await this.fetchClassifierGroups(type.code, treeCode, null, focusGroupUid);
+			}
+
+			if (type.hierarchyType == "Items") {
+				groups = await this.fetchClassifierGroups(type.code, null, null, focusGroupUid);
+			}
+
+			this.setState({ groups });
 		}
 	}
 
@@ -133,7 +164,6 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 
 		this._notificationService.success("Выбранные записи удалены. " + rowsAffected);
 
-		// this.setPostParams(); // to force table refresh
 		await this.refreshTable();
 	}
 
@@ -182,13 +212,8 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 	}
 
 	onDepthChange = async (e: RadioChangeEvent) => {
-		// const { postParams } = this.state;
-
-		this.setState({
-			depth: e.target.value,
-			// postParams: { ...postParams, depth: e.target.value },
-			// updateTableDate: new Date()
-		});
+		// todo: store depth in local storage
+		this.setState({ depth: e.target.value });
 
 		await this.refreshTable();
 	}
@@ -240,34 +265,14 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 		this.refreshTree(selectedGroup.parentUid);
 	}
 
-	refreshTree = async (focusUid?: Guid) => {
-		// to re-render page w/o groups tree, otherwise tree not refreshed
-		this.setState({ groups: null });
-
-		const { type, trees, treeCode } = this.state;
-
-		if (type) {
-			let groups: IClassifierGroup[] = [];
-
-			if (type.hierarchyType == "Groups") {
-				if (trees && trees.length > 0) {
-					groups = await this.fetchClassifierGroups(type.code, treeCode, null, focusUid);
-				}
-			}
-
-			if (type.hierarchyType == "Items") {
-				groups = await this.fetchClassifierGroups(type.code, null, null, focusUid);
-			}
-
-			this.setState({ groups });
-
-			await this.refreshTable();
-		}
+	refreshTree = async (focusGroupUid?: Guid) => {
+		await this.loadClassifierGroups(focusGroupUid);
+		await this.refreshTable();
 	}
 
-	refreshTable = async () => {
+	refreshTable = async (resetSelectedRows?: boolean) => {
 		this.setState({
-			updateTableDate: new Date()
+			updateTableToken: { date: new Date(), resetSelectedRows }
 		});
 	}
 
@@ -304,9 +309,9 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 
 	render() {
 		const { currentCompany } = this.props,
-			{ types, type, treeCode, trees, groups, selectedGroup, groupEditData, /* postParams, */ updateTableDate } = this.state;
+			{ types, type, treeCode, trees, groups, selectedGroup, groupEditData, updateTableToken } = this.state;
 
-		if (!currentCompany || !type /* || !postParams.typeCode */) return null;
+		if (!currentCompany || !type) return null;
 
 		// todo: настройки:
 		// 1. как выглядит дерево - списком или деревом (?)
@@ -318,7 +323,7 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 		if (type.hierarchyType == "Groups") {
 			groupControls = <>
 				<Select defaultValue="default" size="small">
-					{trees.map(x => <Select.Option key={x.code}>{x.name || x.code}</Select.Option>)}
+					{trees && trees.map(x => <Select.Option key={x.code}>{x.name || x.code}</Select.Option>)}
 				</Select>
 				<Button.Group size="small">
 					<Button icon="plus" onClick={this.showAddGroupModal} />
@@ -363,7 +368,7 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 				loadUrl={`${Constants.baseURL}/classifier/list/`}
 				onLoadData={this.onLoadTableData}
 				onSelectionChange={this.onTableSelectionChange}
-				updateDate={updateTableDate}
+				updateToken={updateTableToken}
 			/>
 		);
 
