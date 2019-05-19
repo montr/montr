@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Modal, Spin } from "antd";
-import { Guid, IFormField, IClassifierField } from "@montr-core/models";
+import { Guid, IFormField, IClassifierField, IApiResult } from "@montr-core/models";
 import { withCompanyContext, CompanyContextProps } from "@kompany/components";
 import { ClassifierGroupService } from "../services";
 import { IClassifierGroup } from "@montr-master-data/models";
@@ -95,23 +95,31 @@ class _ModalEditClassifierGroup extends React.Component<IProps, IState> {
 		if (this.props.onCancel) this.props.onCancel();
 	}
 
-	save = async (values: IClassifierGroup) => {
+	save = async (values: IClassifierGroup): Promise<IApiResult> => {
 		const { typeCode, treeCode, uid, onSuccess } = this.props;
 		const { uid: companyUid } = this.props.currentCompany;
 
-		let data: IClassifierGroup;
+		let data: IClassifierGroup,
+			result: IApiResult;
+
 		if (uid) {
 			data = { uid: uid, ...values };
-			const rowsUpdated = await this._classifierGroupService.update(companyUid, data);
 
-			if (rowsUpdated != 1) throw new Error();
+			result = await this._classifierGroupService.update(companyUid, typeCode, treeCode, data);
 		}
 		else {
-			const uid: Guid = await this._classifierGroupService.insert(companyUid, typeCode, treeCode, values);
-			data = { uid: uid, ...values };
+			const insertResult = await this._classifierGroupService.insert(companyUid, typeCode, treeCode, values);
+
+			data = { uid: insertResult.uid, ...values };
+
+			result = insertResult;
 		}
 
-		if (onSuccess) await onSuccess(data);
+		if (result.success) {
+			if (onSuccess) await onSuccess(data);
+		}
+
+		return result;
 	}
 
 	render = () => {

@@ -1,4 +1,6 @@
-﻿namespace Montr.Metadata.Models
+﻿using System.Collections.Generic;
+
+namespace Montr.Metadata.Models
 {
 	public class ApiResult
 	{
@@ -8,5 +10,14 @@
 		}
 
 		public bool Success { get; set; }
+
+		public IList<ApiResultError> Errors { get; set; }
+	}
+
+	public class ApiResultError
+	{
+		public string Key { get; set; }
+
+		public string[] Messages { get; set; }
 	}
 }

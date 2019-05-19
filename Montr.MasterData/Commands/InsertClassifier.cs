@@ -1,10 +1,11 @@
 ﻿using System;
 using MediatR;
 using Montr.MasterData.Models;
+using Montr.Metadata.Models;
 
 namespace Montr.MasterData.Commands
 {
-	public class InsertClassifier : IRequest<Guid>
+	public class InsertClassifier : IRequest<InsertClassifier.Result>
 	{
 		public Guid UserUid { get; set; }
 
@@ -13,5 +14,10 @@ namespace Montr.MasterData.Commands
 		public string TypeCode { get; set; }
 
 		public Classifier Item { get; set; }
+
+		public class Result : ApiResult
+		{
+			public Guid? Uid { get; set; }
+		}
 	}
 }

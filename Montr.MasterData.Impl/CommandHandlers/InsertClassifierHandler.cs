@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using LinqToDB;
@@ -13,7 +12,7 @@ using Montr.MasterData.Services;
 
 namespace Montr.MasterData.Impl.CommandHandlers
 {
-	public class InsertClassifierHandler: IRequestHandler<InsertClassifier, Guid>
+	public class InsertClassifierHandler: IRequestHandler<InsertClassifier, InsertClassifier.Result>
 	{
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IDbContextFactory _dbContextFactory;
@@ -29,7 +28,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 			_classifierTypeService = classifierTypeService;
 		}
 
-		public async Task<Guid> Handle(InsertClassifier request, CancellationToken cancellationToken)
+		public async Task<InsertClassifier.Result> Handle(InsertClassifier request, CancellationToken cancellationToken)
 		{
 			if (request.UserUid == Guid.Empty) throw new InvalidOperationException("User is required.");
 			if (request.CompanyUid == Guid.Empty) throw new InvalidOperationException("Company is required.");
@@ -49,6 +48,13 @@ namespace Montr.MasterData.Impl.CommandHandlers
 
 				using (var db = _dbContextFactory.Create())
 				{
+					var validator = new ClassifierValidator(db, type);
+
+					if (await validator.ValidateInsert(item, cancellationToken) == false)
+					{
+						return new InsertClassifier.Result { Success = false, Errors = validator.Errors };
+					}
+
 					// компания + todo: дата изменения
 
 					await db.GetTable<DbClassifier>()
@@ -65,7 +71,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 
 				scope.Commit();
 
-				return itemUid;
+				return new InsertClassifier.Result { Success = true, Uid = itemUid };
 			}
 		}
 	}

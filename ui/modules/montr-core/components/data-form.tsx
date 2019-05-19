@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Form, Button, Spin } from "antd";
 import { FormComponentProps } from "antd/lib/form";
-import { IFormField, IIndexer } from "../models";
+import { IFormField, IIndexer, IApiResult, IApiResultError } from "../models";
 import { NotificationService } from "../services/notification-service";
 import { FormDefaults, FormFieldFactory } from ".";
 
@@ -12,7 +12,7 @@ interface IProps extends FormComponentProps {
 	fields: IFormField[];
 	data: IIndexer;
 	showControls?: boolean;
-	onSave: (values: IIndexer) => void
+	onSave: (values: IIndexer) => Promise<IApiResult>
 }
 
 interface IState {
@@ -33,19 +33,61 @@ export class WrappedDataForm extends React.Component<IProps, IState> {
 	public handleSubmit = async (e: React.SyntheticEvent) => {
 		e.preventDefault();
 
-		this.props.form.validateFieldsAndScroll(async (errors, values: any) => {
+		const { form, onSave } = this.props;
+
+		form.validateFieldsAndScroll(async (errors, values: any) => {
 			if (errors) {
 				// console.log(errors);
 			}
 			else {
 				try {
-					await this.props.onSave(values);
-					this._notificationService.success("Данные успешно сохранены");
+					this.setState({ loading: true });
+
+					var result = await onSave(values);
+
+					if (result && result.success) {
+						this._notificationService.success("Данные успешно сохранены");
+					}
+
+					await this.setFieldErrors(result, values);
+
 				} catch (error) {
 					this._notificationService.error("Ошибка при сохранении данных", error.message);
 				}
+				finally {
+					this.setState({ loading: false });
+				}
 			}
 		});
+	}
+
+	setFieldErrors = async (result: IApiResult, values: any) => {
+		const { form, fields } = this.props,
+			fieldErrors: any = {},
+			otherErrors: string[] = [];
+
+		if (result && result.errors) {
+			result.errors.forEach(error => {
+				// todo: check key exists in state.fields (ignore case + add tests)
+				if (fields.find(x => x.key == error.key)) {
+					fieldErrors[error.key] = {
+						value: values.code,
+						errors: error.messages.map((x: string) => new Error(x))
+					};
+				}
+				else {
+					error.messages.forEach(message => {
+						otherErrors.push(message);
+					});
+				}
+			});
+
+			form.setFields(fieldErrors);
+
+			if (otherErrors.length > 0) {
+				this._notificationService.error(otherErrors);
+			}
+		}
 	}
 
 	createItem = (field: IFormField): React.ReactNode => {

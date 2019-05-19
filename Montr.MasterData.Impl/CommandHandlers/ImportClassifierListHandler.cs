@@ -300,6 +300,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 									.Value(x => x.ParentUid, parentUid)
 									.InsertAsync(cancellationToken);
 
+								// todo: check result and throw error
 								await closureTable.Insert(itemUid, parentUid, cancellationToken);
 
 								_existingItems.Add(item.Code, new DbClassifier
@@ -372,6 +373,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 										.Value(x => x.ParentUid, parentUid)
 										.InsertAsync(cancellationToken);
 
+									// todo: check result and throw error
 									await closureTable.Insert(groupUid, parentUid, cancellationToken);
 
 									_existingGroups.Add(group.Code, new DbClassifierGroup

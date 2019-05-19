@@ -2,7 +2,7 @@ import * as React from "react";
 import { Redirect } from "react-router";
 import { Spin } from "antd";
 import { CompanyContextProps, withCompanyContext } from "@kompany/components";
-import { IFormField, Guid } from "@montr-core/models";
+import { IFormField, Guid, IApiResult } from "@montr-core/models";
 import { MetadataService } from "@montr-core/services";
 import { DataForm } from "@montr-core/components";
 import { ClassifierService } from "../services";
@@ -60,24 +60,29 @@ class _TabEditClassifier extends React.Component<IProps, IState> {
 		}
 	}
 
-	private save = async (values: IClassifier) => {
+	private save = async (values: IClassifier): Promise<IApiResult> => {
 		const { type, data, onDataChange } = this.props;
 		const { uid: companyUid } = this.props.currentCompany;
 
 		if (data.uid) {
 			const updated = { uid: data.uid, ...values };
-			const rowsUpdated = await this._classifierService.update(companyUid, updated);
 
-			if (rowsUpdated != 1) throw new Error();
+			const result = await this._classifierService.update(companyUid, type.code, updated);
 
-			if (onDataChange) await onDataChange(updated);
+			if (result.success) {
+				if (onDataChange) await onDataChange(updated);
+			}
+
+			return result;
 		}
 		else {
-			const uid: Guid = await this._classifierService.insert(companyUid, type.code, values);
+			const result = await this._classifierService.insert(companyUid, type.code, values);
 
-			const path = RouteBuilder.editClassifier(type.code, uid);
+			if (result.success) {
+				this.setState({ redirect: RouteBuilder.editClassifier(type.code, result.uid) });
+			}
 
-			this.setState({ redirect: path });
+			return result;
 		}
 	}
 

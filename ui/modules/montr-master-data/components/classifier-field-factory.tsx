@@ -4,7 +4,6 @@ import { IIndexer, IFormField, IClassifierField } from "@montr-core/models";
 import { ClassifierSelect } from ".";
 
 export class ClassifierFieldFactory implements FormFieldFactory {
-
 	createNode(field: IFormField, data: IIndexer): React.ReactNode {
 		return <ClassifierSelect field={field as IClassifierField} />;
 	}

@@ -1,5 +1,4 @@
-using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -7,6 +6,7 @@ using Montr.Core.Models;
 using Montr.MasterData.Commands;
 using Montr.MasterData.Models;
 using Montr.MasterData.Queries;
+using Montr.Metadata.Models;
 using Montr.Web.Services;
 
 namespace Montr.MasterData.Controllers
@@ -42,7 +42,7 @@ namespace Montr.MasterData.Controllers
 		}
 
 		[HttpPost]
-		public async Task<Guid> Insert(InsertClassifierType request)
+		public async Task<InsertClassifierType.Result> Insert(InsertClassifierType request)
 		{
 			request.UserUid = _currentUserProvider.GetUserUid();
 
@@ -50,7 +50,7 @@ namespace Montr.MasterData.Controllers
 		}
 
 		[HttpPost]
-		public async Task<int> Update(UpdateClassifierType request)
+		public async Task<ApiResult> Update(UpdateClassifierType request)
 		{
 			request.UserUid = _currentUserProvider.GetUserUid();
 

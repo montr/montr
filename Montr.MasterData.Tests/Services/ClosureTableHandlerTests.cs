@@ -59,7 +59,7 @@ namespace Montr.MasterData.Tests.Services
 
 			var insertClassifierTypeHandler = new InsertClassifierTypeHandler(unitOfWorkFactory, dbContextFactory);
 			var insertClassifierGroupHandler = new InsertClassifierGroupHandler(unitOfWorkFactory, dbContextFactory, classifierTypeService);
-			var updateClassifierGroupHandler = new UpdateClassifierGroupHandler(unitOfWorkFactory, dbContextFactory);
+			var updateClassifierGroupHandler = new UpdateClassifierGroupHandler(unitOfWorkFactory, dbContextFactory, classifierTypeService);
 			var cancellationToken = new CancellationToken();
 
 			using (var _ = unitOfWorkFactory.Create())
@@ -86,7 +86,7 @@ namespace Montr.MasterData.Tests.Services
 
 			var insertClassifierTypeHandler = new InsertClassifierTypeHandler(unitOfWorkFactory, dbContextFactory);
 			var insertClassifierGroupHandler = new InsertClassifierGroupHandler(unitOfWorkFactory, dbContextFactory, classifierTypeService);
-			var updateClassifierGroupHandler = new UpdateClassifierGroupHandler(unitOfWorkFactory, dbContextFactory);
+			var updateClassifierGroupHandler = new UpdateClassifierGroupHandler(unitOfWorkFactory, dbContextFactory, classifierTypeService);
 			var cancellationToken = new CancellationToken();
 
 			using (var _ = unitOfWorkFactory.Create())
@@ -166,7 +166,7 @@ namespace Montr.MasterData.Tests.Services
 			{
 				var code = parentCode != null ? $"{parentCode}.{i}" : $"{i}" ;
 
-				var uid = await insertClassifierGroupHandler.Handle(new InsertClassifierGroup
+				var result = await insertClassifierGroupHandler.Handle(new InsertClassifierGroup
 				{
 					CompanyUid = Constants.OperatorCompanyUid,
 					UserUid = UserUid,
@@ -177,7 +177,7 @@ namespace Montr.MasterData.Tests.Services
 
 				if (depth > 1)
 				{
-					await InsertGroups(count, depth - 1, code, uid, insertClassifierGroupHandler, cancellationToken);
+					await InsertGroups(count, depth - 1, code, result.Uid, insertClassifierGroupHandler, cancellationToken);
 				}
 			}
 		}

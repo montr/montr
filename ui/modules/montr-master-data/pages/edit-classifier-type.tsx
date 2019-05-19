@@ -3,7 +3,7 @@ import { RouteComponentProps, Redirect } from "react-router";
 import { Spin, Tabs } from "antd";
 import { CompanyContextProps, withCompanyContext } from "@kompany/components";
 import { Page, DataForm, PageHeader } from "@montr-core/components";
-import { Guid } from "@montr-core/models";
+import { Guid, IApiResult } from "@montr-core/models";
 import { ClassifierTypeService } from "../services";
 import { IClassifierType } from "../models";
 import { ClassifierBreadcrumb } from "../components";
@@ -65,24 +65,31 @@ class _EditClassifierTypeForm extends React.Component<IProps, IState> {
 		}
 	}
 
-	private save = async (values: IClassifierType) => {
+	private save = async (values: IClassifierType): Promise<IApiResult> => {
 
 		const { uid } = this.props;
 		const { uid: companyUid } = this.props.currentCompany;
 
 		if (uid) {
 			const data = { uid, ...values };
-			const rowsUpdated = await this._classifierTypeService.update(companyUid, data);
 
-			if (rowsUpdated != 1) throw new Error();
-			this.setState({ data });
+			const result = await this._classifierTypeService.update(companyUid, data);
+
+			if (result.success) {
+				this.setState({ data });
+			}
+
+			return result;
 		}
 		else {
-			const uid: Guid = await this._classifierTypeService.insert(companyUid, values);
+			const result = await this._classifierTypeService.insert(companyUid, values);
 
-			const path = RouteBuilder.editClassifierType(uid);
 
-			this.setState({ redirect: path });
+			if (result.success) {
+				this.setState({ redirect: RouteBuilder.editClassifierType(uid) });
+			}
+
+			return result;
 		}
 	}
 

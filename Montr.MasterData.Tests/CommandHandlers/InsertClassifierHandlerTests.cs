@@ -40,10 +40,12 @@ namespace Montr.MasterData.Tests.CommandHandlers
 				}
 			};
 
-			var uid = await handler.Handle(command, CancellationToken.None);
+			var result = await handler.Handle(command, CancellationToken.None);
 
 			// assert
-			Assert.AreNotEqual(Guid.Empty, uid);
+			Assert.IsNotNull(result);
+			Assert.IsTrue(result.Success);
+			Assert.AreNotEqual(Guid.Empty, result.Uid);
 		}
 	}
 }

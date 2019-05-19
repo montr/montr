@@ -12,7 +12,7 @@ using Montr.MasterData.Services;
 
 namespace Montr.MasterData.Impl.CommandHandlers
 {
-	public class InsertClassifierGroupHandler : IRequestHandler<InsertClassifierGroup, Guid>
+	public class InsertClassifierGroupHandler : IRequestHandler<InsertClassifierGroup, InsertClassifierGroup.Result>
 	{
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IDbContextFactory _dbContextFactory;
@@ -26,7 +26,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 			_classifierTypeService = classifierTypeService;
 		}
 
-		public async Task<Guid> Handle(InsertClassifierGroup request, CancellationToken cancellationToken)
+		public async Task<InsertClassifierGroup.Result> Handle(InsertClassifierGroup request, CancellationToken cancellationToken)
 		{
 			if (request.UserUid == Guid.Empty) throw new InvalidOperationException("User is required.");
 			if (request.CompanyUid == Guid.Empty) throw new InvalidOperationException("Company is required.");
@@ -43,10 +43,15 @@ namespace Montr.MasterData.Impl.CommandHandlers
 
 				using (var db = _dbContextFactory.Create())
 				{
-					var closureTable = new ClosureTableHandler(db);
-
 					var tree = await db.GetTable<DbClassifierTree>()
 						.SingleAsync(x => x.TypeUid == type.Uid && x.Code == request.TreeCode, cancellationToken);
+
+					var validator = new ClassifierGroupValidator(db, tree);
+
+					if (await validator.ValidateInsert(item, cancellationToken) == false)
+					{
+						return new InsertClassifierGroup.Result { Success = false, Errors = validator.Errors };
+					}
 
 					await db.GetTable<DbClassifierGroup>()
 						.Value(x => x.Uid, itemUid)
@@ -57,14 +62,19 @@ namespace Montr.MasterData.Impl.CommandHandlers
 						.Value(x => x.Name, item.Name)
 						.InsertAsync(cancellationToken);
 
-					await closureTable.Insert(itemUid, item.ParentUid, cancellationToken);
+					var closureTable = new ClosureTableHandler(db);
+
+					if (await closureTable.Insert(itemUid, item.ParentUid, cancellationToken) == false)
+					{
+						return new InsertClassifierGroup.Result { Success = false, Errors = closureTable.Errors };
+					}
 				}
 
 				// todo: (events)
 
 				scope.Commit();
 
-				return itemUid;
+				return new InsertClassifierGroup.Result { Success = true, Uid = itemUid };
 			}
 		}
 	}

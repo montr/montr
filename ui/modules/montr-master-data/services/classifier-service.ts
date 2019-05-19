@@ -1,6 +1,6 @@
 import { Fetcher } from "@montr-core/services";
 import { Constants } from "@montr-core/.";
-import { Guid, IDataResult } from "@montr-core/models";
+import { Guid, IDataResult, IApiResult } from "@montr-core/models";
 import { IClassifier, IClassifierType } from "../models";
 
 export class ClassifierService extends Fetcher {
@@ -16,15 +16,19 @@ export class ClassifierService extends Fetcher {
 		return this.download(`${Constants.baseURL}/classifier/export`, { companyUid, ...request });
 	};
 
-	insert = async (companyUid: Guid, typeCode: string, data: IClassifier): Promise<Guid> => {
+	insert = async (companyUid: Guid, typeCode: string, data: IClassifier): Promise<IInsertClassifierResult> => {
 		return this.post(`${Constants.baseURL}/classifier/insert`, { companyUid, typeCode, item: data });
 	};
 
-	update = async (companyUid: Guid, data: IClassifier): Promise<number> => {
-		return this.post(`${Constants.baseURL}/classifier/update`, { companyUid, item: data });
+	update = async (companyUid: Guid, typeCode: string, data: IClassifier): Promise<IApiResult> => {
+		return this.post(`${Constants.baseURL}/classifier/update`, { companyUid, typeCode, item: data });
 	};
 
 	delete = async (companyUid: Guid, typeCode: string, uids: string[] | number[]): Promise<number> => {
 		return this.post(`${Constants.baseURL}/classifier/delete`, { companyUid, typeCode, uids });
 	};
+}
+
+export interface IInsertClassifierResult extends IApiResult {
+	uid?: Guid;
 }

@@ -1,10 +1,11 @@
-using System;
+﻿using System;
 using MediatR;
 using Montr.MasterData.Models;
+using Montr.Metadata.Models;
 
 namespace Montr.MasterData.Commands
 {
-	public class UpdateClassifierType: IRequest<int>
+	public class UpdateClassifierType: IRequest<ApiResult>
 	{
 		public Guid UserUid { get; set; }
 

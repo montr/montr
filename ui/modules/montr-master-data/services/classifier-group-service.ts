@@ -1,6 +1,6 @@
 import { Fetcher } from "@montr-core/services";
 import { Constants } from "@montr-core/.";
-import { Guid } from "@montr-core/models";
+import { Guid, IApiResult } from "@montr-core/models";
 import { IClassifierGroup } from "../models";
 
 interface ClassifierGroupSearchRequest {
@@ -19,15 +19,19 @@ export class ClassifierGroupService extends Fetcher {
 		return this.post(`${Constants.baseURL}/classifierGroup/get`, { companyUid, typeCode, treeCode, uid });
 	};
 
-	insert = async (companyUid: Guid, typeCode: string, treeCode: string, data: IClassifierGroup): Promise<Guid> => {
+	insert = async (companyUid: Guid, typeCode: string, treeCode: string, data: IClassifierGroup): Promise<IInsertClassifierGroupResult> => {
 		return this.post(`${Constants.baseURL}/classifierGroup/insert`, { companyUid, typeCode, treeCode, item: data });
 	};
 
-	update = async (companyUid: Guid, data: IClassifierGroup): Promise<number> => {
-		return this.post(`${Constants.baseURL}/classifierGroup/update`, { companyUid, item: data });
+	update = async (companyUid: Guid, typeCode: string, treeCode: string, data: IClassifierGroup): Promise<IApiResult> => {
+		return this.post(`${Constants.baseURL}/classifierGroup/update`, { companyUid, typeCode, treeCode, item: data });
 	};
 
 	delete = async (companyUid: Guid, typeCode: string, treeCode: string, uid: Guid | string | number): Promise<number> => {
 		return this.post(`${Constants.baseURL}/classifierGroup/delete`, { companyUid, typeCode, treeCode, uid });
 	};
+}
+
+export interface IInsertClassifierGroupResult extends IApiResult {
+	uid?: Guid;
 }

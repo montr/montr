@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -6,6 +7,7 @@ using LinqToDB;
 using LinqToDB.Data;
 using Montr.Data.Linq2Db;
 using Montr.MasterData.Impl.Entities;
+using Montr.Metadata.Models;
 
 namespace Montr.MasterData.Impl.Services
 {
@@ -18,9 +20,13 @@ namespace Montr.MasterData.Impl.Services
 			_db = db;
 		}
 
-		public async Task Insert(Guid itemUid, Guid? parentUid, CancellationToken cancellationToken)
+		public IList<ApiResultError> Errors { get; } = new List<ApiResultError>();
+
+		public async Task<bool> Insert(Guid itemUid, Guid? parentUid, CancellationToken cancellationToken)
 		{
 			await ValidateSameTree(itemUid, parentUid, cancellationToken);
+
+			if (Errors.Count > 0) return false;
 
 			var closure = _db.GetTable<DbClassifierClosure>();
 
@@ -47,12 +53,16 @@ namespace Montr.MasterData.Impl.Services
 
 				_db.BulkCopy(insertable);
 			}
+
+			return true;
 		}
 
-		public async Task Update(Guid itemUid, Guid? parentUid, CancellationToken cancellationToken)
+		public async Task<bool> Update(Guid itemUid, Guid? parentUid, CancellationToken cancellationToken)
 		{
 			await ValidateSameTree(itemUid, parentUid, cancellationToken);
 			await ValidateCyclicDependency(itemUid, parentUid, cancellationToken);
+
+			if (Errors.Count > 0) return false;
 
 			var closure = _db.GetTable<DbClassifierClosure>();
 			
@@ -91,11 +101,15 @@ namespace Montr.MasterData.Impl.Services
 
 				_db.BulkCopy(insertable);
 			}
+
+			return true;
 		}
 
-		public async Task Delete(Guid itemUid, Guid? parentUid, CancellationToken cancellationToken)
+		public async Task<bool> Delete(Guid itemUid, Guid? parentUid, CancellationToken cancellationToken)
 		{
 			await ValidateSameTree(itemUid, parentUid, cancellationToken);
+
+			if (Errors.Count > 0) return false;
 
 			var closure = _db.GetTable<DbClassifierClosure>();
 
@@ -124,6 +138,8 @@ namespace Montr.MasterData.Impl.Services
 			await closure
 				.Where(x => x.ParentUid == itemUid)
 				.DeleteAsync(cancellationToken);
+
+			return true;
 		}
 
 		private async Task ValidateSameTree(Guid itemUid, Guid? parentUid, CancellationToken cancellationToken)
@@ -140,7 +156,14 @@ namespace Montr.MasterData.Impl.Services
 
 				if (await query.AnyAsync(cancellationToken) == false)
 				{
-					throw new InvalidOperationException("Item and parent should belongs to the same tree.");
+					Errors.Add(new ApiResultError
+					{
+						Key = string.Empty,
+						Messages = new[]
+						{
+							"Item and parent should belongs to the same tree."
+						}
+					});
 				}
 			}
 		}
@@ -158,7 +181,14 @@ namespace Montr.MasterData.Impl.Services
 
 				if (await query.AnyAsync(cancellationToken))
 				{
-					throw new InvalidOperationException("Cyclic dependency detected.");
+					Errors.Add(new ApiResultError
+					{
+						Key = "parentUid",
+						Messages = new[]
+						{
+							"Cyclic dependency detected."
+						}
+					});
 				}
 			}
 		}
