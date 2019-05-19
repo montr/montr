@@ -121,7 +121,14 @@ namespace Montr.MasterData.Impl.QueryHandlers
 					select item;
 			}
 
-			return Materialize(query);
+			var result = Materialize(query);
+
+			if (result.Count == 1)
+			{
+				result[0].Children = GetItemsByParent(db, type, result[0].Uid);
+			}
+
+			return result;
 		}
 
 		private static IList<ClassifierGroup> GetGroupsByParent(DbContext db, ClassifierType type, string treeCode, Guid? parentUid)
@@ -148,7 +155,14 @@ namespace Montr.MasterData.Impl.QueryHandlers
 					select item;
 			}
 
-			return Materialize(query);
+			var result = Materialize(query);
+
+			if (result.Count == 1)
+			{
+				result[0].Children = GetGroupsByParent(db, type, treeCode, result[0].Uid);
+			}
+
+			return result;
 		}
 
 		private static IList<ClassifierGroup> Materialize(IQueryable<DbClassifierGroup> query)

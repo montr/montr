@@ -28,6 +28,7 @@ interface IState {
 	groups?: IClassifierGroup[];
 	selectedGroup?: IClassifierGroup;
 	groupEditData?: IClassifierGroup;
+	expandedKeys: string[];
 	selectedRowKeys: string[] | number[];
 	depth: string;
 	updateTableToken: { date: Date, resetSelectedRows?: boolean };
@@ -44,6 +45,7 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 
 		this.state = {
 			types: [],
+			expandedKeys: [],
 			selectedRowKeys: [],
 			depth: "0",
 			updateTableToken: { date: new Date() }
@@ -182,33 +184,35 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 	onTreeLoadData = async (node: AntTreeNode) => new Promise(async (resolve) => {
 		const group: IClassifierGroup = node.props.dataRef;
 
-		const { type, treeCode } = this.state;
+		if (!group.children) {
+			const { type, treeCode, expandedKeys } = this.state;
 
-		const children = await this.fetchClassifierGroups(type.code, treeCode, group.uid)
+			const children = await this.fetchClassifierGroups(type.code, treeCode, group.uid)
 
-		group.children = children;
+			// to populate new expanded keys
+			this.buildGroupsTree(children, expandedKeys);
 
-		this.setState({
-			groups: [...this.state.groups],
-		});
+			group.children = children;
+
+			this.setState({
+				groups: [...this.state.groups],
+				expandedKeys
+			});
+		}
 
 		resolve();
 	})
 
 	onTreeSelect = async (selectedKeys: string[], e: AntTreeNodeSelectedEvent) => {
-		// const { postParams } = this.state;
-
 		this.setState({
-			selectedGroup: (e.selected) ? e.node.props.dataRef : null,
-			// postParams: { ...postParams, groupCode: selectedKeys[0] },
-			// updateTableDate: new Date()
+			selectedGroup: (e.selected) ? e.node.props.dataRef : null
 		});
 
 		await this.refreshTable();
 	}
 
 	onTreeExpand = (expandedKeys: string[], e: AntTreeNodeExpandedEvent) => {
-		// todo: save all expanded kes before refresh tree?
+		this.setState({ expandedKeys });
 	}
 
 	onDepthChange = async (e: RadioChangeEvent) => {
@@ -218,11 +222,11 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 		await this.refreshTable();
 	}
 
-	buildGroupsTree = (groups: IClassifierGroup[], expanded?: Guid[]) => {
+	buildGroupsTree = (groups: IClassifierGroup[], expanded?: string[]) => {
 		return groups && groups.map(x => {
 
 			if (expanded && x.children) {
-				expanded.push(x.uid);
+				expanded.push(x.uid.toString());
 			}
 
 			return (
@@ -277,7 +281,15 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 	}
 
 	onGroupModalSuccess = async (data: IClassifierGroup) => {
-		this.setState({ groupEditData: null, selectedGroup: data });
+		const { expandedKeys } = this.state;
+
+		// after group added - expand parent group
+		// todo: expand all parent groups (parent can be selected in modal)
+		if (data.parentUid) {
+			expandedKeys.push(data.parentUid.toString());
+		}
+
+		this.setState({ groupEditData: null, selectedGroup: data, expandedKeys });
 
 		await this.refreshTree(data.uid);
 	}
@@ -309,7 +321,7 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 
 	render() {
 		const { currentCompany } = this.props,
-			{ types, type, treeCode, trees, groups, selectedGroup, groupEditData, updateTableToken } = this.state;
+			{ types, type, treeCode, trees, groups, selectedGroup, groupEditData, expandedKeys, updateTableToken } = this.state;
 
 		if (!currentCompany || !type) return null;
 
@@ -336,10 +348,10 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 		let tree;
 		if (type.hierarchyType != "None") {
 			if (groups) {
-				const expandedKeys: Guid[] = [],
+				const defaultExpandedKeys: string[] = [],
 					selectedKeys: Guid[] = [];
 
-				const nodes = this.buildGroupsTree(groups, expandedKeys);
+				const nodes = this.buildGroupsTree(groups, defaultExpandedKeys);
 
 				if (selectedGroup) {
 					selectedKeys.push(selectedGroup.uid);
@@ -347,8 +359,9 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 
 				tree = (
 					<Tree blockNode
-						defaultExpandedKeys={expandedKeys.map(x => x.toString())}
+						defaultExpandedKeys={defaultExpandedKeys}
 						defaultSelectedKeys={selectedKeys.map(x => x.toString())}
+						expandedKeys={expandedKeys}
 						loadData={this.onTreeLoadData}
 						onSelect={this.onTreeSelect}
 						onExpand={this.onTreeExpand}>
