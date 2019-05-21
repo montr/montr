@@ -2,17 +2,16 @@ import * as React from "react";
 import { Redirect } from "react-router";
 import { Spin } from "antd";
 import { CompanyContextProps, withCompanyContext } from "@kompany/components";
+import { DataForm } from "@montr-core/components";
 import { IFormField, IApiResult } from "@montr-core/models";
 import { MetadataService } from "@montr-core/services";
-import { DataForm } from "@montr-core/components";
-import { ClassifierService } from "../services";
-import { IClassifier, IClassifierType } from "../models";
+import { IClassifierType } from "../models";
+import { ClassifierTypeService } from "../services";
 import { RouteBuilder } from "..";
 
 interface IProps extends CompanyContextProps {
-	type: IClassifierType;
-	data: IClassifier;
-	onDataChange?: (values: IClassifier) => void
+	data: IClassifierType;
+	onDataChange?: (values: IClassifierType) => void
 }
 
 interface IState {
@@ -21,9 +20,9 @@ interface IState {
 	redirect?: string;
 }
 
-class _TabEditClassifier extends React.Component<IProps, IState> {
+class _TabEditClassifierType extends React.Component<IProps, IState> {
 	private _metadataService = new MetadataService();
-	private _classifierService = new ClassifierService();
+	private _classifierTypeService = new ClassifierTypeService();
 
 	constructor(props: IProps) {
 		super(props);
@@ -38,36 +37,36 @@ class _TabEditClassifier extends React.Component<IProps, IState> {
 	}
 
 	componentDidUpdate = async (prevProps: IProps) => {
-		if (this.props.type !== prevProps.type ||
-			this.props.currentCompany !== prevProps.currentCompany) {
+		if (this.props.currentCompany !== prevProps.currentCompany) {
 			await this.fetchData();
 		}
 	}
 
 	componentWillUnmount = async () => {
 		await this._metadataService.abort();
-		await this._classifierService.abort();
+		await this._classifierTypeService.abort();
 	}
 
-	fetchData = async () => {
-		const { type, currentCompany } = this.props;
+	private fetchData = async () => {
+		const { currentCompany } = this.props;
 
-		if (type && currentCompany) {
+		if (currentCompany) {
 
-			const dataView = await this._metadataService.load(`Classifier/${type.code}`);
+			const dataView = await this._metadataService.load(`ClassifierType`);
 
 			this.setState({ loading: false, fields: dataView.fields });
 		}
 	}
 
-	save = async (values: IClassifier): Promise<IApiResult> => {
-		const { type, data, onDataChange } = this.props;
+	save = async (values: IClassifierType): Promise<IApiResult> => {
+
+		const { data, onDataChange } = this.props;
 		const { uid: companyUid } = this.props.currentCompany;
 
 		if (data.uid) {
 			const updated = { uid: data.uid, ...values };
 
-			const result = await this._classifierService.update(companyUid, type.code, updated);
+			const result = await this._classifierTypeService.update(companyUid, updated);
 
 			if (result.success) {
 				if (onDataChange) await onDataChange(updated);
@@ -76,17 +75,17 @@ class _TabEditClassifier extends React.Component<IProps, IState> {
 			return result;
 		}
 		else {
-			const result = await this._classifierService.insert(companyUid, type.code, values);
+			const result = await this._classifierTypeService.insert(companyUid, values);
 
 			if (result.success) {
-				this.setState({ redirect: RouteBuilder.editClassifier(type.code, result.uid) });
+				this.setState({ redirect: RouteBuilder.editClassifierType(result.uid) });
 			}
 
 			return result;
 		}
 	}
 
-	render = () => {
+	render() {
 		const { data } = this.props,
 			{ redirect, fields } = this.state;
 
@@ -103,4 +102,4 @@ class _TabEditClassifier extends React.Component<IProps, IState> {
 	}
 }
 
-export const TabEditClassifier = withCompanyContext(_TabEditClassifier);
+export const TabEditClassifierType = withCompanyContext(_TabEditClassifierType);

@@ -73,6 +73,20 @@
 		public override string Type => "datetime";
 	}
 
+	public class SelectField : FormField
+	{
+		public override string Type => "select";
+
+		public SelectFieldOption[] Options { get; set; }
+	}
+
+	public class SelectFieldOption
+	{
+		public string Value { get; set; }
+
+		public string Name { get; set; }
+	}
+
 	public class ClassifierField : FormField
 	{
 		public override string Type => "classifier";

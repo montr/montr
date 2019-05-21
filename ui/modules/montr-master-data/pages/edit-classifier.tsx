@@ -53,7 +53,7 @@ class _EditClassifier extends React.Component<IProps, IState> {
 		await this._classifierService.abort();
 	}
 
-	private fetchData = async () => {
+	fetchData = async () => {
 		const { typeCode, uid } = this.props.match.params;
 		const { currentCompany } = this.props;
 
@@ -69,11 +69,11 @@ class _EditClassifier extends React.Component<IProps, IState> {
 		}
 	}
 
-	private handleDataChange = (data: IClassifier) => {
+	handleDataChange = (data: IClassifier) => {
 		this.setState({ data });
 	}
 
-	private handleTabChange = (tabKey: string) => {
+	handleTabChange = (tabKey: string) => {
 		const { typeCode, uid } = this.props.match.params;
 
 		const path = RouteBuilder.editClassifier(typeCode, uid, tabKey);

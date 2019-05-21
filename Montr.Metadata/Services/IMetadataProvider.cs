@@ -63,6 +63,22 @@ namespace Montr.Metadata.Services
 				};
 			}
 
+			if (viewId == "ClassifierType")
+			{
+				result.Fields = new List<FormField>
+				{
+					new StringField { Key = "code", Name = "Код", Required = true },
+					new TextAreaField { Key = "name", Name = "Наименование", Rows = 2, Required = true },
+					new TextAreaField { Key = "description", Name = "Описание" },
+					new SelectField { Key = "hierarchyType", Name = "Иерархия", Options = new []
+					{
+						new SelectFieldOption { Value = "None", Name = "Нет" },
+						new SelectFieldOption { Value = "Groups", Name = "Группы" },
+						new SelectFieldOption { Value = "Items", Name = "Элементы" }
+					}},
+				};
+			}
+
 			if (viewId.StartsWith("ClassifierType/Grid"))
 			{
 				result.Columns = new List<DataColumn>

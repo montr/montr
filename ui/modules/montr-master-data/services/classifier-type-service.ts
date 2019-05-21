@@ -5,7 +5,7 @@ import { IClassifierType } from "../models";
 
 interface GetClassifierType {
 	typeCode?: string;
-	uid?: Guid;
+	uid?: Guid | string;
 }
 
 export class ClassifierTypeService extends Fetcher {

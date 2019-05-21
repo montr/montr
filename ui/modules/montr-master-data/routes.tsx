@@ -5,6 +5,7 @@ import { Guid } from "@montr-core/models";
 
 export const Patterns = {
 	editClassifierType: "/classifiers/edit/:uid/:tabKey?",
+
 	editClassifier: "/classifiers/:typeCode/edit/:uid/:tabKey?",
 };
 
@@ -22,7 +23,7 @@ export const Routes = () => {
 		<Switch>
 			<Route path="/classifiers/" exact component={SearchClassifierType} />
 			<Route path="/classifiers/add" exact component={EditClassifierType} />
-			<Route path="/classifiers/edit/:uid" exact component={EditClassifierType} />
+			<Route path={Patterns.editClassifierType} exact component={EditClassifierType} />
 
 			<Route path="/classifiers/:typeCode/" exact component={SearchClassifier} />
 			<Route path="/classifiers/:typeCode/add" exact component={EditClassifier} />
