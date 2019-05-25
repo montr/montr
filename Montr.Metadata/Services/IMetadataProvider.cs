@@ -79,7 +79,15 @@ namespace Montr.Metadata.Services
 				};
 			}
 
-			if (viewId.StartsWith("ClassifierType/Grid"))
+			if (viewId.StartsWith("ClassifierType/Grid/Hierarchy"))
+			{
+				result.Columns = new List<DataColumn>
+				{
+					new DataColumn { Key = "name", Name = "Наименование", Sortable = true, Width = 400, UrlProperty = "url" },
+					new DataColumn { Key = "default", Name = "По умолчанию", Width = 10 },
+				};
+			}
+			else if (viewId.StartsWith("ClassifierType/Grid"))
 			{
 				result.Columns = new List<DataColumn>
 				{

@@ -5,7 +5,7 @@ import { CompanyContextProps, withCompanyContext } from "@kompany/components";
 import { Page, PageHeader } from "@montr-core/components";
 import { ClassifierTypeService } from "../services";
 import { IClassifierType } from "../models";
-import { ClassifierBreadcrumb, TabEditClassifierType } from "../components";
+import { ClassifierBreadcrumb, TabEditClassifierType, TabEditClassifierTypeHierarchy } from "../components";
 import { RouteBuilder } from "..";
 
 interface IRouteProps {
@@ -110,7 +110,9 @@ class _EditClassifierType extends React.Component<IProps, IState> {
 						<Tabs.TabPane key="info" tab="Информация">
 							<TabEditClassifierType data={data} onDataChange={this.handleDataChange} />
 						</Tabs.TabPane>
-						<Tabs.TabPane key="hierarchy" tab="Иерархия" disabled={otherTabsDisabled}></Tabs.TabPane>
+						<Tabs.TabPane key="hierarchy" tab="Иерархия" disabled={otherTabsDisabled}>
+							<TabEditClassifierTypeHierarchy type={data} />
+						</Tabs.TabPane>
 						<Tabs.TabPane key="fields" tab="Поля" disabled={otherTabsDisabled}></Tabs.TabPane>
 						<Tabs.TabPane key="history" tab="История изменений" disabled={otherTabsDisabled}></Tabs.TabPane>
 					</Tabs>
