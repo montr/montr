@@ -13,6 +13,7 @@ using Montr.MasterData.Impl.CommandHandlers;
 using Montr.MasterData.Impl.Entities;
 using Montr.MasterData.Impl.Services;
 using Montr.MasterData.Models;
+using Montr.Metadata.Models;
 
 namespace Montr.MasterData.Tests.Services
 {
@@ -70,8 +71,12 @@ namespace Montr.MasterData.Tests.Services
 				Assert.AreEqual(File.ReadAllText("../../../Content/closure.3x3.txt"), PrintClosure(dbContextFactory));
 
 				// act & assert - cyclic dependency
-				await Assert.ThrowsExceptionAsync<InvalidOperationException>(
-					() => UpdateGroup("1.1", "1.1.1", updateClassifierGroupHandler, dbContextFactory, cancellationToken));
+				var result = await UpdateGroup("1.1", "1.1.1", updateClassifierGroupHandler, dbContextFactory, cancellationToken);
+				Assert.IsNotNull(result);
+				Assert.IsFalse(result.Success);
+				Assert.IsNotNull(result.Errors);
+				Assert.AreEqual("parentUid", result.Errors[0].Key);
+				Assert.AreEqual("Cyclic dependency detected.", result.Errors[0].Messages[0]);
 			}
 		}
 
@@ -182,7 +187,7 @@ namespace Montr.MasterData.Tests.Services
 			}
 		}
 
-		private async Task UpdateGroup(string groupCode, string newParentGroupCode,
+		private async Task<ApiResult> UpdateGroup(string groupCode, string newParentGroupCode,
 			UpdateClassifierGroupHandler updateClassifierGroupHandler, DefaultDbContextFactory dbContextFactory, CancellationToken cancellationToken)
 		{
 			var dbGroup = await FindGroup(dbContextFactory, groupCode);
@@ -200,10 +205,12 @@ namespace Montr.MasterData.Tests.Services
 				item.ParentUid = dbParentGroup.Uid;
 			}
 			
-			await updateClassifierGroupHandler.Handle(new UpdateClassifierGroup
+			return await updateClassifierGroupHandler.Handle(new UpdateClassifierGroup
 			{
 				CompanyUid = Constants.OperatorCompanyUid,
 				UserUid = UserUid,
+				TypeCode = TypeCode,
+				TreeCode = TreeCode,
 				Item = item
 			}, cancellationToken);
 		}

@@ -32,6 +32,7 @@ namespace Montr.MasterData.Tests.CommandHandlers
 			{
 				UserUid = Guid.NewGuid(),
 				CompanyUid = Constants.OperatorCompanyUid,
+				TypeCode = "test",
 				Item = new Classifier
 				{
 					// TypeCode = "test",
