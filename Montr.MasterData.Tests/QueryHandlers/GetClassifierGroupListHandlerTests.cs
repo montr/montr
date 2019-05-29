@@ -1,8 +1,11 @@
 ﻿using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using LinqToDB;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Montr.Data.Linq2Db;
+using Montr.MasterData.Impl.Entities;
 using Montr.MasterData.Impl.QueryHandlers;
 using Montr.MasterData.Impl.Services;
 using Montr.MasterData.Models;
@@ -45,11 +48,28 @@ namespace Montr.MasterData.Tests.QueryHandlers
 		public async Task GetGroups_ForNotNullParent_ReturnItems()
 		{
 			// arrange
+			var cancellationToken = CancellationToken.None;
 			var dbContextFactory = new DefaultDbContextFactory();
 			var classifierTypeRepository = new DbClassifierTypeRepository(dbContextFactory);
 			var classifierTypeService = new DefaultClassifierTypeService(classifierTypeRepository);
 
 			var handler = new GetClassifierGroupListHandler(dbContextFactory, classifierTypeService);
+
+			DbClassifierGroup parentGroup;
+			using (var db = dbContextFactory.Create())
+			{
+				parentGroup = await (
+						from type in db.GetTable<DbClassifierType>()
+							.Where(x => x.Code == "okei")
+						join tree in db.GetTable<DbClassifierTree>()
+								.Where(x => x.Code == "default")
+							on type.Uid equals tree.TypeUid
+						join @group in db.GetTable<DbClassifierGroup>()
+								.Where(x => x.Code == "1")
+							on tree.Uid equals @group.TreeUid
+						select @group)
+					.SingleAsync(cancellationToken);
+			}
 
 			// act
 			var command = new GetClassifierGroupList
@@ -59,11 +79,11 @@ namespace Montr.MasterData.Tests.QueryHandlers
 					CompanyUid = Constants.OperatorCompanyUid,
 					TypeCode = "okei",
 					TreeCode = "default",
-					ParentUid = Guid.NewGuid() // ParentCode = "1"
+					ParentUid = parentGroup.Uid
 				}
 			};
 
-			var result = await handler.Handle(command, CancellationToken.None);
+			var result = await handler.Handle(command, cancellationToken);
 
 			// assert
 			Assert.IsNotNull(result);
@@ -101,11 +121,25 @@ namespace Montr.MasterData.Tests.QueryHandlers
 		public async Task GetItems_ForNotNullParent_ReturnItems()
 		{
 			// arrange
+			var cancellationToken = CancellationToken.None;
 			var dbContextFactory = new DefaultDbContextFactory();
 			var classifierTypeRepository = new DbClassifierTypeRepository(dbContextFactory);
 			var classifierTypeService = new DefaultClassifierTypeService(classifierTypeRepository);
 
 			var handler = new GetClassifierGroupListHandler(dbContextFactory, classifierTypeService);
+
+			DbClassifier parentItem;
+			using (var db = dbContextFactory.Create())
+			{
+				parentItem = await (
+						from type in db.GetTable<DbClassifierType>()
+							.Where(x => x.Code == "okved2")
+						join item in db.GetTable<DbClassifier>()
+								.Where(x => x.Code == "F")
+							on type.Uid equals item.TypeUid
+						select item)
+					.SingleAsync(cancellationToken);
+			}
 
 			// act
 			var command = new GetClassifierGroupList
@@ -114,11 +148,11 @@ namespace Montr.MasterData.Tests.QueryHandlers
 				{
 					CompanyUid = Constants.OperatorCompanyUid,
 					TypeCode = "okved2",
-					ParentUid = Guid.NewGuid() // ParentCode = "F"
+					ParentUid = parentItem.Uid // Guid.NewGuid() // ParentCode = "F"
 				}
 			};
 
-			var result = await handler.Handle(command, CancellationToken.None);
+			var result = await handler.Handle(command, cancellationToken);
 
 			// assert
 			Assert.IsNotNull(result);
