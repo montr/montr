@@ -6,7 +6,7 @@
 
   <ItemGroup>
     <PackageReference Include="EPPlus" Version="4.5.3.1" />
-    <PackageReference Include="linq2db" Version="2.7.0" />
+    <PackageReference Include="linq2db" Version="2.7.1" />
     <PackageReference Include="MediatR" Version="7.0.0" />
 	<PackageReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
