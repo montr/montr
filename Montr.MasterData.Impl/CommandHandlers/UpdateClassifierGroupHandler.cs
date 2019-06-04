@@ -35,17 +35,17 @@ namespace Montr.MasterData.Impl.CommandHandlers
 
 			var item = request.Item ?? throw new ArgumentNullException(nameof(request.Item));
 
-			// todo: проверка что это твоя группа и дерево
+			// todo: check group belongs to company
 			var type = await _classifierTypeService.GetClassifierType(request.CompanyUid, request.TypeCode, cancellationToken);
 
 			using (var scope = _unitOfWorkFactory.Create())
 			{
 				using (var db = _dbContextFactory.Create())
 				{
-					var tree = await db.GetTable<DbClassifierTree>()
-						.SingleAsync(x => x.TypeUid == type.Uid && x.Code == request.TreeCode, cancellationToken);
+					/*var tree = await db.GetTable<DbClassifierTree>()
+						.SingleAsync(x => x.TypeUid == type.Uid && x.Code == request.TreeCode, cancellationToken);*/
 
-					var validator = new ClassifierGroupValidator(db, tree);
+					var validator = new ClassifierGroupValidator(db);
 
 					if (await validator.ValidateUpdate(item, cancellationToken) == false)
 					{
@@ -67,7 +67,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 						.UpdateAsync(cancellationToken);
 				}
 
-				// todo: (события)
+				// todo: (events)
 
 				scope.Commit();
 

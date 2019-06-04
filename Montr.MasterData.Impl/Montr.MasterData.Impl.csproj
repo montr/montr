@@ -5,6 +5,18 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Entities\DbClassifierTree.cs" />
+    <Compile Remove="QueryHandlers\GetClassifierTreeListHandler.cs" />
+    <Compile Remove="Services\DbClassifierTreeRepository.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Entities\DbClassifierTree.cs" />
+    <None Include="QueryHandlers\GetClassifierTreeListHandler.cs" />
+    <None Include="Services\DbClassifierTreeRepository.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Include="EPPlus" Version="4.5.3.1" />
     <PackageReference Include="linq2db" Version="2.7.1" />
     <PackageReference Include="MediatR" Version="7.0.0" />

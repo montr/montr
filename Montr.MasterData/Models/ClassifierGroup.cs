@@ -7,6 +7,8 @@ namespace Montr.MasterData.Models
 	[DebuggerDisplay("{" + nameof(DebuggerDisplay) + ",nq}")]
 	public class ClassifierGroup
 	{
+		public const string DefaultRootCode = "default";
+
 		private string DebuggerDisplay => $"{Code}, {Name}";
 
 		public Guid Uid { get; set; }

@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using MediatR;
 
 namespace Montr.MasterData.Commands
@@ -11,7 +11,7 @@ namespace Montr.MasterData.Commands
 
 		public string TypeCode { get; set; }
 
-		public string TreeCode { get; set; }
+		// public string TreeCode { get; set; }
 
 		public Guid Uid { get; set; }
 	}

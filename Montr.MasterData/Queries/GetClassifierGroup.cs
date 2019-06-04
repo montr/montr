@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using MediatR;
 using Montr.MasterData.Models;
 
@@ -12,7 +12,7 @@ namespace Montr.MasterData.Queries
 
 		public string TypeCode { get; set; }
 
-		public string TreeCode { get; set; }
+		// public string TreeCode { get; set; }
 
 		public Guid Uid { get; set; }
 	}

@@ -150,7 +150,7 @@ namespace Montr.MasterData.Impl.Services
 			{
 				var query =
 					from item in groups
-					join parent in groups on item.TreeUid equals parent.TreeUid
+					join parent in groups on item.TypeUid equals parent.TypeUid
 					where item.Uid == itemUid && parent.Uid == parentUid
 					select item;
 

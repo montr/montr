@@ -24,7 +24,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 		private readonly IClassifierTypeService _classifierTypeService;
 
 		private ClassifierType _type;
-		private DbClassifierTree _tree;
+		private DbClassifierGroup _root;
 
 		private IDictionary<string, DbClassifier> _existingItems;
 		private IDictionary<string, DbClassifierGroup> _existingGroups;
@@ -39,11 +39,11 @@ namespace Montr.MasterData.Impl.CommandHandlers
 
 		public async Task<ImportResult> Handle(ImportClassifierList request, CancellationToken cancellationToken)
 		{
-			// todo: start with unit test for each todo
+			// todo: write with unit test for each todo
 			// (+) todo: build DAG for groups and items
 			// (+) todo: build dictionaries
 			// todo: generate codes for new entities
-			// (+) todo: add new items to default tree
+			// (+) todo: add new items to default root
 			// (+) todo: build tree of items
 			// (+) todo: build closure table for groups or item
 
@@ -79,31 +79,44 @@ namespace Montr.MasterData.Impl.CommandHandlers
 
 				if (_type.HierarchyType == HierarchyType.Groups)
 				{
-					_tree = db.GetTable<DbClassifierTree>()
+					_root = db.GetTable<DbClassifierGroup>()
 						.SingleOrDefault(x =>
 							x.TypeUid == _type.Uid &&
-							x.Code == ClassifierTree.DefaultTreeCode);
+							x.Code == ClassifierGroup.DefaultRootCode);
 
-					if (_tree == null)
+					/*if (_root == null)
 					{
-						_tree = new DbClassifierTree
+						_root = new DbClassifierGroup
 						{
 							Uid = Guid.NewGuid(),
 							TypeUid = _type.Uid,
-							Code = ClassifierTree.DefaultTreeCode,
+							Code = ClassifierGroup.DefaultRootCode,
 							Name = _type.Name
 						};
 
-						await db.GetTable<DbClassifierTree>()
-							.Value(x => x.Uid, _tree.Uid)
-							.Value(x => x.TypeUid, _tree.TypeUid)
-							.Value(x => x.Code, _tree.Code)
-							.Value(x => x.Name, _tree.Name)
+						await db.GetTable<DbClassifierGroup>()
+							.Value(x => x.Uid, _root.Uid)
+							.Value(x => x.TypeUid, _root.TypeUid)
+							.Value(x => x.Code, _root.Code)
+							.Value(x => x.Name, _root.Name)
 							.InsertAsync(cancellationToken);
-					}
+					}*/
 
-					_existingGroups = await db.GetTable<DbClassifierGroup>()
-						.Where(x => x.TreeUid == _tree.Uid)
+					// todo: validate root not updated?
+					/*
+					// note: take all child of default root, don't select all groups of classifier type
+					_existingGroups = await (
+							from children in db.GetTable<DbClassifierClosure>()
+								.Where(x => x.ParentUid == _root.Uid)
+							join child in db.GetTable<DbClassifierGroup>()
+								on children.ChildUid equals child.Uid
+							select child
+						)
+						.ToDictionaryAsync(x => x.Code, cancellationToken);
+						*/
+
+					_existingGroups = await db
+						.GetTable<DbClassifierGroup>().Where(x => x.TypeUid == _type.Uid)
 						.ToDictionaryAsync(x => x.Code, cancellationToken);
 				}
 			}
@@ -166,44 +179,66 @@ namespace Montr.MasterData.Impl.CommandHandlers
 
 			if (_type.HierarchyType == HierarchyType.Groups)
 			{
+				var root = new ClassifierGroup
+				{
+					Uid = Guid.NewGuid(),
+					Code = ClassifierGroup.DefaultRootCode,
+					Name = _type.Name
+				};
+
+				var sortedGroups = new List<ClassifierGroup> { root };
+
 				if (request.Data.Groups != null)
 				{
-					var sortedGroups = DirectedAcyclicGraphVerifier.TopologicalSort(
-						request.Data.Groups,
-						node => node.Code,
-						node => node.ParentCode != null ? new[] { node.ParentCode } : null);
-
-					foreach (var group in sortedGroups)
-					{
-						var groupUid = Guid.NewGuid();
-
-						Guid? parentUid = null;
-
-						if (group.ParentCode != null)
-						{
-							parentUid = groups[group.ParentCode].Uid;
-						}
-
-						groups[group.Code] = new DbClassifierGroup
-						{
-							Uid = groupUid,
-							TreeUid = _tree.Uid,
-							Code = group.Code,
-							Name = group.Name,
-							ParentUid = parentUid
-						};
-
-						closures.Insert(groupUid, parentUid);
-					}
+					sortedGroups.AddRange(
+						DirectedAcyclicGraphVerifier.TopologicalSort(
+							request.Data.Groups,
+							node => node.Code,
+							node => node.ParentCode != null ? new[] {node.ParentCode} : null)
+					);
 				}
 
+				foreach (var group in sortedGroups)
+				{
+					var groupUid = group.Uid == Guid.Empty ? Guid.NewGuid() : group.Uid;
+
+					Guid? parentUid;
+
+					if (group.Code == ClassifierGroup.DefaultRootCode)
+					{
+						parentUid = null;
+					}
+					else if (group.ParentCode != null)
+					{
+						// todo: add friendly error group with code not found (see below in Import)
+						parentUid = groups[group.ParentCode].Uid;
+					}
+					else
+					{
+						parentUid = root.Uid;
+					}
+
+					// todo: check all groups code is not null
+					groups[group.Code] = new DbClassifierGroup
+					{
+						Uid = groupUid,
+						TypeUid = _type.Uid,
+						Code = group.Code,
+						Name = group.Name,
+						ParentUid = parentUid
+					};
+
+					closures.Insert(groupUid, parentUid);
+				}
+
+				// todo: link all unlinked items to root
 				if (request.Data.Links != null)
 				{
 					foreach (var link in request.Data.Links)
 					{
 						var items =
 							link.ItemStatusCode == ClassifierStatusCode.Active
-								? activeItems : inactiveItems;
+							? activeItems : inactiveItems;
 
 						links.Add(new DbClassifierLink
 						{
@@ -214,38 +249,43 @@ namespace Montr.MasterData.Impl.CommandHandlers
 				}
 			}
 
-			using (var db = _dbContextFactory.Create())
+			using (var scope = _unitOfWorkFactory.Create())
 			{
-				var copyOptions = new BulkCopyOptions { BulkCopyType = BulkCopyType.ProviderSpecific };
-
-				// todo: move heavy operations outside of open connection
-
-				if (activeItems.Values.Count > 0 || inactiveItems.Values.Count > 0)
+				using (var db = _dbContextFactory.Create())
 				{
-					var sorted = DirectedAcyclicGraphVerifier.TopologicalSort(
-						activeItems.Values.Union(inactiveItems.Values).ToList(),
-						node => node.Uid,
-						node => node.ParentUid != null ? new[] { node.ParentUid } : null);
+					var copyOptions = new BulkCopyOptions { BulkCopyType = BulkCopyType.ProviderSpecific };
 
-					db.BulkCopy(copyOptions, sorted);
+					// todo: move heavy operations outside of open connection
+
+					if (activeItems.Values.Count > 0 || inactiveItems.Values.Count > 0)
+					{
+						var sorted = DirectedAcyclicGraphVerifier.TopologicalSort(
+							activeItems.Values.Union(inactiveItems.Values).ToList(),
+							node => node.Uid,
+							node => node.ParentUid != null ? new[] { node.ParentUid } : null);
+
+						db.BulkCopy(copyOptions, sorted);
+					}
+
+					if (groups.Values.Count > 0)
+					{
+						var sorted = DirectedAcyclicGraphVerifier.TopologicalSort(
+							groups.Values,
+							node => node.Uid,
+							node => node.ParentUid != null ? new[] { node.ParentUid } : null);
+
+						db.BulkCopy(copyOptions, sorted);
+					}
+
+					if (links.Count > 0)
+					{
+						db.BulkCopy(copyOptions, links);
+					}
+
+					db.BulkCopy(copyOptions, closures.GetAll());
 				}
 
-				if (groups.Values.Count > 0)
-				{
-					var sorted = DirectedAcyclicGraphVerifier.TopologicalSort(
-						groups.Values,
-						node => node.Uid,
-						node => node.ParentUid != null ? new[] { node.ParentUid } : null);
-
-					db.BulkCopy(copyOptions, sorted);
-				}
-
-				if (links.Count > 0)
-				{
-					db.BulkCopy(copyOptions, links);
-				}
-
-				db.BulkCopy(copyOptions, closures.GetAll());
+				scope.Commit();
 			}
 
 			return new ImportResult();
@@ -359,15 +399,20 @@ namespace Montr.MasterData.Impl.CommandHandlers
 										}
 										else
 										{
+											// todo: validate all before import or throw error 
 											errors.Add($"Group {group.ParentCode} specified as parent for group {group.Code} not found in classifier {_type.Code}.");
 										}
+									}
+									else
+									{
+										parentUid = _root.Uid;
 									}
 
 									var groupUid = Guid.NewGuid();
 
 									await db.GetTable<DbClassifierGroup>()
 										.Value(x => x.Uid, groupUid)
-										.Value(x => x.TreeUid, _tree.Uid)
+										.Value(x => x.TypeUid, _type.Uid)
 										.Value(x => x.Code, group.Code)
 										.Value(x => x.Name, group.Name)
 										.Value(x => x.ParentUid, parentUid)
@@ -379,7 +424,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 									_existingGroups.Add(group.Code, new DbClassifierGroup
 									{
 										Uid = groupUid,
-										TreeUid = _tree.Uid,
+										TypeUid = _type.Uid,
 										Code = group.Code,
 										Name = group.Name,
 										ParentUid = parentUid
@@ -409,13 +454,14 @@ namespace Montr.MasterData.Impl.CommandHandlers
 
 						if (request.Data.Links != null)
 						{
+							var dbLinks = await (
+									from children in db.GetTable<DbClassifierClosure>().Where(x => x.ParentUid == _root.Uid)
+									join link in db.GetTable<DbClassifierLink>() on children.ChildUid equals link.GroupUid
+									select link)
+								.ToListAsync(cancellationToken);
+
 							var existingLinks = new HashSet<Tuple<Guid, Guid>>(
-								(from link in db.GetTable<DbClassifierLink>()
-									join g in db.GetTable<DbClassifierGroup>() on link.GroupUid equals g.Uid
-									join i in db.GetTable<DbClassifier>() on link.ItemUid equals i.Uid
-									where i.TypeUid == _type.Uid && g.TreeUid == _tree.Uid
-									select new { link.GroupUid, link.ItemUid })
-								.Select(x => Tuple.Create(x.GroupUid, x.ItemUid)));
+								dbLinks.Select(x => Tuple.Create(x.GroupUid, x.ItemUid)));
 
 							foreach (var itemInGroup in request.Data.Links)
 							{
@@ -476,6 +522,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 				if (parentUid.HasValue)
 				{
 					// insert parent closures with level + 1
+					// todo: throw error if parent closures not found?
 					if (_closuresByChildUid.TryGetValue(parentUid.Value, out var parentClosures))
 					{
 						itemClosures.AddRange(parentClosures

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -10,15 +11,14 @@ using Montr.Metadata.Models;
 
 namespace Montr.MasterData.Impl.CommandHandlers
 {
+	// todo: add tests
 	public class ClassifierGroupValidator
 	{
 		private readonly DbContext _db;
-		private readonly DbClassifierTree _tree;
 
-		public ClassifierGroupValidator(DbContext db, DbClassifierTree tree)
+		public ClassifierGroupValidator(DbContext db)
 		{
 			_db = db;
-			_tree = tree;
 		}
 
 		public IList<ApiResultError> Errors { get; } = new List<ApiResultError>();
@@ -39,8 +39,18 @@ namespace Montr.MasterData.Impl.CommandHandlers
 
 		private async Task ValidateDuplicateCode(ClassifierGroup item, CancellationToken cancellationToken)
 		{
-			var duplicate = await _db.GetTable<DbClassifierGroup>()
-				.Where(x => x.TreeUid == _tree.Uid && x.Uid != item.Uid && x.Code == item.Code)
+			if (item == null) throw new ArgumentNullException(nameof(item));
+
+			var duplicate = await (
+					from parents in _db.GetTable<DbClassifierClosure>().Where(x => x.ChildUid == item.Uid)
+					join root in _db.GetTable<DbClassifierGroup>().Where(x => x.ParentUid == null)
+						on parents.ParentUid equals root.Uid
+					join children in _db.GetTable<DbClassifierClosure>()
+						on root.Uid equals children.ParentUid
+					join child in _db.GetTable<DbClassifierGroup>()
+						on children.ChildUid equals child.Uid
+					select child)
+				.Where(x => x.Uid != item.Uid && x.Code == item.Code)
 				.FirstOrDefaultAsync(cancellationToken);
 
 			if (duplicate != null)

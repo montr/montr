@@ -31,6 +31,8 @@ namespace Montr.MasterData.Impl.CommandHandlers
 
 			var item = request.Item ?? throw new ArgumentNullException(nameof(request.Item));
 
+			// todo: check type belongs to company
+
 			using (var scope = _unitOfWorkFactory.Create())
 			{
 				using (var db = _dbContextFactory.Create())
@@ -52,24 +54,24 @@ namespace Montr.MasterData.Impl.CommandHandlers
 
 					if (item.HierarchyType == HierarchyType.Groups)
 					{
-						var tree = db.GetTable<DbClassifierTree>()
+						var root = db.GetTable<DbClassifierGroup>()
 							.SingleOrDefault(x =>
 								x.TypeUid == item.Uid &&
-								x.Code == ClassifierTree.DefaultTreeCode);
+								x.Code == ClassifierGroup.DefaultRootCode);
 
-						if (tree == null)
+						if (root == null)
 						{
-							await db.GetTable<DbClassifierTree>()
+							await db.GetTable<DbClassifierGroup>()
 								.Value(x => x.Uid, Guid.NewGuid())
 								.Value(x => x.TypeUid, item.Uid)
-								.Value(x => x.Code, ClassifierTree.DefaultTreeCode)
+								.Value(x => x.Code, ClassifierGroup.DefaultRootCode)
 								.Value(x => x.Name, item.Name)
 								.InsertAsync(cancellationToken);
 						}
 					}
 				}
 
-				// todo: (события)
+				// todo: (events)
 
 				scope.Commit();
 

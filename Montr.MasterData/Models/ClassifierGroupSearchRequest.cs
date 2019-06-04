@@ -9,7 +9,7 @@ namespace Montr.MasterData.Models
 
 		public string TypeCode { get; set; }
 
-		public string TreeCode { get; set; }
+		// public string TreeCode { get; set; }
 
 		public Guid? ParentUid { get; set; }
 

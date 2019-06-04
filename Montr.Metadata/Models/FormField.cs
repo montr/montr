@@ -93,7 +93,7 @@
 
 		public string TypeCode { get; set; }
 
-		public string TreeCode { get; set; }
+		// public string TreeCode { get; set; }
 	}
 
 	public class FileField : FormField

@@ -39,14 +39,14 @@ namespace Montr.MasterData.Impl.CommandHandlers
 			{
 				var itemUid = Guid.NewGuid();
 
-				// todo: валидация и ограничения
+				// todo: validation and limits
 
 				using (var db = _dbContextFactory.Create())
 				{
-					var tree = await db.GetTable<DbClassifierTree>()
-						.SingleAsync(x => x.TypeUid == type.Uid && x.Code == request.TreeCode, cancellationToken);
+					/*var tree = await db.GetTable<DbClassifierTree>()
+						.SingleAsync(x => x.TypeUid == type.Uid && x.Code == request.TreeCode, cancellationToken);*/
 
-					var validator = new ClassifierGroupValidator(db, tree);
+					var validator = new ClassifierGroupValidator(db);
 
 					if (await validator.ValidateInsert(item, cancellationToken) == false)
 					{
@@ -55,7 +55,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 
 					await db.GetTable<DbClassifierGroup>()
 						.Value(x => x.Uid, itemUid)
-						.Value(x => x.TreeUid, tree.Uid)
+						.Value(x => x.TypeUid, type.Uid)
 						// todo: validate parent belongs to the same tree
 						.Value(x => x.ParentUid, item.ParentUid)
 						.Value(x => x.Code, item.Code)

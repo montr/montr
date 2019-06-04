@@ -33,7 +33,8 @@ namespace Montr.MasterData.Tests.QueryHandlers
 				{
 					CompanyUid = Constants.OperatorCompanyUid,
 					TypeCode = "okei",
-					TreeCode = "default"
+					ParentUid = null // yeah, we test this
+					// TreeCode = "default"
 				}
 			};
 
@@ -41,7 +42,8 @@ namespace Montr.MasterData.Tests.QueryHandlers
 
 			// assert
 			Assert.IsNotNull(result);
-			Assert.AreEqual(4, result.Count);
+			Assert.AreEqual(1, result.Count);
+			Assert.AreEqual(ClassifierGroup.DefaultRootCode, result[0].Code);
 		}
 
 		[TestMethod]
@@ -54,22 +56,7 @@ namespace Montr.MasterData.Tests.QueryHandlers
 			var classifierTypeService = new DefaultClassifierTypeService(classifierTypeRepository);
 
 			var handler = new GetClassifierGroupListHandler(dbContextFactory, classifierTypeService);
-
-			DbClassifierGroup parentGroup;
-			using (var db = dbContextFactory.Create())
-			{
-				parentGroup = await (
-						from type in db.GetTable<DbClassifierType>()
-							.Where(x => x.Code == "okei")
-						join tree in db.GetTable<DbClassifierTree>()
-								.Where(x => x.Code == "default")
-							on type.Uid equals tree.TypeUid
-						join @group in db.GetTable<DbClassifierGroup>()
-								.Where(x => x.Code == "1")
-							on tree.Uid equals @group.TreeUid
-						select @group)
-					.SingleAsync(cancellationToken);
-			}
+			var parentGroup = await FindClassifierGroup(dbContextFactory, "okei", "1", cancellationToken);
 
 			// act
 			var command = new GetClassifierGroupList
@@ -78,7 +65,7 @@ namespace Montr.MasterData.Tests.QueryHandlers
 				{
 					CompanyUid = Constants.OperatorCompanyUid,
 					TypeCode = "okei",
-					TreeCode = "default",
+					// TreeCode = "default",
 					ParentUid = parentGroup.Uid
 				}
 			};
@@ -88,6 +75,28 @@ namespace Montr.MasterData.Tests.QueryHandlers
 			// assert
 			Assert.IsNotNull(result);
 			Assert.AreEqual(7, result.Count);
+		}
+
+		private async Task<DbClassifierGroup> FindClassifierGroup(IDbContextFactory dbContextFactory, string typeCode, string code, CancellationToken cancellationToken)
+		{
+			using (var db = dbContextFactory.Create())
+			{
+				return await (
+						from type in db.GetTable<DbClassifierType>().Where(x => x.Code == typeCode)
+						/*join tree in db.GetTable<DbClassifierTree>()
+								.Where(x => x.Code == "default")
+							on type.Uid equals tree.TypeUid*/
+						join @group in db.GetTable<DbClassifierGroup>().Where(x => x.Code == code)
+							on type.Uid equals @group.TypeUid
+						select @group)
+					.SingleAsync(cancellationToken);
+			}
+		}
+
+		[TestMethod, Ignore]
+		public async Task GetGroups_WhenAutoExpandSingleChildRequested_ShouldReturnExpanded()
+		{
+			await Task.FromException<NotImplementedException>(new NotImplementedException());
 		}
 
 		[TestMethod]
@@ -159,6 +168,11 @@ namespace Montr.MasterData.Tests.QueryHandlers
 			Assert.AreEqual(3, result.Count);
 		}
 
+		[TestMethod, Ignore]
+		public async Task GetItems_WhenAutoExpandSingleChildRequested_ShouldReturnExpanded()
+		{
+			await Task.FromException<NotImplementedException>(new NotImplementedException());
+		}
 
 		[TestMethod]
 		public async Task GetItems_ForBigGroups_ReturnNoMoreThan1000Items()
@@ -192,11 +206,13 @@ namespace Montr.MasterData.Tests.QueryHandlers
 		public async Task GetGroups_WithFocusUid_ReturnAllChildrenOfParentGroups()
 		{
 			// arrange
+			var cancellationToken = CancellationToken.None;
 			var dbContextFactory = new DefaultDbContextFactory();
 			var classifierTypeRepository = new DbClassifierTypeRepository(dbContextFactory);
 			var classifierTypeService = new DefaultClassifierTypeService(classifierTypeRepository);
 
 			var handler = new GetClassifierGroupListHandler(dbContextFactory, classifierTypeService);
+			var focusGroup = await FindClassifierGroup(dbContextFactory, "okei", "3.7", cancellationToken);
 
 			// act
 			var command = new GetClassifierGroupList
@@ -205,12 +221,12 @@ namespace Montr.MasterData.Tests.QueryHandlers
 				{
 					CompanyUid = Constants.OperatorCompanyUid,
 					TypeCode = "okei",
-					TreeCode = "default",
-					FocusUid = Guid.Parse("fb9e31c0-3b53-4793-9de0-3b85f7b76b49") // 3.7. Экономические единицы
+					// TreeCode = "default",
+					FocusUid = focusGroup.Uid // 3.7. Экономические единицы
 				}
 			};
 
-			var result = await handler.Handle(command, CancellationToken.None);
+			var result = await handler.Handle(command, cancellationToken);
 
 			// assert
 			Assert.IsNotNull(result);

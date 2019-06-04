@@ -22,7 +22,7 @@ namespace Montr.MasterData.Tests.Services
 	{
 		private readonly Guid UserUid = Guid.NewGuid();
 		private readonly string TypeCode = "test_closure";
-		private readonly string TreeCode = ClassifierTree.DefaultTreeCode;
+		// private readonly string TreeCode = ClassifierGroup.DefaultRootCode;
 
 		[TestMethod]
 		public async Task InsertGroup_Should_BuildClosureTable()
@@ -176,7 +176,7 @@ namespace Montr.MasterData.Tests.Services
 					CompanyUid = Constants.OperatorCompanyUid,
 					UserUid = UserUid,
 					TypeCode = TypeCode,
-					TreeCode = TreeCode,
+					// TreeCode = TreeCode,
 					Item = new ClassifierGroup { Code = code, Name = $"Class {code}", ParentUid = parentUid }
 				}, cancellationToken);
 
@@ -210,7 +210,7 @@ namespace Montr.MasterData.Tests.Services
 				CompanyUid = Constants.OperatorCompanyUid,
 				UserUid = UserUid,
 				TypeCode = TypeCode,
-				TreeCode = TreeCode,
+				// TreeCode = TreeCode,
 				Item = item
 			}, cancellationToken);
 		}
@@ -225,7 +225,7 @@ namespace Montr.MasterData.Tests.Services
 				CompanyUid = Constants.OperatorCompanyUid,
 				UserUid = UserUid,
 				TypeCode = TypeCode,
-				TreeCode = TreeCode,
+				// TreeCode = TreeCode,
 				Uid = group.Uid
 			}, cancellationToken);
 		}
@@ -235,10 +235,10 @@ namespace Montr.MasterData.Tests.Services
 			using (var db = dbContextFactory.Create())
 			{
 				var query = from g in db.GetTable<DbClassifierGroup>()
-					join tree in db.GetTable<DbClassifierTree>() on g.TreeUid equals tree.Uid
-					join type in db.GetTable<DbClassifierType>() on tree.TypeUid equals type.Uid
+					// join tree in db.GetTable<DbClassifierTree>() on g.TreeUid equals tree.Uid
+					join type in db.GetTable<DbClassifierType>() on g.TypeUid equals type.Uid
 					where type.Code == TypeCode
-						&& tree.Code == TreeCode
+						// && tree.Code == TreeCode
 						&& g.Code == groupCode
 					select g;
 
@@ -253,10 +253,10 @@ namespace Montr.MasterData.Tests.Services
 				var print = from c in db.GetTable<DbClassifierClosure>()
 					join parent in db.GetTable<DbClassifierGroup>() on c.ParentUid equals parent.Uid
 					join child in db.GetTable<DbClassifierGroup>() on c.ChildUid equals child.Uid
-					join tree in db.GetTable<DbClassifierTree>() on parent.TreeUid equals tree.Uid
-					join type in db.GetTable<DbClassifierType>() on tree.TypeUid equals type.Uid
+					// join tree in db.GetTable<DbClassifierTree>() on parent.TreeUid equals tree.Uid
+					join type in db.GetTable<DbClassifierType>() on parent.TypeUid equals type.Uid
 					where type.Code == TypeCode
-					      && tree.Code == TreeCode
+					      // && tree.Code == TreeCode
 					orderby parent.Code, child.Code, c.Level
 					select new { ParentCode = parent.Code, ChildCode = child.Code, c.Level };
 

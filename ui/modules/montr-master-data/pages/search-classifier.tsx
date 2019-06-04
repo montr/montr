@@ -23,8 +23,8 @@ interface IProps extends CompanyContextProps, RouteComponentProps<IRouteProps> {
 interface IState {
 	types: IClassifierType[];
 	type?: IClassifierType;
-	trees?: IClassifierTree[];
-	treeCode?: string,
+	trees?: IClassifierGroup[];
+	treeUid?: Guid,
 	groups?: IClassifierGroup[];
 	selectedGroup?: IClassifierGroup;
 	groupEditData?: IClassifierGroup;
@@ -109,20 +109,21 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 			{ type } = this.state;
 
 		if (currentCompany && type) {
-			let trees: IClassifierTree[] = [],
-				treeCode: string;
+			let trees: IClassifierGroup[] = [],
+				treeUid: Guid;
 
 			if (type.hierarchyType == "Groups") {
-				trees = (await this._classifierService.trees(currentCompany.uid, type.code)).rows;
+				trees = await this.fetchClassifierGroups(type.code, null);
+				// trees = (await this._classifierService.trees(currentCompany.uid, type.code)).rows;
 
 				if (trees && trees.length > 0) {
-					treeCode = trees[0].code;
+					treeUid = trees[0].uid;
 				}
 			}
 
 			this.setState({
 				trees,
-				treeCode
+				treeUid
 			});
 
 			await this.loadClassifierGroups();
@@ -134,13 +135,13 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 		this.setState({ groups: null });
 
 		const { currentCompany } = this.props,
-			{ type, treeCode } = this.state;
+			{ type, treeUid } = this.state;
 
 		if (currentCompany && type) {
 			let groups: IClassifierGroup[] = [];
 
 			if (type.hierarchyType == "Groups") {
-				groups = await this.fetchClassifierGroups(type.code, treeCode, null, focusGroupUid);
+				groups = await this.fetchClassifierGroups(type.code, /* treeCode */ null, treeUid, focusGroupUid);
 			}
 
 			if (type.hierarchyType == "Items") {
@@ -185,9 +186,9 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 		const group: IClassifierGroup = node.props.dataRef;
 
 		if (!group.children) {
-			const { type, treeCode, expandedKeys } = this.state;
+			const { type, /* treeUid, */ expandedKeys } = this.state;
 
-			const children = await this.fetchClassifierGroups(type.code, treeCode, group.uid)
+			const children = await this.fetchClassifierGroups(type.code, /* treeCode */ null, group.uid)
 
 			// to populate new expanded keys
 			this.buildGroupsTree(children, expandedKeys);
@@ -259,9 +260,9 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 
 	deleteSelectedGroup = async () => {
 		const { currentCompany } = this.props
-		const { type, treeCode, selectedGroup } = this.state;
+		const { type, /* treeCode, */ selectedGroup } = this.state;
 
-		await this._classifierGroupService.delete(currentCompany.uid, type.code, treeCode, selectedGroup.uid);
+		await this._classifierGroupService.delete(currentCompany.uid, type.code, /* treeCode */ null, selectedGroup.uid);
 
 		this.setState({ selectedGroup: null });
 
@@ -300,14 +301,14 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 
 	onLoadTableData = async (loadUrl: string, postParams: any): Promise<IDataResult<{}>> => {
 		const { currentCompany } = this.props,
-			{ type, treeCode, depth, selectedGroup } = this.state;
+			{ type, treeUid, depth, selectedGroup } = this.state;
 
 		if (currentCompany && type.code) {
 
 			const params = {
 				companyUid: currentCompany.uid,
 				typeCode: type.code,
-				treeCode,
+				treeUid,
 				depth,
 				groupUid: selectedGroup ? selectedGroup.uid : null,
 				...postParams
@@ -321,15 +322,14 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 
 	render() {
 		const { currentCompany } = this.props,
-			{ types, type, treeCode, trees, groups, selectedGroup, groupEditData, expandedKeys, updateTableToken } = this.state;
+			{ types, type, treeUid, trees, groups, selectedGroup, groupEditData, expandedKeys, updateTableToken } = this.state;
 
 		if (!currentCompany || !type) return null;
 
-		// todo: настройки:
-		// 1. как выглядит дерево - списком или деревом (?)
-		// 2. прятать дерево
-		// 3. показывать или нет группы в таблице
-		// 4. показывать планарную таблицу без групп
+		// todo: settings
+		// 1. how tree looks - list or tree (?)
+		// 2. hide tree
+		// 3. show or hide groups in list
 
 		let groupControls;
 		if (type.hierarchyType == "Groups") {
@@ -440,7 +440,7 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 				{groupEditData &&
 					<ModalEditClassifierGroup
 						typeCode={type.code}
-						treeCode={treeCode}
+						treeCode={/* treeCode */ null}
 						uid={groupEditData.uid}
 						parentUid={groupEditData.parentUid}
 						onSuccess={this.onGroupModalSuccess}

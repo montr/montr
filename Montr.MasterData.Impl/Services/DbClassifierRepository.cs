@@ -39,7 +39,7 @@ namespace Montr.MasterData.Impl.Services
 				}
 				else if (type.HierarchyType == HierarchyType.Groups)
 				{
-					if (request.Depth == null || request.Depth == "0")
+					/*if (request.Depth == null || request.Depth == "0")
 					{
 						query = from types in db.GetTable<DbClassifierType>()
 							join trees in db.GetTable<DbClassifierTree>() on types.Uid equals trees.TypeUid
@@ -52,18 +52,18 @@ namespace Montr.MasterData.Impl.Services
 								children_groups.Uid == request.GroupUid
 							select c;
 					}
-					else
+					else*/
 					{
 						query = from types in db.GetTable<DbClassifierType>()
-							join trees in db.GetTable<DbClassifierTree>() on types.Uid equals trees.TypeUid
-							join parent_groups in db.GetTable<DbClassifierGroup>() on trees.Uid equals parent_groups.TreeUid
+							// join trees in db.GetTable<DbClassifierTree>() on types.Uid equals trees.TypeUid
+							join parent_groups in db.GetTable<DbClassifierGroup>() on types.Uid equals parent_groups.TypeUid
 							join closures in db.GetTable<DbClassifierClosure>() on parent_groups.Uid equals closures.ParentUid
 							join children_groups in db.GetTable<DbClassifierGroup>() on closures.ChildUid equals children_groups.Uid
 							join links in db.GetTable<DbClassifierLink>() on children_groups.Uid equals links.GroupUid
 							join c in db.GetTable<DbClassifier>() on links.ItemUid equals c.Uid
 							where types.CompanyUid == request.CompanyUid &&
 								types.Code == request.TypeCode &&
-								trees.Code == request.TreeCode &&
+								// trees.Code == request.TreeCode &&
 								parent_groups.Uid == request.GroupUid
 								select c;
 					}

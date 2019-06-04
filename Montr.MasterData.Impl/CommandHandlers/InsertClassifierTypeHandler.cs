@@ -33,7 +33,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 			{
 				var itemUid = Guid.NewGuid();
 
-				// todo: валидация и ограничения
+				// todo: validation and limits
 				// todo: reserved codes (add, new etc. can conflict with routing)
 
 				using (var db = _dbContextFactory.Create())
@@ -45,7 +45,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 						return new InsertClassifierType.Result { Success = false, Errors = validator.Errors };
 					}
 
-					// компания + todo: дата изменения
+					// todo: change date
 
 					await db.GetTable<DbClassifierType>()
 						.Value(x => x.Uid, itemUid)
@@ -58,16 +58,16 @@ namespace Montr.MasterData.Impl.CommandHandlers
 
 					if (item.HierarchyType == HierarchyType.Groups)
 					{
-						await db.GetTable<DbClassifierTree>()
+						await db.GetTable<DbClassifierGroup>()
 							.Value(x => x.Uid, Guid.NewGuid())
 							.Value(x => x.TypeUid, itemUid)
-							.Value(x => x.Code, ClassifierTree.DefaultTreeCode)
+							.Value(x => x.Code, ClassifierGroup.DefaultRootCode)
 							.Value(x => x.Name, item.Name)
 							.InsertAsync(cancellationToken);
 					}
 				}
 
-				// todo: (события)
+				// todo: (events)
 
 				scope.Commit();
 

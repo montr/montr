@@ -1,4 +1,4 @@
-using System;
+﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
 using LinqToDB;
@@ -28,7 +28,7 @@ namespace Montr.MasterData.Impl.QueryHandlers
 			if (command.CompanyUid == Guid.Empty) throw new InvalidOperationException("Company is required.");
 
 			var typeCode = command.TypeCode ?? throw new ArgumentNullException(nameof(command.TypeCode));
-			var treeCode = command.TreeCode ?? throw new ArgumentNullException(nameof(command.TreeCode));
+			// var treeCode = command.TreeCode ?? throw new ArgumentNullException(nameof(command.TreeCode));
 
 			var type = await _classifierTypeService.GetClassifierType(command.CompanyUid, typeCode, cancellationToken);
 
@@ -36,12 +36,12 @@ namespace Montr.MasterData.Impl.QueryHandlers
 			{
 				if (type.HierarchyType == HierarchyType.Groups)
 				{
-					var tree = await db.GetTable<DbClassifierTree>()
-						.SingleAsync(x => x.TypeUid == type.Uid && x.Code == treeCode, cancellationToken);
+					/*var tree = await db.GetTable<DbClassifierTree>()
+						.SingleAsync(x => x.TypeUid == type.Uid && x.Code == treeCode, cancellationToken);*/
 
 					var item = await db.GetTable<DbClassifierGroup>()
 						.SingleAsync(
-							x => x.TreeUid == tree.Uid && x.Uid == command.Uid, cancellationToken);
+							x => x.TypeUid == type.Uid && x.Uid == command.Uid, cancellationToken);
 
 					return new ClassifierGroup
 					{

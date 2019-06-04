@@ -37,41 +37,45 @@ namespace Montr.MasterData.Impl.QueryHandlers
 				{
 					if (request.FocusUid != null)
 					{
-						var query = from tree in db.GetTable<DbClassifierTree>()
-							join focus in db.GetTable<DbClassifierGroup>() on tree.Uid equals focus.TreeUid
+						var query = from /*tree in db.GetTable<DbClassifierTree>()
+							join*/ focus in db.GetTable<DbClassifierGroup>() // on tree.Uid equals focus.TreeUid
 							join closureUp in db.GetTable<DbClassifierClosure>() on focus.Uid equals closureUp.ChildUid
 							join closureDown in db.GetTable<DbClassifierClosure>() on closureUp.ParentUid equals closureDown.ParentUid
 							join result in db.GetTable<DbClassifierGroup>() on closureDown.ChildUid equals result.Uid
-							where tree.TypeUid == type.Uid
-								&& tree.Code == request.TreeCode
+							where focus.TypeUid == type.Uid
+								// && tree.Code == request.TreeCode
 								&& focus.Uid == request.FocusUid
 								&& closureUp.Level > 0 // to exclude just focused group
+								// && result.ParentUid != null // ???
 								&& (closureDown.Level == 0 && result.ParentUid == null ||
 									closureDown.Level == 1 && result.ParentUid != null)
 							select result;
 
 						var children = Materialize(query);
 
-						var roots = GetGroupsByParent(db, type, request.TreeCode, null);
+						// var roots = GetGroupsByParent(db, type, /*request.TreeCode,*/ null, false);
 
-						LinkChildrenToRoots(children, roots);
+						LinkChildrenToRoots(children /*, roots*/);
 
-						return roots;
+						// return roots;
+						var root = children.SingleOrDefault(x => x.ParentUid == null);
+
+						return root != null ? root.Children : ImmutableList<ClassifierGroup>.Empty;
 					}
 
-					return GetGroupsByParent(db, type, request.TreeCode, request.ParentUid);
+					return GetGroupsByParent(db, type, /*request.TreeCode,*/ request.ParentUid, true);
 				}
 				
 				if (type.HierarchyType == HierarchyType.Items)
 				{
-					return GetItemsByParent(db, type, request.ParentUid);
+					return GetItemsByParent(db, type, request.ParentUid, true);
 				}
 			}
 
 			return ImmutableList<ClassifierGroup>.Empty;
 		}
 
-		private static void LinkChildrenToRoots(IList<ClassifierGroup> children, IList<ClassifierGroup> roots)
+		private static void LinkChildrenToRoots(IList<ClassifierGroup> children/*, IList<ClassifierGroup> roots*/)
 		{
 			var map = children.ToDictionary(x => x.Uid);
 
@@ -88,7 +92,7 @@ namespace Montr.MasterData.Impl.QueryHandlers
 
 					parent.Children.Add(child);
 				}
-				else
+				/*else
 				{
 					if (child.Children == null)
 					{
@@ -96,11 +100,11 @@ namespace Montr.MasterData.Impl.QueryHandlers
 
 						root.Children = child.Children = new List<ClassifierGroup>();
 					}
-				}
+				}*/
 			}
 		}
 
-		private static IList<ClassifierGroup> GetItemsByParent(DbContext db, ClassifierType type, Guid? parentUid)
+		private static IList<ClassifierGroup> GetItemsByParent(DbContext db, ClassifierType type, Guid? parentUid, bool expandSingleChild)
 		{
 			IQueryable<DbClassifier> query;
 
@@ -123,43 +127,45 @@ namespace Montr.MasterData.Impl.QueryHandlers
 
 			var result = Materialize(query);
 
-			if (result.Count == 1)
+			if (expandSingleChild && result.Count == 1)
 			{
-				result[0].Children = GetItemsByParent(db, type, result[0].Uid);
+				result[0].Children = GetItemsByParent(db, type, result[0].Uid, true);
 			}
 
 			return result;
 		}
 
-		private static IList<ClassifierGroup> GetGroupsByParent(DbContext db, ClassifierType type, string treeCode, Guid? parentUid)
+		private static IList<ClassifierGroup> GetGroupsByParent(DbContext db, ClassifierType type, /*string treeCode,*/ Guid? parentUid, bool expandSingleChild)
 		{
 			IQueryable<DbClassifierGroup> query;
 
-			if (parentUid != null)
+			/*if (parentUid != null)
 			{
-				query = from tree in db.GetTable<DbClassifierTree>()
-					join item in db.GetTable<DbClassifierGroup>() on tree.Uid equals item.TreeUid
-					join parent in db.GetTable<DbClassifierGroup>() on item.ParentUid equals parent.Uid
-					where tree.TypeUid == type.Uid
-						&& tree.Code == treeCode
-						&& parent.Uid == parentUid
+				query = from /*tree in db.GetTable<DbClassifierTree>()
+					join#1# item in db.GetTable<DbClassifierGroup>() // on tree.Uid equals item.TreeUid
+					// join parent in db.GetTable<DbClassifierGroup>() on item.ParentUid equals parent.Uid
+					where item.TypeUid == type.Uid
+					      && item.ParentUid == parentUid 
+					      /*&& tree.Code == treeCode
+						&& parent.Uid == parentUid#1#
 					select item;
 			}
-			else
+			else*/
 			{
-				query = from tree in db.GetTable<DbClassifierTree>()
-					join item in db.GetTable<DbClassifierGroup>() on tree.Uid equals item.TreeUid
-					where tree.TypeUid == type.Uid
-						&& tree.Code == treeCode
-						&& item.ParentUid == null
+				query = from /*tree in db.GetTable<DbClassifierTree>()
+					join*/
+						item in db.GetTable<DbClassifierGroup>() // on tree.Uid equals item.TreeUid
+					where item.TypeUid == type.Uid
+					      // && tree.Code == treeCode
+					      && item.ParentUid == parentUid // null
 					select item;
 			}
 
 			var result = Materialize(query);
 
-			if (result.Count == 1)
+			if (expandSingleChild && result.Count == 1)
 			{
-				result[0].Children = GetGroupsByParent(db, type, treeCode, result[0].Uid);
+				result[0].Children = GetGroupsByParent(db, type, /*treeCode,*/ result[0].Uid, true);
 			}
 
 			return result;

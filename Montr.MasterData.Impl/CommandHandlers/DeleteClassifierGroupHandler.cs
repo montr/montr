@@ -46,11 +46,11 @@ namespace Montr.MasterData.Impl.CommandHandlers
 					{
 						var closureTable = new ClosureTableHandler(db);
 
-						var tree = await db.GetTable<DbClassifierTree>()
-							.SingleAsync(x => x.TypeUid == type.Uid && x.Code == request.TreeCode, cancellationToken);
+						/*var tree = await db.GetTable<DbClassifierTree>()
+							.SingleAsync(x => x.TypeUid == type.Uid && x.Code == request.TreeCode, cancellationToken);*/
 
 						var group = await db.GetTable<DbClassifierGroup>()
-							.SingleAsync(x => x.TreeUid == tree.Uid && x.Uid == request.Uid, cancellationToken);
+							.SingleAsync(x => x.TypeUid == type.Uid && x.Uid == request.Uid, cancellationToken);
 
 						await closureTable.Delete(group.Uid, group.ParentUid, cancellationToken);
 
@@ -81,7 +81,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 					}
 				}
 
-				// todo: (события)
+				// todo: (events)
 
 				scope.Commit();
 
