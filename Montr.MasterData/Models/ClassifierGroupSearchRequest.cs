@@ -14,5 +14,7 @@ namespace Montr.MasterData.Models
 		public Guid? ParentUid { get; set; }
 
 		public Guid? FocusUid { get; set; }
+
+		public bool ExpandSingleChild { get; set; }
 	}
 }

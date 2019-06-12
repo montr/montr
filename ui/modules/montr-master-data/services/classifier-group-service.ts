@@ -1,17 +1,18 @@
 import { Fetcher } from "@montr-core/services";
 import { Constants } from "@montr-core/.";
-import { Guid, IApiResult } from "@montr-core/models";
+import { Guid, IApiResult, IDataResult } from "@montr-core/models";
 import { IClassifierGroup } from "../models";
 
 interface ClassifierGroupSearchRequest {
 	typeCode: string;
-	treeCode: string;
+	// treeCode: string;
 	parentUid?: Guid
 	focusUid?: Guid | string;
+	expandSingleChild?: boolean;
 }
 
 export class ClassifierGroupService extends Fetcher {
-	list = async (companyUid: Guid, request: ClassifierGroupSearchRequest): Promise<IClassifierGroup[]> => {
+	list = async (companyUid: Guid, request: ClassifierGroupSearchRequest): Promise<IDataResult<IClassifierGroup>> => {
 		return this.post(`${Constants.baseURL}/classifierGroup/list`, { companyUid, ...request });
 	};
 

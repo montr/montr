@@ -11,6 +11,8 @@ namespace Montr.MasterData.Models
 
 		// public string TreeCode { get; set; }
 
+		public Guid? TreeUid { get; set; }
+
 		public Guid? GroupUid { get; set; }
 
 		public string Depth { get; set; }

@@ -4,9 +4,9 @@ import { Guid, IDataResult, IApiResult } from "@montr-core/models";
 import { IClassifier, IClassifierType } from "../models";
 
 export class ClassifierService extends Fetcher {
-	trees = async (companyUid: Guid, typeCode: string): Promise<IDataResult<IClassifierType>> => {
+	/* trees = async (companyUid: Guid, typeCode: string): Promise<IDataResult<IClassifierType>> => {
 		return this.post(`${Constants.baseURL}/classifier/trees`, { companyUid, typeCode });
-	};
+	}; */
 
 	get = async (companyUid: Guid, typeCode: string, uid: Guid | string): Promise<IClassifier> => {
 		return this.post(`${Constants.baseURL}/classifier/get`, { companyUid, typeCode, uid });

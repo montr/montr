@@ -87,15 +87,15 @@ class _EditClassifierType extends React.Component<IProps, IState> {
 		let title;
 		if (loading) {
 			title = <>
-				<ClassifierBreadcrumb types={types} />
+				<ClassifierBreadcrumb /* types={types} */ />
 				<PageHeader>&#xA0;</PageHeader>
 			</>;
 		}
 		else {
 			title = <>
 				{(uid)
-					? <ClassifierBreadcrumb types={types} type={data} item={data} />
-					: <ClassifierBreadcrumb item={{ name: "Добавление справочника" }} />
+					? <ClassifierBreadcrumb /* types={types} */ type={data} item={{ name: "Настройка" }} />
+					: <ClassifierBreadcrumb item={{ name: "Добавление" }} />
 				}
 				<PageHeader>{data.name}</PageHeader>
 			</>;

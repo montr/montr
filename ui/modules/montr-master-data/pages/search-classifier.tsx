@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Page, DataTable, PageHeader, Toolbar } from "@montr-core/components";
+import { Page, PageHeader, Toolbar, DataTable, DataTableUpdateToken } from "@montr-core/components";
 import { RouteComponentProps } from "react-router";
 import { Link } from "react-router-dom";
 import { Icon, Button, Tree, Select, Radio, Layout, Modal, Spin } from "antd";
@@ -8,7 +8,7 @@ import { Guid, IDataResult } from "@montr-core/models";
 import { NotificationService } from "@montr-core/services";
 import { withCompanyContext, CompanyContextProps } from "@kompany/components";
 import { ClassifierService, ClassifierTypeService, ClassifierGroupService } from "../services";
-import { IClassifierType, IClassifierTree, IClassifierGroup } from "../models";
+import { IClassifierType, IClassifierGroup } from "../models";
 import { RadioChangeEvent } from "antd/lib/radio";
 import { AntTreeNode, AntTreeNodeSelectedEvent, AntTreeNodeExpandedEvent } from "antd/lib/tree";
 import { ClassifierBreadcrumb, ModalEditClassifierGroup } from "../components";
@@ -31,14 +31,14 @@ interface IState {
 	expandedKeys: string[];
 	selectedRowKeys: string[] | number[];
 	depth: string;
-	updateTableToken: { date: Date, resetSelectedRows?: boolean };
+	updateTableToken: DataTableUpdateToken;
 }
 
 class _SearchClassifier extends React.Component<IProps, IState> {
-	private _classifierTypeService = new ClassifierTypeService();
-	private _classifierGroupService = new ClassifierGroupService();
-	private _classifierService = new ClassifierService();
-	private _notificationService = new NotificationService();
+	_classifierTypeService = new ClassifierTypeService();
+	_classifierGroupService = new ClassifierGroupService();
+	_classifierService = new ClassifierService();
+	_notificationService = new NotificationService();
 
 	constructor(props: IProps) {
 		super(props);
@@ -141,21 +141,30 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 			let groups: IClassifierGroup[] = [];
 
 			if (type.hierarchyType == "Groups") {
-				groups = await this.fetchClassifierGroups(type.code, /* treeCode */ null, treeUid, focusGroupUid);
+				groups = await this.fetchClassifierGroups(type.code, /* treeCode null, */ treeUid, focusGroupUid, true);
 			}
 
 			if (type.hierarchyType == "Items") {
-				groups = await this.fetchClassifierGroups(type.code, null, null, focusGroupUid);
+				groups = await this.fetchClassifierGroups(type.code, /* null, */ null, focusGroupUid, true);
 			}
 
 			this.setState({ groups });
 		}
 	}
 
-	fetchClassifierGroups = async (typeCode: string, treeCode: string, parentUid?: Guid, focusUid?: Guid): Promise<IClassifierGroup[]> => {
+	fetchClassifierGroups = async (typeCode: string, /* treeCode: string, */ parentUid?: Guid, focusUid?: Guid, expandSingleChild?: boolean): Promise<IClassifierGroup[]> => {
 		const { currentCompany } = this.props
 
-		return await this._classifierGroupService.list(currentCompany.uid, { typeCode, treeCode, parentUid, focusUid });
+		const result = await this._classifierGroupService.list(
+			currentCompany.uid, {
+				typeCode,
+				/* treeCode, */
+				parentUid,
+				focusUid,
+				expandSingleChild
+			});
+
+		return result.rows;
 	}
 
 	// todo: move button to separate class?
@@ -188,7 +197,7 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 		if (!group.children) {
 			const { type, /* treeUid, */ expandedKeys } = this.state;
 
-			const children = await this.fetchClassifierGroups(type.code, /* treeCode */ null, group.uid)
+			const children = await this.fetchClassifierGroups(type.code, /* treeCode  null, */ group.uid, null, true)
 
 			// to populate new expanded keys
 			this.buildGroupsTree(children, expandedKeys);

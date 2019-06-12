@@ -36,7 +36,7 @@ namespace Montr.Metadata.Services
 					result.Fields = new List<FormField>
 					{
 						new StringField { Key = "code", Name = "Код", Required = true },
-						new TextAreaField { Key = "name", Name = "Наименование", Rows = 10 },
+						new TextAreaField { Key = "name", Name = "Наименование", Required = true, Rows = 10 },
 						new StringField { Key = "digitalCode", Name = "Цифровой код", Required = true },
 						new StringField { Key = "shortName", Name = "Краткое наименование" }
 					};
@@ -47,12 +47,12 @@ namespace Montr.Metadata.Services
 					{
 						// new StringField { Key = "statusCode", Name = "Статус", Readonly = true },
 						new StringField { Key = "code", Name = "Код", Required = true },
-						new TextAreaField { Key = "name", Name = "Наименование", Rows = 10 }
+						new TextAreaField { Key = "name", Name = "Наименование", Required = true, Rows = 10 }
 					};
 				}
 			}
 
-			if (viewId.StartsWith("ClassifierGroup/"))
+			if (viewId == "ClassifierGroup/Form")
 			{
 				result.Fields = new List<FormField>
 				{
@@ -70,12 +70,14 @@ namespace Montr.Metadata.Services
 					new StringField { Key = "code", Name = "Код", Required = true },
 					new TextAreaField { Key = "name", Name = "Наименование", Rows = 2, Required = true },
 					new TextAreaField { Key = "description", Name = "Описание" },
-					new SelectField { Key = "hierarchyType", Name = "Иерархия", Options = new []
-					{
-						new SelectFieldOption { Value = "None", Name = "Нет" },
-						new SelectFieldOption { Value = "Groups", Name = "Группы" },
-						new SelectFieldOption { Value = "Items", Name = "Элементы" }
-					}},
+					new SelectField { Key = "hierarchyType", Name = "Иерархия",
+						Description = "Справочник может быть без иерархии, с иерархией групп (например, контрагентов можно распределить по группам по их регионам, размеру или отношению к нашей организации) или иерархией элементов (например, одни виды деятельности уточняются другими видами деятельности)",
+						Options = new []
+						{
+							new SelectFieldOption { Value = "None", Name = "Нет" },
+							new SelectFieldOption { Value = "Groups", Name = "Группы" },
+							new SelectFieldOption { Value = "Items", Name = "Элементы" }
+						}},
 				};
 			}
 
@@ -83,8 +85,9 @@ namespace Montr.Metadata.Services
 			{
 				result.Columns = new List<DataColumn>
 				{
-					new DataColumn { Key = "name", Name = "Наименование", Sortable = true, Width = 400, UrlProperty = "url" },
-					new DataColumn { Key = "default", Name = "По умолчанию", Width = 10 },
+					new DataColumn { Key = "name", Name = "Наименование", Sortable = true, Width = 400 },
+					// new DataColumn { Key = "default", Name = "По умолчанию", Width = 10 },
+					new DataColumn { Key = "code", Name = "Код", Sortable = true, Width = 10 },
 				};
 			}
 			else if (viewId.StartsWith("ClassifierType/Grid"))

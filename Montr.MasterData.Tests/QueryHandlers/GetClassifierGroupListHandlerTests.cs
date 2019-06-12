@@ -42,8 +42,8 @@ namespace Montr.MasterData.Tests.QueryHandlers
 
 			// assert
 			Assert.IsNotNull(result);
-			Assert.AreEqual(1, result.Count);
-			Assert.AreEqual(ClassifierGroup.DefaultRootCode, result[0].Code);
+			Assert.AreEqual(1, result.Rows.Count);
+			Assert.AreEqual(ClassifierGroup.DefaultRootCode, result.Rows[0].Code);
 		}
 
 		[TestMethod]
@@ -74,7 +74,7 @@ namespace Montr.MasterData.Tests.QueryHandlers
 
 			// assert
 			Assert.IsNotNull(result);
-			Assert.AreEqual(7, result.Count);
+			Assert.AreEqual(7, result.Rows.Count);
 		}
 
 		private async Task<DbClassifierGroup> FindClassifierGroup(IDbContextFactory dbContextFactory, string typeCode, string code, CancellationToken cancellationToken)
@@ -115,7 +115,8 @@ namespace Montr.MasterData.Tests.QueryHandlers
 				Request = new ClassifierGroupSearchRequest
 				{
 					CompanyUid = Constants.OperatorCompanyUid,
-					TypeCode = "okved2"
+					TypeCode = "okved2",
+					PageSize = 100
 				}
 			};
 
@@ -123,7 +124,7 @@ namespace Montr.MasterData.Tests.QueryHandlers
 
 			// assert
 			Assert.IsNotNull(result);
-			Assert.AreEqual(21, result.Count);
+			Assert.AreEqual(21, result.Rows.Count);
 		}
 
 		[TestMethod]
@@ -165,7 +166,7 @@ namespace Montr.MasterData.Tests.QueryHandlers
 
 			// assert
 			Assert.IsNotNull(result);
-			Assert.AreEqual(3, result.Count);
+			Assert.AreEqual(3, result.Rows.Count);
 		}
 
 		[TestMethod, Ignore]
@@ -198,7 +199,7 @@ namespace Montr.MasterData.Tests.QueryHandlers
 
 			// assert
 			Assert.IsNotNull(result);
-			Assert.IsTrue(result.Count <= 1000);
+			Assert.IsTrue(result.Rows.Count <= 1000);
 		}
 
 		// todo: generate deep tree
@@ -230,14 +231,14 @@ namespace Montr.MasterData.Tests.QueryHandlers
 
 			// assert
 			Assert.IsNotNull(result);
-			Assert.AreEqual(4, result.Count);
-			Assert.IsNull(result[0].Children);
-			Assert.IsNull(result[1].Children);
+			Assert.AreEqual(4, result.Rows.Count);
+			Assert.IsNull(result.Rows[0].Children);
+			Assert.IsNull(result.Rows[1].Children);
 
-			Assert.IsNotNull(result[2].Children); // 3. ЧЕТЫРЕХЗНАЧНЫЕ НАЦИОНАЛЬНЫЕ ЕДИНИЦЫ ИЗМЕНЕНИЯ, ВКЛЮЧЕННЫЕ В ОКЕИ
-			Assert.AreEqual(result[2].Children.Count, 3);
+			Assert.IsNotNull(result.Rows[2].Children); // 3. ЧЕТЫРЕХЗНАЧНЫЕ НАЦИОНАЛЬНЫЕ ЕДИНИЦЫ ИЗМЕНЕНИЯ, ВКЛЮЧЕННЫЕ В ОКЕИ
+			Assert.AreEqual(result.Rows[2].Children.Count, 3);
 
-			Assert.IsNull(result[3].Children);
+			Assert.IsNull(result.Rows[3].Children);
 		}
 	}
 }

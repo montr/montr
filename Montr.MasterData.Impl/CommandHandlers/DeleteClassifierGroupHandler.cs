@@ -52,6 +52,8 @@ namespace Montr.MasterData.Impl.CommandHandlers
 						var group = await db.GetTable<DbClassifierGroup>()
 							.SingleAsync(x => x.TypeUid == type.Uid && x.Uid == request.Uid, cancellationToken);
 
+						// todo: validate - do not delete root group if children exists
+						// todo: validate - do not delete or change code for default root
 						await closureTable.Delete(group.Uid, group.ParentUid, cancellationToken);
 
 						// reset parent of groups

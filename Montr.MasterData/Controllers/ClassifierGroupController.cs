@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Montr.Core.Models;
 using Montr.MasterData.Commands;
 using Montr.MasterData.Models;
 using Montr.MasterData.Queries;
@@ -24,7 +24,7 @@ namespace Montr.MasterData.Controllers
 		}
 
 		[HttpPost]
-		public async Task<IEnumerable<ClassifierGroup>> List(ClassifierGroupSearchRequest request)
+		public async Task<SearchResult<ClassifierGroup>> List(ClassifierGroupSearchRequest request)
 		{
 			return await _mediator.Send(new GetClassifierGroupList
 			{

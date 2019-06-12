@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Page, DataTable, PageHeader, Toolbar } from "@montr-core/components";
+import { Page, PageHeader, Toolbar, DataTable, DataTableUpdateToken } from "@montr-core/components";
 import { Constants } from "@montr-core/.";
 import { withCompanyContext, CompanyContextProps } from "@kompany/components";
 import { ClassifierBreadcrumb } from "../components";
@@ -7,7 +7,6 @@ import { Link } from "react-router-dom";
 import { Button, Icon } from "antd";
 import { ClassifierTypeService } from "../services";
 import { NotificationService } from "@montr-core/services";
-import { IClassifierType } from "../models";
 import { IDataResult } from "@montr-core/models";
 
 interface IProps extends CompanyContextProps {
@@ -15,7 +14,7 @@ interface IProps extends CompanyContextProps {
 
 interface IState {
 	selectedRowKeys: string[] | number[];
-	postParams: any;
+	updateTableToken: DataTableUpdateToken;
 }
 
 class _SearchClassifierType extends React.Component<IProps, IState> {
@@ -28,19 +27,16 @@ class _SearchClassifierType extends React.Component<IProps, IState> {
 
 		this.state = {
 			selectedRowKeys: [],
-			postParams: {
-				companyUid: null
-			}
+			updateTableToken: { date: new Date() }
 		};
 	}
 
 	componentDidMount = async () => {
-		await this.setPostParams();
 	}
 
 	componentDidUpdate = async (prevProps: IProps) => {
 		if (this.props.currentCompany !== prevProps.currentCompany) {
-			await this.setPostParams();
+			this.refreshTable(true);
 		}
 	}
 
@@ -48,46 +44,52 @@ class _SearchClassifierType extends React.Component<IProps, IState> {
 		await this._classifierTypeService.abort();
 	}
 
-	private setPostParams = async () => {
-		const { currentCompany } = this.props,
-			{ postParams } = this.state;
-
-		const companyUid = currentCompany ? currentCompany.uid : null;
-
-		this.setState({
-			postParams: {
-				companyUid: companyUid
-			}
-		});
-	}
-
-	private onSelectionChange = async (selectedRowKeys: string[] | number[]) => {
+	onSelectionChange = async (selectedRowKeys: string[] | number[]) => {
 		this.setState({ selectedRowKeys });
 	}
 
-	private delete = async () => {
+	// todo: show confirm
+	// todo: localize
+	delete = async () => {
 		try {
 			const rowsAffected = await this._classifierTypeService
 				.delete(this.props.currentCompany.uid, this.state.selectedRowKeys);
 
 			this._notificationService.success("Выбранные записи удалены. " + rowsAffected);
 
-			this.setPostParams(); // to force table refresh
+			this.refreshTable(true);
 		} catch (error) {
 			this._notificationService.error("Ошибка при удалении данных", error.message);
 		}
 	}
 
 	onLoadTableData = async (loadUrl: string, postParams: any): Promise<IDataResult<{}>> => {
-		return await this._classifierTypeService.post(loadUrl, Object.assign(postParams, this.state.postParams));
+		const { currentCompany } = this.props;
+
+		if (currentCompany) {
+
+			const params = {
+				companyUid: currentCompany.uid,
+				...postParams
+			};
+
+			return await this._classifierTypeService.post(loadUrl, params);
+		}
+
+		return null;
+	}
+
+	refreshTable = async (resetSelectedRows?: boolean) => {
+		this.setState({
+			updateTableToken: { date: new Date(), resetSelectedRows }
+		});
 	}
 
 	render = () => {
-		const { postParams } = this.state;
-
-		if (postParams.companyUid == null) return null;
+		const { updateTableToken } = this.state;
 
 		return (
+			// todo: localize
 			<Page
 				title={<>
 					<Toolbar float="right">
@@ -105,9 +107,9 @@ class _SearchClassifierType extends React.Component<IProps, IState> {
 					rowKey="uid"
 					viewId={`ClassifierType/Grid/`}
 					loadUrl={`${Constants.baseURL}/classifierType/list/`}
-					// postParams={this.state.postParams}
 					onLoadData={this.onLoadTableData}
 					onSelectionChange={this.onSelectionChange}
+					updateToken={updateTableToken}
 				/>
 
 			</Page>

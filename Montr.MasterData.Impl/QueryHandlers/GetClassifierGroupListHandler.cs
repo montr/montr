@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using LinqToDB;
 using MediatR;
 using Montr.Core.Models;
+using Montr.Core.Services;
 using Montr.Data.Linq2Db;
 using Montr.MasterData.Impl.Entities;
 using Montr.MasterData.Models;
@@ -14,7 +15,7 @@ using Montr.MasterData.Services;
 
 namespace Montr.MasterData.Impl.QueryHandlers
 {
-	public class GetClassifierGroupListHandler : IRequestHandler<GetClassifierGroupList, IList<ClassifierGroup>>
+	public class GetClassifierGroupListHandler : IRequestHandler<GetClassifierGroupList, SearchResult<ClassifierGroup>>
 	{
 		private readonly IDbContextFactory _dbContextFactory;
 		private readonly IClassifierTypeService _classifierTypeService;
@@ -25,7 +26,7 @@ namespace Montr.MasterData.Impl.QueryHandlers
 			_classifierTypeService = classifierTypeService;
 		}
 
-		public async Task<IList<ClassifierGroup>> Handle(GetClassifierGroupList command, CancellationToken cancellationToken)
+		public async Task<SearchResult<ClassifierGroup>> Handle(GetClassifierGroupList command, CancellationToken cancellationToken)
 		{
 			var request = command.Request ?? throw new ArgumentNullException(nameof(command.Request));
 
@@ -51,28 +52,37 @@ namespace Montr.MasterData.Impl.QueryHandlers
 									closureDown.Level == 1 && result.ParentUid != null)
 							select result;
 
-						var children = Materialize(query);
+						var children = await Materialize(query, request, false);
 
 						// var roots = GetGroupsByParent(db, type, /*request.TreeCode,*/ null, false);
 
-						LinkChildrenToRoots(children /*, roots*/);
+						LinkChildrenToRoots(children.Rows /*, roots*/);
 
 						// return roots;
-						var root = children.SingleOrDefault(x => x.ParentUid == null);
+						var root = children.Rows.SingleOrDefault(x => x.ParentUid == null);
 
-						return root != null ? root.Children : ImmutableList<ClassifierGroup>.Empty;
+						if (root != null)
+						{
+							return new SearchResult<ClassifierGroup>
+							{
+								Rows = root.Children
+							};
+						}
+
+						return null;
 					}
 
-					return GetGroupsByParent(db, type, /*request.TreeCode,*/ request.ParentUid, true);
+					return await GetGroupsByParent(db, type, /*request.TreeCode,*/ request.ParentUid, request, true);
 				}
 				
 				if (type.HierarchyType == HierarchyType.Items)
 				{
-					return GetItemsByParent(db, type, request.ParentUid, true);
+					return await GetItemsByParent(db, type, request.ParentUid, request, true);
 				}
 			}
 
-			return ImmutableList<ClassifierGroup>.Empty;
+			// return ImmutableList<ClassifierGroup>.Empty;
+			return null;
 		}
 
 		private static void LinkChildrenToRoots(IList<ClassifierGroup> children/*, IList<ClassifierGroup> roots*/)
@@ -104,7 +114,8 @@ namespace Montr.MasterData.Impl.QueryHandlers
 			}
 		}
 
-		private static IList<ClassifierGroup> GetItemsByParent(DbContext db, ClassifierType type, Guid? parentUid, bool expandSingleChild)
+		private static async Task<SearchResult<ClassifierGroup>> GetItemsByParent(DbContext db,
+			ClassifierType type, Guid? parentUid, ClassifierGroupSearchRequest request, bool calculateTotalCount)
 		{
 			IQueryable<DbClassifier> query;
 
@@ -125,17 +136,20 @@ namespace Montr.MasterData.Impl.QueryHandlers
 					select item;
 			}
 
-			var result = Materialize(query);
+			var result = await Materialize(query, request, calculateTotalCount);
 
-			if (expandSingleChild && result.Count == 1)
+			if (request.ExpandSingleChild && result.Rows.Count == 1)
 			{
-				result[0].Children = GetItemsByParent(db, type, result[0].Uid, true);
+				var children = await GetItemsByParent(db, type, result.Rows[0].Uid, request, false);
+
+				result.Rows[0].Children = children.Rows;
 			}
 
 			return result;
 		}
 
-		private static IList<ClassifierGroup> GetGroupsByParent(DbContext db, ClassifierType type, /*string treeCode,*/ Guid? parentUid, bool expandSingleChild)
+		private static async Task<SearchResult<ClassifierGroup>> GetGroupsByParent(DbContext db,
+			ClassifierType type, /*string treeCode,*/ Guid? parentUid, ClassifierGroupSearchRequest request, bool calculateTotalCount)
 		{
 			IQueryable<DbClassifierGroup> query;
 
@@ -161,22 +175,25 @@ namespace Montr.MasterData.Impl.QueryHandlers
 					select item;
 			}
 
-			var result = Materialize(query);
+			var result = await Materialize(query, request, calculateTotalCount);
 
-			if (expandSingleChild && result.Count == 1)
+			if (request.ExpandSingleChild && result.Rows.Count == 1)
 			{
-				result[0].Children = GetGroupsByParent(db, type, /*treeCode,*/ result[0].Uid, true);
+				var children = await GetGroupsByParent(db, type, /*treeCode,*/ result.Rows[0].Uid, request, false);
+
+				result.Rows[0].Children = children.Rows;
 			}
 
 			return result;
 		}
 
-		private static IList<ClassifierGroup> Materialize(IQueryable<DbClassifierGroup> query)
+		private static async Task<SearchResult<ClassifierGroup>> Materialize(IQueryable<DbClassifierGroup> query, Paging paging, bool calculateTotalCount)
 		{
-			return query
-				.OrderBy(x => x.Code)
+			var data = query
+				/*.OrderBy(x => x.Code)
 				.ThenBy(x => x.Name)
-				.Take(Paging.MaxPageSize)
+				.Take(Paging.MaxPageSize)*/
+				.Apply(paging, x => x.Code)
 				.Select(x => new ClassifierGroup
 				{
 					Uid = x.Uid,
@@ -185,15 +202,28 @@ namespace Montr.MasterData.Impl.QueryHandlers
 					ParentUid = x.ParentUid
 				})
 				.ToList();
+
+            var result = new SearchResult<ClassifierGroup>
+            {
+	            Rows = data
+            };
+
+            if (calculateTotalCount)
+            {
+	            result.TotalCount = await query.CountAsync();
+            }
+
+            return result;
 		}
 
-		private static IList<ClassifierGroup> Materialize(IQueryable<DbClassifier> query)
+		private static async Task<SearchResult<ClassifierGroup>> Materialize(IQueryable<DbClassifier> query, Paging paging, bool calculateTotalCount)
 		{
-			return query
-				.OrderBy(x => x.StatusCode)
+			var data = query
+				/*.OrderBy(x => x.StatusCode)
 				.ThenBy(x => x.Code)
 				.ThenBy(x => x.Name)
-				.Take(Paging.MaxPageSize)
+				.Take(Paging.MaxPageSize)*/
+				.Apply(paging, x => x.Code)
 				.Select(x => new ClassifierGroup
 				{
 					Uid = x.Uid,
@@ -202,6 +232,18 @@ namespace Montr.MasterData.Impl.QueryHandlers
 					ParentUid = x.ParentUid
 				})
 				.ToList();
+
+			var result = new SearchResult<ClassifierGroup>
+			{
+				Rows = data
+			};
+
+			if (calculateTotalCount)
+			{
+				result.TotalCount = await query.CountAsync();
+			}
+
+			return result;
 		}
 	}
 }

@@ -77,13 +77,13 @@ class _ClassifierSelect extends React.Component<IProps, IState> {
 
 		if (currentCompany) {
 			const groups = await this._classifierGroupService.list(
-				currentCompany.uid, { typeCode: field.typeCode, treeCode: field.treeCode, focusUid: value });
+				currentCompany.uid, { typeCode: field.typeCode, /* treeCode: field.treeCode, */ focusUid: value });
 
 			const expanded: Guid[] = [];
 			// todo: only to detect expanded nodes
-			/* const treeData = */ this.buildTree(groups, expanded);
+			/* const treeData = */ this.buildTree(groups.rows, expanded);
 
-			this.setState({ loading: false, groups, expanded /* , treeData */ });
+			this.setState({ loading: false, groups: groups.rows, expanded /* , treeData */ });
 		}
 	}
 
@@ -108,11 +108,11 @@ class _ClassifierSelect extends React.Component<IProps, IState> {
 			const { currentCompany, field } = this.props,
 				{ groups } = this.state;
 
-			group.children = await this._classifierGroupService.list(
-				currentCompany.uid, { typeCode: field.typeCode, treeCode: field.treeCode, parentUid: group.uid });
+			const children = await this._classifierGroupService.list(
+				currentCompany.uid, { typeCode: field.typeCode, /* treeCode: field.treeCode, */ parentUid: group.uid });
 
-			// todo: store in state real data and build tree nodes in render (like in search-classifier.tsx)
-			// this.setState({ treeData: this.buildTree(groups) });
+			group.children = children.rows;
+
 			this.setState({ groups });
 
 			resolve();

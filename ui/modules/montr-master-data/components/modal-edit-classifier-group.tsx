@@ -12,7 +12,8 @@ interface IProps extends CompanyContextProps {
 	treeCode: string,
 	uid?: Guid;
 	parentUid?: Guid;
-	onSuccess?: (data: IClassifierGroup) => void
+	hideFields?: string[];
+	onSuccess?: (data: IClassifierGroup) => void;
 	onCancel?: () => void;
 }
 
@@ -49,15 +50,19 @@ class _ModalEditClassifierGroup extends React.Component<IProps, IState> {
 	}
 
 	fetchData = async () => {
-		const { currentCompany, typeCode, treeCode, uid, parentUid } = this.props;
+		const { currentCompany, typeCode, treeCode, uid, parentUid, hideFields } = this.props;
 
 		if (currentCompany) {
 
 			try {
 
-				const dataView = await this._metadataService.load(`ClassifierGroup/${typeCode}`);
+				const dataView = await this._metadataService.load(`ClassifierGroup/Form`);
 
-				const parentUidField = dataView.fields.find(x => x.key == "parentUid") as IClassifierField;
+				const fields = hideFields
+					? dataView.fields.filter(x => hideFields.includes(x.key) == false)
+					: dataView.fields;
+
+				const parentUidField = fields.find(x => x.key == "parentUid") as IClassifierField;
 
 				if (parentUidField) {
 					parentUidField.typeCode = typeCode;
@@ -74,7 +79,7 @@ class _ModalEditClassifierGroup extends React.Component<IProps, IState> {
 					data = { parentUid: parentUid };
 				}
 
-				this.setState({ loading: false, fields: dataView.fields, data });
+				this.setState({ loading: false, fields, data });
 
 			} catch (error) {
 				this._notificationService.error("Ошибка при загрузке данных", error.message);
