@@ -191,6 +191,18 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 		this.setState({ selectedRowKeys });
 	}
 
+	onTreeRootSelect = async (value: string) => {
+		const { trees } = this.state;
+
+		const tree = trees.find(x => x.code == value);
+
+		if (tree) {
+			this.setState({ treeUid: tree.uid });
+
+			this.loadClassifierGroups();
+		}
+	}
+
 	onTreeLoadData = async (node: AntTreeNode) => new Promise(async (resolve) => {
 		const group: IClassifierGroup = node.props.dataRef;
 
@@ -343,7 +355,7 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 		let groupControls;
 		if (type.hierarchyType == "Groups") {
 			groupControls = <>
-				<Select defaultValue="default" size="small">
+				<Select defaultValue="default" size="small" onSelect={this.onTreeRootSelect}>
 					{trees && trees.map(x => <Select.Option key={x.code}>{x.name || x.code}</Select.Option>)}
 				</Select>
 				<Button.Group size="small">
