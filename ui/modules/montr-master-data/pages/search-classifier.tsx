@@ -197,9 +197,9 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 		const tree = trees.find(x => x.code == value);
 
 		if (tree) {
-			this.setState({ treeUid: tree.uid });
-
-			this.loadClassifierGroups();
+			// https://reactjs.org/docs/react-component.html#setstate - Generally we recommend using componentDidUpdate()
+			// todo: rewrite using componentDidUpdate() instead of callback in setState
+			this.setState({ treeUid: tree.uid }, () => this.loadClassifierGroups());
 		}
 	}
 
