@@ -204,7 +204,7 @@ namespace Montr.MasterData.Tests.QueryHandlers
 
 		// todo: generate deep tree
 		[TestMethod]
-		public async Task GetGroups_WithFocusUid_ReturnAllChildrenOfParentGroups()
+		public async Task GetGroups_WithFocusUid_ReturnChildrenOfEachParentGroups()
 		{
 			// arrange
 			var cancellationToken = CancellationToken.None;
@@ -213,32 +213,58 @@ namespace Montr.MasterData.Tests.QueryHandlers
 			var classifierTypeService = new DefaultClassifierTypeService(classifierTypeRepository);
 
 			var handler = new GetClassifierGroupListHandler(dbContextFactory, classifierTypeService);
-			var focusGroup = await FindClassifierGroup(dbContextFactory, "okei", "3.7", cancellationToken);
+			var rootGroup = await FindClassifierGroup(dbContextFactory, "okei", "default", cancellationToken);
+			var focusGroup = await FindClassifierGroup(dbContextFactory, "okei", "3.7", cancellationToken); // 3.7. Экономические единицы
 
-			// act
+			// act & assert - focus in root scope
 			var command = new GetClassifierGroupList
 			{
 				Request = new ClassifierGroupSearchRequest
 				{
 					CompanyUid = Constants.OperatorCompanyUid,
 					TypeCode = "okei",
-					// TreeCode = "default",
-					FocusUid = focusGroup.Uid // 3.7. Экономические единицы
+					ParentUid = null,
+					FocusUid = focusGroup.Uid 
+					// PageSize = 100 // todo: common limit for all levels is not ok
 				}
 			};
 
 			var result = await handler.Handle(command, cancellationToken);
 
-			// assert
+			// todo: pretty print and compare by focus.txt
+			Assert.IsNotNull(result);
+			Assert.AreEqual(1, result.Rows.Count);
+			Assert.AreEqual(4, result.Rows[0].Children.Count);
+			Assert.IsNull(result.Rows[0].Children[0].Children);
+			Assert.IsNull(result.Rows[0].Children[1].Children);
+			Assert.IsNull(result.Rows[0].Children[3].Children);
+
+			Assert.IsNotNull(result.Rows[0].Children[2].Children); // 3. ЧЕТЫРЕХЗНАЧНЫЕ НАЦИОНАЛЬНЫЕ ЕДИНИЦЫ ИЗМЕНЕНИЯ, ВКЛЮЧЕННЫЕ В ОКЕИ
+			Assert.AreEqual(result.Rows[0].Children[2].Children.Count, 3);
+
+			// act & assert - focus in scope of selected parent
+			command = new GetClassifierGroupList
+			{
+				Request = new ClassifierGroupSearchRequest
+				{
+					CompanyUid = Constants.OperatorCompanyUid,
+					TypeCode = "okei",
+					ParentUid = rootGroup.Uid,
+					FocusUid = focusGroup.Uid 
+				}
+			};
+
+			result = await handler.Handle(command, cancellationToken);
+
+			// todo: pretty print and compare by focus.txt
 			Assert.IsNotNull(result);
 			Assert.AreEqual(4, result.Rows.Count);
 			Assert.IsNull(result.Rows[0].Children);
 			Assert.IsNull(result.Rows[1].Children);
+			Assert.IsNull(result.Rows[3].Children);
 
 			Assert.IsNotNull(result.Rows[2].Children); // 3. ЧЕТЫРЕХЗНАЧНЫЕ НАЦИОНАЛЬНЫЕ ЕДИНИЦЫ ИЗМЕНЕНИЯ, ВКЛЮЧЕННЫЕ В ОКЕИ
 			Assert.AreEqual(result.Rows[2].Children.Count, 3);
-
-			Assert.IsNull(result.Rows[3].Children);
 		}
 	}
 }

@@ -38,41 +38,10 @@ namespace Montr.MasterData.Impl.QueryHandlers
 				{
 					if (request.FocusUid != null)
 					{
-						var query = from /*tree in db.GetTable<DbClassifierTree>()
-							join*/ focus in db.GetTable<DbClassifierGroup>() // on tree.Uid equals focus.TreeUid
-							join closureUp in db.GetTable<DbClassifierClosure>() on focus.Uid equals closureUp.ChildUid
-							join closureDown in db.GetTable<DbClassifierClosure>() on closureUp.ParentUid equals closureDown.ParentUid
-							join result in db.GetTable<DbClassifierGroup>() on closureDown.ChildUid equals result.Uid
-							where focus.TypeUid == type.Uid
-								// && tree.Code == request.TreeCode
-								&& focus.Uid == request.FocusUid
-								&& closureUp.Level > 0 // to exclude just focused group
-								// && result.ParentUid != null // ???
-								&& (closureDown.Level == 0 && result.ParentUid == null ||
-									closureDown.Level == 1 && result.ParentUid != null)
-							select result;
-
-						var children = await Materialize(query, request, false);
-
-						// var roots = GetGroupsByParent(db, type, /*request.TreeCode,*/ null, false);
-
-						LinkChildrenToRoots(children.Rows /*, roots*/);
-
-						// return roots;
-						var root = children.Rows.SingleOrDefault(x => x.ParentUid == null);
-
-						if (root != null)
-						{
-							return new SearchResult<ClassifierGroup>
-							{
-								Rows = root.Children
-							};
-						}
-
-						return null;
+						return await GetGroupsByFocus(db, type, request, cancellationToken);
 					}
 
-					return await GetGroupsByParent(db, type, /*request.TreeCode,*/ request.ParentUid, request, true);
+					return await GetGroupsByParent(db, type, request.ParentUid, request, true);
 				}
 				
 				if (type.HierarchyType == HierarchyType.Items)
@@ -81,119 +50,68 @@ namespace Montr.MasterData.Impl.QueryHandlers
 				}
 			}
 
-			// return ImmutableList<ClassifierGroup>.Empty;
 			return null;
 		}
 
-		private static void LinkChildrenToRoots(IList<ClassifierGroup> children/*, IList<ClassifierGroup> roots*/)
+		private static async Task<SearchResult<ClassifierGroup>> GetGroupsByFocus(DbContext db,
+			ClassifierType type, ClassifierGroupSearchRequest request, CancellationToken cancellationToken)
 		{
-			var map = children.ToDictionary(x => x.Uid);
+			var path = await (
+					from focus in db.GetTable<DbClassifierGroup>()
+					join closureUp in db.GetTable<DbClassifierClosure>() on focus.Uid equals closureUp.ChildUid
+					join item in db.GetTable<DbClassifierGroup>() on closureUp.ParentUid equals item.Uid
+					where focus.TypeUid == type.Uid && focus.Uid == request.FocusUid
+					orderby closureUp.Level descending
+					select item.ParentUid)
+				.ToListAsync(cancellationToken);
 
-			foreach (var child in children)
+			SearchResult<ClassifierGroup> result = null;
+
+			List<ClassifierGroup> currentLevel = null;
+
+			foreach (var parentUid in path)
 			{
-				if (child.ParentUid.HasValue)
+				if (parentUid == request.ParentUid)
 				{
-					var parent = map[child.ParentUid.Value];
-
-					if (parent.Children == null)
+					// found requested parent, init result and starting level
+					result = new SearchResult<ClassifierGroup>
 					{
-						parent.Children = new List<ClassifierGroup>();
-					}
-
-					parent.Children.Add(child);
+						Rows = currentLevel = new List<ClassifierGroup>()
+					};
 				}
-				/*else
+
+				// if current level is not already inited
+				if (currentLevel == null) continue;
+
+				// try to move to deeper level...
+				if (parentUid.HasValue)
 				{
-					if (child.Children == null)
+					var parent = currentLevel.SingleOrDefault(x => x.Uid == parentUid);
+
+					if (parent != null)
 					{
-						var root = roots.Single(x => x.Uid == child.Uid);
-
-						root.Children = child.Children = new List<ClassifierGroup>();
+						parent.Children = currentLevel = new List<ClassifierGroup>();
 					}
-				}*/
-			}
-		}
+				}
 
-		private static async Task<SearchResult<ClassifierGroup>> GetItemsByParent(DbContext db,
-			ClassifierType type, Guid? parentUid, ClassifierGroupSearchRequest request, bool calculateTotalCount)
-		{
-			IQueryable<DbClassifier> query;
+				// ... and load children
+				var chldrn = await GetGroupsByParent(db, type, parentUid, request, false);
 
-			if (parentUid != null)
-			{
-				query = from item in db.GetTable<DbClassifier>()
-					join parent in db.GetTable<DbClassifier>() on item.ParentUid equals parent.Uid
-					where item.TypeUid == type.Uid
-						&& parent.Uid == parentUid
-					select item;
-			}
-			else
-			{
-				query = from item in db.GetTable<DbClassifier>()
-					where item.TypeUid == type.Uid
-						&& item.ParentUid == null
-					orderby item.StatusCode, item.Code, item.Name
-					select item;
-			}
-
-			var result = await Materialize(query, request, calculateTotalCount);
-
-			if (request.ExpandSingleChild && result.Rows.Count == 1)
-			{
-				var children = await GetItemsByParent(db, type, result.Rows[0].Uid, request, false);
-
-				result.Rows[0].Children = children.Rows;
+				currentLevel.AddRange(chldrn.Rows);
 			}
 
 			return result;
 		}
 
 		private static async Task<SearchResult<ClassifierGroup>> GetGroupsByParent(DbContext db,
-			ClassifierType type, /*string treeCode,*/ Guid? parentUid, ClassifierGroupSearchRequest request, bool calculateTotalCount)
+			ClassifierType type, Guid? parentUid, ClassifierGroupSearchRequest request, bool calculateTotalCount)
 		{
-			IQueryable<DbClassifierGroup> query;
+			var query = from item in db.GetTable<DbClassifierGroup>()
+				where item.TypeUid == type.Uid && item.ParentUid == parentUid
+				select item;
 
-			/*if (parentUid != null)
-			{
-				query = from /*tree in db.GetTable<DbClassifierTree>()
-					join#1# item in db.GetTable<DbClassifierGroup>() // on tree.Uid equals item.TreeUid
-					// join parent in db.GetTable<DbClassifierGroup>() on item.ParentUid equals parent.Uid
-					where item.TypeUid == type.Uid
-					      && item.ParentUid == parentUid 
-					      /*&& tree.Code == treeCode
-						&& parent.Uid == parentUid#1#
-					select item;
-			}
-			else*/
-			{
-				query = from /*tree in db.GetTable<DbClassifierTree>()
-					join*/
-						item in db.GetTable<DbClassifierGroup>() // on tree.Uid equals item.TreeUid
-					where item.TypeUid == type.Uid
-					      // && tree.Code == treeCode
-					      && item.ParentUid == parentUid // null
-					select item;
-			}
-
-			var result = await Materialize(query, request, calculateTotalCount);
-
-			if (request.ExpandSingleChild && result.Rows.Count == 1)
-			{
-				var children = await GetGroupsByParent(db, type, /*treeCode,*/ result.Rows[0].Uid, request, false);
-
-				result.Rows[0].Children = children.Rows;
-			}
-
-			return result;
-		}
-
-		private static async Task<SearchResult<ClassifierGroup>> Materialize(IQueryable<DbClassifierGroup> query, Paging paging, bool calculateTotalCount)
-		{
 			var data = query
-				/*.OrderBy(x => x.Code)
-				.ThenBy(x => x.Name)
-				.Take(Paging.MaxPageSize)*/
-				.Apply(paging, x => x.Code)
+				.Apply(request, x => x.Code)
 				.Select(x => new ClassifierGroup
 				{
 					Uid = x.Uid,
@@ -203,44 +121,58 @@ namespace Montr.MasterData.Impl.QueryHandlers
 				})
 				.ToList();
 
-            var result = new SearchResult<ClassifierGroup>
-            {
-	            Rows = data
-            };
-
-            if (calculateTotalCount)
-            {
-	            result.TotalCount = await query.CountAsync();
-            }
-
-            return result;
-		}
-
-		private static async Task<SearchResult<ClassifierGroup>> Materialize(IQueryable<DbClassifier> query, Paging paging, bool calculateTotalCount)
-		{
-			var data = query
-				/*.OrderBy(x => x.StatusCode)
-				.ThenBy(x => x.Code)
-				.ThenBy(x => x.Name)
-				.Take(Paging.MaxPageSize)*/
-				.Apply(paging, x => x.Code)
-				.Select(x => new ClassifierGroup
-				{
-					Uid = x.Uid,
-					Code = x.Code,
-					Name = x.Name,
-					ParentUid = x.ParentUid
-				})
-				.ToList();
-
-			var result = new SearchResult<ClassifierGroup>
-			{
-				Rows = data
-			};
+			var result = new SearchResult<ClassifierGroup> { Rows = data };
 
 			if (calculateTotalCount)
 			{
 				result.TotalCount = await query.CountAsync();
+			}
+
+			if (request.ExpandSingleChild && data.Count == 1)
+			{
+				var singleChild = data[0];
+
+				var children = await GetGroupsByParent(db, type, singleChild.Uid, request, false);
+
+				singleChild.Children = children.Rows;
+			}
+
+			return result;
+		}
+        
+		private static async Task<SearchResult<ClassifierGroup>> GetItemsByParent(DbContext db,
+			ClassifierType type, Guid? parentUid, ClassifierGroupSearchRequest request, bool calculateTotalCount)
+		{
+			var query = from item in db.GetTable<DbClassifier>()
+				where item.TypeUid == type.Uid && item.ParentUid == parentUid
+				// orderby item.StatusCode, item.Code, item.Name
+				select item;
+
+			var data = query
+				.Apply(request, x => x.Code)
+				.Select(x => new ClassifierGroup
+				{
+					Uid = x.Uid,
+					Code = x.Code,
+					Name = x.Name,
+					ParentUid = x.ParentUid
+				})
+				.ToList();
+
+			var result = new SearchResult<ClassifierGroup> { Rows = data };
+
+			if (calculateTotalCount)
+			{
+				result.TotalCount = await query.CountAsync();
+			}
+
+			if (request.ExpandSingleChild && result.Rows.Count == 1)
+			{
+				var singleChild = data[0];
+
+				var children = await GetItemsByParent(db, type, singleChild.Uid, request, false);
+
+				singleChild.Children = children.Rows;
 			}
 
 			return result;
