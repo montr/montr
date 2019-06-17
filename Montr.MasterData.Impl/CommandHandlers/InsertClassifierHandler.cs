@@ -56,6 +56,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 					}
 
 					// компания + todo: дата изменения
+					// todo: link to selected group or root group
 
 					await db.GetTable<DbClassifier>()
 						.Value(x => x.Uid, itemUid)

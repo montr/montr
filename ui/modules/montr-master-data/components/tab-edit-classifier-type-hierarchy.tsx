@@ -29,7 +29,6 @@ class _TabEditClassifierTypeHierarchy extends React.Component<IProps, IState> {
 		};
 	}
 
-
 	componentDidUpdate = async (prevProps: IProps) => {
 		if (this.props.currentCompany !== prevProps.currentCompany ||
 			this.props.type !== prevProps.type) {
@@ -79,7 +78,7 @@ class _TabEditClassifierTypeHierarchy extends React.Component<IProps, IState> {
 			onOk: async () => {
 				const { currentCompany, type } = this.props
 
-				await this._classifierGroupService.delete(currentCompany.uid, type.code, /* treeCode */ null, data.uid);
+				await this._classifierGroupService.delete(currentCompany.uid, type.code, data.uid);
 
 				this.refreshTable();
 			}
@@ -88,7 +87,7 @@ class _TabEditClassifierTypeHierarchy extends React.Component<IProps, IState> {
 
 	onGroupModalSuccess = async (data: IClassifierGroup) => {
 		this.setState({ groupEditData: null });
-		
+
 		await this.refreshTable();
 	}
 
@@ -128,7 +127,6 @@ class _TabEditClassifierTypeHierarchy extends React.Component<IProps, IState> {
 				{groupEditData &&
 					<ModalEditClassifierGroup
 						typeCode={type.code}
-						treeCode={/* treeCode */ null}
 						uid={groupEditData.uid}
 						hideFields={["parentUid"]}
 						onSuccess={this.onGroupModalSuccess}

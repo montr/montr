@@ -5,18 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Models\ClassifierTree.cs" />
-    <Compile Remove="Models\ClassifierTreeSearchRequest.cs" />
-    <Compile Remove="Queries\GetClassifierTreeList.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="Models\ClassifierTree.cs" />
-    <None Include="Models\ClassifierTreeSearchRequest.cs" />
-    <None Include="Queries\GetClassifierTreeList.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="MediatR" Version="7.0.0" />
 	<PackageReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>

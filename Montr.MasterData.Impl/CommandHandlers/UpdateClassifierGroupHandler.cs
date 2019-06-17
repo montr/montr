@@ -36,6 +36,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 			var item = request.Item ?? throw new ArgumentNullException(nameof(request.Item));
 
 			// todo: check group belongs to company
+			// todo: validate required fields
 			var type = await _classifierTypeService.GetClassifierType(request.CompanyUid, request.TypeCode, cancellationToken);
 
 			using (var scope = _unitOfWorkFactory.Create())

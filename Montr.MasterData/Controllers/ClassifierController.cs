@@ -23,16 +23,6 @@ namespace Montr.MasterData.Controllers
 			_currentUserProvider = currentUserProvider;
 		}
 
-		/*[HttpPost]
-		public async Task<SearchResult<ClassifierTree>> Trees(ClassifierTreeSearchRequest request)
-		{
-			return await _mediator.Send(new GetClassifierTreeList
-			{
-				UserUid = _currentUserProvider.GetUserUid(),
-				Request = request
-			});
-		}*/
-
 		[HttpPost]
 		public async Task<SearchResult<Classifier>> List(ClassifierSearchRequest request)
 		{

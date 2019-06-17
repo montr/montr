@@ -30,7 +30,7 @@ interface IState {
 	groupEditData?: IClassifierGroup;
 	expandedKeys: string[];
 	selectedRowKeys: string[] | number[];
-	depth: string;
+	depth: string; // todo: make enum
 	updateTableToken: DataTableUpdateToken;
 }
 
@@ -114,7 +114,6 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 
 			if (type.hierarchyType == "Groups") {
 				trees = await this.fetchClassifierGroups(type.code, null);
-				// trees = (await this._classifierService.trees(currentCompany.uid, type.code)).rows;
 
 				if (trees && trees.length > 0) {
 					treeUid = trees[0].uid;
@@ -141,24 +140,23 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 			let groups: IClassifierGroup[] = [];
 
 			if (type.hierarchyType == "Groups") {
-				groups = await this.fetchClassifierGroups(type.code, /* treeCode null, */ treeUid, focusGroupUid, true);
+				groups = await this.fetchClassifierGroups(type.code, treeUid, focusGroupUid, true);
 			}
 
 			if (type.hierarchyType == "Items") {
-				groups = await this.fetchClassifierGroups(type.code, /* null, */ null, focusGroupUid, true);
+				groups = await this.fetchClassifierGroups(type.code, null, focusGroupUid, true);
 			}
 
 			this.setState({ groups });
 		}
 	}
 
-	fetchClassifierGroups = async (typeCode: string, /* treeCode: string, */ parentUid?: Guid, focusUid?: Guid, expandSingleChild?: boolean): Promise<IClassifierGroup[]> => {
+	fetchClassifierGroups = async (typeCode: string, parentUid?: Guid, focusUid?: Guid, expandSingleChild?: boolean): Promise<IClassifierGroup[]> => {
 		const { currentCompany } = this.props
 
 		const result = await this._classifierGroupService.list(
 			currentCompany.uid, {
 				typeCode,
-				/* treeCode, */
 				parentUid,
 				focusUid,
 				expandSingleChild
@@ -199,7 +197,7 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 		if (tree) {
 			// https://reactjs.org/docs/react-component.html#setstate - Generally we recommend using componentDidUpdate()
 			// todo: rewrite using componentDidUpdate() instead of callback in setState
-			this.setState({ treeUid: tree.uid }, () => this.loadClassifierGroups());
+			this.setState({ treeUid: tree.uid, selectedGroup: null, expandedKeys: [] }, () => this.loadClassifierGroups());
 		}
 	}
 
@@ -207,9 +205,9 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 		const group: IClassifierGroup = node.props.dataRef;
 
 		if (!group.children) {
-			const { type, /* treeUid, */ expandedKeys } = this.state;
+			const { type, expandedKeys } = this.state;
 
-			const children = await this.fetchClassifierGroups(type.code, /* treeCode  null, */ group.uid, null, true)
+			const children = await this.fetchClassifierGroups(type.code, group.uid, null, true)
 
 			// to populate new expanded keys
 			this.buildGroupsTree(children, expandedKeys);
@@ -260,15 +258,15 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 	}
 
 	showAddGroupModal = () => {
-		const { selectedGroup } = this.state;
+		const { selectedGroup, treeUid } = this.state;
 
-		this.setState({ groupEditData: { parentUid: selectedGroup ? selectedGroup.uid : null } });
+		this.setState({ groupEditData: { parentUid: selectedGroup ? selectedGroup.uid : treeUid } });
 	}
 
 	showEditGroupModal = () => {
-		const { selectedGroup } = this.state;
+		const { selectedGroup, treeUid } = this.state;
 
-		this.setState({ groupEditData: { uid: selectedGroup ? selectedGroup.uid : null } });
+		this.setState({ groupEditData: { uid: selectedGroup ? selectedGroup.uid : treeUid } });
 	}
 
 	showDeleteGroupConfirm = () => {
@@ -281,9 +279,9 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 
 	deleteSelectedGroup = async () => {
 		const { currentCompany } = this.props
-		const { type, /* treeCode, */ selectedGroup } = this.state;
+		const { type, selectedGroup } = this.state;
 
-		await this._classifierGroupService.delete(currentCompany.uid, type.code, /* treeCode */ null, selectedGroup.uid);
+		await this._classifierGroupService.delete(currentCompany.uid, type.code, selectedGroup.uid);
 
 		this.setState({ selectedGroup: null });
 
@@ -343,7 +341,7 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 
 	render() {
 		const { currentCompany } = this.props,
-			{ types, type, treeUid, trees, groups, selectedGroup, groupEditData, expandedKeys, updateTableToken } = this.state;
+			{ types, type, trees, groups, selectedGroup, groupEditData, expandedKeys, updateTableToken } = this.state;
 
 		if (!currentCompany || !type) return null;
 
@@ -461,7 +459,6 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 				{groupEditData &&
 					<ModalEditClassifierGroup
 						typeCode={type.code}
-						treeCode={/* treeCode */ null}
 						uid={groupEditData.uid}
 						parentUid={groupEditData.parentUid}
 						onSuccess={this.onGroupModalSuccess}

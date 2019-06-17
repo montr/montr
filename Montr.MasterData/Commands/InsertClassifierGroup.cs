@@ -13,8 +13,6 @@ namespace Montr.MasterData.Commands
 
 		public string TypeCode { get; set; }
 		
-		// public string TreeCode { get; set; }
-
 		public ClassifierGroup Item { get; set; }
 
 		public class Result : ApiResult

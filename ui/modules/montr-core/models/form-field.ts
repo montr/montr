@@ -51,7 +51,7 @@ export interface IOption {
 
 export interface IClassifierField extends IFormField {
 	typeCode: string;
-	treeCode: string;
+	// treeCode: string;
 }
 
 export interface IFileField extends IFormField {

@@ -59,7 +59,7 @@ namespace Montr.Metadata.Services
 					// new StringField { Key = "statusCode", Name = "Статус", Readonly = true },
 					new StringField { Key = "code", Name = "Код", Required = true },
 					new StringField { Key = "name", Name = "Наименование", Required = true },
-					new ClassifierField { Key = "parentUid", Name = "Родительская группа" },
+					new ClassifierField { Key = "parentUid", Name = "Родительская группа", Required = true },
 				};
 			}
 

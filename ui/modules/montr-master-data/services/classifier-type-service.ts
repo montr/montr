@@ -3,7 +3,7 @@ import { Constants } from "@montr-core/.";
 import { Guid, IDataResult, IApiResult } from "@montr-core/models";
 import { IClassifierType } from "../models";
 
-interface GetClassifierType {
+interface IGetClassifierType {
 	typeCode?: string;
 	uid?: Guid | string;
 }
@@ -13,7 +13,7 @@ export class ClassifierTypeService extends Fetcher {
 		return this.post(`${Constants.baseURL}/classifierType/list`, { companyUid });
 	};
 
-	get = async (companyUid: Guid, request: GetClassifierType): Promise<IClassifierType> => {
+	get = async (companyUid: Guid, request: IGetClassifierType): Promise<IClassifierType> => {
 		return this.post(`${Constants.baseURL}/classifierType/get`, { companyUid, ...request });
 	};
 

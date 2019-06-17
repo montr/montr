@@ -9,7 +9,6 @@ import { DataForm, WrappedDataForm } from "@montr-core/components";
 
 interface IProps extends CompanyContextProps {
 	typeCode: string;
-	treeCode: string,
 	uid?: Guid;
 	parentUid?: Guid;
 	hideFields?: string[];
@@ -21,7 +20,6 @@ interface IState {
 	loading: boolean;
 	fields?: IFormField[];
 	data: IClassifierGroup;
-	// parent?: IClassifierGroup;
 }
 
 class _ModalEditClassifierGroup extends React.Component<IProps, IState> {
@@ -50,7 +48,7 @@ class _ModalEditClassifierGroup extends React.Component<IProps, IState> {
 	}
 
 	fetchData = async () => {
-		const { currentCompany, typeCode, treeCode, uid, parentUid, hideFields } = this.props;
+		const { currentCompany, typeCode, uid, parentUid, hideFields } = this.props;
 
 		if (currentCompany) {
 
@@ -66,13 +64,12 @@ class _ModalEditClassifierGroup extends React.Component<IProps, IState> {
 
 				if (parentUidField) {
 					parentUidField.typeCode = typeCode;
-					parentUidField.treeCode = treeCode;
 				}
 
 				let data;
 
 				if (uid) {
-					data = await this._classifierGroupService.get(currentCompany.uid, typeCode, treeCode, uid);
+					data = await this._classifierGroupService.get(currentCompany.uid, typeCode, uid);
 				}
 				else {
 					// todo: load defaults from server
@@ -101,7 +98,7 @@ class _ModalEditClassifierGroup extends React.Component<IProps, IState> {
 	}
 
 	save = async (values: IClassifierGroup): Promise<IApiResult> => {
-		const { typeCode, treeCode, uid, onSuccess } = this.props;
+		const { typeCode, uid, onSuccess } = this.props;
 		const { uid: companyUid } = this.props.currentCompany;
 
 		let data: IClassifierGroup,
@@ -110,10 +107,10 @@ class _ModalEditClassifierGroup extends React.Component<IProps, IState> {
 		if (uid) {
 			data = { uid: uid, ...values };
 
-			result = await this._classifierGroupService.update(companyUid, typeCode, treeCode, data);
+			result = await this._classifierGroupService.update(companyUid, typeCode, data);
 		}
 		else {
-			const insertResult = await this._classifierGroupService.insert(companyUid, typeCode, treeCode, values);
+			const insertResult = await this._classifierGroupService.insert(companyUid, typeCode, values);
 
 			data = { uid: insertResult.uid, ...values };
 
