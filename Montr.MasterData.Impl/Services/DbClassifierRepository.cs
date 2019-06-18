@@ -42,34 +42,37 @@ namespace Montr.MasterData.Impl.Services
 					// todo: send only selected group uid
 					var groupUid = request.GroupUid ?? request.TreeUid;
 
-					// show only selected group children
-					if (request.Depth == null || request.Depth == "0")
+					if (groupUid != null)
 					{
-						query = from types in db.GetTable<DbClassifierType>()
-							// join trees in db.GetTable<DbClassifierTree>() on types.Uid equals trees.TypeUid
-							join children_groups in db.GetTable<DbClassifierGroup>() on types.Uid equals children_groups.TypeUid
-							join links in db.GetTable<DbClassifierLink>() on children_groups.Uid equals links.GroupUid
-							join c in db.GetTable<DbClassifier>() on links.ItemUid equals c.Uid
-							where types.CompanyUid == request.CompanyUid &&
-								types.Code == request.TypeCode &&
-								// trees.Code == request.TreeCode &&
-								children_groups.Uid == groupUid
-								select c;
-					}
-					else
-					{
-						query = from types in db.GetTable<DbClassifierType>()
-							// join trees in db.GetTable<DbClassifierTree>() on types.Uid equals trees.TypeUid
-							join parent_groups in db.GetTable<DbClassifierGroup>() on types.Uid equals parent_groups.TypeUid
-							join closures in db.GetTable<DbClassifierClosure>() on parent_groups.Uid equals closures.ParentUid
-							join children_groups in db.GetTable<DbClassifierGroup>() on closures.ChildUid equals children_groups.Uid
-							join links in db.GetTable<DbClassifierLink>() on children_groups.Uid equals links.GroupUid
-							join c in db.GetTable<DbClassifier>() on links.ItemUid equals c.Uid
-							where types.CompanyUid == request.CompanyUid &&
-								types.Code == request.TypeCode &&
-								// trees.Code == request.TreeCode &&
-								parent_groups.Uid == groupUid
-								select c;
+						// show only selected group children
+						if (request.Depth == null || request.Depth == "0")
+						{
+							query = from types in db.GetTable<DbClassifierType>()
+								// join trees in db.GetTable<DbClassifierTree>() on types.Uid equals trees.TypeUid
+								join children_groups in db.GetTable<DbClassifierGroup>() on types.Uid equals children_groups.TypeUid
+								join links in db.GetTable<DbClassifierLink>() on children_groups.Uid equals links.GroupUid
+								join c in db.GetTable<DbClassifier>() on links.ItemUid equals c.Uid
+								where types.CompanyUid == request.CompanyUid &&
+									types.Code == request.TypeCode &&
+									// trees.Code == request.TreeCode &&
+									children_groups.Uid == groupUid
+									select c;
+						}
+						else
+						{
+							query = from types in db.GetTable<DbClassifierType>()
+								// join trees in db.GetTable<DbClassifierTree>() on types.Uid equals trees.TypeUid
+								join parent_groups in db.GetTable<DbClassifierGroup>() on types.Uid equals parent_groups.TypeUid
+								join closures in db.GetTable<DbClassifierClosure>() on parent_groups.Uid equals closures.ParentUid
+								join children_groups in db.GetTable<DbClassifierGroup>() on closures.ChildUid equals children_groups.Uid
+								join links in db.GetTable<DbClassifierLink>() on children_groups.Uid equals links.GroupUid
+								join c in db.GetTable<DbClassifier>() on links.ItemUid equals c.Uid
+								where types.CompanyUid == request.CompanyUid &&
+									types.Code == request.TypeCode &&
+									// trees.Code == request.TreeCode &&
+									parent_groups.Uid == groupUid
+									select c;
+						}
 					}
 				}
 				else if (type.HierarchyType == HierarchyType.Items)
