@@ -56,6 +56,7 @@ namespace Montr.MasterData.Impl.QueryHandlers
 		private static async Task<SearchResult<ClassifierGroup>> GetGroupsByFocus(DbContext db,
 			ClassifierType type, ClassifierGroupSearchRequest request, CancellationToken cancellationToken)
 		{
+			// get all parent uids of focused item
 			var path = await (
 					from focus in db.GetTable<DbClassifierGroup>()
 					join closureUp in db.GetTable<DbClassifierClosure>() on focus.Uid equals closureUp.ChildUid

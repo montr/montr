@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using LinqToDB;
@@ -44,8 +45,6 @@ namespace Montr.MasterData.Impl.CommandHandlers
 			{
 				var itemUid = Guid.NewGuid();
 
-				// todo: валидация и ограничения
-
 				using (var db = _dbContextFactory.Create())
 				{
 					var validator = new ClassifierValidator(db, type);
@@ -55,9 +54,9 @@ namespace Montr.MasterData.Impl.CommandHandlers
 						return new InsertClassifier.Result { Success = false, Errors = validator.Errors };
 					}
 
-					// компания + todo: дата изменения
-					// todo: link to selected group or root group
+					// todo: company + modification data
 
+					// insert classifier
 					await db.GetTable<DbClassifier>()
 						.Value(x => x.Uid, itemUid)
 						// .Value(x => x.CompanyUid, request.CompanyUid)
@@ -65,15 +64,84 @@ namespace Montr.MasterData.Impl.CommandHandlers
 						.Value(x => x.StatusCode, ClassifierStatusCode.Active)
 						.Value(x => x.Code, item.Code)
 						.Value(x => x.Name, item.Name)
+						// todo: validate parent belongs to the same classifier
+						.Value(x => x.ParentUid, type.HierarchyType == HierarchyType.Items ? item.ParentUid : null)
 						.InsertAsync(cancellationToken);
+
+					if (type.HierarchyType == HierarchyType.Groups)
+					{
+						// todo: validate group belongs to the same classifier
+
+						if (request.GroupUid != null)
+						{
+							// link to selected group
+							await db.GetTable<DbClassifierLink>()
+								.Value(x => x.GroupUid, request.GroupUid)
+								.Value(x => x.ItemUid, itemUid)
+								.InsertAsync(cancellationToken);
+
+							// if group is not of default hierarchy, link to default hierarchy root
+							var root = await GetRoot(db, request.GroupUid.Value, cancellationToken);
+
+							if (root.Code != ClassifierGroup.DefaultRootCode)
+							{
+								await LinkToDefaultRoot(db, type, itemUid, cancellationToken);
+							}
+						}
+						else
+						{
+							await LinkToDefaultRoot(db, type, itemUid, cancellationToken);
+						}
+					}
+
+					// todo: events
+
+					scope.Commit();
 				}
-
-				// todo: (события)
-
-				scope.Commit();
 
 				return new InsertClassifier.Result { Success = true, Uid = itemUid };
 			}
+		}
+
+		private static async Task LinkToDefaultRoot(DbContext db, ClassifierType type, Guid itemUid, CancellationToken cancellationToken)
+		{
+			var defaultRoot = await GetDefaultRoot(db, type, cancellationToken);
+
+			// todo: insert default root group?
+			if (defaultRoot != null)
+			{
+				await db.GetTable<DbClassifierLink>()
+					.Value(x => x.GroupUid, defaultRoot.Uid)
+					.Value(x => x.ItemUid, itemUid)
+					.InsertAsync(cancellationToken);
+			}
+		}
+
+		// todo: move to ClassifierGroupService.GetDefaultRoot()
+		private static async Task<DbClassifierGroup> GetDefaultRoot(DbContext db, ClassifierType type, CancellationToken cancellationToken)
+		{
+			return await (
+				from @group in db.GetTable<DbClassifierGroup>()
+				where @group.TypeUid == type.Uid && @group.Code == ClassifierGroup.DefaultRootCode
+				select @group
+			).SingleOrDefaultAsync(cancellationToken);
+		}
+
+		// todo: move to ClassifierGroupService.GetRoot()
+		private static async Task<DbClassifierGroup> GetRoot(DbContext db, Guid groupUid, CancellationToken cancellationToken)
+		{
+			return await (
+				from closure in db.GetTable<DbClassifierClosure>()
+					.Where(x => x.ChildUid == groupUid)
+				join maxLevel in (
+					from path in db.GetTable<DbClassifierClosure>()
+						.Where(x => x.ChildUid == groupUid)
+					group path by path.ChildUid
+					into parents
+					select parents.Max(x => x.Level)) on closure.Level equals maxLevel
+				join parent in db.GetTable<DbClassifierGroup>() on closure.ParentUid equals parent.Uid
+				select parent
+			).SingleAsync(cancellationToken);
 		}
 	}
 }
