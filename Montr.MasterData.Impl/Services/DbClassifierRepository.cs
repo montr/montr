@@ -77,20 +77,23 @@ namespace Montr.MasterData.Impl.Services
 				}
 				else if (type.HierarchyType == HierarchyType.Items)
 				{
-					if (request.Depth == null || request.Depth == "0")
+					if (request.GroupUid != null)
 					{
-						query = from parent in db.GetTable<DbClassifier>()
-							join @class in db.GetTable<DbClassifier>() on parent.Uid equals @class.ParentUid
-							where parent.TypeUid == type.Uid && parent.Uid == request.GroupUid
+						if (request.Depth == null || request.Depth == "0")
+						{
+							query = from parent in db.GetTable<DbClassifier>()
+								join @class in db.GetTable<DbClassifier>() on parent.Uid equals @class.ParentUid
+								where parent.TypeUid == type.Uid && parent.Uid == request.GroupUid
+									select @class;
+						}
+						else
+						{
+							query = from parent in db.GetTable<DbClassifier>()
+								join closures in db.GetTable<DbClassifierClosure>() on parent.Uid equals closures.ParentUid
+								join @class in db.GetTable<DbClassifier>() on closures.ChildUid equals @class.Uid
+								where parent.TypeUid == type.Uid && parent.Uid == request.GroupUid && closures.Level > 0
 								select @class;
-					}
-					else
-					{
-						query = from parent in db.GetTable<DbClassifier>()
-							join closures in db.GetTable<DbClassifierClosure>() on parent.Uid equals closures.ParentUid
-							join @class in db.GetTable<DbClassifier>() on closures.ChildUid equals @class.Uid
-							where parent.TypeUid == type.Uid && parent.Uid == request.GroupUid && closures.Level > 0
-							select @class;
+						}
 					}
 				}
 
