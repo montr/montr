@@ -197,7 +197,10 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 		if (tree) {
 			// https://reactjs.org/docs/react-component.html#setstate - Generally we recommend using componentDidUpdate()
 			// todo: rewrite using componentDidUpdate() instead of callback in setState
-			this.setState({ treeUid: tree.uid, selectedGroup: null, expandedKeys: [] }, () => this.loadClassifierGroups());
+			this.setState({ treeUid: tree.uid, selectedGroup: null, expandedKeys: [] }, async () => {
+				await this.loadClassifierGroups();
+				await this.refreshTable();
+			});
 		}
 	}
 
