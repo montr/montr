@@ -74,7 +74,7 @@ class _RegistrationForm extends React.Component<IProps, IState> {
 
 	onChange = (e: RadioChangeEvent) => {
 		this.setState({
-			configCode: e.target.value
+			configCode: e.target.value as string
 		});
 		this.clearFormErrors();
 	}

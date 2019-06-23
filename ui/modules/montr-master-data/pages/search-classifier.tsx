@@ -204,7 +204,7 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 		}
 	}
 
-	onTreeLoadData = async (node: AntTreeNode) => new Promise(async (resolve) => {
+	onTreeLoadData = async (node: AntTreeNode) => new Promise<void>(async (resolve) => {
 		const group: IClassifierGroup = node.props.dataRef;
 
 		if (!group.children) {
@@ -240,7 +240,8 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 
 	onDepthChange = async (e: RadioChangeEvent) => {
 		// todo: store depth in local storage
-		this.setState({ depth: e.target.value });
+
+		this.setState({ depth: e.target.value as string });
 
 		await this.refreshTable();
 	}

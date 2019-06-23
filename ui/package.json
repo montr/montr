@@ -11,13 +11,13 @@
 	"license": "ISC",
 	"private": true,
 	"dependencies": {
-		"@types/react": "^16.8.20",
+		"@types/react": "^16.8.22",
 		"@types/react-dom": "^16.8.4",
 		"@types/react-router": "^5.0.2",
 		"@types/react-router-dom": "^4.3.4",
-		"antd": "^3.19.5",
+		"antd": "^3.19.7",
 		"axios": "^0.19.0",
-		"oidc-client": "^1.8.0",
+		"oidc-client": "^1.8.2",
 		"react": "^16.8.6",
 		"react-dom": "^16.8.6",
 		"react-router": "^5.0.1",
@@ -32,10 +32,10 @@
 		"less-loader": "^5.0.0",
 		"source-map-loader": "^0.2.4",
 		"style-loader": "^0.23.1",
-		"ts-import-plugin": "^1.5.5",
+		"ts-import-plugin": "^1.6.1",
 		"typescript": "^3.5.2",
-		"webpack": "^4.34.0",
+		"webpack": "^4.35.0",
 		"webpack-bundle-analyzer": "^3.3.2",
-		"webpack-cli": "^3.3.4"
+		"webpack-cli": "^3.3.5"
 	}
 }
