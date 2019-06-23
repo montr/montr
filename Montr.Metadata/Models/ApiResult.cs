@@ -11,6 +11,8 @@ namespace Montr.Metadata.Models
 
 		public bool Success { get; set; }
 
+		public int? AffectedRows { get; set; }
+
 		public IList<ApiResultError> Errors { get; set; }
 	}
 

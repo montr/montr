@@ -1,5 +1,6 @@
 export interface IApiResult {
 	success: boolean;
+	affectedRows?: number;
 	errors?: IApiResultError[];
 }
 

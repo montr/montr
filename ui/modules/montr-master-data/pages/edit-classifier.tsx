@@ -5,7 +5,7 @@ import { Spin, Tabs } from "antd";
 import { ClassifierService, ClassifierTypeService } from "../services";
 import { CompanyContextProps, withCompanyContext } from "@kompany/components";
 import { IClassifier, IClassifierType } from "../models";
-import { ClassifierBreadcrumb, TabEditClassifier } from "../components";
+import { ClassifierBreadcrumb, TabEditClassifier, TabEditClassifierHierarchy } from "../components";
 import { RouteBuilder } from "../";
 
 interface IRouteProps {
@@ -97,7 +97,9 @@ class _EditClassifier extends React.Component<IProps, IState> {
 						<Tabs.TabPane key="info" tab="Информация">
 							<TabEditClassifier type={type} data={data} onDataChange={this.handleDataChange} />
 						</Tabs.TabPane>
-						<Tabs.TabPane key="hierarchy" tab="Иерархия" disabled={otherTabsDisabled}></Tabs.TabPane>
+						<Tabs.TabPane key="hierarchy" tab="Иерархия" disabled={otherTabsDisabled}>
+							<TabEditClassifierHierarchy type={type} data={data} onDataChange={this.handleDataChange} />
+						</Tabs.TabPane>
 						<Tabs.TabPane key="dependencies" tab="Зависимости" disabled={otherTabsDisabled}></Tabs.TabPane>
 						<Tabs.TabPane key="history" tab="История изменений" disabled={otherTabsDisabled}></Tabs.TabPane>
 					</Tabs>
