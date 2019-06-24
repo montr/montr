@@ -22,7 +22,6 @@ namespace Montr.MasterData.Tests.Services
 	{
 		private readonly Guid UserUid = Guid.NewGuid();
 		private readonly string TypeCode = "test_closure";
-		// private readonly string TreeCode = ClassifierGroup.DefaultRootCode;
 
 		[TestMethod]
 		public async Task InsertGroup_Should_BuildClosureTable()
@@ -41,7 +40,8 @@ namespace Montr.MasterData.Tests.Services
 			{
 				// act
 				await InsertType(insertClassifierTypeHandler, cancellationToken);
-				await InsertGroups(2, 3, null, null, insertClassifierGroupHandler, cancellationToken);
+				var root = await FindGroup(dbContextFactory, ClassifierGroup.DefaultRootCode);
+				await InsertGroups(2, 3, root.Code, root.Uid, insertClassifierGroupHandler, cancellationToken);
 
 				// assert
 				var closure = PrintClosure(dbContextFactory);
@@ -150,9 +150,9 @@ namespace Montr.MasterData.Tests.Services
 			}
 		}
 
-		private async Task InsertType(InsertClassifierTypeHandler insertClassifierTypeHandler, CancellationToken cancellationToken)
+		private async Task<ApiResult> InsertType(InsertClassifierTypeHandler insertClassifierTypeHandler, CancellationToken cancellationToken)
 		{
-			await insertClassifierTypeHandler.Handle(new InsertClassifierType
+			var result = await insertClassifierTypeHandler.Handle(new InsertClassifierType
 			{
 				CompanyUid = Constants.OperatorCompanyUid,
 				UserUid = UserUid,
@@ -162,6 +162,11 @@ namespace Montr.MasterData.Tests.Services
 					HierarchyType = HierarchyType.Groups
 				}
 			}, cancellationToken);
+
+			Assert.IsNotNull(result);
+			Assert.AreEqual(true, result.Success);
+
+			return result;
 		}
 
 		private async Task InsertGroups(int count, int depth, string parentCode, Guid? parentUid,
@@ -248,23 +253,23 @@ namespace Montr.MasterData.Tests.Services
 
 		private string PrintClosure(IDbContextFactory dbContextFactory)
 		{
+			const int printColumnWidth = 16;
+
 			using (var db = dbContextFactory.Create())
 			{
 				var print = from c in db.GetTable<DbClassifierClosure>()
 					join parent in db.GetTable<DbClassifierGroup>() on c.ParentUid equals parent.Uid
 					join child in db.GetTable<DbClassifierGroup>() on c.ChildUid equals child.Uid
-					// join tree in db.GetTable<DbClassifierTree>() on parent.TreeUid equals tree.Uid
 					join type in db.GetTable<DbClassifierType>() on parent.TypeUid equals type.Uid
 					where type.Code == TypeCode
-					      // && tree.Code == TreeCode
 					orderby parent.Code, child.Code, c.Level
 					select new { ParentCode = parent.Code, ChildCode = child.Code, c.Level };
 
 				var sb = new StringBuilder();
-				sb.AppendLine("Parent       Child        Level");
+				sb.AppendLine($"{"Parent", -printColumnWidth} {"Child", -printColumnWidth} Level");
 				foreach (var line in print)
 				{
-					sb.AppendLine($"{line.ParentCode,-12} {line.ChildCode,-12} {line.Level}");
+					sb.AppendLine($"{line.ParentCode, -printColumnWidth} {line.ChildCode, -printColumnWidth} {line.Level}");
 				}
 
 				return sb.ToString();

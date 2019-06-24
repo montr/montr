@@ -9,10 +9,11 @@ using Montr.MasterData.Commands;
 using Montr.MasterData.Impl.Entities;
 using Montr.MasterData.Impl.Services;
 using Montr.MasterData.Services;
+using Montr.Metadata.Models;
 
 namespace Montr.MasterData.Impl.CommandHandlers
 {
-	public class InsertClassifierGroupHandler : IRequestHandler<InsertClassifierGroup, InsertClassifierGroup.Result>
+	public class InsertClassifierGroupHandler : IRequestHandler<InsertClassifierGroup, ApiResult>
 	{
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IDbContextFactory _dbContextFactory;
@@ -26,7 +27,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 			_classifierTypeService = classifierTypeService;
 		}
 
-		public async Task<InsertClassifierGroup.Result> Handle(InsertClassifierGroup request, CancellationToken cancellationToken)
+		public async Task<ApiResult> Handle(InsertClassifierGroup request, CancellationToken cancellationToken)
 		{
 			if (request.UserUid == Guid.Empty) throw new InvalidOperationException("User is required.");
 			if (request.CompanyUid == Guid.Empty) throw new InvalidOperationException("Company is required.");
@@ -50,7 +51,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 
 					if (await validator.ValidateInsert(item, cancellationToken) == false)
 					{
-						return new InsertClassifierGroup.Result { Success = false, Errors = validator.Errors };
+						return new ApiResult { Success = false, Errors = validator.Errors };
 					}
 
 					await db.GetTable<DbClassifierGroup>()
@@ -66,7 +67,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 
 					if (await closureTable.Insert(itemUid, item.ParentUid, cancellationToken) == false)
 					{
-						return new InsertClassifierGroup.Result { Success = false, Errors = closureTable.Errors };
+						return new ApiResult { Success = false, Errors = closureTable.Errors };
 					}
 				}
 
@@ -74,7 +75,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 
 				scope.Commit();
 
-				return new InsertClassifierGroup.Result { Success = true, Uid = itemUid };
+				return new ApiResult { Success = true, Uid = itemUid };
 			}
 		}
 	}

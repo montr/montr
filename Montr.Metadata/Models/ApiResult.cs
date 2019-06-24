@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Montr.Metadata.Models
 {
@@ -10,6 +11,10 @@ namespace Montr.Metadata.Models
 		}
 
 		public bool Success { get; set; }
+
+		/// <summary>
+		/// Uid of new row in case of insert operation.</summary>
+		public Guid? Uid { get; set; }
 
 		public int? AffectedRows { get; set; }
 

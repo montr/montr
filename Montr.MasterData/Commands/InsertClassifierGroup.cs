@@ -5,7 +5,7 @@ using Montr.Metadata.Models;
 
 namespace Montr.MasterData.Commands
 {
-	public class InsertClassifierGroup : IRequest<InsertClassifierGroup.Result>
+	public class InsertClassifierGroup : IRequest<ApiResult>
 	{
 		public Guid UserUid { get; set; }
 
@@ -14,10 +14,5 @@ namespace Montr.MasterData.Commands
 		public string TypeCode { get; set; }
 		
 		public ClassifierGroup Item { get; set; }
-
-		public class Result : ApiResult
-		{
-			public Guid? Uid { get; set; }
-		}
 	}
 }

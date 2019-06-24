@@ -56,7 +56,7 @@ namespace Montr.MasterData.Controllers
 		}
 
 		[HttpPost]
-		public async Task<InsertClassifier.Result> Insert(InsertClassifier request)
+		public async Task<ApiResult> Insert(InsertClassifier request)
 		{
 			request.UserUid = _currentUserProvider.GetUserUid();
 

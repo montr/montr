@@ -10,10 +10,11 @@ using Montr.MasterData.Commands;
 using Montr.MasterData.Impl.Entities;
 using Montr.MasterData.Models;
 using Montr.MasterData.Services;
+using Montr.Metadata.Models;
 
 namespace Montr.MasterData.Impl.CommandHandlers
 {
-	public class InsertClassifierHandler: IRequestHandler<InsertClassifier, InsertClassifier.Result>
+	public class InsertClassifierHandler: IRequestHandler<InsertClassifier, ApiResult>
 	{
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IDbContextFactory _dbContextFactory;
@@ -29,7 +30,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 			_classifierTypeService = classifierTypeService;
 		}
 
-		public async Task<InsertClassifier.Result> Handle(InsertClassifier request, CancellationToken cancellationToken)
+		public async Task<ApiResult> Handle(InsertClassifier request, CancellationToken cancellationToken)
 		{
 			if (request.UserUid == Guid.Empty) throw new InvalidOperationException("User is required.");
 			if (request.CompanyUid == Guid.Empty) throw new InvalidOperationException("Company is required.");
@@ -51,7 +52,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 
 					if (await validator.ValidateInsert(item, cancellationToken) == false)
 					{
-						return new InsertClassifier.Result { Success = false, Errors = validator.Errors };
+						return new ApiResult { Success = false, Errors = validator.Errors };
 					}
 
 					// todo: company + modification data
@@ -99,7 +100,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 					scope.Commit();
 				}
 
-				return new InsertClassifier.Result { Success = true, Uid = itemUid };
+				return new ApiResult { Success = true, Uid = itemUid };
 			}
 		}
 
