@@ -131,6 +131,23 @@ namespace Montr.MasterData.Tests
 			}, cancellationToken);
 		}
 
+
+		public async Task<ApiResult> InsertItem(string itemCode,
+			InsertClassifierHandler insertClassifierHandler, CancellationToken cancellationToken)
+		{
+			return await insertClassifierHandler.Handle(new InsertClassifier
+			{
+				UserUid = UserUid,
+				CompanyUid = CompanyUid,
+				TypeCode = TypeCode,
+				Item = new Classifier
+				{
+					Code = itemCode,
+					Name = itemCode + " - Test Classifier"
+				}
+			}, cancellationToken);
+		}
+
 		public string PrintClosure()
 		{
 			const int printColumnWidth = 16;

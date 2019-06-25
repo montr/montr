@@ -29,9 +29,11 @@ namespace Montr.MasterData.Tests.Services
 
 			using (var _ = unitOfWorkFactory.Create())
 			{
-				// act
+				// arrange
 				await generator.InsertType(HierarchyType.Groups, cancellationToken);
 				var root = await generator.FindGroup(ClassifierGroup.DefaultRootCode, cancellationToken);
+
+				// act
 				await generator.InsertGroups(2, 3, root.Code, root.Uid, insertClassifierGroupHandler, cancellationToken);
 
 				// assert

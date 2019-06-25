@@ -50,8 +50,8 @@ namespace Montr.MasterData.Impl.QueryHandlers
 					query = query.Where(x => x.ItemUid == request.ItemUid);
 				}
 
+				// todo: order by default hierarchy first, then by group name
 				var data = await query
-					// todo: order by default hierarchy first, then by group name
 					.Apply(request, x => x.GroupUid)
 					.Select(x => new ClassifierLink
 					{

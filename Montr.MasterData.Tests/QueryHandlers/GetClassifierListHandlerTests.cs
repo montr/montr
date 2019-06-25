@@ -16,7 +16,7 @@ namespace Montr.MasterData.Tests.QueryHandlers
 		[TestMethod]
 		public async Task GetClassifierList_Should_ReturnList()
 		{
-			// todo: convert to classifier repository tests
+			// todo: convert to classifier repository tests?
 
 			// arrange
 			var dbContextFactory = new DefaultDbContextFactory();
@@ -40,6 +40,7 @@ namespace Montr.MasterData.Tests.QueryHandlers
 			var result = await handler.Handle(command, CancellationToken.None);
 
 			// assert
+			// todo: switch to db generator and extend asserts
 			Assert.IsNotNull(result);
 		}
 	}
