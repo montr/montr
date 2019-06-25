@@ -6,6 +6,7 @@ using Montr.Core.Services;
 using Montr.Data.Linq2Db;
 using Montr.MasterData.Impl.CommandHandlers;
 using Montr.MasterData.Impl.Services;
+using Montr.MasterData.Models;
 
 namespace Montr.MasterData.Tests.Services
 {
@@ -29,7 +30,8 @@ namespace Montr.MasterData.Tests.Services
 			using (var _ = unitOfWorkFactory.Create())
 			{
 				// act
-				var root = await generator.InsertType(cancellationToken);
+				await generator.InsertType(HierarchyType.Groups, cancellationToken);
+				var root = await generator.FindGroup(ClassifierGroup.DefaultRootCode, cancellationToken);
 				await generator.InsertGroups(2, 3, root.Code, root.Uid, insertClassifierGroupHandler, cancellationToken);
 
 				// assert
@@ -56,7 +58,8 @@ namespace Montr.MasterData.Tests.Services
 			using (var _ = unitOfWorkFactory.Create())
 			{
 				// act & assert
-				var root = await generator.InsertType(cancellationToken);
+				await generator.InsertType(HierarchyType.Groups, cancellationToken);
+				var root = await generator.FindGroup(ClassifierGroup.DefaultRootCode, cancellationToken);
 				await generator.InsertGroups(3, 3, root.Code, root.Uid, insertClassifierGroupHandler, cancellationToken);
 				Assert.AreEqual(File.ReadAllText("../../../Content/closure.3x3.txt"), generator.PrintClosure());
 
@@ -88,7 +91,8 @@ namespace Montr.MasterData.Tests.Services
 			using (var _ = unitOfWorkFactory.Create())
 			{
 				// act & assert
-				var root = await generator.InsertType(cancellationToken);
+				await generator.InsertType(HierarchyType.Groups, cancellationToken);
+				var root = await generator.FindGroup(ClassifierGroup.DefaultRootCode, cancellationToken);
 				await generator.InsertGroups(3, 3, root.Code, root.Uid, insertClassifierGroupHandler, cancellationToken);
 				Assert.AreEqual(File.ReadAllText("../../../Content/closure.3x3.txt"), generator.PrintClosure());
 
@@ -124,7 +128,8 @@ namespace Montr.MasterData.Tests.Services
 			using (var _ = unitOfWorkFactory.Create())
 			{
 				// act & assert
-				var root = await generator.InsertType(cancellationToken);
+				await generator.InsertType(HierarchyType.Groups, cancellationToken);
+				var root = await generator.FindGroup(ClassifierGroup.DefaultRootCode, cancellationToken);
 				await generator.InsertGroups(3, 3, root.Code, root.Uid, insertClassifierGroupHandler, cancellationToken);
 				Assert.AreEqual(File.ReadAllText("../../../Content/closure.3x3.txt"), generator.PrintClosure());
 

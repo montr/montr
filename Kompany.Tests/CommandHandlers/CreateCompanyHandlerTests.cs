@@ -19,7 +19,7 @@ namespace Kompany.Tests.CommandHandlers
 		public async Task CreateCompany_Should_CreateCompany()
 		{
 			// arrange
-			var unitOfWorkFactory = new TransactionScopeUnitOfWorkFactory { Commitable = false };
+			var unitOfWorkFactory = new TransactionScopeUnitOfWorkFactory();
 			var dbContextFactory = new DefaultDbContextFactory();
 			var dateTimeProvider = new DefaultDateTimeProvider();
 			var documentRepository = new DbDocumentRepository(dbContextFactory);
@@ -29,21 +29,24 @@ namespace Kompany.Tests.CommandHandlers
 			var handler = new CreateCompanyHandler(unitOfWorkFactory,
 				dbContextFactory, dateTimeProvider, documentRepository, auditLogService);
 
-			// act
-			var command = new CreateCompany
+			using (var _ = unitOfWorkFactory.Create())
 			{
-				UserUid = Guid.NewGuid(),
-				Company = new Company
+				// act
+				var command = new CreateCompany
 				{
-					ConfigCode = "company",
-					Name = "Montr Inc."
-				}
-			};
+					UserUid = Guid.NewGuid(),
+					Company = new Company
+					{
+						ConfigCode = "company",
+						Name = "Montr Inc."
+					}
+				};
 
-			var uid = await handler.Handle(command, CancellationToken.None);
+				var uid = await handler.Handle(command, CancellationToken.None);
 
-			// assert
-			Assert.AreNotEqual(Guid.Empty, uid);
+				// assert
+				Assert.AreNotEqual(Guid.Empty, uid);
+			}
 		}
 	}
 }

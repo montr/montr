@@ -15,9 +15,6 @@ namespace Montr.Core.Services
 
 	public class TransactionScopeUnitOfWorkFactory : IUnitOfWorkFactory
 	{
-		// todo: remove
-		public bool Commitable { get; set; } = true;
-
 		public IUnitOfWork Create()
 		{
 			var scope = new TransactionScope(
@@ -25,26 +22,21 @@ namespace Montr.Core.Services
 				new TransactionOptions { IsolationLevel = IsolationLevel.ReadCommitted },
 				TransactionScopeAsyncFlowOption.Enabled);
 
-			return new UnitOfWork(scope, Commitable);
+			return new UnitOfWork(scope);
 		}
 
 		private class UnitOfWork : IUnitOfWork
 		{
 			private readonly TransactionScope _scope;
-			private readonly bool _commitable;
 
-			public UnitOfWork(TransactionScope scope, bool commitable)
+			public UnitOfWork(TransactionScope scope)
 			{
 				_scope = scope;
-				_commitable = commitable;
 			}
 			
 			public void Commit()
 			{
-				if (_commitable)
-				{
-					_scope.Complete();
-				}
+				_scope.Complete();
 			}
 
 			public void Dispose()
