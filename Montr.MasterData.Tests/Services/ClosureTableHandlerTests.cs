@@ -39,8 +39,7 @@ namespace Montr.MasterData.Tests.Services
 			using (var _ = unitOfWorkFactory.Create())
 			{
 				// act
-				await InsertType(insertClassifierTypeHandler, cancellationToken);
-				var root = await FindGroup(dbContextFactory, ClassifierGroup.DefaultRootCode);
+				var root = await InsertType(dbContextFactory, insertClassifierTypeHandler, cancellationToken);
 				await InsertGroups(2, 3, root.Code, root.Uid, insertClassifierGroupHandler, cancellationToken);
 
 				// assert
@@ -66,12 +65,12 @@ namespace Montr.MasterData.Tests.Services
 			using (var _ = unitOfWorkFactory.Create())
 			{
 				// act & assert
-				await InsertType(insertClassifierTypeHandler, cancellationToken);
-				await InsertGroups(3, 3, null, null, insertClassifierGroupHandler, cancellationToken);
+				var root = await InsertType(dbContextFactory, insertClassifierTypeHandler, cancellationToken);
+				await InsertGroups(3, 3, root.Code, root.Uid, insertClassifierGroupHandler, cancellationToken);
 				Assert.AreEqual(File.ReadAllText("../../../Content/closure.3x3.txt"), PrintClosure(dbContextFactory));
 
 				// act & assert - cyclic dependency
-				var result = await UpdateGroup("1.1", "1.1.1", updateClassifierGroupHandler, dbContextFactory, cancellationToken);
+				var result = await UpdateGroup(root.Code + ".1.1", root.Code + ".1.1.1", updateClassifierGroupHandler, dbContextFactory, cancellationToken);
 				Assert.IsNotNull(result);
 				Assert.IsFalse(result.Success);
 				Assert.IsNotNull(result.Errors);
@@ -97,20 +96,20 @@ namespace Montr.MasterData.Tests.Services
 			using (var _ = unitOfWorkFactory.Create())
 			{
 				// act & assert
-				await InsertType(insertClassifierTypeHandler, cancellationToken);
-				await InsertGroups(3, 3, null, null, insertClassifierGroupHandler, cancellationToken);
+				var root = await InsertType(dbContextFactory, insertClassifierTypeHandler, cancellationToken);
+				await InsertGroups(3, 3, root.Code, root.Uid, insertClassifierGroupHandler, cancellationToken);
 				Assert.AreEqual(File.ReadAllText("../../../Content/closure.3x3.txt"), PrintClosure(dbContextFactory));
 
 				// act & assert - from null to not null parent
-				await UpdateGroup("1", "2.1", updateClassifierGroupHandler, dbContextFactory, cancellationToken);
+				await UpdateGroup(root.Code + ".1", root.Code + ".2.1", updateClassifierGroupHandler, dbContextFactory, cancellationToken);
 				Assert.AreEqual(File.ReadAllText("../../../Content/closure.3x3~1to2.1.txt"), PrintClosure(dbContextFactory));
 
 				// act & assert - from not null to null parent
-				await UpdateGroup("2.2", null, updateClassifierGroupHandler, dbContextFactory, cancellationToken);
+				await UpdateGroup(root.Code + ".2.2", root.Code, updateClassifierGroupHandler, dbContextFactory, cancellationToken);
 				Assert.AreEqual(File.ReadAllText("../../../Content/closure.3x3~1to2.1~2.2toRoot.txt"), PrintClosure(dbContextFactory));
 
 				// act & assert - from not null to not null parent
-				await UpdateGroup("3.3", "1.3", updateClassifierGroupHandler, dbContextFactory, cancellationToken);
+				await UpdateGroup(root.Code + ".3.3", root.Code + ".1.3", updateClassifierGroupHandler, dbContextFactory, cancellationToken);
 				Assert.AreEqual(File.ReadAllText("../../../Content/closure.3x3~1to2.1~2.2toRoot~3.3to1.3.txt"), PrintClosure(dbContextFactory));
 			}
 		}
@@ -132,25 +131,26 @@ namespace Montr.MasterData.Tests.Services
 			using (var _ = unitOfWorkFactory.Create())
 			{
 				// act & assert
-				await InsertType(insertClassifierTypeHandler, cancellationToken);
-				await InsertGroups(3, 3, null, null, insertClassifierGroupHandler, cancellationToken);
+				var root = await InsertType(dbContextFactory, insertClassifierTypeHandler, cancellationToken);
+				await InsertGroups(3, 3, root.Code, root.Uid, insertClassifierGroupHandler, cancellationToken);
 				Assert.AreEqual(File.ReadAllText("../../../Content/closure.3x3.txt"), PrintClosure(dbContextFactory));
 
 				// act & assert
-				await DeleteGroup("1", deleteClassifierGroupHandler, dbContextFactory, cancellationToken);
+				await DeleteGroup(root.Code + ".1", deleteClassifierGroupHandler, dbContextFactory, cancellationToken);
 				Assert.AreEqual(File.ReadAllText("../../../Content/closure.3x3-1.txt"), PrintClosure(dbContextFactory));
 
 				// act & assert
-				await DeleteGroup("2.2", deleteClassifierGroupHandler, dbContextFactory, cancellationToken);
+				await DeleteGroup(root.Code + ".2.2", deleteClassifierGroupHandler, dbContextFactory, cancellationToken);
 				Assert.AreEqual(File.ReadAllText("../../../Content/closure.3x3-1-2.2.txt"), PrintClosure(dbContextFactory));
 
 				// act & assert
-				await DeleteGroup("3.1.2", deleteClassifierGroupHandler, dbContextFactory, cancellationToken);
+				await DeleteGroup(root.Code + ".3.1.2", deleteClassifierGroupHandler, dbContextFactory, cancellationToken);
 				Assert.AreEqual(File.ReadAllText("../../../Content/closure.3x3-1-2.2-3.1.2.txt"), PrintClosure(dbContextFactory));
 			}
 		}
 
-		private async Task<ApiResult> InsertType(InsertClassifierTypeHandler insertClassifierTypeHandler, CancellationToken cancellationToken)
+		private async Task<DbClassifierGroup> InsertType(IDbContextFactory dbContextFactory,
+			InsertClassifierTypeHandler insertClassifierTypeHandler, CancellationToken cancellationToken)
 		{
 			var result = await insertClassifierTypeHandler.Handle(new InsertClassifierType
 			{
@@ -166,7 +166,7 @@ namespace Montr.MasterData.Tests.Services
 			Assert.IsNotNull(result);
 			Assert.AreEqual(true, result.Success);
 
-			return result;
+			return await FindGroup(dbContextFactory, ClassifierGroup.DefaultRootCode);
 		}
 
 		private async Task InsertGroups(int count, int depth, string parentCode, Guid? parentUid,
@@ -181,9 +181,11 @@ namespace Montr.MasterData.Tests.Services
 					CompanyUid = Constants.OperatorCompanyUid,
 					UserUid = UserUid,
 					TypeCode = TypeCode,
-					// TreeCode = TreeCode,
 					Item = new ClassifierGroup { Code = code, Name = $"Class {code}", ParentUid = parentUid }
 				}, cancellationToken);
+
+				Assert.IsNotNull(result);
+				Assert.AreEqual(true, result.Success);
 
 				if (depth > 1)
 				{
@@ -215,7 +217,6 @@ namespace Montr.MasterData.Tests.Services
 				CompanyUid = Constants.OperatorCompanyUid,
 				UserUid = UserUid,
 				TypeCode = TypeCode,
-				// TreeCode = TreeCode,
 				Item = item
 			}, cancellationToken);
 		}
@@ -230,7 +231,6 @@ namespace Montr.MasterData.Tests.Services
 				CompanyUid = Constants.OperatorCompanyUid,
 				UserUid = UserUid,
 				TypeCode = TypeCode,
-				// TreeCode = TreeCode,
 				Uid = group.Uid
 			}, cancellationToken);
 		}
@@ -240,11 +240,8 @@ namespace Montr.MasterData.Tests.Services
 			using (var db = dbContextFactory.Create())
 			{
 				var query = from g in db.GetTable<DbClassifierGroup>()
-					// join tree in db.GetTable<DbClassifierTree>() on g.TreeUid equals tree.Uid
 					join type in db.GetTable<DbClassifierType>() on g.TypeUid equals type.Uid
-					where type.Code == TypeCode
-						// && tree.Code == TreeCode
-						&& g.Code == groupCode
+					where type.Code == TypeCode && g.Code == groupCode
 					select g;
 
 				return await query.SingleAsync();
