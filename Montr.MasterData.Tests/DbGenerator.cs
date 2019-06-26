@@ -72,22 +72,30 @@ namespace Montr.MasterData.Tests
 			{
 				var code = parentCode != null ? $"{parentCode}.{i}" : $"{i}";
 
-				var result = await insertClassifierGroupHandler.Handle(new InsertClassifierGroup
-				{
-					CompanyUid = CompanyUid,
-					UserUid = UserUid,
-					TypeCode = TypeCode,
-					Item = new ClassifierGroup { Code = code, Name = $"Class {code}", ParentUid = parentUid }
-				}, cancellationToken);
-
-				Assert.IsNotNull(result);
-				Assert.AreEqual(true, result.Success);
+				var result = await InsertGroup(code, parentUid, insertClassifierGroupHandler, cancellationToken);
 
 				if (depth > 1)
 				{
 					await InsertGroups(count, depth - 1, code, result.Uid, insertClassifierGroupHandler, cancellationToken);
 				}
 			}
+		}
+
+		public async Task<ApiResult> InsertGroup(string code, Guid? parentUid,
+			InsertClassifierGroupHandler insertClassifierGroupHandler, CancellationToken cancellationToken)
+		{
+			var result = await insertClassifierGroupHandler.Handle(new InsertClassifierGroup
+			{
+				CompanyUid = CompanyUid,
+				UserUid = UserUid,
+				TypeCode = TypeCode,
+				Item = new ClassifierGroup {Code = code, Name = $"Class {code}", ParentUid = parentUid}
+			}, cancellationToken);
+
+			Assert.IsNotNull(result);
+			Assert.AreEqual(true, result.Success);
+
+			return result;
 		}
 
 		public async Task<ApiResult> UpdateGroup(string groupCode, string newParentGroupCode,

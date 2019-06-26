@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using LinqToDB;
@@ -41,25 +42,32 @@ namespace Montr.MasterData.Impl.CommandHandlers
 			{
 				using (var db = _dbContextFactory.Create())
 				{
-					// todo: validate group and item belongs to type
+					// todo: validate group and item belongs to the same type
 
 					if (type.HierarchyType != HierarchyType.Groups)
 					{
 						throw new InvalidOperationException("Invalid classifier hierarchy type for groups operations.");
 					}
 
-					// todo: remove other item link in same hierarchy
-					await db.GetTable<DbClassifierLink>()
+					// delete other links in same hierarchy
+					var deleted = await (
+						from link in db.GetTable<DbClassifierLink>().Where(x => x.ItemUid == item.ItemUid)
+						join parent in db.GetTable<DbClassifierClosure>().Where(x => x.ChildUid == item.GroupUid)
+							on link.GroupUid equals parent.ParentUid 
+						select link
+					).DeleteAsync(cancellationToken);
+
+					var inserted = await db.GetTable<DbClassifierLink>()
 						.Value(x => x.GroupUid, item.GroupUid)
 						.Value(x => x.ItemUid, item.ItemUid)
 						.InsertAsync(cancellationToken);
-
-					// todo: events
-
-					scope.Commit();
-					
-					return new ApiResult { Success = true };
 				}
+
+				// todo: events
+
+				scope.Commit();
+
+				return new ApiResult { Success = true };
 			}
 		}
 	}
