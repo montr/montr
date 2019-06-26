@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Montr.Core.Services;
@@ -58,8 +59,9 @@ namespace Montr.MasterData.Tests.QueryHandlers
 				Assert.AreEqual(2, result.TotalCount);
 				Assert.AreEqual(root.Uid, result.Rows[0].GroupUid);
 				Assert.AreEqual(root.Uid, result.Rows[1].GroupUid);
-                // todo: check items uids
-				// Assert.AreEqual(itemResult.Uid, result.Rows[0].ItemUid);
+				var items = result.Rows.Select(x => x.ItemUid).ToList();
+				CollectionAssert.Contains(items, item1.Uid);
+				CollectionAssert.Contains(items, item2.Uid);
 
 				// act - search by item code
 				result = await handler.Handle(new GetClassifierLinkList
