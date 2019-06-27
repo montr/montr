@@ -11,10 +11,11 @@ using Montr.MasterData.Impl.Entities;
 using Montr.MasterData.Impl.Services;
 using Montr.MasterData.Models;
 using Montr.MasterData.Services;
+using Montr.Metadata.Models;
 
 namespace Montr.MasterData.Impl.CommandHandlers
 {
-	public class DeleteClassifierGroupHandler : IRequestHandler<DeleteClassifierGroup, int>
+	public class DeleteClassifierGroupHandler : IRequestHandler<DeleteClassifierGroup, ApiResult>
 	{
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IDbContextFactory _dbContextFactory;
@@ -28,7 +29,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 			_classifierTypeService = classifierTypeService;
 		}
 
-		public async Task<int> Handle(DeleteClassifierGroup request, CancellationToken cancellationToken)
+		public async Task<ApiResult> Handle(DeleteClassifierGroup request, CancellationToken cancellationToken)
 		{
 			if (request.UserUid == Guid.Empty) throw new InvalidOperationException("User is required.");
 			if (request.CompanyUid == Guid.Empty) throw new InvalidOperationException("Company is required.");
@@ -38,7 +39,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 
 			using (var scope = _unitOfWorkFactory.Create())
 			{
-				int result = 0;
+				var result = 0;
 
 				using (var db = _dbContextFactory.Create())
 				{
@@ -87,7 +88,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 
 				scope.Commit();
 
-				return result;
+				return new ApiResult { Success = true, AffectedRows = result };
 			}
 		}
 	}

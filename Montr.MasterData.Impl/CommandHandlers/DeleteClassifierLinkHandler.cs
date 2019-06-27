@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -41,6 +42,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 			using (var scope = _unitOfWorkFactory.Create())
 			{
 				int affected;
+				ApiResultError error = null;
 
 				using (var db = _dbContextFactory.Create())
 				{
@@ -54,13 +56,39 @@ namespace Montr.MasterData.Impl.CommandHandlers
 					affected = await db.GetTable<DbClassifierLink>()
 						.Where(x => x.GroupUid == item.GroupUid && x.ItemUid == item.ItemUid)
 						.DeleteAsync(cancellationToken);
+
+					if (affected > 0 && item.GroupUid.HasValue)
+					{
+						var root = await InsertClassifierHandler.GetRoot(db, item.GroupUid.Value, cancellationToken);
+
+						if (root.Code == ClassifierGroup.DefaultRootCode)
+						{
+							// todo: move to ClassifierGroupService
+							await db.GetTable<DbClassifierLink>()
+								.Value(x => x.GroupUid, root.Uid)
+								.Value(x => x.ItemUid, item.ItemUid)
+								.InsertAsync(cancellationToken);
+
+							error = new ApiResultError
+							{
+								Messages = new[] { "All items should be linked to default hierarchy. Relinked item to root." }
+							};
+						}
+					}
 				}
 
 				// todo: events
 
 				scope.Commit();
 
-				return new ApiResult { Success = true, AffectedRows = affected };
+				var result = new ApiResult { Success = true, AffectedRows = affected };
+
+				if (error != null)
+				{
+					result.Errors = new List<ApiResultError> { error };
+				}
+
+				return result;
 			}
 		}
 	}

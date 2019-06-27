@@ -58,7 +58,7 @@ namespace Montr.MasterData.Controllers
 		}
 
 		[HttpPost]
-		public async Task<int> Delete(DeleteClassifierGroup request)
+		public async Task<ApiResult> Delete(DeleteClassifierGroup request)
 		{
 			request.UserUid = _currentUserProvider.GetUserUid();
 

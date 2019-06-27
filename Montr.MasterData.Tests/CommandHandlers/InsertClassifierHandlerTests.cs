@@ -23,7 +23,7 @@ namespace Montr.MasterData.Tests.CommandHandlers
 			var dateTimeProvider = new DefaultDateTimeProvider();
 			var classifierTypeRepository = new DbClassifierTypeRepository(dbContextFactory);
 			var classifierTypeService = new DefaultClassifierTypeService(classifierTypeRepository);
-			var generator = new DbGenerator(unitOfWorkFactory, dbContextFactory);
+			var generator = new DbHelper(unitOfWorkFactory, dbContextFactory);
 
 			var cancellationToken = new CancellationToken();
 
@@ -66,7 +66,7 @@ namespace Montr.MasterData.Tests.CommandHandlers
 			var dateTimeProvider = new DefaultDateTimeProvider();
 			var classifierTypeRepository = new DbClassifierTypeRepository(dbContextFactory);
 			var classifierTypeService = new DefaultClassifierTypeService(classifierTypeRepository);
-			var generator = new DbGenerator(unitOfWorkFactory, dbContextFactory);
+			var generator = new DbHelper(unitOfWorkFactory, dbContextFactory);
 
 			var cancellationToken = new CancellationToken();
 

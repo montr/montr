@@ -129,7 +129,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 		}
 
 		// todo: move to ClassifierGroupService.GetRoot()
-		private static async Task<DbClassifierGroup> GetRoot(DbContext db, Guid groupUid, CancellationToken cancellationToken)
+		public static async Task<DbClassifierGroup> GetRoot(DbContext db, Guid groupUid, CancellationToken cancellationToken)
 		{
 			return await (
 				from closure in db.GetTable<DbClassifierClosure>()

@@ -5,25 +5,46 @@ using System.Threading;
 using System.Threading.Tasks;
 using LinqToDB;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Montr.Core.Models;
 using Montr.Core.Services;
 using Montr.Data.Linq2Db;
 using Montr.MasterData.Commands;
 using Montr.MasterData.Impl.CommandHandlers;
 using Montr.MasterData.Impl.Entities;
+using Montr.MasterData.Impl.QueryHandlers;
+using Montr.MasterData.Impl.Services;
 using Montr.MasterData.Models;
+using Montr.MasterData.Queries;
 using Montr.Metadata.Models;
 
 namespace Montr.MasterData.Tests
 {
-	public class DbGenerator
+	public class DbHelper
 	{
 		private readonly IDbContextFactory _dbContextFactory;
 		private readonly InsertClassifierTypeHandler _insertClassifierTypeHandler;
+		private readonly InsertClassifierGroupHandler _insertClassifierGroupHandler;
+		private readonly InsertClassifierHandler _insertClassifierHandler;
+		private readonly UpdateClassifierGroupHandler _updateClassifierGroupHandler;
+		private readonly DeleteClassifierGroupHandler _deleteClassifierGroupHandler;
+		private readonly InsertClassifierLinkHandler _insertClassifierLinkHandler;
+		private readonly GetClassifierLinkListHandler _getClassifierLinkListHandler;
 
-		public DbGenerator(IUnitOfWorkFactory unitOfWorkFactory, IDbContextFactory dbContextFactory)
+		public DbHelper(IUnitOfWorkFactory unitOfWorkFactory, IDbContextFactory dbContextFactory)
 		{
 			_dbContextFactory = dbContextFactory;
+
+			var dateTimeProvider = new DefaultDateTimeProvider();
+			var classifierTypeRepository = new DbClassifierTypeRepository(dbContextFactory);
+			var classifierTypeService = new DefaultClassifierTypeService(classifierTypeRepository);
+
 			_insertClassifierTypeHandler = new InsertClassifierTypeHandler(unitOfWorkFactory, dbContextFactory);
+			_insertClassifierGroupHandler = new InsertClassifierGroupHandler(unitOfWorkFactory, dbContextFactory, classifierTypeService);
+			_insertClassifierHandler = new InsertClassifierHandler(unitOfWorkFactory, dbContextFactory, dateTimeProvider, classifierTypeService);
+			_updateClassifierGroupHandler = new UpdateClassifierGroupHandler(unitOfWorkFactory, dbContextFactory, classifierTypeService);
+			_deleteClassifierGroupHandler = new DeleteClassifierGroupHandler(unitOfWorkFactory, dbContextFactory, classifierTypeService);
+			_insertClassifierLinkHandler = new InsertClassifierLinkHandler(unitOfWorkFactory, dbContextFactory, classifierTypeService);
+			_getClassifierLinkListHandler = new GetClassifierLinkListHandler(dbContextFactory, classifierTypeService);
 		}
 
 		public string TypeCode { get; set; } = "test_closure";
@@ -65,26 +86,24 @@ namespace Montr.MasterData.Tests
 			}
 		}
 
-		public async Task InsertGroups(int count, int depth, string parentCode, Guid? parentUid,
-			InsertClassifierGroupHandler insertClassifierGroupHandler, CancellationToken cancellationToken)
+		public async Task InsertGroups(int count, int depth, string parentCode, Guid? parentUid, CancellationToken cancellationToken)
 		{
 			for (var i = 1; i <= count; i++)
 			{
 				var code = parentCode != null ? $"{parentCode}.{i}" : $"{i}";
 
-				var result = await InsertGroup(code, parentUid, insertClassifierGroupHandler, cancellationToken);
+				var result = await InsertGroup(code, parentUid, cancellationToken);
 
 				if (depth > 1)
 				{
-					await InsertGroups(count, depth - 1, code, result.Uid, insertClassifierGroupHandler, cancellationToken);
+					await InsertGroups(count, depth - 1, code, result.Uid, cancellationToken);
 				}
 			}
 		}
 
-		public async Task<ApiResult> InsertGroup(string code, Guid? parentUid,
-			InsertClassifierGroupHandler insertClassifierGroupHandler, CancellationToken cancellationToken)
+		public async Task<ApiResult> InsertGroup(string code, Guid? parentUid, CancellationToken cancellationToken)
 		{
-			var result = await insertClassifierGroupHandler.Handle(new InsertClassifierGroup
+			var result = await _insertClassifierGroupHandler.Handle(new InsertClassifierGroup
 			{
 				CompanyUid = CompanyUid,
 				UserUid = UserUid,
@@ -99,7 +118,7 @@ namespace Montr.MasterData.Tests
 		}
 
 		public async Task<ApiResult> UpdateGroup(string groupCode, string newParentGroupCode,
-			UpdateClassifierGroupHandler updateClassifierGroupHandler, CancellationToken cancellationToken)
+			CancellationToken cancellationToken, bool assertResult = true)
 		{
 			var dbGroup = await FindGroup(groupCode, cancellationToken);
 
@@ -116,34 +135,44 @@ namespace Montr.MasterData.Tests
 				item.ParentUid = dbParentGroup.Uid;
 			}
 
-			return await updateClassifierGroupHandler.Handle(new UpdateClassifierGroup
+			var result = await _updateClassifierGroupHandler.Handle(new UpdateClassifierGroup
 			{
 				CompanyUid = CompanyUid,
 				UserUid = UserUid,
 				TypeCode = TypeCode,
 				Item = item
 			}, cancellationToken);
+
+			if (assertResult)
+			{
+				Assert.IsNotNull(result);
+				Assert.AreEqual(true, result.Success);
+			}
+
+			return result;
 		}
 
-		public async Task DeleteGroup(string groupCode,
-			DeleteClassifierGroupHandler deleteClassifierGroupHandler, CancellationToken cancellationToken)
+		public async Task<ApiResult> DeleteGroup(string groupCode, CancellationToken cancellationToken)
 		{
 			var group = await FindGroup(groupCode, cancellationToken);
 
-			await deleteClassifierGroupHandler.Handle(new DeleteClassifierGroup
+			var result = await _deleteClassifierGroupHandler.Handle(new DeleteClassifierGroup
 			{
 				CompanyUid = CompanyUid,
 				UserUid = UserUid,
 				TypeCode = TypeCode,
 				Uid = group.Uid
 			}, cancellationToken);
+
+			Assert.IsNotNull(result);
+			Assert.AreEqual(true, result.Success);
+
+			return result;
 		}
 
-
-		public async Task<ApiResult> InsertItem(string itemCode,
-			InsertClassifierHandler insertClassifierHandler, CancellationToken cancellationToken)
+		public async Task<ApiResult> InsertItem(string itemCode, CancellationToken cancellationToken)
 		{
-			return await insertClassifierHandler.Handle(new InsertClassifier
+			var result = await _insertClassifierHandler.Handle(new InsertClassifier
 			{
 				UserUid = UserUid,
 				CompanyUid = CompanyUid,
@@ -152,6 +181,46 @@ namespace Montr.MasterData.Tests
 				{
 					Code = itemCode,
 					Name = itemCode + " - Test Classifier"
+				}
+			}, cancellationToken);
+
+			Assert.IsNotNull(result);
+			Assert.AreEqual(true, result.Success);
+
+			return result;
+		}
+
+		public async Task<ApiResult> InsertLink(Guid? groupUid, Guid? itemUid, CancellationToken cancellationToken)
+		{
+			var result = await _insertClassifierLinkHandler.Handle(new InsertClassifierLink
+			{
+				UserUid = UserUid,
+				CompanyUid = CompanyUid,
+				TypeCode = TypeCode,
+				Item = new ClassifierLink
+				{
+					GroupUid = groupUid,
+					ItemUid = itemUid
+				}
+			}, cancellationToken);
+
+			Assert.IsNotNull(result);
+			Assert.AreEqual(true, result.Success);
+
+			return result;
+		}
+
+		public async Task<SearchResult<ClassifierLink>> GetLinks(Guid? groupUid, Guid? itemUid, CancellationToken cancellationToken)
+		{
+			return await _getClassifierLinkListHandler.Handle(new GetClassifierLinkList
+			{
+				UserUid = UserUid,
+				Request = new ClassifierLinkSearchRequest
+				{
+					CompanyUid = CompanyUid,
+					TypeCode = TypeCode,
+					GroupUid = groupUid,
+					ItemUid = itemUid
 				}
 			}, cancellationToken);
 		}
