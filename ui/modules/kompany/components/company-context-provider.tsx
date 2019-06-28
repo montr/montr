@@ -71,7 +71,7 @@ export class CompanyContextProvider extends React.Component<any, State> {
 		try {
 			this.setState({ companyList: await this._companyService.list() });
 		} catch (error) {
-			this._notification.error({ message: `Ошибка при загрузке списка организаций`, description: error.message });
+			this._notification.error(`Ошибка при загрузке списка организаций`, error.message);
 		}
 	}
 

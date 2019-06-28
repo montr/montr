@@ -6,7 +6,7 @@
 
   <ItemGroup>
 	<PackageReference Include="Microsoft.AspNetCore.App" />
-    <PackageReference Include="MediatR" Version="6.0.0" />
+    <PackageReference Include="MediatR" Version="7.0.0" />
   </ItemGroup>
 
   <ItemGroup>

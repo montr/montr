@@ -18,14 +18,14 @@
 
 		public bool Required { get; set; }
 	}
-	
+
 	public class StringField : FormField
 	{
 		public override string Type => "string";
 
 		public bool Autosize { get; set; }
 	}
-		
+
 	public class TextAreaField : StringField
 	{
 		public override string Type => "textarea";
@@ -73,9 +73,27 @@
 		public override string Type => "datetime";
 	}
 
+	public class SelectField : FormField
+	{
+		public override string Type => "select";
+
+		public SelectFieldOption[] Options { get; set; }
+	}
+
+	public class SelectFieldOption
+	{
+		public string Value { get; set; }
+
+		public string Name { get; set; }
+	}
+
 	public class ClassifierField : FormField
 	{
 		public override string Type => "classifier";
+
+		public string TypeCode { get; set; }
+
+		// public string TreeCode { get; set; }
 	}
 
 	public class FileField : FormField

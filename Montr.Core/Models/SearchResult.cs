@@ -4,8 +4,8 @@ namespace Montr.Core.Models
 {
 	public class SearchResult<TModel> // : ApiResult
 	{
-		public int TotalCount { get; set; }
+		public int? TotalCount { get; set; }
 
-		public IEnumerable<TModel> Rows { get; set; }
+		public IList<TModel> Rows { get; set; }
 	}
 }

@@ -1,28 +1,35 @@
 import * as React from "react";
 import { Link } from "react-router-dom";
-import { Table, Tag } from "antd";
+import { Table, Tag, Divider, Icon } from "antd";
 import { ColumnProps, PaginationConfig, SorterResult, SortOrder } from "antd/lib/table";
-import { IIndexer } from "@montr-core/models";
 import { Fetcher, NotificationService, MetadataService } from "../services";
-import { IDataColumn, IDataResult } from "../models";
+import { IIndexer, IDataColumn, IDataResult, IMenu } from "../models";
 import { Constants } from "..";
 
 interface IProps<TModel> {
-	rowKey?: string
-	viewId: string
-	loadUrl: string; // todo: (?) add load func or data[]
-	postParams?: any;
-	onSelectionChange?: (selectedRowKeys: string[] | number[], selectedRows: TModel[]) => void
+	rowKey?: string;
+	rowActions?: IMenu[];
+	viewId: string;
+	loadUrl: string; // todo: (?) add data[]
+	// todo: add type for post params
+	onLoadData?: (loadUrl: string, postParams: any) => Promise<IDataResult<TModel>>;
+	onSelectionChange?: (selectedRowKeys: string[] | number[], selectedRows: TModel[]) => void;
+	updateToken?: DataTableUpdateToken;
 }
 
 interface IState<TModel> {
 	loading: boolean;
-	selectedRowKeys: string[] | number[],
+	selectedRowKeys: string[] | number[];
 	error?: any;
 	columns: any[];
 	data: TModel[];
 	totalCount: number;
-	pagination: PaginationConfig,
+	pagination: PaginationConfig;
+}
+
+export class DataTableUpdateToken {
+	date: Date;
+	resetSelectedRows?: boolean;
 }
 
 export class DataTable<TModel extends IIndexer> extends React.Component<IProps<TModel>, IState<TModel>> {
@@ -54,15 +61,19 @@ export class DataTable<TModel extends IIndexer> extends React.Component<IProps<T
 	}
 
 	componentDidUpdate = async (prevProps: IProps<TModel>) => {
-		if (this.props.postParams !== prevProps.postParams) {
+		if (this.props.updateToken !== prevProps.updateToken) {
 
-			// todo: reset other state
+			const { updateToken } = this.props,
+				{ pagination, selectedRowKeys } = this.state;
+
+			pagination.current = 0;
+
 			this.setState({
-				data: [],
-				selectedRowKeys: []
+				pagination,
+				selectedRowKeys: updateToken.resetSelectedRows ? [] : selectedRowKeys
 			});
 
-			await this.fetchMetadata();
+			await this.fetchData();
 		}
 	}
 
@@ -94,7 +105,9 @@ export class DataTable<TModel extends IIndexer> extends React.Component<IProps<T
 	}
 
 	private fetchMetadata = async () => {
-		const dataView = await this._metadataService.load(this.props.viewId);
+		const { viewId, rowActions } = this.props;
+
+		const dataView = await this._metadataService.load(viewId);
 
 		const columns = dataView.columns.map((item: IDataColumn): ColumnProps<TModel> => {
 
@@ -107,12 +120,14 @@ export class DataTable<TModel extends IIndexer> extends React.Component<IProps<T
 				};
 			}
 
+			// todo: remove
 			if (item.key == "configCode") {
 				render = (text: any, record: TModel, index: number): React.ReactNode => {
 					return <Tag color="blue">{text}</Tag>;
 				};
 			}
 
+			// todo: remove
 			if (item.key == "statusCode") {
 				render = (text: any, record: TModel, index: number): React.ReactNode => {
 					return <Tag color="green">{text}</Tag>;
@@ -138,6 +153,24 @@ export class DataTable<TModel extends IIndexer> extends React.Component<IProps<T
 			};
 		});
 
+		if (rowActions && rowActions.length > 0) {
+			columns.push({
+				key: "$action",
+				title: "Действие",
+				width: 1,
+				render: (text: any, record: TModel, index: number) => (
+					<span>
+						{rowActions.map((action, i) => {
+							return (<React.Fragment key={`action-${i}`}>
+								{i > 0 && <Divider type="vertical" />}
+								<a onClick={() => action.onClick && action.onClick.call(this, record, index)}>{action.name}</a>
+							</React.Fragment>);
+						})}
+					</span>
+				)
+			});
+		}
+
 		this.setState({ columns });
 
 		const defaultSortColumn =
@@ -146,7 +179,7 @@ export class DataTable<TModel extends IIndexer> extends React.Component<IProps<T
 		await this.fetchData({
 			sortColumn: defaultSortColumn && defaultSortColumn.key,
 			sortOrder: defaultSortColumn && defaultSortColumn.defaultSortOrder,
-		})
+		});
 	}
 
 	private fetchData = async (params = {}) => {
@@ -155,31 +188,33 @@ export class DataTable<TModel extends IIndexer> extends React.Component<IProps<T
 
 		try {
 			let postParams = {
-				pageSize: Constants.defaultPageSize,
+				// pageSize: Constants.defaultPageSize,
 				...params,
 			};
 
-			if (this.props.postParams) {
-				postParams = Object.assign(postParams, this.props.postParams);
+			const { loadUrl, onLoadData } = this.props;
+
+			const data: IDataResult<TModel> = onLoadData
+				? await onLoadData(loadUrl, postParams)
+				: await this._fetcher.post(loadUrl, postParams);
+
+			if (data) {
+				const pagination = { ...this.state.pagination };
+
+				pagination.total = data.totalCount;
+
+				this.setState({
+					loading: false,
+					pagination,
+					totalCount: data.totalCount,
+					data: data.rows
+				});
 			}
 
-			const data: IDataResult<TModel> = await this._fetcher.post(this.props.loadUrl, postParams);
-
-			const pagination = { ...this.state.pagination };
-
-			pagination.total = data.totalCount;
-
-			this.setState({
-				loading: false,
-				pagination,
-				totalCount: data.totalCount,
-				data: data.rows
-			});
 		} catch (error) {
 			this.setState({ error, loading: false });
-			this._notification.error({
-				message: "Ошибка загрузки данных."
-			});
+			// todo: localize (?)
+			this._notification.error("Ошибка загрузки данных.", error.message);
 			throw error;
 		}
 	}
@@ -192,23 +227,22 @@ export class DataTable<TModel extends IIndexer> extends React.Component<IProps<T
 		}
 	}
 
-	render = () => {
+	render() {
 		const { selectedRowKeys } = this.state;
 
 		const rowSelection = {
 			columnWidth: 1,
-			// selectedRowKeys,
+			selectedRowKeys,
 			onChange: this.onSelectionChange
 		};
 
+		// todo: localize
 		const pagination = {
 			showTotal: (total: number, range: [number, number]) => {
-				return (
-					<>
-						{selectedRowKeys.length > 0 && (<span style={{ marginRight: "1em" }}>Выбрано: <strong>{selectedRowKeys.length}</strong></span>)}
-						{(total != 0) && (<span>Записи <strong>{range[0]}</strong> &mdash; <strong>{range[1]}</strong> из <strong>{total}</strong></span>)}
-					</>
-				);
+				return (<>
+					{selectedRowKeys.length > 0 && (<span style={{ marginRight: "1em" }}>Выбрано: <strong>{selectedRowKeys.length}</strong></span>)}
+					{(total != 0) && (<span>Записи <strong>{range[0]}</strong> &mdash; <strong>{range[1]}</strong> из <strong>{total}</strong></span>)}
+				</>);
 			},
 			...this.state.pagination
 		};

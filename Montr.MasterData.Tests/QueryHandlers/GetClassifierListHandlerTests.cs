@@ -5,6 +5,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Montr.Data.Linq2Db;
 using Montr.MasterData.Impl.QueryHandlers;
 using Montr.MasterData.Impl.Services;
+using Montr.MasterData.Models;
 using Montr.MasterData.Queries;
 
 namespace Montr.MasterData.Tests.QueryHandlers
@@ -15,7 +16,7 @@ namespace Montr.MasterData.Tests.QueryHandlers
 		[TestMethod]
 		public async Task GetClassifierList_Should_ReturnList()
 		{
-			// todo: split test
+			// todo: convert to classifier repository tests?
 
 			// arrange
 			var dbContextFactory = new DefaultDbContextFactory();
@@ -28,12 +29,18 @@ namespace Montr.MasterData.Tests.QueryHandlers
 			// act
 			var command = new GetClassifierList
 			{
-				UserUid = Guid.NewGuid()
+				UserUid = Guid.NewGuid(),
+				Request = new ClassifierSearchRequest
+				{
+					CompanyUid = Constants.OperatorCompanyUid,
+					TypeCode = "okei"
+				}
 			};
 
 			var result = await handler.Handle(command, CancellationToken.None);
 
 			// assert
+			// todo: switch to db generator and extend asserts
 			Assert.IsNotNull(result);
 		}
 	}

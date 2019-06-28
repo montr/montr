@@ -19,16 +19,19 @@ namespace Montr.MasterData.Impl.Services
 
 		public async Task<ClassifierType> GetClassifierType(Guid companyUid, string typeCode, CancellationToken cancellationToken)
 		{
-			if (companyUid == Guid.Empty) throw new InvalidOperationException("Company uid is required.");
-
-			if (typeCode == null) throw new InvalidOperationException("Classifier type code is required.");
-
-			var types = await _classifierTypeRepository
-				.Search(new ClassifierTypeSearchRequest
+			var types = await _classifierTypeRepository.Search(
+				new ClassifierTypeSearchRequest
 				{
 					CompanyUid = companyUid,
-					Code = typeCode
+					Code = typeCode ?? throw new ArgumentNullException(nameof(typeCode)),
+					PageNo = 0,
+					PageSize = 2,
 				}, cancellationToken);
+
+			if (types.Rows.Count != 1)
+			{
+				throw new InvalidOperationException($"Classifier type \"{typeCode}\" not found.");
+			}
 
 			return types.Rows.Single();
 		}

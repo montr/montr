@@ -1,9 +1,10 @@
 ﻿using System;
 using MediatR;
+using Montr.Metadata.Models;
 
 namespace Montr.MasterData.Commands
 {
-	public class DeleteClassifierList: IRequest<int>
+	public class DeleteClassifierList: IRequest<ApiResult>
 	{
 		public Guid UserUid { get; set; }
 

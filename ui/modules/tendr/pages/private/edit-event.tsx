@@ -2,7 +2,7 @@ import * as React from "react";
 import { Tabs, Button, Icon, Modal, message } from "antd";
 import { IApiResult, IDataView, IPaneProps } from "@montr-core/models";
 import { EventService, EventTemplateService } from "../../services";
-import { Page, IPaneComponent } from "@montr-core/components";
+import { Page, IPaneComponent, Toolbar, PageHeader } from "@montr-core/components";
 import { MetadataService } from "@montr-core/services";
 import { IEvent, IEventTemplate } from "modules/tendr/models";
 
@@ -140,26 +140,27 @@ export class EditEvent extends React.Component<IEditEventProps, IEditEventState>
 		if (data.id == null) return null;
 
 		// todo: load from Configuration
-		let toolbar: any;
+		let toolbar: React.ReactNode;
 
 		if (data.statusCode == "draft") {
-			toolbar = (
-				<div>
-					<Button type="primary" onClick={() => this.handlePublish()}>Опубликовать</Button>&#xA0;
-					<Button icon="check" onClick={() => this.handleSave()}>Сохранить</Button>
-				</div>
-			);
+			toolbar = (<>
+				<Button type="primary" onClick={() => this.handlePublish()}>Опубликовать</Button>&#xA0;
+				<Button icon="check" onClick={() => this.handleSave()}>Сохранить</Button>
+			</>);
 		}
 		if (data.statusCode == "published") {
-			toolbar = (
-				<div>
-					<Button onClick={() => this.handleCancel()}>Отменить</Button>&#xA0;
-				</div>
-			);
+			toolbar = (<>
+				<Button onClick={() => this.handleCancel()}>Отменить</Button> &#xA0;
+			</>);
 		}
 
 		return (
-			<Page title={this.formatPageTitle()} toolbar={toolbar}>
+			<Page title={<>
+				<Toolbar float="right">
+					{toolbar}
+				</Toolbar>
+				<PageHeader>{this.formatPageTitle()}</PageHeader>
+			</>}>
 
 				<h3 title={data.name} className="single-line-text">{data.name}</h3>
 

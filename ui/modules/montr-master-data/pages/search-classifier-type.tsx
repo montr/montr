@@ -1,67 +1,115 @@
 import * as React from "react";
-import { Page, DataTable, PageHeader } from "@montr-core/components";
+import { Page, PageHeader, Toolbar, DataTable, DataTableUpdateToken } from "@montr-core/components";
 import { Constants } from "@montr-core/.";
 import { withCompanyContext, CompanyContextProps } from "@kompany/components";
 import { ClassifierBreadcrumb } from "../components";
+import { Link } from "react-router-dom";
+import { Button, Icon } from "antd";
+import { ClassifierTypeService } from "../services";
+import { NotificationService } from "@montr-core/services";
+import { IDataResult } from "@montr-core/models";
 
 interface IProps extends CompanyContextProps {
 }
 
 interface IState {
-	postParams: any;
+	selectedRowKeys: string[] | number[];
+	updateTableToken: DataTableUpdateToken;
 }
 
 class _SearchClassifierType extends React.Component<IProps, IState> {
+
+	private _classifierTypeService = new ClassifierTypeService();
+	private _notificationService = new NotificationService();
 
 	constructor(props: IProps) {
 		super(props);
 
 		this.state = {
-			postParams: {
-				companyUid: null
-			}
+			selectedRowKeys: [],
+			updateTableToken: { date: new Date() }
 		};
 	}
 
 	componentDidMount = async () => {
-		await this.setPostParams();
 	}
 
 	componentDidUpdate = async (prevProps: IProps) => {
 		if (this.props.currentCompany !== prevProps.currentCompany) {
-			await this.setPostParams();
+			this.refreshTable(true);
 		}
 	}
 
-	private setPostParams = async () => {
-		const { currentCompany } = this.props,
-			{ postParams } = this.state;
+	componentWillUnmount = async () => {
+		await this._classifierTypeService.abort();
+	}
 
-		const companyUid = currentCompany ? currentCompany.uid : null;
+	onSelectionChange = async (selectedRowKeys: string[] | number[]) => {
+		this.setState({ selectedRowKeys });
+	}
 
+	// todo: show confirm
+	// todo: localize
+	delete = async () => {
+		try {
+			const rowsAffected = await this._classifierTypeService
+				.delete(this.props.currentCompany.uid, this.state.selectedRowKeys);
+
+			this._notificationService.success("Выбранные записи удалены. " + rowsAffected);
+
+			this.refreshTable(true);
+		} catch (error) {
+			this._notificationService.error("Ошибка при удалении данных", error.message);
+		}
+	}
+
+	onLoadTableData = async (loadUrl: string, postParams: any): Promise<IDataResult<{}>> => {
+		const { currentCompany } = this.props;
+
+		if (currentCompany) {
+
+			const params = {
+				companyUid: currentCompany.uid,
+				...postParams
+			};
+
+			return await this._classifierTypeService.post(loadUrl, params);
+		}
+
+		return null;
+	}
+
+	refreshTable = async (resetSelectedRows?: boolean) => {
 		this.setState({
-			postParams: {
-				companyUid: companyUid
-			}
+			updateTableToken: { date: new Date(), resetSelectedRows }
 		});
 	}
 
 	render = () => {
-		const { postParams } = this.state;
-
-		if (postParams.companyUid == null) return null;
+		const { updateTableToken } = this.state;
 
 		return (
-			<Page title={<>
-				<ClassifierBreadcrumb />
-				<PageHeader>Справочники</PageHeader>
-			</>}>
+			// todo: localize
+			<Page
+				title={<>
+					<Toolbar float="right">
+						<Link to={`/classifiers/add`}>
+							<Button type="primary"><Icon type="plus" /> Добавить</Button>
+						</Link>
+						<Button onClick={this.delete}><Icon type="delete" /> Удалить</Button>
+					</Toolbar>
+
+					<ClassifierBreadcrumb />
+					<PageHeader>Справочники</PageHeader>
+				</>}>
 
 				<DataTable
+					rowKey="uid"
 					viewId={`ClassifierType/Grid/`}
-					loadUrl={`${Constants.baseURL}/classifier/types/`}
-					postParams={this.state.postParams}
-					rowKey="code"
+					loadUrl={`${Constants.baseURL}/classifierType/list/`}
+					onLoadData={this.onLoadTableData}
+					onSelectionChange={this.onSelectionChange}
+					updateToken={updateTableToken}
 				/>
 
 			</Page>

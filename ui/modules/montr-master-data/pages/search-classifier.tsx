@@ -1,16 +1,17 @@
 import * as React from "react";
-import { Page, DataTable, PageHeader } from "@montr-core/components";
-import { NotificationService } from "@montr-core/services";
+import { Page, PageHeader, Toolbar, DataTable, DataTableUpdateToken } from "@montr-core/components";
 import { RouteComponentProps } from "react-router";
-import { Constants } from "@montr-core/.";
-import { Icon, Button, Tree, Select, Radio, Layout } from "antd";
 import { Link } from "react-router-dom";
+import { Icon, Button, Tree, Select, Radio, Layout, Modal, Spin } from "antd";
+import { Constants } from "@montr-core/.";
+import { Guid, IDataResult } from "@montr-core/models";
+import { NotificationService } from "@montr-core/services";
 import { withCompanyContext, CompanyContextProps } from "@kompany/components";
-import { ClassifierService } from "../services";
-import { IClassifierType, IClassifierTree, IClassifierGroup } from "../models";
+import { ClassifierService, ClassifierTypeService, ClassifierGroupService } from "../services";
+import { IClassifierType, IClassifierGroup } from "../models";
 import { RadioChangeEvent } from "antd/lib/radio";
-import { AntTreeNode } from "antd/lib/tree";
-import { ClassifierBreadcrumb } from "../components";
+import { AntTreeNode, AntTreeNodeSelectedEvent, AntTreeNodeExpandedEvent } from "antd/lib/tree";
+import { ClassifierBreadcrumb, ModalEditClassifierGroup } from "../components";
 
 interface IRouteProps {
 	typeCode: string;
@@ -21,114 +22,151 @@ interface IProps extends CompanyContextProps, RouteComponentProps<IRouteProps> {
 
 interface IState {
 	types: IClassifierType[];
-	type: IClassifierType;
-	trees?: IClassifierTree[];
-	treeCode?: string,
+	type?: IClassifierType;
+	trees?: IClassifierGroup[];
+	treeUid?: Guid,
 	groups?: IClassifierGroup[];
+	selectedGroup?: IClassifierGroup;
+	groupEditData?: IClassifierGroup;
+	expandedKeys: string[];
 	selectedRowKeys: string[] | number[];
-	postParams: any;
+	depth: string; // todo: make enum
+	updateTableToken: DataTableUpdateToken;
 }
 
 class _SearchClassifier extends React.Component<IProps, IState> {
-
-	private _classifierService = new ClassifierService();
-	private _notificationService = new NotificationService();
+	_classifierTypeService = new ClassifierTypeService();
+	_classifierGroupService = new ClassifierGroupService();
+	_classifierService = new ClassifierService();
+	_notificationService = new NotificationService();
 
 	constructor(props: IProps) {
 		super(props);
 
 		this.state = {
 			types: [],
-			type: {
-				hierarchyType: "None"
-			},
+			expandedKeys: [],
 			selectedRowKeys: [],
-			postParams: {
-				depth: "0"
-			}
+			depth: "0",
+			updateTableToken: { date: new Date() }
 		};
 	}
 
 	componentDidMount = async () => {
-		this.setPostParams();
+		await this.loadClassifierTypes();
 	}
 
 	componentDidUpdate = async (prevProps: IProps) => {
-		if (this.props.match.params.typeCode !== prevProps.match.params.typeCode ||
-			this.props.currentCompany !== prevProps.currentCompany) {
-			this.setPostParams();
+		if (this.props.currentCompany !== prevProps.currentCompany) {
+			// todo: check if selected type belongs to company (show 404)
+			await this.loadClassifierTypes();
+		}
+		else if (this.props.match.params.typeCode !== prevProps.match.params.typeCode) {
+
+			this.setState({
+				selectedRowKeys: [],
+				selectedGroup: null
+			});
+
+			await this.loadClassifierType();
+			await this.refreshTable(true);
 		}
 	}
 
 	componentWillUnmount = async () => {
+		await this._classifierTypeService.abort();
+		await this._classifierGroupService.abort();
 		await this._classifierService.abort();
 	}
 
-	private setPostParams = async () => {
-		const { currentCompany } = this.props,
-			{ typeCode } = this.props.match.params;
+	loadClassifierTypes = async () => {
+		const { currentCompany } = this.props;
 
-		if (!currentCompany) return;
+		if (currentCompany) {
+			const types = (await this._classifierTypeService.list(currentCompany.uid)).rows;
 
-		const types = await this.fetchClassifierTypes();
-		const type = types.find(x => x.code == typeCode);
+			this.setState({ types });
 
-		let trees: IClassifierTree[] = [],
-			treeCode: string,
-			groups: IClassifierGroup[] = [];
-
-		if (type) {
-			if (type.hierarchyType == "Groups") {
-				trees = await this.fetchClassifierTrees(typeCode);
-
-				if (trees && trees.length > 0) {
-					treeCode = trees[0].code;
-					groups = await this.fetchClassifierGroups(typeCode, treeCode);
-				}
-			}
-
-			if (type.hierarchyType == "Items") {
-				groups = await this.fetchClassifierGroups(typeCode, null);
-			}
-
-			this.setState({
-				types: types,
-				type: type,
-				trees: trees,
-				treeCode: treeCode,
-				groups: groups,
-				postParams: {
-					companyUid: currentCompany ? currentCompany.uid : null,
-					typeCode: typeCode,
-					treeCode: treeCode
-				}
-			});
+			await this.loadClassifierType();
 		}
 	}
 
-	private fetchClassifierTypes = async (): Promise<IClassifierType[]> => {
-		const { currentCompany } = this.props;
+	loadClassifierType = async () => {
+		const { currentCompany } = this.props,
+			{ typeCode } = this.props.match.params;
 
-		const data = await this._classifierService.types(currentCompany.uid);
+		if (currentCompany) {
+			const type = await this._classifierTypeService.get(currentCompany.uid, { typeCode });
 
-		return data.rows;
+			this.setState({ type });
+
+			await this.loadClassifierTrees();
+		}
 	}
 
-	private fetchClassifierTrees = async (typeCode: string): Promise<IClassifierTree[]> => {
-		const { currentCompany } = this.props;
+	loadClassifierTrees = async () => {
+		const { currentCompany } = this.props,
+			{ type } = this.state;
 
-		const data = await this._classifierService.trees(currentCompany.uid, typeCode);
+		if (currentCompany && type) {
+			let trees: IClassifierGroup[] = [],
+				treeUid: Guid;
 
-		return data.rows;
+			if (type.hierarchyType == "Groups") {
+				trees = await this.fetchClassifierGroups(type.code, null);
+
+				if (trees && trees.length > 0) {
+					treeUid = trees[0].uid;
+				}
+			}
+
+			this.setState({
+				trees,
+				treeUid
+			});
+
+			await this.loadClassifierGroups();
+		}
 	}
 
-	private fetchClassifierGroups = async (typeCode: string, treeCode: string, parentCode?: string): Promise<IClassifierGroup[]> => {
+	loadClassifierGroups = async (focusGroupUid?: Guid) => {
+		// to re-render page w/o groups tree, otherwise tree not refreshed
+		this.setState({ groups: null });
+
+		const { currentCompany } = this.props,
+			{ type, treeUid } = this.state;
+
+		if (currentCompany && type) {
+			let groups: IClassifierGroup[] = [];
+
+			if (type.hierarchyType == "Groups") {
+				groups = await this.fetchClassifierGroups(type.code, treeUid, focusGroupUid, true);
+			}
+
+			if (type.hierarchyType == "Items") {
+				groups = await this.fetchClassifierGroups(type.code, null, focusGroupUid, true);
+			}
+
+			this.setState({ groups });
+		}
+	}
+
+	fetchClassifierGroups = async (typeCode: string, parentUid?: Guid, focusUid?: Guid, expandSingleChild?: boolean): Promise<IClassifierGroup[]> => {
 		const { currentCompany } = this.props
 
-		return await this._classifierService.groups(currentCompany.uid, typeCode, treeCode, parentCode);
+		const result = await this._classifierGroupService.list(
+			currentCompany.uid, {
+				typeCode,
+				parentUid,
+				focusUid,
+				expandSingleChild
+			});
+
+		return result.rows;
 	}
 
-	private delete = async () => {
+	// todo: move button to separate class?
+	delete = async () => {
 		const rowsAffected = await this._classifierService
 			.delete(this.props.currentCompany.uid,
 				this.props.match.params.typeCode,
@@ -136,100 +174,243 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 
 		this._notificationService.success("Выбранные записи удалены. " + rowsAffected);
 
-		this.setPostParams(); // to force table refresh
+		await this.refreshTable();
 	}
 
-	private export = async () => {
+	// todo: move button to separate class?
+	export = async () => {
 		// todo: show export dialog: all pages, current page, export format
 		await this._classifierService.export(this.props.currentCompany.uid, {
 			typeCode: this.props.match.params.typeCode
 		});
 	}
 
-	private onSelectionChange = async (selectedRowKeys: string[] | number[]) => {
+	onTableSelectionChange = async (selectedRowKeys: string[] | number[]) => {
 		this.setState({ selectedRowKeys });
 	}
 
-	private onTreeLoadData = async (node: AntTreeNode) => new Promise(async (resolve) => {
+	onTreeRootSelect = async (value: string) => {
+		const { trees } = this.state;
+
+		const tree = trees.find(x => x.code == value);
+
+		if (tree) {
+			// https://reactjs.org/docs/react-component.html#setstate - Generally we recommend using componentDidUpdate()
+			// todo: rewrite using componentDidUpdate() instead of callback in setState
+			this.setState({ treeUid: tree.uid, selectedGroup: null, expandedKeys: [] }, async () => {
+				await this.loadClassifierGroups();
+				await this.refreshTable();
+			});
+		}
+	}
+
+	onTreeLoadData = async (node: AntTreeNode) => new Promise<void>(async (resolve) => {
 		const group: IClassifierGroup = node.props.dataRef;
 
-		const { type, treeCode } = this.state;
+		if (!group.children) {
+			const { type, expandedKeys } = this.state;
 
-		const children = await this.fetchClassifierGroups(type.code, treeCode, group.code)
+			const children = await this.fetchClassifierGroups(type.code, group.uid, null, true)
 
-		group.children = children;
+			// to populate new expanded keys
+			this.buildGroupsTree(children, expandedKeys);
 
-		this.setState({
-			groups: [...this.state.groups],
-		});
+			group.children = children;
+
+			this.setState({
+				groups: [...this.state.groups],
+				expandedKeys
+			});
+		}
 
 		resolve();
 	})
 
-	private onTreeSelect = (selectedKeys: string[]) => {
-		const { postParams } = this.state;
-		this.setState({ postParams: { ...postParams, groupCode: selectedKeys[0] } });
+	onTreeSelect = async (selectedKeys: string[], e: AntTreeNodeSelectedEvent) => {
+		this.setState({
+			selectedGroup: (e.selected) ? e.node.props.dataRef : null
+		});
+
+		await this.refreshTable();
 	}
 
-	private onDepthChange = (e: RadioChangeEvent) => {
-		const { postParams } = this.state;
-		this.setState({ postParams: { ...postParams, depth: e.target.value } });
+	onTreeExpand = (expandedKeys: string[], e: AntTreeNodeExpandedEvent) => {
+		this.setState({ expandedKeys });
 	}
 
-	private buildGroupsTree = (groups: IClassifierGroup[]) => {
+	onDepthChange = async (e: RadioChangeEvent) => {
+		// todo: store depth in local storage
+
+		this.setState({ depth: e.target.value as string });
+
+		await this.refreshTable();
+	}
+
+	buildGroupsTree = (groups: IClassifierGroup[], expanded?: string[]) => {
 		return groups && groups.map(x => {
+
+			if (expanded && x.children) {
+				expanded.push(x.uid.toString());
+			}
+
 			return (
-				<Tree.TreeNode title={`${x.code} - ${x.name}`} key={x.code} dataRef={x}>
-					{x.children && this.buildGroupsTree(x.children)}
+				<Tree.TreeNode title={`${x.code}. ${x.name}`} key={`${x.uid}`} dataRef={x}>
+					{x.children && this.buildGroupsTree(x.children, expanded)}
 				</Tree.TreeNode>
 			);
 		});
 	}
 
+	showAddGroupModal = () => {
+		const { selectedGroup, treeUid } = this.state;
+
+		this.setState({ groupEditData: { parentUid: selectedGroup ? selectedGroup.uid : treeUid } });
+	}
+
+	showEditGroupModal = () => {
+		const { selectedGroup, treeUid } = this.state;
+
+		this.setState({ groupEditData: { uid: selectedGroup ? selectedGroup.uid : treeUid } });
+	}
+
+	showDeleteGroupConfirm = () => {
+		Modal.confirm({
+			title: "Вы действительно хотите удалить выбранную группу?",
+			content: "Дочерние группы и элементы будут перенесены к родительской группе.",
+			onOk: this.deleteSelectedGroup
+		});
+	}
+
+	deleteSelectedGroup = async () => {
+		const { currentCompany } = this.props
+		const { type, selectedGroup } = this.state;
+
+		await this._classifierGroupService.delete(currentCompany.uid, type.code, selectedGroup.uid);
+
+		this.setState({ selectedGroup: null });
+
+		// todo: select deleted group parent?
+		this.refreshTree(selectedGroup.parentUid);
+	}
+
+	refreshTree = async (focusGroupUid?: Guid) => {
+		await this.loadClassifierGroups(focusGroupUid);
+		await this.refreshTable();
+	}
+
+	refreshTable = async (resetSelectedRows?: boolean) => {
+		this.setState({
+			updateTableToken: { date: new Date(), resetSelectedRows }
+		});
+	}
+
+	onGroupModalSuccess = async (data: IClassifierGroup) => {
+		const { expandedKeys } = this.state;
+
+		// after group added - expand parent group
+		// todo: expand all parent groups (parent can be selected in modal)
+		if (data.parentUid) {
+			expandedKeys.push(data.parentUid.toString());
+		}
+
+		this.setState({ groupEditData: null, selectedGroup: data, expandedKeys });
+
+		await this.refreshTree(data.uid);
+	}
+
+	onGroupModalCancel = () => {
+		this.setState({ groupEditData: null });
+	}
+
+	onLoadTableData = async (loadUrl: string, postParams: any): Promise<IDataResult<{}>> => {
+		const { currentCompany } = this.props,
+			{ type, treeUid, depth, selectedGroup } = this.state;
+
+		if (currentCompany && type.code) {
+
+			const params = {
+				companyUid: currentCompany.uid,
+				typeCode: type.code,
+				treeUid,
+				depth,
+				groupUid: selectedGroup ? selectedGroup.uid : null,
+				...postParams
+			};
+
+			return await this._classifierService.post(loadUrl, params);
+		}
+
+		return null;
+	}
+
 	render() {
 		const { currentCompany } = this.props,
-			{ types, type, trees, groups, postParams } = this.state;
+			{ types, type, trees, groups, selectedGroup, groupEditData, expandedKeys, updateTableToken } = this.state;
 
-		if (!currentCompany || !type || !postParams.typeCode) return null;
+		if (!currentCompany || !type) return null;
 
-		// todo: настройки:
-		// 1. как выглядит дерево - списком или деревом (?)
-		// 2. прятать дерево
-		// 3. показывать или нет группы в таблице
-		// 4. показывать планарную таблицу без групп
-		let treeSelect;
-		if (trees && trees.length > 0) {
-			treeSelect = (
-				<Select defaultValue="default" size="small">
-					{trees.map(x => <Select.Option key={x.code}>{x.name || x.code}</Select.Option>)}
+		// todo: settings
+		// 1. how tree looks - list or tree (?)
+		// 2. hide tree
+		// 3. show or hide groups in list
+
+		let groupControls;
+		if (type.hierarchyType == "Groups") {
+			groupControls = <>
+				<Select defaultValue="default" size="small" onSelect={this.onTreeRootSelect}>
+					{trees && trees.map(x => <Select.Option key={x.code}>{x.name || x.code}</Select.Option>)}
 				</Select>
-			);
+				<Button.Group size="small">
+					<Button icon="plus" onClick={this.showAddGroupModal} />
+					<Button icon="edit" onClick={this.showEditGroupModal} disabled={!selectedGroup} />
+					<Button icon="delete" onClick={this.showDeleteGroupConfirm} disabled={!selectedGroup} />
+				</Button.Group>
+			</>
 		}
 
 		let tree;
-		if (type.hierarchyType != "None" && groups.length > 0) {
-			tree = (
-				<Tree blockNode
-					loadData={this.onTreeLoadData}
-					onSelect={this.onTreeSelect}>
-					{this.buildGroupsTree(groups)}
-				</Tree>
-			);
+		if (type.hierarchyType != "None") {
+			if (groups) {
+				const defaultExpandedKeys: string[] = [],
+					selectedKeys: Guid[] = [];
+
+				const nodes = this.buildGroupsTree(groups, defaultExpandedKeys);
+
+				if (selectedGroup) {
+					selectedKeys.push(selectedGroup.uid);
+				}
+
+				tree = (
+					<Tree blockNode
+						defaultExpandedKeys={defaultExpandedKeys}
+						defaultSelectedKeys={selectedKeys.map(x => x.toString())}
+						expandedKeys={expandedKeys}
+						loadData={this.onTreeLoadData}
+						onSelect={this.onTreeSelect}
+						onExpand={this.onTreeExpand}>
+						{nodes}
+					</Tree>
+				);
+			}
+			else {
+				tree = <Spin />;
+			}
 		}
 
 		const table = (
 			<DataTable
+				rowKey="uid"
 				viewId={`Classifier/Grid/${type.code}`}
 				loadUrl={`${Constants.baseURL}/classifier/list/`}
-				postParams={postParams}
-				rowKey="uid"
-				onSelectionChange={this.onSelectionChange}
+				onLoadData={this.onLoadTableData}
+				onSelectionChange={this.onTableSelectionChange}
+				updateToken={updateTableToken}
 			/>
 		);
 
 		const content = (tree)
 			? (<>
-				<Layout.Sider width="360" theme="light" collapsible={false} style={{ overflowX: "auto", height: "100vh" }}>
+				<Layout.Sider width="360" theme="light" collapsible={false} style={{ overflowX: "auto", height: "80vh" }}>
 					{tree}
 				</Layout.Sider>
 				<Layout.Content className="bg-white" style={{ paddingTop: 0, paddingRight: 0 }}>
@@ -241,32 +422,52 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 		return (
 			<Page
 				title={<>
+					<Toolbar float="right">
+						<Link to={`/classifiers/${type.code}/add`}>
+							<Button type="primary"><Icon type="plus" /> Добавить</Button>
+						</Link>
+						<Button onClick={this.delete}><Icon type="delete" /> Удалить</Button>
+						<Button onClick={this.export}><Icon type="export" /> Экспорт</Button>
+					</Toolbar>
+
 					<ClassifierBreadcrumb type={type} types={types} />
 					<PageHeader>{type.name}</PageHeader>
-				</>}
-				toolbar={<>
-					<Link to={`/classifiers/${type.code}/new`}>
-						<Button type="primary"><Icon type="plus" /> Добавить</Button>
-					</Link>
-					&#xA0;<Button onClick={this.delete}><Icon type="delete" /> Удалить</Button>
-					&#xA0;<Button onClick={this.export}><Icon type="export" /> Экспорт</Button>
 				</>}>
 
 				<Layout>
-					<Layout.Header className="bg-white" style={{ padding: "0" }}>
-						{treeSelect}
-						&#xA0;
-						<div style={{ float: "right" }}>
+					<Layout.Header className="bg-white" style={{ padding: "0", lineHeight: 1.5, height: 36 }}>
+
+						<Toolbar size="small">
+							{/* <Button size="small" icon="left" /> */}
+							{groupControls}
+							{/* <Button size="small" icon="search" /> */}
+						</Toolbar>
+
+						<Toolbar size="small" float="right">
+							{/* <Input.Search size="small" allowClear style={{ width: 200 }} /> */}
 							<Radio.Group defaultValue="0" size="small" onChange={this.onDepthChange}>
 								<Radio.Button value="0"><Icon type="folder" /> Группа</Radio.Button>
 								<Radio.Button value="1"><Icon type="cluster" /> Иерархия</Radio.Button>
 							</Radio.Group>
-						</div>
+							<Link to={`/classifiers/edit/${type.uid}`}>
+								<Button size="small"><Icon type="setting" /></Button>
+							</Link>
+						</Toolbar>
+
 					</Layout.Header>
 					<Layout hasSider={!!tree} className="bg-white">
 						{content}
 					</Layout>
 				</Layout>
+
+				{groupEditData &&
+					<ModalEditClassifierGroup
+						typeCode={type.code}
+						uid={groupEditData.uid}
+						parentUid={groupEditData.parentUid}
+						onSuccess={this.onGroupModalSuccess}
+						onCancel={this.onGroupModalCancel} />}
+
 			</Page>
 		);
 	}

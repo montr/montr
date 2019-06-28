@@ -5,10 +5,10 @@ using Montr.MasterData.Models;
 
 namespace Montr.MasterData.Queries
 {
-	public class GetClassifierTreeList : IRequest<SearchResult<ClassifierTree>>
+	public class GetClassifierLinkList : IRequest<SearchResult<ClassifierLink>>
 	{
 		public Guid UserUid { get; set; }
 
-		public ClassifierTreeSearchRequest Request { get; set; }
+		public ClassifierLinkSearchRequest Request { get; set; }
 	}
 }

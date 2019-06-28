@@ -3,16 +3,30 @@ import { BrowserRouter as Router } from "react-router-dom";
 import { LocaleProvider, Layout } from "antd";
 import ru_RU from "antd/lib/locale-provider/ru_RU";
 import { Routes } from ".";
+import { Routes as MasterDataRoutes } from "@montr-master-data/.";
 import { AuthCallbackHandler, UserContextProvider, DataMenu } from "@montr-core/components";
 import { CompanyContextProvider, UserWithCompanyMenu } from "@kompany/components";
 import { NotificationService } from "@montr-core/services";
 
-export class App extends React.Component {
+interface IProps {
+}
+
+interface IState {
+}
+
+export class App extends React.Component<IProps, IState> {
 
 	private _notification = new NotificationService();
 
+	constructor(props: IProps) {
+		super(props);
+
+		this.state = {
+		};
+	}
+
 	componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
-		this._notification.error({ message: "App.componentDidCatch " + error.message });
+		this._notification.error("Ошибка в приложении", error.message);
 	}
 
 	render() {
@@ -46,6 +60,7 @@ export class App extends React.Component {
 										<Layout.Content className="bg-white">
 
 											<Routes />
+											<MasterDataRoutes />
 
 										</Layout.Content>
 										<Layout.Footer className="bg-white">© {new Date().getFullYear()}</Layout.Footer>

@@ -4,5 +4,6 @@ export interface IMenu {
 	icon?: string;
 	url?: string;
 	route?: string;
+	onClick?: (...args: any[]) => void;
 	items?: IMenu[];
 }

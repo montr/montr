@@ -16,6 +16,8 @@ namespace Montr.MasterData.Models
 
 		public string Name { get; set; }
 
+		public Guid? ParentUid { get; set; }
+
 		public string ParentCode { get; set; }
 
 		public string Url { get; set; }

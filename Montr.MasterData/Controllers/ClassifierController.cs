@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -8,6 +6,7 @@ using Montr.Core.Models;
 using Montr.MasterData.Commands;
 using Montr.MasterData.Models;
 using Montr.MasterData.Queries;
+using Montr.Metadata.Models;
 using Montr.Web.Services;
 
 namespace Montr.MasterData.Controllers
@@ -22,36 +21,6 @@ namespace Montr.MasterData.Controllers
 		{
 			_mediator = mediator;
 			_currentUserProvider = currentUserProvider;
-		}
-
-		[HttpPost]
-		public async Task<SearchResult<ClassifierType>> Types(ClassifierTypeSearchRequest request)
-		{
-			return await _mediator.Send(new GetClassifierTypeList
-			{
-				UserUid = _currentUserProvider.GetUserUid(),
-				Request = request
-			});
-		}
-
-		[HttpPost]
-		public async Task<SearchResult<ClassifierTree>> Trees(ClassifierTreeSearchRequest request)
-		{
-			return await _mediator.Send(new GetClassifierTreeList
-			{
-				UserUid = _currentUserProvider.GetUserUid(),
-				Request = request
-			});
-		}
-		
-		[HttpPost]
-		public async Task<IEnumerable<ClassifierGroup>> Groups(ClassifierGroupSearchRequest request)
-		{
-			return await _mediator.Send(new GetClassifierGroupList
-			{
-				UserUid = _currentUserProvider.GetUserUid(),
-				Request = request
-			});
 		}
 
 		[HttpPost]
@@ -87,7 +56,7 @@ namespace Montr.MasterData.Controllers
 		}
 
 		[HttpPost]
-		public async Task<Guid> Insert(InsertClassifier request)
+		public async Task<ApiResult> Insert(InsertClassifier request)
 		{
 			request.UserUid = _currentUserProvider.GetUserUid();
 
@@ -95,7 +64,7 @@ namespace Montr.MasterData.Controllers
 		}
 
 		[HttpPost]
-		public async Task<int> Update(UpdateClassifier request)
+		public async Task<ApiResult> Update(UpdateClassifier request)
 		{
 			request.UserUid = _currentUserProvider.GetUserUid();
 
@@ -103,7 +72,7 @@ namespace Montr.MasterData.Controllers
 		}
 
 		[HttpPost]
-		public async Task<int> Delete(DeleteClassifierList request)
+		public async Task<ApiResult> Delete(DeleteClassifierList request)
 		{
 			request.UserUid = _currentUserProvider.GetUserUid();
 

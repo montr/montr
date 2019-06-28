@@ -9,7 +9,7 @@ namespace Montr.MasterData.Impl.Entities
 	{
 		[Column(Name = "uid"), DataType(DataType.Guid), PrimaryKey, Identity]
 		public Guid Uid { get; set; }
-		
+
 		[Column(Name = "company_uid"), DataType(DataType.Guid), NotNull]
 		public Guid CompanyUid { get; set; }
 
@@ -18,6 +18,9 @@ namespace Montr.MasterData.Impl.Entities
 
 		[Column(Name = "name"), DataType(DataType.VarChar), NotNull]
 		public string Name { get; set; }
+
+		[Column(Name = "description"), DataType(DataType.VarChar)]
+		public string Description { get; set; }
 
 		[Column(Name = "hierarchy_type"), DataType(DataType.VarChar), NotNull]
 		public string HierarchyType { get; set; }

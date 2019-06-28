@@ -34,6 +34,11 @@ namespace Montr.MasterData.Impl.Services
 					query = query.Where(x => x.Code == request.Code);
 				}
 
+				if (request.Uid != null)
+				{
+					query = query.Where(x => x.Uid == request.Uid);
+				}
+
 				var data = await query
 					.Apply(request, x => x.Code)
 					.Select(x => new ClassifierType
@@ -41,6 +46,7 @@ namespace Montr.MasterData.Impl.Services
 						Uid = x.Uid,
 						Code = x.Code,
 						Name = x.Name,
+						Description = x.Description,
 						HierarchyType = Enum.Parse<HierarchyType>(x.HierarchyType),
 						IsSystem = true,
 						Url = $"/classifiers/{x.Code}/"
