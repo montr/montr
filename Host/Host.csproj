@@ -36,19 +36,19 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Dokumento.Implementation\Dokumento.Implementation.csproj" />
-    <ProjectReference Include="..\Dokumento\Dokumento.csproj" />
-    <ProjectReference Include="..\Kompany.Implementation\Kompany.Implementation.csproj" />
-    <ProjectReference Include="..\Kompany\Kompany.csproj" />
-    <ProjectReference Include="..\Montr.Core.Implementation\Montr.Core.Implementation.csproj" />
+    <ProjectReference Include="..\Montr.Dokumento.Impl\Montr.Dokumento.Impl.csproj" />
+    <ProjectReference Include="..\Montr.Dokumento\Montr.Dokumento.csproj" />
+    <ProjectReference Include="..\Montr.Kompany.Impl\Montr.Kompany.Impl.csproj" />
+    <ProjectReference Include="..\Montr.Kompany\Montr.Kompany.csproj" />
+    <ProjectReference Include="..\Montr.Core.Impl\Montr.Core.Impl.csproj" />
     <ProjectReference Include="..\Montr.Data.Linq2Db\Montr.Data.Linq2Db.csproj" />
     <ProjectReference Include="..\Montr.Data.Npgsql\Montr.Data.Npgsql.csproj" />
     <ProjectReference Include="..\Montr.MasterData.Impl\Montr.MasterData.Impl.csproj" />
     <ProjectReference Include="..\Montr.MasterData\Montr.MasterData.csproj" />
     <ProjectReference Include="..\Montr.Modularity\Montr.Modularity.csproj" />
     <ProjectReference Include="..\Montr.Web\Montr.Web.csproj" />
-    <ProjectReference Include="..\Tendr.Implementation\Tendr.Implementation.csproj" />
-    <ProjectReference Include="..\Tendr\Tendr.csproj" />
+    <ProjectReference Include="..\Montr.Tendr.Impl\Montr.Tendr.Impl.csproj" />
+    <ProjectReference Include="..\Montr.Tendr\Montr.Tendr.csproj" />
   </ItemGroup>
 
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
