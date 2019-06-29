@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Kompany.Implementation.QueryHandlers;
-using Kompany.Queries;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Montr.Data.Linq2Db;
+using Montr.Kompany.Impl.QueryHandlers;
+using Montr.Kompany.Queries;
 
-namespace Kompany.Tests.QueryHandlers
+namespace Montr.Kompany.Tests.QueryHandlers
 {
 	[TestClass]
 	public class GetCompanyListHandlerTests

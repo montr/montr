@@ -1,4 +1,4 @@
-﻿namespace Kompany.Models
+﻿namespace Montr.Kompany.Models
 {
 	public class Company
 	{

@@ -1,4 +1,4 @@
-﻿namespace Tendr.Models
+﻿namespace Montr.Tendr.Models
 {
 	public class Event
 	{

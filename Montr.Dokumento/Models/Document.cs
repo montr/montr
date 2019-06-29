@@ -1,4 +1,4 @@
-﻿namespace Dokumento.Models
+﻿namespace Montr.Dokumento.Models
 {
 	public class Document
 	{

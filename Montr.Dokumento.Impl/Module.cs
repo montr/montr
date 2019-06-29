@@ -1,10 +1,10 @@
-﻿using Dokumento.Implementation.Services;
-using Dokumento.Services;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Montr.Dokumento.Impl.Services;
+using Montr.Dokumento.Services;
 using Montr.Modularity;
 
-namespace Dokumento.Implementation
+namespace Montr.Dokumento.Impl
 {
 	public class Module : IModule
 	{

@@ -1,8 +1,8 @@
 ﻿using System;
 using MediatR;
-using Tendr.Models;
+using Montr.Tendr.Models;
 
-namespace Tendr.Commands
+namespace Montr.Tendr.Commands
 {
 	public class CreateEvent: IRequest<long>
 	{

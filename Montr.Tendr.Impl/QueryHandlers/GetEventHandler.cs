@@ -4,11 +4,11 @@ using System.Threading.Tasks;
 using LinqToDB;
 using MediatR;
 using Montr.Data.Linq2Db;
-using Tendr.Implementation.Entities;
-using Tendr.Models;
-using Tendr.Queries;
+using Montr.Tendr.Impl.Entities;
+using Montr.Tendr.Models;
+using Montr.Tendr.Queries;
 
-namespace Tendr.Implementation.QueryHandlers
+namespace Montr.Tendr.Impl.QueryHandlers
 {
 	public class GetEventHandler : IRequestHandler<GetEvent, Event>
 	{

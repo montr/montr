@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
-using Dokumento.Models;
+using Montr.Dokumento.Models;
 
-namespace Dokumento.Services
+namespace Montr.Dokumento.Services
 {
 	public interface IDocumentRepository
 	{

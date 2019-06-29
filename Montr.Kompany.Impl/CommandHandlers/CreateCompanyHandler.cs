@@ -1,18 +1,18 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Dokumento.Models;
-using Dokumento.Services;
-using Kompany.Commands;
-using Kompany.Implementation.Entities;
-using Kompany.Models;
 using LinqToDB;
 using MediatR;
 using Montr.Core.Models;
 using Montr.Core.Services;
 using Montr.Data.Linq2Db;
+using Montr.Dokumento.Models;
+using Montr.Dokumento.Services;
+using Montr.Kompany.Commands;
+using Montr.Kompany.Impl.Entities;
+using Montr.Kompany.Models;
 
-namespace Kompany.Implementation.CommandHandlers
+namespace Montr.Kompany.Impl.CommandHandlers
 {
 	public class CreateCompanyHandler : IRequestHandler<CreateCompany, Guid>
 	{

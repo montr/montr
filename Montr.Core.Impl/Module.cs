@@ -1,10 +1,10 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Montr.Core.Implementation.Services;
+using Montr.Core.Impl.Services;
 using Montr.Core.Services;
 using Montr.Modularity;
 
-namespace Montr.Core.Implementation
+namespace Montr.Core.Impl
 {
 	public class Module : IModule
 	{

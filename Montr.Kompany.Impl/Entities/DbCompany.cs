@@ -1,7 +1,7 @@
 ﻿using LinqToDB;
 using LinqToDB.Mapping;
 
-namespace Kompany.Implementation.Entities
+namespace Montr.Kompany.Impl.Entities
 {
 	[Table(Name = "company")]
 	public class DbCompany

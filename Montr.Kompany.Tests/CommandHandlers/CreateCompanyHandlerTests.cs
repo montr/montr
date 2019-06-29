@@ -1,16 +1,16 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Dokumento.Implementation.Services;
-using Kompany.Commands;
-using Kompany.Implementation.CommandHandlers;
-using Kompany.Models;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Montr.Core.Implementation.Services;
+using Montr.Core.Impl.Services;
 using Montr.Core.Services;
 using Montr.Data.Linq2Db;
+using Montr.Dokumento.Impl.Services;
+using Montr.Kompany.Commands;
+using Montr.Kompany.Impl.CommandHandlers;
+using Montr.Kompany.Models;
 
-namespace Kompany.Tests.CommandHandlers
+namespace Montr.Kompany.Tests.CommandHandlers
 {
 	[TestClass]
 	public class CreateCompanyHandlerTests

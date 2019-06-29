@@ -2,7 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Montr.Modularity;
 
-namespace Kompany
+namespace Montr.Kompany
 {
 	public class Module : IModule
 	{

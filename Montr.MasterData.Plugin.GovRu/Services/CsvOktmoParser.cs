@@ -77,6 +77,7 @@ namespace Montr.MasterData.Plugin.GovRu.Services
 		{
 			var item = base.Parse(record);
 
+			// todo: analyze parent/child relations
 			if (item.SectionCode == "1")
 			{
 				item.Code = string.Concat(item.Code1, item.Code2, item.Code3);

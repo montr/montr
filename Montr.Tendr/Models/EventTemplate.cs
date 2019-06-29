@@ -1,4 +1,4 @@
-﻿namespace Tendr.Models
+﻿namespace Montr.Tendr.Models
 {
     public class EventTemplate
     {
@@ -29,8 +29,7 @@
 			new EventTemplate
 			{
 				ConfigCode = "proposal",
-				Name = "Предложение",
-				Description = "Руки и сердца"
+				Name = "Предложение"
 			}
 		};
     }

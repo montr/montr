@@ -1,7 +1,7 @@
 ﻿using LinqToDB;
 using LinqToDB.Mapping;
 
-namespace Tendr.Implementation.Entities
+namespace Montr.Tendr.Impl.Entities
 {
 	[Table(Name = "event")]
 	public class DbEvent

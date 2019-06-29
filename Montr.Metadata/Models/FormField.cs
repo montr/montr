@@ -26,6 +26,7 @@
 		public bool Autosize { get; set; }
 	}
 
+	// todo join with StringField?
 	public class TextAreaField : StringField
 	{
 		public override string Type => "textarea";

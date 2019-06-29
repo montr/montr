@@ -1,7 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Montr.Data.Linq2Db;
 
-namespace Kompany.Tests
+namespace Montr.Kompany.Tests
 {
 	[TestClass]
 	public class Initialize

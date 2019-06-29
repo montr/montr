@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Kompany.Commands;
-using Kompany.Models;
-using Kompany.Queries;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Montr.Kompany.Commands;
+using Montr.Kompany.Models;
+using Montr.Kompany.Queries;
 using Montr.Web.Services;
 
-namespace Kompany.Controllers
+namespace Montr.Kompany.Controllers
 {
 	[ApiController, Route("api/[controller]/[action]")]
 	public class CompanyController : ControllerBase

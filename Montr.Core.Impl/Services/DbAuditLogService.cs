@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Threading.Tasks;
 using LinqToDB;
-using Montr.Core.Implementation.Entities;
+using Montr.Core.Impl.Entities;
 using Montr.Core.Models;
 using Montr.Core.Services;
 using Montr.Data.Linq2Db;
 
-namespace Montr.Core.Implementation.Services
+namespace Montr.Core.Impl.Services
 {
 	public class DbAuditLogService : IAuditLogService
 	{

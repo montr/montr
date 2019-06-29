@@ -1,7 +1,7 @@
 ﻿using LinqToDB;
 using LinqToDB.Mapping;
 
-namespace Dokumento.Implementation.Entities
+namespace Montr.Dokumento.Impl.Entities
 {
 	[Table(Name = "document")]
 	public class DbDocument

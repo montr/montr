@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using Kompany.Models;
 using MediatR;
+using Montr.Kompany.Models;
 
-namespace Kompany.Queries
+namespace Montr.Kompany.Queries
 {
 	public class GetCompanyList : IRequest<IList<Company>>
 	{

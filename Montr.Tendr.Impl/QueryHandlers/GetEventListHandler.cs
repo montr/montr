@@ -6,12 +6,11 @@ using MediatR;
 using Montr.Core.Models;
 using Montr.Core.Services;
 using Montr.Data.Linq2Db;
-using Montr.Metadata.Models;
-using Tendr.Implementation.Entities;
-using Tendr.Models;
-using Tendr.Queries;
+using Montr.Tendr.Impl.Entities;
+using Montr.Tendr.Models;
+using Montr.Tendr.Queries;
 
-namespace Tendr.Implementation.QueryHandlers
+namespace Montr.Tendr.Impl.QueryHandlers
 {
 	public class GetEventListHandler : IRequestHandler<GetEventList, SearchResult<Event>>
 	{

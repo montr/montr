@@ -1,9 +1,9 @@
 ﻿using System;
 using MediatR;
 using Montr.Core.Models;
-using Tendr.Models;
+using Montr.Tendr.Models;
 
-namespace Tendr.Queries
+namespace Montr.Tendr.Queries
 {
 	public class GetEventList : IRequest<SearchResult<Event>>
 	{

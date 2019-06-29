@@ -3,11 +3,11 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Montr.Data.Linq2Db;
-using Tendr.Implementation.QueryHandlers;
-using Tendr.Models;
-using Tendr.Queries;
+using Montr.Tendr.Impl.QueryHandlers;
+using Montr.Tendr.Models;
+using Montr.Tendr.Queries;
 
-namespace Tendr.Tests.QueryHandlers
+namespace Montr.Tendr.Tests.QueryHandlers
 {
 	[TestClass]
 	public class GetEventListHandlerTests

@@ -2,7 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Montr.Modularity;
 
-namespace Tendr
+namespace Montr.Tendr
 {
 	public class Module : IModule
 	{

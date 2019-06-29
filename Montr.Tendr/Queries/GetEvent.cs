@@ -1,7 +1,7 @@
 ﻿using MediatR;
-using Tendr.Models;
+using Montr.Tendr.Models;
 
-namespace Tendr.Queries
+namespace Montr.Tendr.Queries
 {
 	public class GetEvent : IRequest<Event>
 	{

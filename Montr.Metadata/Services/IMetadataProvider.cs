@@ -10,6 +10,7 @@ namespace Montr.Metadata.Services
 		Task<DataView> GetView(string viewId);
 	}
 
+	// todo: move to db?
 	public class DefaultMetadataProvider : IMetadataProvider
 	{
 		public async Task<DataView> GetView(string viewId)

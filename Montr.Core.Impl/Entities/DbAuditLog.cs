@@ -1,7 +1,7 @@
 ﻿using LinqToDB;
 using LinqToDB.Mapping;
 
-namespace Montr.Core.Implementation.Entities
+namespace Montr.Core.Impl.Entities
 {
 	[Table(Name = "audit_log")]
 	public class DbAuditLog

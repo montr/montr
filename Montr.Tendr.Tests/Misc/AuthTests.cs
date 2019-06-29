@@ -6,7 +6,7 @@ using IdentityModel.Client;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json.Linq;
 
-namespace Tendr.Tests.Misc
+namespace Montr.Tendr.Tests.Misc
 {
 	[TestClass, Ignore]
 	public class AuthTests

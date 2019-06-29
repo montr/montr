@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Dokumento.Implementation.Entities;
-using Dokumento.Models;
-using Dokumento.Services;
 using LinqToDB;
 using Montr.Data.Linq2Db;
+using Montr.Dokumento.Impl.Entities;
+using Montr.Dokumento.Models;
+using Montr.Dokumento.Services;
 
-namespace Dokumento.Implementation.Services
+namespace Montr.Dokumento.Impl.Services
 {
 	public class DbDocumentRepository: IDocumentRepository
 	{

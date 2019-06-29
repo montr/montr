@@ -1,8 +1,8 @@
 ﻿using System;
-using Kompany.Models;
 using MediatR;
+using Montr.Kompany.Models;
 
-namespace Kompany.Commands
+namespace Montr.Kompany.Commands
 {
 	public class CreateCompany : IRequest<Guid>
 	{

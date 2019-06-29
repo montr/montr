@@ -1,7 +1,7 @@
 ﻿using System;
 using MediatR;
 
-namespace Tendr.Commands
+namespace Montr.Tendr.Commands
 {
 	public class CancelEvent: IRequest
 	{

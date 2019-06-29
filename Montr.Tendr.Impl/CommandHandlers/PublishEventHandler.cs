@@ -6,11 +6,11 @@ using LinqToDB;
 using MediatR;
 using Montr.Core.Services;
 using Montr.Data.Linq2Db;
-using Tendr.Commands;
-using Tendr.Implementation.Entities;
-using Tendr.Models;
+using Montr.Tendr.Commands;
+using Montr.Tendr.Impl.Entities;
+using Montr.Tendr.Models;
 
-namespace Tendr.Implementation.CommandHandlers
+namespace Montr.Tendr.Impl.CommandHandlers
 {
 	public class PublishEventHandler : IRequestHandler<PublishEvent>
 	{

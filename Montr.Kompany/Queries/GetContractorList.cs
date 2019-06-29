@@ -1,10 +1,11 @@
 ﻿using System;
-using Kompany.Models;
 using MediatR;
 using Montr.Core.Models;
+using Montr.Kompany.Models;
 
-namespace Kompany.Queries
+namespace Montr.Kompany.Queries
 {
+    // todo: remove, use mdm
 	public class GetContractorList : IRequest<SearchResult<Company>>
 	{
 		public Guid UserUid { get; set; }
