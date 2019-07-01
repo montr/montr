@@ -49,9 +49,9 @@ namespace Montr.MasterData.Tests.QueryHandlers
 				// assert
 				Assert.IsNotNull(result);
 				Assert.AreEqual(2, result.TotalCount);
-				Assert.AreEqual(root.Uid, result.Rows[0].GroupUid);
-				Assert.AreEqual(root.Uid, result.Rows[1].GroupUid);
-				var items = result.Rows.Select(x => x.ItemUid).ToList();
+				Assert.AreEqual(root.Uid, result.Rows[0].Group.Uid);
+				Assert.AreEqual(root.Uid, result.Rows[1].Group.Uid);
+				var items = result.Rows.Select(x => x.Item.Uid).ToList();
 				CollectionAssert.Contains(items, item1.Uid);
 				CollectionAssert.Contains(items, item2.Uid);
 
@@ -70,8 +70,8 @@ namespace Montr.MasterData.Tests.QueryHandlers
 				// assert
 				Assert.IsNotNull(result);
 				Assert.AreEqual(1, result.TotalCount);
-				Assert.AreEqual(root.Uid, result.Rows[0].GroupUid);
-				Assert.AreEqual(item1.Uid, result.Rows[0].ItemUid);
+				Assert.AreEqual(root.Uid, result.Rows[0].Group.Uid);
+				Assert.AreEqual(item1.Uid, result.Rows[0].Item.Uid);
 
 				// act - search by both group and item codes
 				result = await handler.Handle(new GetClassifierLinkList
@@ -89,8 +89,8 @@ namespace Montr.MasterData.Tests.QueryHandlers
 				// assert
 				Assert.IsNotNull(result);
 				Assert.AreEqual(1, result.TotalCount);
-				Assert.AreEqual(root.Uid, result.Rows[0].GroupUid);
-				Assert.AreEqual(item2.Uid, result.Rows[0].ItemUid);
+				Assert.AreEqual(root.Uid, result.Rows[0].Group.Uid);
+				Assert.AreEqual(item2.Uid, result.Rows[0].Item.Uid);
 			}
 		}
 	}

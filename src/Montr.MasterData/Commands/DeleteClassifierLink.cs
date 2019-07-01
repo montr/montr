@@ -1,6 +1,5 @@
 ﻿using System;
 using MediatR;
-using Montr.MasterData.Models;
 using Montr.Metadata.Models;
 
 namespace Montr.MasterData.Commands
@@ -13,6 +12,8 @@ namespace Montr.MasterData.Commands
 
 		public string TypeCode { get; set; }
 
-		public ClassifierLink Item { get; set; }
+		public Guid GroupUid { get; set; }
+
+		public Guid ItemUid { get; set; }
 	}
 }

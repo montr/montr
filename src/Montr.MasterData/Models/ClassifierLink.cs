@@ -1,18 +1,18 @@
-﻿using System;
-
-namespace Montr.MasterData.Models
+﻿namespace Montr.MasterData.Models
 {
 	public class ClassifierLink
 	{
+		public ClassifierGroup Group { get; set; }
+
+		public Classifier Item { get; set; }
+
+		// todo: use Group.Code
 		public string GroupCode { get; set; }
 
-		public Guid? GroupUid { get; set; }
-
+		// todo: use Item.Code
 		public string ItemCode { get; set; }
 
-		public Guid? ItemUid { get; set; }
-
-		// todo: use Classifier.StatusCode
+		// todo: use Item.StatusCode
 		public string ItemStatusCode { get; set; }
 	}
 }

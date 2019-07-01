@@ -50,13 +50,30 @@ namespace Montr.MasterData.Impl.QueryHandlers
 					query = query.Where(x => x.ItemUid == request.ItemUid);
 				}
 
+				var joined = from link in query
+					join @group in db.GetTable<DbClassifierGroup>() on link.GroupUid equals @group.Uid
+					join item in db.GetTable<DbClassifier>() on link.ItemUid equals item.Uid
+					select new { Group = @group, Item = item };
+
 				// todo: order by default hierarchy first, then by group name
-				var data = await query
-					.Apply(request, x => x.GroupUid)
+				// todo: fix QueryableExtensions.GetMemberName and write tests
+				request.SortColumn = "Group.Name";
+				var data = await joined
+					.Apply(request, x => x.Group.Name)
 					.Select(x => new ClassifierLink
 					{
-						GroupUid = x.GroupUid,
-						ItemUid = x.ItemUid
+						Group = new ClassifierGroup
+						{
+                            Uid = x.Group.Uid,
+                            Code = x.Group.Code,
+                            Name = x.Group.Name
+						},
+                        Item = new Classifier
+                        {
+	                        Uid = x.Item.Uid,
+	                        Code = x.Item.Code,
+	                        Name = x.Item.Name
+                        }
 					})
 					.ToListAsync(cancellationToken);
 

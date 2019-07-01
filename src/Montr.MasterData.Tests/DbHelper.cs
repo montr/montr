@@ -197,11 +197,10 @@ namespace Montr.MasterData.Tests
 				UserUid = UserUid,
 				CompanyUid = CompanyUid,
 				TypeCode = TypeCode,
-				Item = new ClassifierLink
-				{
-					GroupUid = groupUid,
-					ItemUid = itemUid
-				}
+				// ReSharper disable once PossibleInvalidOperationException
+				GroupUid = groupUid.Value,
+				// ReSharper disable once PossibleInvalidOperationException
+				ItemUid = itemUid.Value
 			}, cancellationToken);
 
 			Assert.IsNotNull(result);

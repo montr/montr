@@ -20,7 +20,7 @@ export class ClassifierGroupService extends Fetcher {
 		return this.post(`${Constants.baseURL}/classifierGroup/get`, { companyUid, typeCode, uid });
 	};
 
-	insert = async (companyUid: Guid, typeCode: string, data: IClassifierGroup): Promise<IInsertClassifierGroupResult> => {
+	insert = async (companyUid: Guid, typeCode: string, data: IClassifierGroup): Promise<IApiResult> => {
 		return this.post(`${Constants.baseURL}/classifierGroup/insert`, { companyUid, typeCode, item: data });
 	};
 
@@ -28,11 +28,7 @@ export class ClassifierGroupService extends Fetcher {
 		return this.post(`${Constants.baseURL}/classifierGroup/update`, { companyUid, typeCode, item: data });
 	};
 
-	delete = async (companyUid: Guid, typeCode: string, uid: Guid | string | number): Promise<number> => {
+	delete = async (companyUid: Guid, typeCode: string, uid: Guid | string | number): Promise<IApiResult> => {
 		return this.post(`${Constants.baseURL}/classifierGroup/delete`, { companyUid, typeCode, uid });
 	};
-}
-
-export interface IInsertClassifierGroupResult extends IApiResult {
-	uid?: Guid;
 }

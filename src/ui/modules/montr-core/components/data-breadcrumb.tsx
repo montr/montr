@@ -9,14 +9,22 @@ interface IProps {
 
 export class DataBreadcrumb extends React.Component<IProps> {
 
-	private getItem = (value: IMenu, index: number) => {
+	getItemRoute = (item: IMenu): string => {
+		if (typeof item.route == "string") {
+			return item.route as string;
+		}
+
+		return item.route();
+	}
+
+	getItem = (value: IMenu, index: number) => {
 
 		if (value.items) {
 
 			const overlay = (
 				<Menu>
 					{value.items.map((x, idx) => <Menu.Item key={`$${index}.${idx}`}>
-						<Link to={x.route}>{x.name}</Link>
+						<Link to={this.getItemRoute(x)}>{x.name}</Link>
 					</Menu.Item>)}
 				</Menu>
 			);
@@ -36,7 +44,7 @@ export class DataBreadcrumb extends React.Component<IProps> {
 			<Breadcrumb.Item key={index}>
 				{
 					value.route
-						? <Link to={value.route}>{value.name}</Link>
+						? <Link to={this.getItemRoute(value)}>{value.name}</Link>
 						: (value.name)
 				}
 			</Breadcrumb.Item>

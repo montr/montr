@@ -33,8 +33,6 @@ namespace Montr.MasterData.Impl.CommandHandlers
 			if (request.UserUid == Guid.Empty) throw new InvalidOperationException("User is required.");
 			if (request.CompanyUid == Guid.Empty) throw new InvalidOperationException("Company is required.");
 
-			var item = request.Item ?? throw new ArgumentNullException(nameof(request.Item));
-
 			// todo: check company belongs to user
 			var type = await _classifierTypeService.GetClassifierType(request.CompanyUid, request.TypeCode, cancellationToken);
 
@@ -51,15 +49,15 @@ namespace Montr.MasterData.Impl.CommandHandlers
 
 					// delete other links in same hierarchy
 					var deleted = await (
-						from link in db.GetTable<DbClassifierLink>().Where(x => x.ItemUid == item.ItemUid)
-						join parent in db.GetTable<DbClassifierClosure>().Where(x => x.ChildUid == item.GroupUid)
+						from link in db.GetTable<DbClassifierLink>().Where(x => x.ItemUid == request.ItemUid)
+						join parent in db.GetTable<DbClassifierClosure>().Where(x => x.ChildUid == request.GroupUid)
 							on link.GroupUid equals parent.ParentUid 
 						select link
 					).DeleteAsync(cancellationToken);
 
 					var inserted = await db.GetTable<DbClassifierLink>()
-						.Value(x => x.GroupUid, item.GroupUid)
-						.Value(x => x.ItemUid, item.ItemUid)
+						.Value(x => x.GroupUid, request.GroupUid)
+						.Value(x => x.ItemUid, request.ItemUid)
 						.InsertAsync(cancellationToken);
 				}
 

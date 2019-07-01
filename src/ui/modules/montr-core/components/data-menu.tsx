@@ -37,7 +37,15 @@ export class DataMenu extends React.Component<MenuProps & Props, State> {
 		await this._contentService.abort();
 	}
 
-	private buildItems = (menu: IMenu) => {
+	getItemRoute = (item: IMenu): string => {
+		if (typeof item.route == "string") {
+			return item.route as string;
+		}
+
+		return item.route();
+	}
+
+	buildItems = (menu: IMenu) => {
 		return menu && menu.items && menu.items.map((item) => {
 
 			if (item.items) {
@@ -56,7 +64,7 @@ export class DataMenu extends React.Component<MenuProps & Props, State> {
 			if (item.route) {
 				return (
 					<Menu.Item key={item.id}>
-						<Link to={item.route}>
+						<Link to={this.getItemRoute(item)}>
 							{item.icon && <Icon type={item.icon} />}
 							<span className="nav-text">{item.name}</span>
 						</Link>

@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Link } from "react-router-dom";
-import { Table, Tag, Divider, Icon } from "antd";
+import { Table, Tag, Divider } from "antd";
 import { ColumnProps, PaginationConfig, SorterResult, SortOrder } from "antd/lib/table";
 import { Fetcher, NotificationService, MetadataService } from "../services";
 import { IIndexer, IDataColumn, IDataResult, IMenu } from "../models";
@@ -163,7 +163,15 @@ export class DataTable<TModel extends IIndexer> extends React.Component<IProps<T
 						{rowActions.map((action, i) => {
 							return (<React.Fragment key={`action-${i}`}>
 								{i > 0 && <Divider type="vertical" />}
-								<a onClick={() => action.onClick && action.onClick.call(this, record, index)}>{action.name}</a>
+
+								{action.onClick &&
+									<a onClick={() => action.onClick.call(this, record, index)}>{action.name}</a>
+								}
+
+								{(action.route) &&
+									<Link to={(typeof action.route == "string") ? action.route as string : action.route(record, index)}>{action.name}</Link>
+								}
+
 							</React.Fragment>);
 						})}
 					</span>

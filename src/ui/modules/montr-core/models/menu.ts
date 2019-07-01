@@ -3,7 +3,7 @@ export interface IMenu {
 	name?: string;
 	icon?: string;
 	url?: string;
-	route?: string;
+	route?: string | ((...args: any[]) => string);
 	onClick?: (...args: any[]) => void;
 	items?: IMenu[];
 }

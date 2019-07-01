@@ -13,6 +13,7 @@ export class ClassifierBreadcrumb extends React.Component<IProps> {
 	public render() {
 		const { type, types, item } = this.props;
 
+		// todo: here and below use routes class
 		const items: IMenu[] = [
 			{ name: "Справочники", route: `/classifiers/` }
 		];

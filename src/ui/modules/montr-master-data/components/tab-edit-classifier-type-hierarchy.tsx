@@ -131,8 +131,7 @@ class _TabEditClassifierTypeHierarchy extends React.Component<IProps, IState> {
 						hideFields={["parentUid"]}
 						onSuccess={this.onGroupModalSuccess}
 						onCancel={this.onGroupModalCancel} />}
-			</>
-			)}
+			</>)}
 		</>);
 	}
 }

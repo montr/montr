@@ -112,6 +112,17 @@ namespace Montr.Metadata.Services
 				};
 			}
 
+			if (viewId.StartsWith("ClassifierLink/Grid"))
+			{
+				result.Columns = new List<DataColumn>
+				{
+					new DataColumn { Key = "hierarchy", Name = "Иерархия", Width = 300 },
+					new DataColumn { Key = "groupCode", Name = "Код группы", Width = 10, Path = "group.code" },
+					new DataColumn { Key = "groupName", Name = "Группа", Width = 400, Path = "group.name" }
+				};
+			}
+
+			//  todo: remove
 			if (viewId == "PrivateEventCounterpartyList/Grid")
 			{
 				result.Columns = new List<DataColumn>

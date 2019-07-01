@@ -357,7 +357,7 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 		let groupControls;
 		if (type.hierarchyType == "Groups") {
 			groupControls = <>
-				<Select defaultValue="default" size="small" onSelect={this.onTreeRootSelect}>
+				<Select defaultValue="default" size="small" onSelect={this.onTreeRootSelect} style={{ minWidth: 200 }}>
 					{trees && trees.map(x => <Select.Option key={x.code}>{x.name || x.code}</Select.Option>)}
 				</Select>
 				<Button.Group size="small">
@@ -428,6 +428,9 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 						</Link>
 						<Button onClick={this.delete}><Icon type="delete" /> Удалить</Button>
 						<Button onClick={this.export}><Icon type="export" /> Экспорт</Button>
+						<Link to={`/classifiers/edit/${type.uid}`}>
+							<Button><Icon type="setting" /> Настройка</Button>
+						</Link>
 					</Toolbar>
 
 					<ClassifierBreadcrumb type={type} types={types} />
@@ -445,13 +448,11 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 
 						<Toolbar size="small" float="right">
 							{/* <Input.Search size="small" allowClear style={{ width: 200 }} /> */}
+							{/* todo: show only when Items or Groups hierarchy type */}
 							<Radio.Group defaultValue="0" size="small" onChange={this.onDepthChange}>
 								<Radio.Button value="0"><Icon type="folder" /> Группа</Radio.Button>
 								<Radio.Button value="1"><Icon type="cluster" /> Иерархия</Radio.Button>
 							</Radio.Group>
-							<Link to={`/classifiers/edit/${type.uid}`}>
-								<Button size="small"><Icon type="setting" /></Button>
-							</Link>
 						</Toolbar>
 
 					</Layout.Header>

@@ -34,8 +34,6 @@ namespace Montr.MasterData.Impl.CommandHandlers
 			if (request.UserUid == Guid.Empty) throw new InvalidOperationException("User is required.");
 			if (request.CompanyUid == Guid.Empty) throw new InvalidOperationException("Company is required.");
 
-			var item = request.Item ?? throw new ArgumentNullException(nameof(request.Item));
-
 			// todo: check company belongs to user
 			var type = await _classifierTypeService.GetClassifierType(request.CompanyUid, request.TypeCode, cancellationToken);
 
@@ -54,19 +52,19 @@ namespace Montr.MasterData.Impl.CommandHandlers
 					}
 
 					affected = await db.GetTable<DbClassifierLink>()
-						.Where(x => x.GroupUid == item.GroupUid && x.ItemUid == item.ItemUid)
+						.Where(x => x.GroupUid == request.GroupUid && x.ItemUid == request.ItemUid)
 						.DeleteAsync(cancellationToken);
 
-					if (affected > 0 && item.GroupUid.HasValue)
+					if (affected > 0)
 					{
-						var root = await InsertClassifierHandler.GetRoot(db, item.GroupUid.Value, cancellationToken);
+						var root = await InsertClassifierHandler.GetRoot(db, request.GroupUid, cancellationToken);
 
 						if (root.Code == ClassifierGroup.DefaultRootCode)
 						{
 							// todo: move to ClassifierGroupService
 							await db.GetTable<DbClassifierLink>()
 								.Value(x => x.GroupUid, root.Uid)
-								.Value(x => x.ItemUid, item.ItemUid)
+								.Value(x => x.ItemUid, request.ItemUid)
 								.InsertAsync(cancellationToken);
 
 							error = new ApiResultError

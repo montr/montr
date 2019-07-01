@@ -37,8 +37,8 @@ namespace Montr.MasterData.Tests.CommandHandlers
 				var links = await dbHelper.GetLinks(null, item1.Uid, cancellationToken);
 
 				Assert.AreEqual(1, links.TotalCount);
-				Assert.AreEqual(root.Uid, links.Rows[0].GroupUid);
-				Assert.AreEqual(item1.Uid, links.Rows[0].ItemUid);
+				Assert.AreEqual(root.Uid, links.Rows[0].Group.Uid);
+				Assert.AreEqual(item1.Uid, links.Rows[0].Item.Uid);
 
 				// act - link with new group in same hierarchy
 				var result = await handler.Handle(new InsertClassifierLink
@@ -46,11 +46,10 @@ namespace Montr.MasterData.Tests.CommandHandlers
 					UserUid = dbHelper.UserUid,
 					CompanyUid = dbHelper.CompanyUid,
 					TypeCode = dbHelper.TypeCode,
-					Item = new ClassifierLink
-					{
-						GroupUid = group1.Uid,
-						ItemUid = item1.Uid
-					}
+					// ReSharper disable once PossibleInvalidOperationException
+					GroupUid = group1.Uid.Value,
+					// ReSharper disable once PossibleInvalidOperationException
+					ItemUid = item1.Uid.Value
 				}, cancellationToken);
 
 				// assert - new link is inserted
@@ -60,8 +59,8 @@ namespace Montr.MasterData.Tests.CommandHandlers
 				links = await dbHelper.GetLinks(null, item1.Uid, cancellationToken);
 
 				Assert.AreEqual(1, links.TotalCount);
-				Assert.AreEqual(group1.Uid, links.Rows[0].GroupUid);
-				Assert.AreEqual(item1.Uid, links.Rows[0].ItemUid);
+				Assert.AreEqual(group1.Uid, links.Rows[0].Group.Uid);
+				Assert.AreEqual(item1.Uid, links.Rows[0].Item.Uid);
 			}
 		}
 
@@ -89,8 +88,8 @@ namespace Montr.MasterData.Tests.CommandHandlers
 				var links = await dbHelper.GetLinks(null, item1.Uid, cancellationToken);
 
 				Assert.AreEqual(1, links.TotalCount);
-				Assert.AreEqual(root.Uid, links.Rows[0].GroupUid);
-				Assert.AreEqual(item1.Uid, links.Rows[0].ItemUid);
+				Assert.AreEqual(root.Uid, links.Rows[0].Group.Uid);
+				Assert.AreEqual(item1.Uid, links.Rows[0].Item.Uid);
 
 				// act - link with new group in same hierarchy
 				var result = await handler.Handle(new InsertClassifierLink
@@ -98,11 +97,10 @@ namespace Montr.MasterData.Tests.CommandHandlers
 					UserUid = dbHelper.UserUid,
 					CompanyUid = dbHelper.CompanyUid,
 					TypeCode = dbHelper.TypeCode,
-					Item = new ClassifierLink
-					{
-						GroupUid = group2.Uid,
-						ItemUid = item1.Uid
-					}
+					// ReSharper disable once PossibleInvalidOperationException
+					GroupUid = group2.Uid.Value,
+					// ReSharper disable once PossibleInvalidOperationException
+					ItemUid = item1.Uid.Value
 				}, cancellationToken);
 
 				// assert - new link inserted
@@ -112,7 +110,7 @@ namespace Montr.MasterData.Tests.CommandHandlers
 				links = await dbHelper.GetLinks(null, item1.Uid, cancellationToken);
 
 				Assert.AreEqual(2, links.TotalCount);
-				var groups = links.Rows.Select(x => x.GroupUid).ToList();
+				var groups = links.Rows.Select(x => x.Group.Uid).ToList();
 				CollectionAssert.Contains(groups, root.Uid);
 				CollectionAssert.Contains(groups, group2.Uid);
 			}

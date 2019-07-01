@@ -7,7 +7,9 @@ import { Link } from "react-router-dom";
 import { Button, Icon } from "antd";
 import { ClassifierTypeService } from "../services";
 import { NotificationService } from "@montr-core/services";
-import { IDataResult } from "@montr-core/models";
+import { IDataResult, IMenu } from "@montr-core/models";
+import { IClassifierGroup } from "@montr-master-data/models";
+import { RouteBuilder } from "..";
 
 interface IProps extends CompanyContextProps {
 }
@@ -88,6 +90,10 @@ class _SearchClassifierType extends React.Component<IProps, IState> {
 	render = () => {
 		const { updateTableToken } = this.state;
 
+		const rowActions: IMenu[] = [
+			{ name: "Настроить", route: (item: IClassifierGroup) => RouteBuilder.editClassifierType(item.uid) }
+		];
+
 		return (
 			// todo: localize
 			<Page
@@ -110,6 +116,7 @@ class _SearchClassifierType extends React.Component<IProps, IState> {
 					onLoadData={this.onLoadTableData}
 					onSelectionChange={this.onSelectionChange}
 					updateToken={updateTableToken}
+					rowActions={rowActions}
 				/>
 
 			</Page>
