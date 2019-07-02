@@ -64,6 +64,14 @@ namespace Montr.Metadata.Services
 				};
 			}
 
+			if (viewId == "ClassifierLink/Form")
+			{
+				result.Fields = new List<FormField>
+				{
+					new ClassifierField { Key = "group.uid", Name = "Группа", Required = true },
+				};
+			}
+
 			if (viewId == "ClassifierType")
 			{
 				result.Fields = new List<FormField>

@@ -1,11 +1,12 @@
 import * as React from "react";
-import { Alert, Button, Icon } from "antd";
+import { Alert, Button, Icon, Modal } from "antd";
 import { Constants } from "@montr-core/.";
 import { DataTableUpdateToken, Toolbar, DataTable } from "@montr-core/components";
 import { withCompanyContext, CompanyContextProps } from "@kompany/components";
-import { IClassifierType, IClassifierGroup, IClassifier } from "../models";
-import { IDataResult } from "@montr-core/models";
+import { IClassifierType, IClassifier, IClassifierLink } from "../models";
+import { IDataResult, IMenu, Guid } from "@montr-core/models";
 import { ClassifierLinkService } from "@montr-master-data/services";
+import { ModalEditClassifierLink } from ".";
 
 interface IProps extends CompanyContextProps {
 	type: IClassifierType;
@@ -14,7 +15,7 @@ interface IProps extends CompanyContextProps {
 }
 
 interface IState {
-	groupEditData?: IClassifierGroup;
+	modalData?: IClassifierLink;
 	updateTableToken: DataTableUpdateToken;
 }
 
@@ -66,14 +67,43 @@ class _TabEditClassifierHierarchy extends React.Component<IProps, IState> {
 		return null;
 	}
 
-	add = () => {
+	showAddLinkModal = () => {
+		this.setState({ modalData: {} });
+	}
+
+	showDeleteLinkConfirm = (data: IClassifierLink) => {
+		Modal.confirm({
+			title: "Вы действительно хотите удалить связь с выбранной группой?",
+			content: "При удалении связи с группой иерархии по-умолчанию, элемент будет привязан к корню иерархии по-умолчанию.",
+			onOk: async () => {
+				const { currentCompany, type } = this.props
+
+				await this._classifierLinkService.delete(currentCompany.uid, type.code, data.group.uid, data.item.uid);
+
+				this.refreshTable();
+			}
+		});
+	}
+
+	onModalSuccess = async (data: IClassifierLink) => {
+		this.setState({ modalData: null });
+
+		await this.refreshTable();
+	}
+
+	onModalCancel = () => {
+		this.setState({ modalData: null });
 	}
 
 	render() {
-		const { type } = this.props,
-			{ updateTableToken } = this.state;
+		const { type, data } = this.props,
+			{ modalData, updateTableToken } = this.state;
 
 		if (!type) return null;
+
+		const rowActions: IMenu[] = [
+			{ name: "Удалить", onClick: this.showDeleteLinkConfirm }
+		];
 
 		return (<>
 			<Alert type={type.hierarchyType == "Groups" ? "info" : "warning"}
@@ -81,7 +111,7 @@ class _TabEditClassifierHierarchy extends React.Component<IProps, IState> {
 
 			{type.hierarchyType == "Groups" && (<>
 				<Toolbar>
-					<Button onClick={this.add}><Icon type="plus" /> Добавить</Button>
+					<Button onClick={this.showAddLinkModal}><Icon type="plus" /> Добавить</Button>
 				</Toolbar>
 
 				<div style={{ clear: "both" }} />
@@ -90,9 +120,18 @@ class _TabEditClassifierHierarchy extends React.Component<IProps, IState> {
 					rowKey="code"
 					viewId="ClassifierLink/Grid"
 					loadUrl={`${Constants.baseURL}/classifierLink/list/`}
+					rowActions={rowActions}
 					onLoadData={this.onLoadTableData}
 					updateToken={updateTableToken}
 				/>
+
+				{modalData &&
+					<ModalEditClassifierLink
+						typeCode={type.code}
+						itemUid={new Guid(data.uid.toString())}
+						onSuccess={this.onModalSuccess}
+						onCancel={this.onModalCancel}
+					/>}
 			</>)}
 		</>);
 	}

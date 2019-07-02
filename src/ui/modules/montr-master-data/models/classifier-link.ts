@@ -1,6 +1,6 @@
-import { Guid } from "@montr-core/models";
+import { IClassifier, IClassifierGroup } from ".";
 
 export interface IClassifierLink {
-	groupUid?: Guid;
-	itemUid?: Guid;
+	group?: IClassifierGroup;
+	item?: IClassifier;
 }
