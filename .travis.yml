@@ -4,7 +4,8 @@ dotnet: 2.2
 dist: xenial
 script:
   - dotnet build ./src/Montr.sln
-  - dotnet test ./src/Montr.sln
+notifications:
+  email:
 global:
   - DOTNET_SKIP_FIRST_TIME_EXPERIENCE=true
   - DOTNET_CLI_TELEMETRY_OPTOUT=1
