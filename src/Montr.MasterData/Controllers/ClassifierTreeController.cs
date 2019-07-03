@@ -12,21 +12,21 @@ using Montr.Web.Services;
 namespace Montr.MasterData.Controllers
 {
 	[Authorize, ApiController, Route("api/[controller]/[action]")]
-	public class ClassifierTypeController : ControllerBase
+	public class ClassifierTreeController : ControllerBase
 	{
 		private readonly IMediator _mediator;
 		private readonly ICurrentUserProvider _currentUserProvider;
 
-		public ClassifierTypeController(IMediator mediator, ICurrentUserProvider currentUserProvider)
+		public ClassifierTreeController(IMediator mediator, ICurrentUserProvider currentUserProvider)
 		{
 			_mediator = mediator;
 			_currentUserProvider = currentUserProvider;
 		}
 
 		[HttpPost]
-		public async Task<SearchResult<ClassifierType>> List(ClassifierTypeSearchRequest request)
+		public async Task<SearchResult<ClassifierTree>> List(ClassifierTreeSearchRequest request)
 		{
-			return await _mediator.Send(new GetClassifierTypeList
+			return await _mediator.Send(new GetClassifierTreeList
 			{
 				UserUid = _currentUserProvider.GetUserUid(),
 				Request = request
@@ -34,7 +34,7 @@ namespace Montr.MasterData.Controllers
 		}
 
 		[HttpPost]
-		public async Task<ClassifierType> Get(GetClassifierType request)
+		public async Task<ApiResult> Insert(InsertClassifierTree request)
 		{
 			request.UserUid = _currentUserProvider.GetUserUid();
 
@@ -42,7 +42,7 @@ namespace Montr.MasterData.Controllers
 		}
 
 		[HttpPost]
-		public async Task<ApiResult> Insert(InsertClassifierType request)
+		public async Task<ApiResult> Update(UpdateClassifierTree request)
 		{
 			request.UserUid = _currentUserProvider.GetUserUid();
 
@@ -50,15 +50,7 @@ namespace Montr.MasterData.Controllers
 		}
 
 		[HttpPost]
-		public async Task<ApiResult> Update(UpdateClassifierType request)
-		{
-			request.UserUid = _currentUserProvider.GetUserUid();
-
-			return await _mediator.Send(request);
-		}
-
-		[HttpPost]
-		public async Task<ApiResult> Delete(DeleteClassifierTypeList request)
+		public async Task<ApiResult> Delete(DeleteClassifierTreeList request)
 		{
 			request.UserUid = _currentUserProvider.GetUserUid();
 

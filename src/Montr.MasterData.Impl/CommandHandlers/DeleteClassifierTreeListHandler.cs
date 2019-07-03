@@ -8,27 +8,32 @@ using Montr.Core.Services;
 using Montr.Data.Linq2Db;
 using Montr.MasterData.Commands;
 using Montr.MasterData.Impl.Entities;
+using Montr.MasterData.Services;
 using Montr.Metadata.Models;
 
 namespace Montr.MasterData.Impl.CommandHandlers
 {
-	public class DeleteClassifierTypeListHandler : IRequestHandler<DeleteClassifierTypeList, ApiResult>
+	public class DeleteClassifierTreeListHandler : IRequestHandler<DeleteClassifierTreeList, ApiResult>
 	{
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IDbContextFactory _dbContextFactory;
+		private readonly IClassifierTypeService _classifierTypeService;
 
-		public DeleteClassifierTypeListHandler(IUnitOfWorkFactory unitOfWorkFactory, IDbContextFactory dbContextFactory)
+		public DeleteClassifierTreeListHandler(IUnitOfWorkFactory unitOfWorkFactory, IDbContextFactory dbContextFactory,
+			IClassifierTypeService classifierTypeService)
 		{
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_dbContextFactory = dbContextFactory;
+			_classifierTypeService = classifierTypeService;
 		}
 
-		public async Task<ApiResult> Handle(DeleteClassifierTypeList request, CancellationToken cancellationToken)
+		public async Task<ApiResult> Handle(DeleteClassifierTreeList request, CancellationToken cancellationToken)
 		{
 			if (request.UserUid == Guid.Empty) throw new InvalidOperationException("User is required.");
 			if (request.CompanyUid == Guid.Empty) throw new InvalidOperationException("Company is required.");
 
 			// todo: check company belongs to user
+			var type = await _classifierTypeService.GetClassifierType(request.CompanyUid, request.TypeCode, cancellationToken);
 
 			using (var scope = _unitOfWorkFactory.Create())
 			{
@@ -36,25 +41,16 @@ namespace Montr.MasterData.Impl.CommandHandlers
 
 				using (var db = _dbContextFactory.Create())
 				{
-					await (
-						from @group in db.GetTable<DbClassifierGroup>()
-						join type in db.GetTable<DbClassifierType>() on @group.TypeUid equals type.Uid
-						where type.CompanyUid == request.CompanyUid && request.Uids.Contains(type.Uid)
-						select @group
-					).DeleteAsync(cancellationToken);
-
-					// todo: remove items
-
-					affected = await db.GetTable<DbClassifierType>()
-						.Where(x => x.CompanyUid == request.CompanyUid && request.Uids.Contains(x.Uid))
+					affected = await db.GetTable<DbClassifierTree>()
+						.Where(x => x.TypeUid == type.Uid && request.Uids.Contains(x.Uid))
 						.DeleteAsync(cancellationToken);
 				}
 
-				// todo: (events)
+				// todo: (события)
 
 				scope.Commit();
 
-				return new ApiResult { Success = true, AffectedRows = affected };
+				return new ApiResult {Success = true, AffectedRows = affected};
 			}
 		}
 	}
