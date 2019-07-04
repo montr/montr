@@ -7,7 +7,6 @@ using Montr.Core.Services;
 using Montr.Data.Linq2Db;
 using Montr.MasterData.Commands;
 using Montr.MasterData.Impl.Entities;
-using Montr.MasterData.Impl.Services;
 using Montr.MasterData.Models;
 using Montr.Metadata.Models;
 
@@ -62,7 +61,8 @@ namespace Montr.MasterData.Impl.CommandHandlers
 					{
 						var treeUid = Guid.NewGuid();
 
-						await db.GetTable<DbClassifierGroup>()
+						// todo: move to some MasterDataService
+						await db.GetTable<DbClassifierTree>()
 							.Value(x => x.Uid, treeUid)
 							.Value(x => x.TypeUid, itemUid)
 							.Value(x => x.Code, ClassifierGroup.DefaultRootCode)
@@ -70,12 +70,12 @@ namespace Montr.MasterData.Impl.CommandHandlers
 							.InsertAsync(cancellationToken);
 
 						// todo: validate with ClassifierGroupValidator or reuse common service with InsertClassifierGroupHandler
-						var closureTable = new ClosureTableHandler(db);
+						/*var closureTable = new ClosureTableHandler(db);
 
 						if (await closureTable.Insert(treeUid, null, cancellationToken) == false)
 						{
 							return new ApiResult { Success = false, Errors = closureTable.Errors };
-						}
+						}*/
 					}
 				}
 

@@ -20,24 +20,23 @@ namespace Montr.MasterData.Tests.QueryHandlers
 			var cancellationToken = new CancellationToken();
 			var unitOfWorkFactory = new TransactionScopeUnitOfWorkFactory();
 			var dbContextFactory = new DefaultDbContextFactory();
-			var classifierTypeRepository = new DbClassifierTypeRepository(dbContextFactory);
-			var classifierTypeService = new DefaultClassifierTypeService(classifierTypeRepository);
 			var classifierTreeRepository = new DbClassifierTreeRepository(dbContextFactory);
 			var dbHelper = new DbHelper(unitOfWorkFactory, dbContextFactory);
 			var handler = new GetClassifierTreeListHandler(classifierTreeRepository);
 
 			using (var _ = unitOfWorkFactory.Create())
 			{
-				await dbHelper.InsertType(HierarchyType.None, cancellationToken);
+				// default tree will be insered for HierarchyType.Groups
+				await dbHelper.InsertType(HierarchyType.Groups, cancellationToken);
 
-				// act - search by group code
+				// act
 				var result = await handler.Handle(new GetClassifierTreeList
 				{
 					UserUid = dbHelper.UserUid,
 					Request = new ClassifierTreeSearchRequest
 					{
 						CompanyUid = dbHelper.CompanyUid,
-						TypeCode = dbHelper.TypeCode,
+						TypeCode = dbHelper.TypeCode
 					}
 				}, cancellationToken);
 
