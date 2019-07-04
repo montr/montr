@@ -44,7 +44,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 				{
 					affected = await db.GetTable<DbClassifierTree>()
 						.Where(x => x.TypeUid == type.Uid && request.Uids.Contains(x.Uid)
-									&& x.Code != ClassifierGroup.DefaultRootCode)
+									&& x.Code != ClassifierTree.DefaultCode)
 						.DeleteAsync(cancellationToken);
 				}
 

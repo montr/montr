@@ -65,7 +65,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 						await db.GetTable<DbClassifierTree>()
 							.Value(x => x.Uid, treeUid)
 							.Value(x => x.TypeUid, itemUid)
-							.Value(x => x.Code, ClassifierGroup.DefaultRootCode)
+							.Value(x => x.Code, ClassifierTree.DefaultCode)
 							.Value(x => x.Name, item.Name)
 							.InsertAsync(cancellationToken);
 

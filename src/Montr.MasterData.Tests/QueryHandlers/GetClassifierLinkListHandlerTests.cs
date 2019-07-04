@@ -29,7 +29,7 @@ namespace Montr.MasterData.Tests.QueryHandlers
 			using (var _ = unitOfWorkFactory.Create())
 			{
 				await dbHelper.InsertType(HierarchyType.Groups, cancellationToken);
-				var root = await dbHelper.FindGroup(ClassifierGroup.DefaultRootCode, cancellationToken);
+				var root = await dbHelper.FindGroup(ClassifierTree.DefaultCode, cancellationToken);
 				// await generator.InsertGroups(3, 1, root.Code, root.Uid, cancellationToken);
 				var item1 = await dbHelper.InsertItem("001", cancellationToken);
 				var item2 = await dbHelper.InsertItem("002", cancellationToken);

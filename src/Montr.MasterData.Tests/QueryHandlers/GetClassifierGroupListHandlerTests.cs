@@ -43,7 +43,7 @@ namespace Montr.MasterData.Tests.QueryHandlers
 			// assert
 			Assert.IsNotNull(result);
 			Assert.AreEqual(1, result.Rows.Count);
-			Assert.AreEqual(ClassifierGroup.DefaultRootCode, result.Rows[0].Code);
+			Assert.AreEqual(ClassifierTree.DefaultCode, result.Rows[0].Code);
 		}
 
 		[TestMethod]

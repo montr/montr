@@ -29,7 +29,7 @@ namespace Montr.MasterData.Tests.CommandHandlers
 			using (var _ = unitOfWorkFactory.Create())
 			{
 				await dbHelper.InsertType(HierarchyType.Groups, cancellationToken);
-				var root = await dbHelper.FindGroup(ClassifierGroup.DefaultRootCode, cancellationToken);
+				var root = await dbHelper.FindGroup(ClassifierTree.DefaultCode, cancellationToken);
 				var group1 = await dbHelper.InsertGroup("001", root.Uid, cancellationToken);
 				var item1 = await dbHelper.InsertItem("001", cancellationToken);
 
@@ -79,7 +79,7 @@ namespace Montr.MasterData.Tests.CommandHandlers
 			using (var _ = unitOfWorkFactory.Create())
 			{
 				await dbHelper.InsertType(HierarchyType.Groups, cancellationToken);
-				var root = await dbHelper.FindGroup(ClassifierGroup.DefaultRootCode, cancellationToken);
+				var root = await dbHelper.FindGroup(ClassifierTree.DefaultCode, cancellationToken);
 				var root2 = await dbHelper.InsertGroup("root2", null, cancellationToken);
 				var group2 = await dbHelper.InsertGroup("002", root2.Uid, cancellationToken);
 				var item1 = await dbHelper.InsertItem("001", cancellationToken);

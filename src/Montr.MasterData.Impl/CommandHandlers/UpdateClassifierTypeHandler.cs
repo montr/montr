@@ -58,7 +58,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 						var root = db.GetTable<DbClassifierGroup>()
 							.SingleOrDefault(x =>
 								x.TypeUid == item.Uid &&
-								x.Code == ClassifierGroup.DefaultRootCode);
+								x.Code == ClassifierTree.DefaultCode);
 
 						if (root == null)
 						{
@@ -67,7 +67,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 							await db.GetTable<DbClassifierGroup>()
 								.Value(x => x.Uid, treeUid)
 								.Value(x => x.TypeUid, item.Uid)
-								.Value(x => x.Code, ClassifierGroup.DefaultRootCode)
+								.Value(x => x.Code, ClassifierTree.DefaultCode)
 								.Value(x => x.Name, item.Name)
 								.InsertAsync(cancellationToken);
 

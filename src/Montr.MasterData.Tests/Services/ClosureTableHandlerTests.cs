@@ -26,7 +26,7 @@ namespace Montr.MasterData.Tests.Services
 			{
 				// arrange
 				await generator.InsertType(HierarchyType.Groups, cancellationToken);
-				var root = await generator.FindGroup(ClassifierGroup.DefaultRootCode, cancellationToken);
+				var root = await generator.FindGroup(ClassifierTree.DefaultCode, cancellationToken);
 
 				// act
 				await generator.InsertGroups(2, 3, root.Code, root.Uid, cancellationToken);
@@ -50,7 +50,7 @@ namespace Montr.MasterData.Tests.Services
 			{
 				// act & assert
 				await dbHelper.InsertType(HierarchyType.Groups, cancellationToken);
-				var root = await dbHelper.FindGroup(ClassifierGroup.DefaultRootCode, cancellationToken);
+				var root = await dbHelper.FindGroup(ClassifierTree.DefaultCode, cancellationToken);
 				await dbHelper.InsertGroups(3, 3, root.Code, root.Uid, cancellationToken);
 				Assert.AreEqual(File.ReadAllText("../../../Content/closure.3x3.txt"), dbHelper.PrintClosure());
 
@@ -77,7 +77,7 @@ namespace Montr.MasterData.Tests.Services
 			{
 				// act & assert
 				await generator.InsertType(HierarchyType.Groups, cancellationToken);
-				var root = await generator.FindGroup(ClassifierGroup.DefaultRootCode, cancellationToken);
+				var root = await generator.FindGroup(ClassifierTree.DefaultCode, cancellationToken);
 				await generator.InsertGroups(3, 3, root.Code, root.Uid, cancellationToken);
 				Assert.AreEqual(File.ReadAllText("../../../Content/closure.3x3.txt"), generator.PrintClosure());
 
@@ -108,7 +108,7 @@ namespace Montr.MasterData.Tests.Services
 			{
 				// act & assert
 				await dbHelper.InsertType(HierarchyType.Groups, cancellationToken);
-				var root = await dbHelper.FindGroup(ClassifierGroup.DefaultRootCode, cancellationToken);
+				var root = await dbHelper.FindGroup(ClassifierTree.DefaultCode, cancellationToken);
 				await dbHelper.InsertGroups(3, 3, root.Code, root.Uid, cancellationToken);
 				Assert.AreEqual(File.ReadAllText("../../../Content/closure.3x3.txt"), dbHelper.PrintClosure());
 

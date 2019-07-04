@@ -52,7 +52,7 @@ namespace Montr.MasterData.Tests.CommandHandlers
 				// assert - default hierarchy exists
 				trees = await dbHelper.GetTrees(cancellationToken);
 				Assert.AreEqual(1, trees.TotalCount);
-				Assert.AreEqual(ClassifierGroup.DefaultRootCode, trees.Rows[0].Code);
+				Assert.AreEqual(ClassifierTree.DefaultCode, trees.Rows[0].Code);
 			}
 		}
 	}

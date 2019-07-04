@@ -82,7 +82,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 					_root = db.GetTable<DbClassifierGroup>()
 						.SingleOrDefault(x =>
 							x.TypeUid == _type.Uid &&
-							x.Code == ClassifierGroup.DefaultRootCode);
+							x.Code == ClassifierTree.DefaultCode);
 
 					/*if (_root == null)
 					{
@@ -90,7 +90,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 						{
 							Uid = Guid.NewGuid(),
 							TypeUid = _type.Uid,
-							Code = ClassifierGroup.DefaultRootCode,
+							Code = Classifiertree.DefaultCode,
 							Name = _type.Name
 						};
 
@@ -182,7 +182,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 				var root = new ClassifierGroup
 				{
 					Uid = Guid.NewGuid(),
-					Code = ClassifierGroup.DefaultRootCode,
+					Code = ClassifierTree.DefaultCode,
 					Name = _type.Name
 				};
 
@@ -204,7 +204,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 
 					Guid? parentUid;
 
-					if (group.Code == ClassifierGroup.DefaultRootCode)
+					if (group.Code == ClassifierTree.DefaultCode)
 					{
 						parentUid = null;
 					}

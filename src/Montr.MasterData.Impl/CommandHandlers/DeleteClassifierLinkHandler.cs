@@ -59,7 +59,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 					{
 						var root = await InsertClassifierHandler.GetRoot(db, request.GroupUid, cancellationToken);
 
-						if (root.Code == ClassifierGroup.DefaultRootCode)
+						if (root.Code == ClassifierTree.DefaultCode)
 						{
 							// todo: move to ClassifierGroupService
 							await db.GetTable<DbClassifierLink>()

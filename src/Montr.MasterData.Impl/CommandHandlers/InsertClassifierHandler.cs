@@ -84,7 +84,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 							// if group is not of default hierarchy, link to default hierarchy root
 							var root = await GetRoot(db, request.GroupUid.Value, cancellationToken);
 
-							if (root.Code != ClassifierGroup.DefaultRootCode)
+							if (root.Code != ClassifierTree.DefaultCode)
 							{
 								await LinkToDefaultRoot(db, type, itemUid, cancellationToken);
 							}
@@ -123,7 +123,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 		{
 			return await (
 				from @group in db.GetTable<DbClassifierGroup>()
-				where @group.TypeUid == type.Uid && @group.Code == ClassifierGroup.DefaultRootCode
+				where @group.TypeUid == type.Uid && @group.Code == ClassifierTree.DefaultCode
 				select @group
 			).SingleOrDefaultAsync(cancellationToken);
 		}

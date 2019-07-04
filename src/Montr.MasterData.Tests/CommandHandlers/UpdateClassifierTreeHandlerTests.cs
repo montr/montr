@@ -40,7 +40,7 @@ namespace Montr.MasterData.Tests.CommandHandlers
 					Item = new ClassifierTree
 					{
 						Uid = trees.Rows[0].Uid,
-						Code = ClassifierGroup.DefaultRootCode,
+						Code = ClassifierTree.DefaultCode,
 						Name = "Test Classifier Tree"
 					}
 				}, cancellationToken);
