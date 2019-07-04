@@ -39,11 +39,13 @@ namespace Montr.MasterData.Impl.CommandHandlers
 
 			using (var scope = _unitOfWorkFactory.Create())
 			{
+				int affected;
+
 				using (var db = _dbContextFactory.Create())
 				{
-					await db.GetTable<DbClassifierTree>()
-						.Where(x => x.Uid == item.Uid)
-						.Set(x => x.Code, item.Code)
+					affected = await db.GetTable<DbClassifierTree>()
+						.Where(x => x.TypeUid == type.Uid && x.Uid == item.Uid)
+						.Set(x => x.Code, item.Code) // todo: do not update default tree code (?)
 						.Set(x => x.Name, item.Name)
 						.UpdateAsync(cancellationToken);
 				}
@@ -52,7 +54,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 
 				scope.Commit();
 
-				return new ApiResult { Success = true };
+				return new ApiResult { Success = true, AffectedRows = affected };
 			}
 		}
 	}

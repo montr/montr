@@ -22,6 +22,8 @@ namespace Montr.MasterData.Tests
 	public class DbHelper
 	{
 		private readonly IDbContextFactory _dbContextFactory;
+		private readonly GetClassifierTreeListHandler _getClassifierTreeListHandler;
+		private readonly InsertClassifierTreeHandler _insertClassifierTreeTypeHandler;
 		private readonly InsertClassifierTypeHandler _insertClassifierTypeHandler;
 		private readonly InsertClassifierGroupHandler _insertClassifierGroupHandler;
 		private readonly InsertClassifierHandler _insertClassifierHandler;
@@ -35,9 +37,12 @@ namespace Montr.MasterData.Tests
 			_dbContextFactory = dbContextFactory;
 
 			var dateTimeProvider = new DefaultDateTimeProvider();
+			var classifierTreeRepository = new DbClassifierTreeRepository(dbContextFactory);
 			var classifierTypeRepository = new DbClassifierTypeRepository(dbContextFactory);
 			var classifierTypeService = new DefaultClassifierTypeService(classifierTypeRepository);
 
+			_getClassifierTreeListHandler = new GetClassifierTreeListHandler(classifierTreeRepository);
+			_insertClassifierTreeTypeHandler = new InsertClassifierTreeHandler(unitOfWorkFactory, dbContextFactory, classifierTypeService);
 			_insertClassifierTypeHandler = new InsertClassifierTypeHandler(unitOfWorkFactory, dbContextFactory);
 			_insertClassifierGroupHandler = new InsertClassifierGroupHandler(unitOfWorkFactory, dbContextFactory, classifierTypeService);
 			_insertClassifierHandler = new InsertClassifierHandler(unitOfWorkFactory, dbContextFactory, dateTimeProvider, classifierTypeService);
@@ -69,6 +74,43 @@ namespace Montr.MasterData.Tests
 
 			Assert.IsNotNull(result);
 			Assert.AreEqual(true, result.Success);
+
+			return result;
+		}
+
+		public async Task<ApiResult> InsertTree(string treeCode, CancellationToken cancellationToken)
+		{
+			var result = await _insertClassifierTreeTypeHandler.Handle(new InsertClassifierTree
+			{
+				CompanyUid = CompanyUid,
+				UserUid = UserUid,
+				TypeCode = TypeCode,
+				Item = new ClassifierTree
+				{
+					Code = treeCode,
+					Name = treeCode
+				}
+			}, cancellationToken);
+
+			Assert.IsNotNull(result);
+			Assert.AreEqual(true, result.Success);
+
+			return result;
+		}
+
+		public async Task<SearchResult<ClassifierTree>> GetTrees(CancellationToken cancellationToken)
+		{
+			var result = await _getClassifierTreeListHandler.Handle(new GetClassifierTreeList
+			{
+				UserUid = UserUid,
+				Request = new ClassifierTreeSearchRequest
+				{
+					CompanyUid = CompanyUid,
+					TypeCode = TypeCode,
+				}
+			}, cancellationToken);
+
+			Assert.IsNotNull(result);
 
 			return result;
 		}

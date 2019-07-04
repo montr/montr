@@ -36,7 +36,7 @@ namespace Montr.MasterData.Impl.Services
 					.Apply(request, x => x.Code)
 					.Select(x => new ClassifierTree
 					{
-						// Uid = x.Uid,
+						Uid = x.Uid,
 						Code = x.Code,
 						Name = x.Name
 					})

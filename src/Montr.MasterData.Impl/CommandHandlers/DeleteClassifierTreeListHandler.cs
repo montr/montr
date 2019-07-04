@@ -8,6 +8,7 @@ using Montr.Core.Services;
 using Montr.Data.Linq2Db;
 using Montr.MasterData.Commands;
 using Montr.MasterData.Impl.Entities;
+using Montr.MasterData.Models;
 using Montr.MasterData.Services;
 using Montr.Metadata.Models;
 
@@ -42,7 +43,8 @@ namespace Montr.MasterData.Impl.CommandHandlers
 				using (var db = _dbContextFactory.Create())
 				{
 					affected = await db.GetTable<DbClassifierTree>()
-						.Where(x => x.TypeUid == type.Uid && request.Uids.Contains(x.Uid))
+						.Where(x => x.TypeUid == type.Uid && request.Uids.Contains(x.Uid)
+									&& x.Code != ClassifierGroup.DefaultRootCode)
 						.DeleteAsync(cancellationToken);
 				}
 
@@ -50,7 +52,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 
 				scope.Commit();
 
-				return new ApiResult {Success = true, AffectedRows = affected};
+				return new ApiResult { Success = true, AffectedRows = affected };
 			}
 		}
 	}

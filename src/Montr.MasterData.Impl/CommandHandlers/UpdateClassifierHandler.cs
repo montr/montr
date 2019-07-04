@@ -39,6 +39,8 @@ namespace Montr.MasterData.Impl.CommandHandlers
 
 			using (var scope = _unitOfWorkFactory.Create())
 			{
+				int affected;
+
 				using (var db = _dbContextFactory.Create())
 				{
 					var validator = new ClassifierValidator(db, type);
@@ -48,7 +50,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 						return new ApiResult { Success = false, Errors = validator.Errors };
 					}
 
-					await db.GetTable<DbClassifier>()
+					affected = await db.GetTable<DbClassifier>()
 						.Where(x => x.Uid == item.Uid)
 						.Set(x => x.Code, item.Code)
 						.Set(x => x.Name, item.Name)
@@ -59,7 +61,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 
 				scope.Commit();
 
-				return new ApiResult { Success = true };
+				return new ApiResult { Success = true, AffectedRows = affected };
 			}
 		}
 	}
