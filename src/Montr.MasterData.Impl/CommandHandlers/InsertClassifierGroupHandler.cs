@@ -44,8 +44,8 @@ namespace Montr.MasterData.Impl.CommandHandlers
 
 				using (var db = _dbContextFactory.Create())
 				{
-					/*var tree = await db.GetTable<DbClassifierTree>()
-						.SingleAsync(x => x.TypeUid == type.Uid && x.Code == request.TreeCode, cancellationToken);*/
+					var tree = await db.GetTable<DbClassifierTree>()
+						.SingleAsync(x => x.TypeUid == type.Uid && x.Uid == request.TreeUid, cancellationToken);
 
 					var validator = new ClassifierGroupValidator(db);
 
@@ -56,7 +56,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 
 					await db.GetTable<DbClassifierGroup>()
 						.Value(x => x.Uid, itemUid)
-						.Value(x => x.TypeUid, type.Uid)
+						.Value(x => x.TreeUid, tree.Uid)
 						// todo: validate parent belongs to the same tree
 						.Value(x => x.ParentUid, item.ParentUid)
 						.Value(x => x.Code, item.Code)

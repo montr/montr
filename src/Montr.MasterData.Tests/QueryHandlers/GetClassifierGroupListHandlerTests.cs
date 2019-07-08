@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using LinqToDB;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Montr.Core.Services;
 using Montr.Data.Linq2Db;
 using Montr.MasterData.Impl.Entities;
 using Montr.MasterData.Impl.QueryHandlers;
@@ -51,12 +52,14 @@ namespace Montr.MasterData.Tests.QueryHandlers
 		{
 			// arrange
 			var cancellationToken = CancellationToken.None;
+			var unitOfWorkFactory = new TransactionScopeUnitOfWorkFactory();
 			var dbContextFactory = new DefaultDbContextFactory();
 			var classifierTypeRepository = new DbClassifierTypeRepository(dbContextFactory);
 			var classifierTypeService = new DefaultClassifierTypeService(classifierTypeRepository);
-
+			var generator = new DbHelper(unitOfWorkFactory, dbContextFactory) { TypeCode = "okei" }; // todo: use test type
 			var handler = new GetClassifierGroupListHandler(dbContextFactory, classifierTypeService);
-			var parentGroup = await FindClassifierGroup(dbContextFactory, "okei", "1", cancellationToken);
+
+			var parentGroup = await generator.FindGroup(ClassifierTree.DefaultCode, "1", cancellationToken);
 
 			// act
 			var command = new GetClassifierGroupList
@@ -77,7 +80,7 @@ namespace Montr.MasterData.Tests.QueryHandlers
 			Assert.AreEqual(7, result.Rows.Count);
 		}
 
-		private async Task<DbClassifierGroup> FindClassifierGroup(IDbContextFactory dbContextFactory, string typeCode, string code, CancellationToken cancellationToken)
+		/*private async Task<DbClassifierGroup> FindClassifierGroup(IDbContextFactory dbContextFactory, string typeCode, string code, CancellationToken cancellationToken)
 		{
 			using (var db = dbContextFactory.Create())
 			{
@@ -85,13 +88,13 @@ namespace Montr.MasterData.Tests.QueryHandlers
 						from type in db.GetTable<DbClassifierType>().Where(x => x.Code == typeCode)
 						/*join tree in db.GetTable<DbClassifierTree>()
 								.Where(x => x.Code == "default")
-							on type.Uid equals tree.TypeUid*/
+							on type.Uid equals tree.TypeUid#1#
 						join @group in db.GetTable<DbClassifierGroup>().Where(x => x.Code == code)
 							on type.Uid equals @group.TypeUid
 						select @group)
 					.SingleAsync(cancellationToken);
 			}
-		}
+		}*/
 
 		[TestMethod, Ignore]
 		public async Task GetGroups_WhenAutoExpandSingleChildRequested_ShouldReturnExpanded()
@@ -208,13 +211,15 @@ namespace Montr.MasterData.Tests.QueryHandlers
 		{
 			// arrange
 			var cancellationToken = CancellationToken.None;
+			var unitOfWorkFactory = new TransactionScopeUnitOfWorkFactory();
 			var dbContextFactory = new DefaultDbContextFactory();
 			var classifierTypeRepository = new DbClassifierTypeRepository(dbContextFactory);
 			var classifierTypeService = new DefaultClassifierTypeService(classifierTypeRepository);
-
+			var generator = new DbHelper(unitOfWorkFactory, dbContextFactory) { TypeCode = "okei" }; // todo: use test type
 			var handler = new GetClassifierGroupListHandler(dbContextFactory, classifierTypeService);
-			var rootGroup = await FindClassifierGroup(dbContextFactory, "okei", "default", cancellationToken);
-			var focusGroup = await FindClassifierGroup(dbContextFactory, "okei", "3.7", cancellationToken); // 3.7. Экономические единицы
+
+			var rootGroup = await generator.FindGroup(ClassifierTree.DefaultCode, "default", cancellationToken);
+			var focusGroup = await generator.FindGroup(ClassifierTree.DefaultCode, "3.7", cancellationToken); // 3.7. Экономические единицы
 
 			// act & assert - focus in root scope
 			var command = new GetClassifierGroupList

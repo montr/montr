@@ -14,8 +14,8 @@ namespace Montr.MasterData.Impl.Entities
 		[Column(Name = "uid"), DataType(DataType.Guid), PrimaryKey]
 		public Guid Uid { get; set; }
 
-		[Column(Name = "type_uid"), DataType(DataType.Guid), NotNull]
-		public Guid TypeUid { get; set; }
+		[Column(Name = "tree_uid"), DataType(DataType.Guid), NotNull]
+		public Guid TreeUid { get; set; }
 
 		[Column(Name = "parent_uid"), DataType(DataType.Guid), Nullable]
 		public Guid? ParentUid { get; set; }

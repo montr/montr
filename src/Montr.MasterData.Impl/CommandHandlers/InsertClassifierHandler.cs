@@ -72,27 +72,26 @@ namespace Montr.MasterData.Impl.CommandHandlers
 					if (type.HierarchyType == HierarchyType.Groups)
 					{
 						// todo: validate group belongs to the same classifier
+						// todo: validate selected group belong to default tree
 
-						if (request.GroupUid != null)
+						if (request.TreeUid == null || request.GroupUid == null)
 						{
-							// link to selected group
-							await db.GetTable<DbClassifierLink>()
-								.Value(x => x.GroupUid, request.GroupUid)
-								.Value(x => x.ItemUid, itemUid)
-								.InsertAsync(cancellationToken);
-
-							// if group is not of default hierarchy, link to default hierarchy root
-							var root = await GetRoot(db, request.GroupUid.Value, cancellationToken);
-
-							if (root.Code != ClassifierTree.DefaultCode)
-							{
-								await LinkToDefaultRoot(db, type, itemUid, cancellationToken);
-							}
+							throw new InvalidOperationException("Classifier should belong to one of the default hierarchy group.");
 						}
-						else
+
+						// link to selected group
+						await db.GetTable<DbClassifierLink>()
+							.Value(x => x.GroupUid, request.GroupUid)
+							.Value(x => x.ItemUid, itemUid)
+							.InsertAsync(cancellationToken);
+
+						// if group is not of default hierarchy, link to default hierarchy root
+						/*var root = await GetRoot(db, request.GroupUid.Value, cancellationToken);
+
+						if (root.Code != ClassifierTree.DefaultCode)
 						{
 							await LinkToDefaultRoot(db, type, itemUid, cancellationToken);
-						}
+						}*/
 					}
 
 					// todo: events
@@ -104,7 +103,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 			}
 		}
 
-		private static async Task LinkToDefaultRoot(DbContext db, ClassifierType type, Guid itemUid, CancellationToken cancellationToken)
+		/*private static async Task LinkToDefaultRoot(DbContext db, ClassifierType type, Guid itemUid, CancellationToken cancellationToken)
 		{
 			var defaultRoot = await GetDefaultRoot(db, type, cancellationToken);
 
@@ -126,7 +125,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 				where @group.TypeUid == type.Uid && @group.Code == ClassifierTree.DefaultCode
 				select @group
 			).SingleOrDefaultAsync(cancellationToken);
-		}
+		}*/
 
 		// todo: move to ClassifierGroupService.GetRoot()
 		public static async Task<DbClassifierGroup> GetRoot(DbContext db, Guid groupUid, CancellationToken cancellationToken)

@@ -12,7 +12,9 @@ namespace Montr.MasterData.Commands
 		public Guid CompanyUid { get; set; }
 
 		public string TypeCode { get; set; }
-		
+
+		public Guid TreeUid { get; set; }
+
 		public ClassifierGroup Item { get; set; }
 	}
 }

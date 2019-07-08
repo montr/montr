@@ -55,16 +55,16 @@ namespace Montr.MasterData.Impl.CommandHandlers
 
 					if (item.HierarchyType == HierarchyType.Groups)
 					{
-						var root = db.GetTable<DbClassifierGroup>()
+						var defaultTree = db.GetTable<DbClassifierTree>()
 							.SingleOrDefault(x =>
 								x.TypeUid == item.Uid &&
 								x.Code == ClassifierTree.DefaultCode);
 
-						if (root == null)
+						if (defaultTree == null)
 						{
 							var treeUid = Guid.NewGuid();
 
-							await db.GetTable<DbClassifierGroup>()
+							await db.GetTable<DbClassifierTree>()
 								.Value(x => x.Uid, treeUid)
 								.Value(x => x.TypeUid, item.Uid)
 								.Value(x => x.Code, ClassifierTree.DefaultCode)
@@ -72,12 +72,12 @@ namespace Montr.MasterData.Impl.CommandHandlers
 								.InsertAsync(cancellationToken);
 
 							// todo: validate with ClassifierGroupValidator or reuse common service with InsertClassifierGroupHandler
-							var closureTable = new ClosureTableHandler(db);
+							/*var closureTable = new ClosureTableHandler(db);
 
 							if (await closureTable.Insert(treeUid, null, cancellationToken) == false)
 							{
 								return new ApiResult { Success = false, Errors = closureTable.Errors };
-							}
+							}*/
 						}
 					}
 				}

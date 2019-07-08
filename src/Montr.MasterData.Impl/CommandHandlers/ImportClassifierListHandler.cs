@@ -24,7 +24,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 		private readonly IClassifierTypeService _classifierTypeService;
 
 		private ClassifierType _type;
-		private DbClassifierGroup _root;
+		private DbClassifierTree _tree;
 
 		private IDictionary<string, DbClassifier> _existingItems;
 		private IDictionary<string, DbClassifierGroup> _existingGroups;
@@ -43,7 +43,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 			// (+) todo: build DAG for groups and items
 			// (+) todo: build dictionaries
 			// todo: generate codes for new entities
-			// (+) todo: add new items to default root
+			// (+) todo: add new items to default tree
 			// (+) todo: build tree of items
 			// (+) todo: build closure table for groups or item
 
@@ -79,44 +79,31 @@ namespace Montr.MasterData.Impl.CommandHandlers
 
 				if (_type.HierarchyType == HierarchyType.Groups)
 				{
-					_root = db.GetTable<DbClassifierGroup>()
+					_tree = db.GetTable<DbClassifierTree>()
 						.SingleOrDefault(x =>
 							x.TypeUid == _type.Uid &&
 							x.Code == ClassifierTree.DefaultCode);
 
-					/*if (_root == null)
+					if (_tree == null)
 					{
-						_root = new DbClassifierGroup
+						_tree = new DbClassifierTree
 						{
 							Uid = Guid.NewGuid(),
 							TypeUid = _type.Uid,
-							Code = Classifiertree.DefaultCode,
+							Code = ClassifierTree.DefaultCode,
 							Name = _type.Name
 						};
 
-						await db.GetTable<DbClassifierGroup>()
-							.Value(x => x.Uid, _root.Uid)
-							.Value(x => x.TypeUid, _root.TypeUid)
-							.Value(x => x.Code, _root.Code)
-							.Value(x => x.Name, _root.Name)
+						await db.GetTable<DbClassifierTree>()
+							.Value(x => x.Uid, _tree.Uid)
+							.Value(x => x.TypeUid, _tree.TypeUid)
+							.Value(x => x.Code, _tree.Code)
+							.Value(x => x.Name, _tree.Name)
 							.InsertAsync(cancellationToken);
-					}*/
+					}
 
-					// todo: validate root not updated?
-					/*
-					// note: take all child of default root, don't select all groups of classifier type
-					_existingGroups = await (
-							from children in db.GetTable<DbClassifierClosure>()
-								.Where(x => x.ParentUid == _root.Uid)
-							join child in db.GetTable<DbClassifierGroup>()
-								on children.ChildUid equals child.Uid
-							select child
-						)
-						.ToDictionaryAsync(x => x.Code, cancellationToken);
-						*/
-
-					_existingGroups = await db
-						.GetTable<DbClassifierGroup>().Where(x => x.TypeUid == _type.Uid)
+					_existingGroups = await db.GetTable<DbClassifierGroup>()
+						.Where(x => x.TreeUid == _tree.Uid)
 						.ToDictionaryAsync(x => x.Code, cancellationToken);
 				}
 			}
@@ -179,56 +166,35 @@ namespace Montr.MasterData.Impl.CommandHandlers
 
 			if (_type.HierarchyType == HierarchyType.Groups)
 			{
-				var root = new ClassifierGroup
-				{
-					Uid = Guid.NewGuid(),
-					Code = ClassifierTree.DefaultCode,
-					Name = _type.Name
-				};
-
-				var sortedGroups = new List<ClassifierGroup> { root };
-
 				if (request.Data.Groups != null)
 				{
-					sortedGroups.AddRange(
-						DirectedAcyclicGraphVerifier.TopologicalSort(
-							request.Data.Groups,
-							node => node.Code,
-							node => node.ParentCode != null ? new[] {node.ParentCode} : null)
-					);
-				}
+					var sortedGroups = DirectedAcyclicGraphVerifier.TopologicalSort(
+						request.Data.Groups,
+						node => node.Code,
+						node => node.ParentCode != null ? new[] { node.ParentCode } : null);
 
-				foreach (var group in sortedGroups)
-				{
-					var groupUid = group.Uid == Guid.Empty ? Guid.NewGuid() : group.Uid;
-
-					Guid? parentUid;
-
-					if (group.Code == ClassifierTree.DefaultCode)
+					foreach (var group in sortedGroups)
 					{
-						parentUid = null;
+						var groupUid = Guid.NewGuid();
+
+						Guid? parentUid = null;
+
+						if (group.ParentCode != null)
+						{
+							parentUid = groups[group.ParentCode].Uid;
+						}
+
+						groups[group.Code] = new DbClassifierGroup
+						{
+							Uid = groupUid,
+							TreeUid = _tree.Uid,
+							Code = group.Code,
+							Name = group.Name,
+							ParentUid = parentUid
+						};
+
+						closures.Insert(groupUid, parentUid);
 					}
-					else if (group.ParentCode != null)
-					{
-						// todo: add friendly error group with code not found (see below in Import)
-						parentUid = groups[group.ParentCode].Uid;
-					}
-					else
-					{
-						parentUid = root.Uid;
-					}
-
-					// todo: check all groups code is not null
-					groups[group.Code] = new DbClassifierGroup
-					{
-						Uid = groupUid,
-						TypeUid = _type.Uid,
-						Code = group.Code,
-						Name = group.Name,
-						ParentUid = parentUid
-					};
-
-					closures.Insert(groupUid, parentUid);
 				}
 
 				// todo: link all unlinked items to root
@@ -403,16 +369,16 @@ namespace Montr.MasterData.Impl.CommandHandlers
 											errors.Add($"Group {group.ParentCode} specified as parent for group {group.Code} not found in classifier {_type.Code}.");
 										}
 									}
-									else
+									/*else
 									{
 										parentUid = _root.Uid;
-									}
+									}*/
 
 									var groupUid = Guid.NewGuid();
 
 									await db.GetTable<DbClassifierGroup>()
 										.Value(x => x.Uid, groupUid)
-										.Value(x => x.TypeUid, _type.Uid)
+										.Value(x => x.TreeUid, _tree.Uid)
 										.Value(x => x.Code, group.Code)
 										.Value(x => x.Name, group.Name)
 										.Value(x => x.ParentUid, parentUid)
@@ -424,7 +390,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 									_existingGroups.Add(group.Code, new DbClassifierGroup
 									{
 										Uid = groupUid,
-										TypeUid = _type.Uid,
+										TreeUid = _tree.Uid,
 										Code = group.Code,
 										Name = group.Name,
 										ParentUid = parentUid
@@ -454,14 +420,13 @@ namespace Montr.MasterData.Impl.CommandHandlers
 
 						if (request.Data.Links != null)
 						{
-							var dbLinks = await (
-									from children in db.GetTable<DbClassifierClosure>().Where(x => x.ParentUid == _root.Uid)
-									join link in db.GetTable<DbClassifierLink>() on children.ChildUid equals link.GroupUid
-									select link)
-								.ToListAsync(cancellationToken);
-
 							var existingLinks = new HashSet<Tuple<Guid, Guid>>(
-								dbLinks.Select(x => Tuple.Create(x.GroupUid, x.ItemUid)));
+								(from link in db.GetTable<DbClassifierLink>()
+									join g in db.GetTable<DbClassifierGroup>() on link.GroupUid equals g.Uid
+									join i in db.GetTable<DbClassifier>() on link.ItemUid equals i.Uid
+									where i.TypeUid == _type.Uid && g.TreeUid == _tree.Uid
+									select new { link.GroupUid, link.ItemUid })
+								.Select(x => Tuple.Create(x.GroupUid, x.ItemUid)));
 
 							foreach (var itemInGroup in request.Data.Links)
 							{

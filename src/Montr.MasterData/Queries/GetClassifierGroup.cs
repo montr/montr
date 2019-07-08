@@ -12,6 +12,8 @@ namespace Montr.MasterData.Queries
 
 		public string TypeCode { get; set; }
 
+		public Guid TreeUid { get; set; }
+
 		public Guid Uid { get; set; }
 	}
 }

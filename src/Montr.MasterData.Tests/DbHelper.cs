@@ -115,13 +115,27 @@ namespace Montr.MasterData.Tests
 			return result;
 		}
 
-		public async Task<DbClassifierGroup> FindGroup(string groupCode, CancellationToken cancellationToken)
+		public async Task<DbClassifierTree> FindTree(string treeCode, CancellationToken cancellationToken)
+		{
+			using (var db = _dbContextFactory.Create())
+			{
+				var query = from tree in db.GetTable<DbClassifierTree>()
+					join type in db.GetTable<DbClassifierType>() on tree.TypeUid equals type.Uid
+					where type.Code == TypeCode && tree.Code == treeCode
+							select tree;
+
+				return await query.SingleAsync(cancellationToken);
+			}
+		}
+
+		public async Task<DbClassifierGroup> FindGroup(string treeCode, string groupCode, CancellationToken cancellationToken)
 		{
 			using (var db = _dbContextFactory.Create())
 			{
 				var query = from g in db.GetTable<DbClassifierGroup>()
-					join type in db.GetTable<DbClassifierType>() on g.TypeUid equals type.Uid
-					where type.Code == TypeCode && g.Code == groupCode
+					join tree in db.GetTable<DbClassifierTree>() on g.TreeUid equals tree.Uid
+					join type in db.GetTable<DbClassifierType>() on tree.TypeUid equals type.Uid
+					where type.Code == TypeCode && tree.Code == treeCode && g.Code == groupCode
 					select g;
 
 				return await query.SingleAsync(cancellationToken);
@@ -159,10 +173,10 @@ namespace Montr.MasterData.Tests
 			return result;
 		}
 
-		public async Task<ApiResult> UpdateGroup(string groupCode, string newParentGroupCode,
+		public async Task<ApiResult> UpdateGroup(string treeCode, string groupCode, string newParentGroupCode,
 			CancellationToken cancellationToken, bool assertResult = true)
 		{
-			var dbGroup = await FindGroup(groupCode, cancellationToken);
+			var dbGroup = await FindGroup(treeCode, groupCode, cancellationToken);
 
 			var item = new ClassifierGroup
 			{
@@ -173,7 +187,7 @@ namespace Montr.MasterData.Tests
 
 			if (newParentGroupCode != null)
 			{
-				var dbParentGroup = await FindGroup(newParentGroupCode, cancellationToken);
+				var dbParentGroup = await FindGroup(treeCode, newParentGroupCode, cancellationToken);
 				item.ParentUid = dbParentGroup.Uid;
 			}
 
@@ -194,9 +208,9 @@ namespace Montr.MasterData.Tests
 			return result;
 		}
 
-		public async Task<ApiResult> DeleteGroup(string groupCode, CancellationToken cancellationToken)
+		public async Task<ApiResult> DeleteGroup(string treeCode, string groupCode, CancellationToken cancellationToken)
 		{
-			var group = await FindGroup(groupCode, cancellationToken);
+			var group = await FindGroup(treeCode, groupCode, cancellationToken);
 
 			var result = await _deleteClassifierGroupHandler.Handle(new DeleteClassifierGroup
 			{
@@ -266,19 +280,20 @@ namespace Montr.MasterData.Tests
 			}, cancellationToken);
 		}
 
-		public string PrintClosure()
+		public string PrintClosure(string treeCode)
 		{
 			const int printColumnWidth = 16;
 
 			using (var db = _dbContextFactory.Create())
 			{
 				var print = from c in db.GetTable<DbClassifierClosure>()
-							join parent in db.GetTable<DbClassifierGroup>() on c.ParentUid equals parent.Uid
-							join child in db.GetTable<DbClassifierGroup>() on c.ChildUid equals child.Uid
-							join type in db.GetTable<DbClassifierType>() on parent.TypeUid equals type.Uid
-							where type.Code == TypeCode
-							orderby parent.Code, child.Code, c.Level
-							select new { ParentCode = parent.Code, ChildCode = child.Code, c.Level };
+					join parent in db.GetTable<DbClassifierGroup>() on c.ParentUid equals parent.Uid
+					join child in db.GetTable<DbClassifierGroup>() on c.ChildUid equals child.Uid
+					join tree in db.GetTable<DbClassifierTree>() on parent.TreeUid equals tree.Uid
+					join type in db.GetTable<DbClassifierType>() on tree.TypeUid equals type.Uid
+					where type.Code == TypeCode && tree.Code == treeCode
+					orderby parent.Code, child.Code, c.Level
+					select new { ParentCode = parent.Code, ChildCode = child.Code, c.Level };
 
 				var sb = new StringBuilder().AppendLine($"{"Parent",-printColumnWidth} {"Child",-printColumnWidth} Level");
 

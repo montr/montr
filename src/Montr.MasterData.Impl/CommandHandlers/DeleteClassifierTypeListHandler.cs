@@ -36,15 +36,26 @@ namespace Montr.MasterData.Impl.CommandHandlers
 
 				using (var db = _dbContextFactory.Create())
 				{
+					// delete all groups
 					await (
 						from @group in db.GetTable<DbClassifierGroup>()
-						join type in db.GetTable<DbClassifierType>() on @group.TypeUid equals type.Uid
+						join tree in db.GetTable<DbClassifierTree>() on @group.TreeUid equals tree.Uid
+						join type in db.GetTable<DbClassifierType>() on tree.TypeUid equals type.Uid
 						where type.CompanyUid == request.CompanyUid && request.Uids.Contains(type.Uid)
 						select @group
 					).DeleteAsync(cancellationToken);
 
+					// delete all trees
+					await (
+						from tree in db.GetTable<DbClassifierTree>()
+						join type in db.GetTable<DbClassifierType>() on tree.TypeUid equals type.Uid
+						where type.CompanyUid == request.CompanyUid && request.Uids.Contains(type.Uid)
+						select tree
+					).DeleteAsync(cancellationToken);
+
 					// todo: remove items
 
+					// delete type
 					affected = await db.GetTable<DbClassifierType>()
 						.Where(x => x.CompanyUid == request.CompanyUid && request.Uids.Contains(x.Uid))
 						.DeleteAsync(cancellationToken);

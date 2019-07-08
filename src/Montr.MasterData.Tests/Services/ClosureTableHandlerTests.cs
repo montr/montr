@@ -26,13 +26,13 @@ namespace Montr.MasterData.Tests.Services
 			{
 				// arrange
 				await generator.InsertType(HierarchyType.Groups, cancellationToken);
-				var root = await generator.FindGroup(ClassifierTree.DefaultCode, cancellationToken);
+				var root = await generator.FindTree(ClassifierTree.DefaultCode, cancellationToken);
 
 				// act
 				await generator.InsertGroups(2, 3, root.Code, root.Uid, cancellationToken);
 
 				// assert
-				var closure = generator.PrintClosure();
+				var closure = generator.PrintClosure(ClassifierTree.DefaultCode);
 				Assert.AreEqual(File.ReadAllText("../../../Content/closure.2x3.txt"), closure);
 			}
 		}
@@ -50,12 +50,12 @@ namespace Montr.MasterData.Tests.Services
 			{
 				// act & assert
 				await dbHelper.InsertType(HierarchyType.Groups, cancellationToken);
-				var root = await dbHelper.FindGroup(ClassifierTree.DefaultCode, cancellationToken);
+				var root = await dbHelper.FindTree(ClassifierTree.DefaultCode, cancellationToken);
 				await dbHelper.InsertGroups(3, 3, root.Code, root.Uid, cancellationToken);
-				Assert.AreEqual(File.ReadAllText("../../../Content/closure.3x3.txt"), dbHelper.PrintClosure());
+				Assert.AreEqual(File.ReadAllText("../../../Content/closure.3x3.txt"), dbHelper.PrintClosure(ClassifierTree.DefaultCode));
 
 				// act & assert - cyclic dependency
-				var result = await dbHelper.UpdateGroup(root.Code + ".1.1", root.Code + ".1.1.1", cancellationToken, false);
+				var result = await dbHelper.UpdateGroup(ClassifierTree.DefaultCode, root.Code + ".1.1", root.Code + ".1.1.1", cancellationToken, false);
 				Assert.IsNotNull(result);
 				Assert.IsFalse(result.Success);
 				Assert.IsNotNull(result.Errors);
@@ -77,21 +77,21 @@ namespace Montr.MasterData.Tests.Services
 			{
 				// act & assert
 				await generator.InsertType(HierarchyType.Groups, cancellationToken);
-				var root = await generator.FindGroup(ClassifierTree.DefaultCode, cancellationToken);
+				var root = await generator.FindTree(ClassifierTree.DefaultCode, cancellationToken);
 				await generator.InsertGroups(3, 3, root.Code, root.Uid, cancellationToken);
-				Assert.AreEqual(File.ReadAllText("../../../Content/closure.3x3.txt"), generator.PrintClosure());
+				Assert.AreEqual(File.ReadAllText("../../../Content/closure.3x3.txt"), generator.PrintClosure(ClassifierTree.DefaultCode));
 
 				// act & assert - from null to not null parent
-				await generator.UpdateGroup(root.Code + ".1", root.Code + ".2.1", cancellationToken);
-				Assert.AreEqual(File.ReadAllText("../../../Content/closure.3x3~1to2.1.txt"), generator.PrintClosure());
+				await generator.UpdateGroup(ClassifierTree.DefaultCode, root.Code + ".1", root.Code + ".2.1", cancellationToken);
+				Assert.AreEqual(File.ReadAllText("../../../Content/closure.3x3~1to2.1.txt"), generator.PrintClosure(ClassifierTree.DefaultCode));
 
 				// act & assert - from not null to null parent
-				await generator.UpdateGroup(root.Code + ".2.2", root.Code, cancellationToken);
-				Assert.AreEqual(File.ReadAllText("../../../Content/closure.3x3~1to2.1~2.2toRoot.txt"), generator.PrintClosure());
+				await generator.UpdateGroup(ClassifierTree.DefaultCode, root.Code + ".2.2", root.Code, cancellationToken);
+				Assert.AreEqual(File.ReadAllText("../../../Content/closure.3x3~1to2.1~2.2toRoot.txt"), generator.PrintClosure(ClassifierTree.DefaultCode));
 
 				// act & assert - from not null to not null parent
-				await generator.UpdateGroup(root.Code + ".3.3", root.Code + ".1.3", cancellationToken);
-				Assert.AreEqual(File.ReadAllText("../../../Content/closure.3x3~1to2.1~2.2toRoot~3.3to1.3.txt"), generator.PrintClosure());
+				await generator.UpdateGroup(ClassifierTree.DefaultCode, root.Code + ".3.3", root.Code + ".1.3", cancellationToken);
+				Assert.AreEqual(File.ReadAllText("../../../Content/closure.3x3~1to2.1~2.2toRoot~3.3to1.3.txt"), generator.PrintClosure(ClassifierTree.DefaultCode));
 			}
 		}
 
@@ -108,21 +108,21 @@ namespace Montr.MasterData.Tests.Services
 			{
 				// act & assert
 				await dbHelper.InsertType(HierarchyType.Groups, cancellationToken);
-				var root = await dbHelper.FindGroup(ClassifierTree.DefaultCode, cancellationToken);
+				var root = await dbHelper.FindTree(ClassifierTree.DefaultCode, cancellationToken);
 				await dbHelper.InsertGroups(3, 3, root.Code, root.Uid, cancellationToken);
-				Assert.AreEqual(File.ReadAllText("../../../Content/closure.3x3.txt"), dbHelper.PrintClosure());
+				Assert.AreEqual(File.ReadAllText("../../../Content/closure.3x3.txt"), dbHelper.PrintClosure(ClassifierTree.DefaultCode));
 
 				// act & assert
-				await dbHelper.DeleteGroup(root.Code + ".1", cancellationToken);
-				Assert.AreEqual(File.ReadAllText("../../../Content/closure.3x3-1.txt"), dbHelper.PrintClosure());
+				await dbHelper.DeleteGroup(ClassifierTree.DefaultCode, root.Code + ".1", cancellationToken);
+				Assert.AreEqual(File.ReadAllText("../../../Content/closure.3x3-1.txt"), dbHelper.PrintClosure(ClassifierTree.DefaultCode));
 
 				// act & assert
-				await dbHelper.DeleteGroup(root.Code + ".2.2", cancellationToken);
-				Assert.AreEqual(File.ReadAllText("../../../Content/closure.3x3-1-2.2.txt"), dbHelper.PrintClosure());
+				await dbHelper.DeleteGroup(ClassifierTree.DefaultCode, root.Code + ".2.2", cancellationToken);
+				Assert.AreEqual(File.ReadAllText("../../../Content/closure.3x3-1-2.2.txt"), dbHelper.PrintClosure(ClassifierTree.DefaultCode));
 
 				// act & assert
-				await dbHelper.DeleteGroup(root.Code + ".3.1.2", cancellationToken);
-				Assert.AreEqual(File.ReadAllText("../../../Content/closure.3x3-1-2.2-3.1.2.txt"), dbHelper.PrintClosure());
+				await dbHelper.DeleteGroup(ClassifierTree.DefaultCode, root.Code + ".3.1.2", cancellationToken);
+				Assert.AreEqual(File.ReadAllText("../../../Content/closure.3x3-1-2.2-3.1.2.txt"), dbHelper.PrintClosure(ClassifierTree.DefaultCode));
 			}
 		}
 	}

@@ -30,8 +30,8 @@ namespace Montr.MasterData.Tests.CommandHandlers
 			{
 				// arrange
 				await dbHelper.InsertType(HierarchyType.Groups, cancellationToken);
-				var root = await dbHelper.FindGroup(ClassifierTree.DefaultCode, cancellationToken);
-				var root2 = await dbHelper.InsertGroup("root2", null, cancellationToken);
+				var root = await dbHelper.FindTree(ClassifierTree.DefaultCode, cancellationToken);
+				var root2 = await dbHelper.InsertTree("root2", cancellationToken);
 				var group2 = await dbHelper.InsertGroup("002", root2.Uid, cancellationToken);
 				var item1 = await dbHelper.InsertItem("001", cancellationToken);
 				await dbHelper.InsertLink(group2.Uid, item1.Uid, cancellationToken);
@@ -84,7 +84,7 @@ namespace Montr.MasterData.Tests.CommandHandlers
 			{
 				// arrange
 				await dbHelper.InsertType(HierarchyType.Groups, cancellationToken);
-				var root = await dbHelper.FindGroup(ClassifierTree.DefaultCode, cancellationToken);
+				var root = await dbHelper.FindTree(ClassifierTree.DefaultCode, cancellationToken);
 				var group1 = await dbHelper.InsertGroup("001", root.Uid, cancellationToken);
 				var item1 = await dbHelper.InsertItem("001", cancellationToken);
 				await dbHelper.InsertLink(group1.Uid, item1.Uid, cancellationToken);
