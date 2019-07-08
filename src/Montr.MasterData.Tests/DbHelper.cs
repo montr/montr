@@ -142,28 +142,29 @@ namespace Montr.MasterData.Tests
 			}
 		}
 
-		public async Task InsertGroups(int count, int depth, string parentCode, Guid? parentUid, CancellationToken cancellationToken)
+		public async Task InsertGroups(Guid treeUid, int count, int depth, string parentCode, Guid? parentUid, CancellationToken cancellationToken)
 		{
 			for (var i = 1; i <= count; i++)
 			{
 				var code = parentCode != null ? $"{parentCode}.{i}" : $"{i}";
 
-				var result = await InsertGroup(code, parentUid, cancellationToken);
+				var result = await InsertGroup(treeUid, code, parentUid, cancellationToken);
 
 				if (depth > 1)
 				{
-					await InsertGroups(count, depth - 1, code, result.Uid, cancellationToken);
+					await InsertGroups(treeUid, count, depth - 1, code, result.Uid, cancellationToken);
 				}
 			}
 		}
 
-		public async Task<ApiResult> InsertGroup(string code, Guid? parentUid, CancellationToken cancellationToken)
+		public async Task<ApiResult> InsertGroup(Guid treeUid, string code, Guid? parentUid, CancellationToken cancellationToken)
 		{
 			var result = await _insertClassifierGroupHandler.Handle(new InsertClassifierGroup
 			{
 				CompanyUid = CompanyUid,
 				UserUid = UserUid,
 				TypeCode = TypeCode,
+				TreeUid = treeUid,
 				Item = new ClassifierGroup {Code = code, Name = $"Class {code}", ParentUid = parentUid}
 			}, cancellationToken);
 

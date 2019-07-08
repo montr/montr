@@ -30,7 +30,7 @@ namespace Montr.MasterData.Tests.CommandHandlers
 			{
 				await dbHelper.InsertType(HierarchyType.Groups, cancellationToken);
 				var root = await dbHelper.FindTree(ClassifierTree.DefaultCode, cancellationToken);
-				var group1 = await dbHelper.InsertGroup("001", root.Uid, cancellationToken);
+				var group1 = await dbHelper.InsertGroup(root.Uid, "001", root.Uid, cancellationToken);
 				var item1 = await dbHelper.InsertItem("001", cancellationToken);
 
 				// assert - initially new items belongs to default group
@@ -81,7 +81,8 @@ namespace Montr.MasterData.Tests.CommandHandlers
 				await dbHelper.InsertType(HierarchyType.Groups, cancellationToken);
 				var root = await dbHelper.FindTree(ClassifierTree.DefaultCode, cancellationToken);
 				var root2 = await dbHelper.InsertTree("root2", cancellationToken);
-				var group2 = await dbHelper.InsertGroup("002", root2.Uid, cancellationToken);
+				// ReSharper disable once PossibleInvalidOperationException
+				var group2 = await dbHelper.InsertGroup(root2.Uid.Value, "002", root2.Uid, cancellationToken);
 				var item1 = await dbHelper.InsertItem("001", cancellationToken);
 
 				// assert - initially new items belongs to default group
