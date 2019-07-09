@@ -35,6 +35,7 @@ namespace Montr.MasterData.Tests.QueryHandlers
 					CompanyUid = Constants.OperatorCompanyUid,
 					TypeCode = "okei",
 					ParentUid = null // yeah, we test this
+					// todo: add TreeUid or TreeCode parameter - without it method useless
 					// TreeCode = "default"
 				}
 			};
@@ -43,8 +44,8 @@ namespace Montr.MasterData.Tests.QueryHandlers
 
 			// assert
 			Assert.IsNotNull(result);
-			Assert.AreEqual(1, result.Rows.Count);
-			Assert.AreEqual(ClassifierTree.DefaultCode, result.Rows[0].Code);
+			Assert.AreEqual(4, result.Rows.Count);
+			// Assert.AreEqual(ClassifierTree.DefaultCode, result.Rows[0].Code);
 		}
 
 		[TestMethod]
@@ -218,7 +219,7 @@ namespace Montr.MasterData.Tests.QueryHandlers
 			var generator = new DbHelper(unitOfWorkFactory, dbContextFactory) { TypeCode = "okei" }; // todo: use test type
 			var handler = new GetClassifierGroupListHandler(dbContextFactory, classifierTypeService);
 
-			var rootGroup = await generator.FindGroup(ClassifierTree.DefaultCode, "default", cancellationToken);
+			// var rootGroup = await generator.FindGroup(ClassifierTree.DefaultCode, "default", cancellationToken);
 			var focusGroup = await generator.FindGroup(ClassifierTree.DefaultCode, "3.7", cancellationToken); // 3.7. Экономические единицы
 
 			// act & assert - focus in root scope
@@ -238,14 +239,13 @@ namespace Montr.MasterData.Tests.QueryHandlers
 
 			// todo: pretty print and compare by focus.txt
 			Assert.IsNotNull(result);
-			Assert.AreEqual(1, result.Rows.Count);
-			Assert.AreEqual(4, result.Rows[0].Children.Count);
-			Assert.IsNull(result.Rows[0].Children[0].Children);
-			Assert.IsNull(result.Rows[0].Children[1].Children);
-			Assert.IsNull(result.Rows[0].Children[3].Children);
+			Assert.AreEqual(4, result.Rows.Count);
+			Assert.IsNull(result.Rows[0].Children);
+			Assert.IsNull(result.Rows[1].Children);
+			Assert.IsNull(result.Rows[3].Children);
 
-			Assert.IsNotNull(result.Rows[0].Children[2].Children); // 3. ЧЕТЫРЕХЗНАЧНЫЕ НАЦИОНАЛЬНЫЕ ЕДИНИЦЫ ИЗМЕНЕНИЯ, ВКЛЮЧЕННЫЕ В ОКЕИ
-			Assert.AreEqual(result.Rows[0].Children[2].Children.Count, 3);
+			Assert.IsNotNull(result.Rows[2].Children); // 3. ЧЕТЫРЕХЗНАЧНЫЕ НАЦИОНАЛЬНЫЕ ЕДИНИЦЫ ИЗМЕНЕНИЯ, ВКЛЮЧЕННЫЕ В ОКЕИ
+			Assert.AreEqual(result.Rows[2].Children.Count, 3);
 
 			// act & assert - focus in scope of selected parent
 			command = new GetClassifierGroupList
@@ -254,7 +254,7 @@ namespace Montr.MasterData.Tests.QueryHandlers
 				{
 					CompanyUid = Constants.OperatorCompanyUid,
 					TypeCode = "okei",
-					ParentUid = rootGroup.Uid,
+					// ParentUid = rootGroup.Uid,
 					FocusUid = focusGroup.Uid 
 				}
 			};
