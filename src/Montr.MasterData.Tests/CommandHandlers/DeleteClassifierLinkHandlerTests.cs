@@ -33,16 +33,16 @@ namespace Montr.MasterData.Tests.CommandHandlers
 				var root = await dbHelper.FindTree(ClassifierTree.DefaultCode, cancellationToken);
 				var root2 = await dbHelper.InsertTree("root2", cancellationToken);
 				// ReSharper disable once PossibleInvalidOperationException
-				var group2 = await dbHelper.InsertGroup(root2.Uid.Value, "002", root2.Uid, cancellationToken);
+				var group2 = await dbHelper.InsertGroup(root2.Uid.Value, "002", null, cancellationToken);
 				var item1 = await dbHelper.InsertItem("001", cancellationToken);
 				await dbHelper.InsertLink(group2.Uid, item1.Uid, cancellationToken);
 
-				// assert - links to default and secondary hierarchies exists
+				// assert - links to --default and-- secondary hierarchy exists
 				var links = await dbHelper.GetLinks(null, item1.Uid, cancellationToken);
 
-				Assert.AreEqual(2, links.TotalCount);
+				Assert.AreEqual(1, links.TotalCount);
 				var groups = links.Rows.Select(x => x.Group.Uid).ToList();
-				CollectionAssert.Contains(groups, root.Uid);
+				// CollectionAssert.Contains(groups, root.Uid);
 				CollectionAssert.Contains(groups, group2.Uid);
 
 				// act
@@ -60,16 +60,16 @@ namespace Montr.MasterData.Tests.CommandHandlers
 				// assert - link deleted
 				Assert.IsTrue(result.Success);
 
-				// assert - link to default hierarchy still exists
+				// assert - NO link to default hierarchy exists
 				links = await dbHelper.GetLinks(null, item1.Uid, cancellationToken);
 
-				Assert.AreEqual(1, links.TotalCount);
-				Assert.AreEqual(root.Uid, links.Rows[0].Group.Uid);
-				Assert.AreEqual(item1.Uid, links.Rows[0].Item.Uid);
+				Assert.AreEqual(0, links.TotalCount);
+				// Assert.AreEqual(root.Uid, links.Rows[0].Group.Uid);
+				// Assert.AreEqual(item1.Uid, links.Rows[0].Item.Uid);
 			}
 		}
 
-		[TestMethod]
+		[TestMethod, Ignore("No links to default root, restore test later")]
 		public async Task Handle_LastLinkInDefaultHierarchy_ShouldThrow()
 		{
 			// arrange
@@ -86,7 +86,7 @@ namespace Montr.MasterData.Tests.CommandHandlers
 				// arrange
 				await dbHelper.InsertType(HierarchyType.Groups, cancellationToken);
 				var root = await dbHelper.FindTree(ClassifierTree.DefaultCode, cancellationToken);
-				var group1 = await dbHelper.InsertGroup(root.Uid, "001", root.Uid, cancellationToken);
+				var group1 = await dbHelper.InsertGroup(root.Uid, "001", null, cancellationToken);
 				var item1 = await dbHelper.InsertItem("001", cancellationToken);
 				await dbHelper.InsertLink(group1.Uid, item1.Uid, cancellationToken);
 

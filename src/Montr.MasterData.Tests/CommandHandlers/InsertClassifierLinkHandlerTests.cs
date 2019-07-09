@@ -30,14 +30,16 @@ namespace Montr.MasterData.Tests.CommandHandlers
 			{
 				await dbHelper.InsertType(HierarchyType.Groups, cancellationToken);
 				var root = await dbHelper.FindTree(ClassifierTree.DefaultCode, cancellationToken);
-				var group1 = await dbHelper.InsertGroup(root.Uid, "001", root.Uid, cancellationToken);
+				var group1 = await dbHelper.InsertGroup(root.Uid, "001", null, cancellationToken);
+				var group2 = await dbHelper.InsertGroup(root.Uid, "002", null, cancellationToken);
 				var item1 = await dbHelper.InsertItem("001", cancellationToken);
+				await dbHelper.InsertLink(group1.Uid, item1.Uid, cancellationToken);
 
 				// assert - initially new items belongs to default group
 				var links = await dbHelper.GetLinks(null, item1.Uid, cancellationToken);
 
 				Assert.AreEqual(1, links.TotalCount);
-				Assert.AreEqual(root.Uid, links.Rows[0].Group.Uid);
+				Assert.AreEqual(group1.Uid, links.Rows[0].Group.Uid);
 				Assert.AreEqual(item1.Uid, links.Rows[0].Item.Uid);
 
 				// act - link with new group in same hierarchy
@@ -47,7 +49,7 @@ namespace Montr.MasterData.Tests.CommandHandlers
 					CompanyUid = dbHelper.CompanyUid,
 					TypeCode = dbHelper.TypeCode,
 					// ReSharper disable once PossibleInvalidOperationException
-					GroupUid = group1.Uid.Value,
+					GroupUid = group2.Uid.Value,
 					// ReSharper disable once PossibleInvalidOperationException
 					ItemUid = item1.Uid.Value
 				}, cancellationToken);
@@ -59,7 +61,7 @@ namespace Montr.MasterData.Tests.CommandHandlers
 				links = await dbHelper.GetLinks(null, item1.Uid, cancellationToken);
 
 				Assert.AreEqual(1, links.TotalCount);
-				Assert.AreEqual(group1.Uid, links.Rows[0].Group.Uid);
+				Assert.AreEqual(group2.Uid, links.Rows[0].Group.Uid);
 				Assert.AreEqual(item1.Uid, links.Rows[0].Item.Uid);
 			}
 		}
@@ -80,16 +82,18 @@ namespace Montr.MasterData.Tests.CommandHandlers
 			{
 				await dbHelper.InsertType(HierarchyType.Groups, cancellationToken);
 				var root = await dbHelper.FindTree(ClassifierTree.DefaultCode, cancellationToken);
+				var group1 = await dbHelper.InsertGroup(root.Uid, "001", null, cancellationToken);
 				var root2 = await dbHelper.InsertTree("root2", cancellationToken);
 				// ReSharper disable once PossibleInvalidOperationException
-				var group2 = await dbHelper.InsertGroup(root2.Uid.Value, "002", root2.Uid, cancellationToken);
+				var group2 = await dbHelper.InsertGroup(root2.Uid.Value, "002", null, cancellationToken);
 				var item1 = await dbHelper.InsertItem("001", cancellationToken);
+				await dbHelper.InsertLink(group1.Uid, item1.Uid, cancellationToken);
 
 				// assert - initially new items belongs to default group
 				var links = await dbHelper.GetLinks(null, item1.Uid, cancellationToken);
 
 				Assert.AreEqual(1, links.TotalCount);
-				Assert.AreEqual(root.Uid, links.Rows[0].Group.Uid);
+				Assert.AreEqual(group1.Uid, links.Rows[0].Group.Uid);
 				Assert.AreEqual(item1.Uid, links.Rows[0].Item.Uid);
 
 				// act - link with new group in same hierarchy
@@ -112,7 +116,7 @@ namespace Montr.MasterData.Tests.CommandHandlers
 
 				Assert.AreEqual(2, links.TotalCount);
 				var groups = links.Rows.Select(x => x.Group.Uid).ToList();
-				CollectionAssert.Contains(groups, root.Uid);
+				CollectionAssert.Contains(groups, group1.Uid);
 				CollectionAssert.Contains(groups, group2.Uid);
 			}
 		}

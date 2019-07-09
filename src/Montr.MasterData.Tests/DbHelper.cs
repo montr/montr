@@ -165,7 +165,7 @@ namespace Montr.MasterData.Tests
 				UserUid = UserUid,
 				TypeCode = TypeCode,
 				TreeUid = treeUid,
-				Item = new ClassifierGroup {Code = code, Name = $"Class {code}", ParentUid = parentUid}
+				Item = new ClassifierGroup {Code = code, Name = $"Test Group {code}", ParentUid = parentUid}
 			}, cancellationToken);
 
 			Assert.IsNotNull(result);
