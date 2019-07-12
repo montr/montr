@@ -39,22 +39,24 @@ namespace Montr.MasterData.Impl.Services
 				}
 				else if (type.HierarchyType == HierarchyType.Groups)
 				{
-					if (request.Depth == null || request.Depth == "0")
+					if (request.GroupUid != null)
 					{
-						query = from types in db.GetTable<DbClassifierType>()
+						if (request.Depth == null || request.Depth == "0") // todo: use constant
+						{
+							query = from types in db.GetTable<DbClassifierType>()
 								join trees in db.GetTable<DbClassifierTree>() on types.Uid equals trees.TypeUid
 								join children_groups in db.GetTable<DbClassifierGroup>() on trees.Uid equals children_groups.TreeUid
 								join links in db.GetTable<DbClassifierLink>() on children_groups.Uid equals links.GroupUid
 								join c in db.GetTable<DbClassifier>() on links.ItemUid equals c.Uid
 								where types.CompanyUid == request.CompanyUid &&
-									  types.Code == request.TypeCode &&
-									  trees.Uid == request.TreeUid &&
-									  children_groups.Uid == request.GroupUid
+								      types.Code == request.TypeCode &&
+								      trees.Uid == request.TreeUid &&
+								      children_groups.Uid == request.GroupUid
 								select c;
-					}
-					else
-					{
-						query = from types in db.GetTable<DbClassifierType>()
+						}
+						else
+						{
+							query = from types in db.GetTable<DbClassifierType>()
 								join trees in db.GetTable<DbClassifierTree>() on types.Uid equals trees.TypeUid
 								join parent_groups in db.GetTable<DbClassifierGroup>() on trees.Uid equals parent_groups.TreeUid
 								join closures in db.GetTable<DbClassifierClosure>() on parent_groups.Uid equals closures.ParentUid
@@ -62,17 +64,18 @@ namespace Montr.MasterData.Impl.Services
 								join links in db.GetTable<DbClassifierLink>() on children_groups.Uid equals links.GroupUid
 								join c in db.GetTable<DbClassifier>() on links.ItemUid equals c.Uid
 								where types.CompanyUid == request.CompanyUid &&
-									  types.Code == request.TypeCode &&
-									  trees.Uid == request.TreeUid &&
-									  parent_groups.Uid == request.GroupUid
+								      types.Code == request.TypeCode &&
+								      trees.Uid == request.TreeUid &&
+								      parent_groups.Uid == request.GroupUid
 								select c;
+						}
 					}
 				}
 				else if (type.HierarchyType == HierarchyType.Items)
 				{
 					if (request.GroupUid != null)
 					{
-						if (request.Depth == null || request.Depth == "0")
+						if (request.Depth == null || request.Depth == "0") // todo: use constant
 						{
 							query = from parent in db.GetTable<DbClassifier>()
 									join @class in db.GetTable<DbClassifier>() on parent.Uid equals @class.ParentUid

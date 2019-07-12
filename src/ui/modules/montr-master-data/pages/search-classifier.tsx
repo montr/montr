@@ -118,7 +118,7 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 				trees = (await this._classifierTreeService.list(currentCompany.uid, { typeCode: type.code })).rows;
 
 				if (trees && trees.length > 0) {
-					treeUid = trees[0].uid;
+					treeUid = trees.find(x => x.code == "default").uid;
 				}
 			}
 

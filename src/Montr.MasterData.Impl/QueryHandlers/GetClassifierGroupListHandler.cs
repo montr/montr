@@ -108,9 +108,9 @@ namespace Montr.MasterData.Impl.QueryHandlers
 		private static async Task<SearchResult<ClassifierGroup>> GetGroupsByParent(DbContext db,
 			ClassifierType type, Guid? parentUid, ClassifierGroupSearchRequest request, bool calculateTotalCount)
 		{
-			var query = from /*tree in db.GetTable<DbClassifierTree>()
-				join*/ item in db.GetTable<DbClassifierGroup>() // on tree.Uid equals item.TreeUid
-				where /*tree.TypeUid == type.Uid &&*/ item.ParentUid == parentUid
+			var query = from tree in db.GetTable<DbClassifierTree>()
+				join item in db.GetTable<DbClassifierGroup>() on tree.Uid equals item.TreeUid
+				where tree.Uid == request.TreeUid && tree.TypeUid == type.Uid && item.ParentUid == parentUid
 				select item;
 
 			var data = query
