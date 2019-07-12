@@ -34,6 +34,14 @@ namespace Montr.MasterData.Controllers
 		}
 
 		[HttpPost]
+		public async Task<ClassifierTree> Get(GetClassifierTree request)
+		{
+			request.UserUid = _currentUserProvider.GetUserUid();
+
+			return await _mediator.Send(request);
+		}
+
+		[HttpPost]
 		public async Task<ApiResult> Insert(InsertClassifierTree request)
 		{
 			request.UserUid = _currentUserProvider.GetUserUid();

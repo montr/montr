@@ -7,8 +7,8 @@ import { Constants } from "@montr-core/.";
 import { Guid, IDataResult } from "@montr-core/models";
 import { NotificationService } from "@montr-core/services";
 import { withCompanyContext, CompanyContextProps } from "@kompany/components";
-import { ClassifierService, ClassifierTypeService, ClassifierGroupService } from "../services";
-import { IClassifierType, IClassifierGroup } from "../models";
+import { ClassifierService, ClassifierTypeService, ClassifierGroupService, ClassifierTreeService } from "../services";
+import { IClassifierType, IClassifierGroup, IClassifierTree } from "../models";
 import { RadioChangeEvent } from "antd/lib/radio";
 import { AntTreeNode, AntTreeNodeSelectedEvent, AntTreeNodeExpandedEvent } from "antd/lib/tree";
 import { ClassifierBreadcrumb, ModalEditClassifierGroup } from "../components";
@@ -36,6 +36,7 @@ interface IState {
 
 class _SearchClassifier extends React.Component<IProps, IState> {
 	_classifierTypeService = new ClassifierTypeService();
+	_classifierTreeService = new ClassifierTreeService();
 	_classifierGroupService = new ClassifierGroupService();
 	_classifierService = new ClassifierService();
 	_notificationService = new NotificationService();
@@ -75,6 +76,7 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 
 	componentWillUnmount = async () => {
 		await this._classifierTypeService.abort();
+		await this._classifierTreeService.abort();
 		await this._classifierGroupService.abort();
 		await this._classifierService.abort();
 	}
@@ -109,11 +111,11 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 			{ type } = this.state;
 
 		if (currentCompany && type) {
-			let trees: IClassifierGroup[] = [],
+			let trees: IClassifierTree[] = [],
 				treeUid: Guid;
 
 			if (type.hierarchyType == "Groups") {
-				trees = await this.fetchClassifierGroups(type.code, null);
+				trees = (await this._classifierTreeService.list(currentCompany.uid, { typeCode: type.code })).rows;
 
 				if (trees && trees.length > 0) {
 					treeUid = trees[0].uid;
@@ -140,23 +142,24 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 			let groups: IClassifierGroup[] = [];
 
 			if (type.hierarchyType == "Groups") {
-				groups = await this.fetchClassifierGroups(type.code, treeUid, focusGroupUid, true);
+				groups = await this.fetchClassifierGroups(type.code, treeUid, null, focusGroupUid, true);
 			}
 
 			if (type.hierarchyType == "Items") {
-				groups = await this.fetchClassifierGroups(type.code, null, focusGroupUid, true);
+				groups = await this.fetchClassifierGroups(type.code, null, null, focusGroupUid, true);
 			}
 
 			this.setState({ groups });
 		}
 	}
 
-	fetchClassifierGroups = async (typeCode: string, parentUid?: Guid, focusUid?: Guid, expandSingleChild?: boolean): Promise<IClassifierGroup[]> => {
+	fetchClassifierGroups = async (typeCode: string, treeUid?: Guid, parentUid?: Guid, focusUid?: Guid, expandSingleChild?: boolean): Promise<IClassifierGroup[]> => {
 		const { currentCompany } = this.props
 
 		const result = await this._classifierGroupService.list(
 			currentCompany.uid, {
 				typeCode,
+				treeUid,
 				parentUid,
 				focusUid,
 				expandSingleChild
@@ -208,9 +211,9 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 		const group: IClassifierGroup = node.props.dataRef;
 
 		if (!group.children) {
-			const { type, expandedKeys } = this.state;
+			const { type, treeUid, expandedKeys } = this.state;
 
-			const children = await this.fetchClassifierGroups(type.code, group.uid, null, true)
+			const children = await this.fetchClassifierGroups(type.code, treeUid, group.uid, null, true)
 
 			// to populate new expanded keys
 			this.buildGroupsTree(children, expandedKeys);

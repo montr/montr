@@ -26,11 +26,16 @@ namespace Montr.MasterData.Impl.Services
 			using (var db = _dbContextFactory.Create())
 			{
 				var query = from trees in db.GetTable<DbClassifierTree>()
-					join types in db.GetTable<DbClassifierType>()
-						on trees.TypeUid equals types.Uid
-					where types.CompanyUid == request.CompanyUid &&
-					      types.Code == request.TypeCode
-					select trees;
+							join types in db.GetTable<DbClassifierType>()
+								on trees.TypeUid equals types.Uid
+							where types.CompanyUid == request.CompanyUid &&
+								  types.Code == request.TypeCode
+							select trees;
+
+				if (request.Uid != null)
+				{
+					query = query.Where(x => x.Uid == request.Uid);
+				}
 
 				var data = await query
 					.Apply(request, x => x.Code)

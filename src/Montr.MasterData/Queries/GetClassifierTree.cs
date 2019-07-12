@@ -1,9 +1,10 @@
-﻿using System;
-using Montr.Core.Models;
+using System;
+using MediatR;
+using Montr.MasterData.Models;
 
-namespace Montr.MasterData.Models
+namespace Montr.MasterData.Queries
 {
-	public class ClassifierTreeSearchRequest : SearchRequest
+	public class GetClassifierTree : IRequest<ClassifierTree>
 	{
 		public Guid UserUid { get; set; }
 

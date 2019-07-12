@@ -1,25 +1,25 @@
 import * as React from "react";
 import { CompanyContextProps, withCompanyContext } from "@kompany/components";
 import { DataTable, DataTableUpdateToken, Toolbar } from "@montr-core/components";
-import { IClassifierType, IClassifierGroup } from "../models";
+import { IClassifierType, IClassifierTree } from "../models";
 import { Constants } from "@montr-core/.";
-import { ClassifierGroupService } from "../services";
+import { ClassifierTreeService } from "../services";
 import { IDataResult, IMenu } from "@montr-core/models";
 import { Alert, Button, Icon, Modal } from "antd";
-import { ModalEditClassifierGroup } from ".";
+import { ModalEditClassifierTree } from ".";
 
 interface IProps extends CompanyContextProps {
 	type: IClassifierType;
 }
 
 interface IState {
-	groupEditData?: IClassifierGroup;
+	editData?: IClassifierTree;
 	updateTableToken: DataTableUpdateToken;
 }
 
 class _TabEditClassifierTypeHierarchy extends React.Component<IProps, IState> {
 
-	_classifierGroupService = new ClassifierGroupService();
+	_classifierTreeService = new ClassifierTreeService();
 
 	constructor(props: IProps) {
 		super(props);
@@ -37,7 +37,7 @@ class _TabEditClassifierTypeHierarchy extends React.Component<IProps, IState> {
 	}
 
 	componentWillUnmount = async () => {
-		await this._classifierGroupService.abort();
+		await this._classifierTreeService.abort();
 	}
 
 	refreshTable = async (resetSelectedRows?: boolean) => {
@@ -57,51 +57,51 @@ class _TabEditClassifierTypeHierarchy extends React.Component<IProps, IState> {
 				...postParams
 			};
 
-			return await this._classifierGroupService.post(loadUrl, params);
+			return await this._classifierTreeService.post(loadUrl, params);
 		}
 
 		return null;
 	}
 
 	showAddGroupModal = () => {
-		this.setState({ groupEditData: {} });
+		this.setState({ editData: {} });
 	}
 
-	showEditGroupModal = (data: IClassifierGroup) => {
-		this.setState({ groupEditData: data });
+	showEditModal = (data: IClassifierTree) => {
+		this.setState({ editData: data });
 	}
 
-	showDeleteGroupConfirm = (data: IClassifierGroup) => {
+	showDeleteConfirm = (data: IClassifierTree) => {
 		Modal.confirm({
-			title: "Вы действительно хотите удалить выбранную группу?",
-			content: "Дочерние группы и элементы будут перенесены к родительской группе.",
+			title: "Вы действительно хотите удалить выбранную иерархию?",
+			content: "Наверняка что-то случится с группами и элементами справочника...",
 			onOk: async () => {
 				const { currentCompany, type } = this.props
 
-				await this._classifierGroupService.delete(currentCompany.uid, type.code, data.uid);
+				await this._classifierTreeService.delete(currentCompany.uid, type.code, [data.uid]);
 
 				this.refreshTable();
 			}
 		});
 	}
 
-	onGroupModalSuccess = async (data: IClassifierGroup) => {
-		this.setState({ groupEditData: null });
+	onGroupModalSuccess = async (data: IClassifierTree) => {
+		this.setState({ editData: null });
 
 		await this.refreshTable();
 	}
 
 	onGroupModalCancel = () => {
-		this.setState({ groupEditData: null });
+		this.setState({ editData: null });
 	}
 
 	render() {
 		const { type } = this.props,
-			{ groupEditData, updateTableToken } = this.state;
+			{ editData: groupEditData, updateTableToken } = this.state;
 
 		const rowActions: IMenu[] = [
-			{ name: "Редактировать", onClick: this.showEditGroupModal },
-			{ name: "Удалить", onClick: this.showDeleteGroupConfirm }
+			{ name: "Редактировать", onClick: this.showEditModal },
+			{ name: "Удалить", onClick: this.showDeleteConfirm }
 		];
 
 		return (<>
@@ -118,17 +118,17 @@ class _TabEditClassifierTypeHierarchy extends React.Component<IProps, IState> {
 				<DataTable
 					rowKey="code"
 					viewId="ClassifierType/Grid/Hierarchy"
-					loadUrl={`${Constants.baseURL}/classifierGroup/list/`}
+					// todo: get url from service
+					loadUrl={`${Constants.baseURL}/classifierTree/list/`}
 					rowActions={rowActions}
 					onLoadData={this.onLoadTableData}
 					updateToken={updateTableToken}
 				/>
 
 				{groupEditData &&
-					<ModalEditClassifierGroup
+					<ModalEditClassifierTree
 						typeCode={type.code}
 						uid={groupEditData.uid}
-						hideFields={["parentUid"]}
 						onSuccess={this.onGroupModalSuccess}
 						onCancel={this.onGroupModalCancel}
 					/>}

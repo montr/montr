@@ -34,6 +34,7 @@ namespace Montr.MasterData.Impl.QueryHandlers
 
 			using (var db = _dbContextFactory.Create())
 			{
+				// todo: use tree uid from request
 				if (type.HierarchyType == HierarchyType.Groups)
 				{
 					if (request.FocusUid != null)
@@ -141,7 +142,7 @@ namespace Montr.MasterData.Impl.QueryHandlers
 
 			return result;
 		}
-        
+
 		private static async Task<SearchResult<ClassifierGroup>> GetItemsByParent(DbContext db,
 			ClassifierType type, Guid? parentUid, ClassifierGroupSearchRequest request, bool calculateTotalCount)
 		{

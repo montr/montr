@@ -53,11 +53,19 @@ namespace Montr.Metadata.Services
 				}
 			}
 
+			if (viewId == "ClassifierTree/Form")
+			{
+				result.Fields = new List<FormField>
+				{
+					new StringField { Key = "code", Name = "Код", Required = true },
+					new StringField { Key = "name", Name = "Наименование", Required = true },
+				};
+			}
+
 			if (viewId == "ClassifierGroup/Form")
 			{
 				result.Fields = new List<FormField>
 				{
-					// new StringField { Key = "statusCode", Name = "Статус", Readonly = true },
 					new StringField { Key = "code", Name = "Код", Required = true },
 					new StringField { Key = "name", Name = "Наименование", Required = true },
 					new ClassifierField { Key = "parentUid", Name = "Родительская группа", Required = true },

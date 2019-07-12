@@ -42,6 +42,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 
 				using (var db = _dbContextFactory.Create())
 				{
+					// todo: return error when trying to remove default tree
 					affected = await db.GetTable<DbClassifierTree>()
 						.Where(x => x.TypeUid == type.Uid && request.Uids.Contains(x.Uid)
 									&& x.Code != ClassifierTree.DefaultCode)

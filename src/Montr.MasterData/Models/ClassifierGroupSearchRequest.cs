@@ -9,6 +9,8 @@ namespace Montr.MasterData.Models
 
 		public string TypeCode { get; set; }
 
+		public Guid? TreeUid { get; set; }
+
 		public Guid? ParentUid { get; set; }
 
 		public Guid? FocusUid { get; set; }

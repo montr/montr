@@ -13,7 +13,7 @@ export class ClassifierService extends Fetcher {
 		return this.download(`${Constants.baseURL}/classifier/export`, { companyUid, ...request });
 	};
 
-	insert = async (companyUid: Guid, typeCode: string, data: IClassifier): Promise<IInsertClassifierResult> => {
+	insert = async (companyUid: Guid, typeCode: string, data: IClassifier): Promise<IApiResult> => {
 		return this.post(`${Constants.baseURL}/classifier/insert`, { companyUid, typeCode, item: data });
 	};
 
@@ -24,8 +24,4 @@ export class ClassifierService extends Fetcher {
 	delete = async (companyUid: Guid, typeCode: string, uids: string[] | number[]): Promise<number> => {
 		return this.post(`${Constants.baseURL}/classifier/delete`, { companyUid, typeCode, uids });
 	};
-}
-
-export interface IInsertClassifierResult extends IApiResult {
-	uid?: Guid;
 }
