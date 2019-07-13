@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Tree, TreeSelect, Spin } from "antd";
+import { Tree, TreeSelect, Spin, Icon } from "antd";
 import { IClassifierField, Guid } from "@montr-core/models";
 import { ClassifierGroupService } from "../services";
 import { IClassifierGroup } from "../models";
@@ -51,7 +51,7 @@ class _ClassifierSelect extends React.Component<IProps, IState> {
 
 			const result: TreeNode = {
 				value: group.uid,
-				title: `${group.code}. ${group.name}`,
+				title: <span><Icon type="folder-open" /> {group.name} ({group.code})</span>,
 				dataRef: group
 			};
 
@@ -74,7 +74,7 @@ class _ClassifierSelect extends React.Component<IProps, IState> {
 
 		if (currentCompany) {
 			const groups = await this._classifierGroupService.list(
-				currentCompany.uid, { typeCode: field.typeCode, focusUid: value });
+				currentCompany.uid, { typeCode: field.typeCode, treeUid: field.treeUid, focusUid: value });
 
 			const expanded: Guid[] = [];
 			// todo: only to detect expanded nodes, refactor
@@ -106,7 +106,7 @@ class _ClassifierSelect extends React.Component<IProps, IState> {
 				{ groups } = this.state;
 
 			const children = await this._classifierGroupService.list(
-				currentCompany.uid, { typeCode: field.typeCode, parentUid: group.uid });
+				currentCompany.uid, { typeCode: field.typeCode, treeUid: field.treeUid, parentUid: group.uid });
 
 			group.children = children.rows;
 

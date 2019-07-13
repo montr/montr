@@ -23,9 +23,9 @@ interface IProps extends CompanyContextProps, RouteComponentProps<IRouteProps> {
 interface IState {
 	types: IClassifierType[];
 	type?: IClassifierType;
-	trees?: IClassifierGroup[];
-	treeUid?: Guid,
+	trees?: IClassifierTree[];
 	groups?: IClassifierGroup[];
+	selectedTree?: IClassifierTree,
 	selectedGroup?: IClassifierGroup;
 	groupEditData?: IClassifierGroup;
 	expandedKeys: string[];
@@ -112,19 +112,19 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 
 		if (currentCompany && type) {
 			let trees: IClassifierTree[] = [],
-				treeUid: Guid;
+				selectedTree: IClassifierTree;
 
 			if (type.hierarchyType == "Groups") {
 				trees = (await this._classifierTreeService.list(currentCompany.uid, { typeCode: type.code })).rows;
 
 				if (trees && trees.length > 0) {
-					treeUid = trees.find(x => x.code == "default").uid;
+					selectedTree = trees.find(x => x.code == "default");
 				}
 			}
 
 			this.setState({
 				trees,
-				treeUid
+				selectedTree
 			});
 
 			await this.loadClassifierGroups();
@@ -136,13 +136,13 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 		this.setState({ groups: null });
 
 		const { currentCompany } = this.props,
-			{ type, treeUid } = this.state;
+			{ type, selectedTree } = this.state;
 
 		if (currentCompany && type) {
 			let groups: IClassifierGroup[] = [];
 
-			if (type.hierarchyType == "Groups") {
-				groups = await this.fetchClassifierGroups(type.code, treeUid, null, focusGroupUid, true);
+			if (type.hierarchyType == "Groups" && selectedTree) {
+				groups = await this.fetchClassifierGroups(type.code, selectedTree.uid, null, focusGroupUid, true);
 			}
 
 			if (type.hierarchyType == "Items") {
@@ -192,15 +192,15 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 		this.setState({ selectedRowKeys });
 	}
 
-	onTreeRootSelect = async (value: string) => {
+	onTreeSelect = async (value: string) => {
 		const { trees } = this.state;
 
-		const tree = trees.find(x => x.code == value);
+		const selectedTree = trees.find(x => x.code == value);
 
-		if (tree) {
+		if (selectedTree) {
 			// https://reactjs.org/docs/react-component.html#setstate - Generally we recommend using componentDidUpdate()
 			// todo: rewrite using componentDidUpdate() instead of callback in setState
-			this.setState({ treeUid: tree.uid, selectedGroup: null, expandedKeys: [] }, async () => {
+			this.setState({ selectedTree, selectedGroup: null, expandedKeys: [] }, async () => {
 				await this.loadClassifierGroups();
 				await this.refreshTable();
 			});
@@ -211,11 +211,11 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 		const group: IClassifierGroup = node.props.dataRef;
 
 		if (!group.children) {
-			const { type, treeUid, expandedKeys } = this.state;
+			const { type, selectedTree, expandedKeys } = this.state;
 
-			const children = await this.fetchClassifierGroups(type.code, treeUid, group.uid, null, true)
+			const children = await this.fetchClassifierGroups(type.code, selectedTree.uid, group.uid, null, true)
 
-			// to populate new expanded keys
+			// only to populate new expanded keys parameter
 			this.buildGroupsTree(children, expandedKeys);
 
 			group.children = children;
@@ -229,7 +229,7 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 		resolve();
 	})
 
-	onTreeSelect = async (selectedKeys: string[], e: AntTreeNodeSelectedEvent) => {
+	onTreeNodeSelect = async (selectedKeys: string[], e: AntTreeNodeSelectedEvent) => {
 		this.setState({
 			selectedGroup: (e.selected) ? e.node.props.dataRef : null
 		});
@@ -257,7 +257,11 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 			}
 
 			return (
-				<Tree.TreeNode title={`${x.code}. ${x.name}`} key={`${x.uid}`} dataRef={x}>
+				<Tree.TreeNode
+					// todo: convert to component
+					title={<span><span style={{color: "silver"}}>{x.code}</span> {x.name}</span>}
+					key={`${x.uid}`}
+					dataRef={x}>
 					{x.children && this.buildGroupsTree(x.children, expanded)}
 				</Tree.TreeNode>
 			);
@@ -265,15 +269,17 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 	}
 
 	showAddGroupModal = () => {
-		const { selectedGroup, treeUid } = this.state;
+		const { selectedGroup } = this.state;
 
-		this.setState({ groupEditData: { parentUid: selectedGroup ? selectedGroup.uid : treeUid } });
+		this.setState({ groupEditData: { parentUid: selectedGroup ? selectedGroup.uid : null } });
 	}
 
 	showEditGroupModal = () => {
-		const { selectedGroup, treeUid } = this.state;
+		const { selectedGroup } = this.state;
 
-		this.setState({ groupEditData: { uid: selectedGroup ? selectedGroup.uid : treeUid } });
+		if (selectedGroup) {
+			this.setState({ groupEditData: { uid: selectedGroup.uid } });
+		}
 	}
 
 	showDeleteGroupConfirm = () => {
@@ -327,16 +333,16 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 
 	onLoadTableData = async (loadUrl: string, postParams: any): Promise<IDataResult<{}>> => {
 		const { currentCompany } = this.props,
-			{ type, treeUid, depth, selectedGroup } = this.state;
+			{ type, selectedTree, selectedGroup, depth } = this.state;
 
 		if (currentCompany && type.code) {
 
 			const params = {
 				companyUid: currentCompany.uid,
 				typeCode: type.code,
-				treeUid,
-				depth,
+				treeUid: selectedTree ? selectedTree.uid : null,
 				groupUid: selectedGroup ? selectedGroup.uid : null,
+				depth,
 				...postParams
 			};
 
@@ -348,7 +354,7 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 
 	render() {
 		const { currentCompany } = this.props,
-			{ types, type, trees, groups, selectedGroup, groupEditData, expandedKeys, updateTableToken } = this.state;
+			{ types, type, trees, groups, selectedTree, selectedGroup, groupEditData, expandedKeys, updateTableToken } = this.state;
 
 		if (!currentCompany || !type) return null;
 
@@ -360,7 +366,7 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 		let groupControls;
 		if (type.hierarchyType == "Groups") {
 			groupControls = <>
-				<Select defaultValue="default" size="small" onSelect={this.onTreeRootSelect} style={{ minWidth: 200 }}>
+				<Select defaultValue="default" size="small" onSelect={this.onTreeSelect} style={{ minWidth: 200 }}>
 					{trees && trees.map(x => <Select.Option key={x.code}>{x.name || x.code}</Select.Option>)}
 				</Select>
 				<Button.Group size="small">
@@ -389,7 +395,7 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 						defaultSelectedKeys={selectedKeys.map(x => x.toString())}
 						expandedKeys={expandedKeys}
 						loadData={this.onTreeLoadData}
-						onSelect={this.onTreeSelect}
+						onSelect={this.onTreeNodeSelect}
 						onExpand={this.onTreeExpand}>
 						{nodes}
 					</Tree>
@@ -464,9 +470,10 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 					</Layout>
 				</Layout>
 
-				{groupEditData &&
+				{groupEditData && selectedTree &&
 					<ModalEditClassifierGroup
 						typeCode={type.code}
+						treeUid={selectedTree.uid}
 						uid={groupEditData.uid}
 						parentUid={groupEditData.parentUid}
 						onSuccess={this.onGroupModalSuccess}
