@@ -44,6 +44,7 @@ namespace Montr.MasterData.Impl.QueryHandlers
 					return new ClassifierGroup
 					{
 						Uid = item.Uid,
+						TreeUid = item.TreeUid,
 						ParentUid = item.ParentUid,
 						Code = item.Code,
 						Name = item.Name

@@ -120,6 +120,7 @@ namespace Montr.MasterData.Impl.QueryHandlers
 					Uid = x.Uid,
 					Code = x.Code,
 					Name = x.Name,
+					TreeUid = x.TreeUid,
 					ParentUid = x.ParentUid
 				})
 				.ToList();

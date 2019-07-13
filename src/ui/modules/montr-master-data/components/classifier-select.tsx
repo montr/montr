@@ -1,12 +1,13 @@
 import * as React from "react";
-import { Tree, TreeSelect, Spin, Icon } from "antd";
+import { TreeSelect, Spin, Icon } from "antd";
 import { IClassifierField, Guid } from "@montr-core/models";
-import { ClassifierGroupService } from "../services";
-import { IClassifierGroup } from "../models";
+import { ClassifierGroupService, ClassifierTreeService } from "../services";
+import { IClassifierGroup, IClassifierTree } from "../models";
 import { CompanyContextProps, withCompanyContext } from "@kompany/components";
 import { TreeNode } from "antd/lib/tree-select";
 
 interface IProps extends CompanyContextProps {
+	// mode: "Tree" | "Group";
 	value?: string;
 	field: IClassifierField;
 	onChange?: (value: any) => void;
@@ -15,7 +16,8 @@ interface IProps extends CompanyContextProps {
 interface IState {
 	loading: boolean;
 	value: string;
-	groups: IClassifierGroup[];
+	trees?: IClassifierTree[];
+	groups?: IClassifierGroup[];
 	expanded: Guid[];
 }
 
@@ -23,6 +25,7 @@ interface IState {
 // https://github.com/ant-design/ant-design/blob/master/components/form/demo/customized-form-controls.md
 
 class _ClassifierSelect extends React.Component<IProps, IState> {
+
 	static getDerivedStateFromProps(nextProps: any) {
 		// Should be a controlled component.
 		if ('value' in nextProps) {
@@ -33,6 +36,7 @@ class _ClassifierSelect extends React.Component<IProps, IState> {
 		return null;
 	}
 
+	private _classifierTreeService = new ClassifierTreeService();
 	private _classifierGroupService = new ClassifierGroupService();
 
 	constructor(props: IProps) {
@@ -41,46 +45,82 @@ class _ClassifierSelect extends React.Component<IProps, IState> {
 		this.state = {
 			loading: true,
 			value: props.value,
-			groups: [],
 			expanded: []
 		};
 	}
 
-	buildTree(groups: IClassifierGroup[], expanded?: Guid[]): TreeNode[] {
-		return groups && groups.map(group => {
-
-			const result: TreeNode = {
-				value: group.uid,
-				title: <span><Icon type="folder-open" /> {group.name} ({group.code})</span>,
-				dataRef: group
-			};
-
+	async collectExpanded(groups: IClassifierGroup[], expanded?: Guid[]) {
+		groups && groups.forEach(group => {
 			if (group.children) {
 
-				if (expanded) {
-					expanded.push(group.uid);
+				expanded.push(group.uid);
+
+				this.collectExpanded(group.children, expanded);
+			}
+		});
+	}
+
+	buildTree(trees: IClassifierTree[], groups: IClassifierGroup[]): TreeNode[] {
+		if (trees) {
+			return trees.map(tree => {
+
+				const result: TreeNode = {
+					selectable: false,
+					value: tree.uid,
+					title: <span><Icon type="folder" /> {tree.name}</span>,
+					dataRef: tree,
+					dataType: "Tree"
+				};
+
+				if (tree.children) {
+					result.children = this.buildTree(null, tree.children);
 				}
 
-				result.children = this.buildTree(group.children, expanded);
-			}
+				return result;
+			});
+		}
+		else if (groups) {
+			return groups && groups.map(group => {
 
-			return result;
-		});
+				const result: TreeNode = {
+					value: group.uid,
+					title: <span><Icon type="file" /> {group.name} ({group.code})</span>,
+					dataRef: group,
+					dataType: "Group"
+				};
+
+				if (group.children) {
+					result.children = this.buildTree(null, group.children);
+				}
+
+				return result;
+			});
+		}
 	}
 
 	async componentDidMount() {
 		const { currentCompany, field } = this.props,
-			{ value } = this.state;
+			{ value, expanded } = this.state;
 
 		if (currentCompany) {
-			const groups = await this._classifierGroupService.list(
-				currentCompany.uid, { typeCode: field.typeCode, treeUid: field.treeUid, focusUid: value });
 
-			const expanded: Guid[] = [];
-			// todo: only to detect expanded nodes, refactor
-			/* const treeData = */ this.buildTree(groups.rows, expanded);
+			let trees: IClassifierTree[], groups: IClassifierGroup[];
 
-			this.setState({ loading: false, groups: groups.rows, expanded /* , treeData */ });
+			if (field.treeUid) {
+				const result = await this._classifierGroupService.list(
+					currentCompany.uid, { typeCode: field.typeCode, treeUid: field.treeUid, focusUid: value });
+
+				groups = result.rows;
+
+				await this.collectExpanded(groups, expanded);
+			}
+			else {
+				const result = await this._classifierTreeService.list(currentCompany.uid, { typeCode: field.typeCode });
+
+				trees = result.rows;
+			}
+
+			this.setState({ loading: false, trees, groups, expanded });
 		}
 	}
 
@@ -95,22 +135,37 @@ class _ClassifierSelect extends React.Component<IProps, IState> {
 
 	onLoadData = (node: any) => {
 		return new Promise(async (resolve) => {
-			const group: IClassifierGroup = node.props.dataRef;
 
-			if (group.children) {
-				resolve();
-				return;
+			if (node.props.dataType == "Tree") {
+				const tree: IClassifierTree = node.props.dataRef;
+
+				if (!tree.children) {
+					const { currentCompany, field } = this.props,
+						{ trees } = this.state;
+
+					const children = await this._classifierGroupService.list(
+						currentCompany.uid, { typeCode: field.typeCode, treeUid: tree.uid, parentUid: null });
+
+					tree.children = children.rows;
+
+					this.setState({ trees });
+				}
 			}
+			else {
+				const group: IClassifierGroup = node.props.dataRef;
 
-			const { currentCompany, field } = this.props,
-				{ groups } = this.state;
+				if (!group.children) {
+					const { currentCompany, field } = this.props,
+						{ groups } = this.state;
 
-			const children = await this._classifierGroupService.list(
-				currentCompany.uid, { typeCode: field.typeCode, treeUid: field.treeUid, parentUid: group.uid });
+					const children = await this._classifierGroupService.list(
+						currentCompany.uid, { typeCode: field.typeCode, treeUid: group.treeUid, parentUid: group.uid });
 
-			group.children = children.rows;
+					group.children = children.rows;
 
-			this.setState({ groups });
+					this.setState({ groups });
+				}
+			}
 
 			resolve();
 		});
@@ -118,9 +173,9 @@ class _ClassifierSelect extends React.Component<IProps, IState> {
 
 	render() {
 		const { value, field } = this.props,
-			{ loading, expanded, groups } = this.state;
+			{ loading, expanded, trees, groups } = this.state;
 
-		const treeData = this.buildTree(groups);
+		const treeData = this.buildTree(trees, groups);
 
 		return (
 			<Spin spinning={loading}>

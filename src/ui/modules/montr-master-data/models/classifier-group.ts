@@ -5,5 +5,6 @@ export interface IClassifierGroup {
 	code?: string;
 	name?: string;
 	parentUid?: Guid;
+	treeUid?: Guid;
 	children?: IClassifierGroup[];
 }
