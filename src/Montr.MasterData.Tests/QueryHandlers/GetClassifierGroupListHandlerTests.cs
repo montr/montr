@@ -21,11 +21,15 @@ namespace Montr.MasterData.Tests.QueryHandlers
 		public async Task GetGroups_ForNullParent_ReturnItems()
 		{
 			// arrange
+			var cancellationToken = CancellationToken.None;
+			var unitOfWorkFactory = new TransactionScopeUnitOfWorkFactory();
 			var dbContextFactory = new DefaultDbContextFactory();
 			var classifierTypeRepository = new DbClassifierTypeRepository(dbContextFactory);
 			var classifierTypeService = new DefaultClassifierTypeService(classifierTypeRepository);
-
+			var generator = new DbHelper(unitOfWorkFactory, dbContextFactory) { TypeCode = "okei" }; // todo: use test type
 			var handler = new GetClassifierGroupListHandler(dbContextFactory, classifierTypeService);
+
+			var tree = await generator.FindTree(ClassifierTree.DefaultCode, cancellationToken);
 
 			// act
 			var command = new GetClassifierGroupList
@@ -34,13 +38,12 @@ namespace Montr.MasterData.Tests.QueryHandlers
 				{
 					CompanyUid = Constants.OperatorCompanyUid,
 					TypeCode = "okei",
+					TreeUid = tree.Uid,
 					ParentUid = null // yeah, we test this
-					// todo: add TreeUid or TreeCode parameter - without it method useless
-					// TreeCode = "default"
 				}
 			};
 
-			var result = await handler.Handle(command, CancellationToken.None);
+			var result = await handler.Handle(command, cancellationToken);
 
 			// assert
 			Assert.IsNotNull(result);
@@ -60,6 +63,7 @@ namespace Montr.MasterData.Tests.QueryHandlers
 			var generator = new DbHelper(unitOfWorkFactory, dbContextFactory) { TypeCode = "okei" }; // todo: use test type
 			var handler = new GetClassifierGroupListHandler(dbContextFactory, classifierTypeService);
 
+			var tree = await generator.FindTree(ClassifierTree.DefaultCode, cancellationToken);
 			var parentGroup = await generator.FindGroup(ClassifierTree.DefaultCode, "1", cancellationToken);
 
 			// act
@@ -69,8 +73,8 @@ namespace Montr.MasterData.Tests.QueryHandlers
 				{
 					CompanyUid = Constants.OperatorCompanyUid,
 					TypeCode = "okei",
-					// TreeCode = "default",
-					ParentUid = parentGroup.Uid
+					TreeUid = tree.Uid,
+					ParentUid = parentGroup.Uid,
 				}
 			};
 
@@ -220,6 +224,7 @@ namespace Montr.MasterData.Tests.QueryHandlers
 			var handler = new GetClassifierGroupListHandler(dbContextFactory, classifierTypeService);
 
 			// var rootGroup = await generator.FindGroup(ClassifierTree.DefaultCode, "default", cancellationToken);
+			var tree = await generator.FindTree(ClassifierTree.DefaultCode, cancellationToken);
 			var focusGroup = await generator.FindGroup(ClassifierTree.DefaultCode, "3.7", cancellationToken); // 3.7. Экономические единицы
 
 			// act & assert - focus in root scope
@@ -229,6 +234,7 @@ namespace Montr.MasterData.Tests.QueryHandlers
 				{
 					CompanyUid = Constants.OperatorCompanyUid,
 					TypeCode = "okei",
+					TreeUid = tree.Uid,
 					ParentUid = null,
 					FocusUid = focusGroup.Uid 
 					// PageSize = 100 // todo: common limit for all levels is not ok
@@ -254,7 +260,7 @@ namespace Montr.MasterData.Tests.QueryHandlers
 				{
 					CompanyUid = Constants.OperatorCompanyUid,
 					TypeCode = "okei",
-					// ParentUid = rootGroup.Uid,
+					TreeUid = tree.Uid,
 					FocusUid = focusGroup.Uid 
 				}
 			};

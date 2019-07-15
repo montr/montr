@@ -86,7 +86,6 @@ class _ModalEditClassifierLink extends React.Component<IProps, IState> {
 		const { typeCode, itemUid, onSuccess } = this.props;
 		const { uid: companyUid } = this.props.currentCompany;
 
-		debugger;
 		const result = await this._classifierLinkService.insert(companyUid, typeCode, values.group.uid, itemUid);
 
 		if (result.success) {

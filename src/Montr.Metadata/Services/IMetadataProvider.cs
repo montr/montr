@@ -132,7 +132,7 @@ namespace Montr.Metadata.Services
 			{
 				result.Columns = new List<DataColumn>
 				{
-					new DataColumn { Key = "hierarchy", Name = "Иерархия", Width = 300 },
+					new DataColumn { Key = "hierarchy", Name = "Иерархия", Width = 300, Path = "tree.name" },
 					new DataColumn { Key = "groupCode", Name = "Код группы", Width = 10, Path = "group.code" },
 					new DataColumn { Key = "groupName", Name = "Группа", Width = 400, Path = "group.name" }
 				};
