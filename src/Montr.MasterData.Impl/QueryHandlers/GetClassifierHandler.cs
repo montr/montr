@@ -20,12 +20,11 @@ namespace Montr.MasterData.Impl.QueryHandlers
 		public async Task<Classifier> Handle(GetClassifier request, CancellationToken cancellationToken)
 		{
 			var result = await _repository.Search(new ClassifierSearchRequest
-				{
-					CompanyUid = request.CompanyUid,
-					TypeCode = request.TypeCode,
-					Uid = request.Uid
-				},
-				cancellationToken);
+			{
+				CompanyUid = request.CompanyUid,
+				TypeCode = request.TypeCode,
+				Uid = request.Uid
+			}, cancellationToken);
 
 			return result.Rows.Single();
 		}

@@ -1,3 +1,5 @@
+import { Guid } from ".";
+
 export interface IFormField {
 	type: string;
 	key: string;
@@ -51,7 +53,7 @@ export interface IOption {
 
 export interface IClassifierField extends IFormField {
 	typeCode: string;
-	// treeCode: string;
+	treeUid: Guid;
 }
 
 export interface IFileField extends IFormField {

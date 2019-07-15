@@ -22,30 +22,29 @@ namespace Montr.MasterData.Impl.QueryHandlers
 			_classifierTypeService = classifierTypeService;
 		}
 
-		public async Task<ClassifierGroup> Handle(GetClassifierGroup command, CancellationToken cancellationToken)
+		public async Task<ClassifierGroup> Handle(GetClassifierGroup request, CancellationToken cancellationToken)
 		{
-			if (command.UserUid == Guid.Empty) throw new InvalidOperationException("User is required.");
-			if (command.CompanyUid == Guid.Empty) throw new InvalidOperationException("Company is required.");
+			if (request.UserUid == Guid.Empty) throw new InvalidOperationException("User is required.");
+			if (request.CompanyUid == Guid.Empty) throw new InvalidOperationException("Company is required.");
 
-			var typeCode = command.TypeCode ?? throw new ArgumentNullException(nameof(command.TypeCode));
-			// var treeCode = command.TreeCode ?? throw new ArgumentNullException(nameof(command.TreeCode));
+			var typeCode = request.TypeCode ?? throw new ArgumentNullException(nameof(request.TypeCode));
 
-			var type = await _classifierTypeService.GetClassifierType(command.CompanyUid, typeCode, cancellationToken);
+			var type = await _classifierTypeService.GetClassifierType(request.CompanyUid, typeCode, cancellationToken);
 
 			using (var db = _dbContextFactory.Create())
 			{
 				if (type.HierarchyType == HierarchyType.Groups)
 				{
-					/*var tree = await db.GetTable<DbClassifierTree>()
-						.SingleAsync(x => x.TypeUid == type.Uid && x.Code == treeCode, cancellationToken);*/
+					var tree = await db.GetTable<DbClassifierTree>()
+						.SingleAsync(x => x.TypeUid == type.Uid && x.Uid == request.TreeUid, cancellationToken);
 
 					var item = await db.GetTable<DbClassifierGroup>()
-						.SingleAsync(
-							x => x.TypeUid == type.Uid && x.Uid == command.Uid, cancellationToken);
+						.SingleAsync(x => x.TreeUid == tree.Uid && x.Uid == request.Uid, cancellationToken);
 
 					return new ClassifierGroup
 					{
 						Uid = item.Uid,
+						TreeUid = item.TreeUid,
 						ParentUid = item.ParentUid,
 						Code = item.Code,
 						Name = item.Name

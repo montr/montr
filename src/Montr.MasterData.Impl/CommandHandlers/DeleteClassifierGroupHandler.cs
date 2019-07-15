@@ -51,8 +51,9 @@ namespace Montr.MasterData.Impl.CommandHandlers
 							.SingleAsync(x => x.TypeUid == type.Uid && x.Code == request.TreeCode, cancellationToken);*/
 
 						var group = await db.GetTable<DbClassifierGroup>()
-							.SingleAsync(x => x.TypeUid == type.Uid && x.Uid == request.Uid, cancellationToken);
+							.SingleAsync(x => /*x.TypeUid == type.Uid &&*/ x.Uid == request.Uid, cancellationToken);
 
+						// todo: remove next two todos or move to delete tree delete operation ???
 						// todo: validate - do not delete root group (if children exists - or children become roots)
 						// todo: validate - do not delete or change code for default root (why needed default root code?)
 						await closureTable.Delete(group.Uid, group.ParentUid, cancellationToken);

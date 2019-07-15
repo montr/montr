@@ -5,6 +5,7 @@ import { IClassifierGroup } from "../models";
 
 interface IClassifierGroupSearchRequest {
 	typeCode: string;
+	treeUid: Guid;
 	parentUid?: Guid
 	focusUid?: Guid | string;
 	expandSingleChild?: boolean;
@@ -16,12 +17,12 @@ export class ClassifierGroupService extends Fetcher {
 		return this.post(`${Constants.baseURL}/classifierGroup/list`, { companyUid, ...request });
 	};
 
-	get = async (companyUid: Guid, typeCode: string, uid: Guid | string): Promise<IClassifierGroup> => {
-		return this.post(`${Constants.baseURL}/classifierGroup/get`, { companyUid, typeCode, uid });
+	get = async (companyUid: Guid, typeCode: string, treeUid: Guid, uid: Guid | string): Promise<IClassifierGroup> => {
+		return this.post(`${Constants.baseURL}/classifierGroup/get`, { companyUid, typeCode, treeUid, uid });
 	};
 
-	insert = async (companyUid: Guid, typeCode: string, data: IClassifierGroup): Promise<IApiResult> => {
-		return this.post(`${Constants.baseURL}/classifierGroup/insert`, { companyUid, typeCode, item: data });
+	insert = async (companyUid: Guid, typeCode: string, treeUid: Guid, data: IClassifierGroup): Promise<IApiResult> => {
+		return this.post(`${Constants.baseURL}/classifierGroup/insert`, { companyUid, typeCode, treeUid, item: data });
 	};
 
 	update = async (companyUid: Guid, typeCode: string, data: IClassifierGroup): Promise<IApiResult> => {

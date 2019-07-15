@@ -2,6 +2,8 @@
 {
 	public class ClassifierLink
 	{
+		public ClassifierTree Tree { get; set; }
+
 		public ClassifierGroup Group { get; set; }
 
 		public Classifier Item { get; set; }

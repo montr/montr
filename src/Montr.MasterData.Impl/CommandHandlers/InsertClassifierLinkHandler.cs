@@ -50,8 +50,9 @@ namespace Montr.MasterData.Impl.CommandHandlers
 					// delete other links in same hierarchy
 					var deleted = await (
 						from link in db.GetTable<DbClassifierLink>().Where(x => x.ItemUid == request.ItemUid)
-						join parent in db.GetTable<DbClassifierClosure>().Where(x => x.ChildUid == request.GroupUid)
-							on link.GroupUid equals parent.ParentUid 
+						join allGroups in db.GetTable<DbClassifierGroup>() on link.GroupUid equals allGroups.Uid
+						join newGroup in db.GetTable<DbClassifierGroup>().Where(x => x.Uid == request.GroupUid)
+							on allGroups.TreeUid equals newGroup.TreeUid
 						select link
 					).DeleteAsync(cancellationToken);
 

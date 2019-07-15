@@ -52,8 +52,9 @@ namespace Montr.MasterData.Impl.QueryHandlers
 
 				var joined = from link in query
 					join @group in db.GetTable<DbClassifierGroup>() on link.GroupUid equals @group.Uid
+					join tree in db.GetTable<DbClassifierTree>() on @group.TreeUid equals tree.Uid
 					join item in db.GetTable<DbClassifier>() on link.ItemUid equals item.Uid
-					select new { Group = @group, Item = item };
+					select new { Tree = tree, Group = @group, Item = item };
 
 				// todo: order by default hierarchy first, then by group name
 				// todo: fix QueryableExtensions.GetMemberName and write tests
@@ -62,6 +63,12 @@ namespace Montr.MasterData.Impl.QueryHandlers
 					.Apply(request, x => x.Group.Name)
 					.Select(x => new ClassifierLink
 					{
+						Tree = new ClassifierTree
+						{
+                            Uid = x.Tree.Uid,
+                            Code = x.Tree.Code,
+                            Name = x.Tree.Name
+						},
 						Group = new ClassifierGroup
 						{
                             Uid = x.Group.Uid,

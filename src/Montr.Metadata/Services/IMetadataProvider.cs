@@ -53,14 +53,22 @@ namespace Montr.Metadata.Services
 				}
 			}
 
+			if (viewId == "ClassifierTree/Form")
+			{
+				result.Fields = new List<FormField>
+				{
+					new StringField { Key = "code", Name = "Код", Required = true },
+					new StringField { Key = "name", Name = "Наименование", Required = true },
+				};
+			}
+
 			if (viewId == "ClassifierGroup/Form")
 			{
 				result.Fields = new List<FormField>
 				{
-					// new StringField { Key = "statusCode", Name = "Статус", Readonly = true },
 					new StringField { Key = "code", Name = "Код", Required = true },
 					new StringField { Key = "name", Name = "Наименование", Required = true },
-					new ClassifierField { Key = "parentUid", Name = "Родительская группа", Required = true },
+					new ClassifierField { Key = "parentUid", Name = "Родительская группа" },
 				};
 			}
 
@@ -124,7 +132,7 @@ namespace Montr.Metadata.Services
 			{
 				result.Columns = new List<DataColumn>
 				{
-					new DataColumn { Key = "hierarchy", Name = "Иерархия", Width = 300 },
+					new DataColumn { Key = "hierarchy", Name = "Иерархия", Width = 300, Path = "tree.name" },
 					new DataColumn { Key = "groupCode", Name = "Код группы", Width = 10, Path = "group.code" },
 					new DataColumn { Key = "groupName", Name = "Группа", Width = 400, Path = "group.name" }
 				};

@@ -22,6 +22,8 @@ namespace Montr.MasterData.Tests
 	public class DbHelper
 	{
 		private readonly IDbContextFactory _dbContextFactory;
+		private readonly GetClassifierTreeListHandler _getClassifierTreeListHandler;
+		private readonly InsertClassifierTreeHandler _insertClassifierTreeTypeHandler;
 		private readonly InsertClassifierTypeHandler _insertClassifierTypeHandler;
 		private readonly InsertClassifierGroupHandler _insertClassifierGroupHandler;
 		private readonly InsertClassifierHandler _insertClassifierHandler;
@@ -35,9 +37,12 @@ namespace Montr.MasterData.Tests
 			_dbContextFactory = dbContextFactory;
 
 			var dateTimeProvider = new DefaultDateTimeProvider();
+			var classifierTreeRepository = new DbClassifierTreeRepository(dbContextFactory);
 			var classifierTypeRepository = new DbClassifierTypeRepository(dbContextFactory);
 			var classifierTypeService = new DefaultClassifierTypeService(classifierTypeRepository);
 
+			_getClassifierTreeListHandler = new GetClassifierTreeListHandler(classifierTreeRepository);
+			_insertClassifierTreeTypeHandler = new InsertClassifierTreeHandler(unitOfWorkFactory, dbContextFactory, classifierTypeService);
 			_insertClassifierTypeHandler = new InsertClassifierTypeHandler(unitOfWorkFactory, dbContextFactory);
 			_insertClassifierGroupHandler = new InsertClassifierGroupHandler(unitOfWorkFactory, dbContextFactory, classifierTypeService);
 			_insertClassifierHandler = new InsertClassifierHandler(unitOfWorkFactory, dbContextFactory, dateTimeProvider, classifierTypeService);
@@ -73,42 +78,18 @@ namespace Montr.MasterData.Tests
 			return result;
 		}
 
-		public async Task<DbClassifierGroup> FindGroup(string groupCode, CancellationToken cancellationToken)
+		public async Task<ApiResult> InsertTree(string treeCode, CancellationToken cancellationToken)
 		{
-			using (var db = _dbContextFactory.Create())
-			{
-				var query = from g in db.GetTable<DbClassifierGroup>()
-					join type in db.GetTable<DbClassifierType>() on g.TypeUid equals type.Uid
-					where type.Code == TypeCode && g.Code == groupCode
-					select g;
-
-				return await query.SingleAsync(cancellationToken);
-			}
-		}
-
-		public async Task InsertGroups(int count, int depth, string parentCode, Guid? parentUid, CancellationToken cancellationToken)
-		{
-			for (var i = 1; i <= count; i++)
-			{
-				var code = parentCode != null ? $"{parentCode}.{i}" : $"{i}";
-
-				var result = await InsertGroup(code, parentUid, cancellationToken);
-
-				if (depth > 1)
-				{
-					await InsertGroups(count, depth - 1, code, result.Uid, cancellationToken);
-				}
-			}
-		}
-
-		public async Task<ApiResult> InsertGroup(string code, Guid? parentUid, CancellationToken cancellationToken)
-		{
-			var result = await _insertClassifierGroupHandler.Handle(new InsertClassifierGroup
+			var result = await _insertClassifierTreeTypeHandler.Handle(new InsertClassifierTree
 			{
 				CompanyUid = CompanyUid,
 				UserUid = UserUid,
 				TypeCode = TypeCode,
-				Item = new ClassifierGroup {Code = code, Name = $"Class {code}", ParentUid = parentUid}
+				Item = new ClassifierTree
+				{
+					Code = treeCode,
+					Name = treeCode
+				}
 			}, cancellationToken);
 
 			Assert.IsNotNull(result);
@@ -117,10 +98,86 @@ namespace Montr.MasterData.Tests
 			return result;
 		}
 
-		public async Task<ApiResult> UpdateGroup(string groupCode, string newParentGroupCode,
+		public async Task<SearchResult<ClassifierTree>> GetTrees(CancellationToken cancellationToken)
+		{
+			var result = await _getClassifierTreeListHandler.Handle(new GetClassifierTreeList
+			{
+				UserUid = UserUid,
+				Request = new ClassifierTreeSearchRequest
+				{
+					CompanyUid = CompanyUid,
+					TypeCode = TypeCode,
+				}
+			}, cancellationToken);
+
+			Assert.IsNotNull(result);
+
+			return result;
+		}
+
+		public async Task<DbClassifierTree> FindTree(string treeCode, CancellationToken cancellationToken)
+		{
+			using (var db = _dbContextFactory.Create())
+			{
+				var query = from tree in db.GetTable<DbClassifierTree>()
+					join type in db.GetTable<DbClassifierType>() on tree.TypeUid equals type.Uid
+					where type.Code == TypeCode && tree.Code == treeCode
+							select tree;
+
+				return await query.SingleAsync(cancellationToken);
+			}
+		}
+
+		public async Task<DbClassifierGroup> FindGroup(string treeCode, string groupCode, CancellationToken cancellationToken)
+		{
+			using (var db = _dbContextFactory.Create())
+			{
+				var query = from g in db.GetTable<DbClassifierGroup>()
+					join tree in db.GetTable<DbClassifierTree>() on g.TreeUid equals tree.Uid
+					join type in db.GetTable<DbClassifierType>() on tree.TypeUid equals type.Uid
+					where type.Code == TypeCode && tree.Code == treeCode && g.Code == groupCode
+					select g;
+
+				return await query.SingleAsync(cancellationToken);
+			}
+		}
+
+		public async Task InsertGroups(Guid treeUid, int count, int depth, string parentCode, Guid? parentUid, CancellationToken cancellationToken)
+		{
+			for (var i = 1; i <= count; i++)
+			{
+				var code = parentCode != null ? $"{parentCode}.{i}" : $"{i}";
+
+				var result = await InsertGroup(treeUid, code, parentUid, cancellationToken);
+
+				if (depth > 1)
+				{
+					await InsertGroups(treeUid, count, depth - 1, code, result.Uid, cancellationToken);
+				}
+			}
+		}
+
+		public async Task<ApiResult> InsertGroup(Guid treeUid, string code, Guid? parentUid, CancellationToken cancellationToken)
+		{
+			var result = await _insertClassifierGroupHandler.Handle(new InsertClassifierGroup
+			{
+				CompanyUid = CompanyUid,
+				UserUid = UserUid,
+				TypeCode = TypeCode,
+				TreeUid = treeUid,
+				Item = new ClassifierGroup {Code = code, Name = $"Test Group {code}", ParentUid = parentUid}
+			}, cancellationToken);
+
+			Assert.IsNotNull(result);
+			Assert.AreEqual(true, result.Success);
+
+			return result;
+		}
+
+		public async Task<ApiResult> UpdateGroup(string treeCode, string groupCode, string newParentGroupCode,
 			CancellationToken cancellationToken, bool assertResult = true)
 		{
-			var dbGroup = await FindGroup(groupCode, cancellationToken);
+			var dbGroup = await FindGroup(treeCode, groupCode, cancellationToken);
 
 			var item = new ClassifierGroup
 			{
@@ -131,7 +188,7 @@ namespace Montr.MasterData.Tests
 
 			if (newParentGroupCode != null)
 			{
-				var dbParentGroup = await FindGroup(newParentGroupCode, cancellationToken);
+				var dbParentGroup = await FindGroup(treeCode, newParentGroupCode, cancellationToken);
 				item.ParentUid = dbParentGroup.Uid;
 			}
 
@@ -152,9 +209,9 @@ namespace Montr.MasterData.Tests
 			return result;
 		}
 
-		public async Task<ApiResult> DeleteGroup(string groupCode, CancellationToken cancellationToken)
+		public async Task<ApiResult> DeleteGroup(string treeCode, string groupCode, CancellationToken cancellationToken)
 		{
-			var group = await FindGroup(groupCode, cancellationToken);
+			var group = await FindGroup(treeCode, groupCode, cancellationToken);
 
 			var result = await _deleteClassifierGroupHandler.Handle(new DeleteClassifierGroup
 			{
@@ -224,19 +281,20 @@ namespace Montr.MasterData.Tests
 			}, cancellationToken);
 		}
 
-		public string PrintClosure()
+		public string PrintClosure(string treeCode)
 		{
 			const int printColumnWidth = 16;
 
 			using (var db = _dbContextFactory.Create())
 			{
 				var print = from c in db.GetTable<DbClassifierClosure>()
-							join parent in db.GetTable<DbClassifierGroup>() on c.ParentUid equals parent.Uid
-							join child in db.GetTable<DbClassifierGroup>() on c.ChildUid equals child.Uid
-							join type in db.GetTable<DbClassifierType>() on parent.TypeUid equals type.Uid
-							where type.Code == TypeCode
-							orderby parent.Code, child.Code, c.Level
-							select new { ParentCode = parent.Code, ChildCode = child.Code, c.Level };
+					join parent in db.GetTable<DbClassifierGroup>() on c.ParentUid equals parent.Uid
+					join child in db.GetTable<DbClassifierGroup>() on c.ChildUid equals child.Uid
+					join tree in db.GetTable<DbClassifierTree>() on parent.TreeUid equals tree.Uid
+					join type in db.GetTable<DbClassifierType>() on tree.TypeUid equals type.Uid
+					where type.Code == TypeCode && tree.Code == treeCode
+					orderby parent.Code, child.Code, c.Level
+					select new { ParentCode = parent.Code, ChildCode = child.Code, c.Level };
 
 				var sb = new StringBuilder().AppendLine($"{"Parent",-printColumnWidth} {"Child",-printColumnWidth} Level");
 

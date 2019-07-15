@@ -15,18 +15,16 @@ namespace Montr.MasterData.Tests.CommandHandlers
 	public class InsertClassifierHandlerTests
 	{
 		[TestMethod]
-		public async Task InsertClassifier_Should_InsertClassifier()
+		public async Task Handle_NormalValues_InsertClassifier()
 		{
 			// arrange
+			var cancellationToken = new CancellationToken();
 			var unitOfWorkFactory = new TransactionScopeUnitOfWorkFactory();
 			var dbContextFactory = new DefaultDbContextFactory();
 			var dateTimeProvider = new DefaultDateTimeProvider();
 			var classifierTypeRepository = new DbClassifierTypeRepository(dbContextFactory);
 			var classifierTypeService = new DefaultClassifierTypeService(classifierTypeRepository);
 			var generator = new DbHelper(unitOfWorkFactory, dbContextFactory);
-
-			var cancellationToken = new CancellationToken();
-
 			var handler = new InsertClassifierHandler(unitOfWorkFactory, dbContextFactory, dateTimeProvider, classifierTypeService);
 
 			using (var _ = unitOfWorkFactory.Create())
@@ -58,18 +56,16 @@ namespace Montr.MasterData.Tests.CommandHandlers
 		}
 
 		[TestMethod]
-		public async Task InsertClassifier_ShouldThrow_WhenDuplicateCodeInserted()
+		public async Task Handle_DuplicateCode_ReturnError()
 		{
 			// arrange
+			var cancellationToken = new CancellationToken();
 			var unitOfWorkFactory = new TransactionScopeUnitOfWorkFactory();
 			var dbContextFactory = new DefaultDbContextFactory();
 			var dateTimeProvider = new DefaultDateTimeProvider();
 			var classifierTypeRepository = new DbClassifierTypeRepository(dbContextFactory);
 			var classifierTypeService = new DefaultClassifierTypeService(classifierTypeRepository);
 			var generator = new DbHelper(unitOfWorkFactory, dbContextFactory);
-
-			var cancellationToken = new CancellationToken();
-
 			var handler = new InsertClassifierHandler(unitOfWorkFactory, dbContextFactory, dateTimeProvider, classifierTypeService);
 
 			using (var _ = unitOfWorkFactory.Create())

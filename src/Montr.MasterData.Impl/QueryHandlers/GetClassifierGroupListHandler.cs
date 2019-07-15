@@ -34,6 +34,7 @@ namespace Montr.MasterData.Impl.QueryHandlers
 
 			using (var db = _dbContextFactory.Create())
 			{
+				// todo: use tree uid from request
 				if (type.HierarchyType == HierarchyType.Groups)
 				{
 					if (request.FocusUid != null)
@@ -61,7 +62,7 @@ namespace Montr.MasterData.Impl.QueryHandlers
 					from focus in db.GetTable<DbClassifierGroup>()
 					join closureUp in db.GetTable<DbClassifierClosure>() on focus.Uid equals closureUp.ChildUid
 					join item in db.GetTable<DbClassifierGroup>() on closureUp.ParentUid equals item.Uid
-					where focus.TypeUid == type.Uid && focus.Uid == request.FocusUid
+					where /*focus.TypeUid == type.Uid &&*/ focus.Uid == request.FocusUid
 					orderby closureUp.Level descending
 					select item.ParentUid)
 				.ToListAsync(cancellationToken);
@@ -107,8 +108,9 @@ namespace Montr.MasterData.Impl.QueryHandlers
 		private static async Task<SearchResult<ClassifierGroup>> GetGroupsByParent(DbContext db,
 			ClassifierType type, Guid? parentUid, ClassifierGroupSearchRequest request, bool calculateTotalCount)
 		{
-			var query = from item in db.GetTable<DbClassifierGroup>()
-				where item.TypeUid == type.Uid && item.ParentUid == parentUid
+			var query = from tree in db.GetTable<DbClassifierTree>()
+				join item in db.GetTable<DbClassifierGroup>() on tree.Uid equals item.TreeUid
+				where tree.Uid == request.TreeUid && tree.TypeUid == type.Uid && item.ParentUid == parentUid
 				select item;
 
 			var data = query
@@ -118,6 +120,7 @@ namespace Montr.MasterData.Impl.QueryHandlers
 					Uid = x.Uid,
 					Code = x.Code,
 					Name = x.Name,
+					TreeUid = x.TreeUid,
 					ParentUid = x.ParentUid
 				})
 				.ToList();
@@ -140,7 +143,7 @@ namespace Montr.MasterData.Impl.QueryHandlers
 
 			return result;
 		}
-        
+
 		private static async Task<SearchResult<ClassifierGroup>> GetItemsByParent(DbContext db,
 			ClassifierType type, Guid? parentUid, ClassifierGroupSearchRequest request, bool calculateTotalCount)
 		{
