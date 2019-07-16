@@ -1,8 +1,8 @@
 import * as React from "react";
 import { TreeSelect, Spin, Icon } from "antd";
 import { IClassifierField, Guid } from "@montr-core/models";
-import { ClassifierGroupService, ClassifierTreeService } from "../services";
-import { IClassifierGroup, IClassifierTree } from "../models";
+import { ClassifierGroupService, ClassifierTreeService, ClassifierTypeService } from "../services";
+import { IClassifierGroup, IClassifierTree, IClassifierType } from "../models";
 import { CompanyContextProps, withCompanyContext } from "@kompany/components";
 import { TreeNode } from "antd/lib/tree-select";
 
@@ -16,6 +16,7 @@ interface IProps extends CompanyContextProps {
 interface IState {
 	loading: boolean;
 	value: string;
+	type?: IClassifierType;
 	trees?: IClassifierTree[];
 	groups?: IClassifierGroup[];
 	expanded: Guid[];
@@ -36,6 +37,7 @@ class _ClassifierSelect extends React.Component<IProps, IState> {
 		return null;
 	}
 
+	private _classifierTypeService = new ClassifierTypeService();
 	private _classifierTreeService = new ClassifierTreeService();
 	private _classifierGroupService = new ClassifierGroupService();
 
@@ -98,30 +100,48 @@ class _ClassifierSelect extends React.Component<IProps, IState> {
 		}
 	}
 
-	async componentDidMount() {
+	componentDidMount = async () => {
 		const { currentCompany, field } = this.props,
 			{ value, expanded } = this.state;
 
 		if (currentCompany) {
 
+			const type = await this._classifierTypeService.get(currentCompany.uid, { typeCode: field.typeCode });
+
 			let trees: IClassifierTree[], groups: IClassifierGroup[];
 
-			if (field.treeUid) {
+			if (type.hierarchyType == "Groups") {
+				if (field.treeUid) {
+					const result = await this._classifierGroupService.list(
+						currentCompany.uid, { typeCode: field.typeCode, treeUid: field.treeUid, focusUid: value });
+
+					groups = result.rows;
+
+					await this.collectExpanded(groups, expanded);
+				}
+				else {
+					const result = await this._classifierTreeService.list(currentCompany.uid, { typeCode: field.typeCode });
+
+					trees = result.rows;
+				}
+			}
+			else if (type.hierarchyType == "Items") {
 				const result = await this._classifierGroupService.list(
-					currentCompany.uid, { typeCode: field.typeCode, treeUid: field.treeUid, focusUid: value });
+					currentCompany.uid, { typeCode: field.typeCode, treeUid: null, focusUid: value });
 
 				groups = result.rows;
 
 				await this.collectExpanded(groups, expanded);
 			}
-			else {
-				const result = await this._classifierTreeService.list(currentCompany.uid, { typeCode: field.typeCode });
 
-				trees = result.rows;
-			}
-
-			this.setState({ loading: false, trees, groups, expanded });
+			this.setState({ loading: false, type, trees, groups, expanded });
 		}
+	}
+
+	componentWillUnmount = async () => {
+		await this._classifierTypeService.abort();
+		await this._classifierTreeService.abort();
+		await this._classifierGroupService.abort();
 	}
 
 	handleChange = (value: any, label: any, extra: any) => {

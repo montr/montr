@@ -12,6 +12,7 @@ import { IClassifierType, IClassifierGroup, IClassifierTree } from "../models";
 import { RadioChangeEvent } from "antd/lib/radio";
 import { AntTreeNode, AntTreeNodeSelectedEvent, AntTreeNodeExpandedEvent } from "antd/lib/tree";
 import { ClassifierBreadcrumb, ModalEditClassifierGroup } from "../components";
+import { RouteBuilder } from "..";
 
 interface IRouteProps {
 	typeCode: string;
@@ -434,7 +435,7 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 			<Page
 				title={<>
 					<Toolbar float="right">
-						<Link to={`/classifiers/${type.code}/add`}>
+						<Link to={RouteBuilder.addClassifier(type.code, selectedGroup ? selectedGroup.uid : null)}>
 							<Button type="primary"><Icon type="plus" /> Добавить</Button>
 						</Link>
 						<Button onClick={this.delete}><Icon type="delete" /> Удалить</Button>

@@ -36,6 +36,7 @@ namespace Montr.Metadata.Services
 				{
 					result.Fields = new List<FormField>
 					{
+						new ClassifierField { Key = "parentUid", Name = "Группа" },
 						new StringField { Key = "code", Name = "Код", Required = true },
 						new TextAreaField { Key = "name", Name = "Наименование", Required = true, Rows = 10 },
 						new StringField { Key = "digitalCode", Name = "Цифровой код", Required = true },
@@ -46,6 +47,7 @@ namespace Montr.Metadata.Services
 				{
 					result.Fields = new List<FormField>
 					{
+						new ClassifierField { Key = "parentUid", Name = "Группа" },
 						// new StringField { Key = "statusCode", Name = "Статус", Readonly = true },
 						new StringField { Key = "code", Name = "Код", Required = true },
 						new TextAreaField { Key = "name", Name = "Наименование", Required = true, Rows = 10 }

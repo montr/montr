@@ -47,6 +47,11 @@ namespace Montr.MasterData.Impl.QueryHandlers
 				
 				if (type.HierarchyType == HierarchyType.Items)
 				{
+					if (request.FocusUid != null)
+					{
+						return await GetItemsByFocus(db, type, request, cancellationToken);
+					}
+
 					return await GetItemsByParent(db, type, request.ParentUid, request, true);
 				}
 			}
@@ -139,6 +144,57 @@ namespace Montr.MasterData.Impl.QueryHandlers
 				var children = await GetGroupsByParent(db, type, singleChild.Uid, request, false);
 
 				singleChild.Children = children.Rows;
+			}
+
+			return result;
+		}
+
+		private static async Task<SearchResult<ClassifierGroup>> GetItemsByFocus(DbContext db,
+			ClassifierType type, ClassifierGroupSearchRequest request, CancellationToken cancellationToken)
+		{
+			// get all parent uids of focused item
+			var path = await (
+					from focus in db.GetTable<DbClassifier>()
+					join closureUp in db.GetTable<DbClassifierClosure>() on focus.Uid equals closureUp.ChildUid
+					join item in db.GetTable<DbClassifier>() on closureUp.ParentUid equals item.Uid
+					where /*focus.TypeUid == type.Uid &&*/ focus.Uid == request.FocusUid
+					orderby closureUp.Level descending
+					select item.ParentUid)
+				.ToListAsync(cancellationToken);
+
+			SearchResult<ClassifierGroup> result = null;
+
+			List<ClassifierGroup> currentLevel = null;
+
+			foreach (var parentUid in path)
+			{
+				if (parentUid == request.ParentUid)
+				{
+					// found requested parent, init result and starting level
+					result = new SearchResult<ClassifierGroup>
+					{
+						Rows = currentLevel = new List<ClassifierGroup>()
+					};
+				}
+
+				// if current level is not already inited
+				if (currentLevel == null) continue;
+
+				// try to move to deeper level...
+				if (parentUid.HasValue)
+				{
+					var parent = currentLevel.SingleOrDefault(x => x.Uid == parentUid);
+
+					if (parent != null)
+					{
+						parent.Children = currentLevel = new List<ClassifierGroup>();
+					}
+				}
+
+				// ... and load children
+				var chldrn = await GetItemsByParent(db, type, parentUid, request, false);
+
+				currentLevel.AddRange(chldrn.Rows);
 			}
 
 			return result;

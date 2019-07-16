@@ -2,7 +2,7 @@ import * as React from "react";
 import { Redirect } from "react-router";
 import { Spin } from "antd";
 import { CompanyContextProps, withCompanyContext } from "@kompany/components";
-import { IFormField, IApiResult } from "@montr-core/models";
+import { IFormField, IApiResult, IClassifierField, Guid } from "@montr-core/models";
 import { MetadataService } from "@montr-core/services";
 import { DataForm } from "@montr-core/components";
 import { ClassifierService } from "../services";
@@ -56,6 +56,15 @@ class _TabEditClassifier extends React.Component<IProps, IState> {
 
 			const dataView = await this._metadataService.load(`Classifier/${type.code}`);
 
+			const fields = dataView.fields;
+
+			const parentUidField = fields.find(x => x.key == "parentUid") as IClassifierField;
+
+			if (parentUidField) {
+				parentUidField.typeCode = type.code;
+				// parentUidField.treeUid = treeUid;
+			}
+
 			this.setState({ loading: false, fields: dataView.fields });
 		}
 	}
@@ -76,7 +85,7 @@ class _TabEditClassifier extends React.Component<IProps, IState> {
 			return result;
 		}
 		else {
-			const result = await this._classifierService.insert(companyUid, type.code, values);
+			const result = await this._classifierService.insert(companyUid, { typeCode: type.code, item: values });
 
 			if (result.success) {
 				this.setState({ redirect: RouteBuilder.editClassifier(type.code, result.uid) });

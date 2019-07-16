@@ -6,12 +6,16 @@ import { Guid } from "@montr-core/models";
 export const Patterns = {
 	editClassifierType: "/classifiers/edit/:uid/:tabKey?",
 
+	addClassifier: "/classifiers/:typeCode/add/:parentUid?",
 	editClassifier: "/classifiers/:typeCode/edit/:uid/:tabKey?",
 };
 
 export const RouteBuilder = {
 	editClassifierType: (uid: Guid | string, tabKey?: string) => {
 		return generatePath(Patterns.editClassifierType, { uid: uid.toString(), tabKey });
+	},
+	addClassifier: (typeCode: string, parentUid: Guid | string) => {
+		return generatePath(Patterns.addClassifier, { typeCode, parentUid: parentUid ? parentUid.toString() : null });
 	},
 	editClassifier: (typeCode: string, uid: Guid | string, tabKey?: string) => {
 		return generatePath(Patterns.editClassifier, { typeCode, uid: uid.toString(), tabKey });
@@ -26,7 +30,7 @@ export const Routes = () => {
 			<Route path={Patterns.editClassifierType} exact component={EditClassifierType} />
 
 			<Route path="/classifiers/:typeCode/" exact component={SearchClassifier} />
-			<Route path="/classifiers/:typeCode/add" exact component={EditClassifier} />
+			<Route path={Patterns.addClassifier} exact component={EditClassifier} />
 			<Route path={Patterns.editClassifier} exact component={EditClassifier} />
 		</Switch>
 	)

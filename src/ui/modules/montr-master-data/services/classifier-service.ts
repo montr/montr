@@ -3,6 +3,11 @@ import { Constants } from "@montr-core/.";
 import { Guid, IApiResult } from "@montr-core/models";
 import { IClassifier } from "../models";
 
+interface IInsertClassifierRequest {
+	typeCode: string;
+	item: IClassifier;
+}
+
 export class ClassifierService extends Fetcher {
 
 	get = async (companyUid: Guid, typeCode: string, uid: Guid | string): Promise<IClassifier> => {
@@ -13,8 +18,8 @@ export class ClassifierService extends Fetcher {
 		return this.download(`${Constants.baseURL}/classifier/export`, { companyUid, ...request });
 	};
 
-	insert = async (companyUid: Guid, typeCode: string, data: IClassifier): Promise<IApiResult> => {
-		return this.post(`${Constants.baseURL}/classifier/insert`, { companyUid, typeCode, item: data });
+	insert = async (companyUid: Guid, request: IInsertClassifierRequest): Promise<IApiResult> => {
+		return this.post(`${Constants.baseURL}/classifier/insert`, { companyUid, ...request });
 	};
 
 	update = async (companyUid: Guid, typeCode: string, data: IClassifier): Promise<IApiResult> => {

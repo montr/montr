@@ -75,27 +75,31 @@ namespace Montr.MasterData.Impl.CommandHandlers
 						// todo: validate selected group belong to default tree
 
 						// what if insert classifier and no groups inserted before?
-						/*if (request.TreeUid == null || request.GroupUid == null)
+						/*if (request.TreeUid == null || request.ParentUid == null)
 						{
 							throw new InvalidOperationException("Classifier should belong to one of the default hierarchy group.");
 						}*/
 
-						if (request.TreeUid != null && request.GroupUid != null)
+						if (/*request.TreeUid != null &&*/ item.ParentUid != null)
 						{
 							// link to selected group
 							await db.GetTable<DbClassifierLink>()
-								.Value(x => x.GroupUid, request.GroupUid)
+								.Value(x => x.GroupUid, item.ParentUid)
 								.Value(x => x.ItemUid, itemUid)
 								.InsertAsync(cancellationToken);
 						}
 
 						// if group is not of default hierarchy, link to default hierarchy root
-						/*var root = await GetRoot(db, request.GroupUid.Value, cancellationToken);
+						/*var root = await GetRoot(db, request.ParentUid.Value, cancellationToken);
 
 						if (root.Code != ClassifierTree.DefaultCode)
 						{
 							await LinkToDefaultRoot(db, type, itemUid, cancellationToken);
 						}*/
+					}
+					else if (type.HierarchyType == HierarchyType.Items)
+					{
+						// todo: build closure for items
 					}
 
 					// todo: events

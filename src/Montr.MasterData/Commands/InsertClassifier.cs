@@ -13,10 +13,6 @@ namespace Montr.MasterData.Commands
 
 		public string TypeCode { get; set; }
 
-		public Guid? TreeUid { get; set; }
-
-		public Guid? GroupUid { get; set; }
-
 		public Classifier Item { get; set; }
 	}
 }
