@@ -213,9 +213,11 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 		if (!group.children) {
 			const { type, selectedTree, expandedKeys } = this.state;
 
-			const children = await this.fetchClassifierGroups(type.code, selectedTree.uid, group.uid, null, true)
+			const treeUid = selectedTree ? selectedTree.uid : null;
 
-			// only to populate new expanded keys parameter
+			const children = await this.fetchClassifierGroups(type.code, treeUid, group.uid, null, true)
+
+			// todo: refactor - only to populate new expanded keys parameter
 			this.buildGroupsTree(children, expandedKeys);
 
 			group.children = children;
@@ -259,7 +261,7 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 			return (
 				<Tree.TreeNode
 					// todo: convert to component
-					title={<span><span style={{color: "silver"}}>{x.code}</span> {x.name}</span>}
+					title={<span><span style={{ color: "silver" }}>{x.code}</span> {x.name}</span>}
 					key={`${x.uid}`}
 					dataRef={x}>
 					{x.children && this.buildGroupsTree(x.children, expanded)}
@@ -331,7 +333,7 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 		this.setState({ groupEditData: null });
 	}
 
-	onLoadTableData = async (loadUrl: string, postParams: any): Promise<IDataResult<{}>> => {
+	onTableLoadData = async (loadUrl: string, postParams: any): Promise<IDataResult<{}>> => {
 		const { currentCompany } = this.props,
 			{ type, selectedTree, selectedGroup, depth } = this.state;
 
@@ -411,7 +413,7 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 				rowKey="uid"
 				viewId={`Classifier/Grid/${type.code}`}
 				loadUrl={`${Constants.baseURL}/classifier/list/`}
-				onLoadData={this.onLoadTableData}
+				onLoadData={this.onTableLoadData}
 				onSelectionChange={this.onTableSelectionChange}
 				updateToken={updateTableToken}
 			/>
