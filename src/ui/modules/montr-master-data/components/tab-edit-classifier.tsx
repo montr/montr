@@ -2,10 +2,9 @@ import * as React from "react";
 import { Redirect } from "react-router";
 import { Spin } from "antd";
 import { CompanyContextProps, withCompanyContext } from "@kompany/components";
-import { IFormField, IApiResult, IClassifierField, Guid } from "@montr-core/models";
-import { MetadataService } from "@montr-core/services";
+import { IFormField, IApiResult } from "@montr-core/models";
 import { DataForm } from "@montr-core/components";
-import { ClassifierService } from "../services";
+import { ClassifierService, ClassifierMetadataService } from "../services";
 import { IClassifier, IClassifierType } from "../models";
 import { RouteBuilder } from "..";
 
@@ -22,7 +21,7 @@ interface IState {
 }
 
 class _TabEditClassifier extends React.Component<IProps, IState> {
-	private _metadataService = new MetadataService();
+	private _classifierMetadataService = new ClassifierMetadataService();
 	private _classifierService = new ClassifierService();
 
 	constructor(props: IProps) {
@@ -45,7 +44,7 @@ class _TabEditClassifier extends React.Component<IProps, IState> {
 	}
 
 	componentWillUnmount = async () => {
-		await this._metadataService.abort();
+		await this._classifierMetadataService.abort();
 		await this._classifierService.abort();
 	}
 
@@ -54,16 +53,16 @@ class _TabEditClassifier extends React.Component<IProps, IState> {
 
 		if (type && currentCompany) {
 
-			const dataView = await this._metadataService.load(`Classifier/${type.code}`);
+			const dataView = await this._classifierMetadataService.load(currentCompany.uid, type.code);
 
-			const fields = dataView.fields;
+			/* const fields = dataView.fields;
 
 			const parentUidField = fields.find(x => x.key == "parentUid") as IClassifierField;
 
 			if (parentUidField) {
 				parentUidField.typeCode = type.code;
 				// parentUidField.treeUid = treeUid;
-			}
+			} */
 
 			this.setState({ loading: false, fields: dataView.fields });
 		}
