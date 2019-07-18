@@ -38,7 +38,7 @@ namespace Montr.MasterData.Impl.QueryHandlers
 			{
 				commonFields = new List<FormField>
 				{
-					new ClassifierField { Key = "parentUid", Name = "Группа", TypeCode = typeCode, Required = true }
+					new ClassifierField { Key = "parentUid", Name = "Группа", TypeCode = typeCode, TreeCode = ClassifierTree.DefaultCode, Required = true }
 				};
 			}
 			else if (type.HierarchyType == HierarchyType.Items)

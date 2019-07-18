@@ -8,6 +8,7 @@ using Montr.Core.Services;
 using Montr.Data.Linq2Db;
 using Montr.MasterData.Commands;
 using Montr.MasterData.Impl.Entities;
+using Montr.MasterData.Impl.Services;
 using Montr.MasterData.Models;
 using Montr.MasterData.Services;
 using Montr.Metadata.Models;
@@ -37,7 +38,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 
 			var item = request.Item ?? throw new ArgumentNullException(nameof(request.Item));
 
-			// var now = _dateTimeProvider.GetUtcNow();
+			var now = _dateTimeProvider.GetUtcNow();
 
 			// todo: check company belongs to user
 			var type = await _classifierTypeService.GetClassifierType(request.CompanyUid, request.TypeCode, cancellationToken);
@@ -99,7 +100,12 @@ namespace Montr.MasterData.Impl.CommandHandlers
 					}
 					else if (type.HierarchyType == HierarchyType.Items)
 					{
-						// todo: build closure for items
+						var closureTable = new ClosureTableHandler(db, type);
+
+						if (await closureTable.Insert(itemUid, item.ParentUid, cancellationToken) == false)
+						{
+							return new ApiResult { Success = false, Errors = closureTable.Errors };
+						}
 					}
 
 					// todo: events

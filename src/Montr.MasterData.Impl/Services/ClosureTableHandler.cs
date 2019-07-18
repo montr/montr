@@ -7,6 +7,7 @@ using LinqToDB;
 using LinqToDB.Data;
 using Montr.Data.Linq2Db;
 using Montr.MasterData.Impl.Entities;
+using Montr.MasterData.Models;
 using Montr.Metadata.Models;
 
 namespace Montr.MasterData.Impl.Services
@@ -14,10 +15,17 @@ namespace Montr.MasterData.Impl.Services
 	public class ClosureTableHandler
 	{
 		private readonly DbContext _db;
+		private readonly ClassifierType _type;
 
-		public ClosureTableHandler(DbContext db)
+		public ClosureTableHandler(DbContext db, ClassifierType type)
 		{
+			if (type.HierarchyType == HierarchyType.None)
+			{
+				throw new InvalidOperationException($"Hierarchy type {type.HierarchyType} is not suitable to build closure table.");
+			}
+
 			_db = db;
+			_type = type;
 		}
 
 		public IList<ApiResultError> Errors { get; } = new List<ApiResultError>();
@@ -142,12 +150,17 @@ namespace Montr.MasterData.Impl.Services
 			return true;
 		}
 
+		// todo: validate same type
+		/*private async Task ValidateSameType(Guid itemUid, Guid? parentUid, CancellationToken cancellationToken)
+		{
+		}*/
+
 		private async Task ValidateSameTree(Guid itemUid, Guid? parentUid, CancellationToken cancellationToken)
 		{
-			var groups = _db.GetTable<DbClassifierGroup>();
-
-			if (parentUid != null)
+			if (_type.HierarchyType == HierarchyType.Groups && parentUid != null)
 			{
+				var groups = _db.GetTable<DbClassifierGroup>();
+
 				var query =
 					from item in groups
 					join parent in groups on item.TreeUid equals parent.TreeUid
@@ -156,6 +169,7 @@ namespace Montr.MasterData.Impl.Services
 
 				if (await query.AnyAsync(cancellationToken) == false)
 				{
+					// todo: translate errors
 					Errors.Add(new ApiResultError
 					{
 						Key = string.Empty,
@@ -170,10 +184,10 @@ namespace Montr.MasterData.Impl.Services
 
 		private async Task ValidateCyclicDependency(Guid itemUid, Guid? parentUid, CancellationToken cancellationToken)
 		{
-			var closure = _db.GetTable<DbClassifierClosure>();
-
 			if (parentUid != null)
 			{
+				var closure = _db.GetTable<DbClassifierClosure>();
+
 				var query =
 					from c in closure
 					where c.ChildUid == parentUid && c.ParentUid == itemUid
@@ -181,6 +195,7 @@ namespace Montr.MasterData.Impl.Services
 
 				if (await query.AnyAsync(cancellationToken))
 				{
+					// todo: translate errors
 					Errors.Add(new ApiResultError
 					{
 						Key = "parentUid",

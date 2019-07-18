@@ -111,9 +111,9 @@ class _ClassifierSelect extends React.Component<IProps, IState> {
 			let trees: IClassifierTree[], groups: IClassifierGroup[];
 
 			if (type.hierarchyType == "Groups") {
-				if (field.treeUid) {
+				if (field.treeCode || field.treeUid) {
 					const result = await this._classifierGroupService.list(
-						currentCompany.uid, { typeCode: field.typeCode, treeUid: field.treeUid, focusUid: value });
+						currentCompany.uid, { typeCode: field.typeCode, treeCode: field.treeCode, treeUid: field.treeUid, focusUid: value });
 
 					groups = result.rows;
 
@@ -127,7 +127,7 @@ class _ClassifierSelect extends React.Component<IProps, IState> {
 			}
 			else if (type.hierarchyType == "Items") {
 				const result = await this._classifierGroupService.list(
-					currentCompany.uid, { typeCode: field.typeCode, treeUid: null, focusUid: value });
+					currentCompany.uid, { typeCode: field.typeCode, focusUid: value });
 
 				groups = result.rows;
 

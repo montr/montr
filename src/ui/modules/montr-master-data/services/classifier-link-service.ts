@@ -6,7 +6,7 @@ import { IClassifierLink } from "../models";
 interface IClassifierLinkSearchRequest {
 	typeCode: string;
 	groupUid?: Guid;
-	itemUid?: Guid;
+	itemUid?: Guid | string;
 }
 
 export class ClassifierLinkService extends Fetcher {

@@ -63,7 +63,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 						.Value(x => x.Name, item.Name)
 						.InsertAsync(cancellationToken);
 
-					var closureTable = new ClosureTableHandler(db);
+					var closureTable = new ClosureTableHandler(db, type);
 
 					if (await closureTable.Insert(itemUid, item.ParentUid, cancellationToken) == false)
 					{

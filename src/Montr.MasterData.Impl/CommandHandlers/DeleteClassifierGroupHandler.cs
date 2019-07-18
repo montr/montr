@@ -45,7 +45,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 				{
 					if (type.HierarchyType == HierarchyType.Groups)
 					{
-						var closureTable = new ClosureTableHandler(db);
+						var closureTable = new ClosureTableHandler(db, type);
 
 						/*var tree = await db.GetTable<DbClassifierTree>()
 							.SingleAsync(x => x.TypeUid == type.Uid && x.Code == request.TreeCode, cancellationToken);*/

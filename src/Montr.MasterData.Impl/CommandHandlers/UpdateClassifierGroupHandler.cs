@@ -53,7 +53,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 						return new ApiResult { Success = false, Errors = validator.Errors };
 					}
 
-					var closureTable = new ClosureTableHandler(db);
+					var closureTable = new ClosureTableHandler(db, type);
 
 					if (await closureTable.Update(item.Uid, item.ParentUid, cancellationToken) == false)
 					{

@@ -2,7 +2,7 @@ import * as React from "react";
 import { Page, PageHeader } from "@montr-core/components";
 import { RouteComponentProps } from "react-router";
 import { Spin, Tabs } from "antd";
-import { ClassifierService, ClassifierTypeService } from "../services";
+import { ClassifierService, ClassifierTypeService, ClassifierLinkService } from "../services";
 import { CompanyContextProps, withCompanyContext } from "@kompany/components";
 import { IClassifier, IClassifierType } from "../models";
 import { ClassifierBreadcrumb, TabEditClassifier, TabEditClassifierHierarchy } from "../components";
@@ -26,6 +26,7 @@ interface IState {
 class _EditClassifier extends React.Component<IProps, IState> {
 	private _classifierTypeService = new ClassifierTypeService();
 	private _classifierService = new ClassifierService();
+	private _classifierLinkService = new ClassifierLinkService();
 
 	constructor(props: IProps) {
 		super(props);
@@ -51,6 +52,7 @@ class _EditClassifier extends React.Component<IProps, IState> {
 	componentWillUnmount = async () => {
 		await this._classifierTypeService.abort();
 		await this._classifierService.abort();
+		await this._classifierLinkService.abort();
 	}
 
 	fetchData = async () => {
@@ -64,6 +66,15 @@ class _EditClassifier extends React.Component<IProps, IState> {
 			const data = (uid)
 				? await this._classifierService.get(currentCompany.uid, typeCode, uid)
 				: this.state.data;
+
+			if (uid && type.hierarchyType == "Groups") {
+				const links = await this._classifierLinkService.list(
+					currentCompany.uid, { typeCode: type.code, itemUid: uid });
+
+				const defaultLink = links.rows.find(x => x.tree.code == "default");
+
+				if (defaultLink) data.parentUid = defaultLink.group.uid;
+			}
 
 			this.setState({ loading: false, type, data });
 		}

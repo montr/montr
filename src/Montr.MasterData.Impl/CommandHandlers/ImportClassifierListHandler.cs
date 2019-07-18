@@ -273,7 +273,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 			{
 				using (var db = _dbContextFactory.Create())
 				{
-					var closureTable = new ClosureTableHandler(db);
+					var closureTable = new ClosureTableHandler(db, _type);
 
 					if (sortedItems != null)
 					{
