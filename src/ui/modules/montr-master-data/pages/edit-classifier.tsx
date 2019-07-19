@@ -11,6 +11,7 @@ import { RouteBuilder } from "../";
 interface IRouteProps {
 	typeCode: string;
 	uid?: string;
+	parentUid?: string;
 	tabKey?: string;
 }
 
@@ -33,7 +34,9 @@ class _EditClassifier extends React.Component<IProps, IState> {
 
 		this.state = {
 			loading: true,
-			data: {}
+			data: {
+				parentUid: props.match.params.parentUid
+			}
 		};
 	}
 
