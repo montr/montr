@@ -34,15 +34,26 @@ namespace Montr.MasterData.Impl.QueryHandlers
 
 			using (var db = _dbContextFactory.Create())
 			{
-				// todo: use tree uid from request
 				if (type.HierarchyType == HierarchyType.Groups)
 				{
+                    // todo: move to classifier tree service or repository
+					var dbTree = request.TreeUid.HasValue
+						? db.GetTable<DbClassifierTree>().Single(x => x.TypeUid == type.Uid && x.Uid == request.TreeUid)
+						: db.GetTable<DbClassifierTree>().Single(x => x.TypeUid == type.Uid && x.Code == request.TreeCode);
+
+                    var tree = new ClassifierTree
+                    {
+                        Uid = dbTree.Uid,
+                        Code = dbTree.Code,
+                        Name = dbTree.Name
+                    };
+
 					if (request.FocusUid != null)
 					{
-						return await GetGroupsByFocus(db, type, request, cancellationToken);
+						return await GetGroupsByFocus(db, type, tree, request, cancellationToken);
 					}
 
-					return await GetGroupsByParent(db, type, request.ParentUid, request, true);
+					return await GetGroupsByParent(db, type, tree, request.ParentUid, request, true);
 				}
 				
 				if (type.HierarchyType == HierarchyType.Items)
@@ -60,7 +71,7 @@ namespace Montr.MasterData.Impl.QueryHandlers
 		}
 
 		private static async Task<SearchResult<ClassifierGroup>> GetGroupsByFocus(DbContext db,
-			ClassifierType type, ClassifierGroupSearchRequest request, CancellationToken cancellationToken)
+			ClassifierType type, ClassifierTree tree, ClassifierGroupSearchRequest request, CancellationToken cancellationToken)
 		{
 			// get all parent uids of focused item
 			var path = await (
@@ -102,7 +113,7 @@ namespace Montr.MasterData.Impl.QueryHandlers
 				}
 
 				// ... and load children
-				var chldrn = await GetGroupsByParent(db, type, parentUid, request, false);
+				var chldrn = await GetGroupsByParent(db, type, tree, parentUid, request, false);
 
 				currentLevel.AddRange(chldrn.Rows);
 			}
@@ -111,11 +122,11 @@ namespace Montr.MasterData.Impl.QueryHandlers
 		}
 
 		private static async Task<SearchResult<ClassifierGroup>> GetGroupsByParent(DbContext db,
-			ClassifierType type, Guid? parentUid, ClassifierGroupSearchRequest request, bool calculateTotalCount)
+			ClassifierType type, ClassifierTree tree, Guid? parentUid, ClassifierGroupSearchRequest request, bool calculateTotalCount)
 		{
-			var query = from tree in db.GetTable<DbClassifierTree>()
+			var query = from tree1 in db.GetTable<DbClassifierTree>()
 				join item in db.GetTable<DbClassifierGroup>() on tree.Uid equals item.TreeUid
-				where tree.Uid == request.TreeUid && tree.TypeUid == type.Uid && item.ParentUid == parentUid
+				where tree1.Uid == tree.Uid && tree1.TypeUid == type.Uid && item.ParentUid == parentUid
 				select item;
 
 			var data = query
@@ -141,7 +152,7 @@ namespace Montr.MasterData.Impl.QueryHandlers
 			{
 				var singleChild = data[0];
 
-				var children = await GetGroupsByParent(db, type, singleChild.Uid, request, false);
+				var children = await GetGroupsByParent(db, type, tree, singleChild.Uid, request, false);
 
 				singleChild.Children = children.Rows;
 			}
