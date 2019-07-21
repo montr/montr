@@ -19,11 +19,14 @@ namespace Montr.MasterData.Impl.QueryHandlers
 	{
 		private readonly IDbContextFactory _dbContextFactory;
 		private readonly IClassifierTypeService _classifierTypeService;
+		private readonly IClassifierTreeService _classifierTreeService;
 
-		public GetClassifierGroupListHandler(IDbContextFactory dbContextFactory, IClassifierTypeService classifierTypeService)
+		public GetClassifierGroupListHandler(IDbContextFactory dbContextFactory,
+			IClassifierTypeService classifierTypeService, IClassifierTreeService classifierTreeService)
 		{
 			_dbContextFactory = dbContextFactory;
 			_classifierTypeService = classifierTypeService;
+			_classifierTreeService = classifierTreeService;
 		}
 
 		public async Task<SearchResult<ClassifierGroup>> Handle(GetClassifierGroupList command, CancellationToken cancellationToken)
@@ -36,17 +39,9 @@ namespace Montr.MasterData.Impl.QueryHandlers
 			{
 				if (type.HierarchyType == HierarchyType.Groups)
 				{
-                    // todo: move to classifier tree service or repository
-					var dbTree = request.TreeUid.HasValue
-						? db.GetTable<DbClassifierTree>().Single(x => x.TypeUid == type.Uid && x.Uid == request.TreeUid)
-						: db.GetTable<DbClassifierTree>().Single(x => x.TypeUid == type.Uid && x.Code == request.TreeCode);
-
-                    var tree = new ClassifierTree
-                    {
-                        Uid = dbTree.Uid,
-                        Code = dbTree.Code,
-                        Name = dbTree.Name
-                    };
+					var tree = request.TreeUid != null
+						? await _classifierTreeService.GetClassifierTree(request.CompanyUid, request.TypeCode, request.TreeUid.Value, cancellationToken)
+						: await _classifierTreeService.GetClassifierTree(request.CompanyUid, request.TypeCode, request.TreeCode, cancellationToken);
 
 					if (request.FocusUid != null)
 					{

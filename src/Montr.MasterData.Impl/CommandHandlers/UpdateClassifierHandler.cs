@@ -20,13 +20,15 @@ namespace Montr.MasterData.Impl.CommandHandlers
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IDbContextFactory _dbContextFactory;
 		private readonly IClassifierTypeService _classifierTypeService;
+		private readonly IClassifierTreeService _classifierTreeService;
 
 		public UpdateClassifierHandler(IUnitOfWorkFactory unitOfWorkFactory, IDbContextFactory dbContextFactory,
-			IClassifierTypeService classifierTypeService)
+			IClassifierTypeService classifierTypeService, IClassifierTreeService classifierTreeService)
 		{
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_dbContextFactory = dbContextFactory;
 			_classifierTypeService = classifierTypeService;
+			_classifierTreeService = classifierTreeService;
 		}
 
 		public async Task<ApiResult> Handle(UpdateClassifier request, CancellationToken cancellationToken)
@@ -38,6 +40,10 @@ namespace Montr.MasterData.Impl.CommandHandlers
 
 			// todo: check company belongs to user
 			var type = await _classifierTypeService.GetClassifierType(request.CompanyUid, request.TypeCode, cancellationToken);
+
+			var tree = type.HierarchyType == HierarchyType.Groups
+				? await _classifierTreeService.GetClassifierTree(request.CompanyUid, request.TypeCode, ClassifierTree.DefaultCode, cancellationToken)
+				: null;
 
 			using (var scope = _unitOfWorkFactory.Create())
 			{
@@ -61,7 +67,24 @@ namespace Montr.MasterData.Impl.CommandHandlers
 
 					if (type.HierarchyType == HierarchyType.Groups)
 					{
-						// todo: remove old link, add new link in default hierarchy
+						// todo: combine with InsertClassifierLinkHandler in one service
+
+						// delete other links in same tree
+						var deleted = await (
+							from link in db.GetTable<DbClassifierLink>().Where(x => x.ItemUid == item.Uid)
+							join groups in db.GetTable<DbClassifierGroup>() on link.GroupUid equals groups.Uid
+							where groups.TreeUid == tree.Uid
+							select link
+						).DeleteAsync(cancellationToken);
+
+                        // todo: check parent belongs to default tree
+						if (item.ParentUid != null)
+						{
+							var inserted = await db.GetTable<DbClassifierLink>()
+								.Value(x => x.GroupUid, item.ParentUid)
+								.Value(x => x.ItemUid, item.Uid)
+								.InsertAsync(cancellationToken);
+						}
 					}
 					else if (type.HierarchyType == HierarchyType.Items)
 					{

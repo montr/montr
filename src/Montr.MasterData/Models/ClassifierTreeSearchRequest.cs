@@ -11,6 +11,8 @@ namespace Montr.MasterData.Models
 
 		public string TypeCode { get; set; }
 
+		public string Code { get; set; }
+
 		public Guid? Uid { get; set; }
 	}
 }

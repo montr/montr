@@ -32,6 +32,11 @@ namespace Montr.MasterData.Impl.Services
 								  types.Code == request.TypeCode
 							select trees;
 
+				if (request.Code != null)
+				{
+					query = query.Where(x => x.Code == request.Code);
+				}
+
 				if (request.Uid != null)
 				{
 					query = query.Where(x => x.Uid == request.Uid);

@@ -25,9 +25,11 @@ namespace Montr.MasterData.Tests.QueryHandlers
 			var unitOfWorkFactory = new TransactionScopeUnitOfWorkFactory();
 			var dbContextFactory = new DefaultDbContextFactory();
 			var classifierTypeRepository = new DbClassifierTypeRepository(dbContextFactory);
+			var classifierTreeRepository = new DbClassifierTreeRepository(dbContextFactory);
 			var classifierTypeService = new DefaultClassifierTypeService(classifierTypeRepository);
+			var classifierTreeService = new DefaultClassifierTreeService(classifierTreeRepository);
 			var generator = new DbHelper(unitOfWorkFactory, dbContextFactory) { TypeCode = "okei" }; // todo: use test type
-			var handler = new GetClassifierGroupListHandler(dbContextFactory, classifierTypeService);
+			var handler = new GetClassifierGroupListHandler(dbContextFactory, classifierTypeService, classifierTreeService);
 
 			var tree = await generator.FindTree(ClassifierTree.DefaultCode, cancellationToken);
 
@@ -59,9 +61,11 @@ namespace Montr.MasterData.Tests.QueryHandlers
 			var unitOfWorkFactory = new TransactionScopeUnitOfWorkFactory();
 			var dbContextFactory = new DefaultDbContextFactory();
 			var classifierTypeRepository = new DbClassifierTypeRepository(dbContextFactory);
+			var classifierTreeRepository = new DbClassifierTreeRepository(dbContextFactory);
 			var classifierTypeService = new DefaultClassifierTypeService(classifierTypeRepository);
+			var classifierTreeService = new DefaultClassifierTreeService(classifierTreeRepository);
 			var generator = new DbHelper(unitOfWorkFactory, dbContextFactory) { TypeCode = "okei" }; // todo: use test type
-			var handler = new GetClassifierGroupListHandler(dbContextFactory, classifierTypeService);
+			var handler = new GetClassifierGroupListHandler(dbContextFactory, classifierTypeService, classifierTreeService);
 
 			var tree = await generator.FindTree(ClassifierTree.DefaultCode, cancellationToken);
 			var parentGroup = await generator.FindGroup(ClassifierTree.DefaultCode, "1", cancellationToken);
@@ -111,11 +115,13 @@ namespace Montr.MasterData.Tests.QueryHandlers
 		public async Task GetItems_ForNullParent_ReturnItems()
 		{
 			// arrange
+			var cancellationToken = CancellationToken.None;
 			var dbContextFactory = new DefaultDbContextFactory();
 			var classifierTypeRepository = new DbClassifierTypeRepository(dbContextFactory);
+			var classifierTreeRepository = new DbClassifierTreeRepository(dbContextFactory);
 			var classifierTypeService = new DefaultClassifierTypeService(classifierTypeRepository);
-
-			var handler = new GetClassifierGroupListHandler(dbContextFactory, classifierTypeService);
+			var classifierTreeService = new DefaultClassifierTreeService(classifierTreeRepository);
+			var handler = new GetClassifierGroupListHandler(dbContextFactory, classifierTypeService, classifierTreeService);
 
 			// act
 			var command = new GetClassifierGroupList
@@ -128,7 +134,7 @@ namespace Montr.MasterData.Tests.QueryHandlers
 				}
 			};
 
-			var result = await handler.Handle(command, CancellationToken.None);
+			var result = await handler.Handle(command, cancellationToken);
 
 			// assert
 			Assert.IsNotNull(result);
@@ -142,9 +148,10 @@ namespace Montr.MasterData.Tests.QueryHandlers
 			var cancellationToken = CancellationToken.None;
 			var dbContextFactory = new DefaultDbContextFactory();
 			var classifierTypeRepository = new DbClassifierTypeRepository(dbContextFactory);
+			var classifierTreeRepository = new DbClassifierTreeRepository(dbContextFactory);
 			var classifierTypeService = new DefaultClassifierTypeService(classifierTypeRepository);
-
-			var handler = new GetClassifierGroupListHandler(dbContextFactory, classifierTypeService);
+			var classifierTreeService = new DefaultClassifierTreeService(classifierTreeRepository);
+			var handler = new GetClassifierGroupListHandler(dbContextFactory, classifierTypeService, classifierTreeService);
 
 			DbClassifier parentItem;
 			using (var db = dbContextFactory.Create())
@@ -187,11 +194,13 @@ namespace Montr.MasterData.Tests.QueryHandlers
 		public async Task GetItems_ForBigGroups_ReturnNoMoreThan1000Items()
 		{
 			// arrange
+			var cancellationToken = CancellationToken.None;
 			var dbContextFactory = new DefaultDbContextFactory();
 			var classifierTypeRepository = new DbClassifierTypeRepository(dbContextFactory);
+			var classifierTreeRepository = new DbClassifierTreeRepository(dbContextFactory);
 			var classifierTypeService = new DefaultClassifierTypeService(classifierTypeRepository);
-
-			var handler = new GetClassifierGroupListHandler(dbContextFactory, classifierTypeService);
+			var classifierTreeService = new DefaultClassifierTreeService(classifierTreeRepository);
+			var handler = new GetClassifierGroupListHandler(dbContextFactory, classifierTypeService, classifierTreeService);
 
 			// act
 			var command = new GetClassifierGroupList
@@ -203,7 +212,7 @@ namespace Montr.MasterData.Tests.QueryHandlers
 				}
 			};
 
-			var result = await handler.Handle(command, CancellationToken.None);
+			var result = await handler.Handle(command, cancellationToken);
 
 			// assert
 			Assert.IsNotNull(result);
@@ -219,9 +228,11 @@ namespace Montr.MasterData.Tests.QueryHandlers
 			var unitOfWorkFactory = new TransactionScopeUnitOfWorkFactory();
 			var dbContextFactory = new DefaultDbContextFactory();
 			var classifierTypeRepository = new DbClassifierTypeRepository(dbContextFactory);
+			var classifierTreeRepository = new DbClassifierTreeRepository(dbContextFactory);
 			var classifierTypeService = new DefaultClassifierTypeService(classifierTypeRepository);
+			var classifierTreeService = new DefaultClassifierTreeService(classifierTreeRepository);
 			var generator = new DbHelper(unitOfWorkFactory, dbContextFactory) { TypeCode = "okei" }; // todo: use test type
-			var handler = new GetClassifierGroupListHandler(dbContextFactory, classifierTypeService);
+			var handler = new GetClassifierGroupListHandler(dbContextFactory, classifierTypeService, classifierTreeService);
 
 			// var rootGroup = await generator.FindGroup(ClassifierTree.DefaultCode, "default", cancellationToken);
 			var tree = await generator.FindTree(ClassifierTree.DefaultCode, cancellationToken);
