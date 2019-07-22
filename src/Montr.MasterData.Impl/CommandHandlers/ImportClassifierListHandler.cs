@@ -369,10 +369,6 @@ namespace Montr.MasterData.Impl.CommandHandlers
 											errors.Add($"Group {group.ParentCode} specified as parent for group {group.Code} not found in classifier {_type.Code}.");
 										}
 									}
-									/*else
-									{
-										parentUid = _root.Uid;
-									}*/
 
 									var groupUid = Guid.NewGuid();
 

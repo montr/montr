@@ -89,22 +89,6 @@ namespace Montr.MasterData.Tests.QueryHandlers
 			Assert.AreEqual(7, result.Rows.Count);
 		}
 
-		/*private async Task<DbClassifierGroup> FindClassifierGroup(IDbContextFactory dbContextFactory, string typeCode, string code, CancellationToken cancellationToken)
-		{
-			using (var db = dbContextFactory.Create())
-			{
-				return await (
-						from type in db.GetTable<DbClassifierType>().Where(x => x.Code == typeCode)
-						/*join tree in db.GetTable<DbClassifierTree>()
-								.Where(x => x.Code == "default")
-							on type.Uid equals tree.TypeUid#1#
-						join @group in db.GetTable<DbClassifierGroup>().Where(x => x.Code == code)
-							on type.Uid equals @group.TypeUid
-						select @group)
-					.SingleAsync(cancellationToken);
-			}
-		}*/
-
 		[TestMethod, Ignore]
 		public async Task GetGroups_WhenAutoExpandSingleChildRequested_ShouldReturnExpanded()
 		{

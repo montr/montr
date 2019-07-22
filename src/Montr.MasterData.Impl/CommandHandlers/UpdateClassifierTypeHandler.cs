@@ -70,14 +70,6 @@ namespace Montr.MasterData.Impl.CommandHandlers
 								.Value(x => x.Code, ClassifierTree.DefaultCode)
 								.Value(x => x.Name, item.Name)
 								.InsertAsync(cancellationToken);
-
-							// todo: validate with ClassifierGroupValidator or reuse common service with InsertClassifierGroupHandler
-							/*var closureTable = new ClosureTableHandler(db);
-
-							if (await closureTable.Insert(treeUid, null, cancellationToken) == false)
-							{
-								return new ApiResult { Success = false, Errors = closureTable.Errors };
-							}*/
 						}
 					}
 				}
