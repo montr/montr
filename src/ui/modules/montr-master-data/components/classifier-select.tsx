@@ -24,15 +24,13 @@ interface IState {
 
 // http://ant.design/components/form/?locale=en-US#components-form-demo-customized-form-controls
 // https://github.com/ant-design/ant-design/blob/master/components/form/demo/customized-form-controls.md
-
+// todo: rewrite to functional component (see link above)
 class _ClassifierSelect extends React.Component<IProps, IState> {
 
 	static getDerivedStateFromProps(nextProps: any) {
 		// Should be a controlled component.
-		if ('value' in nextProps) {
-			return {
-				...(nextProps.value || {}),
-			};
+		if ("value" in nextProps) {
+			return nextProps.value;
 		}
 		return null;
 	}
@@ -51,56 +49,23 @@ class _ClassifierSelect extends React.Component<IProps, IState> {
 		};
 	}
 
-	async collectExpanded(groups: IClassifierGroup[], expanded?: Guid[]) {
-		groups && groups.forEach(group => {
-			if (group.children) {
-
-				expanded.push(group.uid);
-
-				this.collectExpanded(group.children, expanded);
-			}
-		});
-	}
-
-	buildTree(trees: IClassifierTree[], groups: IClassifierGroup[]): TreeNode[] {
-		if (trees) {
-			return trees.map(tree => {
-
-				const result: TreeNode = {
-					selectable: false,
-					value: tree.uid,
-					title: <span><Icon type="folder" /> {tree.name}</span>,
-					dataRef: tree,
-					dataType: "Tree"
-				};
-
-				if (tree.children) {
-					result.children = this.buildTree(null, tree.children);
-				}
-
-				return result;
-			});
-		}
-		else if (groups) {
-			return groups && groups.map(group => {
-
-				const result: TreeNode = {
-					value: group.uid,
-					title: <span><Icon type="file" /> {group.name} ({group.code})</span>,
-					dataRef: group,
-					dataType: "Group"
-				};
-
-				if (group.children) {
-					result.children = this.buildTree(null, group.children);
-				}
-
-				return result;
-			});
-		}
-	}
-
 	componentDidMount = async () => {
+		await this.fetchData();
+	}
+
+	componentDidUpdate = async (prevProps: IProps) => {
+		if (this.props.value !== prevProps.value) {
+			// await this.fetchData();
+		}
+	}
+
+	componentWillUnmount = async () => {
+		await this._classifierTypeService.abort();
+		await this._classifierTreeService.abort();
+		await this._classifierGroupService.abort();
+	}
+
+	fetchData = async () => {
 		const { currentCompany, field } = this.props,
 			{ value, expanded } = this.state;
 
@@ -138,10 +103,15 @@ class _ClassifierSelect extends React.Component<IProps, IState> {
 		}
 	}
 
-	componentWillUnmount = async () => {
-		await this._classifierTypeService.abort();
-		await this._classifierTreeService.abort();
-		await this._classifierGroupService.abort();
+	async collectExpanded(groups: IClassifierGroup[], expanded?: Guid[]) {
+		groups && groups.forEach(group => {
+			if (group.children) {
+
+				expanded.push(group.uid);
+
+				this.collectExpanded(group.children, expanded);
+			}
+		});
 	}
 
 	handleChange = (value: any, label: any, extra: any) => {
@@ -189,6 +159,44 @@ class _ClassifierSelect extends React.Component<IProps, IState> {
 
 			resolve();
 		});
+	}
+
+	buildTree(trees: IClassifierTree[], groups: IClassifierGroup[]): TreeNode[] {
+		if (trees) {
+			return trees.map(tree => {
+
+				const result: TreeNode = {
+					selectable: false,
+					value: tree.uid,
+					title: <span><Icon type="folder" /> {tree.name}</span>,
+					dataRef: tree,
+					dataType: "Tree"
+				};
+
+				if (tree.children) {
+					result.children = this.buildTree(null, tree.children);
+				}
+
+				return result;
+			});
+		}
+		else if (groups) {
+			return groups && groups.map(group => {
+
+				const result: TreeNode = {
+					value: group.uid,
+					title: <span><Icon type="file" /> {group.name} ({group.code})</span>,
+					dataRef: group,
+					dataType: "Group"
+				};
+
+				if (group.children) {
+					result.children = this.buildTree(null, group.children);
+				}
+
+				return result;
+			});
+		}
 	}
 
 	render() {

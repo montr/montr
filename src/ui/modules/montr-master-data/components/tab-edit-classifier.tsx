@@ -1,12 +1,10 @@
 import * as React from "react";
-import { Redirect } from "react-router";
 import { Spin } from "antd";
 import { CompanyContextProps, withCompanyContext } from "@kompany/components";
 import { IFormField, IApiResult } from "@montr-core/models";
 import { DataForm } from "@montr-core/components";
 import { ClassifierService, ClassifierMetadataService } from "../services";
 import { IClassifier, IClassifierType } from "../models";
-import { RouteBuilder } from "..";
 
 interface IProps extends CompanyContextProps {
 	type: IClassifierType;
@@ -17,7 +15,6 @@ interface IProps extends CompanyContextProps {
 interface IState {
 	loading: boolean;
 	fields?: IFormField[];
-	redirect?: string;
 }
 
 class _TabEditClassifier extends React.Component<IProps, IState> {
@@ -87,7 +84,7 @@ class _TabEditClassifier extends React.Component<IProps, IState> {
 			const result = await this._classifierService.insert(companyUid, { typeCode: type.code, item: values });
 
 			if (result.success) {
-				this.setState({ redirect: RouteBuilder.editClassifier(type.code, result.uid) });
+				if (onDataChange) await onDataChange(result);
 			}
 
 			return result;
@@ -96,12 +93,7 @@ class _TabEditClassifier extends React.Component<IProps, IState> {
 
 	render = () => {
 		const { data } = this.props,
-			{ redirect, fields } = this.state;
-
-		if (redirect) {
-			this.setState({ redirect: null });
-			return <Redirect to={redirect} />
-		}
+			{ fields } = this.state;
 
 		return (
 			<Spin spinning={this.state.loading}>

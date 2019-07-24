@@ -84,7 +84,16 @@ class _EditClassifier extends React.Component<IProps, IState> {
 	}
 
 	handleDataChange = (data: IClassifier) => {
-		this.setState({ data });
+		const { typeCode, uid } = this.props.match.params;
+
+		if (uid) {
+			this.setState({ data });
+		}
+		else {
+			const path = RouteBuilder.editClassifier(typeCode, data.uid);
+
+			this.props.history.push(path)
+		}
 	}
 
 	handleTabChange = (tabKey: string) => {
