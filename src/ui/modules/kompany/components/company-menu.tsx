@@ -7,7 +7,7 @@ class _CompanyMenu extends React.Component<MenuProps & CompanyContextProps> {
 
 	render() {
 
-		const { currentCompany, companyList, registerCompany, manageCompany, switchCompany, onMouseEnter, ...props } = this.props;
+		const { currentCompany, companyList, registerCompany, manageCompany, switchCompany, onMouseEnter, onSelect, ...props } = this.props;
 
 		if (currentCompany) {
 			return <>
@@ -37,7 +37,7 @@ class _CompanyMenu extends React.Component<MenuProps & CompanyContextProps> {
 				</Menu.SubMenu>
 
 				<Menu.Divider {...props} />
-			</>;
+			</>
 		}
 
 		return null;
