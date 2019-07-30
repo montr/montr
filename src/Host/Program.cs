@@ -23,7 +23,7 @@ namespace Host
 						.MinimumLevel.Override("System", LogEventLevel.Warning)
 						.MinimumLevel.Override("Microsoft.AspNetCore.Authentication", LogEventLevel.Information)
 						.Enrich.FromLogContext()
-						.WriteTo.File($"../../.logs/{typeof(Startup).Namespace}-{context.HostingEnvironment.EnvironmentName}.log")
+						.WriteTo.File($"../../../.logs/{typeof(Startup).Namespace}-{context.HostingEnvironment.EnvironmentName}.log")
 						.WriteTo.Console(outputTemplate: "{Timestamp:o} [{Level:w4}] {SourceContext} - {Message:lj}{NewLine}{Exception}");
 				});
 
