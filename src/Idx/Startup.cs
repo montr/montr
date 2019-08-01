@@ -13,6 +13,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Idx.Services;
 using LinqToDB.Mapping;
 using DbContext = Idx.Entities.DbContext;
+using Microsoft.IdentityModel.Tokens;
+using System.Security.Cryptography;
 
 namespace Idx
 {
@@ -140,7 +142,10 @@ namespace Idx
 			}
 			else
 			{
-				throw new Exception("need to configure key material");
+				// todo: use one certificate for all instances
+				builder.AddSigningCredential(new Microsoft.IdentityModel.Tokens.SigningCredentials(
+					new RsaSecurityKey(new RSACryptoServiceProvider(2048)), SecurityAlgorithms.RsaSha256Signature
+				));
 			}
 
 			services
