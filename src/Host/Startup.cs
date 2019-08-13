@@ -67,6 +67,8 @@ namespace Host
 				mvc.AddApplicationPart(assembly);
 			}
 
+			Microsoft.IdentityModel.Logging.IdentityModelEventSource.ShowPII = true;
+
 			services.AddOpenIdApiAuthentication(
 				Configuration.GetSection("OpenId").Get<OpenIdOptions>());
 

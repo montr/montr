@@ -1,4 +1,3 @@
-src/ui
 **/.dockerignore
 **/.env
 **/.git
@@ -10,6 +9,7 @@ src/ui
 **/charts
 **/bin
 **/obj
+**/node_modules/
 **/Dockerfile
 **/Dockerfile.develop
 **/docker-compose.yml

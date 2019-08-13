@@ -6,10 +6,10 @@ FROM mcr.microsoft.com/dotnet/core/sdk:2.2-alpine AS build
 WORKDIR /src
 COPY ./src .
 WORKDIR /src/Idx
-RUN dotnet build "Idx.csproj" -c Debug -o /app
+# RUN dotnet build "Idx.csproj" --configuration Release --output /app
 
 FROM build AS publish
-RUN dotnet publish "Idx.csproj" -c Debug -o /app
+RUN dotnet publish "Idx.csproj" --configuration Release --output /app
 
 FROM base AS final
 WORKDIR /app

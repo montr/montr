@@ -144,7 +144,7 @@ namespace Idx
 			{
 				// todo: use one certificate for all instances
 				builder.AddSigningCredential(new Microsoft.IdentityModel.Tokens.SigningCredentials(
-					new RsaSecurityKey(new RSACryptoServiceProvider(2048)), SecurityAlgorithms.RsaSha256Signature
+					new RsaSecurityKey(RSA.Create(2048)), SecurityAlgorithms.RsaSha256Signature
 				));
 			}
 

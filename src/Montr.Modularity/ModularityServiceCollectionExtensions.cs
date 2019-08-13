@@ -15,6 +15,11 @@ namespace Montr.Modularity
 		{
 			var allAssemblies = AppDomain.CurrentDomain.GetAssemblies();
 
+			if (logger.IsEnabled(LogLevel.Information))
+			{
+				logger.LogInformation($"Preloading assemblies from {AppDomain.CurrentDomain.BaseDirectory}");
+			}
+
 			foreach (var file in Directory.EnumerateFiles(AppDomain.CurrentDomain.BaseDirectory, "*.dll"))
 			{
 				if (allAssemblies.FirstOrDefault(
