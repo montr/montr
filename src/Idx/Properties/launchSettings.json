@@ -1,4 +1,4 @@
-{
+﻿{
   "iisSettings": {
     "windowsAuthentication": false,
     "anonymousAuthentication": true,
@@ -19,21 +19,10 @@
       "commandName": "Project",
       "launchBrowser": true,
       "environmentVariables": {
-        "ASPNETCORE_ENVIRONMENT": "Development"
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "CLIENT_URLS": "http://tendr.montr.io:5000 http://app.tendr.montr.io:5000"
       },
       "applicationUrl": "https://idx.montr.io:5051;http://idx.montr.io:5050"
-    },
-    "Docker": {
-      "commandName": "Docker",
-      "launchBrowser": true,
-      "launchUrl": "{Scheme}://{ServiceHost}:{ServicePort}",
-      "environmentVariables": {
-        "ASPNETCORE_URLS": "https://+:443;http://+:80",
-        "ASPNETCORE_HTTPS_PORT": "44335"
-      },
-      "httpPort": 62189,
-      "useSSL": true,
-      "sslPort": 44335
     }
   }
 }

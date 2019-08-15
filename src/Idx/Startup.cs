@@ -33,6 +33,12 @@ namespace Idx
 		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
 		{
+			var clientUrlsEnv = System.Environment.GetEnvironmentVariable("CLIENT_URLS");
+
+			var clientUrls = (clientUrlsEnv != null)
+				? clientUrlsEnv.Split(new[] {' ', ','}, StringSplitOptions.RemoveEmptyEntries)
+				: new string[0];
+
 			services.Configure<CookiePolicyOptions>(options =>
 			{
 				// This lambda determines whether user consent for non-essential cookies is needed for a given request.
@@ -68,9 +74,7 @@ namespace Idx
 				options.AddPolicy("default", policy =>
 				{
 					policy.WithOrigins(
-							// "http://kompany.montr.io:5010",
-							"http://tendr.montr.io:5000",
-							"http://app.tendr.montr.io:5000")
+						clientUrls)
 						.AllowAnyHeader()
 						.AllowAnyMethod();
 				});
@@ -132,7 +136,7 @@ namespace Idx
 				.AddInMemoryPersistedGrants()
 				.AddInMemoryIdentityResources(Config.GetIdentityResources())
 				.AddInMemoryApiResources(Config.GetApiResources())
-				.AddInMemoryClients(Config.GetClients())
+				.AddInMemoryClients(Config.GetClients(clientUrls))
 
 				.AddAspNetIdentity<DbUser>();
 

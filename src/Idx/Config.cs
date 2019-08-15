@@ -1,6 +1,7 @@
 ﻿using IdentityServer4;
 using IdentityServer4.Models;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Idx
 {
@@ -28,7 +29,7 @@ namespace Idx
 		}
 
 		// clients want to access resources (aka scopes)
-		public static IEnumerable<Client> GetClients()
+		public static IEnumerable<Client> GetClients(ICollection<string> clientUrls)
 		{
 			return new List<Client>
 			{
@@ -46,17 +47,9 @@ namespace Idx
 						new Secret("secret".Sha256())
 					},
 
-					RedirectUris =
-					{
-						"http://tendr.montr.io:5000/signin-oidc",
-						"http://app.tendr.montr.io:5000/signin-oidc"
-					},
-					PostLogoutRedirectUris =
-					{
-						"http://tendr.montr.io:5000/signout-callback-oidc",
-						"http://app.tendr.montr.io:5000/signout-callback-oidc",
-					},
-					AllowedCorsOrigins = { "http://app.tendr.montr.io:5000" },
+					RedirectUris = clientUrls.Select(x => x + "/signin-oidc").ToList(),
+					PostLogoutRedirectUris = clientUrls.Select(x => x + "/signout-callback-oidc").ToList(),
+					AllowedCorsOrigins = clientUrls,
 
 					AllowedScopes =
 					{
@@ -66,32 +59,7 @@ namespace Idx
 					},
 					AllowOfflineAccess = true
 				},
-				/*new Client
-				{
-					ClientId = "kompany",
-					ClientName = "Kompany",
-					AllowedGrantTypes = GrantTypes.HybridAndClientCredentials,
 
-					RequireConsent = false,
-
-					ClientSecrets =
-					{
-						new Secret("secret".Sha256())
-					},
-
-					RedirectUris = { "http://kompany.montr.io:5010/signin-oidc" },
-					PostLogoutRedirectUris = { "http://kompany.montr.io:5010/signout-callback-oidc" },
-					AllowedCorsOrigins = { "http://kompany.montr.io:5010" },
-
-					AllowedScopes =
-					{
-						IdentityServerConstants.StandardScopes.OpenId,
-						IdentityServerConstants.StandardScopes.Profile,
-						"tendr"
-					},
-
-					AllowOfflineAccess = true
-				},*/
 				new Client
 				{
 					ClientId = "ui",
@@ -108,28 +76,9 @@ namespace Idx
 					AccessTokenLifetime = 360, // seconds
 					IdentityTokenLifetime = 360, // seconds
 
-					RedirectUris =
-					{
-						// "http://kompany.montr.io:5010/signin-oidc",
-						// "http://kompany.montr.io:5010/silent-renew-oidc",
-						"http://tendr.montr.io:5000/signin-oidc",
-						"http://tendr.montr.io:5000/silent-renew-oidc",
-						"http://app.tendr.montr.io:5000/signin-oidc",
-						"http://app.tendr.montr.io:5000/silent-renew-oidc",
-					},
-
-					PostLogoutRedirectUris =
-					{
-						// "http://kompany.montr.io:5010/signout-callback-oidc",
-						"http://tendr.montr.io:5000/signout-callback-oidc",
-						"http://app.tendr.montr.io:5000/signout-callback-oidc",
-					},
-
-					AllowedCorsOrigins = {
-						// "http://kompany.montr.io:5010",
-						"http://tendr.montr.io:5000",
-						"http://app.tendr.montr.io:5000",
-					},
+					RedirectUris = clientUrls.SelectMany(x => new[] { x + "/signin-oidc", x + "/silent-renew-oidc" } ).ToList(),
+					PostLogoutRedirectUris = clientUrls.Select(x => x + "/signout-callback-oidc").ToList(),
+					AllowedCorsOrigins = clientUrls,
 
 					AllowedScopes =
 					{
