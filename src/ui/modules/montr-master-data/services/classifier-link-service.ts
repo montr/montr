@@ -12,14 +12,14 @@ interface IClassifierLinkSearchRequest {
 export class ClassifierLinkService extends Fetcher {
 
 	list = async (companyUid: Guid, request: IClassifierLinkSearchRequest): Promise<IDataResult<IClassifierLink>> => {
-		return this.post(`${Constants.baseURL}/classifierLink/list`, { companyUid, ...request });
+		return this.post(`${Constants.apiURL}/classifierLink/list`, { companyUid, ...request });
 	};
 
 	insert = async (companyUid: Guid, typeCode: string, groupUid: Guid, itemUid: string | Guid): Promise<IApiResult> => {
-		return this.post(`${Constants.baseURL}/classifierLink/insert`, { companyUid, typeCode, groupUid, itemUid });
+		return this.post(`${Constants.apiURL}/classifierLink/insert`, { companyUid, typeCode, groupUid, itemUid });
 	};
 
 	delete = async (companyUid: Guid, typeCode: string, groupUid: Guid, itemUid: string | Guid): Promise<IApiResult> => {
-		return this.post(`${Constants.baseURL}/classifierLink/delete`, { companyUid, typeCode, groupUid, itemUid });
+		return this.post(`${Constants.apiURL}/classifierLink/delete`, { companyUid, typeCode, groupUid, itemUid });
 	};
 }

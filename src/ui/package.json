@@ -4,8 +4,8 @@
 	"description": "",
 	"main": "index.js",
 	"scripts": {
-		"build": "webpack",
-		"start": "react-scripts-ts start",
+		"build": "webpack --config webpack.prod.js",
+		"start": "webpack --config webpack.dev.js --watch",
 		"test": "echo \"Error: no test specified\" && exit 1"
 	},
 	"author": "",
@@ -37,6 +37,7 @@
 		"typescript": "^3.5.3",
 		"webpack": "^4.39.2",
 		"webpack-bundle-analyzer": "^3.4.1",
-		"webpack-cli": "^3.3.6"
+		"webpack-cli": "^3.3.6",
+		"webpack-merge": "^4.2.1"
 	}
 }

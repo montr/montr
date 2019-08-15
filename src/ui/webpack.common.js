@@ -1,16 +1,9 @@
 const path = require("path");
-const webpack = require("webpack");
 const tsImportPluginFactory = require("ts-import-plugin")
-const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
-
-const Globals = {
-	"COOKIE_DOMAIN": JSON.stringify(".montr.io"),
-	"KOMPANY_APP_URL": JSON.stringify("http://tendr.montr.io:5000")
-};
 
 module.exports = {
 	// mode: "production",
-	mode: "development",
+	mode: process.env.test,
 	entry: {
 		"tendr": "./modules/tendr/public.tsx",
 		"tendr.app": "./modules/tendr/app.tsx",
@@ -30,10 +23,6 @@ module.exports = {
 			return null; */
 		}
 	},
-
-	// Enable sourcemaps for debugging webpack"s output.
-	devtool: "source-map",
-
 	resolve: {
 		alias: {
 			"@montr-core": path.resolve(__dirname, "modules/montr-core/"),
@@ -42,14 +31,6 @@ module.exports = {
 		},
 		extensions: [".ts", ".tsx", ".js", ".json"]
 	},
-
-	plugins: [
-		new webpack.DefinePlugin({
-			...Globals
-		}),
-		// new BundleAnalyzerPlugin()
-	],
-
 	module: {
 		rules: [
 			{
@@ -77,8 +58,6 @@ module.exports = {
 				enforce: "pre", exclude: [/mutationobserver-shim/g]
 			},
 
-			// { test: /\.css$/, use: [ "style-loader", "css-loader" ] },
-
 			{
 				test: /\.less$/, use: [
 					"style-loader",
@@ -101,14 +80,5 @@ module.exports = {
 				]
 			},
 		],
-	},
-
-	// When importing a module whose path matches one of the following, just
-	// assume a corresponding global variable exists and use that instead.
-	// This is important because it allows us to avoid bundling all of our
-	// dependencies, which allows browsers to cache those libraries between builds.
-	externals: {
-		// "react": "React",
-		// "react-dom": "ReactDOM"
 	}
 };

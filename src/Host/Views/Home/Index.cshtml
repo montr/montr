@@ -1,18 +1,24 @@
 ﻿<!DOCTYPE html>
 
+@{
+	var script =
+		Context.Request.Host.Host.Contains("app.", StringComparison.OrdinalIgnoreCase)
+		? "/assets/tendr.app.js" : "/assets/tendr.js";
+}
+
 <html>
-	<head>
-		<title>Montr</title>
-	</head>
-	<body>
-		<div id="root"></div>
-		@if (Context.Request.Host.Host == "app.tendr.montr.io")
-		{
-			<script src="/assets/tendr.app.js"></script>
-		}
-		else
-		{
-			<script src="/assets/tendr.js"></script>
-		}
-	</body>
+<head>
+	<meta name="viewport" content="width=device-width" />
+	<title>Montr</title>
+</head>
+<body>
+	<div id="root"></div>
+	<script>
+		var COOKIE_DOMAIN = "@Environment.GetEnvironmentVariable("COOKIE_DOMAIN")";
+		var AUTHORITY_APP_URL = "@Environment.GetEnvironmentVariable("AUTHORITY_APP_URL")";
+		var PUBLIC_APP_URL = "@Environment.GetEnvironmentVariable("PUBLIC_APP_URL")";
+		var PRIVATE_APP_URL = "@Environment.GetEnvironmentVariable("PRIVATE_APP_URL")";
+	</script>
+	<script src="@script"></script>
+</body>
 </html>

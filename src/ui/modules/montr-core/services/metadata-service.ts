@@ -7,7 +7,7 @@ export class MetadataService extends Fetcher {
 	load = async<TEntity>(viewId: string, componentToClass?: (component: string) => React.ComponentClass): Promise<IDataView<TEntity>> => {
 
 		const data: IDataView<TEntity> =
-			await this.post(`${Constants.baseURL}/Metadata/View`, { viewId: viewId });
+			await this.post(`${Constants.apiURL}/Metadata/View`, { viewId: viewId });
 
 		if (componentToClass) {
 			data.panes && data.panes.forEach((pane) => {

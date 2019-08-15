@@ -68,7 +68,7 @@ namespace Idx
 				options.AddPolicy("default", policy =>
 				{
 					policy.WithOrigins(
-							"http://kompany.montr.io:5010",
+							// "http://kompany.montr.io:5010",
 							"http://tendr.montr.io:5000",
 							"http://app.tendr.montr.io:5000")
 						.AllowAnyHeader()

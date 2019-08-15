@@ -1,9 +1,10 @@
 import { Log, User, UserManager } from "oidc-client";
 import { message } from "antd";
+import { Constants } from "../";
 import { NavigationService } from "./navigation-service";
 
-class Constants {
-	public static authority = "http://idx.montr.io:5050";
+class AuthConstants {
+	public static authority = Constants.authorityURL;
 	public static clientId = "ui";
 	public static clientRoot = window.location.origin;
 	public static clientScope = "openid profile email tendr";
@@ -33,15 +34,15 @@ export class AuthService {
 		// https://github.com/IdentityModel/oidc-client-js/wiki
 		// https://openid.net/specs/openid-connect-core-1_0.html#Authentication
 		const settings = {
-			authority: Constants.authority,
-			client_id: Constants.clientId,
-			redirect_uri: Constants.clientRoot + Constants.RedirectUri,
-			silent_redirect_uri: Constants.clientRoot + Constants.SilentRedirectUri,
-			post_logout_redirect_uri: Constants.clientRoot + Constants.PostLogoutRedirectUri,
+			authority: AuthConstants.authority,
+			client_id: AuthConstants.clientId,
+			redirect_uri: AuthConstants.clientRoot + AuthConstants.RedirectUri,
+			silent_redirect_uri: AuthConstants.clientRoot + AuthConstants.SilentRedirectUri,
+			post_logout_redirect_uri: AuthConstants.clientRoot + AuthConstants.PostLogoutRedirectUri,
 			// revokeAccessTokenOnSignout: true,
 			// response_type: "id_token token",
 			response_type: "code",
-			scope: Constants.clientScope,
+			scope: AuthConstants.clientScope,
 			automaticSilentRenew: runTasks,
 			monitorSession: runTasks
 		};
@@ -86,28 +87,28 @@ export class AuthService {
 		const url = this._navigator.getUrl();
 
 		return (
-			url.indexOf(Constants.RedirectUri) != -1 ||
-			url.indexOf(Constants.SilentRedirectUri) != -1 ||
-			url.indexOf(Constants.PostLogoutRedirectUri) != -1
+			url.indexOf(AuthConstants.RedirectUri) != -1 ||
+			url.indexOf(AuthConstants.SilentRedirectUri) != -1 ||
+			url.indexOf(AuthConstants.PostLogoutRedirectUri) != -1
 		);
 	}
 
 	public processCallback() {
 		const url = this._navigator.getUrl();
 
-		if (url.indexOf(Constants.RedirectUri) != -1) {
+		if (url.indexOf(AuthConstants.RedirectUri) != -1) {
 			this._userManager.signinRedirectCallback(url)
 				.then((user: User) => {
 					this.redirectCallback(user);
 				}).catch(function (e) {
 					console.error(e);
 				});
-		} else if (url.indexOf(Constants.SilentRedirectUri) != -1) {
+		} else if (url.indexOf(AuthConstants.SilentRedirectUri) != -1) {
 			this._userManager.signinSilentCallback(url)
 				.catch(function (e) {
 					console.error(e);
 				});
-		} else if (url.indexOf(Constants.PostLogoutRedirectUri) != -1) {
+		} else if (url.indexOf(AuthConstants.PostLogoutRedirectUri) != -1) {
 			this._userManager.signoutRedirectCallback(url)
 				.then((user: User) => {
 					this.redirectCallback(user);

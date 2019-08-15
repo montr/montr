@@ -112,7 +112,7 @@ class _SearchClassifierType extends React.Component<IProps, IState> {
 				<DataTable
 					rowKey="uid"
 					viewId={`ClassifierType/Grid/`}
-					loadUrl={`${Constants.baseURL}/classifierType/list/`}
+					loadUrl={`${Constants.apiURL}/classifierType/list/`}
 					onLoadData={this.onLoadTableData}
 					onSelectionChange={this.onSelectionChange}
 					updateToken={updateTableToken}

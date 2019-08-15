@@ -1,8 +1,9 @@
 import * as React from "react";
 import Cookies from "universal-cookie";
 import { ICompany } from "../models";
-import { CompanyService, Constants } from "../services";
+import { CompanyService, } from "../services";
 import { CompanyContextProps, CompanyContext } from "./";
+import { Constants } from "@montr-core/.";
 import { Guid } from "@montr-core/models";
 import { NavigationService, NotificationService } from "@montr-core/services";
 
@@ -37,11 +38,11 @@ export class CompanyContextProvider extends React.Component<any, State> {
 	registerCompany = (): void => {
 		const returnUrl = encodeURI(this._navigation.getUrl());
 		this._navigation.navigate(
-			`${Constants.baseURL}/register/company/?${Constants.returnUrlParam}=${returnUrl}`);
+			`${Constants.publicURL}/register/company/?${Constants.returnUrlParam}=${returnUrl}`);
 	}
 
 	manageCompany = (): void => {
-		this._navigation.navigate(`${Constants.baseURL}/manage/`);
+		this._navigation.navigate(`${Constants.publicURL}/manage/`);
 	}
 
 	switchCompany = async (companyUid?: Guid) => {

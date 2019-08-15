@@ -1,6 +1,6 @@
 import * as React from "react";
 import { BrowserRouter as Router } from "react-router-dom";
-import { LocaleProvider, Layout } from "antd";
+import { ConfigProvider, Layout } from "antd";
 import ru_RU from "antd/lib/locale-provider/ru_RU";
 import { Routes } from ".";
 import { Routes as MasterDataRoutes } from "@montr-master-data/.";
@@ -35,7 +35,7 @@ export class App extends React.Component<IProps, IState> {
 
 		return (
 			<Router>
-				<LocaleProvider locale={ru_RU}>
+				<ConfigProvider locale={ru_RU}>
 					<UserContextProvider>
 						<CompanyContextProvider>
 							<AuthCallbackHandler>
@@ -70,7 +70,7 @@ export class App extends React.Component<IProps, IState> {
 							</AuthCallbackHandler>
 						</CompanyContextProvider>
 					</UserContextProvider>
-				</LocaleProvider>
+				</ConfigProvider>
 			</Router >
 		);
 	}

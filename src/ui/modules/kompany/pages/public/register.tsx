@@ -1,9 +1,10 @@
 import * as React from "react";
 import { Form, Input, Checkbox, Button, Radio, Modal, message } from "antd";
 import { FormComponentProps } from "antd/lib/form";
-import { CompanyService, Constants } from "../../services";
+import { CompanyService } from "../../services";
 import { RadioChangeEvent } from "antd/lib/radio/interface";
 import { NavigationService } from "@montr-core/services";
+import { Constants } from "@montr-core/.";
 import { withCompanyContext, CompanyContextProps } from "@kompany/components";
 
 interface IProps extends CompanyContextProps, FormComponentProps {

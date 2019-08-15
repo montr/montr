@@ -1,6 +1,6 @@
 import * as React from "react";
 import { BrowserRouter as Router } from "react-router-dom";
-import { LocaleProvider, Layout, Breadcrumb } from "antd";
+import { ConfigProvider, Layout, Breadcrumb } from "antd";
 import ru_RU from "antd/lib/locale-provider/ru_RU";
 import { AuthCallbackHandler, UserContextProvider, DataMenu } from "@montr-core/components";
 import { CompanyContextProvider, UserWithCompanyMenu } from "@kompany/components/.";
@@ -10,7 +10,7 @@ export class App extends React.Component {
 	render() {
 		return (
 			<Router>
-				<LocaleProvider locale={ru_RU}>
+				<ConfigProvider locale={ru_RU}>
 					<UserContextProvider>
 						<CompanyContextProvider>
 							<AuthCallbackHandler>
@@ -47,7 +47,7 @@ export class App extends React.Component {
 							</AuthCallbackHandler>
 						</CompanyContextProvider>
 					</UserContextProvider>
-				</LocaleProvider>
+				</ConfigProvider>
 			</Router>
 		);
 	}

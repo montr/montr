@@ -11,22 +11,22 @@ interface IInsertClassifierRequest {
 export class ClassifierService extends Fetcher {
 
 	get = async (companyUid: Guid, typeCode: string, uid: Guid | string): Promise<IClassifier> => {
-		return this.post(`${Constants.baseURL}/classifier/get`, { companyUid, typeCode, uid });
+		return this.post(`${Constants.apiURL}/classifier/get`, { companyUid, typeCode, uid });
 	};
 
 	export = async (companyUid: Guid, request: any): Promise<IClassifier> => {
-		return this.download(`${Constants.baseURL}/classifier/export`, { companyUid, ...request });
+		return this.download(`${Constants.apiURL}/classifier/export`, { companyUid, ...request });
 	};
 
 	insert = async (companyUid: Guid, request: IInsertClassifierRequest): Promise<IApiResult> => {
-		return this.post(`${Constants.baseURL}/classifier/insert`, { companyUid, ...request });
+		return this.post(`${Constants.apiURL}/classifier/insert`, { companyUid, ...request });
 	};
 
 	update = async (companyUid: Guid, typeCode: string, data: IClassifier): Promise<IApiResult> => {
-		return this.post(`${Constants.baseURL}/classifier/update`, { companyUid, typeCode, item: data });
+		return this.post(`${Constants.apiURL}/classifier/update`, { companyUid, typeCode, item: data });
 	};
 
 	delete = async (companyUid: Guid, typeCode: string, uids: string[] | number[]): Promise<number> => {
-		return this.post(`${Constants.baseURL}/classifier/delete`, { companyUid, typeCode, uids });
+		return this.post(`${Constants.apiURL}/classifier/delete`, { companyUid, typeCode, uids });
 	};
 }

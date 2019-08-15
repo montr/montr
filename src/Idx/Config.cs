@@ -66,7 +66,7 @@ namespace Idx
 					},
 					AllowOfflineAccess = true
 				},
-				new Client
+				/*new Client
 				{
 					ClientId = "kompany",
 					ClientName = "Kompany",
@@ -91,7 +91,7 @@ namespace Idx
 					},
 
 					AllowOfflineAccess = true
-				},
+				},*/
 				new Client
 				{
 					ClientId = "ui",
@@ -110,8 +110,8 @@ namespace Idx
 
 					RedirectUris =
 					{
-						"http://kompany.montr.io:5010/signin-oidc",
-						"http://kompany.montr.io:5010/silent-renew-oidc",
+						// "http://kompany.montr.io:5010/signin-oidc",
+						// "http://kompany.montr.io:5010/silent-renew-oidc",
 						"http://tendr.montr.io:5000/signin-oidc",
 						"http://tendr.montr.io:5000/silent-renew-oidc",
 						"http://app.tendr.montr.io:5000/signin-oidc",
@@ -120,13 +120,13 @@ namespace Idx
 
 					PostLogoutRedirectUris =
 					{
-						"http://kompany.montr.io:5010/signout-callback-oidc",
+						// "http://kompany.montr.io:5010/signout-callback-oidc",
 						"http://tendr.montr.io:5000/signout-callback-oidc",
 						"http://app.tendr.montr.io:5000/signout-callback-oidc",
 					},
 
 					AllowedCorsOrigins = {
-						"http://kompany.montr.io:5010",
+						// "http://kompany.montr.io:5010",
 						"http://tendr.montr.io:5000",
 						"http://app.tendr.montr.io:5000",
 					},

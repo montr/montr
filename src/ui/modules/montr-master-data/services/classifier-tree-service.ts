@@ -10,22 +10,22 @@ interface IClassifierTreeSearchRequest {
 export class ClassifierTreeService extends Fetcher {
 
 	list = async (companyUid: Guid, request: IClassifierTreeSearchRequest): Promise<IDataResult<IClassifierTree>> => {
-		return this.post(`${Constants.baseURL}/classifierTree/list`, { companyUid, ...request });
+		return this.post(`${Constants.apiURL}/classifierTree/list`, { companyUid, ...request });
 	};
 
 	get = async (companyUid: Guid, typeCode: string, uid: Guid | string): Promise<IClassifierTree> => {
-		return this.post(`${Constants.baseURL}/classifierTree/get`, { companyUid, typeCode, uid });
+		return this.post(`${Constants.apiURL}/classifierTree/get`, { companyUid, typeCode, uid });
 	};
 
 	insert = async (companyUid: Guid, typeCode: string, data: IClassifierTree): Promise<IApiResult> => {
-		return this.post(`${Constants.baseURL}/classifierTree/insert`, { companyUid, typeCode, item: data });
+		return this.post(`${Constants.apiURL}/classifierTree/insert`, { companyUid, typeCode, item: data });
 	};
 
 	update = async (companyUid: Guid, typeCode: string, data: IClassifierTree): Promise<IApiResult> => {
-		return this.post(`${Constants.baseURL}/classifierTree/update`, { companyUid, typeCode, item: data });
+		return this.post(`${Constants.apiURL}/classifierTree/update`, { companyUid, typeCode, item: data });
 	};
 
 	delete = async (companyUid: Guid, typeCode: string, uids: Guid[]): Promise<IApiResult> => {
-		return this.post(`${Constants.baseURL}/classifierTree/delete`, { companyUid, typeCode, uids });
+		return this.post(`${Constants.apiURL}/classifierTree/delete`, { companyUid, typeCode, uids });
 	};
 }

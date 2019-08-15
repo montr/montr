@@ -118,7 +118,7 @@ class _TabEditClassifierHierarchy extends React.Component<IProps, IState> {
 
 				<DataTable
 					viewId="ClassifierLink/Grid"
-					loadUrl={`${Constants.baseURL}/classifierLink/list/`}
+					loadUrl={`${Constants.apiURL}/classifierLink/list/`}
 					rowActions={rowActions}
 					onLoadData={this.onLoadTableData}
 					updateToken={updateTableToken}

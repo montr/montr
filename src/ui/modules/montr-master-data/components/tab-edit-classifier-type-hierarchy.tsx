@@ -119,7 +119,7 @@ class _TabEditClassifierTypeHierarchy extends React.Component<IProps, IState> {
 					rowKey="code"
 					viewId="ClassifierType/Grid/Hierarchy"
 					// todo: get url from service
-					loadUrl={`${Constants.baseURL}/classifierTree/list/`}
+					loadUrl={`${Constants.apiURL}/classifierTree/list/`}
 					rowActions={rowActions}
 					onLoadData={this.onLoadTableData}
 					updateToken={updateTableToken}

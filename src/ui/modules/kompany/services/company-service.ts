@@ -1,7 +1,7 @@
 import { Guid } from "@montr-core/models";
 import { Fetcher } from "@montr-core/services";
+import { Constants } from "@montr-core/.";
 import { ICompany } from "../models";
-import { Constants } from ".";
 
 export class CompanyService extends Fetcher {
 
