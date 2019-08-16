@@ -43,8 +43,8 @@ namespace Host
 				options.AddPolicy("default", policy =>
 				{
 					policy.WithOrigins(
-							"http://tendr.montr.io:5000",
-							"http://app.tendr.montr.io:5000")
+						System.Environment.GetEnvironmentVariable("PUBLIC_APP_URL"),
+						System.Environment.GetEnvironmentVariable("PRIVATE_APP_URL"))
 						.AllowAnyHeader()
 						.AllowAnyMethod();
 				});
