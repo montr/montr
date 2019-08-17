@@ -1,6 +1,7 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios"
-
 import { AuthService } from "./"
+
+axios.defaults.headers.common["Access-Control-Allow-Origin"] = "*";
 
 const authService = new AuthService();
 const authenticated = axios.create();

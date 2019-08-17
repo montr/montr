@@ -77,17 +77,15 @@ namespace Host
 
 		public void Configure(IApplicationBuilder app, IHostingEnvironment env)
 		{
-			app.UseWhen(
-				context => context.Request.Path.StartsWithSegments("/api") == false,
-				a =>
-				{
-					a.UseExceptionHandler("/Home/Error");
-				}
-			);
+			app.UseWhen(context => context.Request.Path.StartsWithSegments("/api") == false, x =>
+			{
+				x.UseExceptionHandler("/Home/Error");
+			});
+
+			app.UseCors("default");
 			app.UseHsts();
 			app.UseStaticFiles();
 			app.UseCookiePolicy();
-			app.UseCors("default");
 			app.UseAuthentication();
 
 			app.UseMvc(routes =>
