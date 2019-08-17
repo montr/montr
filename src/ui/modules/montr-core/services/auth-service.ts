@@ -1,4 +1,4 @@
-import { Log, User, UserManager } from "oidc-client";
+import { Log, User, UserManager, SignoutResponse } from "oidc-client";
 import { message } from "antd";
 import { Constants } from "../";
 import { NavigationService } from "./navigation-service";
@@ -99,7 +99,7 @@ export class AuthService {
 		if (url.indexOf(AuthConstants.RedirectUri) != -1) {
 			this._userManager.signinRedirectCallback(url)
 				.then((user: User) => {
-					this.redirectCallback(user);
+					this.signinRedirectCallback(user);
 				}).catch(function (e) {
 					console.error(e);
 				});
@@ -110,8 +110,8 @@ export class AuthService {
 				});
 		} else if (url.indexOf(AuthConstants.PostLogoutRedirectUri) != -1) {
 			this._userManager.signoutRedirectCallback(url)
-				.then((user: User) => {
-					this.redirectCallback(user);
+				.then((value: SignoutResponse) => {
+					this.signoutRedirectCallback(value);
 				}).catch(function (e) {
 					console.error(e);
 				});
@@ -144,10 +144,18 @@ export class AuthService {
 		};
 	}
 
-	private redirectCallback(user: User) {
+	private signinRedirectCallback(value: User) {
 		let return_uri;
-		if (user && user.state) {
-			return_uri = user.state.return_uri
+		if (value && value.state) {
+			return_uri = value.state.return_uri
+		}
+		this._navigator.navigate(return_uri || "/");
+	}
+
+	private signoutRedirectCallback(value: SignoutResponse) {
+		let return_uri;
+		if (value && value.state) {
+			return_uri = value.state.return_uri
 		}
 		this._navigator.navigate(return_uri || "/");
 	}
