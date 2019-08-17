@@ -1,14 +1,15 @@
 import * as React from "react";
 import { Steps } from "antd";
+import { Constants } from "@montr-core/.";
 import { Page } from "@montr-core/components";
 import { UserContextProps, withUserContext } from "@montr-core/components/"
 import { CompanyContextProps, withCompanyContext } from "@kompany/components";
 
-class Constants {
-	public static UserRegisterUri = "http://idx.montr.io:5050/Identity/Account/Register";
-	public static UserManageUri = "http://idx.montr.io:5050/Identity/Account/Manage";
+class RegistrationConstants {
+	public static UserRegisterUri = Constants.authorityURL + "/Identity/Account/Register";
+	public static UserManageUri = Constants.authorityURL + "/Identity/Account/Manage";
 
-	public static PrivateTenderUri = "http://app.tendr.montr.io:5000/";
+	public static PrivateTenderUri = Constants.privateURL;
 }
 
 const RegisterUser = (props: UserContextProps) => {
@@ -18,14 +19,14 @@ const RegisterUser = (props: UserContextProps) => {
 		return (
 			<p>
 				Пользователь <strong>{user.profile.name} ({user.profile.email})</strong> зарегистрирован.<br />
-				Вы можете изменить регистрационные данные в <a href={Constants.UserManageUri}>Личном кабинете</a>.
+				Вы можете изменить регистрационные данные в <a href={RegistrationConstants.UserManageUri}>Личном кабинете</a>.
 			</p>
 		);
 	}
 
 	return (
 		<p>
-			Зарегистрируйте пользователя пройдя по < a href={Constants.UserRegisterUri}> ссылке</a>.<br />
+			Зарегистрируйте пользователя пройдя по < a href={RegistrationConstants.UserRegisterUri}> ссылке</a>.<br />
 			Если вы уже зарегистрированы, войдите в систему пройдя по <a onClick={login}> ссылке</a >.
 		</p >
 	);
@@ -64,7 +65,7 @@ const StartWork = (props: UserContextProps & CompanyContextProps) => {
 	if (user && company) {
 		return (
 			<p>
-				Начните создавать свои торговые процедуры в <a href={Constants.PrivateTenderUri}>Личном кабинете</a>.
+				Начните создавать свои торговые процедуры в <a href={RegistrationConstants.PrivateTenderUri}>Личном кабинете</a>.
 			</p>
 		);
 	}

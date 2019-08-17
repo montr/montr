@@ -73,8 +73,8 @@ namespace Idx
 					RequireClientSecret = false,
 
 					AllowOfflineAccess = true, // This feature refresh token
-					AccessTokenLifetime = 360, // seconds
-					IdentityTokenLifetime = 360, // seconds
+					// AccessTokenLifetime = 360, // seconds
+					// IdentityTokenLifetime = 360, // seconds
 
 					RedirectUris = clientUrls.SelectMany(x => new[] { x + "/signin-oidc", x + "/silent-renew-oidc" } ).ToList(),
 					PostLogoutRedirectUris = clientUrls.Select(x => x + "/signout-callback-oidc").ToList(),

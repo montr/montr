@@ -10,7 +10,7 @@ namespace Montr.Data.Npgsql
 		public void ConfigureServices(IConfiguration configuration, IServiceCollection services)
 		{
 			NpgsqlLogManager.IsParameterLoggingEnabled = true;
-			NpgsqlLogManager.Provider = new ConsoleLoggingProvider(NpgsqlLogLevel.Debug, true, true);
+			// NpgsqlLogManager.Provider = new ConsoleLoggingProvider(NpgsqlLogLevel.Debug, true, true);
 		}
 	}
 }

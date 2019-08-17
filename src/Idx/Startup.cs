@@ -18,6 +18,14 @@ using System.Security.Cryptography;
 
 namespace Idx
 {
+	public class IdxServerOptions
+	{
+		public string PublicOrigin { get; set; }
+
+		// todo: temp solution, read client configuration from db
+		public string[] ClientUrls { get; set; }
+	}
+
 	public class Startup
 	{
 		public Startup(IHostingEnvironment environment, IConfiguration configuration)
@@ -30,14 +38,9 @@ namespace Idx
 
 		public IConfiguration Configuration { get; }
 
-		// This method gets called by the runtime. Use this method to add services to the container.
 		public void ConfigureServices(IServiceCollection services)
 		{
-			var clientUrlsEnv = System.Environment.GetEnvironmentVariable("CLIENT_URLS");
-
-			var clientUrls = (clientUrlsEnv != null)
-				? clientUrlsEnv.Split(new[] {' ', ','}, StringSplitOptions.RemoveEmptyEntries)
-				: new string[0];
+			var idxServerOptions = Configuration.GetSection("IdxServer").Get<IdxServerOptions>();
 
 			services.Configure<CookiePolicyOptions>(options =>
 			{
@@ -48,7 +51,7 @@ namespace Idx
 
 			var connectionString = Configuration.GetSection("ConnectionString")["ConnectionString"];
 
-			// Set connection configuration
+			// todo: use common library to setup connection
 			DataConnection
 				.AddConfiguration(
 					"Default",
@@ -73,8 +76,7 @@ namespace Idx
 			{
 				options.AddPolicy("default", policy =>
 				{
-					policy.WithOrigins(
-						clientUrls)
+					policy.WithOrigins(idxServerOptions.ClientUrls)
 						.AllowAnyHeader()
 						.AllowAnyMethod();
 				});
@@ -123,6 +125,7 @@ namespace Idx
 
 			var builder = services.AddIdentityServer(options =>
 				{
+					options.PublicOrigin = idxServerOptions.PublicOrigin;
 					options.Authentication.CookieAuthenticationScheme = IdentityConstants.ApplicationScheme;
 
 					options.Cors.CorsPolicyName = "default";
@@ -136,7 +139,7 @@ namespace Idx
 				.AddInMemoryPersistedGrants()
 				.AddInMemoryIdentityResources(Config.GetIdentityResources())
 				.AddInMemoryApiResources(Config.GetApiResources())
-				.AddInMemoryClients(Config.GetClients(clientUrls))
+				.AddInMemoryClients(Config.GetClients(idxServerOptions.ClientUrls))
 
 				.AddAspNetIdentity<DbUser>();
 

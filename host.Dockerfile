@@ -1,7 +1,7 @@
 FROM node:12-alpine AS node
 WORKDIR /ui
 COPY ./src/ui .
-RUN npm install && npm run build
+RUN npm install && npm run build-prod
 
 FROM mcr.microsoft.com/dotnet/core/aspnet:2.2-alpine AS base
 WORKDIR /app
