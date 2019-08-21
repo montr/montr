@@ -1,15 +1,16 @@
-using System;
+﻿using System;
+using Idx.Entities;
 using LinqToDB;
 using LinqToDB.Data;
 using LinqToDB.Identity;
 
-namespace Idx.Entities
+namespace Idx.Services
 {
 	public class DbConnectionFactory : IConnectionFactory
 	{
 		public IDataContext GetContext()
 		{
-			return new DbContext();
+			return new Montr.Data.Linq2Db.DbContext();
 		}
 
 		public DataConnection GetConnection()

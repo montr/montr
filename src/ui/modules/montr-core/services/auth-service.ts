@@ -15,7 +15,7 @@ class AuthConstants {
 }
 
 export class AuthService {
-	static instance: AuthService;
+	private static instance: AuthService;
 
 	private _userManager: UserManager;
 	private _navigator: NavigationService;
@@ -29,7 +29,7 @@ export class AuthService {
 		Log.level = Log.WARN;
 
 		// todo: normal check, to prevent cancelled .well-known/openid-configuration requests in iframe
-		const runTasks = (window.frameElement == null)
+		const runTasks = (window.frameElement == null);
 
 		// https://github.com/IdentityModel/oidc-client-js/wiki
 		// https://openid.net/specs/openid-connect-core-1_0.html#Authentication
@@ -83,32 +83,32 @@ export class AuthService {
 		AuthService.instance = this;
 	}
 
-	public isCallback() {
+	public isCallback(): boolean {
 		const url = this._navigator.getUrl();
 
 		return (
-			url.indexOf(AuthConstants.RedirectUri) != -1 ||
-			url.indexOf(AuthConstants.SilentRedirectUri) != -1 ||
-			url.indexOf(AuthConstants.PostLogoutRedirectUri) != -1
+			url.indexOf(AuthConstants.RedirectUri) !== -1 ||
+			url.indexOf(AuthConstants.SilentRedirectUri) !== -1 ||
+			url.indexOf(AuthConstants.PostLogoutRedirectUri) !== -1
 		);
 	}
 
-	public processCallback() {
+	public processCallback(): void {
 		const url = this._navigator.getUrl();
 
-		if (url.indexOf(AuthConstants.RedirectUri) != -1) {
+		if (url.indexOf(AuthConstants.RedirectUri) !== -1) {
 			this._userManager.signinRedirectCallback(url)
 				.then((user: User) => {
 					this.signinRedirectCallback(user);
 				}).catch(function (e) {
 					console.error(e);
 				});
-		} else if (url.indexOf(AuthConstants.SilentRedirectUri) != -1) {
+		} else if (url.indexOf(AuthConstants.SilentRedirectUri) !== -1) {
 			this._userManager.signinSilentCallback(url)
 				.catch(function (e) {
 					console.error(e);
 				});
-		} else if (url.indexOf(AuthConstants.PostLogoutRedirectUri) != -1) {
+		} else if (url.indexOf(AuthConstants.PostLogoutRedirectUri) !== -1) {
 			this._userManager.signoutRedirectCallback(url)
 				.then((value: SignoutResponse) => {
 					this.signoutRedirectCallback(value);
@@ -147,7 +147,7 @@ export class AuthService {
 	private signinRedirectCallback(value: User) {
 		let return_uri;
 		if (value && value.state) {
-			return_uri = value.state.return_uri
+			return_uri = value.state.return_uri;
 		}
 		this._navigator.navigate(return_uri || "/");
 	}
@@ -155,7 +155,7 @@ export class AuthService {
 	private signoutRedirectCallback(value: SignoutResponse) {
 		let return_uri;
 		if (value && value.state) {
-			return_uri = value.state.return_uri
+			return_uri = value.state.return_uri;
 		}
 		this._navigator.navigate(return_uri || "/");
 	}
@@ -164,6 +164,6 @@ export class AuthService {
 		// todo: add PR to rename addUserLoaded -> addAuthenticated
 		return this._userManager.events.addUserLoaded((user: User) => {
 			callback(user);
-		})
+		});
 	}
 }

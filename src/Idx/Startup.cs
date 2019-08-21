@@ -1,20 +1,16 @@
-﻿using System;
+﻿using System.Linq;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Idx.Entities;
-using LinqToDB.Data;
-using LinqToDB.DataProvider.PostgreSQL;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Idx.Services;
-using LinqToDB.Mapping;
-using DbContext = Idx.Entities.DbContext;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Cryptography;
+using Microsoft.Extensions.Logging;
+using Montr.Modularity;
 
 namespace Idx
 {
@@ -28,11 +24,15 @@ namespace Idx
 
 	public class Startup
 	{
-		public Startup(IHostingEnvironment environment, IConfiguration configuration)
+		public Startup(ILoggerFactory loggerFactory, IHostingEnvironment environment, IConfiguration configuration)
 		{
+			Logger = loggerFactory.CreateLogger<Startup>();
+
 			Environment = environment;
 			Configuration = configuration;
 		}
+
+		public ILogger Logger { get; }
 
 		public IHostingEnvironment Environment { get; }
 
@@ -40,37 +40,13 @@ namespace Idx
 
 		public void ConfigureServices(IServiceCollection services)
 		{
-			var idxServerOptions = Configuration.GetSection("IdxServer").Get<IdxServerOptions>();
-
 			services.Configure<CookiePolicyOptions>(options =>
 			{
-				// This lambda determines whether user consent for non-essential cookies is needed for a given request.
 				options.CheckConsentNeeded = context => true;
 				options.MinimumSameSitePolicy = SameSiteMode.None;
 			});
 
-			var connectionString = Configuration.GetSection("ConnectionString")["ConnectionString"];
-
-			// todo: use common library to setup connection
-			DataConnection
-				.AddConfiguration(
-					"Default",
-					connectionString,
-					new PostgreSQLDataProvider("Default", PostgreSQLVersion.v95));
-
-			DataConnection.DefaultConfiguration = "Default";
-			DbContext.MapSchema(MappingSchema.Default);
-
-			services
-				.AddIdentity<DbUser, DbRole>()
-				.AddLinqToDBStores(new DbConnectionFactory(),
-					typeof(Guid),
-					typeof(LinqToDB.Identity.IdentityUserClaim<Guid>),
-					typeof(LinqToDB.Identity.IdentityUserRole<Guid>),
-					typeof(LinqToDB.Identity.IdentityUserLogin<Guid>),
-					typeof(LinqToDB.Identity.IdentityUserToken<Guid>),
-					typeof(LinqToDB.Identity.IdentityRoleClaim<Guid>))
-				.AddDefaultTokenProviders();
+			var idxServerOptions = Configuration.GetSection("IdxServer").Get<IdxServerOptions>();
 
 			services.AddCors(options =>
 			{
@@ -82,29 +58,10 @@ namespace Idx
 				});
 			});
 
-			services.Configure<IdentityOptions>(options =>
-			{
-				options.User.RequireUniqueEmail = false;
+			var modules = services.AddModules(Configuration, Logger);
+			var assemblies = modules.Select(x => x.GetType().Assembly).ToArray();
 
-				/* // Password settings.
-				options.Password.RequireDigit = true;
-				options.Password.RequireLowercase = true;
-				options.Password.RequireNonAlphanumeric = true;
-				options.Password.RequireUppercase = true;
-				options.Password.RequiredLength = 6;
-				options.Password.RequiredUniqueChars = 1;
-
-				// Lockout settings.
-				options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
-				options.Lockout.MaxFailedAccessAttempts = 5;
-				options.Lockout.AllowedForNewUsers = true;
-
-				// User settings.
-				options.User.AllowedUserNameCharacters =
-					"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+"; */
-			});
-
-			services.AddMvc()
+			var mvc = services.AddMvc()
 				.SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
 				.AddRazorPagesOptions(options =>
 				{
@@ -113,15 +70,17 @@ namespace Idx
 					options.Conventions.AuthorizeAreaPage("Identity", "/Account/Logout");
 				});
 
+			foreach (var assembly in assemblies)
+			{
+				mvc.AddApplicationPart(assembly);
+			}
+
 			services.ConfigureApplicationCookie(options =>
 			{
 				options.LoginPath = "/Identity/Account/Login";
 				options.LogoutPath = "/Account/Logout";
 				options.AccessDeniedPath = "/Identity/Account/AccessDenied";
 			});
-
-			// using Microsoft.AspNetCore.Identity.UI.Services;
-			services.AddSingleton<IEmailSender, EmailSender>();
 
 			var builder = services.AddIdentityServer(options =>
 				{
@@ -175,17 +134,8 @@ namespace Idx
 
 		public void Configure(IApplicationBuilder app, IHostingEnvironment env)
 		{
-			/* if (env.IsDevelopment())
-			{
-				app.UseDeveloperExceptionPage();
-				app.UseDatabaseErrorPage();
-			}
-			else */
-			{
-				app.UseExceptionHandler("/Home/Error");
-				app.UseHsts();
-			}
-
+			app.UseExceptionHandler("/Home/Error");
+			app.UseHsts();
 			// app.UseHttpsRedirection();
 			app.UseStaticFiles();
 			app.UseCookiePolicy();

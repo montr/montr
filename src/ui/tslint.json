@@ -1,0 +1,23 @@
+{
+	"extends": [
+		"tslint:latest",
+		"tslint-react"
+	],
+	"linterOptions": {
+		"exclude": [
+			"config/**/*.js",
+			"node_modules/**/*.ts",
+			"coverage/lcov-report/*.js"
+		]
+	},
+	"rules": {
+		"indent": [
+			true,
+			"tabs"
+		],
+		"max-classes-per-file": false,
+		"typedef": [
+			false
+		]
+	}
+}

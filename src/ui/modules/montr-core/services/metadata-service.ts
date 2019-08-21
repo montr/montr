@@ -1,6 +1,6 @@
 import { Fetcher } from ".";
-import { IDataView, IPaneProps } from "../models";
 import { Constants } from "..";
+import { IDataView, IPaneProps } from "../models";
 
 export class MetadataService extends Fetcher {
 

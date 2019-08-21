@@ -28,12 +28,8 @@ namespace Host
 
 		public void ConfigureServices(IServiceCollection services)
 		{
-			/*services.AddLinq2Db(
-				Configuration.GetSection("ConnectionString").Get<ConnectionStringSettings>());*/
-
 			services.Configure<CookiePolicyOptions>(options =>
 			{
-				// This lambda determines whether user consent for non-essential cookies is needed for a given request.
 				options.CheckConsentNeeded = context => true;
 				options.MinimumSameSitePolicy = SameSiteMode.None;
 			});

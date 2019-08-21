@@ -13,7 +13,9 @@ namespace Montr.Modularity
 	{
 		public static ICollection<IModule> AddModules(this IServiceCollection services, IConfiguration configuration, ILogger logger)
 		{
-			var allAssemblies = AppDomain.CurrentDomain.GetAssemblies();
+			var allAssemblies = AppDomain.CurrentDomain.GetAssemblies()
+				.Where(x => x.IsDynamic == false) // exclude dynamic assemblies without location
+				.ToArray();
 
 			if (logger.IsEnabled(LogLevel.Information))
 			{

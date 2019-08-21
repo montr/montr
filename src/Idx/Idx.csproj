@@ -26,4 +26,9 @@
     <PackageReference Include="Serilog.Sinks.File" Version="4.0.0" />
   </ItemGroup>
 
+  <ItemGroup>
+    <ProjectReference Include="..\Montr.Data.Linq2Db\Montr.Data.Linq2Db.csproj" />
+    <ProjectReference Include="..\Montr.Modularity\Montr.Modularity.csproj" />
+  </ItemGroup>
+
 </Project>

@@ -5,7 +5,7 @@ using Npgsql.Logging;
 
 namespace Montr.Data.Npgsql
 {
-	public class Module: IModule
+	public class Module : IModule
 	{
 		public void ConfigureServices(IConfiguration configuration, IServiceCollection services)
 		{
