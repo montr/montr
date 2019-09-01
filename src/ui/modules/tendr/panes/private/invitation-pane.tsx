@@ -1,7 +1,8 @@
 import * as React from "react";
+import { Button, Icon } from "antd";
 import { IPaneProps } from "@montr-core/models";
 import { IEvent } from "../../models";
-import { IPaneComponent, DataTable } from "@montr-core/components";
+import { IPaneComponent, DataTable, Toolbar } from "@montr-core/components";
 
 interface IEditEventPaneProps extends IPaneProps<IEvent> {
 	data: IEvent;
@@ -15,6 +16,10 @@ export class InvitationPane extends React.Component<IEditEventPaneProps> {
 		this._formRef.save();
 	}
 
+	showAddModal = () => {
+		this.setState({ modalData: {} });
+	}
+
 	render() {
 		return <>
 			<ol>
@@ -24,6 +29,12 @@ export class InvitationPane extends React.Component<IEditEventPaneProps> {
 				<li>Выбор из своих контрагентов</li>
 				<li>Копирование приглашений из другой процедуры</li>
 			</ol>
+
+			<Toolbar>
+				<Button onClick={this.showAddModal}><Icon type="plus" /> Добавить</Button>
+			</Toolbar>
+
+			<div style={{ clear: "both" }} />
 
 			<DataTable
 				viewId="PrivateEventCounterpartyList/Grid"

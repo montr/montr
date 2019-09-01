@@ -10,22 +10,22 @@ using Montr.Tendr.Queries;
 namespace Montr.Tendr.Tests.QueryHandlers
 {
 	[TestClass]
-	public class GetEventListHandlerTests
+	public class GetInvitationListHandlerTests
 	{
 		[TestMethod]
-		public async Task GetEventList_ForNormalRequest_ReturnItems()
+		public async Task GetInvitationList_ForNormalRequest_ReturnItems()
 		{
 			// arrange
 			var cancellationToken = CancellationToken.None;
 			var dbContextFactory = new DefaultDbContextFactory();
 
-			var handler = new GetEventListHandler(dbContextFactory);
+			var handler = new GetInvitationListHandler(dbContextFactory);
 
 			// act
-			var command = new GetEventList
+			var command = new GetInvitationList
 			{
 				UserUid = Guid.NewGuid(),
-				Request = new EventSearchRequest
+				Request = new InvitationSearchRequest
 				{
 				}
 			};

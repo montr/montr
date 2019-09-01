@@ -12,39 +12,33 @@ using Montr.Tendr.Queries;
 
 namespace Montr.Tendr.Impl.QueryHandlers
 {
-	public class GetEventListHandler : IRequestHandler<GetEventList, SearchResult<Event>>
+	public class GetInvitationListHandler : IRequestHandler<GetInvitationList, SearchResult<Invitation>>
 	{
 		private readonly IDbContextFactory _dbContextFactory;
 
-		public GetEventListHandler(IDbContextFactory dbContextFactory)
+		public GetInvitationListHandler(IDbContextFactory dbContextFactory)
 		{
 			_dbContextFactory = dbContextFactory;
 		}
 
-		public async Task<SearchResult<Event>> Handle(GetEventList command, CancellationToken cancellationToken)
+		public async Task<SearchResult<Invitation>> Handle(GetInvitationList command, CancellationToken cancellationToken)
 		{
 			var request = command.Request;
 
 			using (var db = _dbContextFactory.Create())
 			{
-				var all = db.GetTable<DbEvent>();
+				var all = db.GetTable<DbInvitation>();
 
 				var data = await all
-					.Apply(request, x => x.Id, SortOrder.Descending)
-					.Select(x => new Event
+					.Apply(request, x => x.Uid, SortOrder.Descending)
+					.Select(x => new Invitation
 					{
 						Uid = x.Uid,
-						Id = x.Id,
-						ConfigCode = x.ConfigCode,
-						StatusCode = x.StatusCode,
-						CompanyUid = x.CompanyUid,
-						Name = x.Name,
-						Description = x.Description,
-						Url = "/events/edit/" + x.Id
+						CompanyUid = x.CompanyUid
 					})
 					.ToListAsync(cancellationToken);
 
-				var result = new SearchResult<Event>
+				var result = new SearchResult<Invitation>
 				{
 					TotalCount = all.Count(),
 					Rows = data
