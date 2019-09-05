@@ -34,7 +34,7 @@ namespace Montr.Tendr.Impl.QueryHandlers
 					.Select(x => new Invitation
 					{
 						Uid = x.Uid,
-						CompanyUid = x.CompanyUid
+						CounterpartyUid = x.CounterpartyUid
 					})
 					.ToListAsync(cancellationToken);
 

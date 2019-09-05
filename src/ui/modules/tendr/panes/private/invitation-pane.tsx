@@ -23,11 +23,12 @@ export class InvitationPane extends React.Component<IEditEventPaneProps> {
 	render() {
 		return <>
 			<ol>
-				<li>Ручное добавление</li>
-				<li>Импорт xsl и т.д.</li>
-				<li>Выбор из зарегистрированных в системе</li>
-				<li>Выбор из своих контрагентов</li>
-				<li>Копирование приглашений из другой процедуры</li>
+				<li>Manual add</li>
+				<li>Import from *.xls etc</li>
+				<li>Select from registered companies</li>
+				<li>Invite from companies catalogs</li>
+				<li>Select from counterparty classifier</li>
+				<li>Copy invitation from other event</li>
 			</ol>
 
 			<Toolbar>

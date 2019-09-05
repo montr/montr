@@ -6,6 +6,7 @@
 
 		public long Id { get; set; }
 
+		// todo: remove
 		public string ConfigCode { get; set; }
 
 		public string StatusCode { get; set; }

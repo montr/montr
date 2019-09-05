@@ -3,6 +3,8 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Montr.Core.Models;
+using Montr.Metadata.Models;
+using Montr.Tendr.Commands;
 using Montr.Tendr.Models;
 using Montr.Tendr.Queries;
 using Montr.Web.Services;
@@ -29,6 +31,14 @@ namespace Montr.Tendr.Controllers
 				UserUid = _currentUserProvider.GetUserUid(),
 				Request = request
 			});
+		}
+
+		[HttpPost]
+		public async Task<ApiResult> Insert(InsertInvitation request)
+		{
+			request.UserUid = _currentUserProvider.GetUserUid();
+
+			return await _mediator.Send(request);
 		}
 	}
 }

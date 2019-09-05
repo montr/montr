@@ -4,6 +4,10 @@
 	{
 		public System.Guid Uid { get; set; }
 
-		public System.Guid CompanyUid  { get; set; }
+		public System.Guid EventUid  { get; set; }
+
+		public string StatusCode { get; set; }
+
+		public System.Guid CounterpartyUid  { get; set; }
 	}
 }
