@@ -31,6 +31,8 @@ namespace Montr.Tendr.Tests.CommandHandlers
 					CompanyUid = Guid.NewGuid(),
 					Item = new Invitation
 					{
+						EventUid = Guid.Parse("436c290c-37b2-11e9-88fe-00ff279ba9e1"),
+						CounterpartyUid = Guid.Parse("1bef28d6-2255-416c-a706-008e0c179508")
 					}
 				};
 

@@ -144,7 +144,7 @@ namespace Montr.Metadata.Services
 				result.Columns = new List<DataColumn>
 				{
 					new DataColumn { Key = "name", Name = "Организация", Sortable = true, Width = 400 },
-					new DataColumn { Key = "email", Name = "E-mail", Sortable = true, Width = 100 },
+					new DataColumn { Key = "email", Name = "Email", Sortable = true, Width = 100 },
 					// new DataColumn { Key = "description", Name = "Описание", Width = 300 },
 				};
 			}
@@ -166,6 +166,16 @@ namespace Montr.Metadata.Services
 					new DataPane { Key = "tab_6", Name = "Критерии оценки (анкета?)" },
 					new DataPane { Key = "tab_7", Name = "Документы (поле?)" },
 					new DataPane { Key = "tab_8", Name = "Контактные лица (поле?)" },
+				};
+			}
+
+			if (viewId == "Event/Invitation/Form")
+			{
+				result.Fields = new List<FormField>
+				{
+					new StringField { Key = "name", Name = "Обращение" },
+					new StringField { Key = "email", Name = "Email" },
+					new ClassifierField { Key = "counterpartyUid", Name = "Контрагент", TypeCode = "counterparty", Required = true }
 				};
 			}
 
