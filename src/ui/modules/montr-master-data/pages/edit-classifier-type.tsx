@@ -106,7 +106,7 @@ class _EditClassifierType extends React.Component<IProps, IState> {
 		return (
 			<Page title={title}>
 				<Spin spinning={loading}>
-					<Tabs defaultActiveKey={tabKey} onChange={this.handleTabChange}>
+					<Tabs size="small" defaultActiveKey={tabKey} onChange={this.handleTabChange}>
 						<Tabs.TabPane key="info" tab="Информация">
 							<TabEditClassifierType data={data} onDataChange={this.handleDataChange} />
 						</Tabs.TabPane>

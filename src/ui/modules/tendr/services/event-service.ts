@@ -14,7 +14,7 @@ export class EventService extends Fetcher {
 		return this.post(`${Constants.apiURL}/Events/List`);
 	};
 
-	get = async (id: number): Promise<IEvent> => {
+	get = async (id: number | string): Promise<IEvent> => {
 		return this.post(`${Constants.apiURL}/Events/Get`, { id: id });
 	};
 
@@ -26,11 +26,11 @@ export class EventService extends Fetcher {
 		return this.post(`${Constants.apiURL}/Events/Update`, data);
 	};
 
-	publish = async (id: number): Promise<IApiResult> => {
+	publish = async (id: number | string): Promise<IApiResult> => {
 		return this.post(`${Constants.apiURL}/Events/Publish`, { id: id });
 	};
 
-	cancel = async (id: number): Promise<IApiResult> => {
+	cancel = async (id: number | string): Promise<IApiResult> => {
 		return this.post(`${Constants.apiURL}/Events/Cancel`, { id: id });
 	};
 

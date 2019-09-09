@@ -153,19 +153,19 @@ namespace Montr.Metadata.Services
 			{
 				result.Panes = new List<DataPane>
 				{
-					new DataPane { Key = "tab_info", Name = "Информация", Icon = "profile",
+					new DataPane { Key = "info", Name = "Информация", Icon = "profile",
 						Component = "panes/private/EditEventPane" },
-					new DataPane { Key = "tab_invitations", Name = "Приглашения (0)", Icon = "solution",
+					new DataPane { Key = "invitations", Name = "Приглашения (0)", Icon = "solution",
 						Component = "panes/private/InvitationPane" },
-					new DataPane { Key = "tab_proposals", Name = "Предложения", Icon = "solution" },
-					new DataPane { Key = "tab_questions", Name = "Разъяснения", Icon = "solution" },
-					new DataPane { Key = "tab_team", Name = "Команда", Icon = "team" },
-					new DataPane { Key = "tab_items", Name = "Позиции", Icon = "table" },
-					new DataPane { Key = "tab_history", Name = "История изменений", Icon = "eye" },
-					new DataPane { Key = "tab_5", Name = "Тендерная комиссия (команда?)" },
-					new DataPane { Key = "tab_6", Name = "Критерии оценки (анкета?)" },
-					new DataPane { Key = "tab_7", Name = "Документы (поле?)" },
-					new DataPane { Key = "tab_8", Name = "Контактные лица (поле?)" },
+					new DataPane { Key = "proposals", Name = "Предложения", Icon = "solution" },
+					new DataPane { Key = "questions", Name = "Разъяснения", Icon = "solution" },
+					new DataPane { Key = "team", Name = "Команда", Icon = "team" },
+					new DataPane { Key = "items", Name = "Позиции", Icon = "table" },
+					new DataPane { Key = "history", Name = "История изменений", Icon = "eye" },
+					new DataPane { Key = "5", Name = "Тендерная комиссия (команда?)" },
+					new DataPane { Key = "6", Name = "Критерии оценки (анкета?)" },
+					new DataPane { Key = "7", Name = "Документы (поле?)" },
+					new DataPane { Key = "8", Name = "Контактные лица (поле?)" },
 				};
 			}
 

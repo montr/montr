@@ -7,25 +7,30 @@ import { MetadataService } from "@montr-core/services";
 import { IEvent, IEventTemplate } from "modules/tendr/models";
 
 import * as panes from "../../panes/private"
+import { RouteBuilder } from ".";
+import { CompanyContextProps } from "@kompany/components";
+import { RouteComponentProps } from "react-router";
 
 const componentToClass: Map<string, React.ComponentClass> = new Map<string, React.ComponentClass>();
 
 componentToClass.set("panes/private/EditEventPane", panes.EditEventPane);
 componentToClass.set("panes/private/InvitationPane", panes.InvitationPane);
 
-interface IEditEventProps {
-	params: {
-		id: number
-	};
+interface IRouteProps {
+	id?: string;
+	tabKey?: string;
 }
 
-interface IEditEventState {
+interface IProps extends CompanyContextProps, RouteComponentProps<IRouteProps> {
+}
+
+interface IState {
 	data: IEvent;
 	dataView: IDataView<IEvent>;
 	configCodes: IEventTemplate[];
 }
 
-export class EditEvent extends React.Component<IEditEventProps, IEditEventState> {
+export class EditEvent extends React.Component<IProps, IState> {
 
 	private _metadataService = new MetadataService();
 	private _eventTemplateService = new EventTemplateService();
@@ -33,7 +38,7 @@ export class EditEvent extends React.Component<IEditEventProps, IEditEventState>
 
 	private _refsByKey: Map<string, any> = new Map<string, React.RefObject<any>>();
 
-	constructor(props: IEditEventProps) {
+	constructor(props: IProps) {
 		super(props);
 
 		this.state = { data: {}, dataView: { id: "" }, configCodes: [] };
@@ -56,7 +61,7 @@ export class EditEvent extends React.Component<IEditEventProps, IEditEventState>
 	}
 
 	private fetchData = async () => {
-		this.setState({ data: await this._eventService.get(this.props.params.id) });
+		this.setState({ data: await this._eventService.get(this.props.match.params.id) });
 	}
 
 	private resolveComponent = (component: string): React.ComponentClass => {
@@ -64,6 +69,7 @@ export class EditEvent extends React.Component<IEditEventProps, IEditEventState>
 	}
 
 	private fetchMetadata = async () => {
+		// todo: get metadata key from server
 		const dataView = await this._metadataService.load("PrivateEvent/Edit", this.resolveComponent);
 
 		this.setState({ dataView: dataView });
@@ -90,8 +96,8 @@ export class EditEvent extends React.Component<IEditEventProps, IEditEventState>
 		return result;
 	}
 
-	createRefForKey(key: string): React.RefObject<IEditEventProps> {
-		const ref: React.RefObject<IEditEventProps> = React.createRef()
+	createRefForKey(key: string): React.RefObject<IProps> {
+		const ref: React.RefObject<IProps> = React.createRef()
 		this._refsByKey.set(key, ref);
 		return ref;
 	}
@@ -109,7 +115,7 @@ export class EditEvent extends React.Component<IEditEventProps, IEditEventState>
 			content: "Вы действительно хотите опубликовать событие?",
 			onOk: () => {
 				this._eventService
-					.publish(this.props.params.id)
+					.publish(this.props.match.params.id)
 					.then((result: IApiResult) => {
 						message.success("Событие опубликовано: " + JSON.stringify(result));
 						this.fetchData();
@@ -124,7 +130,7 @@ export class EditEvent extends React.Component<IEditEventProps, IEditEventState>
 			content: "Вы действительно хотите отменить событие?",
 			onOk: () => {
 				this._eventService
-					.cancel(this.props.params.id)
+					.cancel(this.props.match.params.id)
 					.then((result: IApiResult) => {
 						message.success("Событие отменено: " + JSON.stringify(result));
 						this.fetchData();
@@ -133,9 +139,17 @@ export class EditEvent extends React.Component<IEditEventProps, IEditEventState>
 		});
 	}
 
-	render() {
-		const data = this.state.data;
-		const dataView = this.state.dataView;
+	handleTabChange = (tabKey: string) => {
+		const { id } = this.props.match.params;
+
+		const path = RouteBuilder.editClassifier(id, tabKey);
+
+		this.props.history.replace(path)
+	}
+
+	render = () => {
+		const { tabKey } = this.props.match.params;
+		const { data, dataView } = this.state;
 
 		if (data.id == null) return null;
 
@@ -164,7 +178,7 @@ export class EditEvent extends React.Component<IEditEventProps, IEditEventState>
 
 				<h3 title={data.name} className="single-line-text">{data.name}</h3>
 
-				<Tabs size="small">
+				<Tabs size="small" defaultActiveKey={tabKey} onChange={this.handleTabChange}>
 					{dataView && dataView.panes && dataView.panes.map(pane => {
 
 						let component: React.ReactElement<IPaneProps<IEvent>>;
