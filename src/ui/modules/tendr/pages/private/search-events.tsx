@@ -2,7 +2,7 @@ import * as React from "react";
 import { Link } from "react-router-dom";
 import { Form, Select, Button, DatePicker } from "antd";
 import { EventService } from "../../services";
-import { Page, DataTable } from "@montr-core/components";
+import { Page, DataTable, PageHeader, DataBreadcrumb, Toolbar } from "@montr-core/components";
 
 interface Props {
 }
@@ -24,11 +24,14 @@ export class SearchEvents extends React.Component<Props, State> {
 
 	render() {
 		return (
-			<Page title="Торговые процедуры">
-
-				<div style={{ float: "right" }}>
+			<Page title={<>
+				<Toolbar float="right">
 					<Link to="/events/new"><Button icon="plus">Создать</Button></Link>
-				</div>
+				</Toolbar>
+
+				<DataBreadcrumb items={[]} />
+				<PageHeader>Торговые процедуры</PageHeader>
+			</>}>
 
 				<Form layout="inline">
 					<Form.Item>

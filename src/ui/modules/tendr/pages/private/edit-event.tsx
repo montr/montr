@@ -2,7 +2,7 @@ import * as React from "react";
 import { Tabs, Button, Icon, Modal, message } from "antd";
 import { IApiResult, IDataView, IPaneProps } from "@montr-core/models";
 import { EventService, EventTemplateService } from "../../services";
-import { Page, IPaneComponent, Toolbar, PageHeader } from "@montr-core/components";
+import { Page, IPaneComponent, Toolbar, PageHeader, DataBreadcrumb } from "@montr-core/components";
 import { MetadataService } from "@montr-core/services";
 import { IEvent, IEventTemplate } from "modules/tendr/models";
 
@@ -46,8 +46,8 @@ export class EditEvent extends React.Component<IProps, IState> {
 
 	componentWillMount() {
 		this.fetchConfigCodes();
-		this.fetchData();
 		this.fetchMetadata();
+		this.fetchData();
 	}
 
 	componentWillUnmount = async () => {
@@ -173,6 +173,8 @@ export class EditEvent extends React.Component<IProps, IState> {
 				<Toolbar float="right">
 					{toolbar}
 				</Toolbar>
+
+				<DataBreadcrumb items={[]} />
 				<PageHeader>{this.formatPageTitle()}</PageHeader>
 			</>}>
 
