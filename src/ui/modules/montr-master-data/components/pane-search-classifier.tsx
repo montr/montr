@@ -159,12 +159,12 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 
 		const result = await this._classifierGroupService.list(
 			currentCompany.uid, {
-				typeCode,
-				treeUid,
-				parentUid,
-				focusUid,
-				expandSingleChild
-			});
+			typeCode,
+			treeUid,
+			parentUid,
+			focusUid,
+			expandSingleChild
+		});
 
 		return result.rows;
 	}
@@ -487,4 +487,4 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 	}
 }
 
-export const SearchClassifier = withCompanyContext(_SearchClassifier);
+export const PaneSearchClassifier = withCompanyContext(_SearchClassifier);
