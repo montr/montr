@@ -6,15 +6,15 @@ import { Page, IPaneComponent, Toolbar, PageHeader, DataBreadcrumb } from "@mont
 import { MetadataService } from "@montr-core/services";
 import { IEvent, IEventTemplate } from "modules/tendr/models";
 
-import * as panes from "../../panes/private"
+import * as panes from "../../components"
 import { RouteBuilder } from ".";
 import { CompanyContextProps } from "@kompany/components";
 import { RouteComponentProps } from "react-router";
 
 const componentToClass: Map<string, React.ComponentClass> = new Map<string, React.ComponentClass>();
 
-componentToClass.set("panes/private/EditEventPane", panes.EditEventPane);
-componentToClass.set("panes/private/InvitationPane", panes.InvitationPane);
+componentToClass.set("panes/private/EditEventPane", panes.TabEditEvent);
+componentToClass.set("panes/private/InvitationPane", panes.TabEditInvitations);
 
 interface IRouteProps {
 	id?: string;

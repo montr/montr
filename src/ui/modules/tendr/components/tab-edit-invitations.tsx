@@ -1,9 +1,9 @@
 import * as React from "react";
 import { Button, Icon } from "antd";
 import { IPaneProps } from "@montr-core/models";
-import { IEvent, IInvitation } from "../../models";
+import { IEvent, IInvitation } from "../models";
 import { IPaneComponent, DataTable, Toolbar, DataTableUpdateToken } from "@montr-core/components";
-import { ModalEditInvitation } from "../../components";
+import { ModalEditInvitation } from "../components";
 
 interface IProps extends IPaneProps<IEvent> {
 	data: IEvent;
@@ -14,7 +14,7 @@ interface IState {
 	updateTableToken: DataTableUpdateToken;
 }
 
-export class InvitationPane extends React.Component<IProps, IState> {
+export class TabEditInvitations extends React.Component<IProps, IState> {
 
 	private _formRef: IPaneComponent;
 
