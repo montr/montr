@@ -1,6 +1,6 @@
 import * as React from "react";
 import { BrowserRouter as Router } from "react-router-dom";
-import { ConfigProvider, Layout } from "antd";
+import { ConfigProvider, Layout, Icon } from "antd";
 import ru_RU from "antd/lib/locale-provider/ru_RU";
 import { Routes } from ".";
 import { Routes as MasterDataRoutes } from "@montr-master-data/.";
@@ -63,7 +63,10 @@ export class App extends React.Component<IProps, IState> {
 											<MasterDataRoutes />
 
 										</Layout.Content>
-										<Layout.Footer className="bg-white">© {new Date().getFullYear()}</Layout.Footer>
+										<Layout.Footer className="bg-white">
+											<a href="https://github.com/montr/montr" style={{ color: "gray" }} target="_blank"><Icon type="github" /></a>
+											&#xA0; © {new Date().getFullYear()} Montr
+										</Layout.Footer>
 									</Layout>
 
 								</Layout>
