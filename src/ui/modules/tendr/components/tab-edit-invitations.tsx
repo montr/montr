@@ -4,6 +4,7 @@ import { IPaneProps } from "@montr-core/models";
 import { IEvent, IInvitation } from "../models";
 import { IPaneComponent, DataTable, Toolbar, DataTableUpdateToken } from "@montr-core/components";
 import { ModalEditInvitation } from "../components";
+import { PaneSearchClassifier } from "@montr-master-data/components";
 
 interface IProps extends IPaneProps<IEvent> {
 	data: IEvent;
@@ -97,11 +98,11 @@ export class TabEditInvitations extends React.Component<IProps, IState> {
 
 			{showDrawer &&
 				<Drawer
-					title="Контрагенты" width={720}
+					title="Контрагенты" width={1024}
 					onClose={this.onCloseDrawer}
 					visible={showDrawer}
 				>
-					<p></p>
+					<PaneSearchClassifier typeCode="counterparty" />
 				</Drawer>}
 		</>;
 	}

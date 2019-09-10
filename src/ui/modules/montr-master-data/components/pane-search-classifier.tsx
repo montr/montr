@@ -1,6 +1,5 @@
 import * as React from "react";
 import { Page, PageHeader, Toolbar, DataTable, DataTableUpdateToken } from "@montr-core/components";
-import { RouteComponentProps } from "react-router";
 import { Link } from "react-router-dom";
 import { Icon, Button, Tree, Select, Radio, Layout, Modal, Spin } from "antd";
 import { Constants } from "@montr-core/.";
@@ -14,11 +13,8 @@ import { AntTreeNode, AntTreeNodeSelectedEvent, AntTreeNodeExpandedEvent } from 
 import { ClassifierBreadcrumb, ModalEditClassifierGroup } from "../components";
 import { RouteBuilder } from "..";
 
-interface IRouteProps {
+interface IProps extends CompanyContextProps {
 	typeCode: string;
-}
-
-interface IProps extends CompanyContextProps, RouteComponentProps<IRouteProps> {
 }
 
 interface IState {
@@ -63,7 +59,7 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 			// todo: check if selected type belongs to company (show 404)
 			await this.loadClassifierTypes();
 		}
-		else if (this.props.match.params.typeCode !== prevProps.match.params.typeCode) {
+		else if (this.props.typeCode !== prevProps.typeCode) {
 
 			this.setState({
 				selectedRowKeys: [],
@@ -95,8 +91,7 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 	}
 
 	loadClassifierType = async () => {
-		const { currentCompany } = this.props,
-			{ typeCode } = this.props.match.params;
+		const { currentCompany, typeCode } = this.props;
 
 		if (currentCompany) {
 			const type = await this._classifierTypeService.get(currentCompany.uid, { typeCode });
@@ -173,7 +168,7 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 	delete = async () => {
 		const rowsAffected = await this._classifierService
 			.delete(this.props.currentCompany.uid,
-				this.props.match.params.typeCode,
+				this.props.typeCode,
 				this.state.selectedRowKeys);
 
 		this._notificationService.success("Выбранные записи удалены. " + rowsAffected);
@@ -185,7 +180,7 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 	export = async () => {
 		// todo: show export dialog: all pages, current page, export format
 		await this._classifierService.export(this.props.currentCompany.uid, {
-			typeCode: this.props.match.params.typeCode
+			typeCode: this.props.typeCode
 		});
 	}
 
