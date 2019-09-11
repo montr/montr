@@ -7,6 +7,7 @@ import { Routes as MasterDataRoutes } from "@montr-master-data/.";
 import { AuthCallbackHandler, UserContextProvider, DataMenu } from "@montr-core/components";
 import { CompanyContextProvider, UserWithCompanyMenu } from "@kompany/components";
 import { NotificationService } from "@montr-core/services";
+import { Footer } from "../../components";
 
 interface IProps {
 }
@@ -64,8 +65,9 @@ export class App extends React.Component<IProps, IState> {
 
 										</Layout.Content>
 										<Layout.Footer className="bg-white">
-											<a href="https://github.com/montr/montr" style={{ color: "gray" }} target="_blank"><Icon type="github" /></a>
-											&#xA0; © {new Date().getFullYear()} Montr
+
+											<Footer />
+
 										</Layout.Footer>
 									</Layout>
 

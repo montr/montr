@@ -10,11 +10,12 @@ import { ClassifierService, ClassifierTypeService, ClassifierGroupService, Class
 import { IClassifierType, IClassifierGroup, IClassifierTree } from "../models";
 import { RadioChangeEvent } from "antd/lib/radio";
 import { AntTreeNode, AntTreeNodeSelectedEvent, AntTreeNodeExpandedEvent } from "antd/lib/tree";
-import { /* ClassifierBreadcrumb, */ ModalEditClassifierGroup } from "../components";
+import { ClassifierBreadcrumb, ModalEditClassifierGroup } from "../components";
 import { RouteBuilder } from "..";
 
 interface IProps extends CompanyContextProps {
 	typeCode: string;
+	mode: "Page" | "Drawer";
 }
 
 interface IState {
@@ -31,7 +32,7 @@ interface IState {
 	updateTableToken: DataTableUpdateToken;
 }
 
-class _SearchClassifier extends React.Component<IProps, IState> {
+class _PaneSearchClassifier extends React.Component<IProps, IState> {
 
 	_classifierTypeService = new ClassifierTypeService();
 	_classifierTreeService = new ClassifierTreeService();
@@ -52,15 +53,15 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 	}
 
 	componentDidMount = async () => {
-		// await this.loadClassifierTypes();
-		await this.loadClassifierType();
+		await this.loadClassifierTypes();
+		// await this.loadClassifierType();
 	}
 
 	componentDidUpdate = async (prevProps: IProps) => {
 		if (this.props.currentCompany !== prevProps.currentCompany) {
 			// todo: check if selected type belongs to company (show 404)
-			// await this.loadClassifierTypes();
-			await this.loadClassifierType();
+			await this.loadClassifierTypes();
+			// await this.loadClassifierType();
 		}
 		else if (this.props.typeCode !== prevProps.typeCode) {
 
@@ -81,7 +82,7 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 		await this._classifierService.abort();
 	}
 
-	/* loadClassifierTypes = async () => {
+	loadClassifierTypes = async () => {
 		const { currentCompany } = this.props;
 
 		if (currentCompany) {
@@ -91,7 +92,7 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 
 			await this.loadClassifierType();
 		}
-	} */
+	}
 
 	loadClassifierType = async () => {
 		const { currentCompany, typeCode } = this.props;
@@ -354,7 +355,7 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 	}
 
 	render() {
-		const { currentCompany } = this.props,
+		const { mode, currentCompany } = this.props,
 			{ types, type, trees, groups, selectedTree, selectedGroup, groupEditData, expandedKeys, updateTableToken } = this.state;
 
 		if (!currentCompany || !type) return null;
@@ -443,9 +444,14 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 						</Link>
 					</Toolbar>
 
-					{/* <ClassifierBreadcrumb type={type} types={types} /> */}
-					<PageHeader>{type.name}</PageHeader>
+					{mode == "Page" && <>
+						<ClassifierBreadcrumb type={type} types={types} />
+						<PageHeader>{type.name}</PageHeader>
+					</>}
+
 				</>}>
+
+				<div style={{ clear: "both" }} />
 
 				<Layout>
 					<Layout.Header className="bg-white" style={{ padding: "0", lineHeight: 1.5, height: 36 }}>
@@ -485,4 +491,4 @@ class _SearchClassifier extends React.Component<IProps, IState> {
 	}
 }
 
-export const PaneSearchClassifier = withCompanyContext(_SearchClassifier);
+export const PaneSearchClassifier = withCompanyContext(_PaneSearchClassifier);

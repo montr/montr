@@ -65,7 +65,7 @@ export class TabEditInvitations extends React.Component<IProps, IState> {
 
 		return <>
 			<Toolbar>
-				<Button onClick={this.showAddDrawer}><Icon type="plus" /> Пригласить</Button>
+				<Button onClick={this.showAddDrawer} type="primary"><Icon type="plus" /> Пригласить</Button>
 				<Button onClick={this.showAddModal}><Icon type="plus" /> Добавить</Button>
 			</Toolbar>
 
@@ -98,11 +98,12 @@ export class TabEditInvitations extends React.Component<IProps, IState> {
 
 			{showDrawer &&
 				<Drawer
-					title="Контрагенты" width={1024}
+					title="Контрагенты"
 					onClose={this.onCloseDrawer}
 					visible={showDrawer}
+					width={1024}
 				>
-					<PaneSearchClassifier typeCode="counterparty" />
+					<PaneSearchClassifier mode="Drawer" typeCode="counterparty" />
 				</Drawer>}
 		</>;
 	}
