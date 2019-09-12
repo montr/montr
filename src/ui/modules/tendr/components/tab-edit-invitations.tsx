@@ -98,9 +98,10 @@ export class TabEditInvitations extends React.Component<IProps, IState> {
 
 			{showDrawer &&
 				<Drawer
-					title="Контрагенты"
+					// title="Контрагенты"
+					closable={false}
 					onClose={this.onCloseDrawer}
-					visible={showDrawer}
+					visible={true}
 					width={1024}
 				>
 					<PaneSearchClassifier mode="Drawer" typeCode="counterparty" />

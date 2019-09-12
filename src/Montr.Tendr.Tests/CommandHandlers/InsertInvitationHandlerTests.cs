@@ -4,6 +4,8 @@ using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Montr.Core.Services;
 using Montr.Data.Linq2Db;
+using Montr.MasterData.Impl.Services;
+using Montr.MasterData.Tests;
 using Montr.Tendr.Commands;
 using Montr.Tendr.Impl.CommandHandlers;
 using Montr.Tendr.Models;
@@ -20,19 +22,23 @@ namespace Montr.Tendr.Tests.CommandHandlers
 			var cancellationToken = new CancellationToken();
 			var unitOfWorkFactory = new TransactionScopeUnitOfWorkFactory();
 			var dbContextFactory = new DefaultDbContextFactory();
-			var handler = new InsertInvitationHandler(unitOfWorkFactory, dbContextFactory);
+			var classifierTypeRepository = new DbClassifierTypeRepository(dbContextFactory);
+			var classifierTypeService = new DefaultClassifierTypeService(classifierTypeRepository);
+			var classifierRepository = new DbClassifierRepository(dbContextFactory, classifierTypeService);
+			var handler = new InsertInvitationHandler(unitOfWorkFactory, dbContextFactory, classifierRepository);
+			var helper = new DbHelper(unitOfWorkFactory, dbContextFactory);
 
 			using (var _ = unitOfWorkFactory.Create())
 			{
 				// act
 				var command = new InsertInvitation
 				{
-					UserUid = Guid.NewGuid(),
-					CompanyUid = Guid.NewGuid(),
-					Item = new Invitation
+					UserUid = helper.UserUid,
+					CompanyUid = helper.CompanyUid,
+					EventUid = Guid.Parse("436c290c-37b2-11e9-88fe-00ff279ba9e1"),
+					Items = new []
 					{
-						EventUid = Guid.Parse("436c290c-37b2-11e9-88fe-00ff279ba9e1"),
-						CounterpartyUid = Guid.Parse("1bef28d6-2255-416c-a706-008e0c179508")
+						new Invitation { CounterpartyUid = Guid.Parse("1bef28d6-2255-416c-a706-008e0c179508") }
 					}
 				};
 
@@ -41,8 +47,7 @@ namespace Montr.Tendr.Tests.CommandHandlers
 				// assert
 				Assert.IsNotNull(result);
 				Assert.IsTrue(result.Success);
-				Assert.IsNotNull(result.Uid);
-				Assert.AreNotEqual(Guid.Empty, result.Uid);
+				Assert.AreEqual(1, result.AffectedRows);
 			}
 		}
 	}

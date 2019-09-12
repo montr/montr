@@ -354,6 +354,12 @@ class _PaneSearchClassifier extends React.Component<IProps, IState> {
 		return null;
 	}
 
+	select = () => {
+		const { selectedRowKeys } = this.state;
+
+		console.log(selectedRowKeys);
+	}
+
 	render() {
 		const { mode, currentCompany } = this.props,
 			{ types, type, trees, groups, selectedTree, selectedGroup, groupEditData, expandedKeys, updateTableToken } = this.state;
@@ -448,6 +454,10 @@ class _PaneSearchClassifier extends React.Component<IProps, IState> {
 						<ClassifierBreadcrumb type={type} types={types} />
 						<PageHeader>{type.name}</PageHeader>
 					</>}
+
+					{mode == "Drawer" && <Toolbar>
+						<Button type="primary" onClick={this.select}><Icon type="select" /> Выбрать</Button>
+					</Toolbar>}
 
 				</>}>
 

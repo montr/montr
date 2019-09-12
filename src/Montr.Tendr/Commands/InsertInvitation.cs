@@ -11,6 +11,8 @@ namespace Montr.Tendr.Commands
 
 		public Guid CompanyUid { get; set; }
 
-		public Invitation Item { get; set; }
+		public Guid EventUid { get; set; }
+
+		public Invitation[] Items { get; set; }
 	}
 }
