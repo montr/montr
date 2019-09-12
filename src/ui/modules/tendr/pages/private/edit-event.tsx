@@ -13,8 +13,10 @@ import { RouteComponentProps } from "react-router";
 
 const componentToClass: Map<string, React.ComponentClass> = new Map<string, React.ComponentClass>();
 
+// todo: register tabs outside
+// todo: fix cast
 componentToClass.set("panes/private/EditEventPane", panes.TabEditEvent);
-componentToClass.set("panes/private/InvitationPane", panes.TabEditInvitations);
+componentToClass.set("panes/private/InvitationPane", panes.TabEditInvitations as unknown as React.ComponentClass);
 
 interface IRouteProps {
 	id?: string;

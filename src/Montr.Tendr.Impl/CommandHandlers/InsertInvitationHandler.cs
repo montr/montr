@@ -42,6 +42,7 @@ namespace Montr.Tendr.Impl.CommandHandlers
 			{
 				var counterparties = (await _classifierRepository.Search(new ClassifierSearchRequest
 				{
+					PageSize = 100, // todo: remove limit?
 					CompanyUid = request.CompanyUid,
 					TypeCode = "counterparty", // todo: use settings
 					Uids = items.Select(x => x.CounterpartyUid).ToArray()

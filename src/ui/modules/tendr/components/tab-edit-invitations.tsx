@@ -1,12 +1,14 @@
 import * as React from "react";
 import { Button, Icon, Drawer, Alert } from "antd";
-import { IPaneProps } from "@montr-core/models";
-import { IEvent, IInvitation } from "../models";
+import { IPaneProps, Guid } from "@montr-core/models";
 import { IPaneComponent, DataTable, Toolbar, DataTableUpdateToken } from "@montr-core/components";
-import { ModalEditInvitation } from "../components";
 import { PaneSearchClassifier } from "@montr-master-data/components";
+import { CompanyContextProps, withCompanyContext } from "@kompany/components";
+import { ModalEditInvitation } from "../components";
+import { IEvent, IInvitation } from "../models";
+import { InvitationService } from "../services";
 
-interface IProps extends IPaneProps<IEvent> {
+interface IProps extends CompanyContextProps, IPaneProps<IEvent> {
 	data: IEvent;
 }
 
@@ -16,7 +18,9 @@ interface IState {
 	updateTableToken: DataTableUpdateToken;
 }
 
-export class TabEditInvitations extends React.Component<IProps, IState> {
+class _TabEditInvitations extends React.Component<IProps, IState> {
+
+	_invitationService = new InvitationService();
 
 	private _formRef: IPaneComponent;
 
@@ -26,6 +30,10 @@ export class TabEditInvitations extends React.Component<IProps, IState> {
 		this.state = {
 			updateTableToken: { date: new Date() }
 		};
+	}
+
+	componentWillUnmount = async () => {
+		await this._invitationService.abort();
 	}
 
 	save() {
@@ -45,6 +53,23 @@ export class TabEditInvitations extends React.Component<IProps, IState> {
 	onCloseDrawer = () => {
 		this.setState({ showDrawer: false });
 	};
+
+	onSelect = async (keys: string[]) => {
+		const { data, currentCompany } = this.props;
+
+		if (currentCompany) {
+			await this._invitationService.insert(currentCompany.uid, {
+				eventUid: data.uid,
+				items: keys.map(x => {
+					return { counterpartyUid: new Guid(x) };
+				})
+			});
+
+			this.onCloseDrawer();
+
+			await this.refreshTable();
+		}
+	}
 
 	showAddModal = () => {
 		this.setState({ modalData: {} });
@@ -73,7 +98,7 @@ export class TabEditInvitations extends React.Component<IProps, IState> {
 
 			<DataTable
 				viewId="PrivateEventCounterpartyList/Grid"
-				loadUrl="/api/Company/List"
+				loadUrl="/api/Invitation/List"
 				updateToken={updateTableToken}
 			/>
 
@@ -104,8 +129,14 @@ export class TabEditInvitations extends React.Component<IProps, IState> {
 					visible={true}
 					width={1024}
 				>
-					<PaneSearchClassifier mode="Drawer" typeCode="counterparty" />
+					<PaneSearchClassifier
+						mode="Drawer"
+						typeCode="counterparty"
+						onSelect={this.onSelect}
+					/>
 				</Drawer>}
 		</>;
 	}
 }
+
+export const TabEditInvitations = withCompanyContext(_TabEditInvitations);

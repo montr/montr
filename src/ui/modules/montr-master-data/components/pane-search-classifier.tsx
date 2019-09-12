@@ -16,6 +16,7 @@ import { RouteBuilder } from "..";
 interface IProps extends CompanyContextProps {
 	typeCode: string;
 	mode: "Page" | "Drawer";
+	onSelect?: (keys: string[] | number[]) => void;
 }
 
 interface IState {
@@ -355,9 +356,12 @@ class _PaneSearchClassifier extends React.Component<IProps, IState> {
 	}
 
 	select = () => {
-		const { selectedRowKeys } = this.state;
+		const { onSelect } = this.props,
+			{ selectedRowKeys } = this.state;
 
-		console.log(selectedRowKeys);
+		if (onSelect) {
+			onSelect(selectedRowKeys);
+		}
 	}
 
 	render() {

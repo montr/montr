@@ -143,7 +143,7 @@ namespace Montr.Metadata.Services
 			{
 				result.Columns = new List<DataColumn>
 				{
-					new DataColumn { Key = "name", Name = "Организация", Sortable = true, Width = 400 },
+					new DataColumn { Key = "counterpartyUid", Name = "Организация", Sortable = true, Width = 400 },
 					new DataColumn { Key = "email", Name = "Email", Sortable = true, Width = 100 },
 					// new DataColumn { Key = "description", Name = "Описание", Width = 300 },
 				};
