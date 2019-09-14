@@ -40,7 +40,7 @@ namespace Montr.Tendr.Impl.QueryHandlers
 						CompanyUid = x.CompanyUid,
 						Name = x.Name,
 						Description = x.Description,
-						Url = "/events/edit/" + x.Id
+						Url = "/events/edit/" + x.Uid
 					})
 					.ToListAsync(cancellationToken);
 

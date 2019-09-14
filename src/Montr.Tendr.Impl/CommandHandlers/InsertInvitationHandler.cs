@@ -45,7 +45,7 @@ namespace Montr.Tendr.Impl.CommandHandlers
 					PageSize = 100, // todo: remove limit?
 					CompanyUid = request.CompanyUid,
 					TypeCode = "counterparty", // todo: use settings
-					Uids = items.Select(x => x.CounterpartyUid).ToArray()
+					Uids = items.Select(x => x.CounterpartyUid).Distinct().ToArray()
 				}, cancellationToken)).Rows.Select(x => x.Uid).ToList();
 
 				var affectedRows = 0;

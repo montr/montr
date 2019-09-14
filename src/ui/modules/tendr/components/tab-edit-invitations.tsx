@@ -1,12 +1,13 @@
 import * as React from "react";
 import { Button, Icon, Drawer, Alert } from "antd";
-import { IPaneProps, Guid } from "@montr-core/models";
+import { IPaneProps, Guid, IDataResult } from "@montr-core/models";
 import { IPaneComponent, DataTable, Toolbar, DataTableUpdateToken } from "@montr-core/components";
 import { PaneSearchClassifier } from "@montr-master-data/components";
 import { CompanyContextProps, withCompanyContext } from "@kompany/components";
 import { ModalEditInvitation } from "../components";
 import { IEvent, IInvitation } from "../models";
 import { InvitationService } from "../services";
+import { Constants } from "@montr-core/.";
 
 interface IProps extends CompanyContextProps, IPaneProps<IEvent> {
 	data: IEvent;
@@ -34,6 +35,23 @@ class _TabEditInvitations extends React.Component<IProps, IState> {
 
 	componentWillUnmount = async () => {
 		await this._invitationService.abort();
+	}
+
+	onLoadTableData = async (loadUrl: string, postParams: any): Promise<IDataResult<{}>> => {
+		const { currentCompany, data } = this.props;
+
+		if (currentCompany && data) {
+
+			const params = {
+				companyUid: currentCompany.uid,
+				eventUid: data.uid,
+				...postParams
+			};
+
+			return await this._invitationService.post(loadUrl, params);
+		}
+
+		return null;
 	}
 
 	save() {
@@ -98,7 +116,8 @@ class _TabEditInvitations extends React.Component<IProps, IState> {
 
 			<DataTable
 				viewId="PrivateEventCounterpartyList/Grid"
-				loadUrl="/api/Invitation/List"
+				loadUrl={`${Constants.apiURL}/invitation/list/`}
+				onLoadData={this.onLoadTableData}
 				updateToken={updateTableToken}
 			/>
 
@@ -110,7 +129,7 @@ class _TabEditInvitations extends React.Component<IProps, IState> {
 					<li>Import from *.xls etc</li>
 					<li>Select from registered companies</li>
 					<li>Invite from companies catalogs</li>
-					<li>Select from counterparty classifier</li>
+					<li>👍 Select from counterparty classifier</li>
 					<li>Copy invitation from other event</li>
 				</ul>
 			} />

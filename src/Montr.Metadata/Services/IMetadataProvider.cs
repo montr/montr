@@ -143,9 +143,14 @@ namespace Montr.Metadata.Services
 			{
 				result.Columns = new List<DataColumn>
 				{
-					new DataColumn { Key = "counterpartyUid", Name = "Организация", Sortable = true, Width = 400 },
-					new DataColumn { Key = "email", Name = "Email", Sortable = true, Width = 100 },
-					// new DataColumn { Key = "description", Name = "Описание", Width = 300 },
+					new DataColumn { Key = "counterparty", Name = "Организация", Sortable = true, Width = 400, Path = "counterparty.name" },
+					new DataColumn { Key = "statusCode", Name = "Статус", Width = 100 },
+					new DataColumn { Key = "user", Name = "Пользователь", Width = 100 },
+					new DataColumn { Key = "email", Name = "Email", Width = 100 },
+					new DataColumn { Key = "phone", Name = "Телефон", Width = 100 },
+					new DataColumn { Key = "createDate", Name = "Дата создания", Width = 100 },
+					new DataColumn { Key = "inviteDate", Name = "Дата приглашения", Width = 100 },
+					new DataColumn { Key = "lastAccessDate", Name = "Дата последнего доступа", Width = 100 },
 				};
 			}
 

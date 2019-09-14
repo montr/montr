@@ -11,6 +11,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Montr.Core\Montr.Core.csproj" />
+    <ProjectReference Include="..\Montr.MasterData\Montr.MasterData.csproj" />
     <ProjectReference Include="..\Montr.Metadata\Montr.Metadata.csproj" />
     <ProjectReference Include="..\Montr.Web\Montr.Web.csproj" />
   </ItemGroup>

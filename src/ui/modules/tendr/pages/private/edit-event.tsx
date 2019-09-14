@@ -19,7 +19,7 @@ componentToClass.set("panes/private/EditEventPane", panes.TabEditEvent);
 componentToClass.set("panes/private/InvitationPane", panes.TabEditInvitations as unknown as React.ComponentClass);
 
 interface IRouteProps {
-	id?: string;
+	uid?: string;
 	tabKey?: string;
 }
 
@@ -63,7 +63,7 @@ export class EditEvent extends React.Component<IProps, IState> {
 	}
 
 	private fetchData = async () => {
-		this.setState({ data: await this._eventService.get(this.props.match.params.id) });
+		this.setState({ data: await this._eventService.get(this.props.match.params.uid) });
 	}
 
 	private resolveComponent = (component: string): React.ComponentClass => {
@@ -108,6 +108,7 @@ export class EditEvent extends React.Component<IProps, IState> {
 		this._refsByKey.forEach((ref) => {
 			(ref.current as IPaneComponent).save();
 		});
+
 		// this.fetchData();
 	}
 
@@ -117,7 +118,7 @@ export class EditEvent extends React.Component<IProps, IState> {
 			content: "Вы действительно хотите опубликовать событие?",
 			onOk: () => {
 				this._eventService
-					.publish(this.props.match.params.id)
+					.publish(this.props.match.params.uid)
 					.then((result: IApiResult) => {
 						message.success("Событие опубликовано: " + JSON.stringify(result));
 						this.fetchData();
@@ -132,7 +133,7 @@ export class EditEvent extends React.Component<IProps, IState> {
 			content: "Вы действительно хотите отменить событие?",
 			onOk: () => {
 				this._eventService
-					.cancel(this.props.match.params.id)
+					.cancel(this.props.match.params.uid)
 					.then((result: IApiResult) => {
 						message.success("Событие отменено: " + JSON.stringify(result));
 						this.fetchData();
@@ -142,9 +143,9 @@ export class EditEvent extends React.Component<IProps, IState> {
 	}
 
 	handleTabChange = (tabKey: string) => {
-		const { id } = this.props.match.params;
+		const { uid } = this.props.match.params;
 
-		const path = RouteBuilder.editClassifier(id, tabKey);
+		const path = RouteBuilder.editClassifier(uid, tabKey);
 
 		this.props.history.replace(path)
 	}

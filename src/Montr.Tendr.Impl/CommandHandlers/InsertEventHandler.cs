@@ -5,19 +5,20 @@ using LinqToDB;
 using MediatR;
 using Montr.Core.Services;
 using Montr.Data.Linq2Db;
+using Montr.Metadata.Models;
 using Montr.Tendr.Commands;
 using Montr.Tendr.Impl.Entities;
 using Montr.Tendr.Models;
 
 namespace Montr.Tendr.Impl.CommandHandlers
 {
-	public class CreateEventHandler : IRequestHandler<CreateEvent, long>
+	public class InsertEventHandler : IRequestHandler<InsertEvent, ApiResult>
 	{
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IDbContextFactory _dbContextFactory;
 		private readonly IDateTimeProvider _dateTimeProvider;
 
-		public CreateEventHandler(IUnitOfWorkFactory unitOfWorkFactory, IDbContextFactory dbContextFactory,
+		public InsertEventHandler(IUnitOfWorkFactory unitOfWorkFactory, IDbContextFactory dbContextFactory,
 			IDateTimeProvider dateTimeProvider)
 		{
 			_unitOfWorkFactory = unitOfWorkFactory;
@@ -25,7 +26,7 @@ namespace Montr.Tendr.Impl.CommandHandlers
 			_dateTimeProvider = dateTimeProvider;
 		}
 
-		public async Task<long> Handle(CreateEvent request, CancellationToken cancellationToken)
+		public async Task<ApiResult> Handle(InsertEvent request, CancellationToken cancellationToken)
 		{
 			if (request.UserUid == Guid.Empty)
 				throw new InvalidOperationException("UserUid can't be empty guid.");
@@ -41,9 +42,13 @@ namespace Montr.Tendr.Impl.CommandHandlers
 			{
 				using (var db = _dbContextFactory.Create())
 				{
+					var uid = Guid.NewGuid();
+
+					// todo: use number generation service
 					var id = db.SelectSequenceNextValue<long>("event_id_seq");
 
 					await db.GetTable<DbEvent>()
+						.Value(x => x.Uid, uid)
 						.Value(x => x.Id, id)
 						.Value(x => x.ConfigCode, item.ConfigCode)
 						.Value(x => x.StatusCode, EventStatusCode.Draft)
@@ -54,7 +59,7 @@ namespace Montr.Tendr.Impl.CommandHandlers
 
 					scope.Commit();
 
-					return id;
+					return new ApiResult { Success = true, Uid = uid };
 				}
 			}
 		}

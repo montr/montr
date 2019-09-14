@@ -1,4 +1,6 @@
-﻿namespace Montr.Tendr.Models
+﻿using Montr.MasterData.Models;
+
+namespace Montr.Tendr.Models
 {
 	public class Invitation
 	{
@@ -7,5 +9,7 @@
 		public string StatusCode { get; set; }
 
 		public System.Guid CounterpartyUid  { get; set; }
+
+		public Classifier Counterparty { get; set; }
 	}
 }
