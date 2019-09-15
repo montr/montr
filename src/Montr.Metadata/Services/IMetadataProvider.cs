@@ -68,7 +68,7 @@ namespace Montr.Metadata.Services
 				{
 					new StringField { Key = "code", Name = "Код", Required = true },
 					new StringField { Key = "name", Name = "Наименование", Required = true },
-					new ClassifierField { Key = "parentUid", Name = "Родительская группа" },
+					new ClassifierGroupField { Key = "parentUid", Name = "Родительская группа" },
 				};
 			}
 
@@ -76,7 +76,7 @@ namespace Montr.Metadata.Services
 			{
 				result.Fields = new List<FormField>
 				{
-					new ClassifierField { Key = "group.uid", Name = "Группа", Required = true },
+					new ClassifierGroupField { Key = "group.uid", Name = "Группа", Required = true },
 				};
 			}
 
@@ -138,30 +138,13 @@ namespace Montr.Metadata.Services
 				};
 			}
 
-			//  todo: remove
-			if (viewId == "PrivateEventCounterpartyList/Grid")
-			{
-				result.Columns = new List<DataColumn>
-				{
-					new DataColumn { Key = "counterparty", Name = "Организация", Sortable = true, Width = 400, Path = "counterparty.name" },
-					new DataColumn { Key = "statusCode", Name = "Статус", Width = 100 },
-					new DataColumn { Key = "user", Name = "Пользователь", Width = 100 },
-					new DataColumn { Key = "email", Name = "Email", Width = 100 },
-					new DataColumn { Key = "phone", Name = "Телефон", Width = 100 },
-					new DataColumn { Key = "createDate", Name = "Дата создания", Width = 100 },
-					new DataColumn { Key = "inviteDate", Name = "Дата приглашения", Width = 100 },
-					new DataColumn { Key = "lastAccessDate", Name = "Дата последнего доступа", Width = 100 },
-				};
-			}
-
+			// Events
 			if (viewId == "PrivateEvent/Edit")
 			{
 				result.Panes = new List<DataPane>
 				{
-					new DataPane { Key = "info", Name = "Информация", Icon = "profile",
-						Component = "panes/private/EditEventPane" },
-					new DataPane { Key = "invitations", Name = "Приглашения (0)", Icon = "solution",
-						Component = "panes/private/InvitationPane" },
+					new DataPane { Key = "info", Name = "Информация", Icon = "profile", Component = "panes/private/EditEventPane" },
+					new DataPane { Key = "invitations", Name = "Приглашения (0)", Icon = "solution", Component = "panes/private/InvitationPane" },
 					new DataPane { Key = "proposals", Name = "Предложения", Icon = "solution" },
 					new DataPane { Key = "questions", Name = "Разъяснения", Icon = "solution" },
 					new DataPane { Key = "team", Name = "Команда", Icon = "team" },
@@ -174,13 +157,29 @@ namespace Montr.Metadata.Services
 				};
 			}
 
+			if (viewId == "Event/Invitation/List")
+			{
+				result.Columns = new List<DataColumn>
+				{
+					new DataColumn { Key = "counterparty", Name = "Контрагент", Sortable = true, Width = 400, Path = "counterparty.name" },
+					new DataColumn { Key = "statusCode", Name = "Статус", Width = 100 },
+					new DataColumn { Key = "user", Name = "Пользователь", Width = 100 },
+					new DataColumn { Key = "email", Name = "Email", Width = 100 },
+					new DataColumn { Key = "phone", Name = "Телефон", Width = 100 },
+					new DataColumn { Key = "createDate", Name = "Дата создания", Width = 100 },
+					new DataColumn { Key = "inviteDate", Name = "Дата приглашения", Width = 100 },
+					new DataColumn { Key = "lastAccessDate", Name = "Дата последнего доступа", Width = 100 },
+				};
+			}
+
 			if (viewId == "Event/Invitation/Form")
 			{
 				result.Fields = new List<FormField>
 				{
-					new StringField { Key = "name", Name = "Обращение" },
+					new ClassifierField { Key = "counterpartyUid", Name = "Контрагент", TypeCode = "counterparty", Required = true },
+					new StringField { Key = "user", Name = "Пользователь" },
 					new StringField { Key = "email", Name = "Email" },
-					new ClassifierField { Key = "counterpartyUid", Name = "Контрагент", TypeCode = "counterparty", Required = true }
+					new StringField { Key = "phone", Name = "Телефон" },
 				};
 			}
 

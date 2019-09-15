@@ -1,6 +1,6 @@
 export * from "./classifier-breadcrumb";
 export * from "./classifier-field-factory";
-export * from "./classifier-select";
+export * from "./classifier-group-select";
 export * from "./modal-edit-classifier-group";
 export * from "./modal-edit-classifier-link";
 export * from "./modal-edit-classifier-tree";

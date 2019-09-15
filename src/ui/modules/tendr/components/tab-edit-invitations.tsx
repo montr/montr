@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Button, Icon, Drawer, Alert, Modal } from "antd";
-import { IPaneProps, Guid, IDataResult } from "@montr-core/models";
+import { IPaneProps, Guid, IDataResult, IMenu } from "@montr-core/models";
 import { IPaneComponent, DataTable, Toolbar, DataTableUpdateToken } from "@montr-core/components";
 import { PaneSearchClassifier } from "@montr-master-data/components";
 import { CompanyContextProps, withCompanyContext } from "@kompany/components";
@@ -15,7 +15,7 @@ interface IProps extends CompanyContextProps, IPaneProps<IEvent> {
 
 interface IState {
 	showDrawer?: boolean;
-	modalData?: IInvitation;
+	editData?: IInvitation;
 	selectedRowKeys: string[] | number[];
 	updateTableToken: DataTableUpdateToken;
 }
@@ -100,17 +100,21 @@ class _TabEditInvitations extends React.Component<IProps, IState> {
 	}
 
 	showAddModal = () => {
-		this.setState({ modalData: {} });
+		this.setState({ editData: {} });
+	}
+
+	showEditModal = (data: IInvitation) => {
+		this.setState({ editData: data });
 	}
 
 	onModalSuccess = async (data: IInvitation) => {
-		this.setState({ modalData: null });
+		this.setState({ editData: null });
 
 		await this.refreshTable();
 	}
 
 	onModalCancel = () => {
-		this.setState({ modalData: null });
+		this.setState({ editData: null });
 	}
 
 	delete = () => {
@@ -129,7 +133,11 @@ class _TabEditInvitations extends React.Component<IProps, IState> {
 	}
 
 	render() {
-		const { selectedRowKeys, updateTableToken, modalData, showDrawer } = this.state;
+		const { selectedRowKeys, updateTableToken, editData, showDrawer } = this.state;
+
+		const rowActions: IMenu[] = [
+			{ name: "Редактировать", onClick: this.showEditModal }
+		];
 
 		return <>
 			<Toolbar>
@@ -142,8 +150,9 @@ class _TabEditInvitations extends React.Component<IProps, IState> {
 
 			<DataTable
 				rowKey="uid"
-				viewId="PrivateEventCounterpartyList/Grid"
+				viewId="Event/Invitation/List"
 				loadUrl={`${Constants.apiURL}/invitation/list/`}
+				rowActions={rowActions}
 				onLoadData={this.onLoadTableData}
 				onSelectionChange={this.onSelectionChange}
 				updateToken={updateTableToken}
@@ -162,7 +171,7 @@ class _TabEditInvitations extends React.Component<IProps, IState> {
 				</ul>
 			} />
 
-			{modalData &&
+			{editData &&
 				<ModalEditInvitation
 					onSuccess={this.onModalSuccess}
 					onCancel={this.onModalCancel}

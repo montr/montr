@@ -88,13 +88,20 @@
 		public string Name { get; set; }
 	}
 
+	public class ClassifierGroupField : FormField
+	{
+		public override string Type => "classifier-group";
+
+		public string TypeCode { get; set; }
+
+		public string TreeCode { get; set; }
+	}
+
 	public class ClassifierField : FormField
 	{
 		public override string Type => "classifier";
 
 		public string TypeCode { get; set; }
-
-		public string TreeCode { get; set; }
 	}
 
 	public class FileField : FormField

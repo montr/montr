@@ -25,7 +25,7 @@ interface IState {
 // http://ant.design/components/form/?locale=en-US#components-form-demo-customized-form-controls
 // https://github.com/ant-design/ant-design/blob/master/components/form/demo/customized-form-controls.md
 // todo: rewrite to functional component (see link above)
-class _ClassifierSelect extends React.Component<IProps, IState> {
+class _ClassifierGroupSelect extends React.Component<IProps, IState> {
 
 	static getDerivedStateFromProps(nextProps: any) {
 		// Should be a controlled component.
@@ -118,9 +118,15 @@ class _ClassifierSelect extends React.Component<IProps, IState> {
 		// Should provide an event to pass value to Form.
 		const { onChange } = this.props;
 
+		// console.log("handleChange", value);
+
 		if (onChange) {
 			onChange(value);
 		}
+	}
+
+	onSearch = (value: string) => {
+		// console.log("onSearch", value);
 	}
 
 	onLoadData = (node: any) => {
@@ -209,7 +215,8 @@ class _ClassifierSelect extends React.Component<IProps, IState> {
 			<Spin spinning={loading}>
 				<TreeSelect
 					onChange={this.handleChange}
-					allowClear={!field.required} showSearch
+					allowClear={!field.required}
+					showSearch onSearch={this.onSearch}
 					placeholder={field.placeholder}
 					treeDefaultExpandedKeys={expanded.map(x => x.toString())}
 					loadData={this.onLoadData}
@@ -221,4 +228,4 @@ class _ClassifierSelect extends React.Component<IProps, IState> {
 	}
 }
 
-export const ClassifierSelect = withCompanyContext(_ClassifierSelect);
+export const ClassifierGroupSelect = withCompanyContext(_ClassifierGroupSelect);
