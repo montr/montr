@@ -40,5 +40,21 @@ namespace Montr.Tendr.Controllers
 
 			return await _mediator.Send(request);
 		}
+
+		[HttpPost]
+		public async Task<ApiResult> Update(UpdateInvitation request)
+		{
+			request.UserUid = _currentUserProvider.GetUserUid();
+
+			return await _mediator.Send(request);
+		}
+
+		[HttpPost]
+		public async Task<ApiResult> Delete(DeleteInvitation request)
+		{
+			request.UserUid = _currentUserProvider.GetUserUid();
+
+			return await _mediator.Send(request);
+		}
 	}
 }

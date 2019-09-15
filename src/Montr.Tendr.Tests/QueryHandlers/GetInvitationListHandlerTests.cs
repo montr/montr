@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Montr.Data.Linq2Db;
+using Montr.MasterData.Impl.Services;
 using Montr.Tendr.Impl.QueryHandlers;
 using Montr.Tendr.Models;
 using Montr.Tendr.Queries;
@@ -18,8 +19,10 @@ namespace Montr.Tendr.Tests.QueryHandlers
 			// arrange
 			var cancellationToken = CancellationToken.None;
 			var dbContextFactory = new DefaultDbContextFactory();
-
-			var handler = new GetInvitationListHandler(dbContextFactory);
+			var classifierTypeRepository = new DbClassifierTypeRepository(dbContextFactory);
+			var classifierTypeService = new DefaultClassifierTypeService(classifierTypeRepository);
+			var classifierRepository = new DbClassifierRepository(dbContextFactory, classifierTypeService);
+			var handler = new GetInvitationListHandler(dbContextFactory, classifierRepository);
 
 			// act
 			var command = new GetInvitationList

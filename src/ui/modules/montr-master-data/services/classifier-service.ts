@@ -22,8 +22,8 @@ export class ClassifierService extends Fetcher {
 		return this.post(`${Constants.apiURL}/classifier/insert`, { companyUid, ...request });
 	};
 
-	update = async (companyUid: Guid, typeCode: string, data: IClassifier): Promise<IApiResult> => {
-		return this.post(`${Constants.apiURL}/classifier/update`, { companyUid, typeCode, item: data });
+	update = async (companyUid: Guid, typeCode: string, item: IClassifier): Promise<IApiResult> => {
+		return this.post(`${Constants.apiURL}/classifier/update`, { companyUid, typeCode, item });
 	};
 
 	delete = async (companyUid: Guid, typeCode: string, uids: string[] | number[]): Promise<number> => {

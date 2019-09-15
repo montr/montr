@@ -5,10 +5,12 @@ using Montr.Tendr.Models;
 
 namespace Montr.Tendr.Commands
 {
-	public class UpdateEvent : IRequest<ApiResult>
+	public class UpdateInvitation : IRequest<ApiResult>
 	{
 		public Guid UserUid { get; set; }
 
-		public Event Item { get; set; }
+		public Guid CompanyUid { get; set; }
+
+		public Invitation Item { get; set; }
 	}
 }

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Button, Icon, Drawer, Alert } from "antd";
+import { Button, Icon, Drawer, Alert, Modal } from "antd";
 import { IPaneProps, Guid, IDataResult } from "@montr-core/models";
 import { IPaneComponent, DataTable, Toolbar, DataTableUpdateToken } from "@montr-core/components";
 import { PaneSearchClassifier } from "@montr-master-data/components";
@@ -16,6 +16,7 @@ interface IProps extends CompanyContextProps, IPaneProps<IEvent> {
 interface IState {
 	showDrawer?: boolean;
 	modalData?: IInvitation;
+	selectedRowKeys: string[] | number[];
 	updateTableToken: DataTableUpdateToken;
 }
 
@@ -29,6 +30,7 @@ class _TabEditInvitations extends React.Component<IProps, IState> {
 		super(props);
 
 		this.state = {
+			selectedRowKeys: [],
 			updateTableToken: { date: new Date() }
 		};
 	}
@@ -54,13 +56,21 @@ class _TabEditInvitations extends React.Component<IProps, IState> {
 		return null;
 	}
 
-	save() {
-		this._formRef.save();
+	onSelectionChange = async (selectedRowKeys: string[] | number[]) => {
+		this.setState({ selectedRowKeys });
 	}
 
+	/* save() {
+		this._formRef.save();
+	} */
+
 	refreshTable = async (resetSelectedRows?: boolean) => {
+
+		const { selectedRowKeys } = this.state;
+
 		this.setState({
-			updateTableToken: { date: new Date(), resetSelectedRows }
+			updateTableToken: { date: new Date(), resetSelectedRows },
+			selectedRowKeys: resetSelectedRows ? [] : selectedRowKeys
 		});
 	}
 
@@ -103,21 +113,39 @@ class _TabEditInvitations extends React.Component<IProps, IState> {
 		this.setState({ modalData: null });
 	}
 
+	delete = () => {
+		Modal.confirm({
+			title: "Вы действительно хотите удалить выбранные приглашения?",
+			content: "При удалении будут ... и ...",
+			onOk: async () => {
+				const { currentCompany } = this.props,
+					{ selectedRowKeys } = this.state;
+
+				await this._invitationService.delete(currentCompany.uid, selectedRowKeys);
+
+				this.refreshTable(true);
+			}
+		});
+	}
+
 	render() {
-		const { modalData, updateTableToken, showDrawer } = this.state;
+		const { selectedRowKeys, updateTableToken, modalData, showDrawer } = this.state;
 
 		return <>
 			<Toolbar>
 				<Button onClick={this.showAddDrawer} type="primary"><Icon type="plus" /> Пригласить</Button>
 				<Button onClick={this.showAddModal}><Icon type="plus" /> Добавить</Button>
+				<Button onClick={this.delete} disabled={selectedRowKeys.length == 0}><Icon type="delete" /> Удалить</Button>
 			</Toolbar>
 
 			<div style={{ clear: "both" }} />
 
 			<DataTable
+				rowKey="uid"
 				viewId="PrivateEventCounterpartyList/Grid"
 				loadUrl={`${Constants.apiURL}/invitation/list/`}
 				onLoadData={this.onLoadTableData}
+				onSelectionChange={this.onSelectionChange}
 				updateToken={updateTableToken}
 			/>
 

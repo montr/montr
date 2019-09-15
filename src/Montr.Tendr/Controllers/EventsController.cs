@@ -53,15 +53,13 @@ namespace Montr.Tendr.Controllers
 		}
 
 		[HttpPost]
-		public async Task<ActionResult> Update(Event item)
+		public async Task<ApiResult> Update(Event item)
 		{
-			await _mediator.Send(new UpdateEvent
+			return await _mediator.Send(new UpdateEvent
 			{
 				UserUid = _currentUserProvider.GetUserUid(),
-				Event = item
+				Item = item
 			});
-
-			return Ok();
 		}
 
 		[HttpPost]

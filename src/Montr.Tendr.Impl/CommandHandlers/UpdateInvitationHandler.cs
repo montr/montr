@@ -12,33 +12,32 @@ using Montr.Tendr.Impl.Entities;
 
 namespace Montr.Tendr.Impl.CommandHandlers
 {
-	public class UpdateEventHandler : IRequestHandler<UpdateEvent, ApiResult>
+	public class UpdateInvitationHandler : IRequestHandler<UpdateInvitation, ApiResult>
 	{
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IDbContextFactory _dbContextFactory;
 
-		public UpdateEventHandler(IUnitOfWorkFactory unitOfWorkFactory, IDbContextFactory dbContextFactory)
+		public UpdateInvitationHandler(IUnitOfWorkFactory unitOfWorkFactory, IDbContextFactory dbContextFactory)
 		{
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_dbContextFactory = dbContextFactory;
 		}
 
-		public async Task<ApiResult> Handle(UpdateEvent request, CancellationToken cancellationToken)
+		public async Task<ApiResult> Handle(UpdateInvitation request, CancellationToken cancellationToken)
 		{
 			if (request.UserUid == Guid.Empty) throw new InvalidOperationException("User is required.");
 
 			var item = request.Item ?? throw new ArgumentNullException(nameof(request.Item));
 
-			// todo: check event belongs to user company
+			// todo: check invitation belongs to user company
 
 			using (var scope = _unitOfWorkFactory.Create())
 			{
 				using (var db = _dbContextFactory.Create())
 				{
-					await db.GetTable<DbEvent>()
-						.Where(x => x.Id == item.Id)
-						.Set(x => x.Name, item.Name)
-						.Set(x => x.Description, item.Description)
+					await db.GetTable<DbInvitation>()
+						.Where(x => x.Uid == item.Uid)
+						.Set(x => x.CounterpartyUid, item.CounterpartyUid)
 						.UpdateAsync(cancellationToken);
 
 					scope.Commit();
