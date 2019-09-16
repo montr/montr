@@ -24,8 +24,6 @@ class _TabEditInvitations extends React.Component<IProps, IState> {
 
 	_invitationService = new InvitationService();
 
-	private _formRef: IPaneComponent;
-
 	constructor(props: IProps) {
 		super(props);
 
@@ -59,10 +57,6 @@ class _TabEditInvitations extends React.Component<IProps, IState> {
 	onSelectionChange = async (selectedRowKeys: string[] | number[]) => {
 		this.setState({ selectedRowKeys });
 	}
-
-	/* save() {
-		this._formRef.save();
-	} */
 
 	refreshTable = async (resetSelectedRows?: boolean) => {
 
@@ -104,6 +98,7 @@ class _TabEditInvitations extends React.Component<IProps, IState> {
 	}
 
 	showEditModal = (data: IInvitation) => {
+		console.log(data);
 		this.setState({ editData: data });
 	}
 
@@ -173,6 +168,7 @@ class _TabEditInvitations extends React.Component<IProps, IState> {
 
 			{editData &&
 				<ModalEditInvitation
+					uid={editData.uid}
 					onSuccess={this.onModalSuccess}
 					onCancel={this.onModalCancel}
 				/>}

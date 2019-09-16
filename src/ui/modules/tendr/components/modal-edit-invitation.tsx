@@ -5,6 +5,7 @@ import { IInvitation } from "../models";
 import { Modal, Spin } from "antd";
 import { DataForm, WrappedDataForm } from "@montr-core/components";
 import { NotificationService, MetadataService } from "@montr-core/services";
+import { InvitationService } from "../services";
 
 interface IProps extends CompanyContextProps {
 	uid?: Guid;
@@ -22,6 +23,7 @@ class _ModalEditInvitation extends React.Component<IProps, IState> {
 
 	private _notificationService = new NotificationService();
 	private _metadataService = new MetadataService();
+	private _invitationService = new InvitationService();
 
 	_formRef: WrappedDataForm;
 
@@ -40,6 +42,7 @@ class _ModalEditInvitation extends React.Component<IProps, IState> {
 
 	componentWillUnmount = async () => {
 		await this._metadataService.abort();
+		await this._invitationService.abort();
 	}
 
 	fetchData = async () => {
@@ -55,10 +58,10 @@ class _ModalEditInvitation extends React.Component<IProps, IState> {
 
 				let data;
 
-				/* if (uid) {
-					data = await this._classifierTreeService.get(currentCompany.uid, typeCode, uid);
+				if (uid) {
+					data = await this._invitationService.get(currentCompany.uid, uid);
 				}
-				else */ {
+				else {
 					// todo: load defaults from server
 					data = {};
 				}
@@ -86,33 +89,30 @@ class _ModalEditInvitation extends React.Component<IProps, IState> {
 	}
 
 	save = async (values: IInvitation): Promise<IApiResult> => {
+		const { uid, onSuccess } = this.props,
+			{ uid: companyUid } = this.props.currentCompany;
 
-		return null;
-
-		/* const { typeCode, uid, onSuccess } = this.props;
-		const { uid: companyUid } = this.props.currentCompany;
-
-		let data: IClassifierGroup,
+		let data: IInvitation,
 			result: IApiResult;
 
 		if (uid) {
 			data = { uid: uid, ...values };
 
-			result = await this._classifierTreeService.update(companyUid, typeCode, data);
+			result = await this._invitationService.update(companyUid, data);
 		}
 		else {
-			const insertResult = await this._classifierTreeService.insert(companyUid, typeCode, values);
+			/* const insertResult = await this._invitationService.insert(companyUid, values);
 
 			data = { uid: insertResult.uid, ...values };
 
-			result = insertResult;
+			result = insertResult; */
 		}
 
 		if (result.success) {
 			if (onSuccess) await onSuccess(data);
 		}
 
-		return result; */
+		return result;
 	}
 
 	render = () => {

@@ -9,6 +9,11 @@ interface IInsertInvitationRequest {
 }
 
 export class InvitationService extends Fetcher {
+
+	get = async (companyUid: Guid, uid: Guid | string): Promise<IInvitation> => {
+		return this.post(`${Constants.apiURL}/invitation/get`, { companyUid, uid });
+	};
+
 	insert = async (companyUid: Guid, request: IInsertInvitationRequest): Promise<IApiResult> => {
 		return this.post(`${Constants.apiURL}/invitation/insert`, { companyUid, ...request });
 	};

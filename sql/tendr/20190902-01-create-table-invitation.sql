@@ -8,6 +8,7 @@ CREATE TABLE public.invitation
     event_uid uuid NOT NULL,
 	status_code character varying(16) COLLATE pg_catalog."default",
     counterparty_uid uuid NOT NULL,
+	email character varying(128) COLLATE pg_catalog."default",
     CONSTRAINT invitation_pk PRIMARY KEY (uid)
 )
 WITH (

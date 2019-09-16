@@ -51,10 +51,14 @@ export interface IOption {
 	name: string;
 }
 
-export interface IClassifierField extends IFormField {
+export interface IClassifierGroupField extends IFormField {
 	typeCode: string;
 	treeCode: string;
 	treeUid: Guid;
+}
+
+export interface IClassifierField extends IFormField {
+	typeCode: string;
 }
 
 export interface IFileField extends IFormField {

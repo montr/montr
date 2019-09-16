@@ -1,20 +1,22 @@
 import * as React from "react";
-import { TreeSelect, Spin, Icon } from "antd";
-import { Guid, IClassifierGroupField } from "@montr-core/models";
-import { ClassifierGroupService, ClassifierTreeService, ClassifierTypeService } from "../services";
-import { IClassifierGroup, IClassifierTree, IClassifierType } from "../models";
+import { TreeSelect, Spin, Icon, Select } from "antd";
+import { IClassifierField, Guid } from "@montr-core/models";
+import { ClassifierGroupService, ClassifierTreeService, ClassifierTypeService, ClassifierService } from "../services";
+import { IClassifierGroup, IClassifierTree, IClassifierType, IClassifier } from "../models";
 import { CompanyContextProps, withCompanyContext } from "@kompany/components";
 import { TreeNode } from "antd/lib/tree-select";
 
 interface IProps extends CompanyContextProps {
 	// mode: "Tree" | "Group";
 	value?: string;
-	field: IClassifierGroupField;
+	field: IClassifierField;
 	onChange?: (value: any) => void;
 }
 
 interface IState {
 	loading: boolean;
+	items?: IClassifier[];
+
 	value: string;
 	type?: IClassifierType;
 	trees?: IClassifierTree[];
@@ -25,7 +27,7 @@ interface IState {
 // http://ant.design/components/form/?locale=en-US#components-form-demo-customized-form-controls
 // https://github.com/ant-design/ant-design/blob/master/components/form/demo/customized-form-controls.md
 // todo: rewrite to functional component (see link above)
-class _ClassifierGroupSelect extends React.Component<IProps, IState> {
+class _ClassifierSelect extends React.Component<IProps, IState> {
 
 	static getDerivedStateFromProps(nextProps: any) {
 		// Should be a controlled component.
@@ -38,12 +40,14 @@ class _ClassifierGroupSelect extends React.Component<IProps, IState> {
 	private _classifierTypeService = new ClassifierTypeService();
 	private _classifierTreeService = new ClassifierTreeService();
 	private _classifierGroupService = new ClassifierGroupService();
+	private _classifierService = new ClassifierService();
 
 	constructor(props: IProps) {
 		super(props);
 
 		this.state = {
 			loading: true,
+			// items: [],
 			value: props.value,
 			expanded: []
 		};
@@ -63,6 +67,7 @@ class _ClassifierGroupSelect extends React.Component<IProps, IState> {
 		await this._classifierTypeService.abort();
 		await this._classifierTreeService.abort();
 		await this._classifierGroupService.abort();
+		await this._classifierService.abort();
 	}
 
 	fetchData = async () => {
@@ -71,7 +76,11 @@ class _ClassifierGroupSelect extends React.Component<IProps, IState> {
 
 		if (currentCompany) {
 
-			const type = await this._classifierTypeService.get(currentCompany.uid, { typeCode: field.typeCode });
+			const data = await this._classifierService.list(currentCompany.uid, { typeCode: field.typeCode });
+
+			this.setState({ loading: false, items: data.rows });
+
+			/* const type = await this._classifierTypeService.get(currentCompany.uid, { typeCode: field.typeCode });
 
 			let trees: IClassifierTree[], groups: IClassifierGroup[];
 
@@ -99,7 +108,7 @@ class _ClassifierGroupSelect extends React.Component<IProps, IState> {
 				await this.collectExpanded(groups, expanded);
 			}
 
-			this.setState({ loading: false, type, trees, groups, expanded });
+			this.setState({ loading: false, type, trees, groups, expanded }); */
 		}
 	}
 
@@ -114,7 +123,7 @@ class _ClassifierGroupSelect extends React.Component<IProps, IState> {
 		});
 	}
 
-	handleChange = (value: any, label: any, extra: any) => {
+	handleChange = (value: any/* , label: any, extra: any */) => {
 		// Should provide an event to pass value to Form.
 		const { onChange } = this.props;
 
@@ -207,25 +216,28 @@ class _ClassifierGroupSelect extends React.Component<IProps, IState> {
 
 	render() {
 		const { value, field } = this.props,
-			{ loading, expanded, trees, groups } = this.state;
+			{ loading, items, expanded, trees, groups } = this.state;
 
 		const treeData = this.buildTree(trees, groups);
 
 		return (
-			<Spin spinning={loading}>
-				<TreeSelect
-					onChange={this.handleChange}
-					allowClear={!field.required}
-					showSearch onSearch={this.onSearch}
-					placeholder={field.placeholder}
-					treeDefaultExpandedKeys={expanded.map(x => x.toString())}
-					loadData={this.onLoadData}
-					treeData={treeData}
-					value={value}
-				/>
-			</Spin>
-		);
+			<Select
+				loading={loading}
+				value={value}
+				placeholder={field.placeholder}
+				allowClear={!field.required}
+				onChange={this.handleChange}
+			/*
+
+			showSearch onSearch={this.onSearch}
+
+			treeDefaultExpandedKeys={expanded.map(x => x.toString())}
+			loadData={this.onLoadData}
+			treeData={treeData} */
+			>
+				{items && items.map(x => <Select.Option key={x.uid.toString()}>{x.name}</Select.Option>)}
+			</Select>);
 	}
 }
 
-export const ClassifierGroupSelect = withCompanyContext(_ClassifierGroupSelect);
+export const ClassifierSelect = withCompanyContext(_ClassifierSelect);

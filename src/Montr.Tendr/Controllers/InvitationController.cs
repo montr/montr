@@ -24,13 +24,21 @@ namespace Montr.Tendr.Controllers
 		}
 
 		[HttpPost]
-		public async Task<ActionResult<SearchResult<Invitation>>> List(InvitationSearchRequest request)
+		public async Task<ActionResult<SearchResult<InvitationListItem>>> List(InvitationSearchRequest request)
 		{
 			return await _mediator.Send(new GetInvitationList
 			{
 				UserUid = _currentUserProvider.GetUserUid(),
 				Request = request
 			});
+		}
+
+		[HttpPost]
+		public async Task<Invitation> Get(GetInvitation request)
+		{
+			request.UserUid = _currentUserProvider.GetUserUid();
+
+			return await _mediator.Send(request);
 		}
 
 		[HttpPost]

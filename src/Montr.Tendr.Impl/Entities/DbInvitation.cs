@@ -18,6 +18,9 @@ namespace Montr.Tendr.Impl.Entities
 		[Column(Name = "counterparty_uid"), DataType(DataType.Guid)]
 		public System.Guid CounterpartyUid { get; set; }
 
+		[Column(Name = "email"), DataType(DataType.VarChar)]
+		public string Email { get; set; }
+
 		// todo: generated code, invitation message...
 	}
 }

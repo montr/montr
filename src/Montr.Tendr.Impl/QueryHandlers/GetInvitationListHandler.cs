@@ -7,6 +7,7 @@ using MediatR;
 using Montr.Core.Models;
 using Montr.Core.Services;
 using Montr.Data.Linq2Db;
+using Montr.MasterData.Impl.Entities;
 using Montr.MasterData.Models;
 using Montr.Tendr.Impl.Entities;
 using Montr.Tendr.Models;
@@ -14,7 +15,7 @@ using Montr.Tendr.Queries;
 
 namespace Montr.Tendr.Impl.QueryHandlers
 {
-	public class GetInvitationListHandler : IRequestHandler<GetInvitationList, SearchResult<Invitation>>
+	public class GetInvitationListHandler : IRequestHandler<GetInvitationList, SearchResult<InvitationListItem>>
 	{
 		private readonly IDbContextFactory _dbContextFactory;
 		private readonly IRepository<Classifier> _classifierRepository;
@@ -25,51 +26,37 @@ namespace Montr.Tendr.Impl.QueryHandlers
 			_classifierRepository = classifierRepository;
 		}
 
-		public async Task<SearchResult<Invitation>> Handle(GetInvitationList command, CancellationToken cancellationToken)
+		public async Task<SearchResult<InvitationListItem>> Handle(GetInvitationList command, CancellationToken cancellationToken)
 		{
 			var request = command.Request ?? throw new ArgumentNullException(nameof(command.Request));
 
-			SearchResult<Invitation> result;
+			// todo: check event belongs to user company
 
 			using (var db = _dbContextFactory.Create())
 			{
-				var all = db.GetTable<DbInvitation>()
-					.Where(x => x.EventUid == request.EventUid);
-
-				var data = await all
-					.Apply(request, x => x.Uid, SortOrder.Descending)
-					.Select(x => new Invitation
+				var all =
+					from i in db.GetTable<DbInvitation>()
+					join c in db.GetTable<DbClassifier>() on i.CounterpartyUid equals c.Uid
+					where i.EventUid == request.EventUid
+					select new InvitationListItem
 					{
-						Uid = x.Uid,
-						StatusCode = x.StatusCode,
-						CounterpartyUid = x.CounterpartyUid
-					})
+						Uid = i.Uid,
+						StatusCode = i.StatusCode,
+						CounterpartyUid = i.CounterpartyUid,
+						CounterpartyName = c.Name,
+						Email = i.Email
+					};
+				
+				var data = await all
+					.Apply(request, x => x.CounterpartyName, SortOrder.Descending)
 					.ToListAsync(cancellationToken);
 
-				result = new SearchResult<Invitation>
+				return new SearchResult<InvitationListItem>
 				{
 					TotalCount = all.Count(),
 					Rows = data
 				};
 			}
-
-			// todo: join in one query
-			var counterparties = (await _classifierRepository.Search(new ClassifierSearchRequest
-			{
-				CompanyUid = request.CompanyUid,
-				TypeCode = "counterparty", // todo: use settings
-				Uids = result.Rows.Select(x => x.CounterpartyUid).Distinct().ToArray()
-			}, cancellationToken)).Rows.ToDictionary(x => x.Uid);
-
-			foreach (var invitation in result.Rows)
-			{
-				if (counterparties.TryGetValue(invitation.CounterpartyUid, out Classifier counterparty))
-				{
-					invitation.Counterparty = counterparty;
-				}
-			}
-
-			return result;
 		}
 	}
 }

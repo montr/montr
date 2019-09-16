@@ -38,6 +38,7 @@ namespace Montr.Tendr.Impl.CommandHandlers
 					await db.GetTable<DbInvitation>()
 						.Where(x => x.Uid == item.Uid)
 						.Set(x => x.CounterpartyUid, item.CounterpartyUid)
+						.Set(x => x.Email, item.Email)
 						.UpdateAsync(cancellationToken);
 
 					scope.Commit();
