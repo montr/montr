@@ -4,6 +4,7 @@ import { Guid, IApiResult, IDataResult } from "@montr-core/models";
 import { IClassifier } from "../models";
 
 interface IClassifierSearchRequest {
+	pageSize?: number; // todo: move to IPaging
 	typeCode: string;
 }
 

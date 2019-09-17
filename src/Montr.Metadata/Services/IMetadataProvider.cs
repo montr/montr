@@ -178,7 +178,7 @@ namespace Montr.Metadata.Services
 				{
 					new ClassifierField { Key = "counterpartyUid", Name = "Контрагент", TypeCode = "counterparty", Required = true },
 					new StringField { Key = "user", Name = "Пользователь" },
-					new StringField { Key = "email", Name = "Email" },
+					new StringField { Key = "email", Name = "Email", Required = true },
 					new StringField { Key = "phone", Name = "Телефон" },
 				};
 			}

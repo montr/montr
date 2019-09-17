@@ -118,8 +118,6 @@ class _ClassifierGroupSelect extends React.Component<IProps, IState> {
 		// Should provide an event to pass value to Form.
 		const { onChange } = this.props;
 
-		// console.log("handleChange", value);
-
 		if (onChange) {
 			onChange(value);
 		}

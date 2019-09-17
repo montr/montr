@@ -128,7 +128,8 @@ class _TabEditInvitations extends React.Component<IProps, IState> {
 	}
 
 	render() {
-		const { selectedRowKeys, updateTableToken, editData, showDrawer } = this.state;
+		const { data } = this.props,
+			{ selectedRowKeys, updateTableToken, editData, showDrawer } = this.state;
 
 		const rowActions: IMenu[] = [
 			{ name: "Редактировать", onClick: this.showEditModal }
@@ -168,6 +169,7 @@ class _TabEditInvitations extends React.Component<IProps, IState> {
 
 			{editData &&
 				<ModalEditInvitation
+					eventUid={data.uid}
 					uid={editData.uid}
 					onSuccess={this.onModalSuccess}
 					onCancel={this.onModalCancel}

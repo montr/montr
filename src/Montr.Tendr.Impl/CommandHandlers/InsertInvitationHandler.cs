@@ -68,6 +68,7 @@ namespace Montr.Tendr.Impl.CommandHandlers
 								.Value(x => x.EventUid, request.EventUid)
 								.Value(x => x.CounterpartyUid, item.CounterpartyUid)
 								.Value(x => x.StatusCode, InvitationStatusCode.Draft)
+								.Value(x => x.Email, item.Email)
 								.InsertAsync(cancellationToken);
 
 							affectedRows++;

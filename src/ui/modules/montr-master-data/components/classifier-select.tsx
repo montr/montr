@@ -1,5 +1,5 @@
 import * as React from "react";
-import { TreeSelect, Spin, Icon, Select } from "antd";
+import { TreeSelect, Spin, Icon, Select, Divider } from "antd";
 import { IClassifierField, Guid } from "@montr-core/models";
 import { ClassifierGroupService, ClassifierTreeService, ClassifierTypeService, ClassifierService } from "../services";
 import { IClassifierGroup, IClassifierTree, IClassifierType, IClassifier } from "../models";
@@ -76,7 +76,7 @@ class _ClassifierSelect extends React.Component<IProps, IState> {
 
 		if (currentCompany) {
 
-			const data = await this._classifierService.list(currentCompany.uid, { typeCode: field.typeCode });
+			const data = await this._classifierService.list(currentCompany.uid, { typeCode: field.typeCode, pageSize: 1000 });
 
 			this.setState({ loading: false, items: data.rows });
 
@@ -216,17 +216,27 @@ class _ClassifierSelect extends React.Component<IProps, IState> {
 
 	render() {
 		const { value, field } = this.props,
-			{ loading, items, expanded, trees, groups } = this.state;
+			{ loading, items } = this.state;
 
-		const treeData = this.buildTree(trees, groups);
 
 		return (
 			<Select
 				loading={loading}
+				showArrow={true}
+				showSearch={true}
 				value={value}
 				placeholder={field.placeholder}
 				allowClear={!field.required}
 				onChange={this.handleChange}
+				dropdownRender={menu => (
+					<div>
+						{menu}
+						<Divider style={{ margin: "0" }} />
+						<div style={{ padding: "8px", cursor: "pointer" }}>
+							<Icon type="plus" /> Добавить элемент
+					  </div>
+					</div>
+				)}
 			/*
 
 			showSearch onSearch={this.onSearch}

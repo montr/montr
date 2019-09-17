@@ -35,6 +35,13 @@ namespace Montr.Tendr.Impl.CommandHandlers
 			{
 				using (var db = _dbContextFactory.Create())
 				{
+					var validator = new InvitationValidator(db, request.EventUid);
+
+					if (await validator.ValidateUpdate(item, cancellationToken) == false)
+					{
+						return new ApiResult { Success = false, Errors = validator.Errors };
+					}
+
 					await db.GetTable<DbInvitation>()
 						.Where(x => x.Uid == item.Uid)
 						.Set(x => x.CounterpartyUid, item.CounterpartyUid)

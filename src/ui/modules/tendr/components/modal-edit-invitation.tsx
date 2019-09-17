@@ -8,6 +8,7 @@ import { NotificationService, MetadataService } from "@montr-core/services";
 import { InvitationService } from "../services";
 
 interface IProps extends CompanyContextProps {
+	eventUid: Guid;
 	uid?: Guid;
 	onSuccess?: (data: IInvitation) => void;
 	onCancel?: () => void;
@@ -89,7 +90,7 @@ class _ModalEditInvitation extends React.Component<IProps, IState> {
 	}
 
 	save = async (values: IInvitation): Promise<IApiResult> => {
-		const { uid, onSuccess } = this.props,
+		const { eventUid, uid, onSuccess } = this.props,
 			{ uid: companyUid } = this.props.currentCompany;
 
 		let data: IInvitation,
@@ -98,14 +99,15 @@ class _ModalEditInvitation extends React.Component<IProps, IState> {
 		if (uid) {
 			data = { uid: uid, ...values };
 
-			result = await this._invitationService.update(companyUid, data);
+			result = await this._invitationService.update(companyUid, { eventUid, item: data });
 		}
 		else {
-			/* const insertResult = await this._invitationService.insert(companyUid, values);
+			const insertResult =
+				await this._invitationService.insert(companyUid, { eventUid, items: [values] });
 
 			data = { uid: insertResult.uid, ...values };
 
-			result = insertResult; */
+			result = insertResult;
 		}
 
 		if (result.success) {

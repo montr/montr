@@ -8,6 +8,11 @@ interface IInsertInvitationRequest {
 	items: IInvitation[];
 }
 
+interface IUpdateInvitationRequest {
+	eventUid: Guid;
+	item: IInvitation;
+}
+
 export class InvitationService extends Fetcher {
 
 	get = async (companyUid: Guid, uid: Guid | string): Promise<IInvitation> => {
@@ -18,8 +23,8 @@ export class InvitationService extends Fetcher {
 		return this.post(`${Constants.apiURL}/invitation/insert`, { companyUid, ...request });
 	};
 
-	update = async (companyUid: Guid, item: IInvitation): Promise<IApiResult> => {
-		return this.post(`${Constants.apiURL}/invitation/update`, { companyUid, item });
+	update = async (companyUid: Guid, request: IUpdateInvitationRequest): Promise<IApiResult> => {
+		return this.post(`${Constants.apiURL}/invitation/update`, { companyUid, ...request });
 	};
 
 	delete = async (companyUid: Guid, uids: string[] | number[]): Promise<number> => {

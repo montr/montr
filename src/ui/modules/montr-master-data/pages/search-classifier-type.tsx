@@ -33,9 +33,6 @@ class _SearchClassifierType extends React.Component<IProps, IState> {
 		};
 	}
 
-	componentDidMount = async () => {
-	}
-
 	componentDidUpdate = async (prevProps: IProps) => {
 		if (this.props.currentCompany !== prevProps.currentCompany) {
 			this.refreshTable(true);
