@@ -4,8 +4,10 @@ import { Guid, IApiResult, IDataResult } from "@montr-core/models";
 import { IClassifier } from "../models";
 
 interface IClassifierSearchRequest {
-	pageSize?: number; // todo: move to IPaging
+	// todo: move to IPaging
+	pageSize?: number;
 	typeCode: string;
+	focusUid?: Guid | string;
 }
 
 interface IInsertClassifierRequest {

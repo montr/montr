@@ -125,6 +125,29 @@ namespace Montr.MasterData.Impl.Services
 					})
 					.ToListAsync(cancellationToken);
 
+				if (request.FocusUid.HasValue && data.Find(x => x.Uid == request.FocusUid) == null)
+				{
+					var focused = await (
+							from types in db.GetTable<DbClassifierType>()
+							join c in db.GetTable<DbClassifier>() on types.Uid equals c.TypeUid
+							where types.CompanyUid == request.CompanyUid &&
+							      types.Code == request.TypeCode &&
+							      c.Uid == request.FocusUid
+							select c)
+						.Select(x => new Classifier
+						{
+							Uid = x.Uid,
+							StatusCode = x.StatusCode,
+							Code = x.Code,
+							Name = x.Name,
+							ParentUid = x.ParentUid,
+							Url = $"/classifiers/{type.Code}/edit/{x.Uid}"
+						})
+						.ToListAsync(cancellationToken);
+
+					data.InsertRange(0, focused);
+				}
+
 				return new SearchResult<Classifier>
 				{
 					TotalCount = query.Count(),

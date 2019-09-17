@@ -46,7 +46,7 @@ export class EditEvent extends React.Component<IProps, IState> {
 		this.state = { data: {}, dataView: { id: "" }, configCodes: [] };
 	}
 
-	componentWillMount() {
+	componentDidMount() {
 		this.fetchConfigCodes();
 		this.fetchMetadata();
 		this.fetchData();

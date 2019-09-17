@@ -1,13 +1,14 @@
 import * as React from "react";
-import { TreeSelect, Spin, Icon, Select, Divider } from "antd";
+import { TreeSelect, Spin, Icon, Select, Divider, Button } from "antd";
 import { IClassifierField, Guid } from "@montr-core/models";
 import { ClassifierGroupService, ClassifierTreeService, ClassifierTypeService, ClassifierService } from "../services";
 import { IClassifierGroup, IClassifierTree, IClassifierType, IClassifier } from "../models";
 import { CompanyContextProps, withCompanyContext } from "@kompany/components";
 import { TreeNode } from "antd/lib/tree-select";
+import { RouteBuilder } from "..";
+import { Link } from "react-router-dom";
 
 interface IProps extends CompanyContextProps {
-	// mode: "Tree" | "Group";
 	value?: string;
 	field: IClassifierField;
 	onChange?: (value: any) => void;
@@ -37,9 +38,6 @@ class _ClassifierSelect extends React.Component<IProps, IState> {
 		return null;
 	}
 
-	private _classifierTypeService = new ClassifierTypeService();
-	private _classifierTreeService = new ClassifierTreeService();
-	private _classifierGroupService = new ClassifierGroupService();
 	private _classifierService = new ClassifierService();
 
 	constructor(props: IProps) {
@@ -47,7 +45,6 @@ class _ClassifierSelect extends React.Component<IProps, IState> {
 
 		this.state = {
 			loading: true,
-			// items: [],
 			value: props.value,
 			expanded: []
 		};
@@ -64,55 +61,24 @@ class _ClassifierSelect extends React.Component<IProps, IState> {
 	}
 
 	componentWillUnmount = async () => {
-		await this._classifierTypeService.abort();
-		await this._classifierTreeService.abort();
-		await this._classifierGroupService.abort();
 		await this._classifierService.abort();
 	}
 
 	fetchData = async () => {
 		const { currentCompany, field } = this.props,
-			{ value, expanded } = this.state;
+			{ value } = this.state;
 
 		if (currentCompany) {
 
-			const data = await this._classifierService.list(currentCompany.uid, { typeCode: field.typeCode, pageSize: 1000 });
+			const data = await this._classifierService.list(currentCompany.uid, {
+				typeCode: field.typeCode, focusUid: value, pageSize: 1000
+			});
 
 			this.setState({ loading: false, items: data.rows });
-
-			/* const type = await this._classifierTypeService.get(currentCompany.uid, { typeCode: field.typeCode });
-
-			let trees: IClassifierTree[], groups: IClassifierGroup[];
-
-			if (type.hierarchyType == "Groups") {
-				if (field.treeCode || field.treeUid) {
-					const result = await this._classifierGroupService.list(
-						currentCompany.uid, { typeCode: field.typeCode, treeCode: field.treeCode, treeUid: field.treeUid, focusUid: value });
-
-					groups = result.rows;
-
-					await this.collectExpanded(groups, expanded);
-				}
-				else {
-					const result = await this._classifierTreeService.list(currentCompany.uid, { typeCode: field.typeCode });
-
-					trees = result.rows;
-				}
-			}
-			else if (type.hierarchyType == "Items") {
-				const result = await this._classifierGroupService.list(
-					currentCompany.uid, { typeCode: field.typeCode, focusUid: value });
-
-				groups = result.rows;
-
-				await this.collectExpanded(groups, expanded);
-			}
-
-			this.setState({ loading: false, type, trees, groups, expanded }); */
 		}
 	}
 
-	async collectExpanded(groups: IClassifierGroup[], expanded?: Guid[]) {
+	/* async collectExpanded(groups: IClassifierGroup[], expanded?: Guid[]) {
 		groups && groups.forEach(group => {
 			if (group.children) {
 
@@ -121,7 +87,7 @@ class _ClassifierSelect extends React.Component<IProps, IState> {
 				this.collectExpanded(group.children, expanded);
 			}
 		});
-	}
+	} */
 
 	handleChange = (value: any/* , label: any, extra: any */) => {
 		// Should provide an event to pass value to Form.
@@ -138,7 +104,7 @@ class _ClassifierSelect extends React.Component<IProps, IState> {
 		// console.log("onSearch", value);
 	}
 
-	onLoadData = (node: any) => {
+	/* onLoadData = (node: any) => {
 		return new Promise(async (resolve) => {
 
 			if (node.props.dataType == "Tree") {
@@ -174,9 +140,9 @@ class _ClassifierSelect extends React.Component<IProps, IState> {
 
 			resolve();
 		});
-	}
+	} */
 
-	buildTree(trees: IClassifierTree[], groups: IClassifierGroup[]): TreeNode[] {
+	/* buildTree(trees: IClassifierTree[], groups: IClassifierGroup[]): TreeNode[] {
 		if (trees) {
 			return trees.map(tree => {
 
@@ -212,41 +178,46 @@ class _ClassifierSelect extends React.Component<IProps, IState> {
 				return result;
 			});
 		}
-	}
+	} */
 
 	render() {
 		const { value, field } = this.props,
 			{ loading, items } = this.state;
 
+		const options = items
+			&& items.map(x => <Select.Option key={x.uid.toString()}>{x.name}</Select.Option>);
 
-		return (
-			<Select
-				loading={loading}
-				showArrow={true}
-				showSearch={true}
-				value={value}
-				placeholder={field.placeholder}
-				allowClear={!field.required}
-				onChange={this.handleChange}
-				dropdownRender={menu => (
-					<div>
-						{menu}
-						<Divider style={{ margin: "0" }} />
-						<div style={{ padding: "8px", cursor: "pointer" }}>
-							<Icon type="plus" /> Добавить элемент
-					  </div>
-					</div>
-				)}
-			/*
+		// https://github.com/ant-design/ant-design/issues/13448
+		// https://codesandbox.io/s/oo6q47mnr9
 
-			showSearch onSearch={this.onSearch}
-
-			treeDefaultExpandedKeys={expanded.map(x => x.toString())}
-			loadData={this.onLoadData}
-			treeData={treeData} */
-			>
-				{items && items.map(x => <Select.Option key={x.uid.toString()}>{x.name}</Select.Option>)}
-			</Select>);
+		return (<Select
+			loading={loading}
+			showArrow={true}
+			showSearch={true}
+			autoClearSearchValue={false}
+			value={value}
+			placeholder={field.placeholder}
+			allowClear={!field.required}
+			onChange={this.handleChange}
+			dropdownRender={menu => (
+				<div>
+					{menu}
+					<Divider style={{ margin: "1px 0" }} />
+					<div onMouseDown={e => e.preventDefault()}>
+						<Link to={RouteBuilder.addClassifier(field.typeCode, null)}>
+							<Button type="link"><Icon type="plus" /> Добавить элемент</Button>
+						</Link>
+					</div >
+				</div>
+			)}
+		/*
+		showSearch onSearch={this.onSearch}
+		treeDefaultExpandedKeys={expanded.map(x => x.toString())}
+		loadData={this.onLoadData}
+		treeData={treeData} */
+		>
+			{options}
+		</Select>);
 	}
 }
 

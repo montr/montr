@@ -98,7 +98,6 @@ class _TabEditInvitations extends React.Component<IProps, IState> {
 	}
 
 	showEditModal = (data: IInvitation) => {
-		console.log(data);
 		this.setState({ editData: data });
 	}
 
