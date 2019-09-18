@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -95,6 +96,7 @@ namespace Montr.MasterData.Impl.Services
 
 				if (query == null)
 				{
+					// todo: remove joins with DbClassifierType here and above
 					query = from types in db.GetTable<DbClassifierType>()
 							join c in db.GetTable<DbClassifier>() on types.Uid equals c.TypeUid
 							where types.CompanyUid == request.CompanyUid &&
@@ -112,38 +114,20 @@ namespace Montr.MasterData.Impl.Services
 					query = query.Where(x => request.Uids.Contains(x.Uid));
 				}
 
-				var data = await query
-					.Apply(request, x => x.Code)
-					.Select(x => new Classifier
-					{
-						Uid = x.Uid,
-						StatusCode = x.StatusCode,
-						Code = x.Code,
-						Name = x.Name,
-						ParentUid = x.ParentUid,
-						Url = $"/classifiers/{type.Code}/edit/{x.Uid}"
-					})
-					.ToListAsync(cancellationToken);
-
-				if (request.FocusUid.HasValue && data.Find(x => x.Uid == request.FocusUid) == null)
+				if (request.SearchTerm != null)
 				{
-					var focused = await (
-							from types in db.GetTable<DbClassifierType>()
-							join c in db.GetTable<DbClassifier>() on types.Uid equals c.TypeUid
-							where types.CompanyUid == request.CompanyUid &&
-							      types.Code == request.TypeCode &&
-							      c.Uid == request.FocusUid
-							select c)
-						.Select(x => new Classifier
-						{
-							Uid = x.Uid,
-							StatusCode = x.StatusCode,
-							Code = x.Code,
-							Name = x.Name,
-							ParentUid = x.ParentUid,
-							Url = $"/classifiers/{type.Code}/edit/{x.Uid}"
-						})
-						.ToListAsync(cancellationToken);
+					query = query.Where(x => x.Name.Contains(request.SearchTerm));
+				}
+
+				var data = await Materialize(
+					query.Apply(request, x => x.Code), type, cancellationToken);
+
+				// todo: add test
+				if (request.FocusUid.HasValue && data.Any(x => x.Uid == request.FocusUid) == false)
+				{
+					var focused = await Materialize(
+							query.Where(x => x.Uid == request.FocusUid),
+							type, cancellationToken);
 
 					data.InsertRange(0, focused);
 				}
@@ -154,6 +138,22 @@ namespace Montr.MasterData.Impl.Services
 					Rows = data
 				};
 			}
+		}
+
+		private static async Task<List<Classifier>> Materialize(IQueryable<DbClassifier> query,
+			ClassifierType type, CancellationToken cancellationToken)
+		{
+			return await query
+				.Select(x => new Classifier
+				{
+					Uid = x.Uid,
+					StatusCode = x.StatusCode,
+					Code = x.Code,
+					Name = x.Name,
+					ParentUid = x.ParentUid,
+					Url = $"/classifiers/{type.Code}/edit/{x.Uid}"
+				})
+				.ToListAsync(cancellationToken);
 		}
 	}
 }

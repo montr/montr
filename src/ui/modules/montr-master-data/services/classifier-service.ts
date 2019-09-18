@@ -8,6 +8,7 @@ interface IClassifierSearchRequest {
 	pageSize?: number;
 	typeCode: string;
 	focusUid?: Guid | string;
+	searchTerm?: string;
 }
 
 interface IInsertClassifierRequest {

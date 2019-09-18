@@ -19,6 +19,8 @@ namespace Montr.MasterData.Models
 
 		public Guid? FocusUid { get; set; }
 
+		public string SearchTerm { get; set; }
+
 		public Guid[] Uids { get; set; }
 
 		public Guid? Uid { get; set; }
