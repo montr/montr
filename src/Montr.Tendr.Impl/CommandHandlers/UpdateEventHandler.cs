@@ -6,12 +6,13 @@ using LinqToDB;
 using MediatR;
 using Montr.Core.Services;
 using Montr.Data.Linq2Db;
+using Montr.Metadata.Models;
 using Montr.Tendr.Commands;
 using Montr.Tendr.Impl.Entities;
 
 namespace Montr.Tendr.Impl.CommandHandlers
 {
-	public class UpdateEventHandler : IRequestHandler<UpdateEvent>
+	public class UpdateEventHandler : IRequestHandler<UpdateEvent, ApiResult>
 	{
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IDbContextFactory _dbContextFactory;
@@ -22,12 +23,13 @@ namespace Montr.Tendr.Impl.CommandHandlers
 			_dbContextFactory = dbContextFactory;
 		}
 
-		public async Task<Unit> Handle(UpdateEvent request, CancellationToken cancellationToken)
+		public async Task<ApiResult> Handle(UpdateEvent request, CancellationToken cancellationToken)
 		{
-			if (request.UserUid == Guid.Empty)
-				throw new InvalidOperationException("UserUid can't be empty guid.");
+			if (request.UserUid == Guid.Empty) throw new InvalidOperationException("User is required.");
 
-			var item = request.Event;
+			var item = request.Item ?? throw new ArgumentNullException(nameof(request.Item));
+
+			// todo: check event belongs to user company
 
 			using (var scope = _unitOfWorkFactory.Create())
 			{
@@ -41,7 +43,7 @@ namespace Montr.Tendr.Impl.CommandHandlers
 
 					scope.Commit();
 
-					return Unit.Value;
+					return new ApiResult { Success = true };
 				}
 			}
 		}

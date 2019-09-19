@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Modal, Spin } from "antd";
-import { Guid, IFormField, IClassifierField, IApiResult } from "@montr-core/models";
+import { Guid, IFormField, IApiResult, IClassifierGroupField } from "@montr-core/models";
 import { withCompanyContext, CompanyContextProps } from "@kompany/components";
 import { ClassifierGroupService } from "../services";
 import { IClassifierGroup } from "@montr-master-data/models";
@@ -61,7 +61,7 @@ class _ModalEditClassifierGroup extends React.Component<IProps, IState> {
 					? dataView.fields.filter(x => hideFields.includes(x.key) == false)
 					: dataView.fields;
 
-				const parentUidField = fields.find(x => x.key == "parentUid") as IClassifierField;
+				const parentUidField = fields.find(x => x.key == "parentUid") as IClassifierGroupField;
 
 				if (parentUidField) {
 					parentUidField.typeCode = typeCode;

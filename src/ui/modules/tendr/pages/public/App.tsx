@@ -5,6 +5,7 @@ import ru_RU from "antd/lib/locale-provider/ru_RU";
 import { AuthCallbackHandler, UserContextProvider, DataMenu } from "@montr-core/components";
 import { CompanyContextProvider, UserWithCompanyMenu } from "@kompany/components/.";
 import { Routes } from "./routes";
+import { Footer } from "../../components";
 
 export class App extends React.Component {
 	render() {
@@ -42,7 +43,11 @@ export class App extends React.Component {
 
 										</div>
 									</Layout.Content>
-									<Layout.Footer>© {new Date().getFullYear()}</Layout.Footer>
+									<Layout.Footer>
+
+										<Footer />
+
+									</Layout.Footer>
 								</Layout>
 							</AuthCallbackHandler>
 						</CompanyContextProvider>

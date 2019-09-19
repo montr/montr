@@ -68,7 +68,7 @@ namespace Montr.Metadata.Services
 				{
 					new StringField { Key = "code", Name = "Код", Required = true },
 					new StringField { Key = "name", Name = "Наименование", Required = true },
-					new ClassifierField { Key = "parentUid", Name = "Родительская группа" },
+					new ClassifierGroupField { Key = "parentUid", Name = "Родительская группа" },
 				};
 			}
 
@@ -76,7 +76,7 @@ namespace Montr.Metadata.Services
 			{
 				result.Fields = new List<FormField>
 				{
-					new ClassifierField { Key = "group.uid", Name = "Группа", Required = true },
+					new ClassifierGroupField { Key = "group.uid", Name = "Группа", Required = true },
 				};
 			}
 
@@ -138,34 +138,48 @@ namespace Montr.Metadata.Services
 				};
 			}
 
-			//  todo: remove
-			if (viewId == "PrivateEventCounterpartyList/Grid")
-			{
-				result.Columns = new List<DataColumn>
-				{
-					new DataColumn { Key = "name", Name = "Организация", Sortable = true, Width = 400 },
-					new DataColumn { Key = "email", Name = "E-mail", Sortable = true, Width = 100 },
-					// new DataColumn { Key = "description", Name = "Описание", Width = 300 },
-				};
-			}
-
+			// Events
 			if (viewId == "PrivateEvent/Edit")
 			{
 				result.Panes = new List<DataPane>
 				{
-					new DataPane { Key = "tab_info", Name = "Информация", Icon = "profile",
-						Component = "panes/private/EditEventPane" },
-					new DataPane { Key = "tab_invitations", Name = "Приглашения (0)", Icon = "solution",
-						Component = "panes/private/InvitationPane" },
-					new DataPane { Key = "tab_proposals", Name = "Предложения", Icon = "solution" },
-					new DataPane { Key = "tab_questions", Name = "Разъяснения", Icon = "solution" },
-					new DataPane { Key = "tab_team", Name = "Команда", Icon = "team" },
-					new DataPane { Key = "tab_items", Name = "Позиции", Icon = "table" },
-					new DataPane { Key = "tab_history", Name = "История изменений", Icon = "eye" },
-					new DataPane { Key = "tab_5", Name = "Тендерная комиссия (команда?)" },
-					new DataPane { Key = "tab_6", Name = "Критерии оценки (анкета?)" },
-					new DataPane { Key = "tab_7", Name = "Документы (поле?)" },
-					new DataPane { Key = "tab_8", Name = "Контактные лица (поле?)" },
+					new DataPane { Key = "info", Name = "Информация", Icon = "profile", Component = "panes/private/EditEventPane" },
+					new DataPane { Key = "invitations", Name = "Приглашения (0)", Icon = "solution", Component = "panes/private/InvitationPane" },
+					new DataPane { Key = "proposals", Name = "Предложения", Icon = "solution" },
+					new DataPane { Key = "questions", Name = "Разъяснения", Icon = "solution" },
+					new DataPane { Key = "team", Name = "Команда", Icon = "team" },
+					new DataPane { Key = "items", Name = "Позиции", Icon = "table" },
+					new DataPane { Key = "history", Name = "История изменений", Icon = "eye" },
+					new DataPane { Key = "5", Name = "Тендерная комиссия (команда?)" },
+					new DataPane { Key = "6", Name = "Критерии оценки (анкета?)" },
+					new DataPane { Key = "7", Name = "Документы (поле?)" },
+					new DataPane { Key = "8", Name = "Контактные лица (поле?)" },
+				};
+			}
+
+			if (viewId == "Event/Invitation/List")
+			{
+				result.Columns = new List<DataColumn>
+				{
+					new DataColumn { Key = "counterpartyName", Name = "Контрагент", Sortable = true, Width = 400 },
+					new DataColumn { Key = "statusCode", Name = "Статус", Width = 100 },
+					new DataColumn { Key = "user", Name = "Контактное лицо", Width = 100 },
+					new DataColumn { Key = "email", Name = "Email", Width = 100 },
+					new DataColumn { Key = "phone", Name = "Телефон", Width = 100 },
+					new DataColumn { Key = "createDate", Name = "Дата создания", Width = 100 },
+					new DataColumn { Key = "inviteDate", Name = "Дата приглашения", Width = 100 },
+					new DataColumn { Key = "lastAccessDate", Name = "Дата последнего доступа", Width = 100 },
+				};
+			}
+
+			if (viewId == "Event/Invitation/Form")
+			{
+				result.Fields = new List<FormField>
+				{
+					new ClassifierField { Key = "counterpartyUid", Name = "Контрагент", TypeCode = "counterparty", Required = true },
+					new StringField { Key = "user", Name = "Пользователь" },
+					new StringField { Key = "email", Name = "Email", Required = true },
+					new StringField { Key = "phone", Name = "Телефон" },
 				};
 			}
 

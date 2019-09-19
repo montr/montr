@@ -1,13 +1,14 @@
 import * as React from "react";
-import { TreeSelect, Spin, Icon } from "antd";
+import { Spin, Icon, Select, Divider, Button } from "antd";
 import { IClassifierField, Guid } from "@montr-core/models";
-import { ClassifierGroupService, ClassifierTreeService, ClassifierTypeService } from "../services";
-import { IClassifierGroup, IClassifierTree, IClassifierType } from "../models";
+import { ClassifierService } from "../services";
+import { IClassifierGroup, IClassifierTree, IClassifierType, IClassifier } from "../models";
 import { CompanyContextProps, withCompanyContext } from "@kompany/components";
-import { TreeNode } from "antd/lib/tree-select";
+import { RouteBuilder } from "..";
+import { Link } from "react-router-dom";
+// import { debounce } from "lodash";
 
 interface IProps extends CompanyContextProps {
-	// mode: "Tree" | "Group";
 	value?: string;
 	field: IClassifierField;
 	onChange?: (value: any) => void;
@@ -15,6 +16,9 @@ interface IProps extends CompanyContextProps {
 
 interface IState {
 	loading: boolean;
+	fetching: boolean;
+	items?: IClassifier[];
+
 	value: string;
 	type?: IClassifierType;
 	trees?: IClassifierTree[];
@@ -35,18 +39,21 @@ class _ClassifierSelect extends React.Component<IProps, IState> {
 		return null;
 	}
 
-	private _classifierTypeService = new ClassifierTypeService();
-	private _classifierTreeService = new ClassifierTreeService();
-	private _classifierGroupService = new ClassifierGroupService();
+	private _classifierService = new ClassifierService();
 
 	constructor(props: IProps) {
 		super(props);
 
+		// this.lastFetchId = 0;
+
 		this.state = {
 			loading: true,
+			fetching: false,
 			value: props.value,
 			expanded: []
 		};
+
+		// this.onSearch = debounce(this.onSearch, 800);
 	}
 
 	componentDidMount = async () => {
@@ -60,164 +67,90 @@ class _ClassifierSelect extends React.Component<IProps, IState> {
 	}
 
 	componentWillUnmount = async () => {
-		await this._classifierTypeService.abort();
-		await this._classifierTreeService.abort();
-		await this._classifierGroupService.abort();
+		await this._classifierService.abort();
 	}
 
 	fetchData = async () => {
 		const { currentCompany, field } = this.props,
-			{ value, expanded } = this.state;
+			{ value } = this.state;
 
 		if (currentCompany) {
 
-			const type = await this._classifierTypeService.get(currentCompany.uid, { typeCode: field.typeCode });
+			const data = await this._classifierService.list(currentCompany.uid, {
+				typeCode: field.typeCode, focusUid: value, pageSize: 1000
+			});
 
-			let trees: IClassifierTree[], groups: IClassifierGroup[];
-
-			if (type.hierarchyType == "Groups") {
-				if (field.treeCode || field.treeUid) {
-					const result = await this._classifierGroupService.list(
-						currentCompany.uid, { typeCode: field.typeCode, treeCode: field.treeCode, treeUid: field.treeUid, focusUid: value });
-
-					groups = result.rows;
-
-					await this.collectExpanded(groups, expanded);
-				}
-				else {
-					const result = await this._classifierTreeService.list(currentCompany.uid, { typeCode: field.typeCode });
-
-					trees = result.rows;
-				}
-			}
-			else if (type.hierarchyType == "Items") {
-				const result = await this._classifierGroupService.list(
-					currentCompany.uid, { typeCode: field.typeCode, focusUid: value });
-
-				groups = result.rows;
-
-				await this.collectExpanded(groups, expanded);
-			}
-
-			this.setState({ loading: false, type, trees, groups, expanded });
+			this.setState({ loading: false, items: data.rows });
 		}
 	}
 
-	async collectExpanded(groups: IClassifierGroup[], expanded?: Guid[]) {
-		groups && groups.forEach(group => {
-			if (group.children) {
-
-				expanded.push(group.uid);
-
-				this.collectExpanded(group.children, expanded);
-			}
-		});
-	}
-
-	handleChange = (value: any, label: any, extra: any) => {
+	handleChange = (value: any/* , label: any, extra: any */) => {
 		// Should provide an event to pass value to Form.
 		const { onChange } = this.props;
+
+		this.setState({
+			value,
+			// items: [], // ???
+			fetching: false,
+		});
 
 		if (onChange) {
 			onChange(value);
 		}
 	}
 
-	onLoadData = (node: any) => {
-		return new Promise(async (resolve) => {
+	onSearch = async (value: string) => {
 
-			if (node.props.dataType == "Tree") {
-				const tree: IClassifierTree = node.props.dataRef;
+		const { currentCompany, field } = this.props;
 
-				if (!tree.children) {
-					const { currentCompany, field } = this.props,
-						{ trees } = this.state;
+		if (currentCompany) {
 
-					const children = await this._classifierGroupService.list(
-						currentCompany.uid, { typeCode: field.typeCode, treeUid: tree.uid, parentUid: null });
+			this.setState({ items: [], fetching: true });
 
-					tree.children = children.rows;
-
-					this.setState({ trees });
-				}
-			}
-			else {
-				const group: IClassifierGroup = node.props.dataRef;
-
-				if (!group.children) {
-					const { currentCompany, field } = this.props,
-						{ groups } = this.state;
-
-					const children = await this._classifierGroupService.list(
-						currentCompany.uid, { typeCode: field.typeCode, treeUid: group.treeUid, parentUid: group.uid });
-
-					group.children = children.rows;
-
-					this.setState({ groups });
-				}
-			}
-
-			resolve();
-		});
-	}
-
-	buildTree(trees: IClassifierTree[], groups: IClassifierGroup[]): TreeNode[] {
-		if (trees) {
-			return trees.map(tree => {
-
-				const result: TreeNode = {
-					selectable: false,
-					value: tree.uid,
-					title: <span><Icon type="folder" /> {tree.name}</span>,
-					dataRef: tree,
-					dataType: "Tree"
-				};
-
-				if (tree.children) {
-					result.children = this.buildTree(null, tree.children);
-				}
-
-				return result;
+			const data = await this._classifierService.list(currentCompany.uid, {
+				typeCode: field.typeCode, searchTerm: value
 			});
-		}
-		else if (groups) {
-			return groups && groups.map(group => {
 
-				const result: TreeNode = {
-					value: group.uid,
-					title: <span><Icon type="file" /> {group.name} ({group.code})</span>,
-					dataRef: group,
-					dataType: "Group"
-				};
-
-				if (group.children) {
-					result.children = this.buildTree(null, group.children);
-				}
-
-				return result;
-			});
+			this.setState({ items: data.rows, fetching: false });
 		}
 	}
 
 	render() {
 		const { value, field } = this.props,
-			{ loading, expanded, trees, groups } = this.state;
+			{ loading, fetching, items } = this.state;
 
-		const treeData = this.buildTree(trees, groups);
+		const options = items
+			&& items.map(x => <Select.Option key={x.uid.toString()}>{x.name}</Select.Option>);
 
-		return (
-			<Spin spinning={loading}>
-				<TreeSelect
-					onChange={this.handleChange}
-					allowClear={!field.required} showSearch
-					placeholder={field.placeholder}
-					treeDefaultExpandedKeys={expanded.map(x => x.toString())}
-					loadData={this.onLoadData}
-					treeData={treeData}
-					value={value}
-				/>
-			</Spin>
-		);
+		// https://github.com/ant-design/ant-design/issues/13448
+		// https://codesandbox.io/s/oo6q47mnr9
+
+		return (<Select
+			value={value}
+			loading={loading}
+			showArrow={true}
+			showSearch={true}
+			autoClearSearchValue={false}
+			onSearch={this.onSearch}
+			notFoundContent={fetching ? <Spin size="small" /> : null}
+			filterOption={false}
+			placeholder={field.placeholder}
+			allowClear={!field.required}
+			onChange={this.handleChange}
+			dropdownRender={menu => (
+				<div>
+					{menu}
+					<Divider style={{ margin: "1px 0" }} />
+					<div onMouseDown={e => e.preventDefault()}>
+						<Link to={RouteBuilder.addClassifier(field.typeCode, null)}>
+							<Button type="link"><Icon type="plus" /> Добавить элемент</Button>
+						</Link>
+					</div >
+				</div>
+			)}
+		>
+			{options}
+		</Select>);
 	}
 }
 

@@ -12,18 +12,18 @@ using Montr.Metadata.Models;
 
 namespace Montr.MasterData.Impl.CommandHandlers
 {
-	public class DeleteClassifierTypeListHandler : IRequestHandler<DeleteClassifierTypeList, ApiResult>
+	public class DeleteClassifierTypeHandler : IRequestHandler<DeleteClassifierType, ApiResult>
 	{
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IDbContextFactory _dbContextFactory;
 
-		public DeleteClassifierTypeListHandler(IUnitOfWorkFactory unitOfWorkFactory, IDbContextFactory dbContextFactory)
+		public DeleteClassifierTypeHandler(IUnitOfWorkFactory unitOfWorkFactory, IDbContextFactory dbContextFactory)
 		{
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_dbContextFactory = dbContextFactory;
 		}
 
-		public async Task<ApiResult> Handle(DeleteClassifierTypeList request, CancellationToken cancellationToken)
+		public async Task<ApiResult> Handle(DeleteClassifierType request, CancellationToken cancellationToken)
 		{
 			if (request.UserUid == Guid.Empty) throw new InvalidOperationException("User is required.");
 			if (request.CompanyUid == Guid.Empty) throw new InvalidOperationException("Company is required.");

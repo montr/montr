@@ -8,19 +8,18 @@ using Montr.Core.Services;
 using Montr.Data.Linq2Db;
 using Montr.MasterData.Commands;
 using Montr.MasterData.Impl.Entities;
-using Montr.MasterData.Models;
 using Montr.MasterData.Services;
 using Montr.Metadata.Models;
 
 namespace Montr.MasterData.Impl.CommandHandlers
 {
-	public class DeleteClassifierTreeListHandler : IRequestHandler<DeleteClassifierTreeList, ApiResult>
+	public class DeleteClassifierHandler : IRequestHandler<DeleteClassifier, ApiResult>
 	{
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IDbContextFactory _dbContextFactory;
 		private readonly IClassifierTypeService _classifierTypeService;
 
-		public DeleteClassifierTreeListHandler(IUnitOfWorkFactory unitOfWorkFactory, IDbContextFactory dbContextFactory,
+		public DeleteClassifierHandler(IUnitOfWorkFactory unitOfWorkFactory, IDbContextFactory dbContextFactory,
 			IClassifierTypeService classifierTypeService)
 		{
 			_unitOfWorkFactory = unitOfWorkFactory;
@@ -28,7 +27,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 			_classifierTypeService = classifierTypeService;
 		}
 
-		public async Task<ApiResult> Handle(DeleteClassifierTreeList request, CancellationToken cancellationToken)
+		public async Task<ApiResult> Handle(DeleteClassifier request, CancellationToken cancellationToken)
 		{
 			if (request.UserUid == Guid.Empty) throw new InvalidOperationException("User is required.");
 			if (request.CompanyUid == Guid.Empty) throw new InvalidOperationException("Company is required.");
@@ -42,10 +41,8 @@ namespace Montr.MasterData.Impl.CommandHandlers
 
 				using (var db = _dbContextFactory.Create())
 				{
-					// todo: return error when trying to remove default tree
-					affected = await db.GetTable<DbClassifierTree>()
-						.Where(x => x.TypeUid == type.Uid && request.Uids.Contains(x.Uid)
-									&& x.Code != ClassifierTree.DefaultCode)
+					affected = await db.GetTable<DbClassifier>()
+						.Where(x => x.TypeUid == type.Uid && request.Uids.Contains(x.Uid))
 						.DeleteAsync(cancellationToken);
 				}
 

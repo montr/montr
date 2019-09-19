@@ -4,7 +4,7 @@ using Montr.Metadata.Models;
 
 namespace Montr.MasterData.Commands
 {
-	public class DeleteClassifierTypeList : IRequest<ApiResult>
+	public class DeleteClassifierType : IRequest<ApiResult>
 	{
 		public Guid UserUid { get; set; }
 

@@ -23,7 +23,7 @@ namespace Montr.MasterData.Tests.CommandHandlers
 			var classifierTypeRepository = new DbClassifierTypeRepository(dbContextFactory);
 			var classifierTypeService = new DefaultClassifierTypeService(classifierTypeRepository);
 			var dbHelper = new DbHelper(unitOfWorkFactory, dbContextFactory);
-			var handler = new DeleteClassifierTreeListHandler(unitOfWorkFactory, dbContextFactory, classifierTypeService);
+			var handler = new DeleteClassifierTreeHandler(unitOfWorkFactory, dbContextFactory, classifierTypeService);
 
 			using (var _ = unitOfWorkFactory.Create())
 			{
@@ -36,7 +36,7 @@ namespace Montr.MasterData.Tests.CommandHandlers
 				Assert.AreEqual(2, trees.TotalCount);
 
 				// act
-				var result = await handler.Handle(new DeleteClassifierTreeList
+				var result = await handler.Handle(new DeleteClassifierTree
 				{
 					UserUid = dbHelper.UserUid,
 					CompanyUid = dbHelper.CompanyUid,

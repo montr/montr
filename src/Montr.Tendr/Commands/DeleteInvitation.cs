@@ -2,15 +2,13 @@
 using MediatR;
 using Montr.Metadata.Models;
 
-namespace Montr.MasterData.Commands
+namespace Montr.Tendr.Commands
 {
-	public class DeleteClassifierTreeList : IRequest<ApiResult>
+	public class DeleteInvitation : IRequest<ApiResult>
 	{
 		public Guid UserUid { get; set; }
 
 		public Guid CompanyUid { get; set; }
-
-		public string TypeCode { get; set; }
 
 		public Guid[] Uids { get; set; }
 	}

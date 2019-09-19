@@ -1,12 +1,13 @@
 import * as React from "react";
 import { BrowserRouter as Router } from "react-router-dom";
-import { ConfigProvider, Layout } from "antd";
+import { ConfigProvider, Layout, Icon } from "antd";
 import ru_RU from "antd/lib/locale-provider/ru_RU";
 import { Routes } from ".";
 import { Routes as MasterDataRoutes } from "@montr-master-data/.";
 import { AuthCallbackHandler, UserContextProvider, DataMenu } from "@montr-core/components";
 import { CompanyContextProvider, UserWithCompanyMenu } from "@kompany/components";
 import { NotificationService } from "@montr-core/services";
+import { Footer } from "../../components";
 
 interface IProps {
 }
@@ -63,7 +64,11 @@ export class App extends React.Component<IProps, IState> {
 											<MasterDataRoutes />
 
 										</Layout.Content>
-										<Layout.Footer className="bg-white">© {new Date().getFullYear()}</Layout.Footer>
+										<Layout.Footer className="bg-white">
+
+											<Footer />
+
+										</Layout.Footer>
 									</Layout>
 
 								</Layout>

@@ -1,12 +1,15 @@
 ﻿using System;
 using MediatR;
+using Montr.Metadata.Models;
 using Montr.Tendr.Models;
 
 namespace Montr.Tendr.Commands
 {
-	public class CreateEvent: IRequest<long>
+	public class InsertEvent: IRequest<ApiResult>
 	{
 		public Guid UserUid { get; set; }
+
+		public Guid CompanyUid { get; set; }
 
 		public Event Event { get; set; }
 	}

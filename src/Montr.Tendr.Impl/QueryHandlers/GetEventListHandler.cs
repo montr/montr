@@ -29,7 +29,7 @@ namespace Montr.Tendr.Impl.QueryHandlers
 			{
 				var all = db.GetTable<DbEvent>();
 
-				var date = await all
+				var data = await all
 					.Apply(request, x => x.Id, SortOrder.Descending)
 					.Select(x => new Event
 					{
@@ -40,14 +40,14 @@ namespace Montr.Tendr.Impl.QueryHandlers
 						CompanyUid = x.CompanyUid,
 						Name = x.Name,
 						Description = x.Description,
-						Url = "/events/edit/" + x.Id
+						Url = "/events/edit/" + x.Uid
 					})
 					.ToListAsync(cancellationToken);
 
 				var result = new SearchResult<Event>
 				{
 					TotalCount = all.Count(),
-					Rows = date
+					Rows = data
 				};
 
 				return result;

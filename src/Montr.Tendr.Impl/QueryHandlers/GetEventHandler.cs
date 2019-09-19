@@ -24,7 +24,7 @@ namespace Montr.Tendr.Impl.QueryHandlers
 			using (var db = _dbContextFactory.Create())
 			{
 				var result = await db.GetTable<DbEvent>()
-					.Where(x => x.Id == command.EventId)
+					.Where(x => x.Uid == command.Uid)
 					.Select(x => new Event
 					{
 						Uid = x.Uid,
@@ -34,7 +34,7 @@ namespace Montr.Tendr.Impl.QueryHandlers
 						CompanyUid = x.CompanyUid,
 						Name = x.Name,
 						Description = x.Description,
-						Url = "/events/edit/" + x.Id
+						Url = "/events/edit/" + x.Uid
 					})
 					.SingleAsync(cancellationToken);
 

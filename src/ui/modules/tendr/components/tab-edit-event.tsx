@@ -2,7 +2,7 @@ import * as React from "react";
 import { Form, Input, message } from "antd";
 import { FormComponentProps } from "antd/lib/form";
 import { IApiResult, IPaneProps } from "@montr-core/models";
-import { EventService } from "../../services";
+import { EventService } from "../services";
 import { IPaneComponent, FormDefaults } from "@montr-core/components";
 import { IEvent } from "modules/tendr/models";
 
@@ -88,7 +88,7 @@ interface IEditEventPaneProps extends IPaneProps<IEvent> {
 interface IEditEventTabState {
 }
 
-export class EditEventPane extends React.Component<IEditEventPaneProps, IEditEventTabState> {
+export class TabEditEvent extends React.Component<IEditEventPaneProps, IEditEventTabState> {
 
 	private _formRef: IPaneComponent;
 

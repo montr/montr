@@ -5,9 +5,11 @@ import { Redirect } from "react-router-dom";
 import { Page } from "@montr-core/components";
 import { withCompanyContext, CompanyContextProps } from "@kompany/components";
 import { IEventTemplate } from "modules/tendr/models";
+import { IApiResult, Guid } from "@montr-core/models";
+import { RouteBuilder } from ".";
 
 interface State {
-	newId?: number;
+	newUid?: Guid;
 	data: IEventTemplate[];
 }
 
@@ -18,7 +20,10 @@ class _SelectEventTemplate extends React.Component<CompanyContextProps, State> {
 
 	constructor(props: CompanyContextProps) {
 		super(props);
-		this.state = { data: [] };
+
+		this.state = {
+			data: []
+		};
 	}
 
 	componentDidMount = async () => {
@@ -31,17 +36,19 @@ class _SelectEventTemplate extends React.Component<CompanyContextProps, State> {
 	}
 
 	private _handleSelect = async (configCode: string) => {
-		const newId: number = await this._eventService.create({
+		const result: IApiResult = await this._eventService.insert({
 			configCode: configCode,
 			companyUid: this.props.currentCompany.uid
 		});
 
-		this.setState({ newId: newId });
+		this.setState({ newUid: result.uid });
 	}
 
 	render = () => {
-		if (this.state.newId) {
-			return <Redirect to={`/events/edit/${this.state.newId}`} />
+		const { newUid } = this.state;
+
+		if (newUid) {
+			return <Redirect to={RouteBuilder.editClassifier(newUid.toString())} />
 		}
 
 		return (

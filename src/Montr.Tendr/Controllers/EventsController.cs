@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Montr.Core.Models;
+using Montr.Metadata.Models;
 using Montr.Tendr.Commands;
 using Montr.Tendr.Models;
 using Montr.Tendr.Queries;
@@ -37,14 +38,14 @@ namespace Montr.Tendr.Controllers
 		{
 			return await _mediator.Send(new GetEvent
 			{
-				EventId = item.Id
+				Uid = item.Uid
 			});
 		}
 
 		[HttpPost]
-		public async Task<ActionResult<long>> Create(Event item)
+		public async Task<ApiResult> Insert(Event item)
 		{
-			return await _mediator.Send(new CreateEvent
+			return await _mediator.Send(new InsertEvent
 			{
 				UserUid = _currentUserProvider.GetUserUid(),
 				Event = item
@@ -52,15 +53,13 @@ namespace Montr.Tendr.Controllers
 		}
 
 		[HttpPost]
-		public async Task<ActionResult> Update(Event item)
+		public async Task<ApiResult> Update(Event item)
 		{
-			await _mediator.Send(new UpdateEvent
+			return await _mediator.Send(new UpdateEvent
 			{
 				UserUid = _currentUserProvider.GetUserUid(),
-				Event = item
+				Item = item
 			});
-
-			return Ok();
 		}
 
 		[HttpPost]

@@ -17,6 +17,12 @@ namespace Montr.MasterData.Models
 
 		public string Depth { get; set; }
 
+		public Guid? FocusUid { get; set; }
+
+		public string SearchTerm { get; set; }
+
+		public Guid[] Uids { get; set; }
+
 		public Guid? Uid { get; set; }
 	}
 }

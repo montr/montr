@@ -13,9 +13,10 @@ namespace Montr.Tendr.Tests.QueryHandlers
 	public class GetEventListHandlerTests
 	{
 		[TestMethod]
-		public async Task GetEventList_Should_ReturnEventList()
+		public async Task GetEventList_ForNormalRequest_ReturnItems()
 		{
 			// arrange
+			var cancellationToken = CancellationToken.None;
 			var dbContextFactory = new DefaultDbContextFactory();
 
 			var handler = new GetEventListHandler(dbContextFactory);
@@ -29,7 +30,7 @@ namespace Montr.Tendr.Tests.QueryHandlers
 				}
 			};
 
-			var result = await handler.Handle(command, CancellationToken.None);
+			var result = await handler.Handle(command, cancellationToken);
 
 			// assert
 			Assert.IsNotNull(result);

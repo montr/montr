@@ -1,4 +1,5 @@
 import { Fetcher } from "@montr-core/services";
+import { Guid } from "@montr-core/models";
 import { IApiResult } from "@montr-core/models/api-result";
 import { Constants } from "@montr-core/.";
 import { IEvent } from "../models";
@@ -14,23 +15,23 @@ export class EventService extends Fetcher {
 		return this.post(`${Constants.apiURL}/Events/List`);
 	};
 
-	get = async (id: number): Promise<IEvent> => {
-		return this.post(`${Constants.apiURL}/Events/Get`, { id: id });
+	get = async (uid: Guid | string): Promise<IEvent> => {
+		return this.post(`${Constants.apiURL}/Events/Get`, { uid });
 	};
 
-	create = async (data: IEvent): Promise<number> => {
-		return this.post(`${Constants.apiURL}/Events/Create`, data);
+	insert = async (data: IEvent): Promise<IApiResult> => {
+		return this.post(`${Constants.apiURL}/Events/Insert`, data);
 	};
 
 	update = async (data: IEvent): Promise<IApiResult> => {
 		return this.post(`${Constants.apiURL}/Events/Update`, data);
 	};
 
-	publish = async (id: number): Promise<IApiResult> => {
+	publish = async (id: number | string): Promise<IApiResult> => {
 		return this.post(`${Constants.apiURL}/Events/Publish`, { id: id });
 	};
 
-	cancel = async (id: number): Promise<IApiResult> => {
+	cancel = async (id: number | string): Promise<IApiResult> => {
 		return this.post(`${Constants.apiURL}/Events/Cancel`, { id: id });
 	};
 
