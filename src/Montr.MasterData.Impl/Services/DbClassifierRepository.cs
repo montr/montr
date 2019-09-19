@@ -116,7 +116,10 @@ namespace Montr.MasterData.Impl.Services
 
 				if (request.SearchTerm != null)
 				{
-					query = query.Where(x => x.Name.Contains(request.SearchTerm));
+					query = query.Where(x => SqlExpr.ILike(x.Name, "%" + request.SearchTerm + "%"));
+
+					// query = query.Where(x => Sql.Like(x.Name, "%" + request.SearchTerm + "%"));
+					// query = query.Where(x => x.Name.Contains(request.SearchTerm));
 				}
 
 				var data = await Materialize(
