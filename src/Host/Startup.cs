@@ -38,9 +38,12 @@ namespace Host
 			{
 				options.AddPolicy("default", policy =>
 				{
-					policy.WithOrigins(
-						System.Environment.GetEnvironmentVariable("PUBLIC_APP_URL"),
-						System.Environment.GetEnvironmentVariable("PRIVATE_APP_URL"))
+					policy
+						.WithOrigins(
+							System.Environment.GetEnvironmentVariable("PUBLIC_APP_URL"),
+							System.Environment.GetEnvironmentVariable("PRIVATE_APP_URL"))
+						// .AllowAnyOrigin()
+						.AllowCredentials()
 						.AllowAnyHeader()
 						.AllowAnyMethod();
 				});

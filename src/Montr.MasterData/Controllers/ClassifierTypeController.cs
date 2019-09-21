@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Montr.Core.Models;
+using Montr.Kompany.Services;
 using Montr.MasterData.Commands;
 using Montr.MasterData.Models;
 using Montr.MasterData.Queries;
@@ -15,11 +16,14 @@ namespace Montr.MasterData.Controllers
 	public class ClassifierTypeController : ControllerBase
 	{
 		private readonly IMediator _mediator;
+		private readonly ICurrentCompanyProvider _currentCompanyProvider;
 		private readonly ICurrentUserProvider _currentUserProvider;
 
-		public ClassifierTypeController(IMediator mediator, ICurrentUserProvider currentUserProvider)
+		public ClassifierTypeController(IMediator mediator,
+			ICurrentCompanyProvider currentCompanyProvider, ICurrentUserProvider currentUserProvider)
 		{
 			_mediator = mediator;
+			_currentCompanyProvider = currentCompanyProvider;
 			_currentUserProvider = currentUserProvider;
 		}
 
@@ -36,6 +40,7 @@ namespace Montr.MasterData.Controllers
 		[HttpPost]
 		public async Task<ClassifierType> Get(GetClassifierType request)
 		{
+			request.CompanyUid = _currentCompanyProvider.GetCompanyUid();
 			request.UserUid = _currentUserProvider.GetUserUid();
 
 			return await _mediator.Send(request);

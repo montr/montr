@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Montr.Kompany.Services;
 using Montr.Modularity;
 
 namespace Montr.Kompany.Impl
@@ -8,7 +9,7 @@ namespace Montr.Kompany.Impl
 	{
 		public void ConfigureServices(IConfiguration configuration, IServiceCollection services)
 		{
-			// no-op, to load assembly in domain
+			services.AddSingleton<ICurrentCompanyProvider, DefaultCurrentCompanyProvider>();
 		}
 	}
 }

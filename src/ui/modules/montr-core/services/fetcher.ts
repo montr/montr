@@ -1,10 +1,14 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios"
 import { AuthService } from "./"
 
+// axios.defaults.withCredentials = true;
 axios.defaults.headers.common["Access-Control-Allow-Origin"] = "*";
+// axios.defaults.headers.common["Access-Control-Allow-Headers"] = "Content-Type, Accept";
 
 const authService = new AuthService();
-const authenticated = axios.create();
+const authenticated = axios.create({
+	// withCredentials: true,
+});
 
 authenticated.interceptors.request.use(
 	async (config) => {
@@ -50,6 +54,9 @@ export class Fetcher {
 			cancelToken: this._cancelTokenSource.token,
 		};
 
+		// config.withCredentials = true;
+		// config.headers.common["Access-Control-Allow-Headers"] = "Content-Type, Accept";
+
 		return config;
 	}
 
@@ -68,6 +75,7 @@ export class Fetcher {
 
 		const config = this.getRequestConfig();
 
+		// const response = await authenticated.post(url, JSON.stringify(body), config);
 		const response = await authenticated.post(url, body, config);
 
 		return response ? response.data : null;

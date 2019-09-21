@@ -62,7 +62,7 @@ class _EditClassifierType extends React.Component<IProps, IState> {
 
 			const types = await this._classifierTypeService.list(currentCompany.uid);
 
-			const data = (uid) ? await this._classifierTypeService.get(currentCompany.uid, { uid }) : this.state.data;
+			const data = (uid) ? await this._classifierTypeService.get(null /* currentCompany.uid */, { uid }) : this.state.data;
 
 			this.setState({ loading: false, data, types: types.rows });
 		}
