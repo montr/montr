@@ -113,7 +113,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 					scope.Commit();
 				}
 
-				return new ApiResult { Success = true, Uid = itemUid };
+				return new ApiResult { Uid = itemUid };
 			}
 		}
 

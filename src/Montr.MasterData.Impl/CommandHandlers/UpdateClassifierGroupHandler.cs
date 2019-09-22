@@ -41,6 +41,8 @@ namespace Montr.MasterData.Impl.CommandHandlers
 
 			using (var scope = _unitOfWorkFactory.Create())
 			{
+				int affected;
+
 				using (var db = _dbContextFactory.Create())
 				{
 					/*var tree = await db.GetTable<DbClassifierTree>()
@@ -60,7 +62,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 						return new ApiResult { Success = false, Errors = closureTable.Errors };
 					}
 
-					await db.GetTable<DbClassifierGroup>()
+					affected = await db.GetTable<DbClassifierGroup>()
 						.Where(x => x.Uid == item.Uid)
 						.Set(x => x.ParentUid, item.ParentUid)
 						.Set(x => x.Code, item.Code)
@@ -72,7 +74,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 
 				scope.Commit();
 
-				return new ApiResult { Success = true };
+				return new ApiResult { AffectedRows = affected };
 			}
 		}
 	}

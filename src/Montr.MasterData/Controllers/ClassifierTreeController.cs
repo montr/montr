@@ -28,15 +28,12 @@ namespace Montr.MasterData.Controllers
 		}
 
 		[HttpPost]
-		public async Task<SearchResult<ClassifierTree>> List(ClassifierTreeSearchRequest request)
+		public async Task<SearchResult<ClassifierTree>> List(GetClassifierTreeList request)
 		{
 			request.CompanyUid = _currentCompanyProvider.GetCompanyUid();
 			request.UserUid = _currentUserProvider.GetUserUid();
 
-			return await _mediator.Send(new GetClassifierTreeList
-			{
-				Request = request
-			});
+			return await _mediator.Send(request);
 		}
 
 		[HttpPost]

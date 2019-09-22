@@ -1,9 +1,14 @@
-﻿using Montr.Core.Models;
+﻿using System;
+using Montr.Core.Models;
 
 namespace Montr.Tendr.Models
 {
 	public class EventSearchRequest : Paging
     {
-        public string Name { get; set; }
+	    public Guid CompanyUid { get; set; }
+
+	    public Guid UserUid { get; set; }
+
+		public string Name { get; set; }
     }
 }

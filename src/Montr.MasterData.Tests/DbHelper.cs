@@ -102,12 +102,9 @@ namespace Montr.MasterData.Tests
 		{
 			var result = await _getClassifierTreeListHandler.Handle(new GetClassifierTreeList
 			{
-				Request = new ClassifierTreeSearchRequest
-				{
-					CompanyUid = CompanyUid,
-					UserUid = UserUid,
-					TypeCode = TypeCode,
-				}
+				CompanyUid = CompanyUid,
+				UserUid = UserUid,
+				TypeCode = TypeCode,
 			}, cancellationToken);
 
 			Assert.IsNotNull(result);
@@ -270,14 +267,11 @@ namespace Montr.MasterData.Tests
 		{
 			return await _getClassifierLinkListHandler.Handle(new GetClassifierLinkList
 			{
-				Request = new ClassifierLinkSearchRequest
-				{
-					CompanyUid = CompanyUid,
-					UserUid = UserUid,
-					TypeCode = TypeCode,
-					GroupUid = groupUid,
-					ItemUid = itemUid
-				}
+				CompanyUid = CompanyUid,
+				UserUid = UserUid,
+				TypeCode = TypeCode,
+				GroupUid = groupUid,
+				ItemUid = itemUid
 			}, cancellationToken);
 		}
 

@@ -17,9 +17,9 @@ namespace Montr.MasterData.Impl.QueryHandlers
 			_repository = repository;
 		}
 
-		public async Task<SearchResult<ClassifierType>> Handle(GetClassifierTypeList command, CancellationToken cancellationToken)
+		public async Task<SearchResult<ClassifierType>> Handle(GetClassifierTypeList request, CancellationToken cancellationToken)
 		{
-			return await _repository.Search(command.Request, cancellationToken);
+			return await _repository.Search(request, cancellationToken);
 		}
 	}
 }

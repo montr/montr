@@ -1,18 +1,18 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using LinqToDB;
 using MediatR;
 using Montr.Core.Services;
 using Montr.Data.Linq2Db;
+using Montr.Metadata.Models;
 using Montr.Tendr.Commands;
 using Montr.Tendr.Impl.Entities;
 using Montr.Tendr.Models;
 
 namespace Montr.Tendr.Impl.CommandHandlers
 {
-	public class CancelEventHandler : IRequestHandler<CancelEvent>
+	public class CancelEventHandler : IRequestHandler<CancelEvent, ApiResult>
 	{
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IDbContextFactory _dbContextFactory;
@@ -23,23 +23,20 @@ namespace Montr.Tendr.Impl.CommandHandlers
 			_dbContextFactory = dbContextFactory;
 		}
 
-		public async Task<Unit> Handle(CancelEvent request, CancellationToken cancellationToken)
+		public async Task<ApiResult> Handle(CancelEvent request, CancellationToken cancellationToken)
 		{
-			if (request.UserUid == Guid.Empty)
-				throw new InvalidOperationException("User uid can't be empty guid.");
-
 			using (var scope = _unitOfWorkFactory.Create())
 			{
 				using (var db = _dbContextFactory.Create())
 				{
 					var affected = await db.GetTable<DbEvent>()
-						.Where(x => x.Id == request.EventId)
+						.Where(x => x.CompanyUid == request.CompanyUid && x.Id == request.EventId)
 						.Set(x => x.StatusCode, EventStatusCode.Cancelled)
 						.UpdateAsync(cancellationToken);
 
 					scope.Commit();
 
-					return Unit.Value;
+					return new ApiResult { AffectedRows = affected };
 				}
 			}
 		}

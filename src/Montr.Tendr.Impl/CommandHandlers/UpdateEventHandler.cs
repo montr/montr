@@ -35,7 +35,7 @@ namespace Montr.Tendr.Impl.CommandHandlers
 			{
 				using (var db = _dbContextFactory.Create())
 				{
-					await db.GetTable<DbEvent>()
+					var affected = await db.GetTable<DbEvent>()
 						.Where(x => x.Id == item.Id)
 						.Set(x => x.Name, item.Name)
 						.Set(x => x.Description, item.Description)
@@ -43,7 +43,7 @@ namespace Montr.Tendr.Impl.CommandHandlers
 
 					scope.Commit();
 
-					return new ApiResult { Success = true };
+					return new ApiResult { AffectedRows = affected };
 				}
 			}
 		}

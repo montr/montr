@@ -78,7 +78,7 @@ namespace Montr.Tendr.Impl.CommandHandlers
 					scope.Commit();
 				}
 
-				return new ApiResult { Success = true, AffectedRows = affectedRows };
+				return new ApiResult { AffectedRows = affectedRows };
 			}
 		}
 	}

@@ -59,7 +59,7 @@ namespace Montr.Tendr.Impl.CommandHandlers
 
 					scope.Commit();
 
-					return new ApiResult { Success = true, Uid = uid };
+					return new ApiResult { Uid = uid };
 				}
 			}
 		}

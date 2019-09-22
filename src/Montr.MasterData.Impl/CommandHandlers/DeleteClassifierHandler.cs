@@ -50,7 +50,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 
 				scope.Commit();
 
-				return new ApiResult { Success = true, AffectedRows = affected };
+				return new ApiResult { AffectedRows = affected };
 			}
 		}
 	}

@@ -7,6 +7,8 @@ namespace Montr.Tendr.Commands
 {
 	public class UpdateEvent : IRequest<ApiResult>
 	{
+		public Guid CompanyUid { get; set; }
+
 		public Guid UserUid { get; set; }
 
 		public Event Item { get; set; }

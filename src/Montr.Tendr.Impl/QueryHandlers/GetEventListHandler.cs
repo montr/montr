@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using LinqToDB;
@@ -21,13 +22,14 @@ namespace Montr.Tendr.Impl.QueryHandlers
 			_dbContextFactory = dbContextFactory;
 		}
 
-		public async Task<SearchResult<Event>> Handle(GetEventList command, CancellationToken cancellationToken)
+		public async Task<SearchResult<Event>> Handle(GetEventList request, CancellationToken cancellationToken)
 		{
-			var request = command.Request;
+			if (request == null) throw new ArgumentNullException(nameof(request));
 
 			using (var db = _dbContextFactory.Create())
 			{
-				var all = db.GetTable<DbEvent>();
+				var all = db.GetTable<DbEvent>()
+					.Where(x => x.CompanyUid == request.CompanyUid);
 
 				var data = await all
 					.Apply(request, x => x.Id, SortOrder.Descending)

@@ -4,8 +4,7 @@ using Montr.MasterData.Models;
 
 namespace Montr.MasterData.Queries
 {
-	public class GetClassifierList : IRequest<SearchResult<Classifier>>
+	public class GetClassifierList : ClassifierSearchRequest, IRequest<SearchResult<Classifier>>
 	{
-		public ClassifierSearchRequest Request { get; set; }
 	}
 }

@@ -6,9 +6,9 @@ namespace Montr.MasterData.Commands
 {
 	public class DeleteClassifier: IRequest<ApiResult>
 	{
-		public Guid UserUid { get; set; }
-
 		public Guid CompanyUid { get; set; }
+
+		public Guid UserUid { get; set; }
 
 		public string TypeCode { get; set; }
 

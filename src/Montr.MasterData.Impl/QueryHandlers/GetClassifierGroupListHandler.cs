@@ -29,9 +29,9 @@ namespace Montr.MasterData.Impl.QueryHandlers
 			_classifierTreeService = classifierTreeService;
 		}
 
-		public async Task<SearchResult<ClassifierGroup>> Handle(GetClassifierGroupList command, CancellationToken cancellationToken)
+		public async Task<SearchResult<ClassifierGroup>> Handle(GetClassifierGroupList request, CancellationToken cancellationToken)
 		{
-			var request = command.Request ?? throw new ArgumentNullException(nameof(command.Request));
+			if (request == null) throw new ArgumentNullException(nameof(request));
 
 			var type = await _classifierTypeService.GetClassifierType(request.CompanyUid, request.TypeCode, cancellationToken);
 
