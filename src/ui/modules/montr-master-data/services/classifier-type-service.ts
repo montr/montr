@@ -9,23 +9,23 @@ interface IGetClassifierType {
 }
 
 export class ClassifierTypeService extends Fetcher {
-	list = async (companyUid: Guid): Promise<IDataResult<IClassifierType>> => {
-		return this.post(`${Constants.apiURL}/classifierType/list`, { companyUid });
+	list = async (): Promise<IDataResult<IClassifierType>> => {
+		return this.post(`${Constants.apiURL}/classifierType/list`, {});
 	};
 
-	get = async (companyUid: Guid, request: IGetClassifierType): Promise<IClassifierType> => {
-		return this.post(`${Constants.apiURL}/classifierType/get`, { companyUid, ...request });
+	get = async (request: IGetClassifierType): Promise<IClassifierType> => {
+		return this.post(`${Constants.apiURL}/classifierType/get`, request);
 	};
 
-	insert = async (companyUid: Guid, data: IClassifierType): Promise<IApiResult> => {
-		return this.post(`${Constants.apiURL}/classifierType/insert`, { companyUid, item: data });
+	insert = async (item: IClassifierType): Promise<IApiResult> => {
+		return this.post(`${Constants.apiURL}/classifierType/insert`, { item });
 	};
 
-	update = async (companyUid: Guid, data: IClassifierType): Promise<IApiResult> => {
-		return this.post(`${Constants.apiURL}/classifierType/update`, { companyUid, item: data });
+	update = async (item: IClassifierType): Promise<IApiResult> => {
+		return this.post(`${Constants.apiURL}/classifierType/update`, { item });
 	};
 
-	delete = async (companyUid: Guid, uids: string[] | number[]): Promise<IApiResult> => {
-		return this.post(`${Constants.apiURL}/classifierType/delete`, { companyUid, uids });
+	delete = async (uids: string[] | number[]): Promise<IApiResult> => {
+		return this.post(`${Constants.apiURL}/classifierType/delete`, { uids });
 	};
 }

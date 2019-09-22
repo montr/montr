@@ -84,39 +84,32 @@ class _PaneSearchClassifier extends React.Component<IProps, IState> {
 	}
 
 	loadClassifierTypes = async () => {
-		const { currentCompany } = this.props;
+		const types = (await this._classifierTypeService.list()).rows;
 
-		if (currentCompany) {
-			const types = (await this._classifierTypeService.list(currentCompany.uid)).rows;
+		this.setState({ types });
 
-			this.setState({ types });
-
-			await this.loadClassifierType();
-		}
+		await this.loadClassifierType();
 	}
 
 	loadClassifierType = async () => {
-		const { currentCompany, typeCode } = this.props;
+		const { typeCode } = this.props;
 
-		if (currentCompany) {
-			const type = await this._classifierTypeService.get(currentCompany.uid, { typeCode });
+		const type = await this._classifierTypeService.get({ typeCode });
 
-			this.setState({ type });
+		this.setState({ type });
 
-			await this.loadClassifierTrees();
-		}
+		await this.loadClassifierTrees();
 	}
 
 	loadClassifierTrees = async () => {
-		const { currentCompany } = this.props,
-			{ type } = this.state;
+		const { type } = this.state;
 
-		if (currentCompany && type) {
+		if (type) {
 			let trees: IClassifierTree[] = [],
 				selectedTree: IClassifierTree;
 
 			if (type.hierarchyType == "Groups") {
-				trees = (await this._classifierTreeService.list(currentCompany.uid, { typeCode: type.code })).rows;
+				trees = (await this._classifierTreeService.list({ typeCode: type.code })).rows;
 
 				if (trees && trees.length > 0) {
 					selectedTree = trees.find(x => x.code == "default");
@@ -136,10 +129,9 @@ class _PaneSearchClassifier extends React.Component<IProps, IState> {
 		// to re-render page w/o groups tree, otherwise tree not refreshed
 		this.setState({ groups: null });
 
-		const { currentCompany } = this.props,
-			{ type, selectedTree } = this.state;
+		const { type, selectedTree } = this.state;
 
-		if (currentCompany && type) {
+		if (type) {
 			let groups: IClassifierGroup[] = [];
 
 			if (type.hierarchyType == "Groups" && selectedTree) {
@@ -155,10 +147,7 @@ class _PaneSearchClassifier extends React.Component<IProps, IState> {
 	}
 
 	fetchClassifierGroups = async (typeCode: string, treeUid?: Guid, parentUid?: Guid, focusUid?: Guid, expandSingleChild?: boolean): Promise<IClassifierGroup[]> => {
-		const { currentCompany } = this.props
-
-		const result = await this._classifierGroupService.list(
-			currentCompany.uid, {
+		const result = await this._classifierGroupService.list({
 			typeCode,
 			treeUid,
 			parentUid,
@@ -172,9 +161,7 @@ class _PaneSearchClassifier extends React.Component<IProps, IState> {
 	// todo: move button to separate class?
 	delete = async () => {
 		const rowsAffected = await this._classifierService
-			.delete(this.props.currentCompany.uid,
-				this.props.typeCode,
-				this.state.selectedRowKeys);
+			.delete(this.props.typeCode, this.state.selectedRowKeys);
 
 		this._notificationService.success("Выбранные записи удалены. " + rowsAffected);
 
@@ -184,9 +171,7 @@ class _PaneSearchClassifier extends React.Component<IProps, IState> {
 	// todo: move button to separate class?
 	export = async () => {
 		// todo: show export dialog: all pages, current page, export format
-		await this._classifierService.export(this.props.currentCompany.uid, {
-			typeCode: this.props.typeCode
-		});
+		await this._classifierService.export({ typeCode: this.props.typeCode });
 	}
 
 	onTableSelectionChange = async (selectedRowKeys: string[] | number[]) => {
@@ -294,10 +279,9 @@ class _PaneSearchClassifier extends React.Component<IProps, IState> {
 	}
 
 	deleteSelectedGroup = async () => {
-		const { currentCompany } = this.props
 		const { type, selectedGroup } = this.state;
 
-		await this._classifierGroupService.delete(currentCompany.uid, type.code, selectedGroup.uid);
+		await this._classifierGroupService.delete(type.code, selectedGroup.uid);
 
 		this.setState({ selectedGroup: null });
 

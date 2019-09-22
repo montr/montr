@@ -28,10 +28,10 @@ namespace Montr.MasterData.Tests.QueryHandlers
 			// act
 			var command = new ExportClassifierList
 			{
-				UserUid = Guid.NewGuid(),
 				Request = new ClassifierSearchRequest
 				{
 					CompanyUid = Constants.OperatorCompanyUid,
+					UserUid = Guid.NewGuid(),
 					TypeCode = "okved2"
 				}
 			};

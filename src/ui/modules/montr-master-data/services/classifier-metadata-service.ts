@@ -4,10 +4,10 @@ import { Constants } from "@montr-core/.";
 
 export class ClassifierMetadataService extends Fetcher {
 
-	load = async<TEntity>(companyUid: Guid, typeCode: string): Promise<IDataView<TEntity>> => {
+	load = async<TEntity>(typeCode: string): Promise<IDataView<TEntity>> => {
 
 		const data: IDataView<TEntity> =
-			await this.post(`${Constants.apiURL}/ClassifierMetadata/View`, { companyUid, typeCode });
+			await this.post(`${Constants.apiURL}/ClassifierMetadata/View`, { typeCode });
 
 		return data;
 	}

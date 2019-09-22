@@ -66,41 +66,38 @@ class _ClassifierGroupSelect extends React.Component<IProps, IState> {
 	}
 
 	fetchData = async () => {
-		const { currentCompany, field } = this.props,
+		const { field } = this.props,
 			{ value, expanded } = this.state;
 
-		if (currentCompany) {
+		const type = await this._classifierTypeService.get({ typeCode: field.typeCode });
 
-			const type = await this._classifierTypeService.get(currentCompany.uid, { typeCode: field.typeCode });
+		let trees: IClassifierTree[], groups: IClassifierGroup[];
 
-			let trees: IClassifierTree[], groups: IClassifierGroup[];
-
-			if (type.hierarchyType == "Groups") {
-				if (field.treeCode || field.treeUid) {
-					const result = await this._classifierGroupService.list(
-						currentCompany.uid, { typeCode: field.typeCode, treeCode: field.treeCode, treeUid: field.treeUid, focusUid: value });
-
-					groups = result.rows;
-
-					await this.collectExpanded(groups, expanded);
-				}
-				else {
-					const result = await this._classifierTreeService.list(currentCompany.uid, { typeCode: field.typeCode });
-
-					trees = result.rows;
-				}
-			}
-			else if (type.hierarchyType == "Items") {
+		if (type.hierarchyType == "Groups") {
+			if (field.treeCode || field.treeUid) {
 				const result = await this._classifierGroupService.list(
-					currentCompany.uid, { typeCode: field.typeCode, focusUid: value });
+					{ typeCode: field.typeCode, treeCode: field.treeCode, treeUid: field.treeUid, focusUid: value });
 
 				groups = result.rows;
 
 				await this.collectExpanded(groups, expanded);
 			}
+			else {
+				const result = await this._classifierTreeService.list({ typeCode: field.typeCode });
 
-			this.setState({ loading: false, type, trees, groups, expanded });
+				trees = result.rows;
+			}
 		}
+		else if (type.hierarchyType == "Items") {
+			const result = await this._classifierGroupService.list(
+				{ typeCode: field.typeCode, focusUid: value });
+
+			groups = result.rows;
+
+			await this.collectExpanded(groups, expanded);
+		}
+
+		this.setState({ loading: false, type, trees, groups, expanded });
 	}
 
 	async collectExpanded(groups: IClassifierGroup[], expanded?: Guid[]) {
@@ -134,11 +131,11 @@ class _ClassifierGroupSelect extends React.Component<IProps, IState> {
 				const tree: IClassifierTree = node.props.dataRef;
 
 				if (!tree.children) {
-					const { currentCompany, field } = this.props,
+					const { field } = this.props,
 						{ trees } = this.state;
 
 					const children = await this._classifierGroupService.list(
-						currentCompany.uid, { typeCode: field.typeCode, treeUid: tree.uid, parentUid: null });
+						{ typeCode: field.typeCode, treeUid: tree.uid, parentUid: null });
 
 					tree.children = children.rows;
 
@@ -149,11 +146,11 @@ class _ClassifierGroupSelect extends React.Component<IProps, IState> {
 				const group: IClassifierGroup = node.props.dataRef;
 
 				if (!group.children) {
-					const { currentCompany, field } = this.props,
+					const { field } = this.props,
 						{ groups } = this.state;
 
 					const children = await this._classifierGroupService.list(
-						currentCompany.uid, { typeCode: field.typeCode, treeUid: group.treeUid, parentUid: group.uid });
+						{ typeCode: field.typeCode, treeUid: group.treeUid, parentUid: group.uid });
 
 					group.children = children.rows;
 

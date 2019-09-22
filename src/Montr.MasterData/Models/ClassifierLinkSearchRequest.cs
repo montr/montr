@@ -7,6 +7,8 @@ namespace Montr.MasterData.Models
 	{
 		public Guid CompanyUid { get; set; }
 
+		public Guid UserUid { get; set; }
+
 		public string TypeCode { get; set; }
 
 		public Guid? GroupUid { get; set; }

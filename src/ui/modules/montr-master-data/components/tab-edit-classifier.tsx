@@ -46,11 +46,11 @@ class _TabEditClassifier extends React.Component<IProps, IState> {
 	}
 
 	fetchData = async () => {
-		const { type, currentCompany } = this.props;
+		const { type } = this.props;
 
-		if (type && currentCompany) {
+		if (type) {
 
-			const dataView = await this._classifierMetadataService.load(currentCompany.uid, type.code);
+			const dataView = await this._classifierMetadataService.load(type.code);
 
 			/* const fields = dataView.fields;
 
@@ -67,12 +67,11 @@ class _TabEditClassifier extends React.Component<IProps, IState> {
 
 	save = async (values: IClassifier): Promise<IApiResult> => {
 		const { type, data, onDataChange } = this.props;
-		const { uid: companyUid } = this.props.currentCompany;
 
 		if (data.uid) {
 			const updated = { uid: data.uid, ...values };
 
-			const result = await this._classifierService.update(companyUid, type.code, updated);
+			const result = await this._classifierService.update(type.code, updated);
 
 			if (result.success) {
 				if (onDataChange) await onDataChange(updated);
@@ -81,7 +80,7 @@ class _TabEditClassifier extends React.Component<IProps, IState> {
 			return result;
 		}
 		else {
-			const result = await this._classifierService.insert(companyUid, { typeCode: type.code, item: values });
+			const result = await this._classifierService.insert({ typeCode: type.code, item: values });
 
 			if (result.success) {
 				if (onDataChange) await onDataChange(result);

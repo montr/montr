@@ -56,16 +56,12 @@ class _EditClassifierType extends React.Component<IProps, IState> {
 
 	fetchData = async () => {
 		const { uid } = this.props.match.params;
-		const { currentCompany } = this.props;
 
-		if (currentCompany) {
+		const types = await this._classifierTypeService.list();
 
-			const types = await this._classifierTypeService.list(currentCompany.uid);
+		const data = (uid) ? await this._classifierTypeService.get({ uid }) : this.state.data;
 
-			const data = (uid) ? await this._classifierTypeService.get(null /* currentCompany.uid */, { uid }) : this.state.data;
-
-			this.setState({ loading: false, data, types: types.rows });
-		}
+		this.setState({ loading: false, data, types: types.rows });
 	}
 
 	handleDataChange = (data: IClassifierType) => {

@@ -61,12 +61,11 @@ class _TabEditClassifierType extends React.Component<IProps, IState> {
 	save = async (values: IClassifierType): Promise<IApiResult> => {
 
 		const { data, onDataChange } = this.props;
-		const { uid: companyUid } = this.props.currentCompany;
 
 		if (data.uid) {
 			const updated = { uid: data.uid, ...values };
 
-			const result = await this._classifierTypeService.update(companyUid, updated);
+			const result = await this._classifierTypeService.update(updated);
 
 			if (result.success) {
 				if (onDataChange) await onDataChange(updated);
@@ -75,7 +74,7 @@ class _TabEditClassifierType extends React.Component<IProps, IState> {
 			return result;
 		}
 		else {
-			const result = await this._classifierTypeService.insert(companyUid, values);
+			const result = await this._classifierTypeService.insert(values);
 
 			if (result.success) {
 				this.setState({ redirect: RouteBuilder.editClassifierType(result.uid) });

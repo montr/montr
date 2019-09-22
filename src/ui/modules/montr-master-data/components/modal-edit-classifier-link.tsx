@@ -84,9 +84,8 @@ class _ModalEditClassifierLink extends React.Component<IProps, IState> {
 
 	save = async (values: IClassifierLink): Promise<IApiResult> => {
 		const { typeCode, itemUid, onSuccess } = this.props;
-		const { uid: companyUid } = this.props.currentCompany;
 
-		const result = await this._classifierLinkService.insert(companyUid, typeCode, values.group.uid, itemUid);
+		const result = await this._classifierLinkService.insert(typeCode, values.group.uid, itemUid);
 
 		if (result.success) {
 			if (onSuccess) await onSuccess(values);

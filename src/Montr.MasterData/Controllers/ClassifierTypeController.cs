@@ -30,9 +30,11 @@ namespace Montr.MasterData.Controllers
 		[HttpPost]
 		public async Task<SearchResult<ClassifierType>> List(ClassifierTypeSearchRequest request)
 		{
+			request.CompanyUid = _currentCompanyProvider.GetCompanyUid();
+			request.UserUid = _currentUserProvider.GetUserUid();
+
 			return await _mediator.Send(new GetClassifierTypeList
 			{
-				UserUid = _currentUserProvider.GetUserUid(),
 				Request = request
 			});
 		}
@@ -49,6 +51,7 @@ namespace Montr.MasterData.Controllers
 		[HttpPost]
 		public async Task<ApiResult> Insert(InsertClassifierType request)
 		{
+			request.CompanyUid = _currentCompanyProvider.GetCompanyUid();
 			request.UserUid = _currentUserProvider.GetUserUid();
 
 			return await _mediator.Send(request);
@@ -57,6 +60,7 @@ namespace Montr.MasterData.Controllers
 		[HttpPost]
 		public async Task<ApiResult> Update(UpdateClassifierType request)
 		{
+			request.CompanyUid = _currentCompanyProvider.GetCompanyUid();
 			request.UserUid = _currentUserProvider.GetUserUid();
 
 			return await _mediator.Send(request);
@@ -65,6 +69,7 @@ namespace Montr.MasterData.Controllers
 		[HttpPost]
 		public async Task<ApiResult> Delete(DeleteClassifierType request)
 		{
+			request.CompanyUid = _currentCompanyProvider.GetCompanyUid();
 			request.UserUid = _currentUserProvider.GetUserUid();
 
 			return await _mediator.Send(request);

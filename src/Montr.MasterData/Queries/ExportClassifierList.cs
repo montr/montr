@@ -7,8 +7,6 @@ namespace Montr.MasterData.Queries
 {
 	public class ExportClassifierList : IRequest<FileResult>
 	{
-		public Guid UserUid { get; set; }
-
 		public ClassifierSearchRequest Request { get; set; }
 	}
 }

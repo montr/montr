@@ -60,27 +60,22 @@ class _EditClassifier extends React.Component<IProps, IState> {
 
 	fetchData = async () => {
 		const { typeCode, uid } = this.props.match.params;
-		const { currentCompany } = this.props;
 
-		if (currentCompany) {
+		const type = await this._classifierTypeService.get({ typeCode });
 
-			const type = await this._classifierTypeService.get(currentCompany.uid, { typeCode });
+		const data = (uid)
+			? await this._classifierService.get(typeCode, uid)
+			: this.state.data;
 
-			const data = (uid)
-				? await this._classifierService.get(currentCompany.uid, typeCode, uid)
-				: this.state.data;
+		if (uid && type.hierarchyType == "Groups") {
+			const links = await this._classifierLinkService.list({ typeCode: type.code, itemUid: uid });
 
-			if (uid && type.hierarchyType == "Groups") {
-				const links = await this._classifierLinkService.list(
-					currentCompany.uid, { typeCode: type.code, itemUid: uid });
+			const defaultLink = links.rows.find(x => x.tree.code == "default");
 
-				const defaultLink = links.rows.find(x => x.tree.code == "default");
-
-				if (defaultLink) data.parentUid = defaultLink.group.uid;
-			}
-
-			this.setState({ loading: false, type, data });
+			if (defaultLink) data.parentUid = defaultLink.group.uid;
 		}
+
+		this.setState({ loading: false, type, data });
 	}
 
 	handleDataChange = (data: IClassifier) => {

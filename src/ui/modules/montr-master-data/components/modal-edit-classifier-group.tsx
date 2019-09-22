@@ -49,41 +49,38 @@ class _ModalEditClassifierGroup extends React.Component<IProps, IState> {
 	}
 
 	fetchData = async () => {
-		const { currentCompany, typeCode, treeUid, uid, parentUid, hideFields } = this.props;
+		const { typeCode, treeUid, uid, parentUid, hideFields } = this.props;
 
-		if (currentCompany) {
+		try {
 
-			try {
+			const dataView = await this._metadataService.load(`ClassifierGroup/Form`);
 
-				const dataView = await this._metadataService.load(`ClassifierGroup/Form`);
+			const fields = hideFields
+				? dataView.fields.filter(x => hideFields.includes(x.key) == false)
+				: dataView.fields;
 
-				const fields = hideFields
-					? dataView.fields.filter(x => hideFields.includes(x.key) == false)
-					: dataView.fields;
+			const parentUidField = fields.find(x => x.key == "parentUid") as IClassifierGroupField;
 
-				const parentUidField = fields.find(x => x.key == "parentUid") as IClassifierGroupField;
-
-				if (parentUidField) {
-					parentUidField.typeCode = typeCode;
-					parentUidField.treeUid = treeUid;
-				}
-
-				let data;
-
-				if (uid) {
-					data = await this._classifierGroupService.get(currentCompany.uid, typeCode, treeUid, uid);
-				}
-				else {
-					// todo: load defaults from server
-					data = { parentUid: parentUid };
-				}
-
-				this.setState({ loading: false, fields, data });
-
-			} catch (error) {
-				this._notificationService.error("Ошибка при загрузке данных", error.message);
-				this.onCancel();
+			if (parentUidField) {
+				parentUidField.typeCode = typeCode;
+				parentUidField.treeUid = treeUid;
 			}
+
+			let data;
+
+			if (uid) {
+				data = await this._classifierGroupService.get(typeCode, treeUid, uid);
+			}
+			else {
+				// todo: load defaults from server
+				data = { parentUid: parentUid };
+			}
+
+			this.setState({ loading: false, fields, data });
+
+		} catch (error) {
+			this._notificationService.error("Ошибка при загрузке данных", error.message);
+			this.onCancel();
 		}
 	}
 
@@ -101,7 +98,6 @@ class _ModalEditClassifierGroup extends React.Component<IProps, IState> {
 
 	save = async (values: IClassifierGroup): Promise<IApiResult> => {
 		const { typeCode, treeUid, uid, onSuccess } = this.props;
-		const { uid: companyUid } = this.props.currentCompany;
 
 		let data: IClassifierGroup,
 			result: IApiResult;
@@ -109,10 +105,10 @@ class _ModalEditClassifierGroup extends React.Component<IProps, IState> {
 		if (uid) {
 			data = { uid: uid, ...values };
 
-			result = await this._classifierGroupService.update(companyUid, typeCode, data);
+			result = await this._classifierGroupService.update(typeCode, data);
 		}
 		else {
-			const insertResult = await this._classifierGroupService.insert(companyUid, typeCode, treeUid, values);
+			const insertResult = await this._classifierGroupService.insert(typeCode, treeUid, values);
 
 			data = { uid: insertResult.uid, ...values };
 

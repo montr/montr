@@ -46,33 +46,30 @@ class _ModalEditClassifierTree extends React.Component<IProps, IState> {
 	}
 
 	fetchData = async () => {
-		const { currentCompany, typeCode, uid } = this.props;
+		const { typeCode, uid } = this.props;
 
-		if (currentCompany) {
+		try {
 
-			try {
+			const dataView = await this._metadataService.load(`ClassifierTree/Form`);
 
-				const dataView = await this._metadataService.load(`ClassifierTree/Form`);
+			const fields = dataView.fields;
 
-				const fields = dataView.fields;
+			let data;
 
-				let data;
-
-				if (uid) {
-					data = await this._classifierTreeService.get(currentCompany.uid, typeCode, uid);
-				}
-				else {
-					// todo: load defaults from server
-					data = {};
-				}
-
-				this.setState({ loading: false, fields, data });
-
-			} catch (error) {
-				this._notificationService.error("Ошибка при загрузке данных", error.message);
-				// todo: why call onCancel()?
-				this.onCancel();
+			if (uid) {
+				data = await this._classifierTreeService.get(typeCode, uid);
 			}
+			else {
+				// todo: load defaults from server
+				data = {};
+			}
+
+			this.setState({ loading: false, fields, data });
+
+		} catch (error) {
+			this._notificationService.error("Ошибка при загрузке данных", error.message);
+			// todo: why call onCancel()?
+			this.onCancel();
 		}
 	}
 
@@ -90,7 +87,6 @@ class _ModalEditClassifierTree extends React.Component<IProps, IState> {
 
 	save = async (values: IClassifierGroup): Promise<IApiResult> => {
 		const { typeCode, uid, onSuccess } = this.props;
-		const { uid: companyUid } = this.props.currentCompany;
 
 		let data: IClassifierGroup,
 			result: IApiResult;
@@ -98,10 +94,10 @@ class _ModalEditClassifierTree extends React.Component<IProps, IState> {
 		if (uid) {
 			data = { uid: uid, ...values };
 
-			result = await this._classifierTreeService.update(companyUid, typeCode, data);
+			result = await this._classifierTreeService.update(typeCode, data);
 		}
 		else {
-			const insertResult = await this._classifierTreeService.insert(companyUid, typeCode, values);
+			const insertResult = await this._classifierTreeService.insert(typeCode, values);
 
 			data = { uid: insertResult.uid, ...values };
 
