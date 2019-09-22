@@ -18,27 +18,27 @@ interface IInsertClassifierRequest {
 
 export class ClassifierService extends Fetcher {
 
-	list = async (companyUid: Guid, request: IClassifierSearchRequest): Promise<IDataResult<IClassifier>> => {
-		return this.post(`${Constants.apiURL}/classifier/list`, { companyUid, ...request });
+	list = async (request: IClassifierSearchRequest): Promise<IDataResult<IClassifier>> => {
+		return this.post(`${Constants.apiURL}/classifier/list`, request);
 	};
 
-	get = async (companyUid: Guid, typeCode: string, uid: Guid | string): Promise<IClassifier> => {
-		return this.post(`${Constants.apiURL}/classifier/get`, { companyUid, typeCode, uid });
+	get = async (typeCode: string, uid: Guid | string): Promise<IClassifier> => {
+		return this.post(`${Constants.apiURL}/classifier/get`, { typeCode, uid });
 	};
 
-	export = async (companyUid: Guid, request: IClassifierSearchRequest): Promise<any> => {
-		return this.download(`${Constants.apiURL}/classifier/export`, { companyUid, ...request });
+	export = async (request: IClassifierSearchRequest): Promise<any> => {
+		return this.download(`${Constants.apiURL}/classifier/export`, request);
 	};
 
-	insert = async (companyUid: Guid, request: IInsertClassifierRequest): Promise<IApiResult> => {
-		return this.post(`${Constants.apiURL}/classifier/insert`, { companyUid, ...request });
+	insert = async (request: IInsertClassifierRequest): Promise<IApiResult> => {
+		return this.post(`${Constants.apiURL}/classifier/insert`, request);
 	};
 
-	update = async (companyUid: Guid, typeCode: string, item: IClassifier): Promise<IApiResult> => {
-		return this.post(`${Constants.apiURL}/classifier/update`, { companyUid, typeCode, item });
+	update = async (typeCode: string, item: IClassifier): Promise<IApiResult> => {
+		return this.post(`${Constants.apiURL}/classifier/update`, { typeCode, item });
 	};
 
-	delete = async (companyUid: Guid, typeCode: string, uids: string[] | number[]): Promise<number> => {
-		return this.post(`${Constants.apiURL}/classifier/delete`, { companyUid, typeCode, uids });
+	delete = async (typeCode: string, uids: string[] | number[]): Promise<number> => {
+		return this.post(`${Constants.apiURL}/classifier/delete`, { typeCode, uids });
 	};
 }

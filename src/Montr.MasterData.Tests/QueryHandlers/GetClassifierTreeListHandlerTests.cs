@@ -32,10 +32,10 @@ namespace Montr.MasterData.Tests.QueryHandlers
 				// act
 				var result = await handler.Handle(new GetClassifierTreeList
 				{
-					UserUid = dbHelper.UserUid,
 					Request = new ClassifierTreeSearchRequest
 					{
 						CompanyUid = dbHelper.CompanyUid,
+						UserUid = dbHelper.UserUid,
 						TypeCode = dbHelper.TypeCode
 					}
 				}, cancellationToken);

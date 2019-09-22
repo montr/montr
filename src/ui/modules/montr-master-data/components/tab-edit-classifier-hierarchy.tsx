@@ -50,12 +50,11 @@ class _TabEditClassifierHierarchy extends React.Component<IProps, IState> {
 	}
 
 	onLoadTableData = async (loadUrl: string, postParams: any): Promise<IDataResult<{}>> => {
-		const { currentCompany, type, data } = this.props;
+		const { type, data } = this.props;
 
-		if (currentCompany && type.code) {
+		if (type.code) {
 
 			const params = {
-				companyUid: currentCompany.uid,
 				typeCode: type.code,
 				itemUid: data.uid,
 				...postParams
@@ -76,9 +75,9 @@ class _TabEditClassifierHierarchy extends React.Component<IProps, IState> {
 			title: "Вы действительно хотите удалить связь с выбранной группой?",
 			content: "При удалении связи с группой иерархии по-умолчанию, элемент будет привязан к корню иерархии по-умолчанию.",
 			onOk: async () => {
-				const { currentCompany, type } = this.props
+				const { type } = this.props
 
-				await this._classifierLinkService.delete(currentCompany.uid, type.code, data.group.uid, data.item.uid);
+				await this._classifierLinkService.delete(type.code, data.group.uid, data.item.uid);
 
 				this.refreshTable();
 			}

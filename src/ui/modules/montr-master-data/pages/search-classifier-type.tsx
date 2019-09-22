@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 import { Button, Icon } from "antd";
 import { ClassifierTypeService } from "../services";
 import { NotificationService } from "@montr-core/services";
-import { IDataResult, IMenu } from "@montr-core/models";
+import { IMenu } from "@montr-core/models";
 import { IClassifierGroup } from "@montr-master-data/models";
 import { RouteBuilder } from "..";
 
@@ -34,6 +34,7 @@ class _SearchClassifierType extends React.Component<IProps, IState> {
 	}
 
 	componentDidUpdate = async (prevProps: IProps) => {
+		// todo: detect company changed without CompanyContextProps (here and everywhere)
 		if (this.props.currentCompany !== prevProps.currentCompany) {
 			this.refreshTable(true);
 		}
@@ -51,8 +52,7 @@ class _SearchClassifierType extends React.Component<IProps, IState> {
 	// todo: localize
 	delete = async () => {
 		try {
-			const rowsAffected = await this._classifierTypeService
-				.delete(this.props.currentCompany.uid, this.state.selectedRowKeys);
+			const rowsAffected = await this._classifierTypeService.delete(this.state.selectedRowKeys);
 
 			this._notificationService.success("Выбранные записи удалены. " + rowsAffected);
 
@@ -60,22 +60,6 @@ class _SearchClassifierType extends React.Component<IProps, IState> {
 		} catch (error) {
 			this._notificationService.error("Ошибка при удалении данных", error.message);
 		}
-	}
-
-	onLoadTableData = async (loadUrl: string, postParams: any): Promise<IDataResult<{}>> => {
-		const { currentCompany } = this.props;
-
-		if (currentCompany) {
-
-			const params = {
-				companyUid: currentCompany.uid,
-				...postParams
-			};
-
-			return await this._classifierTypeService.post(loadUrl, params);
-		}
-
-		return null;
 	}
 
 	refreshTable = async (resetSelectedRows?: boolean) => {
@@ -110,7 +94,6 @@ class _SearchClassifierType extends React.Component<IProps, IState> {
 					rowKey="uid"
 					viewId={`ClassifierType/Grid/`}
 					loadUrl={`${Constants.apiURL}/classifierType/list/`}
-					onLoadData={this.onLoadTableData}
 					onSelectionChange={this.onSelectionChange}
 					updateToken={updateTableToken}
 					rowActions={rowActions}

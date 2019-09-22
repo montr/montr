@@ -76,9 +76,9 @@ class _TabEditClassifierTypeHierarchy extends React.Component<IProps, IState> {
 			title: "Вы действительно хотите удалить выбранную иерархию?",
 			content: "Наверняка что-то случится с группами и элементами справочника...",
 			onOk: async () => {
-				const { currentCompany, type } = this.props
+				const { type } = this.props
 
-				await this._classifierTreeService.delete(currentCompany.uid, type.code, [data.uid]);
+				await this._classifierTreeService.delete(type.code, [data.uid]);
 
 				this.refreshTable();
 			}

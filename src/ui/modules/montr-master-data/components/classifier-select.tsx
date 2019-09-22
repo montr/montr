@@ -71,17 +71,14 @@ class _ClassifierSelect extends React.Component<IProps, IState> {
 	}
 
 	fetchData = async () => {
-		const { currentCompany, field } = this.props,
+		const { field } = this.props,
 			{ value } = this.state;
 
-		if (currentCompany) {
+		const data = await this._classifierService.list({
+			typeCode: field.typeCode, focusUid: value, pageSize: 1000
+		});
 
-			const data = await this._classifierService.list(currentCompany.uid, {
-				typeCode: field.typeCode, focusUid: value, pageSize: 1000
-			});
-
-			this.setState({ loading: false, items: data.rows });
-		}
+		this.setState({ loading: false, items: data.rows });
 	}
 
 	handleChange = (value: any/* , label: any, extra: any */) => {
@@ -100,19 +97,15 @@ class _ClassifierSelect extends React.Component<IProps, IState> {
 	}
 
 	onSearch = async (value: string) => {
+		const { field } = this.props;
 
-		const { currentCompany, field } = this.props;
+		this.setState({ items: [], fetching: true });
 
-		if (currentCompany) {
+		const data = await this._classifierService.list({
+			typeCode: field.typeCode, searchTerm: value
+		});
 
-			this.setState({ items: [], fetching: true });
-
-			const data = await this._classifierService.list(currentCompany.uid, {
-				typeCode: field.typeCode, searchTerm: value
-			});
-
-			this.setState({ items: data.rows, fetching: false });
-		}
+		this.setState({ items: data.rows, fetching: false });
 	}
 
 	render() {

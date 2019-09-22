@@ -24,7 +24,7 @@
 			"applicationUrl": "http://app.tendr.montr.io:5010;https://app.tendr.montr.io:5001/",
 			"environmentVariables": {
 				"ASPNETCORE_ENVIRONMENT": "Development",
-				"COOKIE_DOMAIN": ".montr.io",
+				"COOKIE_DOMAIN": ".tendr.montr.io",
 				"AUTHORITY_APP_URL": "http://idx.montr.io:5050",
 				"PUBLIC_APP_URL": "http://tendr.montr.io:5010",
 				"PRIVATE_APP_URL": "http://app.tendr.montr.io:5010"

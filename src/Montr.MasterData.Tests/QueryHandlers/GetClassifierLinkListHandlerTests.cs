@@ -39,10 +39,10 @@ namespace Montr.MasterData.Tests.QueryHandlers
 				// act - search by group code
 				var result = await handler.Handle(new GetClassifierLinkList
 				{
-					UserUid = dbHelper.UserUid,
 					Request = new ClassifierLinkSearchRequest
 					{
 						CompanyUid = dbHelper.CompanyUid,
+						UserUid = dbHelper.UserUid,
 						TypeCode = dbHelper.TypeCode,
 						GroupUid = group1.Uid
 					}
@@ -62,10 +62,10 @@ namespace Montr.MasterData.Tests.QueryHandlers
 				// act - search by item code
 				result = await handler.Handle(new GetClassifierLinkList
 				{
-					UserUid = dbHelper.UserUid,
 					Request = new ClassifierLinkSearchRequest
 					{
 						CompanyUid = dbHelper.CompanyUid,
+						UserUid = dbHelper.UserUid,
 						TypeCode = dbHelper.TypeCode,
 						ItemUid = item1.Uid
 					}
@@ -81,10 +81,10 @@ namespace Montr.MasterData.Tests.QueryHandlers
 				// act - search by both group and item codes
 				result = await handler.Handle(new GetClassifierLinkList
 				{
-					UserUid = dbHelper.UserUid,
 					Request = new ClassifierLinkSearchRequest
 					{
 						CompanyUid = dbHelper.CompanyUid,
+						UserUid = dbHelper.UserUid,
 						TypeCode = dbHelper.TypeCode,
 						GroupUid = group1.Uid,
 						ItemUid = item2.Uid

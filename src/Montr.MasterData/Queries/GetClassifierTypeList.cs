@@ -7,8 +7,6 @@ namespace Montr.MasterData.Queries
 {
 	public class GetClassifierTypeList : IRequest<SearchResult<ClassifierType>>
 	{
-		public Guid UserUid { get; set; }
-
 		public ClassifierTypeSearchRequest Request { get; set; }
 	}
 }
