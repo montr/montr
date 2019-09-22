@@ -30,7 +30,7 @@ namespace Montr.Tendr.Controllers
 		[HttpPost]
 		public async Task<ActionResult<SearchResult<InvitationListItem>>> List(GetInvitationList request)
 		{
-			request.CompanyUid = _currentCompanyProvider.GetCompanyUid();
+			request.CompanyUid = await _currentCompanyProvider.GetCompanyUid();
 			request.UserUid = _currentUserProvider.GetUserUid();
 
 			return await _mediator.Send(request);
@@ -39,7 +39,7 @@ namespace Montr.Tendr.Controllers
 		[HttpPost]
 		public async Task<Invitation> Get(GetInvitation request)
 		{
-			request.CompanyUid = _currentCompanyProvider.GetCompanyUid();
+			request.CompanyUid = await _currentCompanyProvider.GetCompanyUid();
 			request.UserUid = _currentUserProvider.GetUserUid();
 
 			return await _mediator.Send(request);
@@ -48,7 +48,7 @@ namespace Montr.Tendr.Controllers
 		[HttpPost]
 		public async Task<ApiResult> Insert(InsertInvitation request)
 		{
-			request.CompanyUid = _currentCompanyProvider.GetCompanyUid();
+			request.CompanyUid = await _currentCompanyProvider.GetCompanyUid();
 			request.UserUid = _currentUserProvider.GetUserUid();
 
 			return await _mediator.Send(request);
@@ -57,7 +57,7 @@ namespace Montr.Tendr.Controllers
 		[HttpPost]
 		public async Task<ApiResult> Update(UpdateInvitation request)
 		{
-			request.CompanyUid = _currentCompanyProvider.GetCompanyUid();
+			request.CompanyUid = await _currentCompanyProvider.GetCompanyUid();
 			request.UserUid = _currentUserProvider.GetUserUid();
 
 			return await _mediator.Send(request);
@@ -66,7 +66,7 @@ namespace Montr.Tendr.Controllers
 		[HttpPost]
 		public async Task<ApiResult> Delete(DeleteInvitation request)
 		{
-			request.CompanyUid = _currentCompanyProvider.GetCompanyUid();
+			request.CompanyUid = await _currentCompanyProvider.GetCompanyUid();
 			request.UserUid = _currentUserProvider.GetUserUid();
 
 			return await _mediator.Send(request);

@@ -6,18 +6,18 @@ import { EventService } from "../services";
 import { IPaneComponent, FormDefaults } from "@montr-core/components";
 import { IEvent } from "modules/tendr/models";
 
-interface IEventFormProps extends FormComponentProps {
+interface IProps extends FormComponentProps {
 	data: IEvent;
 }
 
-interface IEventFormState {
+interface IState {
 }
 
-class EventForm extends React.Component<IEventFormProps, IEventFormState> {
+class EventForm extends React.Component<IProps, IState> {
 
 	private _eventService = new EventService();
 
-	constructor(props: IEventFormProps) {
+	constructor(props: IProps) {
 		super(props);
 
 		this.state = {};
@@ -37,13 +37,10 @@ class EventForm extends React.Component<IEventFormProps, IEventFormState> {
 		this.props.form.validateFieldsAndScroll((errors, values: IEvent) => {
 			if (!errors) {
 				this._eventService
-					.update({ id: this.props.data.id, ...values })
+					.update({ uid: this.props.data.uid, ...values })
 					.then((result: IApiResult) => {
-						message.success("Данные успешно сохранены");
+						message.success("Данные успешно сохранены.");
 					});
-			}
-			else {
-				message.error("Received errors: " + JSON.stringify(errors));
 			}
 		});
 	}
@@ -79,7 +76,7 @@ class EventForm extends React.Component<IEventFormProps, IEventFormState> {
 	}
 }
 
-const WrappedForm = Form.create<IEventFormProps>()(EventForm);
+const WrappedForm = Form.create<IProps>()(EventForm);
 
 interface IEditEventPaneProps extends IPaneProps<IEvent> {
 	data: IEvent;

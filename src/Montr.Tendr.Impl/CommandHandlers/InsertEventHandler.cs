@@ -28,15 +28,9 @@ namespace Montr.Tendr.Impl.CommandHandlers
 
 		public async Task<ApiResult> Handle(InsertEvent request, CancellationToken cancellationToken)
 		{
-			if (request.UserUid == Guid.Empty)
-				throw new InvalidOperationException("UserUid can't be empty guid.");
-
-			if (request.Event.CompanyUid == Guid.Empty)
-				throw new InvalidOperationException("CompanyUid can't be empty guid.");
+			var item = request.Item ?? throw new ArgumentNullException(nameof(request.Item));
 
 			var now = _dateTimeProvider.GetUtcNow();
-
-			var item = request.Event;
 
 			using (var scope = _unitOfWorkFactory.Create())
 			{
@@ -52,7 +46,7 @@ namespace Montr.Tendr.Impl.CommandHandlers
 						.Value(x => x.Id, id)
 						.Value(x => x.ConfigCode, item.ConfigCode)
 						.Value(x => x.StatusCode, EventStatusCode.Draft)
-						.Value(x => x.CompanyUid, item.CompanyUid)
+						.Value(x => x.CompanyUid, request.CompanyUid)
 						.Value(x => x.Name, item.Name)
 						.Value(x => x.Description, item.Description)
 						.InsertAsync(cancellationToken);

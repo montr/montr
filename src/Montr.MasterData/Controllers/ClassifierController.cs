@@ -30,7 +30,7 @@ namespace Montr.MasterData.Controllers
 		[HttpPost]
 		public async Task<SearchResult<Classifier>> List(GetClassifierList request)
 		{
-			request.CompanyUid = _currentCompanyProvider.GetCompanyUid();
+			request.CompanyUid = await _currentCompanyProvider.GetCompanyUid();
 			request.UserUid = _currentUserProvider.GetUserUid();
 
 			return await _mediator.Send(request);
@@ -39,7 +39,7 @@ namespace Montr.MasterData.Controllers
 		[HttpPost]
 		public async Task<FileStreamResult> Export(ClassifierSearchRequest request)
 		{
-			request.CompanyUid = _currentCompanyProvider.GetCompanyUid();
+			request.CompanyUid = await _currentCompanyProvider.GetCompanyUid();
 			request.UserUid = _currentUserProvider.GetUserUid();
 
 			var result = await _mediator.Send(new ExportClassifierList
@@ -55,7 +55,7 @@ namespace Montr.MasterData.Controllers
 		[HttpPost]
 		public async Task<Classifier> Get(GetClassifier request)
 		{
-			request.CompanyUid = _currentCompanyProvider.GetCompanyUid();
+			request.CompanyUid = await _currentCompanyProvider.GetCompanyUid();
 			request.UserUid = _currentUserProvider.GetUserUid();
 
 			return await _mediator.Send(request);
@@ -64,7 +64,7 @@ namespace Montr.MasterData.Controllers
 		[HttpPost]
 		public async Task<ApiResult> Insert(InsertClassifier request)
 		{
-			request.CompanyUid = _currentCompanyProvider.GetCompanyUid();
+			request.CompanyUid = await _currentCompanyProvider.GetCompanyUid();
 			request.UserUid = _currentUserProvider.GetUserUid();
 
 			return await _mediator.Send(request);
@@ -73,7 +73,7 @@ namespace Montr.MasterData.Controllers
 		[HttpPost]
 		public async Task<ApiResult> Update(UpdateClassifier request)
 		{
-			request.CompanyUid = _currentCompanyProvider.GetCompanyUid();
+			request.CompanyUid = await _currentCompanyProvider.GetCompanyUid();
 			request.UserUid = _currentUserProvider.GetUserUid();
 
 			return await _mediator.Send(request);
@@ -82,7 +82,7 @@ namespace Montr.MasterData.Controllers
 		[HttpPost]
 		public async Task<ApiResult> Delete(DeleteClassifier request)
 		{
-			request.CompanyUid = _currentCompanyProvider.GetCompanyUid();
+			request.CompanyUid = await _currentCompanyProvider.GetCompanyUid();
 			request.UserUid = _currentUserProvider.GetUserUid();
 
 			return await _mediator.Send(request);

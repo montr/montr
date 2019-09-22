@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Tabs, Button, Icon, Modal, message } from "antd";
+import { Tabs, Button, Icon, Modal, message, Tag } from "antd";
 import { IApiResult, IDataView, IPaneProps } from "@montr-core/models";
 import { EventService, EventTemplateService } from "../../services";
 import { Page, IPaneComponent, Toolbar, PageHeader, DataBreadcrumb } from "@montr-core/components";
@@ -58,19 +58,19 @@ export class EditEvent extends React.Component<IProps, IState> {
 		await this._eventService.abort();
 	}
 
-	private fetchConfigCodes = async () => {
+	fetchConfigCodes = async () => {
 		this.setState({ configCodes: await this._eventTemplateService.list() });
 	}
 
-	private fetchData = async () => {
+	fetchData = async () => {
 		this.setState({ data: await this._eventService.get(this.props.match.params.uid) });
 	}
 
-	private resolveComponent = (component: string): React.ComponentClass => {
+	resolveComponent = (component: string): React.ComponentClass => {
 		return componentToClass.get(component);
 	}
 
-	private fetchMetadata = async () => {
+	fetchMetadata = async () => {
 		// todo: get metadata key from server
 		const dataView = await this._metadataService.load("PrivateEvent/Edit", this.resolveComponent);
 
@@ -120,7 +120,7 @@ export class EditEvent extends React.Component<IProps, IState> {
 				this._eventService
 					.publish(this.props.match.params.uid)
 					.then((result: IApiResult) => {
-						message.success("Событие опубликовано: " + JSON.stringify(result));
+						message.success("Операция выполнена успешно.");
 						this.fetchData();
 					});
 			}
@@ -135,7 +135,7 @@ export class EditEvent extends React.Component<IProps, IState> {
 				this._eventService
 					.cancel(this.props.match.params.uid)
 					.then((result: IApiResult) => {
-						message.success("Событие отменено: " + JSON.stringify(result));
+						message.success("Операция выполнена успешно.");
 						this.fetchData();
 					});
 			}
@@ -159,7 +159,13 @@ export class EditEvent extends React.Component<IProps, IState> {
 		// todo: load from Configuration
 		let toolbar: React.ReactNode;
 
-		if (data.statusCode == "draft") {
+		toolbar = (<>
+			<Button type="primary" onClick={() => this.handlePublish()}>Опубликовать</Button>&#xA0;
+			<Button icon="check" onClick={() => this.handleSave()}>Сохранить</Button> &#xA0;
+			<Button onClick={() => this.handleCancel()}>Отменить</Button> &#xA0;
+		</>);
+
+		/* if (data.statusCode == "draft") {
 			toolbar = (<>
 				<Button type="primary" onClick={() => this.handlePublish()}>Опубликовать</Button>&#xA0;
 				<Button icon="check" onClick={() => this.handleSave()}>Сохранить</Button>
@@ -169,7 +175,7 @@ export class EditEvent extends React.Component<IProps, IState> {
 			toolbar = (<>
 				<Button onClick={() => this.handleCancel()}>Отменить</Button> &#xA0;
 			</>);
-		}
+		} */
 
 		return (
 			<Page title={<>
@@ -178,7 +184,7 @@ export class EditEvent extends React.Component<IProps, IState> {
 				</Toolbar>
 
 				<DataBreadcrumb items={[]} />
-				<PageHeader>{this.formatPageTitle()}</PageHeader>
+				<PageHeader>{this.formatPageTitle()} <Tag color="green">{data.statusCode}</Tag></PageHeader>
 			</>}>
 
 				<h3 title={data.name} className="single-line-text">{data.name}</h3>

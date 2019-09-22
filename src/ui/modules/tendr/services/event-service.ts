@@ -19,20 +19,20 @@ export class EventService extends Fetcher {
 		return this.post(`${Constants.apiURL}/Events/Get`, { uid });
 	};
 
-	insert = async (data: IEvent): Promise<IApiResult> => {
-		return this.post(`${Constants.apiURL}/Events/Insert`, data);
+	insert = async (item: IEvent): Promise<IApiResult> => {
+		return this.post(`${Constants.apiURL}/Events/Insert`, { item });
 	};
 
-	update = async (data: IEvent): Promise<IApiResult> => {
-		return this.post(`${Constants.apiURL}/Events/Update`, data);
+	update = async (item: IEvent): Promise<IApiResult> => {
+		return this.post(`${Constants.apiURL}/Events/Update`, { item });
 	};
 
-	publish = async (id: number | string): Promise<IApiResult> => {
-		return this.post(`${Constants.apiURL}/Events/Publish`, { id: id });
+	publish = async (uid: number | string): Promise<IApiResult> => {
+		return this.post(`${Constants.apiURL}/Events/Publish`, { uid });
 	};
 
-	cancel = async (id: number | string): Promise<IApiResult> => {
-		return this.post(`${Constants.apiURL}/Events/Cancel`, { id: id });
+	cancel = async (uid: number | string): Promise<IApiResult> => {
+		return this.post(`${Constants.apiURL}/Events/Cancel`, { uid });
 	};
 
 }

@@ -30,7 +30,7 @@ namespace Montr.Tendr.Controllers
 		[HttpPost]
 		public async Task<ActionResult<SearchResult<Event>>> List(GetEventList request)
 		{
-			request.CompanyUid = _currentCompanyProvider.GetCompanyUid();
+			request.CompanyUid = await _currentCompanyProvider.GetCompanyUid();
 			request.UserUid = _currentUserProvider.GetUserUid();
 
 			return await _mediator.Send(request);
@@ -39,7 +39,7 @@ namespace Montr.Tendr.Controllers
 		[HttpPost]
 		public async Task<ActionResult<Event>> Get(GetEvent request)
 		{
-			request.CompanyUid = _currentCompanyProvider.GetCompanyUid();
+			request.CompanyUid = await _currentCompanyProvider.GetCompanyUid();
 			request.UserUid = _currentUserProvider.GetUserUid();
 
 			return await _mediator.Send(request);
@@ -48,7 +48,7 @@ namespace Montr.Tendr.Controllers
 		[HttpPost]
 		public async Task<ApiResult> Insert(InsertEvent request)
 		{
-			request.CompanyUid = _currentCompanyProvider.GetCompanyUid();
+			request.CompanyUid = await _currentCompanyProvider.GetCompanyUid();
 			request.UserUid = _currentUserProvider.GetUserUid();
 
 			return await _mediator.Send(request);
@@ -57,7 +57,7 @@ namespace Montr.Tendr.Controllers
 		[HttpPost]
 		public async Task<ApiResult> Update(UpdateEvent request)
 		{
-			request.CompanyUid = _currentCompanyProvider.GetCompanyUid();
+			request.CompanyUid = await _currentCompanyProvider.GetCompanyUid();
 			request.UserUid = _currentUserProvider.GetUserUid();
 
 			return await _mediator.Send(request);
@@ -66,7 +66,7 @@ namespace Montr.Tendr.Controllers
 		[HttpPost]
 		public async Task<ApiResult> Publish(PublishEvent request)
 		{
-			request.CompanyUid = _currentCompanyProvider.GetCompanyUid();
+			request.CompanyUid = await _currentCompanyProvider.GetCompanyUid();
 			request.UserUid = _currentUserProvider.GetUserUid();
 
 			return await _mediator.Send(request);
@@ -75,7 +75,7 @@ namespace Montr.Tendr.Controllers
 		[HttpPost]
 		public async Task<ApiResult> Cancel(CancelEvent request)
 		{
-			request.CompanyUid = _currentCompanyProvider.GetCompanyUid();
+			request.CompanyUid = await _currentCompanyProvider.GetCompanyUid();
 			request.UserUid = _currentUserProvider.GetUserUid();
 
 			return await _mediator.Send(request);

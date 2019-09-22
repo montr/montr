@@ -30,7 +30,7 @@ namespace Montr.Tendr.Impl.CommandHandlers
 				using (var db = _dbContextFactory.Create())
 				{
 					var affected = await db.GetTable<DbEvent>()
-						.Where(x => x.CompanyUid == request.CompanyUid && x.Id == request.EventId)
+						.Where(x => x.CompanyUid == request.CompanyUid && x.Uid == request.Uid)
 						.Set(x => x.StatusCode, EventStatusCode.Published)
 						.UpdateAsync(cancellationToken);
 

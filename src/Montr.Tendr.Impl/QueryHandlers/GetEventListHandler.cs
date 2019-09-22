@@ -39,7 +39,6 @@ namespace Montr.Tendr.Impl.QueryHandlers
 						Id = x.Id,
 						ConfigCode = x.ConfigCode,
 						StatusCode = x.StatusCode,
-						CompanyUid = x.CompanyUid,
 						Name = x.Name,
 						Description = x.Description,
 						Url = "/events/edit/" + x.Uid

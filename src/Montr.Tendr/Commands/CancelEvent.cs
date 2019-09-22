@@ -10,6 +10,6 @@ namespace Montr.Tendr.Commands
 
 		public Guid UserUid { get; set; }
 
-		public long EventId { get; set; }
+		public Guid Uid { get; set; }
 	}
 }

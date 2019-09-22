@@ -27,7 +27,7 @@ namespace Montr.MasterData.Controllers
 		[HttpPost]
 		public async Task<DataView> View(GetClassifierMetadata request)
 		{
-			request.CompanyUid = _currentCompanyProvider.GetCompanyUid();
+			request.CompanyUid = await _currentCompanyProvider.GetCompanyUid();
 			request.UserUid = _currentUserProvider.GetUserUid();
 
 			return await _mediator.Send(request);
