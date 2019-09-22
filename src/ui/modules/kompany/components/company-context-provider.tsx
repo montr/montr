@@ -88,7 +88,7 @@ export class CompanyContextProvider extends React.Component<any, State> {
 
 	private _setCookieCompanyUid = (companyUid: Guid): void => {
 		this._cookies.set(Constants.cookieName, companyUid.toString(), {
-			domain: Constants.cookieDomain, path: "/" // , httpOnly: true, sameSite: "none"
+			domain: Constants.cookieDomain, path: "/"
 		});
 	}
 

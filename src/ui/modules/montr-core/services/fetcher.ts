@@ -3,7 +3,6 @@ import { AuthService } from "./"
 
 // axios.defaults.withCredentials = true;
 axios.defaults.headers.common["Access-Control-Allow-Origin"] = "*";
-// axios.defaults.headers.common["Access-Control-Allow-Headers"] = "Content-Type, Accept";
 
 const authService = new AuthService();
 const authenticated = axios.create({
@@ -33,8 +32,6 @@ authenticated.interceptors.request.use(
 authenticated.interceptors.response.use(null,
 	(error) => {
 
-		/*  */
-
 		if (error.response && error.response.status === 401) {
 			authService.login();
 			return;
@@ -54,8 +51,8 @@ export class Fetcher {
 			cancelToken: this._cancelTokenSource.token,
 		};
 
-		// config.withCredentials = true;
-		// config.headers.common["Access-Control-Allow-Headers"] = "Content-Type, Accept";
+		// https://github.com/axios/axios/issues/191#issuecomment-311069164
+		config.withCredentials = true;
 
 		return config;
 	}

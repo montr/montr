@@ -11,7 +11,7 @@ export const Constants = {
 	authorityURL: AUTHORITY_APP_URL,
 	publicURL: PUBLIC_APP_URL,
 	privateURL: PRIVATE_APP_URL,
-	apiURL: PRIVATE_APP_URL + "/api",
+	apiURL: PUBLIC_APP_URL + "/api",
 	returnUrlParam: "return_url",
 	defaultPageSize: 10
 };
