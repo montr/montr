@@ -45,6 +45,8 @@
     <ProjectReference Include="..\Montr.Data.Npgsql\Montr.Data.Npgsql.csproj" />
     <ProjectReference Include="..\Montr.MasterData.Impl\Montr.MasterData.Impl.csproj" />
     <ProjectReference Include="..\Montr.MasterData\Montr.MasterData.csproj" />
+    <ProjectReference Include="..\Montr.Messages.Impl\Montr.Messages.Impl.csproj" />
+    <ProjectReference Include="..\Montr.Messages\Montr.Messages.csproj" />
     <ProjectReference Include="..\Montr.Modularity\Montr.Modularity.csproj" />
     <ProjectReference Include="..\Montr.Web\Montr.Web.csproj" />
     <ProjectReference Include="..\Montr.Tendr.Impl\Montr.Tendr.Impl.csproj" />

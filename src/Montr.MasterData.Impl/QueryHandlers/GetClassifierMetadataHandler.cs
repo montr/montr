@@ -25,9 +25,6 @@ namespace Montr.MasterData.Impl.QueryHandlers
 
 		public async Task<DataView> Handle(GetClassifierMetadata request, CancellationToken cancellationToken)
 		{
-			if (request.UserUid == Guid.Empty) throw new InvalidOperationException("User is required.");
-			if (request.CompanyUid == Guid.Empty) throw new InvalidOperationException("Company is required.");
-
 			var typeCode = request.TypeCode ?? throw new ArgumentNullException(nameof(request.TypeCode));
 
 			var type = await _classifierTypeService.GetClassifierType(request.CompanyUid, typeCode, cancellationToken);
