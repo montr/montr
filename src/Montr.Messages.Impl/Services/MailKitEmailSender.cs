@@ -23,8 +23,10 @@ namespace Montr.Messages.Impl.Services
 
 			var message = new MimeMessage();
 
+			var to = options.TestMode ? options.TestAddress : email;
+
 			message.From.Add(MailboxAddress.Parse(options.From));
-			message.To.Add(MailboxAddress.Parse(email));
+			message.To.Add(MailboxAddress.Parse(to));
 			message.Subject = subject;
 			message.Body = new TextPart(TextFormat.Html) { Text = text };
 

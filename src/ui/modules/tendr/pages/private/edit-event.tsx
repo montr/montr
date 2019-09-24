@@ -122,6 +122,9 @@ export class EditEvent extends React.Component<IProps, IState> {
 					.then((result: IApiResult) => {
 						message.success("Операция выполнена успешно.");
 						this.fetchData();
+					})
+					.catch(error => {
+						message.error("Произошла ошибка при выполнении операции.");
 					});
 			}
 		});
