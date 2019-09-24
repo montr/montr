@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -8,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Montr.Modularity;
+using Montr.Web;
 using Montr.Web.Services;
 using Newtonsoft.Json.Serialization;
 
@@ -15,6 +17,8 @@ namespace Host
 {
 	public class Startup
 	{
+		private ICollection<IModule> _modules;
+
 		public Startup(ILoggerFactory loggerFactory, IConfiguration configuration)
 		{
 			Logger = loggerFactory.CreateLogger<Startup>();
@@ -48,8 +52,8 @@ namespace Host
 				});
 			});
 
-			var modules = services.AddModules(Configuration, Logger);
-			var assemblies = modules.Select(x => x.GetType().Assembly).ToArray();
+			_modules = services.AddModules(Configuration, Logger);
+			var assemblies = _modules.Select(x => x.GetType().Assembly).ToArray();
 
 			var mvc = services.AddMvc()
 				.SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
@@ -85,6 +89,11 @@ namespace Host
 			app.UseStaticFiles();
 			app.UseCookiePolicy();
 			app.UseAuthentication();
+
+			foreach (var module in _modules.OfType<IWebModule>())
+			{
+				module.Configure(app);
+			}
 
 			app.UseMvc(routes =>
 			{

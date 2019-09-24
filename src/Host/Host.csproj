@@ -51,6 +51,8 @@
     <ProjectReference Include="..\Montr.Web\Montr.Web.csproj" />
     <ProjectReference Include="..\Montr.Tendr.Impl\Montr.Tendr.Impl.csproj" />
     <ProjectReference Include="..\Montr.Tendr\Montr.Tendr.csproj" />
+    <ProjectReference Include="..\Montr.Worker.Hangfire\Montr.Worker.Hangfire.csproj" />
+    <ProjectReference Include="..\Montr.Worker\Montr.Worker.csproj" />
   </ItemGroup>
 
   <PropertyGroup Condition="'$(Configuration)' == 'Debug'">
