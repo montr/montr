@@ -16,6 +16,7 @@
     <ProjectReference Include="..\Montr.MasterData\Montr.MasterData.csproj" />
     <ProjectReference Include="..\Montr.Messages\Montr.Messages.csproj" />
     <ProjectReference Include="..\Montr.Tendr\Montr.Tendr.csproj" />
+    <ProjectReference Include="..\Montr.Worker\Montr.Worker.csproj" />
   </ItemGroup>
 
 </Project>
