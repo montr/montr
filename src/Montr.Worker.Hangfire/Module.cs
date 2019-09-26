@@ -1,4 +1,7 @@
-﻿using Hangfire;
+﻿using System.Text;
+using System.Threading;
+using Hangfire;
+using Hangfire.Common;
 using Hangfire.PostgreSql;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
@@ -30,7 +33,27 @@ namespace Montr.Worker.Hangfire
 		public void Configure(IApplicationBuilder app)
 		{
 			app.UseHangfireServer();
-			app.UseHangfireDashboard();
+
+			app.UseHangfireDashboard(options: new DashboardOptions
+			{
+				DisplayNameFunc = (context, job) => FormatJobName(job)
+			});
+		}
+
+		private static string FormatJobName(Job job)
+		{
+			var result = new StringBuilder();
+
+			foreach (var arg in job.Args)
+			{
+				if (arg is CancellationToken) continue;
+
+				if (result.Length > 0) result.Append(", ");
+
+				result.Append(arg);
+			}
+
+			return result.ToString();
 		}
 	}
 }
