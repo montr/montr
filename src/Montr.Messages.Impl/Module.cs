@@ -11,6 +11,7 @@ namespace Montr.Messages.Impl
 		public void ConfigureServices(IConfiguration configuration, IServiceCollection services)
 		{
 			services.AddSingleton<IEmailSender, MailKitEmailSender>();
+			services.AddSingleton<ITemplateRenderer, MustacheTemplateRenderer>();
 		}
 	}
 }

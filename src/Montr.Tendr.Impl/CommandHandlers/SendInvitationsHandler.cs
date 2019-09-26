@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -20,12 +21,15 @@ namespace Montr.Tendr.Impl.CommandHandlers
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IDbContextFactory _dbContextFactory;
 		private readonly IEmailSender _emailSender;
+		private readonly ITemplateRenderer _templateRenderer;
 
-		public SendInvitationsHandler(IUnitOfWorkFactory unitOfWorkFactory, IDbContextFactory dbContextFactory, IEmailSender emailSender)
+		public SendInvitationsHandler(IUnitOfWorkFactory unitOfWorkFactory, IDbContextFactory dbContextFactory,
+			IEmailSender emailSender, ITemplateRenderer templateRenderer)
 		{
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_dbContextFactory = dbContextFactory;
 			_emailSender = emailSender;
+			_templateRenderer = templateRenderer;
 		}
 
 		public async Task<ApiResult> Handle(SendInvitations request, CancellationToken cancellationToken)
@@ -51,35 +55,9 @@ namespace Montr.Tendr.Impl.CommandHandlers
 
 			foreach (var invitation in invitations)
 			{
-				await _emailSender.Send(invitation.Email,
-					$"Персональное приглашение на Запрос предложений № {invitation.EventNo}",
-					$@"
-[LOGO]
-<hr>
+				var message = await _templateRenderer.Render(Guid.Empty, invitation);
 
-<h3>Здравствуйте!</h3>
-
-<p>
-<b>АО «ФЫВА-ЙЦУКЕН-ТЭК»</b> приглашает вас принять участие в торговой процедуре <b>Запрос предложений № {invitation.EventNo}</b>
-</p>
-
-<p>
-<b>Предмет процедуры:</b><br>
-{invitation.EventName}
-</p>
-
-<p>
-Дата и время окончания приема заявок: <b>30.11.2018 15:00 MSK</b><br>
-Дата и время рассмотрения заявок: <b>14.12.2018 15:00 MSK</b><br>
-Дата и время подведения результатов процедуры: <b>31.12.2018 15:00 MSK</b><br>
-</p>
-
-<p>
-Ознакомиться с описанием процедуры можно по адресу <a href=""{invitation.EventUrl}"">{invitation.EventUrl}</a>
-</p>
-
-<hr>
-[CONTACTS]");
+				await _emailSender.Send(invitation.Email, message.Subject, message.Body);
 			}
 
 			return new ApiResult { AffectedRows = invitations.Count };
