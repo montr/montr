@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Markdig;
 using Montr.Messages.Models;
 using Montr.Messages.Services;
 using Stubble.Core.Builders;
@@ -14,45 +15,41 @@ namespace Montr.Messages.Impl.Services
 
 			var stubble = new StubbleBuilder().Build();
 
+			var subject = await stubble.RenderAsync(template.Subject, data);
+			var body = await stubble.RenderAsync(template.Body, data);
+
 			return new Message
 			{
-				Subject = await stubble.RenderAsync(template.Subject, data),
-				Body = await stubble.RenderAsync(template.Body, data)
+				Subject = subject,
+				Body = Markdown.ToHtml(body) 
 			};
 		}
 
+		// https://commonmark.org/help/
 		private MessageTemplate GetTemplate(Guid templateUid)
 		{
 			return new MessageTemplate
 			{
 				Uid = templateUid,
-				Subject = "Персональное приглашение на Запрос предложений № {{EventNo}}",
+				Subject = "🔥 Персональное приглашение на Запрос предложений № {{EventNo}}",
 				Body = @"
-[LOGO]
-<hr>
+![](https://dev.montr.net/favicon.ico)
 
-<h3>Здравствуйте!</h3>
+### Здравствуйте!
 
-<p>
-<b>АО «ФЫВА-ЙЦУКЕН-ТЭК»</b> приглашает вас принять участие в торговой процедуре <b>Запрос предложений № {{EventNo}}</b>
-</p>
+**АО «ФЫВА-ЙЦУКЕН-ТЭК»** приглашает вас принять участие в торговой процедуре **Запрос предложений № {{EventNo}}**
 
-<p>
-<b>Предмет процедуры:</b><br>
+**Предмет процедуры:**
 {{invitation.EventName}}
-</p>
 
-<p>
-Дата и время окончания приема заявок: <b>30.11.2018 15:00 MSK</b><br>
-Дата и время рассмотрения заявок: <b>14.12.2018 15:00 MSK</b><br>
-Дата и время подведения результатов процедуры: <b>31.12.2018 15:00 MSK</b><br>
-</p>
+Дата и время окончания приема заявок: **30.11.2018 15:00 MSK**   
+Дата и время рассмотрения заявок: **14.12.2018 15:00 MSK**   
+Дата и время подведения результатов процедуры: **31.12.2018 15:00 MSK**   
 
-<p>
-Ознакомиться с описанием процедуры можно по адресу <a href=""{{invitation.EventUrl}}"">{{invitation.EventUrl}}</a>
-</p>
+Ознакомиться с описанием процедуры можно по адресу <{{EventUrl}}>
 
-<hr>
+___
+
 [CONTACTS]"
 			};
 		}
