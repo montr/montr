@@ -17,7 +17,7 @@ namespace Montr.Metadata.Controllers
 		}
 
 		[HttpPost]
-		public async Task<ActionResult<DataView>> View(MetadataRequest request)
+		public async Task<DataView> View(MetadataRequest request)
 		{
 			return await _metadataProvider.GetView(request.ViewId);
 		}

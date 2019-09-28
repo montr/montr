@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Routing.Patterns;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -66,8 +65,9 @@ namespace Host
 				.SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
 				.AddJsonOptions(options =>
 				{
-					options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
 					options.JsonSerializerOptions.IgnoreNullValues = true;
+					options.JsonSerializerOptions.WriteIndented = false;
+					options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
 				});
 				
 			foreach (var assembly in assemblies)
