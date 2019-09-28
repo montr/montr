@@ -14,7 +14,7 @@ namespace Host
 			var hostBuilder = WebHost
 				.CreateDefaultBuilder(args)
 				.UseStartup<Startup>()
-				.UseSentry()
+				// .UseSentry()
 				.UseSerilog((context, configuration) =>
 				{
 					configuration

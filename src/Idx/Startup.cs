@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -9,8 +10,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using System.Security.Cryptography;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Montr.Modularity;
+using Montr.Web;
 
 namespace Idx
 {
@@ -24,7 +27,9 @@ namespace Idx
 
 	public class Startup
 	{
-		public Startup(ILoggerFactory loggerFactory, IHostingEnvironment environment, IConfiguration configuration)
+		private ICollection<IModule> _modules;
+
+		public Startup(ILoggerFactory loggerFactory, IWebHostEnvironment environment, IConfiguration configuration)
 		{
 			Logger = loggerFactory.CreateLogger<Startup>();
 
@@ -34,7 +39,7 @@ namespace Idx
 
 		public ILogger Logger { get; }
 
-		public IHostingEnvironment Environment { get; }
+		public IWebHostEnvironment Environment { get; }
 
 		public IConfiguration Configuration { get; }
 
@@ -58,14 +63,17 @@ namespace Idx
 				});
 			});
 
-			var modules = services.AddModules(Configuration, Logger);
-			var assemblies = modules.Select(x => x.GetType().Assembly).ToArray();
+			_modules = services.AddModules(Configuration, Logger);
+			var assemblies = _modules.Select(x => x.GetType().Assembly).ToArray();
 
-			var mvc = services.AddMvc()
-				.SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
+			services.AddMvc();
+
+			var mvc = services
+				.AddControllers()
+				.SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
 				.AddRazorPagesOptions(options =>
 				{
-					options.AllowAreas = true;
+					// options.AllowAreas = true;
 					options.Conventions.AuthorizeAreaFolder("Identity", "/Account/Manage");
 					options.Conventions.AuthorizeAreaPage("Identity", "/Account/Logout");
 				});
@@ -132,7 +140,7 @@ namespace Idx
 				});
 		}
 
-		public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+		public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
 		{
 			app.UseExceptionHandler("/Home/Error");
 			app.UseHsts();
@@ -140,15 +148,26 @@ namespace Idx
 			app.UseStaticFiles();
 			app.UseCookiePolicy();
 
+			app.UseAuthorization();
+
 			// app.UseCors("default"); // not needed, since UseIdentityServer adds cors
 			// app.UseAuthentication(); // not needed, since UseIdentityServer adds the authentication middleware
 			app.UseIdentityServer();
 
-			app.UseMvc(routes =>
+			foreach (var module in _modules.OfType<IWebModule>())
 			{
-				routes.MapRoute(
-					name: "default",
-					template: "{controller=Home}/{action=Index}/{id?}");
+				module.Configure(app);
+			}
+
+			app.UseRouting();
+
+			app.UseEndpoints(endpoints =>
+			{
+				endpoints.MapControllers();
+				endpoints.MapRazorPages();
+				// endpoints.MapHub<MyChatHub>()
+				// endpoints.MapGrpcService<MyCalculatorService>()
+				endpoints.MapDefaultControllerRoute();
 			});
 		}
 	}
