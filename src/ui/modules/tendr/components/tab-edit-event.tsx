@@ -49,6 +49,7 @@ class EventForm extends React.Component<IProps, IState> {
 
 		const { getFieldDecorator } = this.props.form;
 
+		// todo: load metadatata from api
 		return (
 			<Form onSubmit={this.handleSubmit}>
 				<Form.Item {...FormDefaults.formItemLayout} label="Наименование">

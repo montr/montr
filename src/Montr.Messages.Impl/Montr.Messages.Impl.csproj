@@ -5,6 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="linq2db" Version="2.9.0" />
     <PackageReference Include="MailKit" Version="2.3.1.6" />
     <PackageReference Include="Markdig" Version="0.17.1" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="2.2.0" />
@@ -12,6 +13,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Montr.Data.Linq2Db\Montr.Data.Linq2Db.csproj" />
     <ProjectReference Include="..\Montr.Messages\Montr.Messages.csproj" />
     <ProjectReference Include="..\Montr.Modularity\Montr.Modularity.csproj" />
   </ItemGroup>

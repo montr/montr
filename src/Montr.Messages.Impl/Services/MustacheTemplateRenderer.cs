@@ -1,6 +1,11 @@
 ﻿using System;
+using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
+using LinqToDB;
 using Markdig;
+using Montr.Data.Linq2Db;
+using Montr.Messages.Impl.Entities;
 using Montr.Messages.Models;
 using Montr.Messages.Services;
 using Stubble.Core.Builders;
@@ -9,9 +14,16 @@ namespace Montr.Messages.Impl.Services
 {
 	public class MustacheTemplateRenderer : ITemplateRenderer
 	{
-		public async Task<Message> Render<TModel>(Guid templateUid, TModel data)
+		private readonly IDbContextFactory _dbContextFactory;
+
+		public MustacheTemplateRenderer(IDbContextFactory dbContextFactory)
 		{
-			var template = GetTemplate(templateUid);
+			_dbContextFactory = dbContextFactory;
+		}
+
+		public async Task<Message> Render<TModel>(Guid templateUid, TModel data, CancellationToken cancellationToken)
+		{
+			var template = await GetTemplate(templateUid, cancellationToken);
 
 			var stubble = new StubbleBuilder().Build();
 
@@ -25,33 +37,21 @@ namespace Montr.Messages.Impl.Services
 			};
 		}
 
-		// https://commonmark.org/help/
-		private MessageTemplate GetTemplate(Guid templateUid)
+		private async Task< MessageTemplate> GetTemplate(Guid templateUid, CancellationToken cancellationToken)
 		{
-			return new MessageTemplate
+			using (var db = _dbContextFactory.Create())
 			{
-				Uid = templateUid,
-				Subject = "🔥 Персональное приглашение на Запрос предложений № {{EventNo}}",
-				Body = @"
-![](https://dev.montr.net/favicon.ico)
-
-### Здравствуйте!
-
-**АО «ФЫВА-ЙЦУКЕН-ТЭК»** приглашает вас принять участие в торговой процедуре **Запрос предложений № {{EventNo}}**
-
-**Предмет процедуры:**
-{{invitation.EventName}}
-
-Дата и время окончания приема заявок: **30.11.2018 15:00 MSK**   
-Дата и время рассмотрения заявок: **14.12.2018 15:00 MSK**   
-Дата и время подведения результатов процедуры: **31.12.2018 15:00 MSK**   
-
-Ознакомиться с описанием процедуры можно по адресу <{{EventUrl}}>
-
-___
-
-[CONTACTS]"
-			};
+				return await db
+					.GetTable<DbMessageTemplate>()
+					.Where(x => x.Uid == templateUid)
+					.Select(x => new MessageTemplate
+					{
+						Uid = x.Uid,
+						Subject = x.Subject,
+						Body = x.Body
+					})
+					.SingleAsync(cancellationToken);
+			}
 		}
 	}
 }
