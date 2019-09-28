@@ -42,7 +42,7 @@ namespace Montr.Tendr.Impl.CommandHandlers
 						return new ApiResult { Success = false, Errors = validator.Errors };
 					}
 
-					await db.GetTable<DbInvitation>()
+					var affected = await db.GetTable<DbInvitation>()
 						.Where(x => x.Uid == item.Uid)
 						.Set(x => x.CounterpartyUid, item.CounterpartyUid)
 						.Set(x => x.Email, item.Email)
@@ -50,7 +50,7 @@ namespace Montr.Tendr.Impl.CommandHandlers
 
 					scope.Commit();
 
-					return new ApiResult { Success = true };
+					return new ApiResult { AffectedRows = affected  };
 				}
 			}
 		}

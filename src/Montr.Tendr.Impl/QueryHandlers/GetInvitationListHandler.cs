@@ -26,9 +26,9 @@ namespace Montr.Tendr.Impl.QueryHandlers
 			_classifierRepository = classifierRepository;
 		}
 
-		public async Task<SearchResult<InvitationListItem>> Handle(GetInvitationList command, CancellationToken cancellationToken)
+		public async Task<SearchResult<InvitationListItem>> Handle(GetInvitationList request, CancellationToken cancellationToken)
 		{
-			var request = command.Request ?? throw new ArgumentNullException(nameof(command.Request));
+			if (request == null) throw new ArgumentNullException(nameof(request));
 
 			// todo: check event belongs to user company
 

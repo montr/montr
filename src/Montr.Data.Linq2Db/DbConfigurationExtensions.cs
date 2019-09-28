@@ -18,14 +18,11 @@ namespace Montr.Data.Linq2Db
 			configuration.SetLinq2DbDefaultSettings();
 		}
 
-		public static void SetLinq2DbDefaultSettings(this IConfiguration configuration, string sectionName = "ConnectionString")
+		public static void SetLinq2DbDefaultSettings(this IConfiguration configuration)
 		{
 			if (configuration == null) throw new ArgumentNullException(nameof(configuration));
 
-			var connectionStringSettings = configuration
-				.GetSection(sectionName).Get<ConnectionStringSettings>();
-
-			DataConnection.DefaultSettings = new DbSettings(connectionStringSettings);
+			DataConnection.DefaultSettings = new DbSettingsProvider(configuration);
 		}
 	}
 }

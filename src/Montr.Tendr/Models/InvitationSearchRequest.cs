@@ -7,6 +7,8 @@ namespace Montr.Tendr.Models
 	{
 		public Guid CompanyUid { get; set; }
 
+		public Guid UserUid { get; set; }
+
 		public Guid EventUid { get; set; }
 	}
 }

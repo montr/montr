@@ -89,7 +89,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 
 				scope.Commit();
 
-				return new ApiResult { Success = true, AffectedRows = result };
+				return new ApiResult { AffectedRows = result };
 			}
 		}
 	}

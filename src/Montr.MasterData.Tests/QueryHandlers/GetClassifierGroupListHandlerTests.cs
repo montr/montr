@@ -36,13 +36,10 @@ namespace Montr.MasterData.Tests.QueryHandlers
 			// act
 			var command = new GetClassifierGroupList
 			{
-				Request = new ClassifierGroupSearchRequest
-				{
-					CompanyUid = Constants.OperatorCompanyUid,
-					TypeCode = "okei",
-					TreeUid = tree.Uid,
-					ParentUid = null // yeah, we test this
-				}
+				CompanyUid = Constants.OperatorCompanyUid,
+				TypeCode = "okei",
+				TreeUid = tree.Uid,
+				ParentUid = null // yeah, we test this
 			};
 
 			var result = await handler.Handle(command, cancellationToken);
@@ -73,13 +70,10 @@ namespace Montr.MasterData.Tests.QueryHandlers
 			// act
 			var command = new GetClassifierGroupList
 			{
-				Request = new ClassifierGroupSearchRequest
-				{
-					CompanyUid = Constants.OperatorCompanyUid,
-					TypeCode = "okei",
-					TreeUid = tree.Uid,
-					ParentUid = parentGroup.Uid,
-				}
+				CompanyUid = Constants.OperatorCompanyUid,
+				TypeCode = "okei",
+				TreeUid = tree.Uid,
+				ParentUid = parentGroup.Uid,
 			};
 
 			var result = await handler.Handle(command, cancellationToken);
@@ -110,12 +104,9 @@ namespace Montr.MasterData.Tests.QueryHandlers
 			// act
 			var command = new GetClassifierGroupList
 			{
-				Request = new ClassifierGroupSearchRequest
-				{
-					CompanyUid = Constants.OperatorCompanyUid,
-					TypeCode = "okved2",
-					PageSize = 100
-				}
+				CompanyUid = Constants.OperatorCompanyUid,
+				TypeCode = "okved2",
+				PageSize = 100
 			};
 
 			var result = await handler.Handle(command, cancellationToken);
@@ -153,12 +144,9 @@ namespace Montr.MasterData.Tests.QueryHandlers
 			// act
 			var command = new GetClassifierGroupList
 			{
-				Request = new ClassifierGroupSearchRequest
-				{
-					CompanyUid = Constants.OperatorCompanyUid,
-					TypeCode = "okved2",
-					ParentUid = parentItem.Uid // Guid.NewGuid() // ParentCode = "F"
-				}
+				CompanyUid = Constants.OperatorCompanyUid,
+				TypeCode = "okved2",
+				ParentUid = parentItem.Uid // Guid.NewGuid() // ParentCode = "F"
 			};
 
 			var result = await handler.Handle(command, cancellationToken);
@@ -189,11 +177,8 @@ namespace Montr.MasterData.Tests.QueryHandlers
 			// act
 			var command = new GetClassifierGroupList
 			{
-				Request = new ClassifierGroupSearchRequest
-				{
-					CompanyUid = Constants.OperatorCompanyUid,
-					TypeCode = "oktmo"
-				}
+				CompanyUid = Constants.OperatorCompanyUid,
+				TypeCode = "oktmo"
 			};
 
 			var result = await handler.Handle(command, cancellationToken);
@@ -225,15 +210,12 @@ namespace Montr.MasterData.Tests.QueryHandlers
 			// act & assert - focus in root scope
 			var command = new GetClassifierGroupList
 			{
-				Request = new ClassifierGroupSearchRequest
-				{
-					CompanyUid = Constants.OperatorCompanyUid,
-					TypeCode = "okei",
-					TreeUid = tree.Uid,
-					ParentUid = null,
-					FocusUid = focusGroup.Uid 
-					// PageSize = 100 // todo: common limit for all levels is not ok
-				}
+				CompanyUid = Constants.OperatorCompanyUid,
+				TypeCode = "okei",
+				TreeUid = tree.Uid,
+				ParentUid = null,
+				FocusUid = focusGroup.Uid 
+				// PageSize = 100 // todo: common limit for all levels is not ok
 			};
 
 			var result = await handler.Handle(command, cancellationToken);
@@ -251,13 +233,10 @@ namespace Montr.MasterData.Tests.QueryHandlers
 			// act & assert - focus in scope of selected parent
 			command = new GetClassifierGroupList
 			{
-				Request = new ClassifierGroupSearchRequest
-				{
-					CompanyUid = Constants.OperatorCompanyUid,
-					TypeCode = "okei",
-					TreeUid = tree.Uid,
-					FocusUid = focusGroup.Uid 
-				}
+				CompanyUid = Constants.OperatorCompanyUid,
+				TypeCode = "okei",
+				TreeUid = tree.Uid,
+				FocusUid = focusGroup.Uid 
 			};
 
 			result = await handler.Handle(command, cancellationToken);

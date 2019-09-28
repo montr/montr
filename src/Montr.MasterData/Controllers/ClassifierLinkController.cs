@@ -28,21 +28,18 @@ namespace Montr.MasterData.Controllers
 		}
 
 		[HttpPost]
-		public async Task<SearchResult<ClassifierLink>> List(ClassifierLinkSearchRequest request)
+		public async Task<SearchResult<ClassifierLink>> List(GetClassifierLinkList request)
 		{
-			request.CompanyUid = _currentCompanyProvider.GetCompanyUid();
+			request.CompanyUid = await _currentCompanyProvider.GetCompanyUid();
 			request.UserUid = _currentUserProvider.GetUserUid();
 
-			return await _mediator.Send(new GetClassifierLinkList
-			{
-				Request = request
-			});
+			return await _mediator.Send(request);
 		}
 
 		[HttpPost]
 		public async Task<ApiResult> Insert(InsertClassifierLink request)
 		{
-			request.CompanyUid = _currentCompanyProvider.GetCompanyUid();
+			request.CompanyUid = await _currentCompanyProvider.GetCompanyUid();
 			request.UserUid = _currentUserProvider.GetUserUid();
 
 			return await _mediator.Send(request);
@@ -51,7 +48,7 @@ namespace Montr.MasterData.Controllers
 		[HttpPost]
 		public async Task<ApiResult> Delete(DeleteClassifierLink request)
 		{
-			request.CompanyUid = _currentCompanyProvider.GetCompanyUid();
+			request.CompanyUid = await _currentCompanyProvider.GetCompanyUid();
 			request.UserUid = _currentUserProvider.GetUserUid();
 
 			return await _mediator.Send(request);

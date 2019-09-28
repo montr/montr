@@ -28,21 +28,18 @@ namespace Montr.MasterData.Controllers
 		}
 
 		[HttpPost]
-		public async Task<SearchResult<ClassifierTree>> List(ClassifierTreeSearchRequest request)
+		public async Task<SearchResult<ClassifierTree>> List(GetClassifierTreeList request)
 		{
-			request.CompanyUid = _currentCompanyProvider.GetCompanyUid();
+			request.CompanyUid = await _currentCompanyProvider.GetCompanyUid();
 			request.UserUid = _currentUserProvider.GetUserUid();
 
-			return await _mediator.Send(new GetClassifierTreeList
-			{
-				Request = request
-			});
+			return await _mediator.Send(request);
 		}
 
 		[HttpPost]
 		public async Task<ClassifierTree> Get(GetClassifierTree request)
 		{
-			request.CompanyUid = _currentCompanyProvider.GetCompanyUid();
+			request.CompanyUid = await _currentCompanyProvider.GetCompanyUid();
 			request.UserUid = _currentUserProvider.GetUserUid();
 
 			return await _mediator.Send(request);
@@ -51,7 +48,7 @@ namespace Montr.MasterData.Controllers
 		[HttpPost]
 		public async Task<ApiResult> Insert(InsertClassifierTree request)
 		{
-			request.CompanyUid = _currentCompanyProvider.GetCompanyUid();
+			request.CompanyUid = await _currentCompanyProvider.GetCompanyUid();
 			request.UserUid = _currentUserProvider.GetUserUid();
 
 			return await _mediator.Send(request);
@@ -60,7 +57,7 @@ namespace Montr.MasterData.Controllers
 		[HttpPost]
 		public async Task<ApiResult> Update(UpdateClassifierTree request)
 		{
-			request.CompanyUid = _currentCompanyProvider.GetCompanyUid();
+			request.CompanyUid = await _currentCompanyProvider.GetCompanyUid();
 			request.UserUid = _currentUserProvider.GetUserUid();
 
 			return await _mediator.Send(request);
@@ -69,7 +66,7 @@ namespace Montr.MasterData.Controllers
 		[HttpPost]
 		public async Task<ApiResult> Delete(DeleteClassifierTree request)
 		{
-			request.CompanyUid = _currentCompanyProvider.GetCompanyUid();
+			request.CompanyUid = await _currentCompanyProvider.GetCompanyUid();
 			request.UserUid = _currentUserProvider.GetUserUid();
 
 			return await _mediator.Send(request);

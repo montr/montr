@@ -66,7 +66,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 
 				scope.Commit();
 
-				return new ApiResult { Success = true };
+				return new ApiResult();
 			}
 		}
 	}

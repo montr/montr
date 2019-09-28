@@ -5,7 +5,6 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Montr.Data.Linq2Db;
 using Montr.MasterData.Impl.Services;
 using Montr.Tendr.Impl.QueryHandlers;
-using Montr.Tendr.Models;
 using Montr.Tendr.Queries;
 
 namespace Montr.Tendr.Tests.QueryHandlers
@@ -28,9 +27,6 @@ namespace Montr.Tendr.Tests.QueryHandlers
 			var command = new GetInvitationList
 			{
 				UserUid = Guid.NewGuid(),
-				Request = new InvitationSearchRequest
-				{
-				}
 			};
 
 			var result = await handler.Handle(command, cancellationToken);

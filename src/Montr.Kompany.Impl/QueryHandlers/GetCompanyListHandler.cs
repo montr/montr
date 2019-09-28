@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -22,9 +21,6 @@ namespace Montr.Kompany.Impl.QueryHandlers
 
 		public Task<IList<Company>> Handle(GetCompanyList request, CancellationToken cancellationToken)
 		{
-			if (request.UserUid == Guid.Empty)
-				throw new InvalidOperationException("UserUid can't be empty guid.");
-
 			using (var db = _dbContextFactory.Create())
 			{
 				var query = from c in db.GetTable<DbCompany>()

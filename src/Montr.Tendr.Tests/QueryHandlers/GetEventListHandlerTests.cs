@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Montr.Data.Linq2Db;
 using Montr.Tendr.Impl.QueryHandlers;
-using Montr.Tendr.Models;
 using Montr.Tendr.Queries;
 
 namespace Montr.Tendr.Tests.QueryHandlers
@@ -25,9 +24,6 @@ namespace Montr.Tendr.Tests.QueryHandlers
 			var command = new GetEventList
 			{
 				UserUid = Guid.NewGuid(),
-				Request = new EventSearchRequest
-				{
-				}
 			};
 
 			var result = await handler.Handle(command, cancellationToken);

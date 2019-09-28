@@ -7,10 +7,10 @@ namespace Montr.Tendr.Commands
 {
 	public class InsertEvent: IRequest<ApiResult>
 	{
-		public Guid UserUid { get; set; }
-
 		public Guid CompanyUid { get; set; }
 
-		public Event Event { get; set; }
+		public Guid UserUid { get; set; }
+
+		public Event Item { get; set; }
 	}
 }

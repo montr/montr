@@ -28,21 +28,18 @@ namespace Montr.MasterData.Controllers
 		}
 
 		[HttpPost]
-		public async Task<SearchResult<ClassifierGroup>> List(ClassifierGroupSearchRequest request)
+		public async Task<SearchResult<ClassifierGroup>> List(GetClassifierGroupList request)
 		{
-			request.CompanyUid = _currentCompanyProvider.GetCompanyUid();
+			request.CompanyUid = await _currentCompanyProvider.GetCompanyUid();
 			request.UserUid = _currentUserProvider.GetUserUid();
 
-			return await _mediator.Send(new GetClassifierGroupList
-			{
-				Request = request
-			});
+			return await _mediator.Send(request);
 		}
 
 		[HttpPost]
 		public async Task<ClassifierGroup> Get(GetClassifierGroup request)
 		{
-			request.CompanyUid = _currentCompanyProvider.GetCompanyUid();
+			request.CompanyUid = await _currentCompanyProvider.GetCompanyUid();
 			request.UserUid = _currentUserProvider.GetUserUid();
 
 			return await _mediator.Send(request);
@@ -51,7 +48,7 @@ namespace Montr.MasterData.Controllers
 		[HttpPost]
 		public async Task<ApiResult> Insert(InsertClassifierGroup request)
 		{
-			request.CompanyUid = _currentCompanyProvider.GetCompanyUid();
+			request.CompanyUid = await _currentCompanyProvider.GetCompanyUid();
 			request.UserUid = _currentUserProvider.GetUserUid();
 
 			return await _mediator.Send(request);
@@ -60,7 +57,7 @@ namespace Montr.MasterData.Controllers
 		[HttpPost]
 		public async Task<ApiResult> Update(UpdateClassifierGroup request)
 		{
-			request.CompanyUid = _currentCompanyProvider.GetCompanyUid();
+			request.CompanyUid = await _currentCompanyProvider.GetCompanyUid();
 			request.UserUid = _currentUserProvider.GetUserUid();
 
 			return await _mediator.Send(request);
@@ -69,7 +66,7 @@ namespace Montr.MasterData.Controllers
 		[HttpPost]
 		public async Task<ApiResult> Delete(DeleteClassifierGroup request)
 		{
-			request.CompanyUid = _currentCompanyProvider.GetCompanyUid();
+			request.CompanyUid = await _currentCompanyProvider.GetCompanyUid();
 			request.UserUid = _currentUserProvider.GetUserUid();
 
 			return await _mediator.Send(request);

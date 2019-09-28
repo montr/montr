@@ -30,7 +30,7 @@ export class SearchEvents extends React.Component<Props, State> {
 				</Toolbar>
 
 				<DataBreadcrumb items={[]} />
-				<PageHeader>Торговые процедуры</PageHeader>
+				<PageHeader>Процедуры</PageHeader>
 			</>}>
 
 				<Form layout="inline">

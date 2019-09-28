@@ -25,8 +25,6 @@ namespace Montr.Tendr.Impl.CommandHandlers
 
 		public async Task<ApiResult> Handle(UpdateEvent request, CancellationToken cancellationToken)
 		{
-			if (request.UserUid == Guid.Empty) throw new InvalidOperationException("User is required.");
-
 			var item = request.Item ?? throw new ArgumentNullException(nameof(request.Item));
 
 			// todo: check event belongs to user company
@@ -35,15 +33,15 @@ namespace Montr.Tendr.Impl.CommandHandlers
 			{
 				using (var db = _dbContextFactory.Create())
 				{
-					await db.GetTable<DbEvent>()
-						.Where(x => x.Id == item.Id)
+					var affected = await db.GetTable<DbEvent>()
+						.Where(x => x.Uid == item.Uid)
 						.Set(x => x.Name, item.Name)
 						.Set(x => x.Description, item.Description)
 						.UpdateAsync(cancellationToken);
 
 					scope.Commit();
 
-					return new ApiResult { Success = true };
+					return new ApiResult { AffectedRows = affected };
 				}
 			}
 		}

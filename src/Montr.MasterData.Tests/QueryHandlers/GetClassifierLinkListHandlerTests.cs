@@ -39,13 +39,10 @@ namespace Montr.MasterData.Tests.QueryHandlers
 				// act - search by group code
 				var result = await handler.Handle(new GetClassifierLinkList
 				{
-					Request = new ClassifierLinkSearchRequest
-					{
-						CompanyUid = dbHelper.CompanyUid,
-						UserUid = dbHelper.UserUid,
-						TypeCode = dbHelper.TypeCode,
-						GroupUid = group1.Uid
-					}
+					CompanyUid = dbHelper.CompanyUid,
+					UserUid = dbHelper.UserUid,
+					TypeCode = dbHelper.TypeCode,
+					GroupUid = group1.Uid
 				}, cancellationToken);
 
 				// assert
@@ -62,13 +59,10 @@ namespace Montr.MasterData.Tests.QueryHandlers
 				// act - search by item code
 				result = await handler.Handle(new GetClassifierLinkList
 				{
-					Request = new ClassifierLinkSearchRequest
-					{
-						CompanyUid = dbHelper.CompanyUid,
-						UserUid = dbHelper.UserUid,
-						TypeCode = dbHelper.TypeCode,
-						ItemUid = item1.Uid
-					}
+					CompanyUid = dbHelper.CompanyUid,
+					UserUid = dbHelper.UserUid,
+					TypeCode = dbHelper.TypeCode,
+					ItemUid = item1.Uid
 				}, cancellationToken);
 
 				// assert
@@ -81,14 +75,11 @@ namespace Montr.MasterData.Tests.QueryHandlers
 				// act - search by both group and item codes
 				result = await handler.Handle(new GetClassifierLinkList
 				{
-					Request = new ClassifierLinkSearchRequest
-					{
-						CompanyUid = dbHelper.CompanyUid,
-						UserUid = dbHelper.UserUid,
-						TypeCode = dbHelper.TypeCode,
-						GroupUid = group1.Uid,
-						ItemUid = item2.Uid
-					}
+					CompanyUid = dbHelper.CompanyUid,
+					UserUid = dbHelper.UserUid,
+					TypeCode = dbHelper.TypeCode,
+					GroupUid = group1.Uid,
+					ItemUid = item2.Uid
 				}, cancellationToken);
 
 				// assert

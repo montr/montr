@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Montr.Core.Models;
+using Montr.Kompany.Services;
 using Montr.Metadata.Models;
 using Montr.Tendr.Commands;
 using Montr.Tendr.Models;
@@ -15,75 +16,69 @@ namespace Montr.Tendr.Controllers
 	public class EventsController : ControllerBase
 	{
 		private readonly IMediator _mediator;
+		private readonly ICurrentCompanyProvider _currentCompanyProvider;
 		private readonly ICurrentUserProvider _currentUserProvider;
 
-		public EventsController(IMediator mediator, ICurrentUserProvider currentUserProvider)
+		public EventsController(IMediator mediator,
+			ICurrentCompanyProvider currentCompanyProvider, ICurrentUserProvider currentUserProvider)
 		{
 			_mediator = mediator;
+			_currentCompanyProvider = currentCompanyProvider;
 			_currentUserProvider = currentUserProvider;
 		}
 
 		[HttpPost]
-		public async Task<ActionResult<SearchResult<Event>>> List(EventSearchRequest request)
+		public async Task<ActionResult<SearchResult<Event>>> List(GetEventList request)
 		{
-			return await _mediator.Send(new GetEventList
-			{
-				UserUid = _currentUserProvider.GetUserUid(),
-				Request = request
-			});
+			request.CompanyUid = await _currentCompanyProvider.GetCompanyUid();
+			request.UserUid = _currentUserProvider.GetUserUid();
+
+			return await _mediator.Send(request);
 		}
 
 		[HttpPost]
-		public async Task<ActionResult<Event>> Get(Event item) // todo: pass only id
+		public async Task<ActionResult<Event>> Get(GetEvent request)
 		{
-			return await _mediator.Send(new GetEvent
-			{
-				Uid = item.Uid
-			});
+			request.CompanyUid = await _currentCompanyProvider.GetCompanyUid();
+			request.UserUid = _currentUserProvider.GetUserUid();
+
+			return await _mediator.Send(request);
 		}
 
 		[HttpPost]
-		public async Task<ApiResult> Insert(Event item)
+		public async Task<ApiResult> Insert(InsertEvent request)
 		{
-			return await _mediator.Send(new InsertEvent
-			{
-				UserUid = _currentUserProvider.GetUserUid(),
-				Event = item
-			});
+			request.CompanyUid = await _currentCompanyProvider.GetCompanyUid();
+			request.UserUid = _currentUserProvider.GetUserUid();
+
+			return await _mediator.Send(request);
 		}
 
 		[HttpPost]
-		public async Task<ApiResult> Update(Event item)
+		public async Task<ApiResult> Update(UpdateEvent request)
 		{
-			return await _mediator.Send(new UpdateEvent
-			{
-				UserUid = _currentUserProvider.GetUserUid(),
-				Item = item
-			});
+			request.CompanyUid = await _currentCompanyProvider.GetCompanyUid();
+			request.UserUid = _currentUserProvider.GetUserUid();
+
+			return await _mediator.Send(request);
 		}
 
 		[HttpPost]
-		public async Task<ActionResult> Publish(Event item) // todo: pass only id
+		public async Task<ApiResult> Publish(PublishEvent request)
 		{
-			await _mediator.Send(new PublishEvent
-			{
-				UserUid = _currentUserProvider.GetUserUid(),
-				EventId = item.Id
-			});
+			request.CompanyUid = await _currentCompanyProvider.GetCompanyUid();
+			request.UserUid = _currentUserProvider.GetUserUid();
 
-			return Ok();
+			return await _mediator.Send(request);
 		}
 
 		[HttpPost]
-		public async Task<ActionResult> Cancel(Event item) // todo: pass only id
+		public async Task<ApiResult> Cancel(CancelEvent request)
 		{
-			await _mediator.Send(new CancelEvent
-			{
-				UserUid = _currentUserProvider.GetUserUid(),
-				EventId = item.Id
-			});
+			request.CompanyUid = await _currentCompanyProvider.GetCompanyUid();
+			request.UserUid = _currentUserProvider.GetUserUid();
 
-			return Ok();
+			return await _mediator.Send(request);
 		}
 	}
 }
