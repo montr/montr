@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json.Serialization;
-using System.Xml;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -14,7 +13,6 @@ using Microsoft.Extensions.Logging;
 using Montr.Modularity;
 using Montr.Web;
 using Montr.Web.Services;
-using Newtonsoft.Json.Serialization;
 
 namespace Host
 {
