@@ -1,16 +1,16 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp2.2</TargetFramework>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
   </PropertyGroup>
+
+	<ItemGroup>
+		<FrameworkReference Include="Microsoft.AspNetCore.App" />
+	</ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\Montr.Core\Montr.Core.csproj" />
     <ProjectReference Include="..\Montr.Modularity\Montr.Modularity.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-	  <PackageReference Include="Microsoft.AspNetCore.App" />
   </ItemGroup>
 
 </Project>

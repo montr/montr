@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Text.Json.Serialization;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -11,7 +12,6 @@ using Microsoft.Extensions.Logging;
 using Montr.Modularity;
 using Montr.Web;
 using Montr.Web.Services;
-using Newtonsoft.Json.Serialization;
 
 namespace Host
 {
@@ -55,15 +55,21 @@ namespace Host
 			_modules = services.AddModules(Configuration, Logger);
 			var assemblies = _modules.Select(x => x.GetType().Assembly).ToArray();
 
-			var mvc = services.AddMvc()
-				.SetCompatibilityVersion(CompatibilityVersion.Version_2_2)
+			var mvc = services.AddMvc();
+
+			services
+				.AddControllers(options =>
+				{
+					options.EnableEndpointRouting = false; // todo: remove legacy routing support
+				})
+				.SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
 				.AddJsonOptions(options =>
 				{
-					options.SerializerSettings.Formatting = Newtonsoft.Json.Formatting.None;
-					options.SerializerSettings.Converters.Add(new Newtonsoft.Json.Converters.StringEnumConverter(new DefaultNamingStrategy()));
-					options.SerializerSettings.NullValueHandling = Newtonsoft.Json.NullValueHandling.Ignore;
+					options.JsonSerializerOptions.IgnoreNullValues = true;
+					options.JsonSerializerOptions.WriteIndented = false;
+					options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
 				});
-
+				
 			foreach (var assembly in assemblies)
 			{
 				mvc.AddApplicationPart(assembly);
@@ -77,7 +83,7 @@ namespace Host
 			services.AddMediatR(assemblies);
 		}
 
-		public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+		public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
 		{
 			app.UseWhen(context => context.Request.Path.StartsWithSegments("/api") == false, x =>
 			{
@@ -95,12 +101,10 @@ namespace Host
 				module.Configure(app);
 			}
 
+			app.UseRouting();
+
 			app.UseMvc(routes =>
 			{
-				/* routes.MapRoute(
-					name: "default",
-					template: "{controller=Home}/{action=Index}/{id?}"); */
-
 				routes.MapRoute(
 					name: "greedy",
 					template: "{**greedy}",

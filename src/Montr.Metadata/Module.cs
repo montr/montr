@@ -9,6 +9,13 @@ namespace Montr.Metadata
 	{
 		public void ConfigureServices(IConfiguration configuration, IServiceCollection services)
 		{
+			services
+				.AddMvcCore()
+				.AddJsonOptions(options =>
+				{
+					options.JsonSerializerOptions.Converters.Add(new FormFieldJsonConverter());
+				});
+
 			services.AddSingleton<IMetadataProvider, DefaultMetadataProvider>();
 		}
 	}

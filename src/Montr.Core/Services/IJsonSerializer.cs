@@ -1,19 +1,20 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json;
 
 namespace Montr.Core.Services
 {
 	public interface IJsonSerializer
 	{
-		string Serialize(object value, string configName = null);
+		string Serialize(object value);
 
 		T Deserialize<T>(string value);
 	}
 
+	// todo: add tests
 	public class DefaultJsonSerializer : IJsonSerializer
 	{
-		public string Serialize(object value, string configName = null)
+		public string Serialize(object value)
 		{
-			return JsonConvert.SerializeObject(value);
+			return JsonSerializer.Serialize(value);
 		}
 
 		public T Deserialize<T>(string value)
