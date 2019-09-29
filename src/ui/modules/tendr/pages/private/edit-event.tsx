@@ -4,7 +4,7 @@ import { IApiResult, IDataView, IPaneProps } from "@montr-core/models";
 import { EventService, EventTemplateService } from "../../services";
 import { Page, IPaneComponent, Toolbar, PageHeader, DataBreadcrumb } from "@montr-core/components";
 import { MetadataService } from "@montr-core/services";
-import { IEvent, IEventTemplate } from "modules/tendr/models";
+import { IEvent } from "modules/tendr/models";
 
 import * as panes from "../../components"
 import { RouteBuilder } from ".";
@@ -29,7 +29,7 @@ interface IProps extends CompanyContextProps, RouteComponentProps<IRouteProps> {
 interface IState {
 	data: IEvent;
 	dataView: IDataView<IEvent>;
-	configCodes: IEventTemplate[];
+	configCodes: IEvent[];
 }
 
 export class EditEvent extends React.Component<IProps, IState> {
@@ -59,7 +59,8 @@ export class EditEvent extends React.Component<IProps, IState> {
 	}
 
 	fetchConfigCodes = async () => {
-		this.setState({ configCodes: await this._eventTemplateService.list() });
+		const templates = await this._eventTemplateService.list();
+		this.setState({ configCodes: templates.rows });
 	}
 
 	fetchData = async () => {

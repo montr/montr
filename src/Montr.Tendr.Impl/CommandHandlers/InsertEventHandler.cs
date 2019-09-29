@@ -44,9 +44,12 @@ namespace Montr.Tendr.Impl.CommandHandlers
 					await db.GetTable<DbEvent>()
 						.Value(x => x.Uid, uid)
 						.Value(x => x.Id, id)
+						.Value(x => x.CompanyUid, request.CompanyUid)
+						// todo: is it possible to create event without templates, from scratch?
+						.Value(x => x.IsTemplate, false)
+						.Value(x => x.TemplateUid, item.TemplateUid)
 						.Value(x => x.ConfigCode, item.ConfigCode)
 						.Value(x => x.StatusCode, EventStatusCode.Draft)
-						.Value(x => x.CompanyUid, request.CompanyUid)
 						.Value(x => x.Name, item.Name)
 						.Value(x => x.Description, item.Description)
 						.InsertAsync(cancellationToken);

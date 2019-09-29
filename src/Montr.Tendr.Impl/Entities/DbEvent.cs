@@ -1,4 +1,5 @@
-﻿using LinqToDB;
+﻿using System;
+using LinqToDB;
 using LinqToDB.Mapping;
 
 namespace Montr.Tendr.Impl.Entities
@@ -7,13 +8,19 @@ namespace Montr.Tendr.Impl.Entities
 	public class DbEvent
 	{
 		[Column(Name = "uid"), DataType(DataType.Guid), PrimaryKey, Identity]
-		public System.Guid Uid { get; set; }
+		public Guid Uid { get; set; }
 
 		[Column(Name = "id"), DataType(DataType.Int64)]
 		public long Id { get; set; }
 
 		[Column(Name = "company_uid"), DataType(DataType.Guid)]
-		public System.Guid CompanyUid { get; set; }
+		public Guid CompanyUid { get; set; }
+
+		[Column(Name = "is_template"), DataType(DataType.Boolean)]
+		public bool IsTemplate { get; set; }
+
+		[Column(Name = "template_uid"), DataType(DataType.Guid)]
+		public Guid? TemplateUid { get; set; }
 
 		[Column(Name = "config_code"), DataType(DataType.VarChar), NotNull]
 		public string ConfigCode { get; set; }

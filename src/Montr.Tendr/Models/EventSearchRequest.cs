@@ -9,6 +9,8 @@ namespace Montr.Tendr.Models
 
 	    public Guid UserUid { get; set; }
 
+	    public bool IsTemplate { get; set; }
+
 		public string Name { get; set; }
     }
 }
