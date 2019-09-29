@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using LinqToDB;
+using LinqToDB.Data;
 using MediatR;
 using Montr.Core.Services;
 using Montr.Data.Linq2Db;
@@ -36,6 +38,15 @@ namespace Montr.Tendr.Impl.CommandHandlers
 			{
 				using (var db = _dbContextFactory.Create())
 				{
+					DbEvent template = null;
+
+					if (item.TemplateUid != null)
+					{
+						template = await db.GetTable<DbEvent>()
+							.Where(x => x.Uid == item.TemplateUid)
+							.SingleOrDefaultAsync(cancellationToken);
+					}
+
 					var uid = Guid.NewGuid();
 
 					// todo: use number generation service
@@ -45,14 +56,32 @@ namespace Montr.Tendr.Impl.CommandHandlers
 						.Value(x => x.Uid, uid)
 						.Value(x => x.Id, id)
 						.Value(x => x.CompanyUid, request.CompanyUid)
-						// todo: is it possible to create event without templates, from scratch?
 						.Value(x => x.IsTemplate, false)
-						.Value(x => x.TemplateUid, item.TemplateUid)
-						.Value(x => x.ConfigCode, item.ConfigCode)
+						.Value(x => x.TemplateUid, template?.Uid)
+						.Value(x => x.Name, template?.Name)
+						.Value(x => x.Description, template?.Description)
+						.Value(x => x.ConfigCode, template?.ConfigCode) // todo: remove
 						.Value(x => x.StatusCode, EventStatusCode.Draft)
-						.Value(x => x.Name, item.Name)
-						.Value(x => x.Description, item.Description)
 						.InsertAsync(cancellationToken);
+
+					if (template != null)
+					{
+						var invitations = await db.GetTable<DbInvitation>()
+							.Where(x => x.EventUid == template.Uid)
+							.Select(x => new DbInvitation
+							{
+								Uid = Guid.NewGuid(),
+								EventUid = uid,
+								StatusCode = InvitationStatusCode.Draft,
+								CounterpartyUid = x.CounterpartyUid,
+								Email = x.Email
+							}).ToListAsync(cancellationToken);
+
+						if (invitations.Count > 0)
+						{
+							db.BulkCopy(invitations);
+						}
+					}
 
 					scope.Commit();
 

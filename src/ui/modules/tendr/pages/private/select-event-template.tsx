@@ -31,7 +31,7 @@ export class SelectEventTemplate extends React.Component<IProps, IState> {
 
 	handleSelect = async (data: IEvent) => {
 		const result: IApiResult = await this._eventService.insert({
-			templateUid: data.templateUid,
+			templateUid: data.uid,
 			configCode: data.configCode
 		});
 

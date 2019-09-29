@@ -43,7 +43,11 @@ export class EditEvent extends React.Component<IProps, IState> {
 	constructor(props: IProps) {
 		super(props);
 
-		this.state = { data: {}, dataView: { id: "" }, configCodes: [] };
+		this.state = {
+			data: {},
+			dataView: { id: "" },
+			configCodes: []
+		};
 	}
 
 	componentDidMount() {
@@ -60,6 +64,7 @@ export class EditEvent extends React.Component<IProps, IState> {
 
 	fetchConfigCodes = async () => {
 		const templates = await this._eventTemplateService.list();
+
 		this.setState({ configCodes: templates.rows });
 	}
 
@@ -193,23 +198,25 @@ export class EditEvent extends React.Component<IProps, IState> {
 
 				<h3 title={data.name} className="single-line-text">{data.name}</h3>
 
-				<Tabs size="small" defaultActiveKey={tabKey} onChange={this.handleTabChange}>
-					{dataView && dataView.panes && dataView.panes.map(pane => {
+				{dataView && dataView.panes &&
+					<Tabs size="small" defaultActiveKey={tabKey} onChange={this.handleTabChange}>
+						{dataView.panes.map(pane => {
 
-						let component: React.ReactElement<IPaneProps<IEvent>>;
-						if (pane.component) {
-							component = React.createElement(pane.component,
-								{ data: data, ref: this.createRefForKey(pane.key) });
-						}
+							let component: React.ReactElement<IPaneProps<IEvent>>;
+							if (pane.component) {
+								component = React.createElement(pane.component,
+									{ data: data, ref: this.createRefForKey(pane.key) });
+							}
 
-						return (
-							<Tabs.TabPane key={pane.key}
-								tab={<span>{pane.icon && <Icon type={pane.icon} />} {pane.name}</span>}>
-								{component}
-							</Tabs.TabPane>
-						);
-					})}
-				</Tabs>
+							return (
+								<Tabs.TabPane key={pane.key}
+									tab={<span>{pane.icon && <Icon type={pane.icon} />} {pane.name}</span>}>
+									{component}
+								</Tabs.TabPane>
+							);
+						})}
+					</Tabs>
+				}
 
 			</Page>
 		);
