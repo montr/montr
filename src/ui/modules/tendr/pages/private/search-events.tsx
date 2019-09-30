@@ -58,7 +58,7 @@ export class SearchEvents extends React.Component<Props, State> {
 					<Form.Item>
 						<Select mode="multiple" placeholder="Выберите тип" style={{ minWidth: 200 }}>
 							{configCodes.map(x => {
-								return <Select.Option value={x.uid.toString()}>{x.name}</Select.Option>
+								return <Select.Option key={`${x.uid}`} value={`${x.uid}`}>{x.name}</Select.Option>
 							})}
 						</Select>
 					</Form.Item>
@@ -73,6 +73,7 @@ export class SearchEvents extends React.Component<Props, State> {
 				<br />
 
 				<DataTable
+					rowKey="uid"
 					viewId="PrivateEventSearch/Grid"
 					loadUrl={this._eventService.getLoadUrl()} />
 

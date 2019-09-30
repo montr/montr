@@ -53,6 +53,7 @@ export class SelectEventTemplate extends React.Component<IProps, IState> {
 			<Page title="Выберите шаблон процедуры">
 
 				<DataTable
+					rowKey="uid"
 					viewId="PrivateEventSearch/Grid"
 					loadUrl={`${Constants.apiURL}/EventTemplate/List/`}
 					rowActions={rowActions}
