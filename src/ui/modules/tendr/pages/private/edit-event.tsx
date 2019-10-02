@@ -115,7 +115,7 @@ export class EditEvent extends React.Component<IProps, IState> {
 			(ref.current as IPaneComponent).save();
 		});
 
-		// this.fetchData();
+		this.fetchData();
 	}
 
 	handlePublish() {

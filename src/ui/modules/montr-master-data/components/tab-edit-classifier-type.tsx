@@ -47,15 +47,10 @@ class _TabEditClassifierType extends React.Component<IProps, IState> {
 		await this._classifierTypeService.abort();
 	}
 
-	private fetchData = async () => {
-		const { currentCompany } = this.props;
+	fetchData = async () => {
+		const dataView = await this._metadataService.load(`ClassifierType`);
 
-		if (currentCompany) {
-
-			const dataView = await this._metadataService.load(`ClassifierType`);
-
-			this.setState({ loading: false, fields: dataView.fields });
-		}
+		this.setState({ loading: false, fields: dataView.fields });
 	}
 
 	save = async (values: IClassifierType): Promise<IApiResult> => {
@@ -86,7 +81,7 @@ class _TabEditClassifierType extends React.Component<IProps, IState> {
 
 	render() {
 		const { data } = this.props,
-			{ redirect, fields } = this.state;
+			{ loading, redirect, fields } = this.state;
 
 		if (redirect) {
 			this.setState({ redirect: null });
@@ -94,7 +89,7 @@ class _TabEditClassifierType extends React.Component<IProps, IState> {
 		}
 
 		return (
-			<Spin spinning={this.state.loading}>
+			<Spin spinning={loading}>
 				<DataForm fields={fields} data={data} onSave={this.save} />
 			</Spin>
 		);
