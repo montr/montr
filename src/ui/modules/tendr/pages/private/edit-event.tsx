@@ -1,4 +1,5 @@
 import * as React from "react";
+import { withTranslation, WithTranslation } from 'react-i18next';
 import { Tabs, Button, Icon, Modal, message, Tag } from "antd";
 import { IApiResult, IDataView, IPaneProps } from "@montr-core/models";
 import { EventService, EventTemplateService } from "../../services";
@@ -23,7 +24,7 @@ interface IRouteProps {
 	tabKey?: string;
 }
 
-interface IProps extends CompanyContextProps, RouteComponentProps<IRouteProps> {
+interface IProps extends WithTranslation, CompanyContextProps, RouteComponentProps<IRouteProps> {
 }
 
 interface IState {
@@ -32,7 +33,7 @@ interface IState {
 	configCodes: IEvent[];
 }
 
-export class EditEvent extends React.Component<IProps, IState> {
+class _EditEvent extends React.Component<IProps, IState> {
 
 	private _metadataService = new MetadataService();
 	private _eventTemplateService = new EventTemplateService();
@@ -119,9 +120,11 @@ export class EditEvent extends React.Component<IProps, IState> {
 	}
 
 	handlePublish() {
+		const { t } = this.props;
+
 		Modal.confirm({
-			title: "Подтверждение операции",
-			content: "Вы действительно хотите опубликовать событие?",
+			title: t("confirm.title"), // "Подтверждение операции",
+			content: t("publish.confirm.content"), // "Вы действительно хотите опубликовать событие?",
 			onOk: () => {
 				this._eventService
 					.publish(this.props.match.params.uid)
@@ -222,3 +225,5 @@ export class EditEvent extends React.Component<IProps, IState> {
 		);
 	}
 }
+
+export const EditEvent = withTranslation()(_EditEvent);

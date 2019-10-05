@@ -21,6 +21,8 @@
 		"antd": "^3.23.5",
 		"axios": "^0.19.0",
 		"i18next": "^17.0.18",
+		"i18next-browser-languagedetector": "^3.1.1",
+		"i18next-xhr-backend": "^3.2.0",
 		"oidc-client": "^1.9.1",
 		"react": "^16.10.1",
 		"react-dom": "^16.10.1",

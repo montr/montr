@@ -1,0 +1,10 @@
+{
+	"confirm": {
+		"title": "Confirm operation"
+	},
+	"publish": {
+		"confirm": {
+			"content": "Are you sure you want to publish the event?"
+		}
+	}
+}
