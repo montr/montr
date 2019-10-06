@@ -28,16 +28,17 @@ namespace Montr.Tendr.Controllers
 		}
 
 		[HttpPost]
-		public async Task<ActionResult<SearchResult<Event>>> List(GetEventList request)
+		public async Task<SearchResult<Event>> List(GetEventList request)
 		{
 			request.CompanyUid = await _currentCompanyProvider.GetCompanyUid();
 			request.UserUid = _currentUserProvider.GetUserUid();
+			request.IsTemplate = false;
 
 			return await _mediator.Send(request);
 		}
 
 		[HttpPost]
-		public async Task<ActionResult<Event>> Get(GetEvent request)
+		public async Task<Event> Get(GetEvent request)
 		{
 			request.CompanyUid = await _currentCompanyProvider.GetCompanyUid();
 			request.UserUid = _currentUserProvider.GetUserUid();

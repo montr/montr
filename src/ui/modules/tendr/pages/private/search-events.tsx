@@ -1,28 +1,49 @@
 import * as React from "react";
 import { Link } from "react-router-dom";
 import { Form, Select, Button, DatePicker } from "antd";
-import { EventService } from "../../services";
+import { EventService, EventTemplateService } from "../../services";
 import { Page, DataTable, PageHeader, DataBreadcrumb, Toolbar } from "@montr-core/components";
+import { IEvent } from "../../models";
 
 interface Props {
 }
 
 interface State {
+	configCodes: IEvent[];
 }
 
 export class SearchEvents extends React.Component<Props, State> {
 
-	private _eventService = new EventService();
+	_eventService = new EventService();
+	_eventTemplateService = new EventTemplateService();
 
 	constructor(props: Props) {
 		super(props);
+
+		this.state = {
+			configCodes: []
+		};
+	}
+
+	componentDidMount() {
+		this.fetchConfigCodes();
 	}
 
 	componentWillUnmount = async () => {
+		await this._eventTemplateService.abort();
 		await this._eventService.abort();
 	}
 
+	fetchConfigCodes = async () => {
+		const templates = await this._eventTemplateService.list();
+
+		this.setState({ configCodes: templates.rows });
+	}
+
 	render() {
+
+		const { configCodes } = this.state;
+
 		return (
 			<Page title={<>
 				<Toolbar float="right">
@@ -36,8 +57,9 @@ export class SearchEvents extends React.Component<Props, State> {
 				<Form layout="inline">
 					<Form.Item>
 						<Select mode="multiple" placeholder="Выберите тип" style={{ minWidth: 200 }}>
-							<Select.Option value="0">Запрос предложений</Select.Option>
-							<Select.Option value="1">Предложение</Select.Option>
+							{configCodes.map(x => {
+								return <Select.Option key={`${x.uid}`} value={`${x.uid}`}>{x.name}</Select.Option>
+							})}
 						</Select>
 					</Form.Item>
 					<Form.Item>
@@ -51,6 +73,7 @@ export class SearchEvents extends React.Component<Props, State> {
 				<br />
 
 				<DataTable
+					rowKey="uid"
 					viewId="PrivateEventSearch/Grid"
 					loadUrl={this._eventService.getLoadUrl()} />
 

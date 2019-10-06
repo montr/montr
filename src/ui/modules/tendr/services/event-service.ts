@@ -1,5 +1,5 @@
 import { Fetcher } from "@montr-core/services";
-import { Guid } from "@montr-core/models";
+import { Guid, IDataResult } from "@montr-core/models";
 import { IApiResult } from "@montr-core/models/api-result";
 import { Constants } from "@montr-core/.";
 import { IEvent } from "../models";
@@ -11,7 +11,7 @@ export class EventService extends Fetcher {
 		return `${Constants.apiURL}/Events/List`;
 	}
 
-	list = async (): Promise<IEvent[]> => {
+	list = async (): Promise<IDataResult<IEvent>> => {
 		return this.post(`${Constants.apiURL}/Events/List`);
 	};
 

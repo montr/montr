@@ -29,7 +29,8 @@ namespace Montr.Tendr.Impl.QueryHandlers
 			using (var db = _dbContextFactory.Create())
 			{
 				var all = db.GetTable<DbEvent>()
-					.Where(x => x.CompanyUid == request.CompanyUid);
+					.Where(x => x.CompanyUid == request.CompanyUid
+					            && x.IsTemplate == request.IsTemplate);
 
 				var data = await all
 					.Apply(request, x => x.Id, SortOrder.Descending)

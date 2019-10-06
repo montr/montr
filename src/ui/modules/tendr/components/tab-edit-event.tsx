@@ -1,9 +1,9 @@
 import * as React from "react";
-import { Form, Input, message } from "antd";
+import { Form, Spin } from "antd";
 import { FormComponentProps } from "antd/lib/form";
-import { IApiResult, IPaneProps } from "@montr-core/models";
-import { EventService } from "../services";
-import { IPaneComponent, FormDefaults } from "@montr-core/components";
+import { IApiResult, IPaneProps, IFormField } from "@montr-core/models";
+import { EventService, EventMetadataService } from "../services";
+import { IPaneComponent, DataForm } from "@montr-core/components";
 import { IEvent } from "modules/tendr/models";
 
 interface IProps extends FormComponentProps {
@@ -11,68 +11,48 @@ interface IProps extends FormComponentProps {
 }
 
 interface IState {
+	loading: boolean;
+	fields?: IFormField[];
 }
 
 class EventForm extends React.Component<IProps, IState> {
-
-	private _eventService = new EventService();
+	_metadataService = new EventMetadataService();
+	_eventService = new EventService();
 
 	constructor(props: IProps) {
 		super(props);
 
-		this.state = {};
+		this.state = {
+			loading: true
+		};
+	}
+
+	componentDidMount = async () => {
+		await this.fetchData();
 	}
 
 	componentWillUnmount = async () => {
+		await this._metadataService.abort();
 		await this._eventService.abort();
 	}
 
-	private handleSubmit = async (e: React.SyntheticEvent) => {
-		e.preventDefault();
+	fetchData = async () => {
+		const dataView = await this._metadataService.load(`Event/Edit`);
 
-		await this.save();
+		this.setState({ loading: false, fields: dataView.fields });
 	}
 
-	private save = async () => {
-		this.props.form.validateFieldsAndScroll((errors, values: IEvent) => {
-			if (!errors) {
-				this._eventService
-					.update({ uid: this.props.data.uid, ...values })
-					.then((result: IApiResult) => {
-						message.success("Данные успешно сохранены.");
-					});
-			}
-		});
+	save = async (values: IEvent): Promise<IApiResult> => {
+		return await this._eventService.update({ uid: this.props.data.uid, ...values });
 	}
 
 	render = () => {
 
-		const { getFieldDecorator } = this.props.form;
+		const { data } = this.props,
+			{ loading, fields } = this.state;
 
-		// todo: load metadatata from api
 		return (
-			<Form onSubmit={this.handleSubmit}>
-				<Form.Item {...FormDefaults.formItemLayout} label="Наименование">
-					{getFieldDecorator("name", {
-						rules: [
-							{ required: true, whitespace: true, message: "Поле «Наименование» обязательно для заполнения" }
-						],
-						initialValue: this.props.data.name
-					})(
-						<Input.TextArea autosize={{ minRows: 4, maxRows: 24 }} />
-					)}
-				</Form.Item>
-				<Form.Item {...FormDefaults.formItemLayout} label="Описание" extra="Как можно подробнее опишите что вы хотите купить.">
-					{getFieldDecorator("description", {
-						initialValue: this.props.data.description
-					})(
-						<Input.TextArea autosize={{ minRows: 4, maxRows: 24 }} />
-					)}
-				</Form.Item>
-				{/*  <Form.Item {...tailFormItemLayout}>
-                    <Button type="primary" htmlType="submit" icon="check">Сохранить</Button>
-                </Form.Item> */}
-			</Form >
+			<DataForm fields={fields} data={data} onSave={this.save} />
 		);
 	}
 }
