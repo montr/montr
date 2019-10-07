@@ -34,7 +34,7 @@
 		public byte? Rows { get; set; }
 	}
 
-	public class PasswordField : StringField
+	public class PasswordField : FormField
 	{
 		public override string Type => "password";
 	}
