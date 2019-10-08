@@ -1,13 +1,10 @@
 import i18n from "i18next";
 import { initReactI18next } from "react-i18next";
 
-import Backend from "i18next-xhr-backend";
-import LanguageDetector from "i18next-browser-languagedetector";
-// not like to use this?
-// have a look at the Quick start guide
-// for passing in lng and translations on init
+import i18nextBackend from "i18next-xhr-backend";
+import i18nextLanguageDetector from "i18next-browser-languagedetector";
 
-const resources = {
+/* const resources = {
 	en: {
 		translation: {
 			"confirm": {
@@ -32,36 +29,35 @@ const resources = {
 			}
 		}
 	}
-};
-
-/* i18n
-	// load translation using xhr -> see /public/locales
-	// learn more: https://github.com/i18next/i18next-xhr-backend
-	.use(Backend)
-	.init({
-		backend: {
-			// for all available options read the backend's repository readme file
-			loadPath: "/locales/{{lng}}/{{ns}}.json"
-		}
-	}); */
+}; */
 
 i18n
-	// detect user language
-	// learn more: https://github.com/i18next/i18next-browser-languageDetector
-	// .use(LanguageDetector)
-	// pass the i18n instance to react-i18next.
+	.use(i18nextBackend)
+	.use(i18nextLanguageDetector)
 	.use(initReactI18next)
-	// init i18next
-	// for all options read: https://www.i18next.com/overview/configuration-options
 	.init({
-		resources,
-		lng: "ru",
+		// https://www.i18next.com/overview/configuration-options
+		defaultNS: "common",
+		lng: "en",
+		whitelist: ["en", "ru"],
 		fallbackLng: "en",
-		// keySeparator: false, // we do not use keys in form messages.welcome
 		debug: true,
-
+		// https://www.i18next.com/overview/configuration-options#missing-keys
+		saveMissing: false,
 		interpolation: {
-			escapeValue: false, // not needed for react as it escapes by default
+			escapeValue: false,
+		},
+		react: {
+			bindI18n: "languageChanged",
+			useSuspense: true,
+		},
+		// https://github.com/i18next/i18next-xhr-backend
+		backend: {
+			loadPath: "/assets/locales/{{lng}}/{{ns}}.json"
+		},
+		// https://github.com/i18next/i18next-browser-languageDetector
+		detection: {
+			// order: ["cookie", "navigator"]
 		}
 	});
 
