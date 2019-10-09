@@ -11,7 +11,7 @@ i18n
 	.init({
 		// https://www.i18next.com/overview/configuration-options
 		defaultNS: "common",
-		lng: "en",
+		// lng: "en",
 		fallbackLng: "en",
 		keySeparator: false,
 		debug: true,
@@ -30,7 +30,9 @@ i18n
 		},
 		// https://github.com/i18next/i18next-browser-languageDetector
 		detection: {
-			// order: ["cookie", "navigator"]
+			order: ["cookie", "header"],
+			lookupCookie: "lang",
+			caches: ["cookie"],
 		}
 	});
 
