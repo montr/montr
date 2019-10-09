@@ -1,6 +1,6 @@
 import * as React from "react";
 import { BrowserRouter as Router } from "react-router-dom";
-import { ConfigProvider, Layout } from "antd";
+import { ConfigProvider, Layout, Spin } from "antd";
 import ru_RU from "antd/lib/locale-provider/ru_RU";
 import { Routes } from ".";
 import { Routes as MasterDataRoutes } from "@montr-master-data/.";
@@ -35,7 +35,7 @@ export class App extends React.Component<IProps, IState> {
 		const siderWidth = 220;
 
 		return (
-			<React.Suspense fallback={<div>Loading...</div>}>
+			<React.Suspense fallback={<Spin style={{ position: "fixed", top: "33%", left: "49%" }} />}>
 				<Router>
 					<ConfigProvider locale={ru_RU}>
 						<UserContextProvider>

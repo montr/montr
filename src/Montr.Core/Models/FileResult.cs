@@ -8,5 +8,6 @@ namespace Montr.Core.Models
 
 		public string FileName { get; set; }
 
-		public Stream Stream { get; set; }	}
+		public Stream Stream { get; set; }
+	}
 }
