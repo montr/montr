@@ -16,6 +16,7 @@ TABLESPACE pg_default;
 
 GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE public.message_template TO web;
 
+/*
 insert into message_template(uid, subject, body)
 values ('4D3C920C-ABFC-4F21-B900-6AFB894413DD',
 	   '🔥 Персональное приглашение на Запрос предложений № {{EventNo}}',
@@ -33,4 +34,5 @@ values ('4D3C920C-ABFC-4F21-B900-6AFB894413DD',
 Дата и время подведения результатов процедуры: **31.12.2018 15:00 MSK**   
 
 Ознакомиться с описанием процедуры можно по адресу <{{EventUrl}}>');
+*/
 

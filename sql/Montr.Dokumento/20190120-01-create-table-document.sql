@@ -13,4 +13,6 @@ CREATE TABLE IF NOT EXISTS public.document
 )
 WITH (
 	OIDS = FALSE
-)
+);
+
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE public.document TO web;

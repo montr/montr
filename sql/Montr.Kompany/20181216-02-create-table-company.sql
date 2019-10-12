@@ -16,3 +16,9 @@ WITH (
 );
 
 GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE public.company TO web;
+
+/*
+insert into company (uid, config_code, status_code, name) values (
+	'6465dd4c-8664-4433-ba6a-14effd40ebed', 'company', 'active', 'Montr, Inc.'
+);
+*/
