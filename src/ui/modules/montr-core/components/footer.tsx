@@ -1,5 +1,5 @@
 import * as React from "react";
-import { LanguageSelector } from ".";
+import { LanguageSelector } from "./";
 
 export const Footer = () => {
 	return (<>

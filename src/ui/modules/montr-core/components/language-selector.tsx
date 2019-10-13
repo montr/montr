@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Translation } from 'react-i18next';
 import { Menu, Dropdown, Icon } from "antd";
-import { IIndexer } from "@montr-core/models";
+import { IIndexer } from "../models";
 
 export const LanguageSelector = () => {
 
