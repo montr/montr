@@ -2,8 +2,9 @@ import * as React from "react";
 import { BrowserRouter as Router } from "react-router-dom";
 import { ConfigProvider, Layout, Spin } from "antd";
 import ru_RU from "antd/lib/locale-provider/ru_RU";
-import { Routes } from ".";
+import { Routes as CoreRoutes } from "@montr-core/.";
 import { Routes as MasterDataRoutes } from "@montr-master-data/.";
+import { Routes } from ".";
 import { AuthCallbackHandler, UserContextProvider, DataMenu, ErrorBoundary, Footer } from "@montr-core/components";
 import { CompanyContextProvider, UserWithCompanyMenu } from "@kompany/components";
 
@@ -40,8 +41,9 @@ export class App extends React.Component {
 											<Layout style={{ marginLeft: siderWidth }} className="bg-white">
 												<Layout.Content className="bg-white">
 													<ErrorBoundary>
-														<Routes />
+														<CoreRoutes />
 														<MasterDataRoutes />
+														<Routes />
 													</ErrorBoundary>
 												</Layout.Content>
 												<Layout.Footer className="bg-white">

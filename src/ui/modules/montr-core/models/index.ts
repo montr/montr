@@ -5,5 +5,6 @@ export * from "./data-view";
 export * from "./form-field";
 export * from "./guid";
 export * from "./indexer";
+export * from "./locale-string";
 export * from "./menu";
 export * from "./pane";

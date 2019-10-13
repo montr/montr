@@ -138,6 +138,16 @@ namespace Montr.Metadata.Services
 				};
 			}
 
+			// Core
+			if (viewId.StartsWith("LocaleString/Grid"))
+			{
+				result.Columns = new List<DataColumn>
+				{
+					new DataColumn { Key = "key", Name = "Ключ", Width = 100, Sortable = true },
+					new DataColumn { Key = "value", Name = "Значение", Width = 400 }
+				};
+			}
+
 			// Events
 			if (viewId == "PrivateEvent/Edit")
 			{

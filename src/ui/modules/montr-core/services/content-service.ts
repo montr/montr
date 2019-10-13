@@ -1,4 +1,4 @@
-import { Fetcher } from ".";
+import { Fetcher } from "./fetcher";
 import { Constants } from "..";
 import { IMenu } from "../models";
 
