@@ -3,15 +3,15 @@ import { DataTableUpdateToken, Page, DataTable, Toolbar, PageHeader, DataBreadcr
 import { Constants } from "..";
 import { IMenu, ILocaleString, IDataResult } from "@montr-core/models";
 import { LocaleService } from "@montr-core/services";
-import { Form, Select, Button } from "antd";
+import { Form, Select, Button, Icon } from "antd";
 import { FormComponentProps } from "antd/lib/form";
 
 interface IProps extends FormComponentProps {
 }
 
 interface IState {
-	locale?: string;
-	module?: string;
+	locale: string;
+	module: string;
 	updateTableToken: DataTableUpdateToken;
 }
 
@@ -23,6 +23,8 @@ export class _SearchLocaleString extends React.Component<IProps, IState> {
 		super(props);
 
 		this.state = {
+			locale: "en",
+			module: "common",
 			updateTableToken: { date: new Date() }
 		};
 	}
@@ -61,6 +63,12 @@ export class _SearchLocaleString extends React.Component<IProps, IState> {
 		});
 	}
 
+	handleImport = async (e: React.SyntheticEvent) => {
+	}
+
+	handleExport = async (e: React.SyntheticEvent) => {
+	}
+
 	refreshTable = async (resetSelectedRows?: boolean) => {
 		this.setState({
 			updateTableToken: { date: new Date(), resetSelectedRows }
@@ -68,7 +76,7 @@ export class _SearchLocaleString extends React.Component<IProps, IState> {
 	}
 
 	render = () => {
-		const { updateTableToken } = this.state;
+		const { locale, module, updateTableToken } = this.state;
 
 		const rowActions: IMenu[] = [
 			{ name: "Редактировать", route: (item: ILocaleString) => item.key }
@@ -83,10 +91,8 @@ export class _SearchLocaleString extends React.Component<IProps, IState> {
 			<Page
 				title={<>
 					<Toolbar float="right">
-						{/* <Link to={`/classifiers/add`}>
-							<Button type="primary"><Icon type="plus" /> Добавить</Button>
-						</Link>
-						<Button onClick={this.delete}><Icon type="delete" /> Удалить</Button> */}
+						<Button onClick={this.handleImport}><Icon type="import" /> Импорт</Button>
+						<Button onClick={this.handleExport}><Icon type="export" /> Экспорт</Button>
 					</Toolbar>
 
 					<DataBreadcrumb items={[{ name: "Локализация" }]} />
@@ -96,7 +102,7 @@ export class _SearchLocaleString extends React.Component<IProps, IState> {
 				<Form layout="inline" onSubmit={this.handleSubmit}>
 					<Form.Item>
 						{getFieldDecorator("locale", {
-							rules: [{ required: true }],
+							rules: [{ required: true }], initialValue: locale
 						})(
 							<Select placeholder="Локаль" style={{ minWidth: 100 }}>
 								{locales.map(x => {
@@ -107,7 +113,7 @@ export class _SearchLocaleString extends React.Component<IProps, IState> {
 					</Form.Item>
 					<Form.Item>
 						{getFieldDecorator("module", {
-							rules: [{ required: true }],
+							rules: [{ required: true }], initialValue: module
 						})(
 							<Select placeholder="Модуль" style={{ minWidth: 100 }}>
 								{modules.map(x => {
