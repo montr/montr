@@ -2,7 +2,7 @@ import * as React from "react";
 import * as ReactDOM from "react-dom";
 import { App } from "./pages/private";
 
-import "./i18n";
+import "@montr-core/i18n";
 
 import "@montr-core/index.less"
 import "./index.less";
