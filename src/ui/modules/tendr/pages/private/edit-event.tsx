@@ -123,31 +123,33 @@ class _EditEvent extends React.Component<IProps, IState> {
 		const { t } = this.props;
 
 		Modal.confirm({
-			title: t("confirm.title"), // "Подтверждение операции",
-			content: t("publish.confirm.content"), // "Вы действительно хотите опубликовать событие?",
+			title: t("confirm.title"),
+			content: t("publish.confirm.content"),
 			onOk: () => {
 				this._eventService
 					.publish(this.props.match.params.uid)
 					.then((result: IApiResult) => {
-						message.success("Операция выполнена успешно.");
+						message.success(t("operation.success"));
 						this.fetchData();
 					})
 					.catch(error => {
-						message.error("Произошла ошибка при выполнении операции.");
+						message.error(t("operation.error"));
 					});
 			}
 		});
 	}
 
 	handleCancel() {
+		const { t } = this.props;
+
 		Modal.confirm({
-			title: "Подтверждение операции",
-			content: "Вы действительно хотите отменить событие?",
+			title: t("confirm.title"),
+			content: t("publish.cancel.content"),
 			onOk: () => {
 				this._eventService
 					.cancel(this.props.match.params.uid)
 					.then((result: IApiResult) => {
-						message.success("Операция выполнена успешно.");
+						message.success(t("operation.success"));
 						this.fetchData();
 					});
 			}
@@ -163,6 +165,7 @@ class _EditEvent extends React.Component<IProps, IState> {
 	}
 
 	render = () => {
+		const { t } = this.props;
 		const { tabKey } = this.props.match.params;
 		const { data, dataView } = this.state;
 
@@ -172,9 +175,9 @@ class _EditEvent extends React.Component<IProps, IState> {
 		let toolbar: React.ReactNode;
 
 		toolbar = (<>
-			<Button type="primary" onClick={() => this.handlePublish()}>Опубликовать</Button>&#xA0;
-			<Button icon="check" onClick={() => this.handleSave()}>Сохранить</Button> &#xA0;
-			<Button onClick={() => this.handleCancel()}>Отменить</Button> &#xA0;
+			<Button type="primary" onClick={() => this.handlePublish()}>{t("publish.button")}</Button>&#xA0;
+			<Button icon="check" onClick={() => this.handleSave()}>{t("save.button")}</Button> &#xA0;
+			<Button onClick={() => this.handleCancel()}>{t("cancel.button")}</Button> &#xA0;
 		</>);
 
 		/* if (data.statusCode == "draft") {
@@ -226,4 +229,4 @@ class _EditEvent extends React.Component<IProps, IState> {
 	}
 }
 
-export const EditEvent = withTranslation()(_EditEvent);
+export const EditEvent = withTranslation("tendr")(_EditEvent);

@@ -1,36 +1,32 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
+using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Montr.Core.Models;
+using Montr.Core.Queries;
 
 namespace Montr.Core.Controllers
 {
 	[/*Authorize,*/ ApiController, Route("api/[controller]/[action]")]
 	public class LocaleController
 	{
-		private readonly IDictionary<string, IDictionary<string, string>> _langs =
-			new Dictionary<string, IDictionary<string, string>>
-			{
-				{
-					"en", new Dictionary<string, string>
-					{
-						{"confirm.title", "Confirm operation"},
-						{"publish.confirm.content", "Are you sure you want to publish the event?"}
-					}
-				},
-				{
-					"ru", new Dictionary<string, string>
-					{
-						{"confirm.title", "Подтверждение операции"},
-						{"publish.confirm.content", "Вы действительно хотите опубликовать событие?"}
-					}
-				},
-			};
+		private readonly IMediator _mediator;
 
-
-		[HttpGet, Route("{lng}/{ns}")]
-		public Task<IDictionary<string, string>> List([FromRoute]string lng, [FromRoute]string ns)
+		public LocaleController(IMediator mediator)
 		{
-			return Task.FromResult(_langs[lng]);
+			_mediator = mediator;
+		}
+
+		[HttpGet, Route("{locale}/{module}")]
+		public async Task<IDictionary<string, string>> Strings([FromRoute]string locale, [FromRoute]string module)
+		{
+			return await _mediator.Send(new GetAllLocaleStrings { Locale = locale, Module = module });
+		}
+
+		[HttpPost]
+		public async Task<SearchResult<LocaleString>> List(GetLocaleStringList request)
+		{
+			return await _mediator.Send(request);
 		}
 	}
 }
