@@ -8,7 +8,7 @@ using Montr.Core.Queries;
 namespace Montr.Core.Controllers
 {
 	[/*Authorize,*/ ApiController, Route("api/[controller]/[action]")]
-	public class LocaleController
+	public class LocaleController : ControllerBase
 	{
 		private readonly IMediator _mediator;
 
@@ -27,6 +27,14 @@ namespace Montr.Core.Controllers
 		public async Task<SearchResult<LocaleString>> List(GetLocaleStringList request)
 		{
 			return await _mediator.Send(request);
+		}
+
+		[HttpPost]
+		public async Task<FileStreamResult> Export(ExportLocaleStringList request)
+		{
+			var result = await _mediator.Send(request);
+
+			return File(result.Stream, result.ContentType, result.FileName);
 		}
 	}
 }

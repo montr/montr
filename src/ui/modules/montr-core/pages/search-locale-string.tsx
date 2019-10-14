@@ -2,7 +2,7 @@ import React from "react";
 import { DataTableUpdateToken, Page, DataTable, Toolbar, PageHeader, DataBreadcrumb } from "@montr-core/components";
 import { Constants } from "..";
 import { IMenu, ILocaleString, IDataResult } from "@montr-core/models";
-import { LocaleService } from "@montr-core/services";
+import { LocaleStringService } from "@montr-core/services";
 import { Form, Select, Button, Icon } from "antd";
 import { FormComponentProps } from "antd/lib/form";
 
@@ -17,7 +17,7 @@ interface IState {
 
 export class _SearchLocaleString extends React.Component<IProps, IState> {
 
-	_localeService = new LocaleService();
+	_localeService = new LocaleStringService();
 
 	constructor(props: IProps) {
 		super(props);
@@ -67,6 +67,9 @@ export class _SearchLocaleString extends React.Component<IProps, IState> {
 	}
 
 	handleExport = async (e: React.SyntheticEvent) => {
+		const { locale, module } = this.state;
+
+		await this._localeService.export({ locale, module });
 	}
 
 	refreshTable = async (resetSelectedRows?: boolean) => {

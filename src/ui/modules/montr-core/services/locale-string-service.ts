@@ -7,10 +7,13 @@ interface ILocaleStringSearchRequest {
 	module: string;
 }
 
-export class LocaleService extends Fetcher {
+export class LocaleStringService extends Fetcher {
 
 	list = async (request: ILocaleStringSearchRequest): Promise<IDataResult<ILocaleString>> => {
 		return this.post(`${Constants.apiURL}/locale/list`, request);
 	};
 
+	export = async (request: ILocaleStringSearchRequest): Promise<any> => {
+		return this.download(`${Constants.apiURL}/locale/export`, request);
+	};
 }
