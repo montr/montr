@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 using MediatR;
-using Montr.Metadata.Models;
+using Montr.Core.Models;
 
 namespace Montr.Tendr.Commands
 {

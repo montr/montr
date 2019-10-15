@@ -1,7 +1,7 @@
 ﻿using System;
 using MediatR;
+using Montr.Core.Models;
 using Montr.MasterData.Models;
-using Montr.Metadata.Models;
 
 namespace Montr.MasterData.Commands
 {

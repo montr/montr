@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Montr.Core.Impl.QueryHandlers;
+using Montr.Core.Impl.Services;
 using Montr.Core.Models;
 using Montr.Core.Queries;
 using Montr.Core.Services;
@@ -19,6 +20,8 @@ namespace Montr.Core.Tests.QueryHandlers
 		{
 			// arrange
 			var cancellationToken = new CancellationToken();
+			var localeStringSerializer = new LocaleStringSerializer();
+
 			var repository = new Mock<IRepository<LocaleString>>();
 			repository
 				.Setup(x => x.Search(It.IsAny<ExportLocaleStringList>(), It.IsAny<CancellationToken>()))
@@ -32,7 +35,7 @@ namespace Montr.Core.Tests.QueryHandlers
 					}
 				});
 
-			var handler = new ExportLocaleStringListHandler(repository.Object);
+			var handler = new ExportLocaleStringListHandler(repository.Object, localeStringSerializer);
 
 			// act
 			var result = await handler.Handle(new ExportLocaleStringList

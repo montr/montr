@@ -1,10 +1,8 @@
 ﻿using System;
-using System.IO;
-using System.Text.Encodings.Web;
-using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
+using Montr.Core.Impl.Services;
 using Montr.Core.Models;
 using Montr.Core.Queries;
 using Montr.Core.Services;
@@ -14,10 +12,12 @@ namespace Montr.Core.Impl.QueryHandlers
 	public class ExportLocaleStringListHandler : IRequestHandler<ExportLocaleStringList, FileResult>
 	{
 		private readonly IRepository<LocaleString> _repository;
+		private readonly LocaleStringSerializer _serializer;
 
-		public ExportLocaleStringListHandler(IRepository<LocaleString> repository)
+		public ExportLocaleStringListHandler(IRepository<LocaleString> repository, LocaleStringSerializer serializer)
 		{
 			_repository = repository;
+			_serializer = serializer;
 		}
 
 		public async Task<FileResult> Handle(ExportLocaleStringList request, CancellationToken cancellationToken)
@@ -28,40 +28,28 @@ namespace Montr.Core.Impl.QueryHandlers
 
 			var searchResult = await _repository.Search(request, cancellationToken);
 
-			var stream = new MemoryStream();
-
-			var options = new JsonWriterOptions
+			var lists = new[]
 			{
-				Indented = true,
-				Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
+				new LocaleStringList
+				{
+					Locale = request.Locale,
+					Modules = new[]
+					{
+						new LocaleModuleStringList
+						{
+							Module = request.Module,
+							Items = searchResult.Rows
+						}
+					}
+				}
 			};
 
-			using (var writer = new Utf8JsonWriter(stream, options))
+			return new FileResult
 			{
-				writer.WriteStartObject();
-				writer.WriteStartObject(request.Locale);
-				writer.WriteStartObject(request.Module);
-
-				foreach (var row in searchResult.Rows)
-				{
-					writer.WriteString(row.Key, row.Value);
-				}
-
-				writer.WriteEndObject(); // module
-				writer.WriteEndObject(); // locale
-				writer.WriteEndObject();
-
-				await writer.FlushAsync(cancellationToken);
-
-				stream.Position = 0;
-
-				return new FileResult
-				{
-					ContentType = "application/json",
-					FileName = $"locale-strings-{request.Locale}-{request.Module}-{DateTime.Now.ToString("u").Replace(':', '-').Replace(' ', '-')}.json",
-					Stream = stream
-				};
-			}
+				ContentType = "application/json",
+				FileName = $"locale-strings-{request.Locale}-{request.Module}-{DateTime.Now.ToString("u").Replace(':', '-').Replace(' ', '-')}.json",
+				Stream = await _serializer.Serialize(lists, cancellationToken)
+			};
 		}
 	}
 }
