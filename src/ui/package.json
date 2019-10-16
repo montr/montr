@@ -14,11 +14,11 @@
 	"private": true,
 	"dependencies": {
 		"@types/lodash": "^4.14.144",
-		"@types/react": "^16.9.5",
-		"@types/react-dom": "^16.9.1",
-		"@types/react-router": "^5.1.1",
+		"@types/react": "^16.9.9",
+		"@types/react-dom": "^16.9.2",
+		"@types/react-router": "^5.1.2",
 		"@types/react-router-dom": "^5.1.0",
-		"antd": "^3.23.6",
+		"antd": "^3.24.0",
 		"axios": "^0.19.0",
 		"i18next": "^17.2.0",
 		"i18next-browser-languagedetector": "^4.0.0",
@@ -42,8 +42,8 @@
 		"style-loader": "^1.0.0",
 		"ts-import-plugin": "^1.6.1",
 		"typescript": "^3.6.4",
-		"webpack": "^4.41.1",
-		"webpack-bundle-analyzer": "^3.5.2",
+		"webpack": "^4.41.2",
+		"webpack-bundle-analyzer": "^3.6.0",
 		"webpack-cli": "^3.3.9",
 		"webpack-merge": "^4.2.2"
 	}
