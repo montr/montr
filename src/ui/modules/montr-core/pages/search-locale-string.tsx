@@ -11,8 +11,8 @@ interface IProps extends FormComponentProps {
 }
 
 interface IState {
-	locale: string;
-	module: string;
+	locale?: string;
+	module?: string;
 	updateTableToken: DataTableUpdateToken;
 }
 
@@ -25,8 +25,8 @@ export class _SearchLocaleString extends React.Component<IProps, IState> {
 		super(props);
 
 		this.state = {
-			locale: "en",
-			module: "common",
+			// locale: "en",
+			// module: "common",
 			updateTableToken: { date: new Date() }
 		};
 	}
@@ -127,9 +127,9 @@ export class _SearchLocaleString extends React.Component<IProps, IState> {
 				<Form layout="inline" onSubmit={this.handleSubmit}>
 					<Form.Item>
 						{getFieldDecorator("locale", {
-							rules: [{ required: true }], initialValue: locale
+							rules: [{ required: false }], initialValue: locale
 						})(
-							<Select placeholder="Локаль" style={{ minWidth: 100 }}>
+							<Select placeholder="Локаль" allowClear style={{ minWidth: 100 }}>
 								{locales.map(x => {
 									return <Select.Option key={`${x}`} value={`${x}`}>{x}</Select.Option>
 								})}
@@ -138,9 +138,9 @@ export class _SearchLocaleString extends React.Component<IProps, IState> {
 					</Form.Item>
 					<Form.Item>
 						{getFieldDecorator("module", {
-							rules: [{ required: true }], initialValue: module
+							rules: [{ required: false }], initialValue: module
 						})(
-							<Select placeholder="Модуль" style={{ minWidth: 100 }}>
+							<Select placeholder="Модуль" allowClear style={{ minWidth: 100 }}>
 								{modules.map(x => {
 									return <Select.Option key={`${x}`} value={`${x}`}>{x}</Select.Option>
 								})}
@@ -155,12 +155,12 @@ export class _SearchLocaleString extends React.Component<IProps, IState> {
 				<br />
 
 				<DataTable
-					rowKey="key"
+					// rowKey="key"
+					// rowActions={rowActions}
 					viewId={`LocaleString/Grid/`}
 					loadUrl={`${Constants.apiURL}/locale/list/`}
 					onLoadData={this.onLoadTableData}
 					updateToken={updateTableToken}
-					rowActions={rowActions}
 				/>
 
 			</Page>

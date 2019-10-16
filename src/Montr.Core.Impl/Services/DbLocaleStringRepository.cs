@@ -26,7 +26,8 @@ namespace Montr.Core.Impl.Services
 			using (var db = _dbContextFactory.Create())
 			{
 				var all = db.GetTable<DbLocaleString>()
-					.Where(x => x.Locale == request.Locale && x.Module == request.Module);
+					.Where(x => (request.Locale == null || x.Locale == request.Locale)
+					            && (request.Module == null || x.Module == request.Module));
 
 				var withPaging = request.PageSize > 0;
 
@@ -35,6 +36,8 @@ namespace Montr.Core.Impl.Services
 				var data = await paged
 					.Select(x => new LocaleString
 					{
+						Locale = x.Locale,
+						Module = x.Module,
 						Key = x.Key,
 						Value = x.Value
 					})

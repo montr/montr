@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
@@ -28,21 +30,27 @@ namespace Montr.Core.Impl.QueryHandlers
 
 			var searchResult = await _repository.Search(request, cancellationToken);
 
-			var lists = new[]
+			var lists = new List<LocaleStringList>();
+
+			foreach (var localeGroup in searchResult.Rows.GroupBy(x => x.Locale))
 			{
-				new LocaleStringList
+				var locale = new LocaleStringList
 				{
-					Locale = request.Locale,
-					Modules = new[]
+					Locale = localeGroup.Key,
+					Modules = new List<LocaleModuleStringList>()
+				};
+
+				foreach (var moduleGroup in localeGroup.GroupBy(x => x.Module))
+				{
+					locale.Modules.Add(new LocaleModuleStringList
 					{
-						new LocaleModuleStringList
-						{
-							Module = request.Module,
-							Items = searchResult.Rows
-						}
-					}
+						Module = moduleGroup.Key,
+						Items = moduleGroup.ToList()
+					});
 				}
-			};
+
+				lists.Add(locale);
+			}
 
 			return new FileResult
 			{

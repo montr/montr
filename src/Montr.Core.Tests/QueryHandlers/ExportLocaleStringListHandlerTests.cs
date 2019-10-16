@@ -29,9 +29,9 @@ namespace Montr.Core.Tests.QueryHandlers
 				{
 					Rows = new List<LocaleString>
 					{
-						new LocaleString { Key = "key1", Value = "value1" },
-						new LocaleString { Key = "key2", Value = "value2" },
-						new LocaleString { Key = "key3", Value = "value3" },
+						new LocaleString { Locale = "en", Module = "common", Key = "key1", Value = "value1" },
+						new LocaleString { Locale = "en", Module = "common", Key = "key2", Value = "value2" },
+						new LocaleString { Locale = "en", Module = "common", Key = "key3", Value = "value3" },
 					}
 				});
 

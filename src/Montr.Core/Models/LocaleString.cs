@@ -8,6 +8,10 @@ namespace Montr.Core.Models
 	{
 		private string DebuggerDisplay => $"{Key}: {Value}";
 
+		public string Locale { get; set; }
+
+		public string Module { get; set; }
+
 		public string Key { get; set; }
 
 		public string Value { get; set; }

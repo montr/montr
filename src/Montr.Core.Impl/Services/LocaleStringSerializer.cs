@@ -12,7 +12,7 @@ namespace Montr.Core.Impl.Services
 	// todo: use Montr.Core.Services.IJsonSerializer
 	public class LocaleStringSerializer
 	{
-		public async Task<Stream> Serialize(LocaleStringList[] data, CancellationToken cancellationToken)
+		public async Task<Stream> Serialize(IList<LocaleStringList> data, CancellationToken cancellationToken)
 		{
 			var value = data.ToDictionary(x => x.Locale,
 				locale => locale.Modules.ToDictionary(x => x.Module,
