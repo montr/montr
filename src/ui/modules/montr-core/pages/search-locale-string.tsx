@@ -2,8 +2,8 @@ import React from "react";
 import { DataTableUpdateToken, Page, DataTable, Toolbar, PageHeader, DataBreadcrumb } from "@montr-core/components";
 import { Constants } from "..";
 import { IMenu, ILocaleString, IDataResult } from "@montr-core/models";
-import { LocaleStringService } from "@montr-core/services";
-import { Form, Select, Button, Icon, Upload, message } from "antd";
+import { LocaleStringService, NotificationService } from "@montr-core/services";
+import { Form, Select, Button, Icon, Upload } from "antd";
 import { FormComponentProps } from "antd/lib/form";
 import { UploadChangeParam } from "antd/lib/upload";
 
@@ -18,6 +18,7 @@ interface IState {
 
 export class _SearchLocaleString extends React.Component<IProps, IState> {
 
+	_notification = new NotificationService();
 	_localeService = new LocaleStringService();
 
 	constructor(props: IProps) {
@@ -74,13 +75,12 @@ export class _SearchLocaleString extends React.Component<IProps, IState> {
 	}
 
 	handleUploadChange = async (info: UploadChangeParam) => {
-		if (info.file.status !== 'uploading') {
-			console.log(info.file, info.fileList);
-		}
-		if (info.file.status === 'done') {
-			message.success(`${info.file.name} file uploaded successfully`);
-		} else if (info.file.status === 'error') {
-			message.error(`${info.file.name} file upload failed.`);
+		if (info.file.status === "done") {
+			this._notification.success(`File "${info.file.name}" uploaded successfully.`);
+
+			this.refreshTable();
+		} else if (info.file.status === "error") {
+			this._notification.error(`File "${info.file.name}" upload failed.`);
 		}
 	}
 
@@ -94,7 +94,8 @@ export class _SearchLocaleString extends React.Component<IProps, IState> {
 		const { locale, module, updateTableToken } = this.state;
 
 		const rowActions: IMenu[] = [
-			{ name: "Редактировать", route: (item: ILocaleString) => item.key }
+			{ name: "Редактировать", route: (item: ILocaleString) => item.key },
+			{ name: "Удалить", route: (item: ILocaleString) => item.key },
 		];
 
 		const locales = ["en", "ru"],
@@ -106,8 +107,14 @@ export class _SearchLocaleString extends React.Component<IProps, IState> {
 			<Page
 				title={<>
 					<Toolbar float="right">
-						<Upload showUploadList={false} style={{ display: "inline-block" }} accept=".json"
-							onChange={this.handleUploadChange} action="https://www.mocky.io/v2/5cc8019d300000980a055e76">
+						<Upload
+							accept=".json"
+							action={`${Constants.apiURL}/locale/import/`}
+							name="file"
+							showUploadList={false}
+							style={{ display: "inline-block" }}
+							// customRequest={this.handleUpload}
+							onChange={this.handleUploadChange}>
 							<Button onClick={this.handleImport}><Icon type="import" /> Импорт</Button>
 						</Upload>
 						<Button onClick={this.handleExport}><Icon type="export" /> Экспорт</Button>

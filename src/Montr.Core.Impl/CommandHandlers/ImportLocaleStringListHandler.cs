@@ -28,7 +28,7 @@ namespace Montr.Core.Impl.CommandHandlers
 
 		public async Task<ApiResult> Handle(ImportLocaleStringList request, CancellationToken cancellationToken)
 		{
-			var list = await _serializer.Deserialize(request.Stream, cancellationToken);
+			var list = await _serializer.Deserialize(request.File.OpenReadStream(), cancellationToken);
 
 			var affected = 0;
 

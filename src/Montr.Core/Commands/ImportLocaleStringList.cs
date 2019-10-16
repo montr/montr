@@ -1,5 +1,6 @@
 ﻿using System.IO;
 using MediatR;
+using Microsoft.AspNetCore.Http;
 using Montr.Core.Models;
 
 namespace Montr.Core.Commands
@@ -10,6 +11,6 @@ namespace Montr.Core.Commands
 
 		public string FileName { get; set; }
 
-		public Stream Stream { get; set; }
+		public IFormFile File { get; set; }
 	}
 }

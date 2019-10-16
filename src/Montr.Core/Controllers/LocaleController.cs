@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Montr.Core.Commands;
 using Montr.Core.Models;
 using Montr.Core.Queries;
 
@@ -35,6 +36,12 @@ namespace Montr.Core.Controllers
 			var result = await _mediator.Send(request);
 
 			return File(result.Stream, result.ContentType, result.FileName);
+		}
+
+		[HttpPost]
+		public async Task<ApiResult> Import([FromForm]ImportLocaleStringList request)
+		{
+			return await _mediator.Send(request);
 		}
 	}
 }
