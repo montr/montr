@@ -37,8 +37,9 @@ namespace Montr.Web.Services
 					Icon = "setting",
 					Items = new List<Menu>
 				{
-					new Menu { Id = "m.3.2", Name = "Справочники", Route = "/classifiers/" },
-					new Menu { Id = "m.3.1", Name = "Настройки", Route = "/settings/" },
+					new Menu { Id = "m.3.1", Name = "Справочники", Route = "/classifiers/" },
+					new Menu { Id = "m.3.2", Name = "Настройки", Route = "/settings/" },
+					new Menu { Id = "m.3.3", Name = "Локализация", Route = "/locales/" },
 					new Menu { Id = "hangfire", Name = "Hangfire Dashboard", Url = "/hangfire/" }
 				}
 				});

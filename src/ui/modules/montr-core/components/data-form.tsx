@@ -30,7 +30,7 @@ export class WrappedDataForm extends React.Component<IProps, IState> {
 		};
 	}
 
-	public handleSubmit = async (e: React.SyntheticEvent) => {
+	handleSubmit = async (e: React.SyntheticEvent) => {
 		e.preventDefault();
 
 		const { form, onSave } = this.props;

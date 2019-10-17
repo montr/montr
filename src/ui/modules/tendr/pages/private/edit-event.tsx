@@ -1,4 +1,5 @@
 import * as React from "react";
+import { withTranslation, WithTranslation } from 'react-i18next';
 import { Tabs, Button, Icon, Modal, message, Tag } from "antd";
 import { IApiResult, IDataView, IPaneProps } from "@montr-core/models";
 import { EventService, EventTemplateService } from "../../services";
@@ -23,7 +24,7 @@ interface IRouteProps {
 	tabKey?: string;
 }
 
-interface IProps extends CompanyContextProps, RouteComponentProps<IRouteProps> {
+interface IProps extends WithTranslation, CompanyContextProps, RouteComponentProps<IRouteProps> {
 }
 
 interface IState {
@@ -32,7 +33,7 @@ interface IState {
 	configCodes: IEvent[];
 }
 
-export class EditEvent extends React.Component<IProps, IState> {
+class _EditEvent extends React.Component<IProps, IState> {
 
 	private _metadataService = new MetadataService();
 	private _eventTemplateService = new EventTemplateService();
@@ -119,32 +120,36 @@ export class EditEvent extends React.Component<IProps, IState> {
 	}
 
 	handlePublish() {
+		const { t } = this.props;
+
 		Modal.confirm({
-			title: "Подтверждение операции",
-			content: "Вы действительно хотите опубликовать событие?",
+			title: t("confirm.title"),
+			content: t("publish.confirm.content"),
 			onOk: () => {
 				this._eventService
 					.publish(this.props.match.params.uid)
 					.then((result: IApiResult) => {
-						message.success("Операция выполнена успешно.");
+						message.success(t("operation.success"));
 						this.fetchData();
 					})
 					.catch(error => {
-						message.error("Произошла ошибка при выполнении операции.");
+						message.error(t("operation.error"));
 					});
 			}
 		});
 	}
 
 	handleCancel() {
+		const { t } = this.props;
+
 		Modal.confirm({
-			title: "Подтверждение операции",
-			content: "Вы действительно хотите отменить событие?",
+			title: t("confirm.title"),
+			content: t("publish.cancel.content"),
 			onOk: () => {
 				this._eventService
 					.cancel(this.props.match.params.uid)
 					.then((result: IApiResult) => {
-						message.success("Операция выполнена успешно.");
+						message.success(t("operation.success"));
 						this.fetchData();
 					});
 			}
@@ -160,6 +165,7 @@ export class EditEvent extends React.Component<IProps, IState> {
 	}
 
 	render = () => {
+		const { t } = this.props;
 		const { tabKey } = this.props.match.params;
 		const { data, dataView } = this.state;
 
@@ -169,9 +175,9 @@ export class EditEvent extends React.Component<IProps, IState> {
 		let toolbar: React.ReactNode;
 
 		toolbar = (<>
-			<Button type="primary" onClick={() => this.handlePublish()}>Опубликовать</Button>&#xA0;
-			<Button icon="check" onClick={() => this.handleSave()}>Сохранить</Button> &#xA0;
-			<Button onClick={() => this.handleCancel()}>Отменить</Button> &#xA0;
+			<Button type="primary" onClick={() => this.handlePublish()}>{t("publish.button")}</Button>&#xA0;
+			<Button icon="check" onClick={() => this.handleSave()}>{t("save.button")}</Button> &#xA0;
+			<Button onClick={() => this.handleCancel()}>{t("cancel.button")}</Button> &#xA0;
 		</>);
 
 		/* if (data.statusCode == "draft") {
@@ -222,3 +228,5 @@ export class EditEvent extends React.Component<IProps, IState> {
 		);
 	}
 }
+
+export const EditEvent = withTranslation("tendr")(_EditEvent);

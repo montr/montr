@@ -46,6 +46,7 @@ namespace Host
 						.WithOrigins(
 							System.Environment.GetEnvironmentVariable("PUBLIC_APP_URL"),
 							System.Environment.GetEnvironmentVariable("PRIVATE_APP_URL"))
+						.WithExposedHeaders("content-disposition") // to export work (fetcher.openFile) 
 						.AllowCredentials()
 						.AllowAnyHeader()
 						.AllowAnyMethod();

@@ -5,7 +5,7 @@ import { IMenu } from "../models";
 import { MenuProps } from "antd/lib/menu";
 import { ContentService } from "../services/content-service";
 
-interface Props {
+interface Props extends MenuProps {
 	menuId: string;
 	head?: React.ReactElement<MenuProps>;
 	tail?: React.ReactElement<MenuProps>;
@@ -15,11 +15,11 @@ interface State {
 	menu: IMenu;
 }
 
-export class DataMenu extends React.Component<MenuProps & Props, State> {
+export class DataMenu extends React.Component<Props, State> {
 
 	private _contentService = new ContentService();
 
-	constructor(props: any) {
+	constructor(props: Props) {
 		super(props);
 
 		this.state = {

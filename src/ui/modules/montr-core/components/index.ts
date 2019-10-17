@@ -3,8 +3,11 @@ export * from "./data-breadcrumb";
 export * from "./data-form";
 export * from "./data-menu";
 export * from "./data-table";
+export * from "./error-boundary";
+export * from "./footer";
 export * from "./form-defaults"
 export * from "./form-field-factory";
+export * from "./language-selector";
 export * from "./page";
 export * from "./page-header";
 export * from "./pane-component";

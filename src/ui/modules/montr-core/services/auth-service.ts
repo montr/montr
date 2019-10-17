@@ -1,6 +1,6 @@
 import { Log, User, UserManager, SignoutResponse } from "oidc-client";
 import { message } from "antd";
-import { Constants } from "../";
+import { Constants } from "../constants";
 import { NavigationService } from "./navigation-service";
 
 class AuthConstants {

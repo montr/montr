@@ -7,7 +7,7 @@ import { IIndexer, IDataColumn, IDataResult, IMenu } from "../models";
 import { Constants } from "..";
 
 interface IProps<TModel> {
-	rowKey?: string;
+	rowKey?: string | ((record: TModel, index: number) => string);
 	rowActions?: IMenu[];
 	viewId: string;
 	loadUrl: string; // todo: (?) add data[]

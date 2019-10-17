@@ -7,7 +7,7 @@
 		"sourceMap": true,
 		"noImplicitAny": true,
 		// "strictFunctionTypes": true,
-		// "allowSyntheticDefaultImports": true,
+		"allowSyntheticDefaultImports": true, // for i18next
 		"moduleResolution": "node",
 		"module": "esnext",
 		"target": "es5",
