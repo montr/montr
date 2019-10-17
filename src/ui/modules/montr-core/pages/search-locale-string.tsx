@@ -3,9 +3,10 @@ import { DataTableUpdateToken, Page, DataTable, Toolbar, PageHeader, DataBreadcr
 import { Constants } from "..";
 import { IMenu, ILocaleString, IDataResult } from "@montr-core/models";
 import { LocaleStringService, NotificationService } from "@montr-core/services";
-import { Form, Select, Button, Icon, Upload } from "antd";
+import { Form, Select, Button, Upload } from "antd";
 import { FormComponentProps } from "antd/lib/form";
 import { UploadChangeParam } from "antd/lib/upload";
+import { Translation } from "react-i18next";
 
 interface IProps extends FormComponentProps {
 }
@@ -101,69 +102,73 @@ export class _SearchLocaleString extends React.Component<IProps, IState> {
 		const locales = ["en", "ru"],
 			modules = ["common", "master-data", "tendr"];
 
-		const { getFieldDecorator, getFieldsError, getFieldError, isFieldTouched } = this.props.form;
+		const { getFieldDecorator } = this.props.form;
 
 		return (
-			<Page
-				title={<>
-					<Toolbar float="right">
-						<Upload
-							accept=".json"
-							action={`${Constants.apiURL}/locale/import/`}
-							name="file"
-							showUploadList={false}
-							style={{ display: "inline-block" }}
-							// customRequest={this.handleUpload}
-							onChange={this.handleUploadChange}>
-							<Button onClick={this.handleImport}><Icon type="import" /> Импорт</Button>
-						</Upload>
-						<Button onClick={this.handleExport}><Icon type="export" /> Экспорт</Button>
-					</Toolbar>
+			<Translation>
+				{(t) => (
+					<Page
+						title={<>
+							<Toolbar float="right">
+								<Upload
+									accept=".json"
+									action={`${Constants.apiURL}/locale/import/`}
+									name="file"
+									showUploadList={false}
+									style={{ display: "inline-block" }}
+									// customRequest={this.handleUpload}
+									onChange={this.handleUploadChange}>
+									<Button icon="import" onClick={this.handleImport}>{t("button.import")}</Button>
+								</Upload>
+								<Button icon="export" onClick={this.handleExport}>{t("button.export")}</Button>
+							</Toolbar>
 
-					<DataBreadcrumb items={[{ name: "Локализация" }]} />
-					<PageHeader>Локализация</PageHeader>
-				</>}>
+							<DataBreadcrumb items={[{ name: "Локализация" }]} />
+							<PageHeader>Локализация</PageHeader>
+						</>}>
 
-				<Form layout="inline" onSubmit={this.handleSubmit}>
-					<Form.Item>
-						{getFieldDecorator("locale", {
-							rules: [{ required: false }], initialValue: locale
-						})(
-							<Select placeholder="Локаль" allowClear style={{ minWidth: 100 }}>
-								{locales.map(x => {
-									return <Select.Option key={`${x}`} value={`${x}`}>{x}</Select.Option>
-								})}
-							</Select>
-						)}
-					</Form.Item>
-					<Form.Item>
-						{getFieldDecorator("module", {
-							rules: [{ required: false }], initialValue: module
-						})(
-							<Select placeholder="Модуль" allowClear style={{ minWidth: 100 }}>
-								{modules.map(x => {
-									return <Select.Option key={`${x}`} value={`${x}`}>{x}</Select.Option>
-								})}
-							</Select>
-						)}
-					</Form.Item>
-					<Form.Item>
-						<Button type="primary" htmlType="submit" icon="search">Искать</Button>
-					</Form.Item>
-				</Form>
+						<Form layout="inline" onSubmit={this.handleSubmit}>
+							<Form.Item>
+								{getFieldDecorator("locale", {
+									rules: [{ required: false }], initialValue: locale
+								})(
+									<Select placeholder="Локаль" allowClear style={{ minWidth: 100 }}>
+										{locales.map(x => {
+											return <Select.Option key={`${x}`} value={`${x}`}>{x}</Select.Option>
+										})}
+									</Select>
+								)}
+							</Form.Item>
+							<Form.Item>
+								{getFieldDecorator("module", {
+									rules: [{ required: false }], initialValue: module
+								})(
+									<Select placeholder="Модуль" allowClear style={{ minWidth: 100 }}>
+										{modules.map(x => {
+											return <Select.Option key={`${x}`} value={`${x}`}>{x}</Select.Option>
+										})}
+									</Select>
+								)}
+							</Form.Item>
+							<Form.Item>
+								<Button type="primary" htmlType="submit" icon="search">{t("button.search")}</Button>
+							</Form.Item>
+						</Form>
 
-				<br />
+						<br />
 
-				<DataTable
-					// rowKey="key"
-					// rowActions={rowActions}
-					viewId={`LocaleString/Grid/`}
-					loadUrl={`${Constants.apiURL}/locale/list/`}
-					onLoadData={this.onLoadTableData}
-					updateToken={updateTableToken}
-				/>
+						<DataTable
+							rowKey={(x: ILocaleString) => `${x.locale}-${x.module}-${x.key}`}
+							// rowActions={rowActions}
+							viewId={`LocaleString/Grid/`}
+							loadUrl={`${Constants.apiURL}/locale/list/`}
+							onLoadData={this.onLoadTableData}
+							updateToken={updateTableToken}
+						/>
 
-			</Page>
+					</Page>
+				)}
+			</Translation>
 		);
 	}
 }

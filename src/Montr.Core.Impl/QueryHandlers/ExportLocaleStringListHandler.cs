@@ -30,9 +30,11 @@ namespace Montr.Core.Impl.QueryHandlers
 
 			var searchResult = await _repository.Search(request, cancellationToken);
 
+			var data = searchResult.Rows.OrderBy(x => x.Locale).ThenBy(x => x.Module).ThenBy(x => x.Key);
+
 			var lists = new List<LocaleStringList>();
 
-			foreach (var localeGroup in searchResult.Rows.GroupBy(x => x.Locale))
+			foreach (var localeGroup in data.GroupBy(x => x.Locale))
 			{
 				var locale = new LocaleStringList
 				{

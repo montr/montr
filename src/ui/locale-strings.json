@@ -1,0 +1,36 @@
+{
+  "en": {
+    "common": {
+      "button.cancel": "Cancel",
+      "button.export": "Export",
+      "button.import": "Import",
+      "button.publish": "Publish",
+      "button.save": "Save",
+      "button.search": "Search",
+      "confirm.title": "Confirm operation",
+      "operation.error": "An error occurred while performing the operation.",
+      "operation.success": "The operation completed successfully."
+    },
+    "tendr": {
+      "cancel.confirm.content": "Are you sure you want to cancel the event?",
+      "publish.confirm.content": "Are you sure you want to publish the event?"
+    }
+  },
+  "ru": {
+    "common": {
+      "button.cancel": "Отменить",
+      "button.export": "Экспорт",
+      "button.import": "Импорт",
+      "button.publish": "Опубликовать",
+      "button.save": "Сохранить",
+      "button.search": "Искать",
+      "confirm.title": "Подтверждение операции",
+      "operation.error": "Произошла ошибка при выполнении операции.",
+      "operation.success": "Операция выполнена успешно."
+    },
+    "tendr": {
+      "cancel.confirm.content": "Вы действительно хотите отменить событие?",
+      "publish.confirm.content": "Вы действительно хотите опубликовать событие?"
+    }
+  }
+}

@@ -17,7 +17,7 @@ i18n
 		fallbackNS: defaultNS,
 		fallbackLng: "en",
 		keySeparator: false,
-		debug: false, // todo: use env var
+		debug: true, // todo: use env var
 		saveMissing: false,
 		interpolation: {
 			escapeValue: false,

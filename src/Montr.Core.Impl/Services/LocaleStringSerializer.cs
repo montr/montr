@@ -35,8 +35,13 @@ namespace Montr.Core.Impl.Services
 
 		public async Task<IList<LocaleStringList>> Deserialize(Stream json, CancellationToken cancellationToken)
 		{
+			var options = new JsonSerializerOptions
+			{
+				AllowTrailingCommas = true
+			};
+
 			var value = await JsonSerializer
-				.DeserializeAsync<Dictionary<string, Dictionary<string, Dictionary<string, string>>>>(json, null, cancellationToken);
+				.DeserializeAsync<Dictionary<string, Dictionary<string, Dictionary<string, string>>>>(json, options, cancellationToken);
 
 			var result = new List<LocaleStringList>();
 

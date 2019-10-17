@@ -29,7 +29,7 @@ class TextAreaFieldFactory implements FormFieldFactory {
 
 		const minRows = textAreaField.rows || 4;
 
-		return <Input.TextArea placeholder={field.placeholder} autosize={{ minRows: minRows, maxRows: 24 }} />;
+		return <Input.TextArea placeholder={field.placeholder} autoSize={{ minRows: minRows, maxRows: 24 }} />;
 	}
 }
 
