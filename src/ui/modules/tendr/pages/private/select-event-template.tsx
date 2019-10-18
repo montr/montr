@@ -42,7 +42,7 @@ export class SelectEventTemplate extends React.Component<IProps, IState> {
 		const { newUid } = this.state;
 
 		if (newUid) {
-			return <Redirect to={RouteBuilder.editClassifier(newUid.toString())} />
+			return <Redirect to={RouteBuilder.editEvent(newUid.toString())} />
 		}
 
 		const rowActions: IMenu[] = [

@@ -159,7 +159,7 @@ class _EditEvent extends React.Component<IProps, IState> {
 	handleTabChange = (tabKey: string) => {
 		const { uid } = this.props.match.params;
 
-		const path = RouteBuilder.editClassifier(uid, tabKey);
+		const path = RouteBuilder.editEvent(uid, tabKey);
 
 		this.props.history.replace(path)
 	}
