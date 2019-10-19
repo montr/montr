@@ -1,7 +1,7 @@
 import * as React from "react";
 import { RouteComponentProps } from "react-router";
 import { Spin, Tabs } from "antd";
-import { CompanyContextProps, withCompanyContext } from "@kompany/components";
+import { CompanyContextProps, withCompanyContext } from "@montr-kompany/components";
 import { Page, PageHeader } from "@montr-core/components";
 import { ClassifierTypeService } from "../services";
 import { IClassifierType } from "../models";

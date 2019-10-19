@@ -5,7 +5,7 @@ import { Icon, Button, Tree, Select, Radio, Layout, Modal, Spin } from "antd";
 import { Constants } from "@montr-core/.";
 import { Guid, IDataResult } from "@montr-core/models";
 import { NotificationService } from "@montr-core/services";
-import { withCompanyContext, CompanyContextProps } from "@kompany/components";
+import { withCompanyContext, CompanyContextProps } from "@montr-kompany/components";
 import { ClassifierService, ClassifierTypeService, ClassifierGroupService, ClassifierTreeService } from "../services";
 import { IClassifierType, IClassifierGroup, IClassifierTree } from "../models";
 import { RadioChangeEvent } from "antd/lib/radio";

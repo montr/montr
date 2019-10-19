@@ -2,7 +2,7 @@ import * as React from "react";
 import { Alert, Button, Icon, Modal } from "antd";
 import { Constants } from "@montr-core/.";
 import { DataTableUpdateToken, Toolbar, DataTable } from "@montr-core/components";
-import { withCompanyContext, CompanyContextProps } from "@kompany/components";
+import { withCompanyContext, CompanyContextProps } from "@montr-kompany/components";
 import { IClassifierType, IClassifier, IClassifierLink } from "../models";
 import { IDataResult, IMenu, Guid } from "@montr-core/models";
 import { ClassifierLinkService } from "@montr-master-data/services";

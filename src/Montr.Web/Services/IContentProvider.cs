@@ -27,7 +27,7 @@ namespace Montr.Web.Services
 
 			if (menuId == "SideMenu")
 			{
-				result.Items.Add(new Menu { Id = "m.0", Name = "Панель управления", Icon = "dashboard", Route = "/" });
+				result.Items.Add(new Menu { Id = "m.0", Name = "Панель управления", Icon = "dashboard", Route = "/dashboard/" });
 				result.Items.Add(new Menu { Id = "m.1", Name = "Процедуры", Icon = "project", Route = "/events/" });
 
 				result.Items.Add(new Menu

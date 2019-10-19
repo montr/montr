@@ -3,7 +3,7 @@ import { Spin, Icon, Select, Divider, Button } from "antd";
 import { IClassifierField, Guid } from "@montr-core/models";
 import { ClassifierService } from "../services";
 import { IClassifierGroup, IClassifierTree, IClassifierType, IClassifier } from "../models";
-import { CompanyContextProps, withCompanyContext } from "@kompany/components";
+import { CompanyContextProps, withCompanyContext } from "@montr-kompany/components";
 import { RouteBuilder } from "..";
 import { Link } from "react-router-dom";
 // import { debounce } from "lodash";

@@ -1,6 +1,7 @@
 import * as React from "react";
-import { Route, Switch, generatePath } from "react-router";
+import { Switch, generatePath } from "react-router";
 import { SearchClassifier, EditClassifierType, EditClassifier, SearchClassifierType } from "./pages";
+import { AppRoute as Route } from "@montr-core/components";
 import { Guid } from "@montr-core/models";
 
 export const Patterns = {
@@ -23,15 +24,13 @@ export const RouteBuilder = {
 };
 
 export const Routes = () => {
-	return (
-		<Switch>
-			<Route path="/classifiers/" exact component={SearchClassifierType} />
-			<Route path="/classifiers/add" exact component={EditClassifierType} />
-			<Route path={Patterns.editClassifierType} exact component={EditClassifierType} />
+	return <Switch>
+		<Route path="/classifiers/" layout="private" exact component={SearchClassifierType} />
+		<Route path="/classifiers/add" layout="private" exact component={EditClassifierType} />
+		<Route path={Patterns.editClassifierType} layout="private" exact component={EditClassifierType} />
 
-			<Route path="/classifiers/:typeCode/" exact component={SearchClassifier} />
-			<Route path={Patterns.addClassifier} exact component={EditClassifier} />
-			<Route path={Patterns.editClassifier} exact component={EditClassifier} />
-		</Switch>
-	)
+		<Route path="/classifiers/:typeCode/" layout="private" exact component={SearchClassifier} />
+		<Route path={Patterns.addClassifier} layout="private" exact component={EditClassifier} />
+		<Route path={Patterns.editClassifier} layout="private" exact component={EditClassifier} />
+	</Switch>
 }

@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Spin } from "antd";
-import { CompanyContextProps, withCompanyContext } from "@kompany/components";
+import { CompanyContextProps, withCompanyContext } from "@montr-kompany/components";
 import { IFormField, IApiResult } from "@montr-core/models";
 import { DataForm } from "@montr-core/components";
 import { ClassifierService, ClassifierMetadataService } from "../services";

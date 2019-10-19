@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Redirect } from "react-router";
 import { Spin } from "antd";
-import { CompanyContextProps, withCompanyContext } from "@kompany/components";
+import { CompanyContextProps, withCompanyContext } from "@montr-kompany/components";
 import { DataForm } from "@montr-core/components";
 import { IFormField, IApiResult } from "@montr-core/models";
 import { MetadataService } from "@montr-core/services";

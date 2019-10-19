@@ -3,7 +3,7 @@ import { TreeSelect, Spin, Icon } from "antd";
 import { Guid, IClassifierGroupField } from "@montr-core/models";
 import { ClassifierGroupService, ClassifierTreeService, ClassifierTypeService } from "../services";
 import { IClassifierGroup, IClassifierTree, IClassifierType } from "../models";
-import { CompanyContextProps, withCompanyContext } from "@kompany/components";
+import { CompanyContextProps, withCompanyContext } from "@montr-kompany/components";
 import { TreeNode } from "antd/lib/tree-select";
 
 interface IProps extends CompanyContextProps {

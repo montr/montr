@@ -30,6 +30,5 @@ export const LanguageSelector = () => {
 				</Dropdown>
 			)}
 		</Translation>
-
 	);
 }

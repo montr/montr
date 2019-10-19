@@ -2,12 +2,9 @@ const path = require("path");
 const tsImportPluginFactory = require("ts-import-plugin")
 
 module.exports = {
-	// mode: "production",
 	mode: process.env.test,
 	entry: {
-		"tendr": "./modules/tendr/public.tsx",
-		"tendr.app": "./modules/tendr/app.tsx",
-		// "kompany": "./modules/kompany/public.tsx"
+		"app": "./modules/host/app.tsx",
 	},
 	output: {
 		path: __dirname,
@@ -27,7 +24,8 @@ module.exports = {
 		alias: {
 			"@montr-core": path.resolve(__dirname, "modules/montr-core/"),
 			"@montr-master-data": path.resolve(__dirname, "modules/montr-master-data/"),
-			"@kompany": path.resolve(__dirname, "modules/kompany/"),
+			"@montr-kompany": path.resolve(__dirname, "modules/montr-kompany/"),
+			"@montr-tendr": path.resolve(__dirname, "modules/montr-tendr/"),
 		},
 		extensions: [".ts", ".tsx", ".js", ".json"]
 	},

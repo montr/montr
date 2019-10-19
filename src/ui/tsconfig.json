@@ -20,8 +20,11 @@
 			"@montr-master-data/*": [
 				"modules/montr-master-data/*"
 			],
-			"@kompany/*": [
-				"modules/kompany/*"
+			"@montr-kompany/*": [
+				"modules/montr-kompany/*"
+			],
+			"@montr-tendr/*": [
+				"modules/montr-tendr/*"
 			]
 		}
 	},

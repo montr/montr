@@ -1,5 +1,5 @@
 import * as React from "react";
-import { CompanyContextProps, withCompanyContext } from "@kompany/components";
+import { CompanyContextProps, withCompanyContext } from "@montr-kompany/components";
 import { DataTable, DataTableUpdateToken, Toolbar } from "@montr-core/components";
 import { IClassifierType, IClassifierTree } from "../models";
 import { Constants } from "@montr-core/.";

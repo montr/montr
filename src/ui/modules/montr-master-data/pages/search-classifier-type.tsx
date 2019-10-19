@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Page, PageHeader, Toolbar, DataTable, DataTableUpdateToken } from "@montr-core/components";
 import { Constants } from "@montr-core/.";
-import { withCompanyContext, CompanyContextProps } from "@kompany/components";
+import { withCompanyContext, CompanyContextProps } from "@montr-kompany/components";
 import { ClassifierBreadcrumb } from "../components";
 import { Link } from "react-router-dom";
 import { Button, Icon } from "antd";

@@ -1,11 +1,5 @@
 ﻿<!DOCTYPE html>
 
-@{
-	var script =
-		Context.Request.Host.Host.Contains("app.", StringComparison.OrdinalIgnoreCase)
-		? "/assets/tendr.app.js" : "/assets/tendr.js";
-}
-
 <html>
 <head>
 	<meta name="viewport" content="width=device-width" />
@@ -19,6 +13,6 @@
 		var PUBLIC_APP_URL = "@Environment.GetEnvironmentVariable("PUBLIC_APP_URL")";
 		var PRIVATE_APP_URL = "@Environment.GetEnvironmentVariable("PRIVATE_APP_URL")";
 	</script>
-	<script src="@script"></script>
+	<script src="/assets/app.js"></script>
 </body>
 </html>

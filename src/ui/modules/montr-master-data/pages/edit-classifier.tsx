@@ -3,7 +3,7 @@ import { Page, PageHeader } from "@montr-core/components";
 import { RouteComponentProps } from "react-router";
 import { Spin, Tabs } from "antd";
 import { ClassifierService, ClassifierTypeService, ClassifierLinkService } from "../services";
-import { CompanyContextProps, withCompanyContext } from "@kompany/components";
+import { CompanyContextProps, withCompanyContext } from "@montr-kompany/components";
 import { IClassifier, IClassifierType } from "../models";
 import { ClassifierBreadcrumb, TabEditClassifier, TabEditClassifierHierarchy } from "../components";
 import { RouteBuilder } from "../";
