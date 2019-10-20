@@ -16,7 +16,7 @@ import "@montr-tendr/pages/private/routes";
 
 import "@montr-core/i18n";
 import "@montr-core/index.less"
-import "./index.less";
+import { Error404 } from "@montr-core/pages";
 
 AppLayoutRegistry.register("public", PublicLayout);
 AppLayoutRegistry.register("private", PrivateLayout);
@@ -32,9 +32,10 @@ class App extends React.Component {
 								<AuthCallbackHandler>
 									<BrowserRouter>
 										<Switch>
-											{AppRouteRegistry.Routes.map(({ layout, ...props }) => {
-												return <AppRoute {...props} layoutComponent={AppLayoutRegistry.get(layout || "private")} />
+											{AppRouteRegistry.Routes.map(({ layout, ...props }, _do_not_use_) => {
+												return <AppRoute key={0} {...props} layoutComponent={AppLayoutRegistry.get(layout || "private")} />
 											})}
+											<AppRoute component={Error404} layoutComponent={AppLayoutRegistry.get("public")} />
 										</Switch>
 									</BrowserRouter>
 								</AuthCallbackHandler>

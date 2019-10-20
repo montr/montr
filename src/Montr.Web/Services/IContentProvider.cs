@@ -22,13 +22,14 @@ namespace Montr.Web.Services
 			if (menuId == "TopMenu")
 			{
 				result.Items.Add(new Menu { Id = "p.0", Icon = "home", Route = "/" });
-				result.Items.Add(new Menu { Id = "p.1", Name = "Регистрация", Icon = "user-add", Route = "/register/" });
+				result.Items.Add(new Menu { Id = "p.1", Name = "Регистрация", Icon = "user-add", Route = "/register" });
+				result.Items.Add(new Menu { Id = "p.2", Name = "Панель управления", Icon = "dashboard", Route = "/dashboard" });
 			}
 
 			if (menuId == "SideMenu")
 			{
-				result.Items.Add(new Menu { Id = "m.0", Name = "Панель управления", Icon = "dashboard", Route = "/dashboard/" });
-				result.Items.Add(new Menu { Id = "m.1", Name = "Процедуры", Icon = "project", Route = "/events/" });
+				result.Items.Add(new Menu { Id = "m.0", Name = "Панель управления", Icon = "dashboard", Route = "/dashboard" });
+				result.Items.Add(new Menu { Id = "m.1", Name = "Процедуры", Icon = "project", Route = "/events" });
 
 				result.Items.Add(new Menu
 				{
@@ -36,12 +37,12 @@ namespace Montr.Web.Services
 					Name = "Администрирование",
 					Icon = "setting",
 					Items = new List<Menu>
-				{
-					new Menu { Id = "m.3.1", Name = "Справочники", Route = "/classifiers/" },
-					new Menu { Id = "m.3.2", Name = "Настройки", Route = "/settings/" },
-					new Menu { Id = "m.3.3", Name = "Локализация", Route = "/locales/" },
-					new Menu { Id = "hangfire", Name = "Hangfire Dashboard", Url = "/hangfire/" }
-				}
+					{
+						new Menu {Id = "m.3.1", Name = "Справочники", Route = "/classifiers"},
+						new Menu {Id = "m.3.2", Name = "Настройки", Route = "/settings"},
+						new Menu {Id = "m.3.3", Name = "Локализация", Route = "/locales"},
+						new Menu {Id = "hangfire", Name = "Hangfire Dashboard", Url = "/hangfire"}
+					}
 				});
 
 				result.Items.Add(new Menu
@@ -49,7 +50,7 @@ namespace Montr.Web.Services
 					Id = "tender",
 					Name = "Промо",
 					Icon = "global",
-					Url = System.Environment.GetEnvironmentVariable("PUBLIC_APP_URL") + "/register/"
+					Route = "/"
 				});
 			}
 
