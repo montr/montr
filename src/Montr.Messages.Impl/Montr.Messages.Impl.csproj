@@ -5,8 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="linq2db" Version="2.9.1" />
-    <PackageReference Include="MailKit" Version="2.3.1.6" />
+    <PackageReference Include="linq2db" Version="2.9.2" />
+    <PackageReference Include="MailKit" Version="2.3.2" />
     <PackageReference Include="Markdig" Version="0.17.1" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="3.0.0" />
     <PackageReference Include="Stubble.Core" Version="1.4.12" />
