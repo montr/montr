@@ -1,3 +1,4 @@
+export * from "./app-layout-registry";
 export * from "./auth-service";
 export * from "./content-service";
 export * from "./fetcher";

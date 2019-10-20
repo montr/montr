@@ -1,8 +1,7 @@
-import * as React from "react";
-import { Switch, generatePath } from "react-router";
+import { generatePath } from "react-router";
 import { SearchClassifier, EditClassifierType, EditClassifier, SearchClassifierType } from "./pages";
-import { AppRoute as Route } from "@montr-core/components";
-import { Guid } from "@montr-core/models";
+import { Guid, IRoute } from "@montr-core/models";
+import { AppRouteRegistry } from "@montr-core/services/app-routes-registry";
 
 export const Patterns = {
 	editClassifierType: "/classifiers/edit/:uid/:tabKey?",
@@ -23,14 +22,14 @@ export const RouteBuilder = {
 	},
 };
 
-export const Routes = () => {
-	return <Switch>
-		<Route path="/classifiers/" layout="private" exact component={SearchClassifierType} />
-		<Route path="/classifiers/add" layout="private" exact component={EditClassifierType} />
-		<Route path={Patterns.editClassifierType} layout="private" exact component={EditClassifierType} />
+export const Routes: IRoute[] = [
+	{ path: "/classifiers/", layout: "private", exact: true, component: SearchClassifierType },
+	{ path: "/classifiers/add/", layout: "private", exact: true, component: EditClassifierType },
+	{ path: Patterns.editClassifierType, layout: "private", exact: true, component: EditClassifierType },
 
-		<Route path="/classifiers/:typeCode/" layout="private" exact component={SearchClassifier} />
-		<Route path={Patterns.addClassifier} layout="private" exact component={EditClassifier} />
-		<Route path={Patterns.editClassifier} layout="private" exact component={EditClassifier} />
-	</Switch>
-}
+	{ path: "/classifiers/:typeCode/", layout: "private", exact: true, component: SearchClassifier },
+	{ path: Patterns.addClassifier, layout: "private", exact: true, component: EditClassifier },
+	{ path: Patterns.editClassifier, layout: "private", exact: true, component: EditClassifier }
+];
+
+AppRouteRegistry.add(Routes);

@@ -1,12 +1,11 @@
-import * as React from "react";
 import { Registration } from "../public";
 import { Registration as CompanyRegistration } from "@montr-kompany/pages/public/";
-import { AppRoute as Route } from "@montr-core/components";
-import { Switch } from "react-router";
+import { IRoute } from "@montr-core/models";
+import { AppRouteRegistry } from "@montr-core/services/app-routes-registry";
 
-export const Routes = () => {
-	return <Switch>
-		<Route path="/register" exact component={Registration} />
-		<Route path="/register/company" exact component={CompanyRegistration} />
-	</Switch>
-}
+export const Routes: IRoute[] = [
+	{ path: "/register/", layout: "public", exact: true, component: Registration },
+	{ path: "/register/company/", layout: "public", exact: true, component: CompanyRegistration },
+];
+
+AppRouteRegistry.add(Routes);

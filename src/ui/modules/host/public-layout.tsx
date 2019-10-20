@@ -32,8 +32,6 @@ export class PublicLayout extends React.Component {
 
 							{this.props.children}
 
-							{/* <Routes /> */}
-
 						</div>
 					</ErrorBoundary>
 				</Layout.Content>

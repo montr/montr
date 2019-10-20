@@ -4,12 +4,11 @@ import { Constants } from "@montr-core/.";
 import { Page } from "@montr-core/components";
 import { UserContextProps, withUserContext } from "@montr-core/components/"
 import { CompanyContextProps, withCompanyContext } from "@montr-kompany/components";
+import { Link } from "react-router-dom";
 
 class RegistrationConstants {
 	public static UserRegisterUri = Constants.authorityURL + "/Identity/Account/Register";
 	public static UserManageUri = Constants.authorityURL + "/Identity/Account/Manage";
-
-	public static PrivateTenderUri = Constants.privateURL;
 }
 
 const RegisterUser = (props: UserContextProps) => {
@@ -26,7 +25,7 @@ const RegisterUser = (props: UserContextProps) => {
 
 	return (
 		<p>
-			Зарегистрируйте пользователя пройдя по < a href={RegistrationConstants.UserRegisterUri}> ссылке</a>.<br />
+			Зарегистрируйте пользователя пройдя по <a href={RegistrationConstants.UserRegisterUri}> ссылке</a>.<br />
 			Если вы уже зарегистрированы, войдите в систему пройдя по <a onClick={login}> ссылке</a >.
 		</p >
 	);
@@ -65,7 +64,7 @@ const StartWork = (props: UserContextProps & CompanyContextProps) => {
 	if (user && company) {
 		return (
 			<p>
-				Начните создавать свои торговые процедуры в <a href={RegistrationConstants.PrivateTenderUri}>Личном кабинете</a>.
+				Начните создавать свои торговые процедуры в <Link to="/dashboard/">Личном кабинете</Link>.
 			</p>
 		);
 	}

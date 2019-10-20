@@ -32,10 +32,6 @@ export class PrivateLayout extends React.Component {
 
 							{this.props.children}
 
-							{/* <CoreRoutes />
-														<MasterDataRoutes />
-														<Routes /> */}
-
 						</ErrorBoundary>
 					</Layout.Content>
 					<Layout.Footer className="bg-white">

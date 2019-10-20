@@ -1,12 +1,11 @@
-import React from "react";
-import { Switch, generatePath } from "react-router";
 import { SearchLocaleString, Settings, Dashboard } from "./pages";
-import { AppRoute as Route } from "./components";
+import { IRoute } from "./models";
+import { AppRouteRegistry } from "./services/app-routes-registry";
 
-export const Routes = () => {
-	return <Switch>
-		<Route path="/dashboard" layout="private" exact component={Dashboard} />
-		<Route path="/locales/" layout="private" exact component={SearchLocaleString} />
-		<Route path="/settings/" layout="private" exact component={Settings} />
-	</Switch>
-}
+export const Routes: IRoute[] = [
+	{ path: "/dashboard/", layout: "private", exact: true, component: Dashboard },
+	{ path: "/locales/", layout: "private", exact: true, component: SearchLocaleString },
+	{ path: "/settings/", layout: "private", exact: true, component: Settings },
+];
+
+AppRouteRegistry.add(Routes);

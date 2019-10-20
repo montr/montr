@@ -1,7 +1,7 @@
-import * as React from "react";
-import { Switch, generatePath } from "react-router";
+import { generatePath } from "react-router";
 import { SearchEvents, SelectEventTemplate, EditEvent } from "../private";
-import { AppRoute as Route } from "@montr-core/components";
+import { IRoute } from "@montr-core/models";
+import { AppRouteRegistry } from "@montr-core/services/app-routes-registry";
 
 export const Patterns = {
 	editEvent: "/events/edit/:uid/:tabKey?",
@@ -13,10 +13,10 @@ export const RouteBuilder = {
 	},
 };
 
-export const Routes = () => {
-	return <Switch>
-		<Route path="/events" layout="private" exact component={SearchEvents} />
-		<Route path="/events/new" layout="private" component={SelectEventTemplate} />
-		<Route path={Patterns.editEvent} layout="private" exact component={EditEvent} />
-	</Switch>
-}
+export const Routes: IRoute[] = [
+	{ path: "/events/", exact: true, component: SearchEvents },
+	{ path: "/events/new", exact: true, component: SelectEventTemplate },
+	{ path: Patterns.editEvent, exact: true, component: EditEvent }
+];
+
+AppRouteRegistry.add(Routes);

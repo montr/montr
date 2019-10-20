@@ -8,3 +8,4 @@ export * from "./indexer";
 export * from "./locale-string";
 export * from "./menu";
 export * from "./pane";
+export * from "./route";
