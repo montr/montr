@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="CommandHandlers\" />
+    <Folder Include="Services\" />
+    <Folder Include="QueryHandlers\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="linq2db" Version="2.9.2" />
+    <PackageReference Include="linq2db.Identity" Version="2.0.1" />
+    <PackageReference Include="linq2db.PostgreSQL" Version="2.9.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Montr.Idx\Montr.Idx.csproj" />
+    <ProjectReference Include="..\Montr.Modularity\Montr.Modularity.csproj" />
+  </ItemGroup>
+
+</Project>

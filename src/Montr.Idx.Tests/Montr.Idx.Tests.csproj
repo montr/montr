@@ -1,0 +1,26 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+  </PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.3.0" />
+		<PackageReference Include="MSTest.TestAdapter" Version="2.0.0" />
+		<PackageReference Include="MSTest.TestFramework" Version="2.0.0" />
+		<PackageReference Include="Npgsql" Version="4.1.1" />
+	</ItemGroup>
+
+  <ItemGroup>
+	  <ProjectReference Include="..\Montr.Data.Linq2Db\Montr.Data.Linq2Db.csproj" />
+    <ProjectReference Include="..\Montr.Idx.Impl\Montr.Idx.Impl.csproj" />
+    <ProjectReference Include="..\Montr.Idx\Montr.Idx.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="appsettings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>

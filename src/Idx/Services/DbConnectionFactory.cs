@@ -1,8 +1,8 @@
 ﻿using System;
-using Idx.Entities;
 using LinqToDB;
 using LinqToDB.Data;
 using LinqToDB.Identity;
+using Montr.Idx.Impl.Entities;
 
 namespace Idx.Services
 {

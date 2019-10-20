@@ -1,11 +1,11 @@
 ﻿using System;
-using Idx.Entities;
 using Idx.Services;
 using LinqToDB.Mapping;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.UI.Services;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Montr.Idx.Impl.Entities;
 using Montr.Modularity;
 
 namespace Idx

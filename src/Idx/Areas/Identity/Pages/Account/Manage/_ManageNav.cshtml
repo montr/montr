@@ -1,4 +1,4 @@
-﻿@using Idx.Entities
+﻿@using Montr.Idx.Impl.Entities
 @inject SignInManager<DbUser> SignInManager
 @{
     var hasExternalLogins = (await SignInManager.GetExternalAuthenticationSchemesAsync()).Any();
