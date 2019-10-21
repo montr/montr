@@ -7,7 +7,7 @@ import { IFormField, IApiResult } from "@montr-core/models";
 import { MetadataService } from "@montr-core/services";
 import { IClassifierType } from "../models";
 import { ClassifierTypeService } from "../services";
-import { RouteBuilder } from "..";
+import { RouteBuilder } from "../routes";
 
 interface IProps extends CompanyContextProps {
 	data: IClassifierType;

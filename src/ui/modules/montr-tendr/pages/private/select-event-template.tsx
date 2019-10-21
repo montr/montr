@@ -5,7 +5,7 @@ import { Constants } from "@montr-core/.";
 import { Page, DataTable } from "@montr-core/components";
 import { IEvent } from "../../models";
 import { IApiResult, Guid, IMenu } from "@montr-core/models";
-import { RouteBuilder } from "../private";
+import { RouteBuilder } from "../../routes";
 
 interface IProps {
 }

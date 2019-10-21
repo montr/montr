@@ -6,7 +6,7 @@ import { Page, PageHeader } from "@montr-core/components";
 import { ClassifierTypeService } from "../services";
 import { IClassifierType } from "../models";
 import { ClassifierBreadcrumb, TabEditClassifierType, TabEditClassifierTypeHierarchy } from "../components";
-import { RouteBuilder } from "..";
+import { RouteBuilder } from "../routes";
 
 interface IRouteProps {
 	uid?: string;

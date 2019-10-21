@@ -5,10 +5,9 @@ import { IApiResult, IDataView, IPaneProps } from "@montr-core/models";
 import { EventService, EventTemplateService } from "../../services";
 import { Page, IPaneComponent, Toolbar, PageHeader, DataBreadcrumb } from "@montr-core/components";
 import { MetadataService } from "@montr-core/services";
-import { IEvent } from "modules/montr-tendr/models";
-
+import { IEvent } from "../../models";
 import * as panes from "../../components"
-import { RouteBuilder } from "../private";
+import { RouteBuilder } from "../../routes";
 import { CompanyContextProps } from "@montr-kompany/components";
 import { RouteComponentProps } from "react-router";
 
@@ -144,7 +143,7 @@ class _EditEvent extends React.Component<IProps, IState> {
 
 		Modal.confirm({
 			title: t("confirm.title"),
-			content: t("publish.cancel.content"),
+			content: t("cancel.confirm.content"),
 			onOk: () => {
 				this._eventService
 					.cancel(this.props.match.params.uid)
@@ -175,9 +174,9 @@ class _EditEvent extends React.Component<IProps, IState> {
 		let toolbar: React.ReactNode;
 
 		toolbar = (<>
-			<Button type="primary" onClick={() => this.handlePublish()}>{t("publish.button")}</Button>&#xA0;
-			<Button icon="check" onClick={() => this.handleSave()}>{t("save.button")}</Button> &#xA0;
-			<Button onClick={() => this.handleCancel()}>{t("cancel.button")}</Button> &#xA0;
+			<Button type="primary" onClick={() => this.handlePublish()}>{t("button.publish")}</Button>&#xA0;
+			<Button icon="check" onClick={() => this.handleSave()}>{t("button.save")}</Button> &#xA0;
+			<Button onClick={() => this.handleCancel()}>{t("button.cancel")}</Button> &#xA0;
 		</>);
 
 		/* if (data.statusCode == "draft") {
@@ -223,7 +222,6 @@ class _EditEvent extends React.Component<IProps, IState> {
 						})}
 					</Tabs>
 				}
-
 			</Page>
 		);
 	}

@@ -9,7 +9,7 @@ import { ClassifierTypeService } from "../services";
 import { NotificationService } from "@montr-core/services";
 import { IMenu } from "@montr-core/models";
 import { IClassifierGroup } from "@montr-master-data/models";
-import { RouteBuilder } from "..";
+import { RouteBuilder } from "../routes";
 
 interface IProps extends CompanyContextProps {
 }

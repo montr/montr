@@ -1,7 +1,7 @@
 import { generatePath } from "react-router";
 import { SearchClassifier, EditClassifierType, EditClassifier, SearchClassifierType } from "./pages";
 import { Guid, IRoute } from "@montr-core/models";
-import { AppRouteRegistry } from "@montr-core/services/app-routes-registry";
+import { AppRouteRegistry } from "@montr-core/services/";
 
 export const Patterns = {
 	editClassifierType: "/classifiers/edit/:uid/:tabKey?",

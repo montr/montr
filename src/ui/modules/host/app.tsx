@@ -7,12 +7,11 @@ import { AppLayoutRegistry } from "@montr-core/services";
 import { ErrorBoundary, UserContextProvider, AuthCallbackHandler, AppRoute } from "@montr-core/components";
 import { CompanyContextProvider } from "@montr-kompany/components";
 import { PublicLayout, PrivateLayout } from "./";
-import { AppRouteRegistry } from "@montr-core/services/app-routes-registry";
+import { AppRouteRegistry } from "@montr-core/services/";
 
 import "@montr-core/routes";
 import "@montr-master-data/routes";
-import "@montr-tendr/pages/public/routes";
-import "@montr-tendr/pages/private/routes";
+import "@montr-tendr/routes";
 
 import "@montr-core/i18n";
 import "@montr-core/index.less"
