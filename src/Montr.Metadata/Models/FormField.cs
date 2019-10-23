@@ -19,6 +19,11 @@
 		public bool Required { get; set; }
 	}
 
+	public class BooleanField : FormField
+	{
+		public override string Type => "boolean";
+	}
+
 	public class StringField : FormField
 	{
 		public override string Type => "string";

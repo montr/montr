@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Input, Select } from "antd";
+import { Input, Select, Checkbox } from "antd";
 import { IFormField, IIndexer, ISelectField, ITextAreaField } from "../models";
 
 export abstract class FormFieldFactory {
@@ -14,6 +14,12 @@ export abstract class FormFieldFactory {
 	}
 
 	abstract createNode(field: IFormField, data: IIndexer): React.ReactNode;
+}
+
+class BooleanFieldFactory implements FormFieldFactory {
+	createNode(field: IFormField, data: IIndexer): React.ReactNode {
+		return <Checkbox>{field.name}</Checkbox>;
+	}
 }
 
 class StringFieldFactory implements FormFieldFactory {
@@ -48,6 +54,14 @@ class SelectFieldFactory implements FormFieldFactory {
 	}
 }
 
+class PasswordFieldFactory implements FormFieldFactory {
+	createNode(field: IFormField, data: IIndexer): React.ReactNode {
+		return <Input.Password placeholder={field.placeholder} />;
+	}
+}
+
+FormFieldFactory.register("boolean", new BooleanFieldFactory());
 FormFieldFactory.register("string", new StringFieldFactory());
 FormFieldFactory.register("textarea", new TextAreaFieldFactory());
 FormFieldFactory.register("select", new SelectFieldFactory());
+FormFieldFactory.register("password", new PasswordFieldFactory());

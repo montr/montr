@@ -92,10 +92,10 @@ class _TabEditClassifier extends React.Component<IProps, IState> {
 
 	render = () => {
 		const { data } = this.props,
-			{ fields } = this.state;
+			{ fields, loading } = this.state;
 
 		return (
-			<Spin spinning={this.state.loading}>
+			<Spin spinning={loading}>
 				<DataForm fields={fields} data={data} onSave={this.save} />
 			</Spin>
 		);

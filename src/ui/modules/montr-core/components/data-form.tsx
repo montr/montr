@@ -94,23 +94,33 @@ export class WrappedDataForm extends React.Component<IProps, IState> {
 		const { layout, data } = this.props;
 		const { getFieldDecorator } = this.props.form;
 
-		const fieldOptions = {
-			rules: [{
-				required: field.required,
-				whitespace: field.required,
-				message: `Поле «${field.name}» обязательно для заполнения`
-			}],
-			initialValue: data[field.key]
-		};
+		const fieldOptions = field.type == "boolean"
+			? {
+				valuePropName: "checked"
+			}
+			: {
+				rules: [{
+					required: field.required,
+					whitespace: field.required,
+					message: `Поле «${field.name}» обязательно для заполнения`
+				}],
+				initialValue: data[field.key]
+			};
 
 		const fieldFactory = FormFieldFactory.get(field.type);
 
 		const fieldNode = fieldFactory.createNode(field, data);
 
-		const itemLayout = (layout == null || layout == "horizontal") ? FormDefaults.formItemLayout : {};
+		const itemLayout = (layout == null || layout == "horizontal")
+			? (field.type == "boolean" ? FormDefaults.tailFormItemLayout : FormDefaults.formItemLayout)
+			: {};
 
 		return (
-			<Form.Item key={field.key} label={field.name} extra={field.description} {...itemLayout}>
+			<Form.Item
+				key={field.key}
+				label={field.type == "boolean" ? null : field.name}
+				extra={field.description}
+				{...itemLayout}>
 				{getFieldDecorator(field.key, fieldOptions)(fieldNode)}
 			</Form.Item>
 		);

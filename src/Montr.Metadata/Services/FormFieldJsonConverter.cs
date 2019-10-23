@@ -36,9 +36,13 @@ namespace Montr.Metadata.Services
 			writer.WriteBoolean("readonly", value.Readonly);
 			writer.WriteBoolean("required", value.Required);
 
-			if (value is StringField stringField)
+			/*if (value is BooleanField booleanField)
 			{
 				// writer.WriteNumber("TypeDiscriminator", (int)TypeDiscriminator.StringField);
+			}*/
+
+			if (value is StringField stringField)
+			{
 				writer.WriteBoolean("autosize", stringField.Autosize);
 			}
 

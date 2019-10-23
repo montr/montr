@@ -15,7 +15,7 @@ export const RouteBuilder = {
 
 export const Routes: IRoute[] = [
 	{ path: "/register/", layout: "public", exact: true, component: React.lazy(() => import("./pages/public/registration")) },
-	{ path: "/register/company/", layout: "public", exact: true, component: React.lazy(() => import("@montr-kompany/pages/public/register")) },
+	{ path: "/register/company/", layout: "public", exact: true, component: React.lazy(() => import("@montr-kompany/pages/register")) },
 
 	{ path: "/events/", exact: true, component: React.lazy(() => import("./pages/private/search-events")) },
 	{ path: "/events/new", exact: true, component: React.lazy(() => import("./pages/private/select-event-template")) },
