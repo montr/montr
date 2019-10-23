@@ -14,7 +14,7 @@ interface IState {
 	newUid?: Guid;
 }
 
-export class SelectEventTemplate extends React.Component<IProps, IState> {
+export default class SelectEventTemplate extends React.Component<IProps, IState> {
 
 	private _eventService = new EventService();
 

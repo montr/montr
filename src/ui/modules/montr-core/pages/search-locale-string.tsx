@@ -173,4 +173,6 @@ export class _SearchLocaleString extends React.Component<IProps, IState> {
 	}
 }
 
-export const SearchLocaleString = Form.create<IProps>()(_SearchLocaleString);
+const SearchLocaleString = Form.create<IProps>()(_SearchLocaleString);
+
+export default SearchLocaleString;

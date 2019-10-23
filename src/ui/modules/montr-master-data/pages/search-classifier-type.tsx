@@ -104,4 +104,6 @@ class _SearchClassifierType extends React.Component<IProps, IState> {
 	}
 }
 
-export const SearchClassifierType = withCompanyContext(_SearchClassifierType);
+const SearchClassifierType = withCompanyContext(_SearchClassifierType);
+
+export default SearchClassifierType;

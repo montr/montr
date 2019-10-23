@@ -177,7 +177,7 @@ class _RegistrationForm extends React.Component<IProps, IState> {
 
 const RegistrationForm = Form.create()(withCompanyContext(_RegistrationForm));
 
-export class Registration extends React.Component {
+export default class Registration extends React.Component {
 	render() {
 		return (
 			<div>

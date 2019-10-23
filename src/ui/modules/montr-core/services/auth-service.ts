@@ -17,8 +17,8 @@ class AuthConstants {
 export class AuthService {
 	private static instance: AuthService;
 
-	private _userManager: UserManager;
-	private _navigator: NavigationService;
+	private _userManager!: UserManager;
+	private _navigator: NavigationService = new NavigationService();
 
 	constructor() {
 		if (AuthService.instance) {
@@ -48,7 +48,7 @@ export class AuthService {
 		};
 
 		this._userManager = new UserManager(settings);
-		this._navigator = new NavigationService();
+		// this._navigator = new NavigationService();
 
 		// todo: use logger here and below
 		this._userManager.events.addAccessTokenExpired((...args: any[]) => {

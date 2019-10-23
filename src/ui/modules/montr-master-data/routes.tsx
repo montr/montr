@@ -1,7 +1,7 @@
 import { generatePath } from "react-router";
-import { SearchClassifier, EditClassifierType, EditClassifier, SearchClassifierType } from "./pages";
 import { Guid, IRoute } from "@montr-core/models";
 import { AppRouteRegistry } from "@montr-core/services/";
+import React from "react";
 
 export const Patterns = {
 	editClassifierType: "/classifiers/edit/:uid/:tabKey?",
@@ -23,13 +23,13 @@ export const RouteBuilder = {
 };
 
 export const Routes: IRoute[] = [
-	{ path: "/classifiers/", layout: "private", exact: true, component: SearchClassifierType },
-	{ path: "/classifiers/add/", layout: "private", exact: true, component: EditClassifierType },
-	{ path: Patterns.editClassifierType, layout: "private", exact: true, component: EditClassifierType },
+	{ path: "/classifiers/", layout: "private", exact: true, component: React.lazy(() => import("./pages/search-classifier-type")) },
+	{ path: "/classifiers/add/", layout: "private", exact: true, component: React.lazy(() => import("./pages/edit-classifier-type")) },
+	{ path: Patterns.editClassifierType, layout: "private", exact: true, component: React.lazy(() => import("./pages/edit-classifier-type")) },
 
-	{ path: "/classifiers/:typeCode/", layout: "private", exact: true, component: SearchClassifier },
-	{ path: Patterns.addClassifier, layout: "private", exact: true, component: EditClassifier },
-	{ path: Patterns.editClassifier, layout: "private", exact: true, component: EditClassifier }
+	{ path: "/classifiers/:typeCode/", layout: "private", exact: true, component: React.lazy(() => import("./pages/search-classifier")) },
+	{ path: Patterns.addClassifier, layout: "private", exact: true, component: React.lazy(() => import("./pages/edit-classifier")) },
+	{ path: Patterns.editClassifier, layout: "private", exact: true, component: React.lazy(() => import("./pages/edit-classifier")) }
 ];
 
 AppRouteRegistry.add(Routes);

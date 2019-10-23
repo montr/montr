@@ -1,15 +1,14 @@
-import { Home, SearchLocaleString, Settings, Dashboard } from "./pages";
+import React from "react";
 import { IRoute } from "./models";
 import { AppRouteRegistry } from "./services/";
-import { Login } from "./pages/login";
 
 export const Routes: IRoute[] = [
-	{ path: "/", layout: "public", exact: true, component: Home },
-	{ path: "/login", layout: "public", exact: true, component: Login },
+	{ path: "/", layout: "public", exact: true, component: React.lazy(() => import("./pages/home")) },
+	{ path: "/login", layout: "public", exact: true, component: React.lazy(() => import("./pages/login")) },
 
-	{ path: "/dashboard/", exact: true, component: Dashboard },
-	{ path: "/locales/", exact: true, component: SearchLocaleString },
-	{ path: "/settings/", exact: true, component: Settings },
+	{ path: "/dashboard/", exact: true, component: React.lazy(() => import("./pages/dashboard")) },
+	{ path: "/locales/", exact: true, component: React.lazy(() => import("./pages/search-locale-string")) },
+	{ path: "/settings/", exact: true, component: React.lazy(() => import("./pages/settings")) },
 ];
 
 AppRouteRegistry.add(Routes);

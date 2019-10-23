@@ -12,7 +12,7 @@ interface State {
 	configCodes: IEvent[];
 }
 
-export class SearchEvents extends React.Component<Props, State> {
+export default class SearchEvents extends React.Component<Props, State> {
 
 	_eventService = new EventService();
 	_eventTemplateService = new EventTemplateService();

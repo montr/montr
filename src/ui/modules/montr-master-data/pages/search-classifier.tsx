@@ -12,7 +12,7 @@ interface IProps extends RouteComponentProps<IRouteProps> {
 interface IState {
 }
 
-export class SearchClassifier extends React.Component<IProps, IState> {
+export default class SearchClassifier extends React.Component<IProps, IState> {
 	render() {
 		return (
 			<PaneSearchClassifier mode="Page" typeCode={this.props.match.params.typeCode} />

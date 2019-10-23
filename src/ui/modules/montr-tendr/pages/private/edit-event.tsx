@@ -227,4 +227,6 @@ class _EditEvent extends React.Component<IProps, IState> {
 	}
 }
 
-export const EditEvent = withTranslation("tendr")(_EditEvent);
+const EditEvent = withTranslation("tendr")(_EditEvent);
+
+export default EditEvent;

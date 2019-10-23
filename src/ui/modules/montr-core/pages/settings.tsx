@@ -7,7 +7,7 @@ interface IProps {
 interface IState {
 }
 
-export class Settings extends React.Component<IProps, IState> {
+export default class Settings extends React.Component<IProps, IState> {
 	constructor(props: IProps) {
 		super(props);
 

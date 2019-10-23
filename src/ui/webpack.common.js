@@ -1,5 +1,6 @@
 const path = require("path");
 const tsImportPluginFactory = require("ts-import-plugin")
+const copyPlugin = require("copy-webpack-plugin");
 
 module.exports = {
 	mode: process.env.test,
@@ -7,18 +8,10 @@ module.exports = {
 		"app": "./modules/host/app.tsx",
 	},
 	output: {
-		path: __dirname,
-		filename: (chunkData) => {
-			return "../Host/wwwroot/assets/[name].js";
-
-			/* if (chunkData.chunk.name.startsWith("tendr"))
-				return "../Host/wwwroot/assets/[name].js";
-
-			if (chunkData.chunk.name === "kompany")
-				return "../Kompany.Web/wwwroot/assets/[name].js";
-
-			return null; */
-		}
+		path: path.resolve(__dirname, "assets"),
+		filename: "[name].bundle.js",
+		chunkFilename: "[name].chunk.js",
+		publicPath: "/assets/"
 	},
 	resolve: {
 		alias: {
@@ -33,6 +26,7 @@ module.exports = {
 		rules: [
 			{
 				test: /\.(jsx|tsx|js|ts)$/,
+				// loader: "ts-loader",
 				loader: "awesome-typescript-loader",
 				options: {
 					transpileOnly: false,
@@ -44,7 +38,7 @@ module.exports = {
 						})]
 					}),
 					/* compilerOptions: {
-						module: "es2015"
+						// module: "es2015"
 					} */
 				},
 				exclude: /node_modules/
@@ -52,7 +46,8 @@ module.exports = {
 
 			// All output ".js" files will have any sourcemaps re-processed by "source-map-loader".
 			{
-				test: /\.js$/, loader: "source-map-loader",
+				test: /\.js$/,
+				loader: "source-map-loader",
 				enforce: "pre", exclude: [/mutationobserver-shim/g]
 			},
 
@@ -78,5 +73,10 @@ module.exports = {
 				]
 			},
 		],
-	}
+	},
+	plugins: [
+		new copyPlugin([
+			{ from: "./assets", to: "../../Host/wwwroot/assets" }
+		]),
+	],
 };

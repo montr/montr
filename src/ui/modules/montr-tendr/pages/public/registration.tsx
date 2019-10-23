@@ -99,4 +99,6 @@ class _Registration extends React.Component<UserContextProps & CompanyContextPro
 	}
 }
 
-export const Registration = withCompanyContext(withUserContext(_Registration));
+const Registration = withCompanyContext(withUserContext(_Registration));
+
+export default Registration;

@@ -118,4 +118,6 @@ class _EditClassifierType extends React.Component<IProps, IState> {
 	}
 }
 
-export const EditClassifierType = withCompanyContext(_EditClassifierType);
+const EditClassifierType = withCompanyContext(_EditClassifierType);
+
+export default EditClassifierType;
