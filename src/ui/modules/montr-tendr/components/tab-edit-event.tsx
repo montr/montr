@@ -52,7 +52,7 @@ class EventForm extends React.Component<IProps, IState> {
 			{ loading, fields } = this.state;
 
 		return (
-			<DataForm fields={fields} data={data} onSave={this.save} />
+			<DataForm fields={fields} data={data} onSubmit={this.save} />
 		);
 	}
 }

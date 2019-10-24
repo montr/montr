@@ -4,7 +4,6 @@ import { IFormField, IApiResult } from "@montr-core/models";
 import { Spin } from "antd";
 import { MetadataService } from "@montr-core/services";
 import { ILoginModel } from "@montr-core/models/login-model";
-import { Link } from "react-router-dom";
 import { Translation } from "react-i18next";
 
 interface IProps {
@@ -16,7 +15,7 @@ interface IState {
 	fields?: IFormField[];
 }
 
-export default class Login extends React.Component<IProps, IState> {
+export default class Register extends React.Component<IProps, IState> {
 
 	private _metadataService = new MetadataService();
 
@@ -38,7 +37,7 @@ export default class Login extends React.Component<IProps, IState> {
 	}
 
 	fetchData = async () => {
-		const dataView = await this._metadataService.load("Login/Form");
+		const dataView = await this._metadataService.load("Register/Form");
 
 		this.setState({ loading: false, fields: dataView.fields });
 	}
@@ -53,9 +52,9 @@ export default class Login extends React.Component<IProps, IState> {
 		return (
 			<Translation>
 				{(t, { i18n }) => (
-					<Page title="Log in">
+					<Page title="Register">
 
-						<h3>Use a local account to log in.</h3>
+						<h3>Create a new account.</h3>
 
 						<div style={{ width: "50%" }} >
 							<Spin spinning={loading}>
@@ -63,15 +62,10 @@ export default class Login extends React.Component<IProps, IState> {
 									fields={fields}
 									data={data}
 									onSubmit={this.save}
-									submitButton={t("button.login")}
+									submitButton={t("button.register")}
 								/>
 							</Spin>
 						</div>
-
-						<p><Link to="/account/forgot-password">Forgot your password?</Link></p>
-						<p><Link to="/account/register">Register as a new user</Link></p>
-
-						<h3>Use another service to log in.</h3>
 
 					</Page>
 				)}

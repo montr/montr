@@ -7,6 +7,8 @@
       "button.publish": "Publish",
       "button.save": "Save",
       "button.search": "Search",
+      "button.register": "Register",
+      "button.login": "Log in",
       "confirm.title": "Confirm operation",
       "operation.error": "An error occurred while performing the operation.",
       "operation.success": "The operation completed successfully."
@@ -24,6 +26,8 @@
       "button.publish": "Опубликовать",
       "button.save": "Сохранить",
       "button.search": "Искать",
+      "button.register": "Зарегистрироваться",
+      "button.login": "Войти",
       "confirm.title": "Подтверждение операции",
       "operation.error": "Произошла ошибка при выполнении операции.",
       "operation.success": "Операция выполнена успешно."

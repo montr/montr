@@ -160,6 +160,18 @@ namespace Montr.Metadata.Services
 				};
 			}
 
+			if (viewId == "Register/Form")
+			{
+				result.Fields = new List<FormField>
+				{
+					new StringField { Key = "email", Name = "Email", Required = true },
+					new StringField { Key = "firstName", Name = "First Name", Required = true },
+					new StringField { Key = "lastName", Name = "Last Name", Required = true },
+					new PasswordField { Key = "password", Name = "Password", Required = true },
+					// new PasswordField { Key = "confirmPassword", Name = "Confirm Password", Required = true }
+				};
+			}
+
 			// Events
 			if (viewId == "PrivateEvent/Edit")
 			{

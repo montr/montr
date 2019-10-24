@@ -4,15 +4,18 @@ import { FormComponentProps } from "antd/lib/form";
 import { IFormField, IIndexer, IApiResult, IApiResultError } from "../models";
 import { NotificationService } from "../services/notification-service";
 import { FormDefaults, FormFieldFactory } from ".";
+import { withTranslation, WithTranslation } from "react-i18next";
 
 declare const FormLayouts: ["horizontal", "inline", "vertical"];
 
-interface IProps extends FormComponentProps {
+interface IProps extends WithTranslation, FormComponentProps {
 	layout?: (typeof FormLayouts)[number];
 	fields: IFormField[];
 	data: IIndexer;
 	showControls?: boolean;
-	onSave: (values: IIndexer) => Promise<IApiResult>
+	submitButton?: string;
+	resetButton?: string;
+	onSubmit: (values: IIndexer) => Promise<IApiResult>
 }
 
 interface IState {
@@ -33,7 +36,7 @@ export class WrappedDataForm extends React.Component<IProps, IState> {
 	handleSubmit = async (e: React.SyntheticEvent) => {
 		e.preventDefault();
 
-		const { form, onSave } = this.props;
+		const { form, onSubmit: onSave } = this.props;
 
 		form.validateFieldsAndScroll(async (errors, values: any) => {
 			if (errors) {
@@ -127,7 +130,7 @@ export class WrappedDataForm extends React.Component<IProps, IState> {
 	}
 
 	render = () => {
-		const { layout, fields, showControls } = this.props,
+		const { layout, fields, showControls, t, submitButton } = this.props,
 			{ loading } = this.state;
 
 		const itemLayout = (layout == null || layout == "horizontal") ? FormDefaults.tailFormItemLayout : null;
@@ -138,8 +141,8 @@ export class WrappedDataForm extends React.Component<IProps, IState> {
 					{fields && fields.map(x => this.createItem(x))}
 					{fields && showControls !== false &&
 						<Form.Item {...itemLayout}>
-							<Button type="primary" htmlType="submit" icon="check">Сохранить</Button>&#xA0;
-					{/* <Button htmlType="reset">Отменить</Button> */}
+							<Button type="primary" htmlType="submit" icon="check">{submitButton || t("button.save")}</Button>&#xA0;
+							{/* <Button htmlType="reset">{t("button.cancel")}</Button> */}
 						</Form.Item>
 					}
 				</Form>
@@ -148,4 +151,4 @@ export class WrappedDataForm extends React.Component<IProps, IState> {
 	}
 }
 
-export const DataForm = Form.create<IProps>()(WrappedDataForm);
+export const DataForm = withTranslation()(Form.create<IProps>()(WrappedDataForm));

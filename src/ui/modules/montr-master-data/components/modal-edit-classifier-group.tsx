@@ -136,7 +136,7 @@ class _ModalEditClassifierGroup extends React.Component<IProps, IState> {
 						fields={fields}
 						data={data}
 						showControls={false}
-						onSave={this.save}
+						onSubmit={this.save}
 					/>
 				</Spin>
 			</Modal>

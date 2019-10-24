@@ -22,7 +22,8 @@ namespace Montr.Web.Services
 			if (menuId == "TopMenu")
 			{
 				result.Items.Add(new Menu { Id = "p.0", Icon = "home", Route = "/" });
-				result.Items.Add(new Menu { Id = "login", Name = "Войти", Icon = "login", Route = "/login" });
+				result.Items.Add(new Menu { Id = "login", Name = "Войти", Icon = "login", Route = "/account/login" });
+				result.Items.Add(new Menu { Id = "register", Name = "Регистрация", Icon = "user-add", Route = "/account/register" });
 				result.Items.Add(new Menu { Id = "p.1", Name = "Регистрация", Icon = "user-add", Route = "/register" });
 				result.Items.Add(new Menu { Id = "p.2", Name = "Панель управления", Icon = "dashboard", Route = "/dashboard" });
 			}
