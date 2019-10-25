@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
 using System.Text.Encodings.Web;
@@ -11,7 +13,9 @@ using Microsoft.Extensions.Logging;
 using Montr.Core.Models;
 using Montr.Idx.Commands;
 using Montr.Idx.Impl.Entities;
+using Montr.Idx.Models;
 using Montr.Messages.Services;
+using ValidationResult = System.ComponentModel.DataAnnotations.ValidationResult;
 
 namespace Montr.Idx.Impl.CommandHandlers
 {
@@ -36,8 +40,11 @@ namespace Montr.Idx.Impl.CommandHandlers
 
 		public async Task<ApiResult> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
 		{
-			// if (ModelState.IsValid)
-			// {
+			var model = (RegisterUserModel)request;
+			var validationResults = new List<ValidationResult>();
+
+			if (Validator.TryValidateObject(model, new ValidationContext(model), validationResults, true))
+			{
 				var user = new DbUser
 				{
 					Id = Guid.NewGuid(),
@@ -83,20 +90,26 @@ namespace Montr.Idx.Impl.CommandHandlers
 					return new ApiResult { Success = true };
 				}
 
-				/*foreach (var error in result.Errors)
+				return new ApiResult
 				{
-					ModelState.AddModelError(string.Empty, error.Description);
-				}*/
-			// }
+					Success = false,
+					Errors = identityResult.Errors.Select(x =>
+						new ApiResultError
+						{
+							Key = x.Code,
+							Messages = new[] { x.Description }
+						}).ToArray()
+				};
+			}
 
 			return new ApiResult
 			{
-				Success =  false,
-				Errors = new []
+				Success = false,
+				Errors = new[]
 				{
 					new ApiResultError
 					{
-						Messages = identityResult.Errors.Select(x => x.Description).ToArray()
+						Messages = validationResults.Select(x => x.ErrorMessage).ToArray()
 					}
 				}
 			};
