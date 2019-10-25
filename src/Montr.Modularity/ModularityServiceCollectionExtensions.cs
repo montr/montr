@@ -45,10 +45,19 @@ namespace Montr.Modularity
 					.Where(x => x.IsClass && x.IsAbstract == false && typeof(IModule).IsAssignableFrom(x)));
 			}
 
+			foreach (var type in types)
+			{
+				// modules instances will be created twice (with temp and real service providers) 
+				services.AddTransient(type);
+			}
+
+			// temp service provider to create modules
+			IServiceProvider serviceProvider = services.BuildServiceProvider();
+
 			// todo: order by module dependencies
 			foreach (var type in types)
 			{
-				var module = (IModule)Activator.CreateInstance(type);
+				var module = (IModule)serviceProvider.GetService(type);
 
 				if (logger.IsEnabled(LogLevel.Information))
 				{

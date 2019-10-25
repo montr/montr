@@ -11,20 +11,14 @@ using Microsoft.IdentityModel.Tokens;
 using System.Security.Cryptography;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Montr.Idx;
+using Montr.Idx.Impl;
 using Montr.Idx.Impl.Entities;
 using Montr.Modularity;
 using Montr.Web;
 
 namespace Idx
 {
-	public class IdxServerOptions
-	{
-		public string PublicOrigin { get; set; }
-
-		// todo: temp solution, read client configuration from db
-		public string[] ClientUrls { get; set; }
-	}
-
 	public class Startup
 	{
 		private ICollection<IModule> _modules;
@@ -90,7 +84,7 @@ namespace Idx
 				options.AccessDeniedPath = "/Identity/Account/AccessDenied";
 			});
 
-			var builder = services.AddIdentityServer(options =>
+			/*var builder = services.AddIdentityServer(options =>
 				{
 					options.PublicOrigin = idxServerOptions.PublicOrigin;
 					options.Authentication.CookieAuthenticationScheme = IdentityConstants.ApplicationScheme;
@@ -107,7 +101,6 @@ namespace Idx
 				.AddInMemoryIdentityResources(Config.GetIdentityResources())
 				.AddInMemoryApiResources(Config.GetApiResources())
 				.AddInMemoryClients(Config.GetClients(idxServerOptions.ClientUrls))
-
 				.AddAspNetIdentity<DbUser>();
 
 			if (Environment.IsDevelopment())
@@ -120,7 +113,7 @@ namespace Idx
 				builder.AddSigningCredential(new Microsoft.IdentityModel.Tokens.SigningCredentials(
 					new RsaSecurityKey(RSA.Create(2048)), SecurityAlgorithms.RsaSha256Signature
 				));
-			}
+			}*/
 
 			services
 				.AddAuthentication(x =>

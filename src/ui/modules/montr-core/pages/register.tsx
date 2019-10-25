@@ -3,21 +3,23 @@ import { Page, DataForm } from "../components";
 import { IFormField, IApiResult } from "@montr-core/models";
 import { Spin } from "antd";
 import { MetadataService } from "@montr-core/services";
-import { ILoginModel } from "@montr-core/models/login-model";
+import { IRegisterUserModel } from "@montr-core/models/register-user-model";
 import { Translation } from "react-i18next";
+import { AccountService } from "@montr-core/services/account-service";
 
 interface IProps {
 }
 
 interface IState {
 	loading: boolean;
-	data: ILoginModel;
+	data: IRegisterUserModel;
 	fields?: IFormField[];
 }
 
 export default class Register extends React.Component<IProps, IState> {
 
 	private _metadataService = new MetadataService();
+	private _accountService = new AccountService();
 
 	constructor(props: IProps) {
 		super(props);
@@ -34,6 +36,7 @@ export default class Register extends React.Component<IProps, IState> {
 
 	componentWillUnmount = async () => {
 		await this._metadataService.abort();
+		await this._accountService.abort();
 	}
 
 	fetchData = async () => {
@@ -42,8 +45,8 @@ export default class Register extends React.Component<IProps, IState> {
 		this.setState({ loading: false, fields: dataView.fields });
 	}
 
-	save = async (values: ILoginModel): Promise<IApiResult> => {
-		return null;
+	save = async (values: IRegisterUserModel): Promise<IApiResult> => {
+		return await this._accountService.register(values);
 	}
 
 	render = () => {

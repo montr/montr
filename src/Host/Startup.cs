@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json.Serialization;
 using MediatR;
@@ -19,14 +20,16 @@ namespace Host
 	{
 		private ICollection<IModule> _modules;
 
-		public Startup(ILoggerFactory loggerFactory, IConfiguration configuration)
+		public Startup(ILoggerFactory loggerFactory, IWebHostEnvironment environment, IConfiguration configuration)
 		{
 			Logger = loggerFactory.CreateLogger<Startup>();
 
+			Environment = environment;
 			Configuration = configuration;
 		}
 
 		public ILogger Logger { get; }
+		public IWebHostEnvironment Environment { get; }
 
 		public IConfiguration Configuration { get; }
 

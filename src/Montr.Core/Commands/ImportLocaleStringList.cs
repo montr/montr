@@ -1,5 +1,4 @@
-﻿using System.IO;
-using MediatR;
+﻿using MediatR;
 using Microsoft.AspNetCore.Http;
 using Montr.Core.Models;
 

@@ -14,7 +14,7 @@ namespace Idx
 	{
 		public void ConfigureServices(IConfiguration configuration, IServiceCollection services)
 		{
-			services.Configure<IdentityOptions>(options =>
+			/*services.Configure<IdentityOptions>(options =>
 			{
 				options.User.RequireUniqueEmail = false;
 
@@ -33,7 +33,7 @@ namespace Idx
 
 				// User settings.
 				options.User.AllowedUserNameCharacters =
-					"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+"; */
+					"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+"; #1#
 			});
 
 			// https://github.com/linq2db/linq2db/issues/286
@@ -49,7 +49,7 @@ namespace Idx
 					typeof(LinqToDB.Identity.IdentityUserLogin<Guid>),
 					typeof(LinqToDB.Identity.IdentityUserToken<Guid>),
 					typeof(LinqToDB.Identity.IdentityRoleClaim<Guid>))
-				.AddDefaultTokenProviders();
+				.AddDefaultTokenProviders();*/
 
 			// using Microsoft.AspNetCore.Identity.UI.Services;
 			services.AddSingleton<IEmailSender, EmailSender>();

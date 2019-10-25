@@ -9,14 +9,16 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Controllers\" />
-	  <Folder Include="Commands\" />
-	  <Folder Include="Models\" />
-	  <Folder Include="Services\" />
 	  <Folder Include="Queries\" />
+	  <Folder Include="Services\" />
 	</ItemGroup>
 
 	<ItemGroup>
+	  <PackageReference Include="MediatR" Version="7.0.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <ProjectReference Include="..\Montr.Core\Montr.Core.csproj" />
 	  <ProjectReference Include="..\Montr.Modularity\Montr.Modularity.csproj" />
 	</ItemGroup>
 

@@ -13,7 +13,7 @@ using Montr.Data.Linq2Db;
 
 namespace Montr.Core.Impl.CommandHandlers
 {
-	public class ImportLocaleStringListHandler :  IRequestHandler<ImportLocaleStringList, ApiResult>
+	public class ImportLocaleStringListHandler : IRequestHandler<ImportLocaleStringList, ApiResult>
 	{
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IDbContextFactory _dbContextFactory;
