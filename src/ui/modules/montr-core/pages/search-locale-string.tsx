@@ -100,7 +100,7 @@ export class _SearchLocaleString extends React.Component<IProps, IState> {
 		];
 
 		const locales = ["en", "ru"],
-			modules = ["common", "master-data", "tendr"];
+			modules = ["common", "idx", "master-data", "tendr"];
 
 		const { getFieldDecorator } = this.props.form;
 

@@ -113,23 +113,15 @@ namespace Montr.Idx.Impl.CommandHandlers
 
 			code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
 
-			var callbackUrl = _appUrlBuilder.Build(ClientRoutes.ConfirmEmail,
-				new Dictionary<string, string>
-				{
-					{"userId", user.Id.ToString()},
-					{"code", code}
-				});
-
 			var messageModel = new ConfirmEmailMessageModel
 			{
-				CallbackUrl = callbackUrl 
+				CallbackUrl = _appUrlBuilder.Build($"{ClientRoutes.ConfirmEmail}/{user.Id}/{code}") 
 			};
 
 			var templateUid = Guid.Parse("CEEF2983-C083-448F-88B1-2DA6E6CB41A4");
 
 			var message = await _templateRenderer.Render(templateUid, messageModel, cancellationToken);
 
-			// $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>."
 			await _emailSender.Send(user.Email, message.Subject, message.Body);
 		}
 	}

@@ -51,30 +51,28 @@ export default class Login extends React.Component<IProps, IState> {
 		const { fields, data, loading } = this.state;
 
 		return (
-			<Translation>
-				{(t, { i18n }) => (
-					<Page title="Log in">
+			<Translation ns="idx">
+				{(t) => <Page title={t("page.login.title")}>
 
-						<h3>Use a local account to log in.</h3>
+					<h3>{t("page.login.section.loginLocal")}</h3>
 
-						<div style={{ width: "50%" }} >
-							<Spin spinning={loading}>
-								<DataForm
-									fields={fields}
-									data={data}
-									onSubmit={this.save}
-									submitButton={t("button.login")}
-								/>
-							</Spin>
-						</div>
+					<div style={{ width: "50%" }} >
+						<Spin spinning={loading}>
+							<DataForm
+								fields={fields}
+								data={data}
+								onSubmit={this.save}
+								submitButton={t("button.login")}
+							/>
+						</Spin>
+					</div>
 
-						<p><Link to="/account/forgot-password">Forgot your password?</Link></p>
-						<p><Link to="/account/register">Register as a new user</Link></p>
+					<p><Link to="/account/forgot-password">{t("page.login.link.forgotPassword")}</Link></p>
+					<p><Link to="/account/register">{t("page.login.link.register")}</Link></p>
 
-						<h3>Use another service to log in.</h3>
+					<h3>{t("page.login.section.loginExternal")}</h3>
 
-					</Page>
-				)}
+				</Page>}
 			</Translation>
 		);
 	}

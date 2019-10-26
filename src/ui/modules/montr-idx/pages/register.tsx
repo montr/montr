@@ -53,25 +53,23 @@ export default class Register extends React.Component<IProps, IState> {
 		const { fields, data, loading } = this.state;
 
 		return (
-			<Translation>
-				{(t, { i18n }) => (
-					<Page title="Register">
+			<Translation ns="idx">
+				{(t) => <Page title={t("page.register.title")}>
 
-						<h3>Create a new account.</h3>
+					<h3>{t("page.register.subtitle")}</h3>
 
-						<div style={{ width: "50%" }} >
-							<Spin spinning={loading}>
-								<DataForm
-									fields={fields}
-									data={data}
-									onSubmit={this.save}
-									submitButton={t("button.register")}
-								/>
-							</Spin>
-						</div>
+					<div style={{ width: "50%" }} >
+						<Spin spinning={loading}>
+							<DataForm
+								fields={fields}
+								data={data}
+								onSubmit={this.save}
+								submitButton={t("button.register")}
+							/>
+						</Spin>
+					</div>
 
-					</Page>
-				)}
+				</Page>}
 			</Translation>
 		);
 	}

@@ -2,16 +2,27 @@
   "en": {
     "common": {
       "button.cancel": "Cancel",
+      "button.continue": "Continue",
       "button.export": "Export",
       "button.import": "Import",
       "button.publish": "Publish",
       "button.save": "Save",
       "button.search": "Search",
-      "button.register": "Register",
-      "button.login": "Log in",
       "confirm.title": "Confirm operation",
       "operation.error": "An error occurred while performing the operation.",
       "operation.success": "The operation completed successfully."
+    },
+    "idx": {
+      "button.login": "Log in",
+      "button.register": "Register",
+      "page.confirmEmail.title": "Confirm email",
+      "page.login.link.forgotPassword": "Forgot your password?",
+      "page.login.link.register": "Register as a new user",
+      "page.login.section.loginExternal": "Use another service to log in.",
+      "page.login.section.loginLocal": "Use a local account to log in.",
+      "page.login.title": "Log in",
+      "page.register.subtitle": "Create a new account.",
+      "page.register.title": "Register"
     },
     "tendr": {
       "cancel.confirm.content": "Are you sure you want to cancel the event?",
@@ -21,16 +32,27 @@
   "ru": {
     "common": {
       "button.cancel": "Отменить",
+      "button.continue": "Продолжить",
       "button.export": "Экспорт",
       "button.import": "Импорт",
       "button.publish": "Опубликовать",
       "button.save": "Сохранить",
       "button.search": "Искать",
-      "button.register": "Зарегистрироваться",
-      "button.login": "Войти",
       "confirm.title": "Подтверждение операции",
       "operation.error": "Произошла ошибка при выполнении операции.",
       "operation.success": "Операция выполнена успешно."
+    },
+    "idx": {
+      "button.login": "Войти",
+      "button.register": "Зарегистрироваться",
+      "page.confirmEmail.title": "Подтверждение электронной почты",
+      "page.login.link.forgotPassword": "Забыли пароль?",
+      "page.login.link.register": "Зарегистрироваться как новый пользователь",
+      "page.login.section.loginExternal": "Использовать другой сервис для входа.",
+      "page.login.section.loginLocal": "Использовать локальный аккаунт для входа.",
+      "page.login.title": "Войти",
+      "page.register.subtitle": "Создать новый аккаунт.",
+      "page.register.title": "Регистрация"
     },
     "tendr": {
       "cancel.confirm.content": "Вы действительно хотите отменить событие?",
