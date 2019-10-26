@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Text;
-using System.Text.Encodings.Web;
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
@@ -11,11 +10,11 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using Montr.Core.Models;
+using Montr.Core.Services;
 using Montr.Idx.Commands;
 using Montr.Idx.Impl.Entities;
 using Montr.Idx.Models;
 using Montr.Messages.Services;
-using ValidationResult = System.ComponentModel.DataAnnotations.ValidationResult;
 
 namespace Montr.Idx.Impl.CommandHandlers
 {
@@ -24,18 +23,24 @@ namespace Montr.Idx.Impl.CommandHandlers
 		private readonly ILogger<RegisterUserCommandHandler> _logger;
 		private readonly UserManager<DbUser> _userManager;
 		private readonly SignInManager<DbUser> _signInManager;
+		private readonly IAppUrlBuilder _appUrlBuilder;
 		private readonly IEmailSender _emailSender;
+		private readonly ITemplateRenderer _templateRenderer;
 
 		public RegisterUserCommandHandler(
 			ILogger<RegisterUserCommandHandler> logger,
 			UserManager<DbUser> userManager,
 			SignInManager<DbUser> signInManager,
-			IEmailSender emailSender)
+			IAppUrlBuilder appUrlBuilder,
+			IEmailSender emailSender,
+			ITemplateRenderer templateRenderer)
 		{
 			_logger = logger;
 			_userManager = userManager;
 			_signInManager = signInManager;
+			_appUrlBuilder = appUrlBuilder;
 			_emailSender = emailSender;
+			_templateRenderer = templateRenderer;
 		}
 
 		public async Task<ApiResult> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
@@ -60,41 +65,28 @@ namespace Montr.Idx.Impl.CommandHandlers
 				{
 					_logger.LogInformation("User created a new account with password.");
 
-					var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-
-					code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-
-					var callbackUrl = "/Account/ConfirmEmail";
-
-					/*var callbackUrl = Url.Page(
-						"/Account/ConfirmEmail",
-						pageHandler: null,
-						values: new { area = "Identity", userId = user.Id, code = code },
-						protocol: Request.Scheme);*/
-
-					// todo: use message template
-					await _emailSender.Send(request.Email, "Confirm your email",
-						$"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>.");
+					await SendEmailConfirmationMessage(user, cancellationToken);
 
 					if (_userManager.Options.SignIn.RequireConfirmedAccount)
 					{
 						// return RedirectToPage("RegisterConfirmation", new { email = request.Email });
-					}
-					else
-					{
-						await _signInManager.SignInAsync(user, isPersistent: false);
 
-						// return LocalRedirect(returnUrl);
+						var redirectUrl = _appUrlBuilder.Build(ClientRoutes.RegisterConfirmation,
+							new Dictionary<string, string> { {"email", request.Email} });
+
+						return new ApiResult { Success = true, RedirectUrl = redirectUrl };
 					}
 
-					return new ApiResult { Success = true };
+					await _signInManager.SignInAsync(user, isPersistent: false);
+
+					return new ApiResult { Success = true, RedirectUrl = request.ReturnUrl };
 				}
 
 				return new ApiResult
 				{
 					Success = false,
-					Errors = identityResult.Errors.Select(x =>
-						new ApiResultError
+					Errors = identityResult.Errors
+						.Select(x => new ApiResultError
 						{
 							Key = x.Code,
 							Messages = new[] { x.Description }
@@ -113,6 +105,32 @@ namespace Montr.Idx.Impl.CommandHandlers
 					}
 				}
 			};
+		}
+
+		private async Task SendEmailConfirmationMessage(DbUser user, CancellationToken cancellationToken)
+		{
+			var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
+
+			code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+
+			var callbackUrl = _appUrlBuilder.Build(ClientRoutes.ConfirmEmail,
+				new Dictionary<string, string>
+				{
+					{"userId", user.Id.ToString()},
+					{"code", code}
+				});
+
+			var messageModel = new ConfirmEmailMessageModel
+			{
+				CallbackUrl = callbackUrl 
+			};
+
+			var templateUid = Guid.Parse("CEEF2983-C083-448F-88B1-2DA6E6CB41A4");
+
+			var message = await _templateRenderer.Render(templateUid, messageModel, cancellationToken);
+
+			// $"Please confirm your account by <a href='{HtmlEncoder.Default.Encode(callbackUrl)}'>clicking here</a>."
+			await _emailSender.Send(user.Email, message.Subject, message.Body);
 		}
 	}
 }

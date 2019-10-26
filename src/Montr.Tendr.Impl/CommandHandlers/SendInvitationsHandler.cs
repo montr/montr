@@ -35,7 +35,7 @@ namespace Montr.Tendr.Impl.CommandHandlers
 
 		public async Task<ApiResult> Handle(SendInvitations request, CancellationToken cancellationToken)
 		{
-			IList<InvitationMailModel> invitations;
+			IList<InvitationMessageModel> invitations;
 
 			using (var db = _dbContextFactory.Create())
 			{
@@ -45,7 +45,7 @@ namespace Montr.Tendr.Impl.CommandHandlers
 					join i in db.GetTable<DbInvitation>() on e.Uid equals i.EventUid
 					join c in db.GetTable<DbClassifier>() on i.CounterpartyUid equals c.Uid
 					where e.Uid == request.EventUid && i.Email != null
-					select new InvitationMailModel
+					select new InvitationMessageModel
 					{
 						EventNo = e.Id,
 						EventName = e.Name,

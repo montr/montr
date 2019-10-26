@@ -12,7 +12,7 @@
 		"IIS Express": {
 			"commandName": "IISExpress",
 			"launchBrowser": true,
-			"launchUrl": "api/values",
+			"launchUrl": "/",
 			"environmentVariables": {
 				"ASPNETCORE_ENVIRONMENT": "Development"
 			}
@@ -20,7 +20,7 @@
 		"tendr.core": {
 			"commandName": "Project",
 			"launchBrowser": true,
-			"launchUrl": "api/values",
+			"launchUrl": "/",
 			"applicationUrl": "http://app.montr.io:5010;https://app.montr.io:5001/",
 			"environmentVariables": {
 				"ASPNETCORE_ENVIRONMENT": "Development",

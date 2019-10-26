@@ -9,6 +9,7 @@ namespace Montr.Core
 	{
 		public void ConfigureServices(IConfiguration configuration, IServiceCollection services)
 		{
+			services.AddSingleton<IAppUrlBuilder, DefaultAppUrlBuilder>();
 			services.AddSingleton<IDateTimeProvider, DefaultDateTimeProvider>();
 			services.AddSingleton<IJsonSerializer, DefaultJsonSerializer>();
 			services.AddSingleton<IUnitOfWorkFactory, TransactionScopeUnitOfWorkFactory>();

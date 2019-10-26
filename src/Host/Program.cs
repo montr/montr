@@ -20,6 +20,8 @@ namespace Host
 						.MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
 						.MinimumLevel.Override("System", LogEventLevel.Warning)
 						.MinimumLevel.Override("Microsoft.AspNetCore.Authentication", LogEventLevel.Information)
+						.MinimumLevel.Override("Hangfire.Processing.BackgroundExecution", LogEventLevel.Information)
+						.MinimumLevel.Override("Hangfire.Server.ServerHeartbeatProcess", LogEventLevel.Information)
 						.Enrich.FromLogContext()
 						.WriteTo.File($"../../../.logs/{typeof(Startup).Namespace}-{context.HostingEnvironment.EnvironmentName}.log")
 						.WriteTo.Console(outputTemplate: "{Timestamp:o} [{Level:w4}] {SourceContext} - {Message:lj}{NewLine}{Exception}");

@@ -18,6 +18,8 @@ namespace Montr.Core.Models
 
 		public int? AffectedRows { get; set; }
 
+		public string RedirectUrl { get; set; }
+
 		public IList<ApiResultError> Errors { get; set; }
 	}
 

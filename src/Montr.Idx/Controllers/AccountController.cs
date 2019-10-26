@@ -21,5 +21,11 @@ namespace Montr.Idx.Controllers
 		{
 			return await _mediator.Send(request);
 		}
+
+		[HttpPost]
+		public async Task<ApiResult> ConfirmEmail(ConfirmEmailCommand request)
+		{
+			return await _mediator.Send(request);
+		}
 	}
 }
