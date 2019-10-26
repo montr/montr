@@ -1,11 +1,11 @@
 import * as React from "react";
-import { Page, DataForm } from "../components";
+import { Page, DataForm } from "@montr-core/components";
 import { IFormField, IApiResult } from "@montr-core/models";
 import { Spin } from "antd";
 import { MetadataService } from "@montr-core/services";
-import { IRegisterUserModel } from "@montr-core/models/register-user-model";
+import { IRegisterUserModel } from "../models/";
 import { Translation } from "react-i18next";
-import { AccountService } from "@montr-core/services/account-service";
+import { AccountService } from "../services/account-service";
 
 interface IProps {
 }

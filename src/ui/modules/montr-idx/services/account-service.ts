@@ -1,6 +1,7 @@
-import { Fetcher } from "./fetcher";
-import { Constants } from "../constants";
-import { IApiResult, IConfirmEmailModel, IRegisterUserModel } from "../models";
+import { Fetcher } from "@montr-core/services/fetcher";
+import { Constants } from "@montr-core/constants";
+import { IApiResult } from "@montr-core/models";
+import { IConfirmEmailModel, IRegisterUserModel } from "../models";
 
 export class AccountService extends Fetcher {
 

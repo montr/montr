@@ -16,6 +16,7 @@ module.exports = {
 	resolve: {
 		alias: {
 			"@montr-core": path.resolve(__dirname, "modules/montr-core/"),
+			"@montr-idx": path.resolve(__dirname, "modules/montr-idx/"),
 			"@montr-master-data": path.resolve(__dirname, "modules/montr-master-data/"),
 			"@montr-kompany": path.resolve(__dirname, "modules/montr-kompany/"),
 			"@montr-tendr": path.resolve(__dirname, "modules/montr-tendr/"),

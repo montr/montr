@@ -10,6 +10,7 @@ import { PublicLayout, PrivateLayout } from "./";
 import { AppRouteRegistry } from "@montr-core/services/";
 
 import "@montr-core/routes";
+import "@montr-idx/routes";
 import "@montr-master-data/routes";
 import "@montr-tendr/routes";
 

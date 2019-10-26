@@ -1,9 +1,9 @@
 import * as React from "react";
-import { Page, DataForm } from "../components";
+import { Page, DataForm } from "@montr-core/components";
 import { IFormField, IApiResult } from "@montr-core/models";
 import { Spin } from "antd";
 import { MetadataService } from "@montr-core/services";
-import { ILoginModel } from "@montr-core/models/login-model";
+import { ILoginModel } from "../models/";
 import { Link } from "react-router-dom";
 import { Translation } from "react-i18next";
 

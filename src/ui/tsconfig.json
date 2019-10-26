@@ -18,6 +18,9 @@
 			"@montr-core/*": [
 				"modules/montr-core/*"
 			],
+			"@montr-idx/*": [
+				"modules/montr-idx/*"
+			],
 			"@montr-master-data/*": [
 				"modules/montr-master-data/*"
 			],
