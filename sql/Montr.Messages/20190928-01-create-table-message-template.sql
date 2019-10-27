@@ -37,7 +37,6 @@ values ('4D3C920C-ABFC-4F21-B900-6AFB894413DD',
 ');
 */
 
-
 /*
 insert into message_template(uid, subject, body)
 values ('CEEF2983-C083-448F-88B1-2DA6E6CB41A4',
@@ -45,5 +44,15 @@ values ('CEEF2983-C083-448F-88B1-2DA6E6CB41A4',
 	   '### Hello!
 
 Please confirm your account by clicking here <{{CallbackUrl}}>.
+');
+*/
+
+/*
+insert into message_template(uid, subject, body)
+values ('34ED7F4F-7C6F-44A4-8FA6-2C6F38AB69E0',
+	   '❗ Reset Password',
+	   '### Hello!
+
+Please reset your password by clicking here <{{CallbackUrl}}>.
 ');
 */

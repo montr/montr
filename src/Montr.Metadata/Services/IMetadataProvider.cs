@@ -160,6 +160,14 @@ namespace Montr.Metadata.Services
 				};
 			}
 
+			if (viewId == "ForgotPassword/Form")
+			{
+				result.Fields = new List<FormField>
+				{
+					new StringField { Key = "email", Name = "Email", Required = true }
+				};
+			}
+
 			if (viewId == "Register/Form")
 			{
 				result.Fields = new List<FormField>

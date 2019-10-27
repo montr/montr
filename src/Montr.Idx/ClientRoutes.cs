@@ -9,5 +9,7 @@
 		public static readonly string RegisterConfirmation = "/account/register-confirmation";
 
 		public static readonly string ConfirmEmail = "/account/confirm-email";
+
+		public static readonly string ResetPassword = "/account/reset-password";
 	}
 }

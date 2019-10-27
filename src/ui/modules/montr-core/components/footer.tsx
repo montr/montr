@@ -9,7 +9,7 @@ export const Footer = () => {
 			<img alt="GitHub Actions status" src="//github.com/montr/montr/workflows/build/badge.svg" />
 		</a>
 
-		<span style={{ float: "right", paddingRight: 10 }}>
+		<span className="language-selector">
 			<LanguageSelector />
 		</span>
 	</>);
