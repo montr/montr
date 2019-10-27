@@ -28,6 +28,7 @@ namespace Host
 		}
 
 		public ILogger Logger { get; }
+
 		public IWebHostEnvironment Environment { get; }
 
 		public IConfiguration Configuration { get; }
@@ -92,11 +93,15 @@ namespace Host
 				x.UseExceptionHandler("/Home/Error");
 			});
 
-			app.UseCors("default");
 			app.UseHsts();
 			app.UseStaticFiles();
 			app.UseCookiePolicy();
-			app.UseAuthentication();
+
+			app.UseAuthorization();
+
+			// app.UseCors("default"); // not needed, since UseIdentityServer adds cors
+			// app.UseAuthentication(); // not needed, since UseIdentityServer adds the authentication middleware
+			app.UseIdentityServer();
 
 			foreach (var module in _modules.OfType<IWebModule>())
 			{
@@ -104,6 +109,15 @@ namespace Host
 			}
 
 			app.UseRouting();
+
+			app.UseEndpoints(endpoints =>
+			{
+				endpoints.MapControllers();
+				endpoints.MapRazorPages();
+				// endpoints.MapHub<MyChatHub>()
+				// endpoints.MapGrpcService<MyCalculatorService>()
+				endpoints.MapDefaultControllerRoute();
+			});
 
 			app.UseMvc(routes =>
 			{

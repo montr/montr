@@ -6,7 +6,7 @@ using Montr.Idx.Commands;
 
 namespace Montr.Idx.Controllers
 {
-	[/*Authorize,*/ ApiController, Route("api/[controller]/[action]")]
+	[ApiController, Route("api/[controller]/[action]")]
 	public class AccountController : ControllerBase
 	{
 		private readonly IMediator _mediator;
@@ -14,6 +14,12 @@ namespace Montr.Idx.Controllers
 		public AccountController(IMediator mediator)
 		{
 			_mediator = mediator;
+		}
+
+		[HttpPost]
+		public async Task<ApiResult> Login(LoginCommand request)
+		{
+			return await _mediator.Send(request);
 		}
 
 		[HttpPost]

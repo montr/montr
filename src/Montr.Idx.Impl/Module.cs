@@ -23,11 +23,16 @@ namespace Montr.Idx.Impl
 
 		public void ConfigureServices(IConfiguration configuration, IServiceCollection services)
 		{
+			// todo: move from impl?
 			services.Configure<IdentityOptions>(options =>
 			{
-				options.User.RequireUniqueEmail = false;
+				options.SignIn.RequireConfirmedAccount = false;
+				options.SignIn.RequireConfirmedEmail = false;
+				options.SignIn.RequireConfirmedPhoneNumber = false;
 
-				/* // Password settings.
+				options.User.RequireUniqueEmail = false;
+				options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
+
 				options.Password.RequireDigit = true;
 				options.Password.RequireLowercase = true;
 				options.Password.RequireNonAlphanumeric = true;
@@ -35,14 +40,9 @@ namespace Montr.Idx.Impl
 				options.Password.RequiredLength = 6;
 				options.Password.RequiredUniqueChars = 1;
 
-				// Lockout settings.
 				options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
 				options.Lockout.MaxFailedAccessAttempts = 5;
 				options.Lockout.AllowedForNewUsers = true;
-
-				// User settings.
-				options.User.AllowedUserNameCharacters =
-					"abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+"; */
 			});
 
 			// https://github.com/linq2db/linq2db/issues/286
@@ -62,7 +62,8 @@ namespace Montr.Idx.Impl
 
 			var idxServerOptions = configuration.GetSection("IdxServer").Get<IdxServerOptions>();
 
-			var builder = services.AddIdentityServer(options =>
+			var builder = services
+				.AddIdentityServer(options =>
 				{
 					options.PublicOrigin = idxServerOptions.PublicOrigin;
 					options.Authentication.CookieAuthenticationScheme = IdentityConstants.ApplicationScheme;

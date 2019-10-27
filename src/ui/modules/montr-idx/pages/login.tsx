@@ -6,6 +6,7 @@ import { MetadataService } from "@montr-core/services";
 import { ILoginModel } from "../models/";
 import { Link } from "react-router-dom";
 import { Translation } from "react-i18next";
+import { AccountService } from "../services/account-service";
 
 interface IProps {
 }
@@ -19,6 +20,7 @@ interface IState {
 export default class Login extends React.Component<IProps, IState> {
 
 	private _metadataService = new MetadataService();
+	private _accountService = new AccountService();
 
 	constructor(props: IProps) {
 		super(props);
@@ -35,6 +37,7 @@ export default class Login extends React.Component<IProps, IState> {
 
 	componentWillUnmount = async () => {
 		await this._metadataService.abort();
+		await this._accountService.abort();
 	}
 
 	fetchData = async () => {
@@ -44,7 +47,7 @@ export default class Login extends React.Component<IProps, IState> {
 	}
 
 	save = async (values: ILoginModel): Promise<IApiResult> => {
-		return null;
+		return await this._accountService.login(values);
 	}
 
 	render = () => {
