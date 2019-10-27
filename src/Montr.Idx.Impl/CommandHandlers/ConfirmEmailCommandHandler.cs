@@ -32,6 +32,7 @@ namespace Montr.Idx.Impl.CommandHandlers
 				return new ApiResult { Success = false };
 			}
 
+			// todo: move to EmailConfirmationService
 			var user = await _userManager.FindByIdAsync(request.UserId);
 
 			if (user == null)

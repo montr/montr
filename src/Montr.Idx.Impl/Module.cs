@@ -23,11 +23,13 @@ namespace Montr.Idx.Impl
 
 		public void ConfigureServices(IConfiguration configuration, IServiceCollection services)
 		{
+			services.AddTransient<EmailConfirmationService, EmailConfirmationService>();
+
 			// todo: move from impl?
 			services.Configure<IdentityOptions>(options =>
 			{
 				options.SignIn.RequireConfirmedAccount = false;
-				options.SignIn.RequireConfirmedEmail = false;
+				options.SignIn.RequireConfirmedEmail = true;
 				options.SignIn.RequireConfirmedPhoneNumber = false;
 
 				options.User.RequireUniqueEmail = false;

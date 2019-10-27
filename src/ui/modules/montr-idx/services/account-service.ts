@@ -9,6 +9,10 @@ export class AccountService extends Fetcher {
 		return this.post(`${Constants.apiURL}/account/login`, request);
 	};
 
+	sendEmailConfirmation = async (request: ILoginModel): Promise<IApiResult> => {
+		return this.post(`${Constants.apiURL}/account/sendEmailConfirmation`, request);
+	};
+
 	register = async (request: IRegisterUserModel): Promise<IApiResult> => {
 		return this.post(`${Constants.apiURL}/account/register`, request);
 	};

@@ -33,6 +33,13 @@ export class WrappedDataForm extends React.Component<IProps, IState> {
 		};
 	}
 
+	getFieldValue = async (fieldName: string) => {
+
+		const { form } = this.props;
+
+		return form.getFieldValue(fieldName);
+	}
+
 	handleSubmit = async (e: React.SyntheticEvent) => {
 		e.preventDefault();
 

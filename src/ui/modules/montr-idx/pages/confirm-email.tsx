@@ -60,6 +60,9 @@ export default class ConfirmEmail extends React.Component<IProps, IState> {
 			<Translation ns="idx">
 				{(t) => <Page title={t("page.confirmEmail.title")}>
 					<Spin spinning={loading}>
+
+						{!loading && <p>Thank you for confirming your email.</p>}
+
 						<Button disabled={loading} onClick={this.handleContinue}>{t("button.continue")}</Button>
 					</Spin>
 				</Page>}

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Page, DataForm } from "@montr-core/components";
+import { Page, DataForm, WrappedDataForm } from "@montr-core/components";
 import { IFormField, IApiResult } from "@montr-core/models";
 import { Spin } from "antd";
 import { MetadataService } from "@montr-core/services";
@@ -22,6 +22,8 @@ export default class Login extends React.Component<IProps, IState> {
 	private _metadataService = new MetadataService();
 	private _accountService = new AccountService();
 
+	private _formRef: WrappedDataForm;
+
 	constructor(props: IProps) {
 		super(props);
 
@@ -40,14 +42,24 @@ export default class Login extends React.Component<IProps, IState> {
 		await this._accountService.abort();
 	}
 
+	saveFormRef = (formRef: WrappedDataForm) => {
+		this._formRef = formRef;
+	}
+
 	fetchData = async () => {
 		const dataView = await this._metadataService.load("Login/Form");
 
 		this.setState({ loading: false, fields: dataView.fields });
 	}
 
-	save = async (values: ILoginModel): Promise<IApiResult> => {
+	login = async (values: ILoginModel): Promise<IApiResult> => {
 		return await this._accountService.login(values);
+	}
+
+	sendEmailConfirmation = async (): Promise<IApiResult> => {
+		return await this._accountService.sendEmailConfirmation({
+			email: await this._formRef.getFieldValue("email")
+		});
 	}
 
 	render = () => {
@@ -64,7 +76,8 @@ export default class Login extends React.Component<IProps, IState> {
 							<DataForm
 								fields={fields}
 								data={data}
-								onSubmit={this.save}
+								wrappedComponentRef={this.saveFormRef}
+								onSubmit={this.login}
 								submitButton={t("button.login")}
 							/>
 						</Spin>
@@ -72,6 +85,7 @@ export default class Login extends React.Component<IProps, IState> {
 
 					<p><Link to="/account/forgot-password">{t("page.login.link.forgotPassword")}</Link></p>
 					<p><Link to="/account/register">{t("page.login.link.register")}</Link></p>
+					<p><a onClick={this.sendEmailConfirmation}>{t("page.login.link.resendEmailConfirmation")}</a></p>
 
 					<h3>{t("page.login.section.loginExternal")}</h3>
 

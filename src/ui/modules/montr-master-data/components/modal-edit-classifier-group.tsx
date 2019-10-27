@@ -28,7 +28,7 @@ class _ModalEditClassifierGroup extends React.Component<IProps, IState> {
 	private _metadataService = new MetadataService();
 	private _classifierGroupService = new ClassifierGroupService();
 
-	_formRef: WrappedDataForm;
+	private _formRef: WrappedDataForm;
 
 	constructor(props: IProps) {
 		super(props);

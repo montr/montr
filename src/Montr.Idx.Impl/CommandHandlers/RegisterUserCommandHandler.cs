@@ -2,19 +2,17 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using Montr.Core.Models;
 using Montr.Core.Services;
 using Montr.Idx.Commands;
 using Montr.Idx.Impl.Entities;
+using Montr.Idx.Impl.Services;
 using Montr.Idx.Models;
-using Montr.Messages.Services;
 
 namespace Montr.Idx.Impl.CommandHandlers
 {
@@ -24,23 +22,21 @@ namespace Montr.Idx.Impl.CommandHandlers
 		private readonly UserManager<DbUser> _userManager;
 		private readonly SignInManager<DbUser> _signInManager;
 		private readonly IAppUrlBuilder _appUrlBuilder;
-		private readonly IEmailSender _emailSender;
-		private readonly ITemplateRenderer _templateRenderer;
+		private readonly EmailConfirmationService _emailConfirmationService;
 
 		public RegisterUserCommandHandler(
 			ILogger<RegisterUserCommandHandler> logger,
 			UserManager<DbUser> userManager,
 			SignInManager<DbUser> signInManager,
 			IAppUrlBuilder appUrlBuilder,
-			IEmailSender emailSender,
-			ITemplateRenderer templateRenderer)
+			EmailConfirmationService emailConfirmationService)
 		{
 			_logger = logger;
 			_userManager = userManager;
 			_signInManager = signInManager;
 			_appUrlBuilder = appUrlBuilder;
-			_emailSender = emailSender;
-			_templateRenderer = templateRenderer;
+
+			_emailConfirmationService = emailConfirmationService;
 		}
 
 		public async Task<ApiResult> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
@@ -48,6 +44,7 @@ namespace Montr.Idx.Impl.CommandHandlers
 			var model = (RegisterUserModel)request;
 			var validationResults = new List<ValidationResult>();
 
+			// todo: remove validation
 			if (Validator.TryValidateObject(model, new ValidationContext(model), validationResults, true))
 			{
 				var user = new DbUser
@@ -65,7 +62,7 @@ namespace Montr.Idx.Impl.CommandHandlers
 				{
 					_logger.LogInformation("User created a new account with password.");
 
-					await SendEmailConfirmationMessage(user, cancellationToken);
+					await _emailConfirmationService.SendMessage(user, cancellationToken);
 
 					if (_userManager.Options.SignIn.RequireConfirmedAccount)
 					{
@@ -105,24 +102,6 @@ namespace Montr.Idx.Impl.CommandHandlers
 					}
 				}
 			};
-		}
-
-		private async Task SendEmailConfirmationMessage(DbUser user, CancellationToken cancellationToken)
-		{
-			var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-
-			code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
-
-			var messageModel = new ConfirmEmailMessageModel
-			{
-				CallbackUrl = _appUrlBuilder.Build($"{ClientRoutes.ConfirmEmail}/{user.Id}/{code}") 
-			};
-
-			var templateUid = Guid.Parse("CEEF2983-C083-448F-88B1-2DA6E6CB41A4");
-
-			var message = await _templateRenderer.Render(templateUid, messageModel, cancellationToken);
-
-			await _emailSender.Send(user.Email, message.Subject, message.Body);
 		}
 	}
 }
