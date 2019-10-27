@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Linq;
+using System.Net;
 using Microsoft.AspNetCore.Http;
 
 namespace Montr.Web.Services
@@ -37,6 +38,10 @@ namespace Montr.Web.Services
 			}
 
 			throw new InvalidOperationException("User is not authenticated");
+			// throw new UnauthorizedAccessException("User is not authenticated");
+			// _httpContextAccessor.HttpContext.Response.StatusCode = (int)HttpStatusCode.Forbidden;
+
+			return default;
 		}
 
 		public Guid GetUserUid()

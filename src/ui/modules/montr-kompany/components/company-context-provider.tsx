@@ -5,7 +5,7 @@ import { CompanyService, } from "../services";
 import { CompanyContextProps, CompanyContext } from "./";
 import { Constants } from "@montr-core/.";
 import { Guid } from "@montr-core/models";
-import { NavigationService, NotificationService } from "@montr-core/services";
+import { NavigationService, NotificationService, AuthService } from "@montr-core/services";
 
 interface State {
 	currentCompany?: ICompany;
@@ -17,6 +17,7 @@ export class CompanyContextProvider extends React.Component<any, State> {
 	private _cookies = new Cookies();
 	private _navigation = new NavigationService();
 	private _notification = new NotificationService();
+	private _authService = new AuthService();
 	private _companyService = new CompanyService();
 
 	constructor(props: any) {
@@ -28,7 +29,11 @@ export class CompanyContextProvider extends React.Component<any, State> {
 	}
 
 	componentDidMount = async () => {
-		this.switchCompany();
+		const user = await this._authService.getUser();
+
+		if (user) {
+			await this.switchCompany();
+		}
 	}
 
 	componentWillUnmount = async () => {

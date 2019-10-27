@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Montr.Core.Models;
 using Montr.Kompany.Services;
-using Montr.Metadata.Models;
 using Montr.Tendr.Commands;
 using Montr.Tendr.Models;
 using Montr.Tendr.Queries;

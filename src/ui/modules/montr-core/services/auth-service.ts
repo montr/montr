@@ -52,31 +52,31 @@ export class AuthService {
 
 		// todo: use logger here and below
 		this._userManager.events.addAccessTokenExpired((...args: any[]) => {
-			// console.log("AccessTokenExpired", window.frameElement, args);
+			console.log("AccessTokenExpired", window.frameElement, args);
 			message.error("AccessTokenExpired");
 		});
 		this._userManager.events.addAccessTokenExpiring((...args: any[]) => {
-			// console.log("AccessTokenExpiring", window.frameElement, args);
+			console.log("AccessTokenExpiring", window.frameElement, args);
 			message.warning("AccessTokenExpiring");
 		});
 		this._userManager.events.addSilentRenewError((...args: any[]) => {
-			// console.log("SilentRenewError", window.frameElement, args);
+			console.log("SilentRenewError", window.frameElement, args);
 			message.error("SilentRenewError");
 		});
 		this._userManager.events.addUserLoaded((...args: any[]) => {
-			// console.log("UserLoaded", window.frameElement, args);
+			console.log("UserLoaded", window.frameElement, args);
 			message.info("UserLoaded");
 		});
 		this._userManager.events.addUserSessionChanged((...args: any[]) => {
-			// console.log("UserSessionChanged", window.frameElement, args);
+			console.log("UserSessionChanged", window.frameElement, args);
 			message.info("UserSessionChanged");
 		});
 		this._userManager.events.addUserSignedOut((...args: any[]) => {
-			// console.log("UserSignedOut", window.frameElement, args);
+			console.log("UserSignedOut", window.frameElement, args);
 			message.info("UserSignedOut");
 		});
 		this._userManager.events.addUserUnloaded((...args: any[]) => {
-			// console.log("UserUnloaded", window.frameElement, args);
+			console.log("UserUnloaded", window.frameElement, args);
 			message.info("UserUnloaded");
 		});
 
@@ -95,6 +95,8 @@ export class AuthService {
 
 	public processCallback(): void {
 		const url = this._navigator.getUrl();
+
+		console.log("processCallback()", window.frameElement, url);
 
 		if (url.indexOf(AuthConstants.RedirectUri) !== -1) {
 			this._userManager.signinRedirectCallback(url)
@@ -164,6 +166,12 @@ export class AuthService {
 		// todo: add PR to rename addUserLoaded -> addAuthenticated
 		return this._userManager.events.addUserLoaded((user: User) => {
 			callback(user);
+		});
+	}
+
+	public addUserSignedOut(callback: () => void): void {
+		return this._userManager.events.addUserSignedOut(() => {
+			callback();
 		});
 	}
 }

@@ -53,7 +53,13 @@ export default class Login extends React.Component<IProps, IState> {
 	}
 
 	login = async (values: ILoginModel): Promise<IApiResult> => {
-		return await this._accountService.login(values);
+		const result = await this._accountService.login(values);
+
+		const params = new URLSearchParams(window.location.search);
+		const returnUrl = params.get("ReturnUrl");
+		window.location.href = returnUrl || "/";
+
+		return result;
 	}
 
 	sendEmailConfirmation = async (): Promise<IApiResult> => {

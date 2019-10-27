@@ -41,6 +41,12 @@ namespace Montr.Idx.Controllers
 		}
 
 		[HttpPost]
+		public async Task<ApiResult> Logout(LogoutCommand request)
+		{
+			return await _mediator.Send(request);
+		}
+
+		[HttpPost]
 		public async Task<ApiResult> ForgotPassword(ForgotPasswordCommand request)
 		{
 			return await _mediator.Send(request);

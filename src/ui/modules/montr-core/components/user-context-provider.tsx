@@ -24,7 +24,11 @@ export class UserContextProvider extends React.Component<any, UserContextState> 
 		this._authService.onAuthenticated((user: User) => {
 			this.setState({ user });
 			// this.getUser(false);
-		})
+		});
+
+		this._authService.addUserSignedOut(() => {
+			this.setState({ user: null });
+		});
 	}
 
 	login = () => {

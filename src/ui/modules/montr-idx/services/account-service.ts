@@ -17,16 +17,20 @@ export class AccountService extends Fetcher {
 		return this.post(`${Constants.apiURL}/account/confirmEmail`, request);
 	};
 
+	login = async (request: ILoginModel): Promise<IApiResult> => {
+		return this.post(`${Constants.apiURL}/account/login`, request);
+	};
+
+	logout = async (): Promise<IApiResult> => {
+		return this.post(`${Constants.apiURL}/account/logout`, {});
+	};
+
 	forgotPassword = async (request: IForgotPasswordModel): Promise<IApiResult> => {
 		return this.post(`${Constants.apiURL}/account/forgotPassword`, request);
 	};
 
 	resetPassword = async (request: IResetPasswordModel): Promise<IApiResult> => {
 		return this.post(`${Constants.apiURL}/account/resetPassword`, request);
-	};
-
-	login = async (request: ILoginModel): Promise<IApiResult> => {
-		return this.post(`${Constants.apiURL}/account/login`, request);
 	};
 
 }

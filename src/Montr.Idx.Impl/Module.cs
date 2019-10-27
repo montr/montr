@@ -72,8 +72,8 @@ namespace Montr.Idx.Impl
 
 					options.Cors.CorsPolicyName = "default";
 
-					options.UserInteraction.LoginUrl = "/Identity/Account/Login";
-					options.UserInteraction.LogoutUrl = "/Account/Logout";
+					options.UserInteraction.LoginUrl = "/account/login";
+					options.UserInteraction.LogoutUrl = "/account/logout";
 				})
 				// https://www.scottbrady91.com/Identity-Server/Creating-Your-Own-IdentityServer4-Storage-Library
 				// https://damienbod.com/2017/12/30/using-an-ef-core-database-for-the-identityserver4-configuration-data/

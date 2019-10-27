@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Montr.Core.Models;
 using Montr.Kompany.Services;
@@ -9,7 +10,7 @@ using Montr.Web.Services;
 
 namespace Montr.Tendr.Controllers
 {
-	[ApiController, Route("api/[controller]/[action]")]
+	[Authorize, ApiController, Route("api/[controller]/[action]")]
 	public class EventTemplateController : ControllerBase
 	{
 		private readonly IMediator _mediator;

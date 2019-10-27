@@ -26,6 +26,8 @@
       "page.login.section.loginExternal": "Use another service to log in.",
       "page.login.section.loginLocal": "Use a local account to log in.",
       "page.login.title": "Log in",
+      "page.logout.message": "You have successfully logged out of the application.",
+      "page.logout.title": "Log out",
       "page.register.subtitle": "Create a new account.",
       "page.register.title": "Register",
       "page.resetPassword.subtitle": "Reset your password.",

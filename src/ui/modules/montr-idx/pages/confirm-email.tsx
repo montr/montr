@@ -1,8 +1,6 @@
 import * as React from "react";
 import { Page } from "@montr-core/components";
-import { IApiResult } from "@montr-core/models";
 import { Spin, Button } from "antd";
-import { ILoginModel } from "../models/";
 import { RouteComponentProps } from "react-router-dom";
 import { Translation } from "react-i18next";
 import { AccountService } from "../services/account-service";
