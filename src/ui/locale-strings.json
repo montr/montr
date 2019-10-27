@@ -8,6 +8,7 @@
       "button.publish": "Publish",
       "button.save": "Save",
       "button.search": "Search",
+      "button.submit": "Submit",
       "confirm.title": "Confirm operation",
       "operation.error": "An error occurred while performing the operation.",
       "operation.success": "The operation completed successfully."
@@ -15,14 +16,20 @@
     "idx": {
       "button.login": "Log in",
       "button.register": "Register",
+      "button.resetPassword": "Reset",
       "page.confirmEmail.title": "Confirm email",
+      "page.forgotPassword.subtitle": "Enter your email.",
+      "page.forgotPassword.title": "Forgot your password?",
       "page.login.link.forgotPassword": "Forgot your password?",
       "page.login.link.register": "Register as a new user",
+      "page.login.link.resendEmailConfirmation": "Resend email confirmation",
       "page.login.section.loginExternal": "Use another service to log in.",
       "page.login.section.loginLocal": "Use a local account to log in.",
       "page.login.title": "Log in",
       "page.register.subtitle": "Create a new account.",
-      "page.register.title": "Register"
+      "page.register.title": "Register",
+      "page.resetPassword.subtitle": "Reset your password.",
+      "page.resetPassword.title": "Reset password"
     },
     "tendr": {
       "cancel.confirm.content": "Are you sure you want to cancel the event?",
@@ -45,6 +52,7 @@
     "idx": {
       "button.login": "Войти",
       "button.register": "Зарегистрироваться",
+      "button.resetPassword": "Сбросить",
       "page.confirmEmail.title": "Подтверждение электронной почты",
       "page.login.link.forgotPassword": "Забыли пароль?",
       "page.login.link.register": "Зарегистрироваться как новый пользователь",

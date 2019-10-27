@@ -150,6 +150,7 @@ namespace Montr.Metadata.Services
 				};
 			}
 
+			// Montr.Idx
 			if (viewId == "Login/Form")
 			{
 				result.Fields = new List<FormField>
@@ -160,11 +161,21 @@ namespace Montr.Metadata.Services
 				};
 			}
 
-			if (viewId == "ForgotPassword/Form")
+			if (viewId == "ForgotPassword/Form" || viewId == "SendEmailConfirmation/Form")
 			{
 				result.Fields = new List<FormField>
 				{
 					new StringField { Key = "email", Name = "Email", Required = true }
+				};
+			}
+			
+			if (viewId == "ResetPassword/Form")
+			{
+				result.Fields = new List<FormField>
+				{
+					new StringField { Key = "email", Name = "Email", Required = true },
+					new PasswordField { Key = "password", Name = "Password", Required = true }
+					// new PasswordField { Key = "confirmPassword", Name = "Confirm Password", Required = true }
 				};
 			}
 

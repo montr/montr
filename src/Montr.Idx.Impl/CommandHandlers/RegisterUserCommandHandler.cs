@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
@@ -12,7 +10,6 @@ using Montr.Core.Services;
 using Montr.Idx.Commands;
 using Montr.Idx.Impl.Entities;
 using Montr.Idx.Impl.Services;
-using Montr.Idx.Models;
 
 namespace Montr.Idx.Impl.CommandHandlers
 {
@@ -41,67 +38,40 @@ namespace Montr.Idx.Impl.CommandHandlers
 
 		public async Task<ApiResult> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
 		{
-			var model = (RegisterUserModel)request;
-			var validationResults = new List<ValidationResult>();
 
-			// todo: remove validation
-			if (Validator.TryValidateObject(model, new ValidationContext(model), validationResults, true))
+			var user = new DbUser
 			{
-				var user = new DbUser
+				Id = Guid.NewGuid(),
+				UserName = request.Email,
+				FirstName = request.FirstName,
+				LastName = request.LastName,
+				Email = request.Email
+			};
+
+			var identityResult = await _userManager.CreateAsync(user, request.Password);
+
+			if (identityResult.Succeeded)
+			{
+				_logger.LogInformation("User created a new account with password.");
+
+				await _emailConfirmationService.SendMessage(user, cancellationToken);
+
+				if (_userManager.Options.SignIn.RequireConfirmedAccount)
 				{
-					Id = Guid.NewGuid(),
-					UserName = request.Email,
-					FirstName = request.FirstName,
-					LastName = request.LastName,
-					Email = request.Email
-				};
+					// return RedirectToPage("RegisterConfirmation", new { email = request.Email });
 
-				var identityResult = await _userManager.CreateAsync(user, request.Password);
+					var redirectUrl = _appUrlBuilder.Build(ClientRoutes.RegisterConfirmation,
+						new Dictionary<string, string> { { "email", request.Email } });
 
-				if (identityResult.Succeeded)
-				{
-					_logger.LogInformation("User created a new account with password.");
-
-					await _emailConfirmationService.SendMessage(user, cancellationToken);
-
-					if (_userManager.Options.SignIn.RequireConfirmedAccount)
-					{
-						// return RedirectToPage("RegisterConfirmation", new { email = request.Email });
-
-						var redirectUrl = _appUrlBuilder.Build(ClientRoutes.RegisterConfirmation,
-							new Dictionary<string, string> { {"email", request.Email} });
-
-						return new ApiResult { Success = true, RedirectUrl = redirectUrl };
-					}
-
-					await _signInManager.SignInAsync(user, isPersistent: false);
-
-					return new ApiResult { Success = true, RedirectUrl = request.ReturnUrl };
+					return new ApiResult { Success = true, RedirectUrl = redirectUrl };
 				}
 
-				return new ApiResult
-				{
-					Success = false,
-					Errors = identityResult.Errors
-						.Select(x => new ApiResultError
-						{
-							Key = x.Code,
-							Messages = new[] { x.Description }
-						}).ToArray()
-				};
+				await _signInManager.SignInAsync(user, isPersistent: false);
+
+				return new ApiResult { Success = true, RedirectUrl = request.ReturnUrl };
 			}
 
-			return new ApiResult
-			{
-				Success = false,
-				Errors = new[]
-				{
-					new ApiResultError
-					{
-						Messages = validationResults.Select(x => x.ErrorMessage).ToArray()
-					}
-				}
-			};
+			return identityResult.ToApiResult();
 		}
 	}
 }

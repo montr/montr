@@ -20,6 +20,7 @@ namespace Montr.Core.Models
 
 		public string RedirectUrl { get; set; }
 
+		// todo: remove, use client redirect
 		public string RedirectRoute { get; set; }
 
 		public IList<ApiResultError> Errors { get; set; }

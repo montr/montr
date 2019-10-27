@@ -17,7 +17,7 @@ namespace Montr.Idx.Controllers
 		}
 
 		[HttpPost]
-		public async Task<ApiResult> Login(LoginCommand request)
+		public async Task<ApiResult> Register(RegisterUserCommand request)
 		{
 			return await _mediator.Send(request);
 		}
@@ -29,19 +29,25 @@ namespace Montr.Idx.Controllers
 		}
 
 		[HttpPost]
+		public async Task<ApiResult> ConfirmEmail(ConfirmEmailCommand request)
+		{
+			return await _mediator.Send(request);
+		}
+
+		[HttpPost]
+		public async Task<ApiResult> Login(LoginCommand request)
+		{
+			return await _mediator.Send(request);
+		}
+
+		[HttpPost]
 		public async Task<ApiResult> ForgotPassword(ForgotPasswordCommand request)
 		{
 			return await _mediator.Send(request);
 		}
 
 		[HttpPost]
-		public async Task<ApiResult> Register(RegisterUserCommand request)
-		{
-			return await _mediator.Send(request);
-		}
-
-		[HttpPost]
-		public async Task<ApiResult> ConfirmEmail(ConfirmEmailCommand request)
+		public async Task<ApiResult> ResetPassword(ResetPasswordCommand request)
 		{
 			return await _mediator.Send(request);
 		}

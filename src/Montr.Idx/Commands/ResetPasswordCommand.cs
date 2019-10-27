@@ -1,10 +1,13 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using MediatR;
+using Montr.Core.Models;
 
-namespace Montr.Idx.Models
+namespace Montr.Idx.Commands
 {
-	public class LoginModel
+	public class ResetPasswordCommand : IRequest<ApiResult>
 	{
-		public string ReturnUrl { get; set; }
+		[Required]
+		public string Code { get; set; }
 
 		[Required]
 		[EmailAddress]
@@ -15,8 +18,5 @@ namespace Montr.Idx.Models
 		[StringLength(100, ErrorMessage = "The {0} must be at least {2} and at max {1} characters long.", MinimumLength = 6)]
 		[DataType(DataType.Password)]
 		public string Password { get; set; }
-
-		[Display(Name = "Remember me?")]
-		public bool RememberMe { get; set; }
 	}
 }
