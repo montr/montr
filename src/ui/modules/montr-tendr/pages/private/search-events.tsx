@@ -57,7 +57,7 @@ export default class SearchEvents extends React.Component<Props, State> {
 				<Form layout="inline">
 					<Form.Item>
 						<Select mode="multiple" placeholder="Выберите тип" style={{ minWidth: 200 }}>
-							{configCodes.map(x => {
+							{configCodes && configCodes.map(x => {
 								return <Select.Option key={`${x.uid}`} value={`${x.uid}`}>{x.name}</Select.Option>
 							})}
 						</Select>
