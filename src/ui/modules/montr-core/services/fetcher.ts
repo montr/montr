@@ -16,7 +16,7 @@ authenticated.interceptors.request.use(
 		const user = await authService.getUser();
 
 		if (user && user.access_token) {
-			// config.headers.Authorization = `Bearer ${user.access_token}`;
+			config.headers.Authorization = `Bearer ${user.access_token}`;
 		}
 
 		return config;
