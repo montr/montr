@@ -5,10 +5,12 @@ using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Montr.Idx;
 using Montr.Modularity;
 using Montr.Web;
 using Montr.Web.Services;
@@ -41,13 +43,16 @@ namespace Host
 				options.MinimumSameSitePolicy = SameSiteMode.None;
 			});
 
+			var idxServerOptions = Configuration.GetSection("IdxServer").Get<IdxServerOptions>();
+
 			services.AddCors(options =>
 			{
 				options.AddPolicy("default", policy =>
 				{
 					policy
-						.WithOrigins(
-							System.Environment.GetEnvironmentVariable("APP_URL"))
+						.WithOrigins(idxServerOptions.ClientUrls)
+						/*.WithOrigins(
+							System.Environment.GetEnvironmentVariable("APP_URL"))*/
 						.WithExposedHeaders("content-disposition") // to export work (fetcher.openFile) 
 						.AllowCredentials()
 						.AllowAnyHeader()
@@ -71,8 +76,14 @@ namespace Host
 					options.JsonSerializerOptions.IgnoreNullValues = true;
 					options.JsonSerializerOptions.WriteIndented = false;
 					options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+				})
+				.AddRazorPagesOptions(options =>
+				{
+					// options.AllowAreas = true;
+					// options.Conventions.AuthorizeAreaFolder("Identity", "/Account/Manage");
+					// options.Conventions.AuthorizeAreaPage("Identity", "/Account/Logout");
 				});
-				
+
 			foreach (var assembly in assemblies)
 			{
 				mvc.AddApplicationPart(assembly);
@@ -80,8 +91,8 @@ namespace Host
 
 			Microsoft.IdentityModel.Logging.IdentityModelEventSource.ShowPII = true;
 
-			services.AddOpenIdApiAuthentication(
-				Configuration.GetSection("OpenId").Get<OpenIdOptions>());
+			/*services.AddOpenIdApiAuthentication(
+				Configuration.GetSection("OpenId").Get<OpenIdOptions>());*/
 
 			services.AddMediatR(assemblies);
 		}
@@ -94,14 +105,14 @@ namespace Host
 			});
 
 			app.UseHsts();
+			// app.UseHttpsRedirection();
 			app.UseStaticFiles();
 			app.UseCookiePolicy();
-
-			app.UseAuthorization();
 
 			// app.UseCors("default"); // not needed, since UseIdentityServer adds cors
 			// app.UseAuthentication(); // not needed, since UseIdentityServer adds the authentication middleware
 			app.UseIdentityServer();
+			app.UseAuthorization();
 
 			foreach (var module in _modules.OfType<IWebModule>())
 			{
@@ -110,14 +121,14 @@ namespace Host
 
 			app.UseRouting();
 
-			app.UseEndpoints(endpoints =>
+			/*app.UseEndpoints(endpoints =>
 			{
 				endpoints.MapControllers();
 				endpoints.MapRazorPages();
 				// endpoints.MapHub<MyChatHub>()
 				// endpoints.MapGrpcService<MyCalculatorService>()
 				endpoints.MapDefaultControllerRoute();
-			});
+			});*/
 
 			app.UseMvc(routes =>
 			{

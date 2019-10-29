@@ -1,6 +1,14 @@
 ﻿using System;
 using System.Security.Cryptography;
+using System.Threading.Tasks;
+using IdentityServer4;
+using LinqToDB.Identity;
 using LinqToDB.Mapping;
+using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -64,11 +72,41 @@ namespace Montr.Idx.Impl
 
 			var idxServerOptions = configuration.GetSection("IdxServer").Get<IdxServerOptions>();
 
+			/*services.ConfigureApplicationCookie(options =>
+			{
+				options.LoginPath = PathString.Empty;
+				options.LoginPath = "/account/login";
+				options.LogoutPath = "/account/logout";
+				options.AccessDeniedPath = "/account/access-denied";
+
+				options.Events = new CookieAuthenticationEvents()
+				{
+					OnRedirectToLogin = (ctx) =>
+					{
+						if (ctx.Request.Path.StartsWithSegments("/api") && ctx.Response.StatusCode == 200)
+						{
+							ctx.Response.StatusCode = 401;
+						}
+
+						return Task.CompletedTask;
+					},
+					OnRedirectToAccessDenied = (ctx) =>
+					{
+						if (ctx.Request.Path.StartsWithSegments("/api") && ctx.Response.StatusCode == 200)
+						{
+							ctx.Response.StatusCode = 403;
+						}
+
+						return Task.CompletedTask;
+					}
+				};
+			});*/
+
 			var builder = services
 				.AddIdentityServer(options =>
 				{
 					options.PublicOrigin = idxServerOptions.PublicOrigin;
-					options.Authentication.CookieAuthenticationScheme = IdentityConstants.ApplicationScheme;
+					// options.Authentication.CookieAuthenticationScheme = IdentityConstants.ApplicationScheme;
 
 					options.Cors.CorsPolicyName = "default";
 
@@ -82,7 +120,47 @@ namespace Montr.Idx.Impl
 				.AddInMemoryIdentityResources(Config.GetIdentityResources())
 				.AddInMemoryApiResources(Config.GetApiResources())
 				.AddInMemoryClients(Config.GetClients(idxServerOptions.ClientUrls))
+				// .AddApiAuthorization<DbUser, ApiAuthorizationDbContext<DbUser>>()
 				.AddAspNetIdentity<DbUser>();
+
+			services
+				// .AddAuthentication("JwtBearer")
+				/*.AddAuthentication(options =>
+				{
+					// https://github.com/aspnetboilerplate/aspnetboilerplate/issues/2321
+					options.DefaultAuthenticateScheme = "JwtBearer";
+					options.DefaultChallengeScheme = "JwtBearer";
+				})*/
+				// .AddJwtAuthentication()
+				/*.AddAuthentication(options =>
+				{
+					// options.DefaultScheme = IdentityServerConstants.JwtRequestClientKey;
+				})*/
+				// .AddIdentityServerJwt()
+				/*.AddJwtBearer(options =>
+				{
+					// base-address of your identityserver
+					options.Authority = idxServerOptions.PublicOrigin;
+
+					// name of the API resource
+					options.Audience = "tendr";
+				})*/
+				/*.AddAuthentication(options =>
+				{
+					// x.DefaultAuthenticateScheme = IdentityServerConstants.DefaultCookieAuthenticationScheme;
+					// x.DefaultAuthenticateScheme = IdentityConstants.ApplicationScheme;
+					// x.DefaultSignInScheme = IdentityConstants.ApplicationScheme;
+					// x.DefaultSignOutScheme = IdentityConstants.ApplicationScheme;
+				})*/
+				.AddAuthentication()
+				.AddGoogle("Google", options =>
+				{
+					// options.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
+					options.SignInScheme = IdentityConstants.ExternalScheme;
+
+					options.ClientId = configuration["Authentication:Google:ClientId"];
+					options.ClientSecret = configuration["Authentication:Google:ClientSecret"];
+				});
 
 			if (_environment.IsDevelopment())
 			{
