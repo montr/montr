@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Montr.Core;
 using Montr.Messages.Services;
-using Montr.Modularity;
 
 namespace Montr.Messages
 {

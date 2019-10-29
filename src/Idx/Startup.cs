@@ -11,10 +11,11 @@ using Microsoft.IdentityModel.Tokens;
 using System.Security.Cryptography;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Montr.Core;
+using Montr.Core.Services;
 using Montr.Idx;
 using Montr.Idx.Impl;
 using Montr.Idx.Impl.Entities;
-using Montr.Modularity;
 using Montr.Web;
 
 namespace Idx

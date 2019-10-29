@@ -11,8 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Montr.Modularity\Montr.Modularity.csproj" />
-    <ProjectReference Include="..\Montr.Web\Montr.Web.csproj" />
+    <ProjectReference Include="..\Montr.Core\Montr.Core.csproj" />
     <ProjectReference Include="..\Montr.Worker\Montr.Worker.csproj" />
   </ItemGroup>
 

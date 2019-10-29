@@ -5,15 +5,13 @@ using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Montr.Core;
+using Montr.Core.Services;
 using Montr.Idx;
-using Montr.Modularity;
-using Montr.Web;
-using Montr.Web.Services;
 
 namespace Host
 {
@@ -47,7 +45,7 @@ namespace Host
 
 			services.AddCors(options =>
 			{
-				options.AddPolicy("default", policy =>
+				options.AddPolicy(AppConstants.CorsPolicyName, policy =>
 				{
 					policy
 						.WithOrigins(idxServerOptions.ClientUrls)
@@ -91,13 +89,10 @@ namespace Host
 
 			Microsoft.IdentityModel.Logging.IdentityModelEventSource.ShowPII = true;
 
-			/*services.AddOpenIdApiAuthentication(
-				Configuration.GetSection("OpenId").Get<OpenIdOptions>());*/
-
 			services.AddMediatR(assemblies);
 		}
 
-		public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+		public void Configure(IApplicationBuilder app)
 		{
 			app.UseWhen(context => context.Request.Path.StartsWithSegments("/api") == false, x =>
 			{
@@ -108,11 +103,6 @@ namespace Host
 			// app.UseHttpsRedirection();
 			app.UseStaticFiles();
 			app.UseCookiePolicy();
-
-			// app.UseCors("default"); // not needed, since UseIdentityServer adds cors
-			// app.UseAuthentication(); // not needed, since UseIdentityServer adds the authentication middleware
-			app.UseIdentityServer();
-			app.UseAuthorization();
 
 			foreach (var module in _modules.OfType<IWebModule>())
 			{

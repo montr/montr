@@ -6,7 +6,7 @@ using Hangfire.PostgreSql;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Montr.Web;
+using Montr.Core;
 using Montr.Worker.Hangfire.Services;
 using Montr.Worker.Services;
 using Newtonsoft.Json;

@@ -3,7 +3,7 @@ using System.ComponentModel;
 using System.Linq;
 using Microsoft.AspNetCore.Http;
 
-namespace Montr.Web.Services
+namespace Montr.Idx.Services
 {
 	public interface ICurrentUserProvider
 	{

@@ -1,8 +1,8 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Montr.Core;
 using Montr.Kompany.Impl.Services;
 using Montr.Kompany.Services;
-using Montr.Modularity;
 
 namespace Montr.Kompany.Impl
 {

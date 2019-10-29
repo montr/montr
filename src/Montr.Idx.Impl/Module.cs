@@ -1,26 +1,20 @@
 ﻿using System;
 using System.Security.Cryptography;
-using System.Threading.Tasks;
-using IdentityServer4;
-using LinqToDB.Identity;
 using LinqToDB.Mapping;
-using Microsoft.AspNetCore.ApiAuthorization.IdentityServer;
-using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
+using Montr.Core;
 using Montr.Idx.Impl.Entities;
 using Montr.Idx.Impl.Services;
-using Montr.Modularity;
 
 namespace Montr.Idx.Impl
 {
-	public class Module : IModule
+	// ReSharper disable once UnusedMember.Global
+	public class Module : IWebModule
 	{
 		private readonly IHostEnvironment _environment;
 
@@ -55,9 +49,7 @@ namespace Montr.Idx.Impl
 				options.Lockout.AllowedForNewUsers = true;
 			});
 
-			// https://github.com/linq2db/linq2db/issues/286
-			// https://github.com/linq2db/t4models
-			MapSchema(MappingSchema.Default);
+			IdentitySchemaMapper.MapSchema(MappingSchema.Default);
 
 			services
 				.AddIdentity<DbUser, DbRole>()
@@ -108,10 +100,10 @@ namespace Montr.Idx.Impl
 					options.PublicOrigin = idxServerOptions.PublicOrigin;
 					// options.Authentication.CookieAuthenticationScheme = IdentityConstants.ApplicationScheme;
 
-					options.Cors.CorsPolicyName = "default";
+					options.Cors.CorsPolicyName = AppConstants.CorsPolicyName;
 
-					options.UserInteraction.LoginUrl = "/account/login";
-					options.UserInteraction.LogoutUrl = "/account/logout";
+					options.UserInteraction.LoginUrl = ClientRoutes.Login;
+					options.UserInteraction.LogoutUrl = ClientRoutes.Logout;
 				})
 				// https://www.scottbrady91.com/Identity-Server/Creating-Your-Own-IdentityServer4-Storage-Library
 				// https://damienbod.com/2017/12/30/using-an-ef-core-database-for-the-identityserver4-configuration-data/
@@ -120,39 +112,14 @@ namespace Montr.Idx.Impl
 				.AddInMemoryIdentityResources(Config.GetIdentityResources())
 				.AddInMemoryApiResources(Config.GetApiResources())
 				.AddInMemoryClients(Config.GetClients(idxServerOptions.ClientUrls))
-				// .AddApiAuthorization<DbUser, ApiAuthorizationDbContext<DbUser>>()
 				.AddAspNetIdentity<DbUser>();
 
-			services
-				// .AddAuthentication("JwtBearer")
-				/*.AddAuthentication(options =>
-				{
-					// https://github.com/aspnetboilerplate/aspnetboilerplate/issues/2321
-					options.DefaultAuthenticateScheme = "JwtBearer";
-					options.DefaultChallengeScheme = "JwtBearer";
-				})*/
-				// .AddJwtAuthentication()
-				/*.AddAuthentication(options =>
-				{
-					// options.DefaultScheme = IdentityServerConstants.JwtRequestClientKey;
-				})*/
-				// .AddIdentityServerJwt()
-				/*.AddJwtBearer(options =>
-				{
-					// base-address of your identityserver
-					options.Authority = idxServerOptions.PublicOrigin;
+			/*services.AddOpenIdApiAuthentication(
+				configuration.GetSection("OpenId").Get<OpenIdOptions>());*/
 
-					// name of the API resource
-					options.Audience = "tendr";
-				})*/
-				/*.AddAuthentication(options =>
-				{
-					// x.DefaultAuthenticateScheme = IdentityServerConstants.DefaultCookieAuthenticationScheme;
-					// x.DefaultAuthenticateScheme = IdentityConstants.ApplicationScheme;
-					// x.DefaultSignInScheme = IdentityConstants.ApplicationScheme;
-					// x.DefaultSignOutScheme = IdentityConstants.ApplicationScheme;
-				})*/
+			services
 				.AddAuthentication()
+				// .AddIdentityServerJwt()
 				.AddGoogle("Google", options =>
 				{
 					// options.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
@@ -175,37 +142,12 @@ namespace Montr.Idx.Impl
 			}
 		}
 
-		public static void MapSchema(MappingSchema mappingSchema)
+		public void Configure(IApplicationBuilder app)
 		{
-			mappingSchema.GetFluentMappingBuilder()
-
-				.Entity<LinqToDB.Identity.IdentityRoleClaim<Guid>>().HasTableName("role_claim")
-				.Property(x => x.Id).HasColumnName("id").IsPrimaryKey()
-				.Property(x => x.RoleId).HasColumnName("role_id").IsNullable(false)
-				.Property(x => x.ClaimType).HasColumnName("claim_type").IsNullable(false)
-				.Property(x => x.ClaimValue).HasColumnName("claim_value").IsNullable(false)
-
-				.Entity<LinqToDB.Identity.IdentityUserClaim<Guid>>().HasTableName("user_claim")
-				.Property(x => x.Id).HasColumnName("id").IsPrimaryKey().IsIdentity()
-				.Property(x => x.UserId).HasColumnName("user_id").IsNullable(false)
-				.Property(x => x.ClaimType).HasColumnName("claim_type").IsNullable(false)
-				.Property(x => x.ClaimValue).HasColumnName("claim_value").IsNullable(false)
-
-				.Entity<LinqToDB.Identity.IdentityUserLogin<Guid>>().HasTableName("user_login")
-				.Property(x => x.LoginProvider).HasColumnName("login_provider").IsPrimaryKey(0)
-				.Property(x => x.ProviderKey).HasColumnName("provider_key").IsPrimaryKey(1)
-				.Property(x => x.UserId).HasColumnName("user_id").IsNullable(false)
-				.Property(x => x.ProviderDisplayName).HasColumnName("provider_display_name")
-
-				.Entity<LinqToDB.Identity.IdentityUserRole<Guid>>().HasTableName("user_role")
-				.Property(x => x.UserId).HasColumnName("user_id").IsPrimaryKey(0)
-				.Property(x => x.RoleId).HasColumnName("role_id").IsPrimaryKey(1)
-
-				.Entity<LinqToDB.Identity.IdentityUserToken<Guid>>().HasTableName("user_token")
-				.Property(x => x.UserId).HasColumnName("user_id").IsPrimaryKey(0)
-				.Property(x => x.LoginProvider).HasColumnName("login_provider").IsPrimaryKey(1)
-				.Property(x => x.Name).HasColumnName("name").IsPrimaryKey(2)
-				.Property(x => x.Value).HasColumnName("value");
+			// app.UseCors("default"); // not needed, since UseIdentityServer adds cors
+			// app.UseAuthentication(); // not needed, since UseIdentityServer adds the authentication middleware
+			app.UseIdentityServer();
+			// app.UseAuthorization();
 		}
 	}
 }

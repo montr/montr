@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <PackageReference Include="IdentityServer4" Version="3.0.2" />
+    <PackageReference Include="IdentityServer4.AccessTokenValidation" Version="3.0.1" />
     <PackageReference Include="IdentityServer4.AspNetIdentity" Version="3.0.2" />
     <PackageReference Include="linq2db" Version="2.9.2" />
     <PackageReference Include="linq2db.Identity" Version="2.0.1" />
@@ -24,7 +25,6 @@
     <ProjectReference Include="..\Montr.Data.Linq2Db\Montr.Data.Linq2Db.csproj" />
     <ProjectReference Include="..\Montr.Idx\Montr.Idx.csproj" />
     <ProjectReference Include="..\Montr.Messages\Montr.Messages.csproj" />
-    <ProjectReference Include="..\Montr.Modularity\Montr.Modularity.csproj" />
   </ItemGroup>
 
 </Project>

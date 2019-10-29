@@ -1,8 +1,8 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Montr.Core;
 using Montr.Dokumento.Impl.Services;
 using Montr.Dokumento.Services;
-using Montr.Modularity;
 
 namespace Montr.Dokumento.Impl
 {

@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Montr.Modularity
+namespace Montr.Core
 {
 	public interface IModule
 	{

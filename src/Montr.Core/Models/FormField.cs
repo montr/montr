@@ -1,4 +1,4 @@
-﻿namespace Montr.Metadata.Models
+﻿namespace Montr.Core.Models
 {
 	public abstract class FormField
 	{

@@ -4,10 +4,10 @@ using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Montr.Idx.Services;
 using Montr.Kompany.Commands;
 using Montr.Kompany.Models;
 using Montr.Kompany.Queries;
-using Montr.Web.Services;
 
 namespace Montr.Kompany.Controllers
 {

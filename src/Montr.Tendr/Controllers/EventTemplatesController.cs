@@ -3,10 +3,10 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Montr.Core.Models;
+using Montr.Idx.Services;
 using Montr.Kompany.Services;
 using Montr.Tendr.Models;
 using Montr.Tendr.Queries;
-using Montr.Web.Services;
 
 namespace Montr.Tendr.Controllers
 {

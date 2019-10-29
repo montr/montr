@@ -9,8 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Montr.Metadata\Montr.Metadata.csproj" />
-    <ProjectReference Include="..\Montr.Web\Montr.Web.csproj" />
+    <ProjectReference Include="..\Montr.Idx\Montr.Idx.csproj" />
   </ItemGroup>
 
 </Project>

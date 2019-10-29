@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using Montr.Metadata.Models;
+using Montr.Core.Models;
 
-namespace Montr.Metadata.Services
+namespace Montr.Core.Services
 {
 	/// <summary>
 	/// https://github.com/dotnet/corefx/issues/38650

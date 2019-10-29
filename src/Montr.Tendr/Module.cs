@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Montr.Modularity;
+using Montr.Core;
 
 namespace Montr.Tendr
 {

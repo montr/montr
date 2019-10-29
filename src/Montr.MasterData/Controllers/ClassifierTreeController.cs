@@ -3,12 +3,11 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Montr.Core.Models;
+using Montr.Idx.Services;
 using Montr.Kompany.Services;
 using Montr.MasterData.Commands;
 using Montr.MasterData.Models;
 using Montr.MasterData.Queries;
-using Montr.Metadata.Models;
-using Montr.Web.Services;
 
 namespace Montr.MasterData.Controllers
 {

@@ -1,9 +1,10 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Montr.Modularity;
+using Montr.Core;
 
 namespace Montr.Data.Linq2Db
 {
+	// ReSharper disable once UnusedMember.Global
 	public class Module : IModule
 	{
 		public void ConfigureServices(IConfiguration configuration, IServiceCollection services)

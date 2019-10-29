@@ -4,6 +4,8 @@
 	{
 		public static readonly string Login = "/account/login";
 
+		public static readonly string Logout = "/account/logout";
+
 		public static readonly string Register = "/account/register";
 
 		public static readonly string RegisterConfirmation = "/account/register-confirmation";

@@ -1,8 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Montr.Web.Models;
+using Montr.Core.Models;
 
-namespace Montr.Web.Services
+namespace Montr.Core.Services
 {
 	public interface IContentProvider
 	{

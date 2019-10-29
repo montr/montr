@@ -2,9 +2,9 @@
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
+using Montr.Core.Models;
+using Montr.Core.Services;
 using Montr.MasterData.Services;
-using Montr.Metadata.Models;
-using Montr.Metadata.Services;
 using Montr.Tendr.Queries;
 
 namespace Montr.Tendr.Impl.QueryHandlers

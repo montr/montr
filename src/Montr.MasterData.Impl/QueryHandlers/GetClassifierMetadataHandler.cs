@@ -4,11 +4,11 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
+using Montr.Core.Models;
+using Montr.Core.Services;
 using Montr.MasterData.Models;
 using Montr.MasterData.Queries;
 using Montr.MasterData.Services;
-using Montr.Metadata.Models;
-using Montr.Metadata.Services;
 
 namespace Montr.MasterData.Impl.QueryHandlers
 {
