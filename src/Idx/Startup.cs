@@ -16,7 +16,6 @@ using Montr.Core.Services;
 using Montr.Idx;
 using Montr.Idx.Impl;
 using Montr.Idx.Impl.Entities;
-using Montr.Web;
 
 namespace Idx
 {
