@@ -1,7 +1,7 @@
 import { Fetcher } from "@montr-core/services/fetcher";
 import { Constants } from "@montr-core/constants";
 import { IApiResult } from "@montr-core/models";
-import { IConfirmEmailModel, IRegisterUserModel, ILoginModel, IResetPasswordModel, IForgotPasswordModel } from "../models";
+import { IConfirmEmailModel, IRegisterUserModel, ILoginModel, IResetPasswordModel, IForgotPasswordModel, IAuthScheme } from "../models";
 
 export class AccountService extends Fetcher {
 
@@ -19,6 +19,10 @@ export class AccountService extends Fetcher {
 
 	login = async (request: ILoginModel): Promise<IApiResult> => {
 		return this.post(`${Constants.apiURL}/account/login`, request);
+	};
+
+	authSchemes = async (): Promise<IAuthScheme[]> => {
+		return this.post(`${Constants.apiURL}/account/authSchemes`, {});
 	};
 
 	logout = async (): Promise<IApiResult> => {

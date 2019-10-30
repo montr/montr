@@ -1,8 +1,11 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Montr.Core.Models;
 using Montr.Idx.Commands;
+using Montr.Idx.Models;
+using Montr.Idx.Queries;
 
 namespace Montr.Idx.Controllers
 {
@@ -36,6 +39,12 @@ namespace Montr.Idx.Controllers
 
 		[HttpPost]
 		public async Task<ApiResult> Login(LoginCommand request)
+		{
+			return await _mediator.Send(request);
+		}
+
+		[HttpPost]
+		public async Task<IList<AuthScheme>> AuthSchemes(GetAuthSchemesQuery request)
 		{
 			return await _mediator.Send(request);
 		}

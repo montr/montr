@@ -1,9 +1,9 @@
 import * as React from "react";
 import { Page, DataForm, WrappedDataForm } from "@montr-core/components";
 import { IFormField, IApiResult } from "@montr-core/models";
-import { Spin } from "antd";
+import { Row, Spin, Button, Col } from "antd";
 import { MetadataService } from "@montr-core/services";
-import { ILoginModel } from "../models/";
+import { ILoginModel, IAuthScheme } from "../models/";
 import { Link } from "react-router-dom";
 import { Translation } from "react-i18next";
 import { AccountService } from "../services/account-service";
@@ -13,6 +13,7 @@ interface IProps {
 
 interface IState {
 	loading: boolean;
+	authSchemes: IAuthScheme[];
 	data: ILoginModel;
 	fields?: IFormField[];
 }
@@ -28,6 +29,7 @@ export default class Login extends React.Component<IProps, IState> {
 		super(props);
 
 		this.state = {
+			authSchemes: [],
 			data: {},
 			loading: true
 		};
@@ -49,7 +51,9 @@ export default class Login extends React.Component<IProps, IState> {
 	fetchData = async () => {
 		const dataView = await this._metadataService.load("Login/Form");
 
-		this.setState({ loading: false, fields: dataView.fields });
+		const authSchemes = await this._accountService.authSchemes();
+
+		this.setState({ loading: false, fields: dataView.fields, authSchemes });
 	}
 
 	login = async (values: ILoginModel): Promise<IApiResult> => {
@@ -69,32 +73,47 @@ export default class Login extends React.Component<IProps, IState> {
 	}
 
 	render = () => {
-		const { fields, data, loading } = this.state;
+		const { fields, authSchemes, data, loading } = this.state;
 
 		return (
 			<Translation ns="idx">
 				{(t) => <Page title={t("page.login.title")}>
+					<Row>
+						<Col offset={4} span={8} style={{ padding: 12 }}>
 
-					<h3>{t("page.login.section.loginLocal")}</h3>
+							<h3>{t("page.login.section.loginLocal")}</h3>
 
-					<div style={{ width: "50%" }} >
-						<Spin spinning={loading}>
-							<DataForm
-								fields={fields}
-								data={data}
-								wrappedComponentRef={this.saveFormRef}
-								onSubmit={this.login}
-								submitButton={t("button.login")}
-							/>
-						</Spin>
-					</div>
+							<div>
+								<Spin spinning={loading}>
+									<DataForm
+										fields={fields}
+										data={data}
+										wrappedComponentRef={this.saveFormRef}
+										onSubmit={this.login}
+										submitButton={t("button.login")}
+									/>
+								</Spin>
+							</div>
 
-					<p><Link to="/account/forgot-password">{t("page.login.link.forgotPassword")}</Link></p>
-					<p><Link to="/account/register">{t("page.login.link.register")}</Link></p>
-					<p><a onClick={this.sendEmailConfirmation}>{t("page.login.link.resendEmailConfirmation")}</a></p>
+							<p><Link to="/account/forgot-password">{t("page.login.link.forgotPassword")}</Link></p>
+							<p><Link to="/account/register">{t("page.login.link.register")}</Link></p>
+							<p><a onClick={this.sendEmailConfirmation}>{t("page.login.link.resendEmailConfirmation")}</a></p>
 
-					<h3>{t("page.login.section.loginExternal")}</h3>
+						</Col>
+						<Col span={8} style={{ padding: 12 }}>
 
+							<h3>{t("page.login.section.loginExternal")}</h3>
+
+							<form>
+								<p>
+									{authSchemes.map(x => (
+										<Button icon={x.name.toLowerCase()}>{`Log in using your ${x.displayName} account`}</Button>
+									))}
+								</p>
+							</form>
+
+						</Col>
+					</Row>
 				</Page>}
 			</Translation>
 		);
