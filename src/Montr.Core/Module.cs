@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Montr.Core.Models;
 using Montr.Core.Services;
 
 namespace Montr.Core
@@ -27,7 +28,8 @@ namespace Montr.Core
 				.AddMvcCore()
 				.AddJsonOptions(options =>
 				{
-					options.JsonSerializerOptions.Converters.Add(new FormFieldJsonConverter());
+					options.JsonSerializerOptions.Converters.Add(new PolymorphicWriteOnlyJsonConverter<FormField>());
+					// options.JsonSerializerOptions.Converters.Add(new FormFieldJsonConverter());
 				});
 
 			services.AddSingleton<IAppUrlBuilder, DefaultAppUrlBuilder>();

@@ -5,7 +5,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Montr.Core.Models;
 using Montr.Core.Services;
 
-namespace Montr.Metadata.Tests.Services
+namespace Montr.Core.Tests.Services
 {
 	[TestClass]
 	public class FormFieldJsonConverterTests
@@ -16,7 +16,11 @@ namespace Montr.Metadata.Tests.Services
 			// arrange
 			var options = new JsonSerializerOptions
 			{
-				Converters = { new FormFieldJsonConverter() }
+				PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
+				IgnoreNullValues = true,
+				WriteIndented = false,
+				// Converters = { new FormFieldJsonConverter() }
+				Converters = { new PolymorphicWriteOnlyJsonConverter<FormField>() }
 			};
 
 			var fields = GetTestFields();
