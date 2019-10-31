@@ -14,6 +14,7 @@ export const LanguageSelector = () => {
 	return (
 		<Translation>
 			{(t, { i18n }) => (
+
 				<Dropdown
 					trigger={["click"]}
 					overlay={
@@ -26,7 +27,7 @@ export const LanguageSelector = () => {
 								)
 							})}
 						</Menu>}>
-					<a className="ant-dropdown-link" href="#">{langs[i18n.language].title} <Icon type="down" /></a>
+					<a className="ant-dropdown-link" href="#"><Icon type="global" /> {langs[i18n.language].title} <Icon type="down" /></a>
 				</Dropdown>
 			)}
 		</Translation>
