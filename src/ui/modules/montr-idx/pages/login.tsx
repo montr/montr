@@ -7,6 +7,7 @@ import { ILoginModel, IAuthScheme } from "../models/";
 import { Link } from "react-router-dom";
 import { Translation } from "react-i18next";
 import { AccountService } from "../services/account-service";
+import { Constants } from "@montr-core/.";
 
 interface IProps {
 }
@@ -59,11 +60,17 @@ export default class Login extends React.Component<IProps, IState> {
 	login = async (values: ILoginModel): Promise<IApiResult> => {
 		const result = await this._accountService.login(values);
 
-		const params = new URLSearchParams(window.location.search);
-		const returnUrl = params.get("ReturnUrl");
-		window.location.href = returnUrl || "/";
+		if (result.success) {
+			window.location.href = this.getReturnUrl();
+		}
 
 		return result;
+	}
+
+	getReturnUrl = () => {
+		// todo: check url is local
+		const params = new URLSearchParams(window.location.search);
+		return params.get("ReturnUrl") || "/";
 	}
 
 	sendEmailConfirmation = async (): Promise<IApiResult> => {
@@ -104,13 +111,21 @@ export default class Login extends React.Component<IProps, IState> {
 
 							<h3>{t("page.login.section.loginExternal")}</h3>
 
-							<form>
-								<p>
+							<p>
+								<form method="post" action={`${Constants.apiURL}/authentication/externalLogin`}>
+									<input type="hidden" name="returnUrl" value={this.getReturnUrl()} />
 									{authSchemes.map(x => (
-										<Button icon={x.name.toLowerCase()}>{`Log in using your ${x.displayName} account`}</Button>
+										<Button
+											key={x.name}
+											htmlType="submit"
+											name="provider"
+											value={x.name}
+											icon={x.name.toLowerCase()}>
+											{`Log in using your ${x.displayName} account`}
+										</Button>
 									))}
-								</p>
-							</form>
+								</form>
+							</p>
 
 						</Col>
 					</Row>
