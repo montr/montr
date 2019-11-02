@@ -13,16 +13,4 @@ namespace Montr.Idx.Commands
 		[StringLength(128)]
 		public string Provider { get; set; }
 	}
-
-	public class ExternalLoginCallbackCommand : IRequest<IActionResult>
-	{
-		// todo: remove, use client redirect?
-		public string ReturnUrl { get; set; }
-
-		public string RemoteError { get; set; }
-
-		[Required]
-		[StringLength(128)]
-		public string LoginProvider { get; set; }
-	}
 }

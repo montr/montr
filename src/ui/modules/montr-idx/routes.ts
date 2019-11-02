@@ -7,6 +7,7 @@ export const Patterns = {
 	confirmEmail: "/account/confirm-email/:userId/:code",
 	login: "/account/login",
 	logout: "/account/logout",
+	externalLogin: "/account/external-login",
 	forgotPassword: "/account/forgot-password",
 	resetPassword: "/account/reset-password/:code",
 };
@@ -16,6 +17,7 @@ export const Routes: IRoute[] = [
 	{ path: Patterns.confirmEmail, layout: "public", exact: true, component: React.lazy(() => import("./pages/confirm-email")) },
 	{ path: Patterns.login, layout: "public", exact: true, component: React.lazy(() => import("./pages/login")) },
 	{ path: Patterns.logout, layout: "public", exact: true, component: React.lazy(() => import("./pages/logout")) },
+	{ path: Patterns.externalLogin, layout: "public", exact: true, component: React.lazy(() => import("./pages/external-login")) },
 	{ path: Patterns.forgotPassword, layout: "public", exact: true, component: React.lazy(() => import("./pages/forgot-password")) },
 	{ path: Patterns.resetPassword, layout: "public", exact: true, component: React.lazy(() => import("./pages/reset-password")) },
 ];

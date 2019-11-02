@@ -20,11 +20,5 @@ namespace Montr.Idx.Controllers
 		{
 			return await _mediator.Send(request);
 		}
-
-		// [HttpPost]
-		public async Task<IActionResult> ExternalLoginCallback(ExternalLoginCallbackCommand request)
-		{
-			return await _mediator.Send(request);
-		}
 	}
 }

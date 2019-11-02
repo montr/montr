@@ -5,6 +5,7 @@ export interface IApiResult {
 	uid?: Guid;
 	affectedRows?: number;
 	errors?: IApiResultError[];
+	redirectUrl?: string;
 }
 
 export interface IApiResultError {
