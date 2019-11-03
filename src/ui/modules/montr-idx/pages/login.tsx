@@ -111,21 +111,19 @@ export default class Login extends React.Component<IProps, IState> {
 
 							<h3>{t("page.login.section.loginExternal")}</h3>
 
-							<p>
-								<form method="post" action={`${Constants.apiURL}/authentication/externalLogin`}>
-									<input type="hidden" name="returnUrl" value={this.getReturnUrl()} />
-									{authSchemes.map(x => (
-										<Button
-											key={x.name}
-											htmlType="submit"
-											name="provider"
-											value={x.name}
-											icon={x.name.toLowerCase()}>
-											{`Log in using your ${x.displayName} account`}
-										</Button>
-									))}
-								</form>
-							</p>
+							<form method="post" action={`${Constants.apiURL}/authentication/externalLogin`}>
+								<input type="hidden" name="returnUrl" value={this.getReturnUrl()} />
+								{authSchemes.map(x => (
+									<Button
+										key={x.name}
+										htmlType="submit"
+										name="provider"
+										value={x.name}
+										icon={x.name.toLowerCase()}>
+										{`Log in using your ${x.displayName} account`}
+									</Button>
+								))}
+							</form>
 
 						</Col>
 					</Row>

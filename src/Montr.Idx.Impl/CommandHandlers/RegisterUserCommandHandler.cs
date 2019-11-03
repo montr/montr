@@ -38,7 +38,6 @@ namespace Montr.Idx.Impl.CommandHandlers
 
 		public async Task<ApiResult> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
 		{
-
 			var user = new DbUser
 			{
 				Id = Guid.NewGuid(),
@@ -63,12 +62,12 @@ namespace Montr.Idx.Impl.CommandHandlers
 					var redirectUrl = _appUrlBuilder.Build(ClientRoutes.RegisterConfirmation,
 						new Dictionary<string, string> { { "email", request.Email } });
 
-					return new ApiResult { Success = true, RedirectUrl = redirectUrl };
+					return new ApiResult { RedirectUrl = redirectUrl };
 				}
 
 				await _signInManager.SignInAsync(user, isPersistent: false);
 
-				return new ApiResult { Success = true, RedirectUrl = request.ReturnUrl };
+				return new ApiResult { RedirectUrl = request.ReturnUrl };
 			}
 
 			return identityResult.ToApiResult();

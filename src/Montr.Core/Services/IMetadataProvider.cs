@@ -190,6 +190,16 @@ namespace Montr.Core.Services
 				};
 			}
 
+			if (viewId == "ExternalRegister/Form")
+			{
+				result.Fields = new List<FormField>
+				{
+					new StringField { Key = "email", Name = "Email", Required = true },
+					new StringField { Key = "firstName", Name = "First Name", Required = true },
+					new StringField { Key = "lastName", Name = "Last Name", Required = true }
+				};
+			}
+
 			// Events
 			if (viewId == "PrivateEvent/Edit")
 			{

@@ -10,6 +10,19 @@ namespace Montr.Core.Models
 			Success = true;	
 		}
 
+		public ApiResult(params string[] errorMessages)
+		{
+			Success = false;
+
+			Errors = new[]
+			{
+				new ApiResultError
+				{
+					Messages = errorMessages
+				}
+			};
+		}
+
 		public bool Success { get; set; }
 
 		/// <summary>

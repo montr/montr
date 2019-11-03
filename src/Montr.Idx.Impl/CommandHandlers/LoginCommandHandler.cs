@@ -52,19 +52,12 @@ namespace Montr.Idx.Impl.CommandHandlers
 				return new ApiResult { RedirectRoute = "./Lockout" };
 			}
 
+			// todo: implement
 			if (result.IsNotAllowed) // Email not confirmed?
 			{
-				// todo
 			}
 
-			// ModelState.AddModelError(string.Empty, "Invalid login attempt.");
-			return new ApiResult
-			{
-				Success = false, Errors = new[]
-				{
-					new ApiResultError { Messages = new[] { "Invalid login attempt." } }
-				}
-			};
+			return new ApiResult("Invalid login attempt.");
 		}
 	}
 }

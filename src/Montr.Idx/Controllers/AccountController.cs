@@ -26,6 +26,12 @@ namespace Montr.Idx.Controllers
 		}
 
 		[HttpPost]
+		public async Task<ApiResult> ExternalRegister(ExternalRegisterUser request)
+		{
+			return await _mediator.Send(request);
+		}
+
+		[HttpPost]
 		public async Task<ApiResult> SendEmailConfirmation(SendEmailConfirmationCommand request)
 		{
 			return await _mediator.Send(request);
@@ -50,7 +56,7 @@ namespace Montr.Idx.Controllers
 		}
 
 		[HttpPost]
-		public async Task<ApiResult> ExternalLoginCallback(ExternalLoginCallbackCommand request)
+		public async Task<ExternalLoginCallbackCommand.Result> ExternalLoginCallback(ExternalLoginCallbackCommand request)
 		{
 			return await _mediator.Send(request);
 		}

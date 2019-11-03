@@ -50,7 +50,7 @@ export default class Register extends React.Component<IProps, IState> {
 	}
 
 	render = () => {
-		const { fields, data, loading } = this.state;
+		const { loading, fields, data } = this.state;
 
 		return (
 			<Translation ns="idx">

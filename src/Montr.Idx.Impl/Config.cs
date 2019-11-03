@@ -64,7 +64,8 @@ namespace Montr.Idx.Impl
 				{
 					ClientId = "ui",
 					ClientName = "UI Client",
-					// AllowedGrantTypes = GrantTypes.Implicit,
+					// AccessTokenType = AccessTokenType.Jwt,
+					// AllowedGrantTypes = GrantTypes.Implicit, // required for JS clients
 					AllowedGrantTypes = GrantTypes.Code,
 					AllowAccessTokensViaBrowser = true,
 					AlwaysIncludeUserClaimsInIdToken = true,
