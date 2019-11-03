@@ -17,12 +17,12 @@ jobs:
           dotnet-version: '3.0.100'
       - run: dotnet build ./src/Montr.sln
 
+      # build node
       - uses: actions/setup-node@v1
         with:
           node-version: '12.x'
-
-      - name: build node
+      - run: npm install
         working-directory: ./src/ui
-        run: npm install
-        run: npm run build-prod
-        # run: npm test
+      - run: npm run build-prod
+        working-directory: ./src/ui
+      # - run: npm test
