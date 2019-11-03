@@ -21,8 +21,8 @@ jobs:
       - uses: actions/setup-node@v1
         with:
           node-version: '12.x'
-      - run: npm install
+      - run: |
+          npm install
+          npm run build-prod
+          # - run: npm test
         working-directory: ./src/ui
-      - run: npm run build-prod
-        working-directory: ./src/ui
-      # - run: npm test
