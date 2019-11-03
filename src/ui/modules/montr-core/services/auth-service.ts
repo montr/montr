@@ -1,4 +1,4 @@
-import { Log, User, UserManager, SignoutResponse } from "oidc-client";
+import { Log, User, UserManager, SignoutResponse, UserManagerSettings } from "oidc-client";
 import { message } from "antd";
 import { Constants } from "../constants";
 import { NavigationService } from "./navigation-service";
@@ -33,7 +33,7 @@ export class AuthService {
 
 		// https://github.com/IdentityModel/oidc-client-js/wiki
 		// https://openid.net/specs/openid-connect-core-1_0.html#Authentication
-		const settings = {
+		const settings: UserManagerSettings = {
 			authority: AuthConstants.authority,
 			client_id: AuthConstants.clientId,
 			redirect_uri: AuthConstants.clientRoot + AuthConstants.RedirectUri,
@@ -52,31 +52,31 @@ export class AuthService {
 
 		// todo: use logger here and below
 		this._userManager.events.addAccessTokenExpired((...args: any[]) => {
-			console.log("AccessTokenExpired", window.frameElement, args);
+			// console.log("AccessTokenExpired", window.frameElement, args);
 			message.error("AccessTokenExpired");
 		});
 		this._userManager.events.addAccessTokenExpiring((...args: any[]) => {
-			console.log("AccessTokenExpiring", window.frameElement, args);
+			// console.log("AccessTokenExpiring", window.frameElement, args);
 			message.warning("AccessTokenExpiring");
 		});
 		this._userManager.events.addSilentRenewError((...args: any[]) => {
-			console.log("SilentRenewError", window.frameElement, args);
+			// console.log("SilentRenewError", window.frameElement, args);
 			message.error("SilentRenewError");
 		});
 		this._userManager.events.addUserLoaded((...args: any[]) => {
-			console.log("UserLoaded", window.frameElement, args);
+			// console.log("UserLoaded", window.frameElement, args);
 			message.info("UserLoaded");
 		});
 		this._userManager.events.addUserSessionChanged((...args: any[]) => {
-			console.log("UserSessionChanged", window.frameElement, args);
+			// console.log("UserSessionChanged", window.frameElement, args);
 			message.info("UserSessionChanged");
 		});
 		this._userManager.events.addUserSignedOut((...args: any[]) => {
-			console.log("UserSignedOut", window.frameElement, args);
+			// console.log("UserSignedOut", window.frameElement, args);
 			message.info("UserSignedOut");
 		});
 		this._userManager.events.addUserUnloaded((...args: any[]) => {
-			console.log("UserUnloaded", window.frameElement, args);
+			// console.log("UserUnloaded", window.frameElement, args);
 			message.info("UserUnloaded");
 		});
 

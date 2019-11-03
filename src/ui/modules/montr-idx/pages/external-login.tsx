@@ -6,7 +6,7 @@ import { AccountService } from "../services/account-service";
 import { IExternalLoginModel, IExternalLoginResult, IExternalRegisterModel } from "../models";
 import { NotificationService, MetadataService } from "@montr-core/services";
 import { RouteComponentProps } from "react-router";
-import { Patterns } from "@montr-idx/routes";
+import { Patterns } from "@montr-idx/module";
 import { IFormField, IApiResult } from "@montr-core/models";
 
 interface IProps extends RouteComponentProps {

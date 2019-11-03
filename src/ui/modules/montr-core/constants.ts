@@ -13,3 +13,8 @@ export const Constants = {
 	returnUrlParam: "return_url",
 	defaultPageSize: 10
 };
+
+export const Layout = {
+	public: "public",
+	private: "private"
+};

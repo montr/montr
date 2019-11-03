@@ -6,7 +6,7 @@ import { ClassifierService, ClassifierTypeService, ClassifierLinkService } from 
 import { CompanyContextProps, withCompanyContext } from "@montr-kompany/components";
 import { IClassifier, IClassifierType } from "../models";
 import { ClassifierBreadcrumb, TabEditClassifier, TabEditClassifierHierarchy } from "../components";
-import { RouteBuilder } from "../routes";
+import { RouteBuilder } from "../module";
 
 interface IRouteProps {
 	typeCode: string;

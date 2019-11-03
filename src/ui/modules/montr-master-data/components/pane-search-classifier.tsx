@@ -11,7 +11,7 @@ import { IClassifierType, IClassifierGroup, IClassifierTree } from "../models";
 import { RadioChangeEvent } from "antd/lib/radio";
 import { AntTreeNode, AntTreeNodeSelectedEvent, AntTreeNodeExpandedEvent } from "antd/lib/tree";
 import { ClassifierBreadcrumb, ModalEditClassifierGroup } from "../components";
-import { RouteBuilder } from "../routes";
+import { RouteBuilder } from "../module";
 
 interface IProps extends CompanyContextProps {
 	typeCode: string;

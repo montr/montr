@@ -7,7 +7,7 @@ import { Page, IPaneComponent, Toolbar, PageHeader, DataBreadcrumb } from "@mont
 import { MetadataService } from "@montr-core/services";
 import { IEvent } from "../../models";
 import * as panes from "../../components"
-import { RouteBuilder } from "../../routes";
+import { RouteBuilder } from "../../module";
 import { CompanyContextProps } from "@montr-kompany/components";
 import { RouteComponentProps } from "react-router";
 

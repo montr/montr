@@ -4,7 +4,7 @@ import { Spin, Button } from "antd";
 import { RouteComponentProps } from "react-router-dom";
 import { Translation } from "react-i18next";
 import { AccountService } from "../services/account-service";
-import { Patterns } from "../routes";
+import { Patterns } from "../module";
 import { MetadataService } from "@montr-core/services";
 import { IResetPasswordModel } from "../models";
 import { IApiResult, IFormField } from "@montr-core/models";
