@@ -9,20 +9,20 @@ using Montr.Idx.Impl.Entities;
 
 namespace Montr.Idx.Impl.CommandHandlers
 {
-	public class LogoutCommandHandler : IRequestHandler<LogoutCommand, ApiResult>
+	public class LogoutHandler : IRequestHandler<Logout, ApiResult>
 	{
-		private readonly ILogger<ConfirmEmailCommandHandler> _logger;
+		private readonly ILogger<ConfirmEmailHandler> _logger;
 		private readonly SignInManager<DbUser> _signInManager;
 
-		public LogoutCommandHandler(
-			ILogger<ConfirmEmailCommandHandler> logger,
+		public LogoutHandler(
+			ILogger<ConfirmEmailHandler> logger,
 			SignInManager<DbUser> signInManager)
 		{
 			_logger = logger;
 			_signInManager = signInManager;
 		}
 
-		public async Task<ApiResult> Handle(LogoutCommand request, CancellationToken cancellationToken)
+		public async Task<ApiResult> Handle(Logout request, CancellationToken cancellationToken)
 		{
 			await _signInManager.SignOutAsync();
 

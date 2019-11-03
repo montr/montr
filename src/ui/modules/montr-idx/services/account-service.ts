@@ -1,11 +1,11 @@
 import { Fetcher } from "@montr-core/services/fetcher";
 import { Constants } from "@montr-core/constants";
 import { IApiResult } from "@montr-core/models";
-import { IConfirmEmailModel, IRegisterUserModel, ILoginModel, IResetPasswordModel, IForgotPasswordModel, IAuthScheme, IExternalLoginModel, IExternalRegisterUser } from "../models/";
+import { IConfirmEmailModel, IRegisterModel, ILoginModel, IResetPasswordModel, IForgotPasswordModel, IAuthScheme, IExternalLoginModel, IExternalRegisterModel } from "../models/";
 
 export class AccountService extends Fetcher {
 
-	register = async (request: IRegisterUserModel): Promise<IApiResult> => {
+	register = async (request: IRegisterModel): Promise<IApiResult> => {
 		return this.post(`${Constants.apiURL}/account/register`, request);
 	};
 
@@ -25,7 +25,7 @@ export class AccountService extends Fetcher {
 		return this.post(`${Constants.apiURL}/account/externalLoginCallback`, request);
 	};
 
-	externalRegister = async (request: IExternalRegisterUser): Promise<IApiResult> => {
+	externalRegister = async (request: IExternalRegisterModel): Promise<IApiResult> => {
 		return this.post(`${Constants.apiURL}/account/externalRegister`, request);
 	};
 

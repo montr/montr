@@ -2,7 +2,7 @@
 
 namespace Montr.Idx.Models
 {
-	public class ExternalRegisterUserModel
+	public class ExternalRegisterModel
 	{
 		public string Provider { get; set; }
 

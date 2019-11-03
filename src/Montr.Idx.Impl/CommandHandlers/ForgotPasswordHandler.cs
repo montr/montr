@@ -15,16 +15,16 @@ using Montr.Messages.Services;
 
 namespace Montr.Idx.Impl.CommandHandlers
 {
-	public class ForgotPasswordCommandHandler : IRequestHandler<ForgotPasswordCommand, ApiResult>
+	public class ForgotPasswordHandler : IRequestHandler<ForgotPassword, ApiResult>
 	{
-		private readonly ILogger<ForgotPasswordCommandHandler> _logger;
+		private readonly ILogger<ForgotPasswordHandler> _logger;
 		private readonly UserManager<DbUser> _userManager;
 		private readonly IAppUrlBuilder _appUrlBuilder;
 		private readonly IEmailSender _emailSender;
 		private readonly ITemplateRenderer _templateRenderer;
 
-		public ForgotPasswordCommandHandler(
-			ILogger<ForgotPasswordCommandHandler> logger,
+		public ForgotPasswordHandler(
+			ILogger<ForgotPasswordHandler> logger,
 			UserManager<DbUser> userManager,
 			IAppUrlBuilder appUrlBuilder,
 			IEmailSender emailSender,
@@ -37,7 +37,7 @@ namespace Montr.Idx.Impl.CommandHandlers
 			_templateRenderer = templateRenderer;
 		}
 
-		public async Task<ApiResult> Handle(ForgotPasswordCommand request, CancellationToken cancellationToken)
+		public async Task<ApiResult> Handle(ForgotPassword request, CancellationToken cancellationToken)
 		{
 			var user = await _userManager.FindByEmailAsync(request.Email);
 

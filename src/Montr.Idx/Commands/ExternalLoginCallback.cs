@@ -5,7 +5,7 @@ using Montr.Idx.Models;
 
 namespace Montr.Idx.Commands
 {
-	public class ExternalLoginCallbackCommand : IRequest<ExternalLoginCallbackCommand.Result>
+	public class ExternalLoginCallback : IRequest<ExternalLoginCallback.Result>
 	{
 		[Required]
 		public string ReturnUrl { get; set; }
@@ -22,7 +22,7 @@ namespace Montr.Idx.Commands
 			{
 			}
 			
-			public ExternalRegisterUserModel Register { get; set; }
+			public ExternalRegisterModel Register { get; set; }
 		}
 	}
 }

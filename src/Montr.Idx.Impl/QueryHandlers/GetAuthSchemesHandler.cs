@@ -11,20 +11,20 @@ using Montr.Idx.Queries;
 
 namespace Montr.Idx.Impl.QueryHandlers
 {
-	public class GetAuthSchemesQueryHandler : IRequestHandler<GetAuthSchemesQuery, IList<AuthScheme>>
+	public class GetAuthSchemesHandler : IRequestHandler<GetAuthSchemes, IList<AuthScheme>>
 	{
-		private readonly ILogger<GetAuthSchemesQueryHandler> _logger;
+		private readonly ILogger<GetAuthSchemesHandler> _logger;
 		private readonly SignInManager<DbUser> _signInManager;
 
-		public GetAuthSchemesQueryHandler(
-			ILogger<GetAuthSchemesQueryHandler> logger,
+		public GetAuthSchemesHandler(
+			ILogger<GetAuthSchemesHandler> logger,
 			SignInManager<DbUser> signInManager)
 		{
 			_logger = logger;
 			_signInManager = signInManager;
 		}
 
-		public async Task<IList<AuthScheme>> Handle(GetAuthSchemesQuery request, CancellationToken cancellationToken)
+		public async Task<IList<AuthScheme>> Handle(GetAuthSchemes request, CancellationToken cancellationToken)
 		{
 			var schemes = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
 

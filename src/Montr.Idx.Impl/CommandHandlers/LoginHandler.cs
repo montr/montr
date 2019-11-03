@@ -9,20 +9,20 @@ using Montr.Idx.Impl.Entities;
 
 namespace Montr.Idx.Impl.CommandHandlers
 {
-	public class LoginCommandHandler : IRequestHandler<LoginCommand, ApiResult>
+	public class LoginHandler : IRequestHandler<Login, ApiResult>
 	{
-		private readonly ILogger<ConfirmEmailCommandHandler> _logger;
+		private readonly ILogger<ConfirmEmailHandler> _logger;
 		private readonly SignInManager<DbUser> _signInManager;
 
-		public LoginCommandHandler(
-			ILogger<ConfirmEmailCommandHandler> logger,
+		public LoginHandler(
+			ILogger<ConfirmEmailHandler> logger,
 			SignInManager<DbUser> signInManager)
 		{
 			_logger = logger;
 			_signInManager = signInManager;
 		}
 
-		public async Task<ApiResult> Handle(LoginCommand request, CancellationToken cancellationToken)
+		public async Task<ApiResult> Handle(Login request, CancellationToken cancellationToken)
 		{
 			var returnUrl = request.ReturnUrl ?? "~/";
 

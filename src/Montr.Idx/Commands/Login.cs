@@ -4,7 +4,7 @@ using Montr.Core.Models;
 
 namespace Montr.Idx.Commands
 {
-	public class LoginCommand : IRequest<ApiResult>
+	public class Login : IRequest<ApiResult>
 	{
 		// todo: remove, use client redirect
 		public string ReturnUrl { get; set; }

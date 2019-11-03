@@ -12,20 +12,20 @@ using Montr.Idx.Impl.Services;
 
 namespace Montr.Idx.Impl.CommandHandlers
 {
-	public class ResetPasswordCommandHandler : IRequestHandler<ResetPasswordCommand, ApiResult>
+	public class ResetHandler : IRequestHandler<ResetPassword, ApiResult>
 	{
-		private readonly ILogger<ResetPasswordCommandHandler> _logger;
+		private readonly ILogger<ResetHandler> _logger;
 		private readonly UserManager<DbUser> _userManager;
 
-		public ResetPasswordCommandHandler(
-			ILogger<ResetPasswordCommandHandler> logger,
+		public ResetHandler(
+			ILogger<ResetHandler> logger,
 			UserManager<DbUser> userManager)
 		{
 			_logger = logger;
 			_userManager = userManager;
 		}
 
-		public async Task<ApiResult> Handle(ResetPasswordCommand request, CancellationToken cancellationToken)
+		public async Task<ApiResult> Handle(ResetPassword request, CancellationToken cancellationToken)
 		{
 			var user = await _userManager.FindByEmailAsync(request.Email);
 

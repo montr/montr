@@ -16,7 +16,7 @@ namespace Montr.Idx.Controllers
 		}
 
 		[HttpPost]
-		public async Task<ChallengeResult> ExternalLogin(ExternalLoginCommand request)
+		public async Task<ChallengeResult> ExternalLogin(ExternalLogin request)
 		{
 			return await _mediator.Send(request);
 		}

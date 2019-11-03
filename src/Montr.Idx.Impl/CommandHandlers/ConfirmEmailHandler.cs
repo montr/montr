@@ -11,20 +11,20 @@ using Montr.Idx.Impl.Entities;
 
 namespace Montr.Idx.Impl.CommandHandlers
 {
-	public class ConfirmEmailCommandHandler : IRequestHandler<ConfirmEmailCommand, ApiResult>
+	public class ConfirmEmailHandler : IRequestHandler<ConfirmEmail, ApiResult>
 	{
-		private readonly ILogger<ConfirmEmailCommandHandler> _logger;
+		private readonly ILogger<ConfirmEmailHandler> _logger;
 		private readonly UserManager<DbUser> _userManager;
 
-		public ConfirmEmailCommandHandler(
-			ILogger<ConfirmEmailCommandHandler> logger,
+		public ConfirmEmailHandler(
+			ILogger<ConfirmEmailHandler> logger,
 			UserManager<DbUser> userManager)
 		{
 			_logger = logger;
 			_userManager = userManager;
 		}
 
-		public async Task<ApiResult> Handle(ConfirmEmailCommand request, CancellationToken cancellationToken)
+		public async Task<ApiResult> Handle(ConfirmEmail request, CancellationToken cancellationToken)
 		{
 			if (request.UserId == null || request.Code == null)
 			{

@@ -3,7 +3,7 @@ using Montr.Core.Models;
 
 namespace Montr.Idx.Commands
 {
-	public class LogoutCommand : IRequest<ApiResult>
+	public class Logout : IRequest<ApiResult>
 	{
 	}
 }

@@ -10,30 +10,30 @@ using Montr.Idx.Models;
 
 namespace Montr.Idx.Impl.CommandHandlers
 {
-	public class ExternalLoginCallbackCommandHandler : IRequestHandler<ExternalLoginCallbackCommand, ExternalLoginCallbackCommand.Result>
+	public class ExternalLoginCallbackHandler : IRequestHandler<ExternalLoginCallback, ExternalLoginCallback.Result>
 	{
-		private readonly ILogger<ExternalLoginCallbackCommandHandler> _logger;
+		private readonly ILogger<ExternalLoginCallbackHandler> _logger;
 		private readonly SignInManager<DbUser> _signInManager;
 
-		public ExternalLoginCallbackCommandHandler(
-			ILogger<ExternalLoginCallbackCommandHandler> logger,
+		public ExternalLoginCallbackHandler(
+			ILogger<ExternalLoginCallbackHandler> logger,
 			SignInManager<DbUser> signInManager)
 		{
 			_logger = logger;
 			_signInManager = signInManager;
 		}
 
-		public async Task<ExternalLoginCallbackCommand.Result> Handle(ExternalLoginCallbackCommand request, CancellationToken cancellationToken)
+		public async Task<ExternalLoginCallback.Result> Handle(ExternalLoginCallback request, CancellationToken cancellationToken)
 		{
 			if (request.RemoteError != null)
 			{
-				return new ExternalLoginCallbackCommand.Result($"Error from external provider: {request.RemoteError}");
+				return new ExternalLoginCallback.Result($"Error from external provider: {request.RemoteError}");
 			}
 
 			var info = await _signInManager.GetExternalLoginInfoAsync();
 			if (info == null)
 			{
-				return new ExternalLoginCallbackCommand.Result("Error loading external login information.");
+				return new ExternalLoginCallback.Result("Error loading external login information.");
 			}
 
 			// Sign in the user with this external login provider if the user already has a login.
@@ -42,7 +42,7 @@ namespace Montr.Idx.Impl.CommandHandlers
 			{
 				_logger.LogInformation("{Name} logged in with {LoginProvider} provider.", info.Principal.Identity.Name, info.LoginProvider);
 
-				return new ExternalLoginCallbackCommand.Result { RedirectUrl = request.ReturnUrl };
+				return new ExternalLoginCallback.Result { RedirectUrl = request.ReturnUrl };
 			}
 
 			// todo: implement
@@ -52,13 +52,13 @@ namespace Montr.Idx.Impl.CommandHandlers
 
 			if (result.IsLockedOut)
 			{
-				return new ExternalLoginCallbackCommand.Result("This account has been locked out, please try again later.");
+				return new ExternalLoginCallback.Result("This account has been locked out, please try again later.");
 			}
 
 			// If the user does not have an account, then ask the user to create an account.
-			return new ExternalLoginCallbackCommand.Result
+			return new ExternalLoginCallback.Result
 			{
-				Register = new ExternalRegisterUserModel
+				Register = new ExternalRegisterModel
 				{
 					Provider = info.LoginProvider,
 					ReturnUrl = request.ReturnUrl,

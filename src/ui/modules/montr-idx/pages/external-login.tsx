@@ -3,7 +3,7 @@ import { Page, DataForm } from "@montr-core/components";
 import { Spin } from "antd";
 import { Translation } from "react-i18next";
 import { AccountService } from "../services/account-service";
-import { IExternalLoginModel, IExternalLoginResult, IExternalRegisterUser } from "../models";
+import { IExternalLoginModel, IExternalLoginResult, IExternalRegisterModel } from "../models";
 import { NotificationService, MetadataService } from "@montr-core/services";
 import { RouteComponentProps } from "react-router";
 import { Patterns } from "@montr-idx/routes";
@@ -14,7 +14,7 @@ interface IProps extends RouteComponentProps {
 
 interface IState {
 	loading: boolean;
-	data?: IExternalRegisterUser;
+	data?: IExternalRegisterModel;
 	fields?: IFormField[];
 }
 
@@ -75,7 +75,7 @@ export default class ExternalLogin extends React.Component<IProps, IState> {
 		}
 	}
 
-	save = async (values: IExternalRegisterUser): Promise<IApiResult> => {
+	save = async (values: IExternalRegisterModel): Promise<IApiResult> => {
 		const { data } = this.state;
 
 		const result = await this._accountService.externalRegister({

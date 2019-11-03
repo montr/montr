@@ -10,14 +10,14 @@ using Montr.Idx.Impl.Services;
 
 namespace Montr.Idx.Impl.CommandHandlers
 {
-	public class SendEmailConfirmationCommandHandler : IRequestHandler<SendEmailConfirmationCommand, ApiResult>
+	public class SendEmailConfirmationHandler : IRequestHandler<SendEmailConfirmation, ApiResult>
 	{
-		private readonly ILogger<SendEmailConfirmationCommandHandler> _logger;
+		private readonly ILogger<SendEmailConfirmationHandler> _logger;
 		private readonly UserManager<DbUser> _userManager;
 		private readonly EmailConfirmationService _emailConfirmationService;
 
-		public SendEmailConfirmationCommandHandler(
-			ILogger<SendEmailConfirmationCommandHandler> logger,
+		public SendEmailConfirmationHandler(
+			ILogger<SendEmailConfirmationHandler> logger,
 			UserManager<DbUser> userManager,
 			EmailConfirmationService emailConfirmationService)
 		{
@@ -26,14 +26,12 @@ namespace Montr.Idx.Impl.CommandHandlers
 			_emailConfirmationService = emailConfirmationService;
 		}
 
-		public async Task<ApiResult> Handle(SendEmailConfirmationCommand request, CancellationToken cancellationToken)
+		public async Task<ApiResult> Handle(SendEmailConfirmation request, CancellationToken cancellationToken)
 		{
 			var user = await _userManager.FindByEmailAsync(request.Email);
 
 			if (user != null)
 			{
-				// var userId = await _userManager.GetUserIdAsync(user);
-
 				await _emailConfirmationService.SendMessage(user, cancellationToken);
 			}
 

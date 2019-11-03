@@ -4,7 +4,7 @@ using Montr.Idx.Models;
 
 namespace Montr.Idx.Commands
 {
-	public class RegisterUserCommand : RegisterUserModel, IRequest<ApiResult>
+	public class Register : RegisterModel, IRequest<ApiResult>
 	{
 	}
 }

@@ -4,7 +4,7 @@ using Montr.Core.Models;
 
 namespace Montr.Idx.Commands
 {
-	public class ConfirmEmailCommand : IRequest<ApiResult>
+	public class ConfirmEmail : IRequest<ApiResult>
 	{
 		[Required, StringLength(36, MinimumLength = 36)]
 		public string UserId { get; set; }

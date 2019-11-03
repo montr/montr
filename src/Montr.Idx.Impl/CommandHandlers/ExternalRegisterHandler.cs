@@ -11,15 +11,15 @@ using Montr.Idx.Impl.Services;
 
 namespace Montr.Idx.Impl.CommandHandlers
 {
-	public class ExternalRegisterUserHandler : IRequestHandler<ExternalRegisterUser, ApiResult>
+	public class ExternalRegisterHandler : IRequestHandler<ExternalRegister, ApiResult>
 	{
-		private readonly ILogger<ExternalRegisterUserHandler> _logger;
+		private readonly ILogger<ExternalRegisterHandler> _logger;
 		private readonly SignInManager<DbUser> _signInManager;
 		private readonly UserManager<DbUser> _userManager;
 		private readonly EmailConfirmationService _emailConfirmationService;
 
-		public ExternalRegisterUserHandler(
-			ILogger<ExternalRegisterUserHandler> logger,
+		public ExternalRegisterHandler(
+			ILogger<ExternalRegisterHandler> logger,
 			SignInManager<DbUser> signInManager,
 			UserManager<DbUser> userManager,
 			EmailConfirmationService emailConfirmationService)
@@ -30,7 +30,7 @@ namespace Montr.Idx.Impl.CommandHandlers
 			_emailConfirmationService = emailConfirmationService;
 		}
 
-		public async Task<ApiResult> Handle(ExternalRegisterUser request, CancellationToken cancellationToken)
+		public async Task<ApiResult> Handle(ExternalRegister request, CancellationToken cancellationToken)
 		{
 			// Get the information about the user from the external login provider
 			var info = await _signInManager.GetExternalLoginInfoAsync();

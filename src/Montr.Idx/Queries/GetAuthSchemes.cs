@@ -4,7 +4,7 @@ using Montr.Idx.Models;
 
 namespace Montr.Idx.Queries
 {
-	public class GetAuthSchemesQuery : IRequest<IList<AuthScheme>>
+	public class GetAuthSchemes : IRequest<IList<AuthScheme>>
 	{
 	}
 }

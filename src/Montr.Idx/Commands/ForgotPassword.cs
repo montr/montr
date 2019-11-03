@@ -4,7 +4,7 @@ using Montr.Core.Models;
 
 namespace Montr.Idx.Commands
 {
-	public class SendEmailConfirmationCommand : IRequest<ApiResult>
+	public class ForgotPassword : IRequest<ApiResult>
 	{
 		[Required]
 		[EmailAddress]

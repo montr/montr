@@ -13,16 +13,16 @@ using Montr.Idx.Impl.Services;
 
 namespace Montr.Idx.Impl.CommandHandlers
 {
-	public class RegisterUserCommandHandler : IRequestHandler<RegisterUserCommand, ApiResult>
+	public class RegisterHandler : IRequestHandler<Register, ApiResult>
 	{
-		private readonly ILogger<RegisterUserCommandHandler> _logger;
+		private readonly ILogger<RegisterHandler> _logger;
 		private readonly UserManager<DbUser> _userManager;
 		private readonly SignInManager<DbUser> _signInManager;
 		private readonly IAppUrlBuilder _appUrlBuilder;
 		private readonly EmailConfirmationService _emailConfirmationService;
 
-		public RegisterUserCommandHandler(
-			ILogger<RegisterUserCommandHandler> logger,
+		public RegisterHandler(
+			ILogger<RegisterHandler> logger,
 			UserManager<DbUser> userManager,
 			SignInManager<DbUser> signInManager,
 			IAppUrlBuilder appUrlBuilder,
@@ -36,7 +36,7 @@ namespace Montr.Idx.Impl.CommandHandlers
 			_emailConfirmationService = emailConfirmationService;
 		}
 
-		public async Task<ApiResult> Handle(RegisterUserCommand request, CancellationToken cancellationToken)
+		public async Task<ApiResult> Handle(Register request, CancellationToken cancellationToken)
 		{
 			var user = new DbUser
 			{

@@ -4,7 +4,7 @@ using Montr.Core.Models;
 
 namespace Montr.Idx.Commands
 {
-	public class ResetPasswordCommand : IRequest<ApiResult>
+	public class ResetPassword : IRequest<ApiResult>
 	{
 		[Required]
 		public string Code { get; set; }

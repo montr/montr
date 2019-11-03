@@ -20,61 +20,61 @@ namespace Montr.Idx.Controllers
 		}
 
 		[HttpPost]
-		public async Task<ApiResult> Register(RegisterUserCommand request)
+		public async Task<ApiResult> Register(Register request)
 		{
 			return await _mediator.Send(request);
 		}
 
 		[HttpPost]
-		public async Task<ApiResult> ExternalRegister(ExternalRegisterUser request)
+		public async Task<ApiResult> ExternalRegister(ExternalRegister request)
 		{
 			return await _mediator.Send(request);
 		}
 
 		[HttpPost]
-		public async Task<ApiResult> SendEmailConfirmation(SendEmailConfirmationCommand request)
+		public async Task<ApiResult> SendEmailConfirmation(SendEmailConfirmation request)
 		{
 			return await _mediator.Send(request);
 		}
 
 		[HttpPost]
-		public async Task<ApiResult> ConfirmEmail(ConfirmEmailCommand request)
+		public async Task<ApiResult> ConfirmEmail(ConfirmEmail request)
 		{
 			return await _mediator.Send(request);
 		}
 
 		[HttpPost]
-		public async Task<ApiResult> Login(LoginCommand request)
+		public async Task<ApiResult> Login(Login request)
 		{
 			return await _mediator.Send(request);
 		}
 
 		[HttpPost]
-		public async Task<IList<AuthScheme>> AuthSchemes(GetAuthSchemesQuery request)
+		public async Task<IList<AuthScheme>> AuthSchemes(GetAuthSchemes request)
 		{
 			return await _mediator.Send(request);
 		}
 
 		[HttpPost]
-		public async Task<ExternalLoginCallbackCommand.Result> ExternalLoginCallback(ExternalLoginCallbackCommand request)
+		public async Task<ExternalLoginCallback.Result> ExternalLoginCallback(ExternalLoginCallback request)
 		{
 			return await _mediator.Send(request);
 		}
 
 		[HttpPost]
-		public async Task<ApiResult> Logout(LogoutCommand request)
+		public async Task<ApiResult> Logout(Logout request)
 		{
 			return await _mediator.Send(request);
 		}
 
 		[HttpPost]
-		public async Task<ApiResult> ForgotPassword(ForgotPasswordCommand request)
+		public async Task<ApiResult> ForgotPassword(ForgotPassword request)
 		{
 			return await _mediator.Send(request);
 		}
 
 		[HttpPost]
-		public async Task<ApiResult> ResetPassword(ResetPasswordCommand request)
+		public async Task<ApiResult> ResetPassword(ResetPassword request)
 		{
 			return await _mediator.Send(request);
 		}

@@ -11,14 +11,14 @@ using Montr.Idx.Impl.Entities;
 
 namespace Montr.Idx.Impl.CommandHandlers
 {
-	public class ExternalLoginCommandHandler : IRequestHandler<ExternalLoginCommand, ChallengeResult>
+	public class ExternalLoginHandler : IRequestHandler<ExternalLogin, ChallengeResult>
 	{
-		private readonly ILogger<ExternalLoginCommandHandler> _logger;
+		private readonly ILogger<ExternalLoginHandler> _logger;
 		private readonly SignInManager<DbUser> _signInManager;
 		private readonly IAppUrlBuilder _appUrlBuilder;
 
-		public ExternalLoginCommandHandler(
-			ILogger<ExternalLoginCommandHandler> logger,
+		public ExternalLoginHandler(
+			ILogger<ExternalLoginHandler> logger,
 			SignInManager<DbUser> signInManager,
 			IAppUrlBuilder appUrlBuilder)
 		{
@@ -27,7 +27,7 @@ namespace Montr.Idx.Impl.CommandHandlers
 			_appUrlBuilder = appUrlBuilder;
 		}
 
-		public Task<ChallengeResult> Handle(ExternalLoginCommand request, CancellationToken cancellationToken)
+		public Task<ChallengeResult> Handle(ExternalLogin request, CancellationToken cancellationToken)
 		{
 			var redirectUrl = _appUrlBuilder.Build(ClientRoutes.ExternalLogin,
 				new Dictionary<string, string> { { "returnUrl", request.ReturnUrl } });
