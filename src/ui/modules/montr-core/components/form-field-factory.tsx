@@ -24,7 +24,7 @@ class BooleanFieldFactory implements FormFieldFactory {
 
 class StringFieldFactory implements FormFieldFactory {
 	createNode(field: IFormField, data: IIndexer): React.ReactNode {
-		return <Input placeholder={field.placeholder} />;
+		return <Input allowClear placeholder={field.placeholder} />;
 	}
 }
 
@@ -35,7 +35,7 @@ class TextAreaFieldFactory implements FormFieldFactory {
 
 		const minRows = textAreaField.rows || 4;
 
-		return <Input.TextArea placeholder={field.placeholder} autoSize={{ minRows: minRows, maxRows: 24 }} />;
+		return <Input.TextArea allowClear placeholder={field.placeholder} autoSize={{ minRows: minRows, maxRows: 24 }} />;
 	}
 }
 
@@ -56,7 +56,7 @@ class SelectFieldFactory implements FormFieldFactory {
 
 class PasswordFieldFactory implements FormFieldFactory {
 	createNode(field: IFormField, data: IIndexer): React.ReactNode {
-		return <Input.Password placeholder={field.placeholder} />;
+		return <Input.Password allowClear placeholder={field.placeholder} />;
 	}
 }
 
