@@ -16,7 +16,7 @@
 [Dd]ebugPublic/
 [Rr]elease/
 x64/
-assets/
+**/assets/*.js**
 build/
 bld/
 [Bb]in/
