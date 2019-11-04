@@ -96,7 +96,7 @@ export class AuthService {
 	public processCallback(): void {
 		const url = this._navigator.getUrl();
 
-		console.log("processCallback()", window.frameElement, url);
+		// console.log("processCallback()", window.frameElement, url);
 
 		if (url.indexOf(AuthConstants.RedirectUri) !== -1) {
 			this._userManager.signinRedirectCallback(url)

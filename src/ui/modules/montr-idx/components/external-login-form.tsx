@@ -52,7 +52,7 @@ export class ExternalLoginForm extends React.Component<IProps, IState> {
 				</p>}
 
 				{authSchemes.length > 0 && <form method="post" action={`${Constants.apiURL}/authentication/externalLogin`}>
-					<input type="hidden" name={Constants.returnUrlParam} value={this._navigation.getReturnUrlParameter()} />
+					<input type="hidden" name={Constants.returnUrlParam} value={this._navigation.getReturnUrlParameter() || ""} />
 					{authSchemes.map(x => (
 						<Button
 							key={x.name}
