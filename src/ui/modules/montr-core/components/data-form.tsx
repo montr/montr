@@ -1,10 +1,11 @@
 import * as React from "react";
 import { Form, Button, Spin } from "antd";
 import { FormComponentProps } from "antd/lib/form";
-import { IFormField, IIndexer, IApiResult, IApiResultError } from "../models";
+import { IFormField, IIndexer, IApiResult } from "../models";
 import { NotificationService } from "../services/notification-service";
 import { FormDefaults, FormFieldFactory } from ".";
 import { withTranslation, WithTranslation } from "react-i18next";
+import { NavigationService } from "@montr-core/services";
 
 declare const FormLayouts: ["horizontal", "inline", "vertical"];
 
@@ -15,6 +16,8 @@ interface IProps extends WithTranslation, FormComponentProps {
 	showControls?: boolean;
 	submitButton?: string;
 	resetButton?: string;
+	successMessage?: string;
+	errorMessage?: string;
 	onSubmit: (values: IIndexer) => Promise<IApiResult>
 }
 
@@ -23,6 +26,8 @@ interface IState {
 }
 
 export class WrappedDataForm extends React.Component<IProps, IState> {
+
+	private _navigation = new NavigationService();
 	private _notificationService = new NotificationService();
 
 	constructor(props: IProps) {
@@ -43,7 +48,7 @@ export class WrappedDataForm extends React.Component<IProps, IState> {
 	handleSubmit = async (e: React.SyntheticEvent) => {
 		e.preventDefault();
 
-		const { form, onSubmit: onSave } = this.props;
+		const { t, form, onSubmit: onSave, successMessage, errorMessage } = this.props;
 
 		form.validateFieldsAndScroll(async (errors, values: any) => {
 			if (errors) {
@@ -56,13 +61,17 @@ export class WrappedDataForm extends React.Component<IProps, IState> {
 					var result = await onSave(values);
 
 					if (result && result.success) {
-						this._notificationService.success("Данные успешно сохранены");
+						this._notificationService.success(successMessage || t("dataForm.submit.success"));
+
+						if (result.redirectUrl) {
+							this._navigation.navigate(result.redirectUrl);
+						}
 					}
 
 					await this.setFieldErrors(result, values);
 
 				} catch (error) {
-					this._notificationService.error("Ошибка при сохранении данных", error.message);
+					this._notificationService.error(errorMessage || t("dataForm.submit.error"), error.message);
 				}
 				finally {
 					this.setState({ loading: false });

@@ -1,5 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using MediatR;
+﻿using MediatR;
 using Montr.Core.Models;
 using Montr.Idx.Models;
 
@@ -7,7 +6,6 @@ namespace Montr.Idx.Commands
 {
 	public class ExternalLoginCallback : IRequest<ExternalLoginCallback.Result>
 	{
-		[Required]
 		public string ReturnUrl { get; set; }
 
 		public string RemoteError { get; set; }

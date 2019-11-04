@@ -4,10 +4,11 @@ import { Spin } from "antd";
 import { Translation } from "react-i18next";
 import { AccountService } from "../services/account-service";
 import { IExternalLoginModel, IExternalLoginResult, IExternalRegisterModel } from "../models";
-import { NotificationService, MetadataService } from "@montr-core/services";
+import { NotificationService, MetadataService, NavigationService } from "@montr-core/services";
 import { RouteComponentProps } from "react-router";
-import { Patterns } from "@montr-idx/module";
+import { Patterns, Views } from "@montr-idx/module";
 import { IFormField, IApiResult } from "@montr-core/models";
+import { Constants } from "@montr-core/constants";
 
 interface IProps extends RouteComponentProps {
 }
@@ -20,6 +21,7 @@ interface IState {
 
 export default class ExternalLogin extends React.Component<IProps, IState> {
 
+	private _navigation = new NavigationService();
 	private _notification = new NotificationService();
 	private _metadataService = new MetadataService();
 	private _accountService = new AccountService();
@@ -43,11 +45,9 @@ export default class ExternalLogin extends React.Component<IProps, IState> {
 
 	fetchData = async () => {
 
-		const params = new URLSearchParams(window.location.search);
-
 		const request: IExternalLoginModel = {
-			returnUrl: params.get("returnUrl"),
-			remoteError: params.get("remoteError")
+			returnUrl: this._navigation.getUrlParameter(Constants.returnUrlParamLower),
+			remoteError: this._navigation.getUrlParameter("remoteError")
 		};
 
 		const result: IExternalLoginResult = await this._accountService.externalLoginCallback(request);
@@ -56,12 +56,12 @@ export default class ExternalLogin extends React.Component<IProps, IState> {
 
 		if (result.success) {
 			if (result.redirectUrl) {
-				window.location.href = result.redirectUrl;
+				this._navigation.navigate(result.redirectUrl);
 			}
 
 			if (result.register) {
 
-				const dataView = await this._metadataService.load("ExternalRegister/Form");
+				const dataView = await this._metadataService.load(Views.formExternalRegister);
 
 				this.setState({ loading: false, data: result.register, fields: dataView.fields });
 			}
@@ -75,25 +75,13 @@ export default class ExternalLogin extends React.Component<IProps, IState> {
 		}
 	}
 
-	save = async (values: IExternalRegisterModel): Promise<IApiResult> => {
+	handleSubmit = async (values: IExternalRegisterModel): Promise<IApiResult> => {
 		const { data } = this.state;
 
-		const result = await this._accountService.externalRegister({
+		return await this._accountService.externalRegister({
 			returnUrl: data.returnUrl,
 			...values
 		});
-
-		if (result.success) {
-			window.location.href = this.getReturnUrl();
-		}
-
-		return result;
-	}
-
-	getReturnUrl = () => {
-		// todo: check url is local
-		const params = new URLSearchParams(window.location.search);
-		return params.get("ReturnUrl") || "/";
 	}
 
 	render = () => {
@@ -115,7 +103,7 @@ export default class ExternalLogin extends React.Component<IProps, IState> {
 								<DataForm
 									fields={fields}
 									data={data}
-									onSubmit={this.save}
+									onSubmit={this.handleSubmit}
 									submitButton={t("button.register")}
 								/>
 							</div>

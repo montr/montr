@@ -24,8 +24,6 @@ namespace Montr.Idx.Impl.CommandHandlers
 
 		public async Task<ApiResult> Handle(Login request, CancellationToken cancellationToken)
 		{
-			var returnUrl = request.ReturnUrl ?? "~/";
-
 			// This doesn't count login failures towards account lockout
 			// To enable password failures to trigger account lockout, set lockoutOnFailure: true
 			var result = await _signInManager.PasswordSignInAsync(
@@ -35,13 +33,14 @@ namespace Montr.Idx.Impl.CommandHandlers
 			{
 				_logger.LogInformation("User logged in.");
 
-				return new ApiResult { RedirectUrl = returnUrl };
+				// todo: check redirect is local
+				return new ApiResult { RedirectUrl = request.ReturnUrl };
 			}
 
 			if (result.RequiresTwoFactor)
 			{
 				// return RedirectToPage("./LoginWith2fa", new { ReturnUrl = returnUrl, RememberMe = Input.RememberMe });
-				return new ApiResult { RedirectRoute = "./LoginWith2fa", RedirectUrl = returnUrl };
+				return new ApiResult { RedirectRoute = "./LoginWith2fa", RedirectUrl = request.ReturnUrl };
 			}
 
 			if (result.IsLockedOut)

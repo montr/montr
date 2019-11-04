@@ -12,6 +12,14 @@ export const Patterns = {
 	resetPassword: "/account/reset-password/:code",
 };
 
+export const Views = {
+	formLogin: "Login/Form",
+	formRegister: "Register/Form",
+	formExternalRegister: "ExternalRegister/Form",
+	formForgotPassword: "ForgotPassword/Form",
+	formResetPassword: "ResetPassword/Form",
+};
+
 AppRouteRegistry.add([
 	{ path: Patterns.register, layout: Layout.public, exact: true, component: React.lazy(() => import("./pages/register")) },
 	{ path: Patterns.confirmEmail, layout: Layout.public, exact: true, component: React.lazy(() => import("./pages/confirm-email")) },

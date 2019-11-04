@@ -6,7 +6,6 @@ namespace Montr.Idx.Commands
 {
 	public class ExternalLogin : IRequest<ChallengeResult>
 	{
-		// todo: remove, use client redirect?
 		public string ReturnUrl { get; set; }
 
 		[Required]

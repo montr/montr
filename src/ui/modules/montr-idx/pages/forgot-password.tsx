@@ -6,6 +6,7 @@ import { MetadataService } from "@montr-core/services";
 import { ILoginModel } from "../models/";
 import { Translation } from "react-i18next";
 import { AccountService } from "../services/account-service";
+import { Views } from "../module";
 
 interface IProps {
 }
@@ -40,7 +41,7 @@ export default class ForgotPassword extends React.Component<IProps, IState> {
 	}
 
 	fetchData = async () => {
-		const dataView = await this._metadataService.load("ForgotPassword/Form");
+		const dataView = await this._metadataService.load(Views.formForgotPassword);
 
 		this.setState({ loading: false, fields: dataView.fields });
 	}

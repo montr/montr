@@ -1,11 +1,13 @@
 import * as React from "react";
 import { Page, DataForm } from "@montr-core/components";
 import { IFormField, IApiResult } from "@montr-core/models";
-import { Spin } from "antd";
+import { Spin, Row, Col } from "antd";
 import { MetadataService } from "@montr-core/services";
 import { IRegisterModel } from "../models/";
 import { Translation } from "react-i18next";
 import { AccountService } from "../services/account-service";
+import { ExternalLoginForm } from "../components";
+import { Views } from "../module";
 
 interface IProps {
 }
@@ -40,7 +42,7 @@ export default class Register extends React.Component<IProps, IState> {
 	}
 
 	fetchData = async () => {
-		const dataView = await this._metadataService.load("Register/Form");
+		const dataView = await this._metadataService.load(Views.formRegister);
 
 		this.setState({ loading: false, fields: dataView.fields });
 	}
@@ -55,20 +57,28 @@ export default class Register extends React.Component<IProps, IState> {
 		return (
 			<Translation ns="idx">
 				{(t) => <Page title={t("page.register.title")}>
+					<Row>
+						<Col offset={4} span={8} style={{ padding: 12 }}>
 
-					<h3>{t("page.register.subtitle")}</h3>
+							<h3>{t("page.register.subtitle")}</h3>
 
-					<div style={{ width: "50%" }} >
-						<Spin spinning={loading}>
-							<DataForm
-								fields={fields}
-								data={data}
-								onSubmit={this.save}
-								submitButton={t("button.register")}
-							/>
-						</Spin>
-					</div>
+							<Spin spinning={loading}>
+								<DataForm
+									fields={fields}
+									data={data}
+									onSubmit={this.save}
+									submitButton={t("button.register")}
+								/>
+							</Spin>
 
+						</Col>
+						<Col span={8} style={{ padding: 12 }}>
+
+							<h3>Use another service to register.</h3>
+
+							<ExternalLoginForm />
+						</Col>
+					</Row>
 				</Page>}
 			</Translation>
 		);

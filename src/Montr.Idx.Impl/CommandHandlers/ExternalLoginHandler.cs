@@ -29,8 +29,9 @@ namespace Montr.Idx.Impl.CommandHandlers
 
 		public Task<ChallengeResult> Handle(ExternalLogin request, CancellationToken cancellationToken)
 		{
+			// todo: make returnUrl constant
 			var redirectUrl = _appUrlBuilder.Build(ClientRoutes.ExternalLogin,
-				new Dictionary<string, string> { { "returnUrl", request.ReturnUrl } });
+				new Dictionary<string, string> { { "returnUrl", request.ReturnUrl ?? "/" } });
 
 			var properties = _signInManager.ConfigureExternalAuthenticationProperties(request.Provider, redirectUrl);
 			var result = new ChallengeResult(request.Provider, properties);

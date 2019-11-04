@@ -4,7 +4,7 @@ import { Spin, Button } from "antd";
 import { RouteComponentProps } from "react-router-dom";
 import { Translation } from "react-i18next";
 import { AccountService } from "../services/account-service";
-import { Patterns } from "../module";
+import { Patterns, Views } from "../module";
 import { MetadataService } from "@montr-core/services";
 import { IResetPasswordModel } from "../models";
 import { IApiResult, IFormField } from "@montr-core/models";
@@ -44,7 +44,7 @@ export default class ResetPassword extends React.Component<IProps, IState> {
 	}
 
 	fetchData = async () => {
-		const dataView = await this._metadataService.load("ResetPassword/Form");
+		const dataView = await this._metadataService.load(Views.formResetPassword);
 
 		this.setState({ loading: false, fields: dataView.fields });
 	}

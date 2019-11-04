@@ -10,7 +10,10 @@ export const Constants = {
 	authorityURL: AUTHORITY_APP_URL,
 	publicURL: APP_URL,
 	apiURL: APP_URL + "/api",
-	returnUrlParam: "return_url",
+
+	returnUrlParam: "ReturnUrl",
+	returnUrlParamLower: "returnUrl", // todo: why case differ from Constants.returnUrl?
+
 	defaultPageSize: 10
 };
 

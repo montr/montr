@@ -10,6 +10,8 @@
       "button.search": "Search",
       "button.submit": "Submit",
       "confirm.title": "Confirm operation",
+      "dataForm.submit.error": "An error occurred while submit data.",
+      "dataForm.submit.success": "Data successfully submitted.",
       "operation.error": "An error occurred while performing the operation.",
       "operation.success": "The operation completed successfully."
     },
@@ -48,6 +50,8 @@
       "button.save": "Сохранить",
       "button.search": "Искать",
       "confirm.title": "Подтверждение операции",
+      "dataForm.submit.error": "Ошибка при сохранении данных.",
+      "dataForm.submit.success": "Данные успешно сохранены.",
       "operation.error": "Произошла ошибка при выполнении операции.",
       "operation.success": "Операция выполнена успешно."
     },
