@@ -77,7 +77,7 @@ module.exports = {
 	},
 	plugins: [
 		new copyPlugin([
-			{ from: "./assets", to: "../../Host/wwwroot/assets" }
+			{ from: "assets", to: "../../Host/wwwroot/assets" }
 		]),
 	],
 };
