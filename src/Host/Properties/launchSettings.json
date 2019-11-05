@@ -25,8 +25,8 @@
 			"environmentVariables": {
 				"ASPNETCORE_ENVIRONMENT": "Development",
 				"COOKIE_DOMAIN": ".montr.io",
-				"AUTHORITY_APP_URL": "http://app.montr.io:5010",
-				"APP_URL": "http://app.montr.io:5010"
+				"AUTHORITY_APP_URL": "https://app.montr.io:5001",
+				"APP_URL": "https://app.montr.io:5001"
 			}
 		}
 	}

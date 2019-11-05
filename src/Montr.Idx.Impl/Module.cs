@@ -127,6 +127,11 @@ namespace Montr.Idx.Impl
 
 					options.ClientId = configuration["Authentication:Google:ClientId"];
 					options.ClientSecret = configuration["Authentication:Google:ClientSecret"];
+				})
+				.AddFacebook(options =>
+				{
+					options.AppId = configuration["Authentication:Facebook:AppId"];
+					options.AppSecret = configuration["Authentication:Facebook:AppSecret"];
 				});
 
 			if (_environment.IsDevelopment())
