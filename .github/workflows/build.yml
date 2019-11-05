@@ -1,4 +1,6 @@
 name: build
+env:
+  DOTNET_CLI_TELEMETRY_OPTOUT: 1
 
 on: [push]
 
