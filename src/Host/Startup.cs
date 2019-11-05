@@ -100,7 +100,7 @@ namespace Host
 			});
 
 			app.UseHsts();
-			// app.UseHttpsRedirection();
+			app.UseHttpsRedirection();
 			app.UseStaticFiles();
 			app.UseCookiePolicy();
 
@@ -111,14 +111,14 @@ namespace Host
 
 			app.UseRouting();
 
-			/*app.UseEndpoints(endpoints =>
+			app.UseEndpoints(endpoints =>
 			{
 				endpoints.MapControllers();
 				endpoints.MapRazorPages();
 				// endpoints.MapHub<MyChatHub>()
 				// endpoints.MapGrpcService<MyCalculatorService>()
 				endpoints.MapDefaultControllerRoute();
-			});*/
+			});
 
 			app.UseMvc(routes =>
 			{

@@ -114,16 +114,21 @@ namespace Montr.Idx.Impl
 				.AddInMemoryClients(Config.GetClients(idxServerOptions.ClientUrls))
 				.AddAspNetIdentity<DbUser>();
 
-			/*services.AddOpenIdApiAuthentication(
-				configuration.GetSection("OpenId").Get<OpenIdOptions>());*/
+			// services.AddOpenIdAuthentication(configuration.GetSection("OpenId").Get<OpenIdOptions>());
 
 			services
-				.AddAuthentication()
-				// .AddIdentityServerJwt()
+				.AddAuthentication(/*options =>
+				{
+					options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+					options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+					options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+				}*/)
+				// .AddIdentityServerAuthentication()
+				// .AddJwtBearer()
 				.AddGoogle("Google", options =>
 				{
 					// options.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
-					options.SignInScheme = IdentityConstants.ExternalScheme;
+					// options.SignInScheme = IdentityConstants.ExternalScheme;
 
 					options.ClientId = configuration["Authentication:Google:ClientId"];
 					options.ClientSecret = configuration["Authentication:Google:ClientSecret"];
@@ -132,6 +137,11 @@ namespace Montr.Idx.Impl
 				{
 					options.AppId = configuration["Authentication:Facebook:AppId"];
 					options.AppSecret = configuration["Authentication:Facebook:AppSecret"];
+				})
+				.AddMicrosoftAccount("Microsoft", options =>
+				{
+					options.ClientId = configuration["Authentication:Microsoft:ClientId"];
+					options.ClientSecret = configuration["Authentication:Microsoft:ClientSecret"];
 				});
 
 			if (_environment.IsDevelopment())
@@ -152,7 +162,7 @@ namespace Montr.Idx.Impl
 			// app.UseCors("default"); // not needed, since UseIdentityServer adds cors
 			// app.UseAuthentication(); // not needed, since UseIdentityServer adds the authentication middleware
 			app.UseIdentityServer();
-			// app.UseAuthorization();
+			app.UseAuthorization();
 		}
 	}
 }
