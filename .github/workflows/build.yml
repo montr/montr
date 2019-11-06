@@ -24,7 +24,7 @@ jobs:
         with:
           node-version: '12.x'
       - run: |
-          npm install
+          npm ci
           npm run build-prod
           # - run: npm test
         working-directory: ./src/ui
