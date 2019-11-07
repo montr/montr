@@ -40,16 +40,27 @@ namespace Montr.Core.Services
 					Icon = "setting",
 					Items = new List<Menu>
 					{
-						new Menu {Id = "m.3.1", Name = "Справочники", Route = "/classifiers"},
-						new Menu {Id = "m.3.2", Name = "Настройки", Route = "/settings"},
-						new Menu {Id = "m.3.3", Name = "Локализация", Route = "/locales"},
-						new Menu {Id = "hangfire", Name = "Hangfire Dashboard", Url = "/hangfire"}
+						new Menu { Id = "m.3.1", Name = "Справочники", Route = "/classifiers" },
+						new Menu { Id = "m.3.2", Name = "Настройки", Route = "/settings" },
+						new Menu { Id = "m.3.3", Name = "Локализация", Route = "/locales" },
+						new Menu { Id = "hangfire", Name = "Hangfire Dashboard", Url = "/hangfire" }
 					}
 				});
 
 				result.Items.Add(new Menu
 				{
-					Id = "tender",
+					Id = "m.4",
+					Name = "Пользователь",
+					Icon = "user",
+					Items = new List<Menu>
+					{
+						new Menu { Id = "m.4.1", Name = "Профиль", Route = "/profile" }
+					}
+				});
+
+				result.Items.Add(new Menu
+				{
+					Id = "promo",
 					Name = "Промо",
 					Icon = "global",
 					Route = "/"

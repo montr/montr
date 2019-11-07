@@ -36,6 +36,7 @@ namespace Montr.Worker.Hangfire
 
 			app.UseHangfireDashboard(options: new DashboardOptions
 			{
+				AppPath = "/dashboard",
 				DisplayNameFunc = (context, job) => FormatJobName(job)
 			});
 		}

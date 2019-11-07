@@ -200,6 +200,15 @@ namespace Montr.Core.Services
 				};
 			}
 
+			if (viewId == "Profile/Form")
+			{
+				result.Fields = new List<FormField>
+				{
+					new StringField { Key = "username", Name = "Имя пользователя", Required = true },
+					new StringField { Key = "phoneNumber", Name = "Номер телефона" }
+				};
+			}
+
 			// Events
 			if (viewId == "PrivateEvent/Edit")
 			{

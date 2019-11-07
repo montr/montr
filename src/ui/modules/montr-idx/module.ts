@@ -10,6 +10,8 @@ export const Patterns = {
 	externalLogin: "/account/external-login",
 	forgotPassword: "/account/forgot-password",
 	resetPassword: "/account/reset-password/:code",
+
+	profile: "/profile"
 };
 
 export const Views = {
@@ -18,6 +20,8 @@ export const Views = {
 	formExternalRegister: "ExternalRegister/Form",
 	formForgotPassword: "ForgotPassword/Form",
 	formResetPassword: "ResetPassword/Form",
+
+	formProfile: "Profile/Form"
 };
 
 AppRouteRegistry.add([
@@ -28,4 +32,6 @@ AppRouteRegistry.add([
 	{ path: Patterns.externalLogin, layout: Layout.public, exact: true, component: React.lazy(() => import("./pages/external-login")) },
 	{ path: Patterns.forgotPassword, layout: Layout.public, exact: true, component: React.lazy(() => import("./pages/forgot-password")) },
 	{ path: Patterns.resetPassword, layout: Layout.public, exact: true, component: React.lazy(() => import("./pages/reset-password")) },
+
+	{ path: Patterns.profile, exact: true, component: React.lazy(() => import("./pages/profile")) },
 ]);
