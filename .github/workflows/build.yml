@@ -12,8 +12,7 @@ jobs:
     steps:
       - uses: actions/checkout@v1
 
-      - name: setup .net core
-        uses: actions/setup-dotnet@v1
+      - uses: actions/setup-dotnet@v1
         with:
           dotnet-version: '3.0.100'
 

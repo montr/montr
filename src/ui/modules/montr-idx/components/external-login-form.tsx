@@ -55,11 +55,12 @@ export class ExternalLoginForm extends React.Component<IProps, IState> {
 					<input type="hidden" name={Constants.returnUrlParam} value={this._navigation.getReturnUrlParameter() || ""} />
 					{authSchemes.map(x => (
 						<Button
+							style={{ marginTop: 4 }}
 							key={x.name}
 							htmlType="submit"
 							name="provider"
 							value={x.name}
-							icon={x.name.toLowerCase()}>
+							icon={x.icon}>
 							{`Log in using your ${x.displayName} account`}
 						</Button>
 					))}

@@ -28,7 +28,12 @@ namespace Montr.Idx.Impl.QueryHandlers
 		{
 			var schemes = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
 
-			return schemes.Select(x => new AuthScheme { Name = x.Name, DisplayName = x.DisplayName }).ToList();
+			return schemes.Select(x => new AuthScheme
+			{
+				Name = x.Name,
+				DisplayName = x.DisplayName,
+				Icon = x.Name.ToLower() == "microsoft" ? "windows" : x.Name.ToLower()
+			}).ToList();
 		}
 	}
 }
