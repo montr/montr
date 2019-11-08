@@ -2,7 +2,7 @@
 	"compilerOptions": {
 		"lib": [
 			"dom",
-			"es7"
+			"esnext"
 		],
 		"sourceMap": true,
 		"noImplicitAny": true,
