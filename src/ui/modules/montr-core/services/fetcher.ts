@@ -74,7 +74,7 @@ export class Fetcher {
 		const config = this.getRequestConfig();
 
 		// const response = await authenticated.post(url, JSON.stringify(body), config);
-		const response = await authenticated.post(url, body, config);
+		const response = await authenticated.post(url, body || {}, config);
 
 		return response ? response.data : null;
 	}

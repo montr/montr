@@ -41,9 +41,11 @@ export default class Register extends React.Component<IProps, IState> {
 	}
 
 	fetchData = async () => {
+		const data = await this._profileService.get();
+
 		const dataView = await this._metadataService.load(Views.formProfile);
 
-		this.setState({ loading: false, fields: dataView.fields });
+		this.setState({ loading: false, data, fields: dataView.fields });
 	}
 
 	save = async (values: IProfileModel): Promise<IApiResult> => {

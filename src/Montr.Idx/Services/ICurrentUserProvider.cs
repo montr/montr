@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Linq;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
 
 namespace Montr.Idx.Services
@@ -10,6 +11,8 @@ namespace Montr.Idx.Services
 		T GetUserId<T>();
 
 		Guid GetUserUid();
+
+		ClaimsPrincipal GetUser();
 	}
 
 	public class DefaultCurrentUserProvider : ICurrentUserProvider
@@ -37,13 +40,23 @@ namespace Montr.Idx.Services
 			}
 
 			throw new InvalidOperationException("User is not authenticated");
-			// throw new UnauthorizedAccessException("User is not authenticated");
-			// _httpContextAccessor.HttpContext.Response.StatusCode = (int)HttpStatusCode.Forbidden;
 		}
 
 		public Guid GetUserUid()
 		{
 			return GetUserId<Guid>();
+		}
+
+		public ClaimsPrincipal GetUser()
+		{
+			var user = _httpContextAccessor.HttpContext.User;
+
+			if (user.Identity.IsAuthenticated)
+			{
+				return user;
+			}
+
+			throw new InvalidOperationException("User is not authenticated");
 		}
 	}
 }

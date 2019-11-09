@@ -4,7 +4,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Logging;
 using Montr.Idx.Impl.Entities;
 using Montr.Idx.Models;
 using Montr.Idx.Queries;
@@ -13,14 +12,10 @@ namespace Montr.Idx.Impl.QueryHandlers
 {
 	public class GetAuthSchemesHandler : IRequestHandler<GetAuthSchemes, IList<AuthScheme>>
 	{
-		private readonly ILogger<GetAuthSchemesHandler> _logger;
 		private readonly SignInManager<DbUser> _signInManager;
 
-		public GetAuthSchemesHandler(
-			ILogger<GetAuthSchemesHandler> logger,
-			SignInManager<DbUser> signInManager)
+		public GetAuthSchemesHandler(SignInManager<DbUser> signInManager)
 		{
-			_logger = logger;
 			_signInManager = signInManager;
 		}
 

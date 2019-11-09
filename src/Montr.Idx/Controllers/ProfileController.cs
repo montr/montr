@@ -1,19 +1,33 @@
 ﻿using System.Threading.Tasks;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Montr.Core.Models;
 using Montr.Idx.Commands;
+using Montr.Idx.Models;
+using Montr.Idx.Queries;
+using Montr.Idx.Services;
 
 namespace Montr.Idx.Controllers
 {
-	[ApiController, Route("api/[controller]/[action]")]
+	[Authorize, ApiController, Route("api/[controller]/[action]")]
 	public class ProfileController : ControllerBase
 	{
 		private readonly IMediator _mediator;
+		private readonly ICurrentUserProvider _currentUserProvider;
 
-		public ProfileController(IMediator mediator)
+		public ProfileController(IMediator mediator, ICurrentUserProvider currentUserProvider)
 		{
 			_mediator = mediator;
+			_currentUserProvider = currentUserProvider;
+		}
+
+		[HttpPost]
+		public async Task<Profile> Get(GetProfile request)
+		{
+			request.User = _currentUserProvider.GetUser();
+
+			return await _mediator.Send(request);
 		}
 
 		[HttpPost]

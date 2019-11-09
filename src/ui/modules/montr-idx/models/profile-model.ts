@@ -1,4 +1,4 @@
 export interface IProfileModel {
-	username?: string;
+	userName?: string;
 	phoneNumber?: string;
 }

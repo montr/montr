@@ -113,17 +113,20 @@ export class WrappedDataForm extends React.Component<IProps, IState> {
 		const { layout, data } = this.props;
 		const { getFieldDecorator } = this.props.form;
 
+		const initialValue = data ? data[field.key] : null;
+
 		const fieldOptions = field.type == "boolean"
 			? {
-				valuePropName: "checked"
+				initialValue: initialValue,
+				valuePropName: "checked",
 			}
 			: {
+				initialValue: initialValue,
 				rules: [{
 					required: field.required,
 					whitespace: field.required,
 					message: `Поле «${field.name}» обязательно для заполнения`
-				}],
-				initialValue: data[field.key]
+				}]
 			};
 
 		const fieldFactory = FormFieldFactory.get(field.type);
