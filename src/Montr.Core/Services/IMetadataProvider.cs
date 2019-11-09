@@ -204,8 +204,8 @@ namespace Montr.Core.Services
 			{
 				result.Fields = new List<FormField>
 				{
-					new StringField { Key = "userName", Name = "Имя пользователя", Required = true },
-					new StringField { Key = "phoneNumber", Name = "Номер телефона" }
+					new StringField { Key = "userName", Name = "Имя пользователя", Readonly = true },
+					new StringField { Key = "phoneNumber", Name = "Номер телефона" } // todo: PhoneField
 				};
 			}
 

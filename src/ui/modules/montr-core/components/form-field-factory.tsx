@@ -24,7 +24,7 @@ class BooleanFieldFactory implements FormFieldFactory {
 
 class StringFieldFactory implements FormFieldFactory {
 	createNode(field: IFormField, data: IIndexer): React.ReactNode {
-		return <Input allowClear placeholder={field.placeholder} />;
+		return <Input allowClear placeholder={field.placeholder} disabled={field.readonly} />;
 	}
 }
 

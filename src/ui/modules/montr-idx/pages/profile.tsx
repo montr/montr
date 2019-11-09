@@ -65,6 +65,7 @@ export default class Register extends React.Component<IProps, IState> {
 							fields={fields}
 							data={data}
 							onSubmit={this.save}
+							successMessage="Your profile has been updated"
 						/>
 					</Spin>
 				</Page>}

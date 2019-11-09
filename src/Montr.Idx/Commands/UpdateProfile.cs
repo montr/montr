@@ -1,9 +1,12 @@
-﻿using MediatR;
+﻿using System.Security.Claims;
+using MediatR;
 using Montr.Core.Models;
+using Montr.Idx.Models;
 
 namespace Montr.Idx.Commands
 {
-	public class UpdateProfile : IRequest<ApiResult>
+	public class UpdateProfile : Profile, IRequest<ApiResult>
 	{
+		public ClaimsPrincipal User { get; set; }
 	}
 }

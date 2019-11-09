@@ -33,6 +33,8 @@ namespace Montr.Idx.Controllers
 		[HttpPost]
 		public async Task<ApiResult> Update(UpdateProfile request)
 		{
+			request.User = _currentUserProvider.GetUser();
+
 			return await _mediator.Send(request);
 		}
 	}
