@@ -18,7 +18,7 @@ interface IProps extends WithTranslation, FormComponentProps {
 	resetButton?: string;
 	successMessage?: string;
 	errorMessage?: string;
-	onSubmit: (values: IIndexer) => Promise<IApiResult>
+	onSubmit: (values: IIndexer) => Promise<IApiResult>;
 }
 
 interface IState {
@@ -43,7 +43,7 @@ export class WrappedDataForm extends React.Component<IProps, IState> {
 		const { form } = this.props;
 
 		return form.getFieldValue(fieldName);
-	}
+	};
 
 	handleSubmit = async (e: React.SyntheticEvent) => {
 		e.preventDefault();
@@ -78,7 +78,7 @@ export class WrappedDataForm extends React.Component<IProps, IState> {
 				}
 			}
 		});
-	}
+	};
 
 	setFieldErrors = async (result: IApiResult, values: any) => {
 		const { form, fields } = this.props,
@@ -107,13 +107,13 @@ export class WrappedDataForm extends React.Component<IProps, IState> {
 				this._notificationService.error(otherErrors);
 			}
 		}
-	}
+	};
 
 	createItem = (field: IFormField): React.ReactNode => {
 		const { layout, data } = this.props;
 		const { getFieldDecorator } = this.props.form;
 
-		const initialValue = data ? data[field.key] : null;
+		const initialValue = data?.[field.key];
 
 		const fieldOptions = field.type == "boolean"
 			? {
@@ -146,7 +146,7 @@ export class WrappedDataForm extends React.Component<IProps, IState> {
 				{getFieldDecorator(field.key, fieldOptions)(fieldNode)}
 			</Form.Item>
 		);
-	}
+	};
 
 	render = () => {
 		const { layout, fields, showControls, t, submitButton } = this.props,
@@ -167,7 +167,7 @@ export class WrappedDataForm extends React.Component<IProps, IState> {
 				</Form>
 			</Spin>
 		);
-	}
+	};
 }
 
 export const DataForm = withTranslation()(Form.create<IProps>()(WrappedDataForm));
