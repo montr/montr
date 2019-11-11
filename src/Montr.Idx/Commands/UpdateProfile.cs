@@ -5,7 +5,7 @@ using Montr.Idx.Models;
 
 namespace Montr.Idx.Commands
 {
-	public class UpdateProfile : Profile, IRequest<ApiResult>
+	public class UpdateProfile : ProfileModel, IRequest<ApiResult>
 	{
 		public ClaimsPrincipal User { get; set; }
 	}

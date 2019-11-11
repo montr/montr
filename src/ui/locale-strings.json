@@ -16,9 +16,12 @@
       "operation.success": "The operation completed successfully."
     },
     "idx": {
+      "button.changePassword": "Change password",
       "button.login": "Log in",
       "button.register": "Register",
       "button.resetPassword": "Reset",
+      "button.setPassword": "Set password",
+      "page.changePassword.title": "Change password",
       "page.confirmEmail.title": "Confirm email",
       "page.forgotPassword.subtitle": "Enter your email.",
       "page.forgotPassword.title": "Forgot your password?",
@@ -30,10 +33,14 @@
       "page.login.title": "Log in",
       "page.logout.message": "You have successfully logged out of the application.",
       "page.logout.title": "Log out",
+      "page.profile.subtitle": "",
+      "page.profile.title": "Profile",
       "page.register.subtitle": "Create a new account.",
       "page.register.title": "Register",
       "page.resetPassword.subtitle": "Reset your password.",
-      "page.resetPassword.title": "Reset password"
+      "page.resetPassword.title": "Reset password",
+      "page.setPassword.info": "You do not have a local username/password for this site. Add a local account so you can log in without an external login.",
+      "page.setPassword.title": "Set password"
     },
     "tendr": {
       "cancel.confirm.content": "Are you sure you want to cancel the event?",
@@ -56,17 +63,24 @@
       "operation.success": "Операция выполнена успешно."
     },
     "idx": {
+      "button.changePassword": "Изменить пароль",
       "button.login": "Войти",
       "button.register": "Зарегистрироваться",
       "button.resetPassword": "Сбросить",
+      "button.setPassword": "Установить пароль",
+      "page.changePassword.title": "Изменить пароль",
       "page.confirmEmail.title": "Подтверждение электронной почты",
       "page.login.link.forgotPassword": "Забыли пароль?",
       "page.login.link.register": "Зарегистрироваться как новый пользователь",
       "page.login.section.loginExternal": "Использовать другой сервис для входа.",
       "page.login.section.loginLocal": "Использовать локальный аккаунт для входа.",
       "page.login.title": "Войти",
+      "page.profile.subtitle": "",
+      "page.profile.title": "Профиль",
       "page.register.subtitle": "Создать новый аккаунт.",
-      "page.register.title": "Регистрация"
+      "page.register.title": "Регистрация",
+      "page.setPassword.info": "У вас нет локального имени пользователя / пароля для этого сайта. Добавьте локальную учетную запись, чтобы вы могли войти без внешнего сервиса.",
+      "page.setPassword.title": "Установить пароль"
     },
     "tendr": {
       "cancel.confirm.content": "Вы действительно хотите отменить событие?",

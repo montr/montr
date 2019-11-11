@@ -12,13 +12,13 @@ using Montr.Idx.Impl.Services;
 
 namespace Montr.Idx.Impl.CommandHandlers
 {
-	public class ResetHandler : IRequestHandler<ResetPassword, ApiResult>
+	public class ResetPasswordHandler : IRequestHandler<ResetPassword, ApiResult>
 	{
-		private readonly ILogger<ResetHandler> _logger;
+		private readonly ILogger<ResetPasswordHandler> _logger;
 		private readonly UserManager<DbUser> _userManager;
 
-		public ResetHandler(
-			ILogger<ResetHandler> logger,
+		public ResetPasswordHandler(
+			ILogger<ResetPasswordHandler> logger,
 			UserManager<DbUser> userManager)
 		{
 			_logger = logger;

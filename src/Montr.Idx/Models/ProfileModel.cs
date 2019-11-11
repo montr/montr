@@ -2,9 +2,11 @@
 
 namespace Montr.Idx.Models
 {
-	public class Profile
+	public class ProfileModel
 	{
 		public string UserName { get; set; }
+
+		public bool HasPassword { get; set; }
 
 		[Phone]
 		[StringLength(12)]

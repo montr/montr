@@ -8,16 +8,17 @@ using Montr.Idx.Queries;
 
 namespace Montr.Idx.Impl.QueryHandlers
 {
-	public class GetProfileHandler : IRequestHandler<GetProfile, Profile>
+	public class GetProfileHandler : IRequestHandler<GetProfile, ProfileModel>
 	{
 		private readonly UserManager<DbUser> _userManager;
 
-		public GetProfileHandler(UserManager<DbUser> userManager)
+		public GetProfileHandler(
+			UserManager<DbUser> userManager)
 		{
 			_userManager = userManager;
 		}
 
-		public async Task<Profile> Handle(GetProfile request, CancellationToken cancellationToken)
+		public async Task<ProfileModel> Handle(GetProfile request, CancellationToken cancellationToken)
 		{
 			var user = await _userManager.GetUserAsync(request.User);
 
@@ -27,10 +28,11 @@ namespace Montr.Idx.Impl.QueryHandlers
 				// return NotFound($"Unable to load user with ID '{_userManager.GetUserId(User)}'.");
 			}
 
-			return new Profile
+			return new ProfileModel
 			{
 				UserName = await _userManager.GetUserNameAsync(user),
-				PhoneNumber = await _userManager.GetPhoneNumberAsync(user)
+				PhoneNumber = await _userManager.GetPhoneNumberAsync(user),
+				HasPassword = await _userManager.HasPasswordAsync(user)
 			};
 		}
 	}

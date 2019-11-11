@@ -23,7 +23,7 @@ namespace Montr.Idx.Controllers
 		}
 
 		[HttpPost]
-		public async Task<Profile> Get(GetProfile request)
+		public async Task<ProfileModel> Get(GetProfile request)
 		{
 			request.User = _currentUserProvider.GetUser();
 
@@ -32,6 +32,22 @@ namespace Montr.Idx.Controllers
 
 		[HttpPost]
 		public async Task<ApiResult> Update(UpdateProfile request)
+		{
+			request.User = _currentUserProvider.GetUser();
+
+			return await _mediator.Send(request);
+		}
+
+		[HttpPost]
+		public async Task<ApiResult> Update(ChangePassword request)
+		{
+			request.User = _currentUserProvider.GetUser();
+
+			return await _mediator.Send(request);
+		}
+
+		[HttpPost]
+		public async Task<ApiResult> Update(SetPassword request)
 		{
 			request.User = _currentUserProvider.GetUser();
 

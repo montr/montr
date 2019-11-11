@@ -174,9 +174,9 @@ class _EditEvent extends React.Component<IProps, IState> {
 		let toolbar: React.ReactNode;
 
 		toolbar = (<>
-			<Button type="primary" onClick={() => this.handlePublish()}>{t("button.publish")}</Button>&#xA0;
-			<Button icon="check" onClick={() => this.handleSave()}>{t("button.save")}</Button> &#xA0;
-			<Button onClick={() => this.handleCancel()}>{t("button.cancel")}</Button> &#xA0;
+			<Button type="primary" onClick={() => this.handlePublish()}>{t("button.publish")}</Button>
+			<Button icon="check" onClick={() => this.handleSave()}>{t("button.save")}</Button>
+			<Button onClick={() => this.handleCancel()}>{t("button.cancel")}</Button>
 		</>);
 
 		/* if (data.statusCode == "draft") {

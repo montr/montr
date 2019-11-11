@@ -5,8 +5,8 @@ import { Views } from "../module";
 import { IProfileModel } from "../models";
 import { ProfileService } from "../services/";
 import { Translation } from "react-i18next";
-import { Page, DataForm } from "@montr-core/components";
-import { Spin } from "antd";
+import { Page, DataForm, Toolbar, DataBreadcrumb, PageHeader } from "@montr-core/components";
+import { Spin, Button } from "antd";
 
 interface IProps {
 }
@@ -52,12 +52,37 @@ export default class Register extends React.Component<IProps, IState> {
 		return await this._profileService.update(values);
 	}
 
+	handleChangePassword = () => {
+		/* const { t } = this.props;
+
+		Modal.confirm({
+			title: t("confirm.title"),
+			content: t("cancel.confirm.content"),
+			onOk: () => {
+				this._eventService
+					.cancel(this.props.match.params.uid)
+					.then((result: IApiResult) => {
+						message.success(t("operation.success"));
+						this.fetchData();
+					});
+			}
+		}); */
+	}
+
 	render = () => {
 		const { loading, fields, data } = this.state;
 
 		return (
 			<Translation ns="idx">
-				{(t) => <Page title={t("page.profile.title")}>
+				{(t) => <Page
+				title={<>
+					<Toolbar float="right">
+					<Button onClick={this.handleChangePassword}>{t("button.changePassword")}</Button>
+					</Toolbar>
+	
+					<DataBreadcrumb items={[]} />
+					<PageHeader>{t("page.profile.title")}</PageHeader>
+				</>}>
 					<h3>{t("page.profile.subtitle")}</h3>
 
 					<Spin spinning={loading}>

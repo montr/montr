@@ -1,10 +1,11 @@
 ﻿using System.Security.Claims;
 using MediatR;
+using Montr.Core.Models;
 using Montr.Idx.Models;
 
-namespace Montr.Idx.Queries
+namespace Montr.Idx.Commands
 {
-	public class GetProfile : IRequest<ProfileModel>
+	public class SetPassword : SetPasswordModel, IRequest<ApiResult>
 	{
 		public ClaimsPrincipal User { get; set; }
 	}
