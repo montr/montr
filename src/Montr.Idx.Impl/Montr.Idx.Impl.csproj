@@ -8,9 +8,9 @@
     <PackageReference Include="IdentityServer4" Version="3.0.2" />
     <PackageReference Include="IdentityServer4.AccessTokenValidation" Version="3.0.1" />
     <PackageReference Include="IdentityServer4.AspNetIdentity" Version="3.0.2" />
-    <PackageReference Include="linq2db" Version="2.9.3" />
+    <PackageReference Include="linq2db" Version="2.9.4" />
     <PackageReference Include="linq2db.Identity" Version="2.0.1" />
-    <PackageReference Include="linq2db.PostgreSQL" Version="2.9.3" />
+    <PackageReference Include="linq2db.PostgreSQL" Version="2.9.4" />
     <PackageReference Include="MediatR" Version="7.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.ApiAuthorization.IdentityServer" Version="3.0.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.Facebook" Version="3.0.0" />
