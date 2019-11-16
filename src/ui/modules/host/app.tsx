@@ -1,6 +1,7 @@
 import * as React from "react";
 import * as ReactDOM from "react-dom";
 import { ConfigProvider } from "antd";
+import { Translation } from "react-i18next";
 // import locale from "antd/lib/locale-provider/ru_RU";
 import { Layout } from "@montr-core/constants";
 import { AppLayoutRegistry, AppRouteRegistry } from "@montr-core/services";
@@ -8,10 +9,7 @@ import { ErrorBoundary, UserContextProvider, AuthCallbackHandler, AppRouteList, 
 import { CompanyContextProvider } from "@montr-kompany/components";
 import { PublicLayout, PrivateLayout } from "./components";
 
-import "@montr-core/i18n";
-import "@montr-core/index.less"
 import "./modules"
-import { Translation } from "react-i18next";
 
 AppLayoutRegistry.register(Layout.public, PublicLayout);
 AppLayoutRegistry.register(Layout.private, PrivateLayout);

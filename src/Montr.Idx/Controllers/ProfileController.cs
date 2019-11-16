@@ -39,7 +39,7 @@ namespace Montr.Idx.Controllers
 		}
 
 		[HttpPost]
-		public async Task<ApiResult> Update(ChangePassword request)
+		public async Task<ApiResult> ChangePassword(ChangePassword request)
 		{
 			request.User = _currentUserProvider.GetUser();
 
@@ -47,7 +47,7 @@ namespace Montr.Idx.Controllers
 		}
 
 		[HttpPost]
-		public async Task<ApiResult> Update(SetPassword request)
+		public async Task<ApiResult> SetPassword(SetPassword request)
 		{
 			request.User = _currentUserProvider.GetUser();
 

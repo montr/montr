@@ -1,56 +1,34 @@
 import React from "react";
-import { IFormField, IApiResult } from "@montr-core/models";
-import { MetadataService } from "@montr-core/services";
-import { Views } from "../module";
-import { IProfileModel } from "../models";
-import { ProfileService } from "../services/";
+import { Button, Menu } from "antd";
 import { Translation } from "react-i18next";
-import { Page, DataForm, Toolbar, DataBreadcrumb, PageHeader } from "@montr-core/components";
-import { Spin, Button } from "antd";
+import { Page, Toolbar, DataBreadcrumb } from "@montr-core/components";
+import { PaneEditProfile } from "../components/pane-edit-profile";
 
 interface IProps {
 }
 
 interface IState {
-	loading: boolean;
-	data: IProfileModel;
-	fields?: IFormField[];
+	mode: "inline" | "horizontal";
+	selectedKey: string;
 }
 
-export default class Register extends React.Component<IProps, IState> {
+export default class Profile extends React.Component<IProps, IState> {
 
-	private _metadataService = new MetadataService();
-	private _profileService = new ProfileService();
+	private _main: HTMLDivElement | undefined = undefined;
 
 	constructor(props: IProps) {
 		super(props);
 
 		this.state = {
-			data: {},
-			loading: true
+			mode: "inline",
+			selectedKey: "base"
 		};
 	}
 
 	componentDidMount = async () => {
-		await this.fetchData();
-	}
-
-	componentWillUnmount = async () => {
-		await this._metadataService.abort();
-		await this._profileService.abort();
-	}
-
-	fetchData = async () => {
-		const data = await this._profileService.get();
-
-		const dataView = await this._metadataService.load(Views.formProfile);
-
-		this.setState({ loading: false, data, fields: dataView.fields });
-	}
-
-	save = async (values: IProfileModel): Promise<IApiResult> => {
-		return await this._profileService.update(values);
-	}
+		window.addEventListener("resize", this.resize);
+		this.resize();
+	};
 
 	handleChangePassword = () => {
 		/* const { t } = this.props;
@@ -67,34 +45,76 @@ export default class Register extends React.Component<IProps, IState> {
 					});
 			}
 		}); */
-	}
+	};
+
+	resize = () => {
+		if (!this._main) return;
+
+		requestAnimationFrame(() => {
+			if (!this._main) return;
+
+			let mode: "inline" | "horizontal" = "inline";
+
+			const { offsetWidth } = this._main;
+
+			if (this._main.offsetWidth < 641 && offsetWidth > 400) {
+				mode = "horizontal";
+			}
+
+			if (window.innerWidth < 768 && offsetWidth > 400) {
+				mode = "horizontal";
+			}
+
+			this.setState({ mode });
+		});
+	};
+
+	renderChildren = () => {
+		const { selectedKey } = this.state;
+
+		switch (selectedKey) {
+			case "base":
+				return <PaneEditProfile />;
+			default:
+				break;
+		}
+
+		return null;
+	};
 
 	render = () => {
-		const { loading, fields, data } = this.state;
+		const { mode, selectedKey } = this.state;
 
 		return (
 			<Translation ns="idx">
 				{(t) => <Page
-				title={<>
-					<Toolbar float="right">
-					<Button onClick={this.handleChangePassword}>{t("button.changePassword")}</Button>
-					</Toolbar>
-	
-					<DataBreadcrumb items={[]} />
-					<PageHeader>{t("page.profile.title")}</PageHeader>
-				</>}>
-					<h3>{t("page.profile.subtitle")}</h3>
+					title={<>
+						<Toolbar float="right">
+							<Button onClick={this.handleChangePassword}>{t("button.changePassword")}</Button>
+						</Toolbar>
 
-					<Spin spinning={loading}>
-						<DataForm
-							fields={fields}
-							data={data}
-							onSubmit={this.save}
-							successMessage="Your profile has been updated"
-						/>
-					</Spin>
+						<DataBreadcrumb items={[]} />
+					</>}>
+
+					{/* todo: good names & create components */}
+					<div className="grid-content">
+						<div className="page-with-menu" ref={ref => { if (ref) { this._main = ref; } }}>
+							<div className="menu">
+								<Menu
+									mode={mode}
+									defaultSelectedKeys={[selectedKey]}
+									onSelect={({ key }) => this.setState({ selectedKey: key })}>
+									<Menu.Item key="base">Profile</Menu.Item>
+									<Menu.Item key="2">Security</Menu.Item>
+								</Menu>
+							</div>
+							<div className="content">
+								{this.renderChildren()}
+							</div>
+						</div>
+					</div>
 				</Page>}
 			</Translation>
 		);
-	}
+	};
 }

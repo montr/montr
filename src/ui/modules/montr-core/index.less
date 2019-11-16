@@ -1,13 +1,10 @@
-// @import "~antd/dist/antd.less";
+@import '~antd/es/style/themes/default.less';
 // @import (css) url("//fonts.googleapis.com/css?family=Open+Sans:400");
-
-@normal-color: rgba(0, 0, 0, 0.65);
 
 .ant-layout.private-layout {
 	.ant-menu-vertical .user-menu .ant-menu-submenu-title {
 		height: 64px;
 	}
-
 	.ant-layout-footer {
 		padding: 24px;
 	}
@@ -111,4 +108,39 @@
 	overflow: hidden;
 	white-space: nowrap;
 	text-overflow: ellipsis;
+}
+
+.grid-content {
+	width: 100%;
+    height: 100%;
+	min-height: 100%;
+	
+	.page-with-menu {
+		display: flex;
+		width: 100%;
+		height: 100%;
+		overflow: auto;
+		.menu {
+			width: 224px;
+			border-right: @border-width-base @border-style-base @border-color-split;
+			.ant-menu-inline {
+				border: none;
+			}
+		}
+		.content {
+			flex: 1;
+			padding: 8px 40px;
+		}
+
+		@media screen and (max-width: @screen-md) {
+			flex-direction: column;
+			.menu {
+				width: 100%;
+				border: none;
+			}
+			.content {
+				padding: 40px;
+			}
+		}
+	}
 }
