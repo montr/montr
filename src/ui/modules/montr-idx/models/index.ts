@@ -10,3 +10,4 @@ export * from "./profile-model";
 export * from "./register-model";
 export * from "./reset-password-model";
 export * from "./set-password-model";
+export * from "./user-login-info";

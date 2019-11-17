@@ -2,7 +2,7 @@ import React from "react";
 import { Menu } from "antd";
 import { Translation } from "react-i18next";
 import { Page, Toolbar, DataBreadcrumb } from "@montr-core/components";
-import { PaneEditProfile, PaneSecurity } from "../components/";
+import { PaneEditProfile, PaneSecurity, PaneExternalLogins } from "../components/";
 
 interface IProps {
 }
@@ -60,6 +60,8 @@ export default class Profile extends React.Component<IProps, IState> {
 				return <PaneEditProfile />;
 			case "security":
 				return <PaneSecurity />;
+			case "external-logins":
+				return <PaneExternalLogins />;
 			default:
 				break;
 		}
@@ -90,6 +92,7 @@ export default class Profile extends React.Component<IProps, IState> {
 									onSelect={({ key }) => this.setState({ selectedKey: key })}>
 									<Menu.Item key="base">Profile</Menu.Item>
 									<Menu.Item key="security">Security</Menu.Item>
+									<Menu.Item key="external-logins">External Logins</Menu.Item>
 								</Menu>
 							</div>
 							<div className="content">

@@ -1,6 +1,8 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Montr.Core.Models;
 using Montr.Idx.Commands;
@@ -24,6 +26,14 @@ namespace Montr.Idx.Controllers
 
 		[HttpPost]
 		public async Task<ProfileModel> Get(GetProfile request)
+		{
+			request.User = _currentUserProvider.GetUser();
+
+			return await _mediator.Send(request);
+		}
+
+		[HttpPost]
+		public async Task<IList<UserLoginInfo>> ExternalLogins(GetExternalLogins request)
 		{
 			request.User = _currentUserProvider.GetUser();
 

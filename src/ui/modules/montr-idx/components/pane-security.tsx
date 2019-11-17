@@ -28,6 +28,7 @@ export class PaneSecurity extends React.Component<IProps, IState> {
 			displayPasswordModal: false
 		};
 	}
+
 	componentDidMount = async () => {
 		await this.fetchData();
 	};

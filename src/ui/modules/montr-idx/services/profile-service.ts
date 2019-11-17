@@ -1,12 +1,16 @@
 import { Fetcher } from "@montr-core/services";
 import { Constants } from "@montr-core/constants";
 import { IApiResult } from "@montr-core/models";
-import { IProfileModel, IChangePasswordModel, ISetPasswordModel } from "../models";
+import { IProfileModel, IChangePasswordModel, ISetPasswordModel, IUserLoginInfo } from "../models";
 
 export class ProfileService extends Fetcher {
 
 	get = async (): Promise<IProfileModel> => {
 		return this.post(`${Constants.apiURL}/profile/get`);
+	};
+
+	externalLogins = async (): Promise<IUserLoginInfo[]> => {
+		return this.post(`${Constants.apiURL}/profile/externalLogins`, {});
 	};
 
 	update = async (request: IProfileModel): Promise<IApiResult> => {
