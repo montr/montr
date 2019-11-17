@@ -20,6 +20,8 @@ export const Views = {
 	formExternalRegister: "ExternalRegister/Form",
 	formForgotPassword: "ForgotPassword/Form",
 	formResetPassword: "ResetPassword/Form",
+	formChangePassword: "ChangePassword/Form",
+	formSetPassword: "SetPassword/Form",
 
 	formProfile: "Profile/Form"
 };

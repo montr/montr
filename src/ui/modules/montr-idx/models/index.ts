@@ -1,4 +1,5 @@
 export * from "./auth-scheme";
+export * from "./change-password-model";
 export * from "./confirm-email-model";
 export * from "./external-login-model";
 export * from "./external-login-result";
@@ -8,3 +9,4 @@ export * from "./login-model";
 export * from "./profile-model";
 export * from "./register-model";
 export * from "./reset-password-model";
+export * from "./set-password-model";

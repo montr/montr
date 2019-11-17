@@ -32,6 +32,7 @@ namespace Montr.Core.Services
 			{
 				result.Items.Add(new Menu { Id = "m.0", Name = "Панель управления", Icon = "dashboard", Route = "/dashboard" });
 				result.Items.Add(new Menu { Id = "m.1", Name = "Процедуры", Icon = "project", Route = "/events" });
+				result.Items.Add(new Menu { Id = "reports", Name = "Отчеты", Icon = "bar-chart", Route = "/reports" });
 
 				result.Items.Add(new Menu
 				{
@@ -40,6 +41,7 @@ namespace Montr.Core.Services
 					Icon = "setting",
 					Items = new List<Menu>
 					{
+						new Menu { Id = "m.3.0", Name = "Интеграции", Route = "/integrations" },
 						new Menu { Id = "m.3.1", Name = "Справочники", Route = "/classifiers" },
 						new Menu { Id = "m.3.2", Name = "Настройки", Route = "/settings" },
 						new Menu { Id = "m.3.3", Name = "Локализация", Route = "/locales" },

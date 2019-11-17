@@ -167,7 +167,7 @@ namespace Montr.Core.Services
 					new StringField { Key = "email", Name = "Email", Required = true }
 				};
 			}
-			
+
 			if (viewId == "ResetPassword/Form")
 			{
 				result.Fields = new List<FormField>
@@ -175,6 +175,25 @@ namespace Montr.Core.Services
 					new StringField { Key = "email", Name = "Email", Required = true },
 					new PasswordField { Key = "password", Name = "Password", Required = true }
 					// new PasswordField { Key = "confirmPassword", Name = "Confirm Password", Required = true }
+				};
+			}
+
+			if (viewId == "ChangePassword/Form")
+			{
+				result.Fields = new List<FormField>
+				{
+					new PasswordField { Key = "oldPassword", Name = "Current password", Required = true },
+					new PasswordField { Key = "newPassword", Name = "New password", Required = true },
+					new PasswordField { Key = "confirmPassword", Name = "Confirm new password", Required = true }
+				};
+			}
+
+			if (viewId == "SetPassword/Form")
+			{
+				result.Fields = new List<FormField>
+				{
+					new PasswordField { Key = "newPassword", Name = "New password", Required = true },
+					new PasswordField { Key = "confirmPassword", Name = "Confirm new password", Required = true }
 				};
 			}
 
