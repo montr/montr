@@ -9,12 +9,12 @@ using Montr.Idx.Impl.Services;
 
 namespace Montr.Idx.Impl.CommandHandlers
 {
-	public class RemoveExternalLoginHandler : IRequestHandler<RemoveExternalLogin, ApiResult>
+	public class RemoveLoginHandler : IRequestHandler<RemoveLogin, ApiResult>
 	{
 		private readonly UserManager<DbUser> _userManager;
 		private readonly SignInManager<DbUser> _signInManager;
 
-		public RemoveExternalLoginHandler(
+		public RemoveLoginHandler(
 			UserManager<DbUser> userManager,
 			SignInManager<DbUser> signInManager)
 		{
@@ -22,7 +22,7 @@ namespace Montr.Idx.Impl.CommandHandlers
 			_signInManager = signInManager;
 		}
 
-		public async Task<ApiResult> Handle(RemoveExternalLogin request, CancellationToken cancellationToken)
+		public async Task<ApiResult> Handle(RemoveLogin request, CancellationToken cancellationToken)
 		{
 			var user = await _userManager.GetUserAsync(request.User);
 			if (user == null)

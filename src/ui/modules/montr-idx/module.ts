@@ -11,7 +11,8 @@ export const Patterns = {
 	forgotPassword: "/account/forgot-password",
 	resetPassword: "/account/reset-password/:code",
 
-	profile: "/profile"
+	profile: "/profile",
+	linkLogin: "/profile/link-login"
 };
 
 export const Views = {
@@ -36,4 +37,5 @@ AppRouteRegistry.add([
 	{ path: Patterns.resetPassword, layout: Layout.public, exact: true, component: React.lazy(() => import("./pages/reset-password")) },
 
 	{ path: Patterns.profile, exact: true, component: React.lazy(() => import("./pages/profile")) },
+	{ path: Patterns.linkLogin, exact: true, component: React.lazy(() => import("./pages/link-login")) },
 ]);

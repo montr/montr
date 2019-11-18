@@ -15,5 +15,7 @@
 		public static readonly string ResetPassword = "/account/reset-password";
 
 		public static readonly string ExternalLogin = "/account/external-login";
+
+		public static readonly string LinkLogin = "/profile/link-login";
 	}
 }

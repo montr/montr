@@ -1,9 +1,11 @@
 import React from "react";
 import { Translation } from "react-i18next";
 import { PageHeader } from "@montr-core/components";
+import { NavigationService } from "@montr-core/services";
 import { IProfileModel, IUserLoginInfo, IAuthScheme } from "../models";
 import { ProfileService, AccountService } from "../services";
-import { Spin, List, Button, Icon, Avatar } from "antd";
+import { Spin, List, Button, Avatar } from "antd";
+import { Constants } from "@montr-core/constants";
 
 interface IProps {
 }
@@ -17,6 +19,7 @@ interface IState {
 
 export class PaneExternalLogins extends React.Component<IProps, IState> {
 
+	private _navigation = new NavigationService();
 	private _accountService = new AccountService();
 	private _profileService = new ProfileService();
 
@@ -49,6 +52,14 @@ export class PaneExternalLogins extends React.Component<IProps, IState> {
 		this.setState({ loading: false, profile, authSchemes, externalLogins });
 	};
 
+	handleRemoveLogin = async (info: IUserLoginInfo) => {
+		const result = await this._profileService.removeLogin(info);
+
+		if (result.success) {
+			await this.fetchData();
+		}
+	};
+
 	render = () => {
 		const { loading, profile, authSchemes, externalLogins } = this.state;
 
@@ -59,50 +70,64 @@ export class PaneExternalLogins extends React.Component<IProps, IState> {
 		return (
 			<Translation ns="idx">
 				{(t) => <>
+
 					<PageHeader>{t("page.externalLogins.title")}</PageHeader>
 					<h3>{t("page.externalLogins.subtitle")}</h3>
 
 					<Spin spinning={loading}>
-						<List>
+						<form method="post" action={`${Constants.apiURL}/authentication/linkLogin`}>
 
-							{externalLogins.map((x) => {
+							{/* <input type="hidden" name={Constants.returnUrlParam} value={this._navigation.getReturnUrlParameter() || ""} /> */}
 
-								const scheme = authSchemes.find(s => s.name == x.loginProvider);
+							<List>
 
-								const actions = showRemoveButton
-									? [<Button key="1">Remove</Button>] : null;
+								{externalLogins.map((x) => {
+									const scheme = authSchemes.find(s => s.name == x.loginProvider);
+									return (
+										<List.Item
+											key={x.loginProvider}
+											actions={
+												showRemoveButton ? [
+													<Button
+														onClick={() => this.handleRemoveLogin(x)}>
+														{t("button.removeExternalLogin")}
+													</Button>
+												] : null}>
+											<List.Item.Meta
+												avatar={<Avatar icon={scheme.icon} className={scheme.icon} />}
+												title={x.providerDisplayName}
+												description="Last used Feb 21, 2017"
+											/>
+										</List.Item>
+									);
+								})}
 
-								return (
-									<List.Item
-										key={x.loginProvider}
-										actions={actions}>
-										<List.Item.Meta
-											/* todo: use icon */
-											avatar={<Avatar icon={scheme.icon} className={scheme.icon} />}
-											title={x.providerDisplayName}
-											description="Last used Feb 21, 2017"
-										/>
-									</List.Item>
-								);
-							})}
+								{otherLogins.map((x) => {
+									return (
+										<List.Item
+											key={x.name}
+											actions={[
+												<Button
+													htmlType="submit"
+													name="provider"
+													value={x.name}>
+													{t("button.addExternalLogin")}
+												</Button>
+											]}>
+											<List.Item.Meta
+												avatar={<Avatar icon={x.icon} className={x.icon} />}
+												title={x.displayName}
+												description="Last used Feb 21, 2017"
+											/>
+										</List.Item>
+									);
+								})}
 
-							{otherLogins.map((x) => {
-								return (
-									<List.Item
-										key={x.name}
-										actions={[<Button key="1">Add</Button>]}>
-										<List.Item.Meta
-											avatar={<Avatar icon={x.icon} className={x.icon} />}
-											title={x.displayName}
-											description="Last used Feb 21, 2017"
-										/>
-									</List.Item>
-								);
-							})}
+							</List>
 
-
-						</List>
+						</form>
 					</Spin>
+
 				</>}
 			</Translation>
 		);

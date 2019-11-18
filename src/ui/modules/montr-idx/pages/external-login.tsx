@@ -36,12 +36,12 @@ export default class ExternalLogin extends React.Component<IProps, IState> {
 
 	componentDidMount = async () => {
 		await this.fetchData();
-	}
+	};
 
 	componentWillUnmount = async () => {
 		await this._metadataService.abort();
 		await this._accountService.abort();
-	}
+	};
 
 	fetchData = async () => {
 
@@ -73,7 +73,7 @@ export default class ExternalLogin extends React.Component<IProps, IState> {
 
 			this.props.history.push(Patterns.login);
 		}
-	}
+	};
 
 	handleSubmit = async (values: IExternalRegisterModel): Promise<IApiResult> => {
 		const { data } = this.state;
@@ -82,7 +82,7 @@ export default class ExternalLogin extends React.Component<IProps, IState> {
 			returnUrl: data.returnUrl,
 			...values
 		});
-	}
+	};
 
 	render = () => {
 		const { loading, fields, data } = this.state;
@@ -113,5 +113,5 @@ export default class ExternalLogin extends React.Component<IProps, IState> {
 				</Page>}
 			</Translation>
 		);
-	}
+	};
 }

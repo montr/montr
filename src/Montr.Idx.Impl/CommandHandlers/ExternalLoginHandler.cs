@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 using Montr.Core.Services;
 using Montr.Idx.Commands;
 using Montr.Idx.Impl.Entities;
@@ -13,16 +12,13 @@ namespace Montr.Idx.Impl.CommandHandlers
 {
 	public class ExternalLoginHandler : IRequestHandler<ExternalLogin, ChallengeResult>
 	{
-		private readonly ILogger<ExternalLoginHandler> _logger;
 		private readonly SignInManager<DbUser> _signInManager;
 		private readonly IAppUrlBuilder _appUrlBuilder;
 
 		public ExternalLoginHandler(
-			ILogger<ExternalLoginHandler> logger,
 			SignInManager<DbUser> signInManager,
 			IAppUrlBuilder appUrlBuilder)
 		{
-			_logger = logger;
 			_signInManager = signInManager;
 			_appUrlBuilder = appUrlBuilder;
 		}

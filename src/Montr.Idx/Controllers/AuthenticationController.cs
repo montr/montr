@@ -1,7 +1,9 @@
 ﻿using System.Threading.Tasks;
 using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Montr.Idx.Commands;
+using Montr.Idx.Services;
 
 namespace Montr.Idx.Controllers
 {
@@ -9,15 +11,25 @@ namespace Montr.Idx.Controllers
 	public class AuthenticationController : ControllerBase
 	{
 		private readonly IMediator _mediator;
+		private readonly ICurrentUserProvider _currentUserProvider;
 
-		public AuthenticationController(IMediator mediator)
+		public AuthenticationController(IMediator mediator, ICurrentUserProvider currentUserProvider)
 		{
 			_mediator = mediator;
+			_currentUserProvider = currentUserProvider;
 		}
 
 		[HttpPost]
 		public async Task<ChallengeResult> ExternalLogin(ExternalLogin request)
 		{
+			return await _mediator.Send(request);
+		}
+
+		[Authorize, HttpPost]
+		public async Task<ChallengeResult> LinkLogin(LinkLogin request)
+		{
+			request.User = _currentUserProvider.GetUser();
+
 			return await _mediator.Send(request);
 		}
 	}

@@ -9,10 +9,6 @@ export class ProfileService extends Fetcher {
 		return this.post(`${Constants.apiURL}/profile/get`);
 	};
 
-	externalLogins = async (): Promise<IUserLoginInfo[]> => {
-		return this.post(`${Constants.apiURL}/profile/externalLogins`, {});
-	};
-
 	update = async (request: IProfileModel): Promise<IApiResult> => {
 		return this.post(`${Constants.apiURL}/profile/update`, request);
 	};
@@ -23,6 +19,18 @@ export class ProfileService extends Fetcher {
 
 	setPassword = async (request: ISetPasswordModel): Promise<IApiResult> => {
 		return this.post(`${Constants.apiURL}/profile/setPassword`, request);
+	};
+
+	externalLogins = async (): Promise<IUserLoginInfo[]> => {
+		return this.post(`${Constants.apiURL}/profile/externalLogins`, {});
+	};
+
+	linkLoginCallback = async (): Promise<IApiResult> => {
+		return this.post(`${Constants.apiURL}/profile/linkLoginCallback`, {});
+	};
+
+	removeLogin = async (request: IUserLoginInfo): Promise<IApiResult> => {
+		return this.post(`${Constants.apiURL}/profile/removeLogin`, request);
 	};
 
 }

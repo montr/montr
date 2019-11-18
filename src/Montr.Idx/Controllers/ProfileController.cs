@@ -64,7 +64,15 @@ namespace Montr.Idx.Controllers
 		}
 
 		[HttpPost]
-		public async Task<ApiResult> RemoveExternalLogin(RemoveExternalLogin request)
+		public async Task<ApiResult> LinkLoginCallback(LinkLoginCallback request)
+		{
+			request.User = _currentUserProvider.GetUser();
+
+			return await _mediator.Send(request);
+		}
+
+		[HttpPost]
+		public async Task<ApiResult> RemoveLogin(RemoveLogin request)
 		{
 			request.User = _currentUserProvider.GetUser();
 
