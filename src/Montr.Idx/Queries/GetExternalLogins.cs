@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Security.Claims;
 using MediatR;
-using Microsoft.AspNetCore.Identity;
+using Montr.Idx.Models;
 
 namespace Montr.Idx.Queries
 {
-	public class GetExternalLogins : IRequest<IList<UserLoginInfo>>
+	public class GetExternalLogins : IRequest<IList<ExternalLoginModel>>
 	{
 		public ClaimsPrincipal User { get; set; }
 	}

@@ -10,6 +10,7 @@ namespace Montr.Core.Models
 			Success = true;	
 		}
 
+		// todo: remove ctor
 		public ApiResult(params string[] errorMessages)
 		{
 			Success = false;
