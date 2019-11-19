@@ -34,7 +34,9 @@ namespace Montr.Idx.Impl.QueryHandlers
 				PhoneNumber = await _userManager.GetPhoneNumberAsync(user),
 				HasPassword = await _userManager.HasPasswordAsync(user),
 				IsEmailConfirmed = await _userManager.IsEmailConfirmedAsync(user),
-				IsPhoneNumberConfirmed = await _userManager.IsPhoneNumberConfirmedAsync(user)
+				IsPhoneNumberConfirmed = await _userManager.IsPhoneNumberConfirmedAsync(user),
+				FirstName = user.FirstName,
+				LastName = user.LastName
 			};
 		}
 	}

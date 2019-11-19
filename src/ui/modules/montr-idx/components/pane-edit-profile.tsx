@@ -12,66 +12,66 @@ interface IProps {
 }
 
 interface IState {
-    loading: boolean;
-    data: IProfileModel;
-    fields?: IFormField[];
+	loading: boolean;
+	data: IProfileModel;
+	fields?: IFormField[];
 }
 
 export class PaneEditProfile extends React.Component<IProps, IState> {
 
-    private _metadataService = new MetadataService();
-    private _profileService = new ProfileService();
+	private _metadataService = new MetadataService();
+	private _profileService = new ProfileService();
 
-    constructor(props: IProps) {
-        super(props);
+	constructor(props: IProps) {
+		super(props);
 
-        this.state = {
-            loading: true,
-            data: {}
-        };
-    }
+		this.state = {
+			loading: true,
+			data: {}
+		};
+	}
 
-    componentDidMount = async () => {
-        await this.fetchData();
-    };
+	componentDidMount = async () => {
+		await this.fetchData();
+	};
 
-    componentWillUnmount = async () => {
-        await this._metadataService.abort();
-        await this._profileService.abort();
-    };
+	componentWillUnmount = async () => {
+		await this._metadataService.abort();
+		await this._profileService.abort();
+	};
 
-    fetchData = async () => {
-        const data = await this._profileService.get();
+	fetchData = async () => {
+		const data = await this._profileService.get();
 
-        const dataView = await this._metadataService.load(Views.formProfile);
+		const dataView = await this._metadataService.load(Views.formUpdateProfile);
 
-        this.setState({ loading: false, data, fields: dataView.fields });
-    };
+		this.setState({ loading: false, data, fields: dataView.fields });
+	};
 
-    save = async (values: IProfileModel): Promise<IApiResult> => {
-        return await this._profileService.update(values);
-    };
+	save = async (values: IProfileModel): Promise<IApiResult> => {
+		return await this._profileService.update(values);
+	};
 
-    render = () => {
-        const { loading, fields, data } = this.state;
+	render = () => {
+		const { loading, fields, data } = this.state;
 
-        return (
-            <Translation ns="idx">
-                {(t) => <>
+		return (
+			<Translation ns="idx">
+				{(t) => <>
 
-                    <PageHeader>{t("page.profile.title")}</PageHeader>
-                    <h3>{t("page.profile.subtitle")}</h3>
+					<PageHeader>{t("page.profile.title")}</PageHeader>
+					<h3>{t("page.profile.subtitle")}</h3>
 
-                    <Spin spinning={loading}>
-                        <DataForm
-                            fields={fields}
-                            data={data}
-                            onSubmit={this.save}
-                            successMessage="Your profile has been updated"
-                        />
-                    </Spin>
-                </>}
-            </Translation>
-        );
-    };
+					<Spin spinning={loading}>
+						<DataForm
+							fields={fields}
+							data={data}
+							onSubmit={this.save}
+							successMessage="Your profile has been updated"
+						/>
+					</Spin>
+				</>}
+			</Translation>
+		);
+	};
 }

@@ -19,14 +19,13 @@ export const Views = {
 	formLogin: "Login/Form",
 	formRegister: "Register/Form",
 	formExternalRegister: "ExternalRegister/Form",
+	formUpdateProfile: "UpdateProfile/Form",
 	formChangeEmail: "ChangeEmail/Form",
 	formChangePhone: "ChangePhone/Form",
 	formForgotPassword: "ForgotPassword/Form",
 	formResetPassword: "ResetPassword/Form",
 	formChangePassword: "ChangePassword/Form",
-	formSetPassword: "SetPassword/Form",
-
-	formProfile: "Profile/Form"
+	formSetPassword: "SetPassword/Form"
 };
 
 AppRouteRegistry.add([

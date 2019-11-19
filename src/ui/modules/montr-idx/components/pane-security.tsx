@@ -1,6 +1,6 @@
 import React from "react";
 import { Translation } from "react-i18next";
-import { Button, List, Icon } from "antd";
+import { Button, List, Icon, Tooltip } from "antd";
 import { PageHeader } from "@montr-core/components";
 import { IProfileModel } from "../models";
 import { ModalChangePassword, ModalSetPassword } from "./";
@@ -59,6 +59,9 @@ export class PaneSecurity extends React.Component<IProps, IState> {
 	render = () => {
 		const { data, displayModal } = this.state;
 
+		const confirmed = <Tooltip title="Confirmed"><Icon type="check-circle" theme="twoTone" twoToneColor="#52c41a" /></Tooltip>,
+			notConfirmed = <Tooltip title="Not confirmed"><Icon type="question-circle" /></Tooltip>;
+
 		return (
 			<Translation ns="idx">
 				{(t) => <>
@@ -106,25 +109,23 @@ export class PaneSecurity extends React.Component<IProps, IState> {
 						}
 
 						<List.Item actions={[
-							<Button onClick={() => this.handleDisplayModal("changeEmail")}>{t("button.changeEmail")}</Button>]}>
+							!data.isEmailConfirmed && <a>Send verification email</a>,
+							<Button onClick={() => this.handleDisplayModal("changeEmail")}>{t("button.changeEmail")}</Button>
+						].filter(x => x)}>
 							<List.Item.Meta
 								title="Email"
-								description={data.userName}
+								description={<>{data.userName} {data.isEmailConfirmed ? confirmed : notConfirmed} </>}
 							/>
-							{data.isEmailConfirmed
-								? <><Icon type="check" /> &#xA0; Email confirmed</>
-								: <a>Send verification email</a>}
 						</List.Item>
 
 						<List.Item actions={[
-							<Button onClick={() => this.handleDisplayModal("changePhone")}>{t("button.changePhone")}</Button>]}>
+							!data.isPhoneNumberConfirmed && <a>Send verification SMS</a>,
+							<Button onClick={() => this.handleDisplayModal("changePhone")}>{t("button.changePhone")}</Button>
+						].filter(x => x)}>
 							<List.Item.Meta
 								title="Phone"
-								description={data.phoneNumber}
+								description={<>{data.phoneNumber} {data.isPhoneNumberConfirmed ? confirmed : notConfirmed} </>}
 							/>
-							{data.isPhoneNumberConfirmed
-								? <><Icon type="check" /> &#xA0; Phone confirmed</>
-								: <a>Send verification SMS</a>}
 						</List.Item>
 					</List>
 				</>}

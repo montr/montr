@@ -93,6 +93,8 @@ export default class Profile extends React.Component<IProps, IState> {
 									<Menu.Item key="base">Profile</Menu.Item>
 									<Menu.Item key="security">Security</Menu.Item>
 									<Menu.Item key="external-logins">External Logins</Menu.Item>
+									<Menu.Item key="notifications">Notifications</Menu.Item>
+									<Menu.Item key="history">History</Menu.Item>
 								</Menu>
 							</div>
 							<div className="content">

@@ -235,12 +235,13 @@ namespace Montr.Core.Services
 				};
 			}
 
-			if (viewId == "Profile/Form")
+			if (viewId == "UpdateProfile/Form")
 			{
 				result.Fields = new List<FormField>
 				{
 					new StringField { Key = "userName", Name = "Имя пользователя", Readonly = true },
-					new StringField { Key = "phoneNumber", Name = "Номер телефона" } // todo: PhoneField
+					new StringField { Key = "firstName", Name = "Имя" },
+					new StringField { Key = "lastName", Name = "Фамилия" }
 				};
 			}
 
