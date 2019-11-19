@@ -90,7 +90,7 @@ export class PaneExternalLogins extends React.Component<IProps, IState> {
 												showRemoveButton ? [
 													<Button
 														onClick={() => this.handleRemoveLogin(x)}>
-														{t("button.removeExternalLogin")}
+														{t("button.removeLogin")}
 													</Button>
 												] : null}>
 											<List.Item.Meta
@@ -111,7 +111,7 @@ export class PaneExternalLogins extends React.Component<IProps, IState> {
 													htmlType="submit"
 													name="provider"
 													value={x.name}>
-													{t("button.addExternalLogin")}
+													{t("button.addLogin")}
 												</Button>
 											]}>
 											<List.Item.Meta

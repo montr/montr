@@ -19,6 +19,8 @@ export const Views = {
 	formLogin: "Login/Form",
 	formRegister: "Register/Form",
 	formExternalRegister: "ExternalRegister/Form",
+	formChangeEmail: "ChangeEmail/Form",
+	formChangePhone: "ChangePhone/Form",
 	formForgotPassword: "ForgotPassword/Form",
 	formResetPassword: "ResetPassword/Form",
 	formChangePassword: "ChangePassword/Form",

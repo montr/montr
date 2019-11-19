@@ -219,6 +219,22 @@ namespace Montr.Core.Services
 				};
 			}
 
+			if (viewId == "ChangeEmail/Form")
+			{
+				result.Fields = new List<FormField>
+				{
+					new StringField { Key = "email", Name = "Email" }
+				};
+			}
+
+			if (viewId == "ChangePhone/Form")
+			{
+				result.Fields = new List<FormField>
+				{
+					new StringField { Key = "phoneNumber", Name = "Номер телефона" } // todo: PhoneField
+				};
+			}
+
 			if (viewId == "Profile/Form")
 			{
 				result.Fields = new List<FormField>

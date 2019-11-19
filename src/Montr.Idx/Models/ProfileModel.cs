@@ -1,6 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-
-namespace Montr.Idx.Models
+﻿namespace Montr.Idx.Models
 {
 	public class ProfileModel
 	{
@@ -8,8 +6,10 @@ namespace Montr.Idx.Models
 
 		public bool HasPassword { get; set; }
 
-		[Phone]
-		[StringLength(12)]
+		public bool IsEmailConfirmed { get; set; }
+
+		public bool IsPhoneNumberConfirmed { get; set; }
+
 		public string PhoneNumber { get; set; }
 	}
 }

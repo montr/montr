@@ -13,6 +13,14 @@ export class ProfileService extends Fetcher {
 		return this.post(`${Constants.apiURL}/profile/update`, request);
 	};
 
+	changeEmail = async (request: IProfileModel): Promise<IApiResult> => {
+		return this.post(`${Constants.apiURL}/profile/changeEmail`, request);
+	};
+
+	changePhone = async (request: IProfileModel): Promise<IApiResult> => {
+		return this.post(`${Constants.apiURL}/profile/changePhone`, request);
+	};
+
 	changePassword = async (request: IChangePasswordModel): Promise<IApiResult> => {
 		return this.post(`${Constants.apiURL}/profile/changePassword`, request);
 	};

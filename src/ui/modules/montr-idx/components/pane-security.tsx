@@ -1,10 +1,13 @@
 import React from "react";
 import { Translation } from "react-i18next";
-import { Button, List } from "antd";
+import { Button, List, Icon } from "antd";
 import { PageHeader } from "@montr-core/components";
 import { IProfileModel } from "../models";
 import { ModalChangePassword, ModalSetPassword } from "./";
 import { ProfileService } from "../services";
+import { ModalChangePhone } from "./modal-change-phone";
+
+declare const ModalTypes: ["changePassword", "setPassword", "changeEmail", "changePhone"];
 
 interface IProps {
 }
@@ -12,7 +15,7 @@ interface IProps {
 interface IState {
 	loading: boolean;
 	data: IProfileModel;
-	displayPasswordModal: "changePassword" | "setPassword" | boolean;
+	displayModal: (typeof ModalTypes)[number] | boolean;
 }
 
 export class PaneSecurity extends React.Component<IProps, IState> {
@@ -25,7 +28,7 @@ export class PaneSecurity extends React.Component<IProps, IState> {
 		this.state = {
 			loading: true,
 			data: {},
-			displayPasswordModal: false
+			displayModal: false
 		};
 	}
 
@@ -39,26 +42,22 @@ export class PaneSecurity extends React.Component<IProps, IState> {
 		this.setState({ loading: false, data });
 	};
 
-	handleChangePassword = () => {
-		this.setState({ displayPasswordModal: "changePassword" });
+	handleDisplayModal = (modalType: (typeof ModalTypes)[number]) => {
+		this.setState({ displayModal: modalType });
 	};
 
-	handleSetPassword = () => {
-		this.setState({ displayPasswordModal: "setPassword" });
-	};
-
-	handlePasswordModalSuccess = async () => {
-		this.setState({ displayPasswordModal: false });
+	handleModalSuccess = async () => {
+		this.setState({ displayModal: false });
 
 		await this.fetchData();
 	};
 
-	handlePasswordModalCancel = () => {
-		this.setState({ displayPasswordModal: false });
+	handleModalCancel = () => {
+		this.setState({ displayModal: false });
 	};
 
 	render = () => {
-		const { displayPasswordModal } = this.state;
+		const { data, displayModal } = this.state;
 
 		return (
 			<Translation ns="idx">
@@ -66,47 +65,66 @@ export class PaneSecurity extends React.Component<IProps, IState> {
 					<PageHeader>{t("page.security.title")}</PageHeader>
 					<h3>{t("page.security.subtitle")}</h3>
 
-					{displayPasswordModal == "changePassword" &&
+					{displayModal == "changePassword" &&
 						<ModalChangePassword
-							onSuccess={this.handlePasswordModalSuccess}
-							onCancel={this.handlePasswordModalCancel}
+							onSuccess={this.handleModalSuccess}
+							onCancel={this.handleModalCancel}
 						/>}
 
-					{displayPasswordModal == "setPassword" &&
+					{displayModal == "setPassword" &&
 						<ModalSetPassword
-							onSuccess={this.handlePasswordModalSuccess}
-							onCancel={this.handlePasswordModalCancel}
+							onSuccess={this.handleModalSuccess}
+							onCancel={this.handleModalCancel}
+						/>}
+
+					{displayModal == "changePhone" &&
+						<ModalChangePhone
+							onSuccess={this.handleModalSuccess}
+							onCancel={this.handleModalCancel}
 						/>}
 
 					{/*  todo: create DataList component */}
 					<List>
+						{data.hasPassword &&
+							<List.Item actions={[
+								<Button onClick={() => this.handleDisplayModal("changePassword")}>{t("button.changePassword")}</Button>]}>
+								<List.Item.Meta
+									title="Password"
+									description="Last changed Feb 21, 2017"
+								/>
+							</List.Item>
+						}
+
+						{data.hasPassword == false &&
+							<List.Item actions={[
+								<Button onClick={() => this.handleDisplayModal("setPassword")}>{t("button.setPassword")}</Button>]}>
+								<List.Item.Meta
+									title="Password"
+									description="Account does not have a password"
+								/>
+							</List.Item>
+						}
+
 						<List.Item actions={[
-							<Button onClick={this.handleChangePassword}>{t("button.changePassword")}</Button>
-						]}>
-							<List.Item.Meta
-								title="Password"
-								description="Last changed Feb 21, 2017"
-							/>
-						</List.Item>
-						<List.Item actions={[
-							<Button onClick={this.handleSetPassword}>{t("button.setPassword")}</Button>
-						]}>
-							<List.Item.Meta
-								title="Password"
-								description="Account does not have a password"
-							/>
-						</List.Item>
-						<List.Item actions={[<Button key="1">Change Email</Button>]}>
+							<Button onClick={() => this.handleDisplayModal("changeEmail")}>{t("button.changeEmail")}</Button>]}>
 							<List.Item.Meta
 								title="Email"
-								description="Last changed Feb 21, 2017"
+								description={data.userName}
 							/>
+							{data.isEmailConfirmed
+								? <><Icon type="check" /> &#xA0; Email confirmed</>
+								: <a>Send verification email</a>}
 						</List.Item>
-						<List.Item actions={[<Button key="1">Change Phone</Button>]}>
+
+						<List.Item actions={[
+							<Button onClick={() => this.handleDisplayModal("changePhone")}>{t("button.changePhone")}</Button>]}>
 							<List.Item.Meta
 								title="Phone"
-								description="Last changed Feb 21, 2017"
+								description={data.phoneNumber}
 							/>
+							{data.isPhoneNumberConfirmed
+								? <><Icon type="check" /> &#xA0; Phone confirmed</>
+								: <a>Send verification SMS</a>}
 						</List.Item>
 					</List>
 				</>}

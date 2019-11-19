@@ -16,9 +16,11 @@
       "operation.success": "The operation completed successfully."
     },
     "idx": {
+      "button.addLogin": "Link",
       "button.changePassword": "Change password",
       "button.login": "Log in",
       "button.register": "Register",
+      "button.removeLogin": "Remove",
       "button.resetPassword": "Reset",
       "button.setPassword": "Set Password",
       "page.changePassword.title": "Change Password",
