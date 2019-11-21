@@ -1,7 +1,7 @@
 import { Fetcher } from "@montr-core/services/fetcher";
 import { Constants } from "@montr-core/constants";
 import { IApiResult } from "@montr-core/models";
-import { IConfirmEmailModel, IRegisterModel, ILoginModel, IResetPasswordModel, IForgotPasswordModel, IAuthScheme, IExternalLoginModel, IExternalRegisterModel } from "../models/";
+import { IConfirmEmailModel, IRegisterModel, ILoginModel, IResetPasswordModel, IForgotPasswordModel, IAuthScheme, IExternalLoginModel, IExternalRegisterModel, ISendEmailConfirmationModel } from "../models/";
 
 export class AccountService extends Fetcher {
 
@@ -9,7 +9,7 @@ export class AccountService extends Fetcher {
 		return this.post(`${Constants.apiURL}/account/register`, request);
 	};
 
-	sendEmailConfirmation = async (request: ILoginModel): Promise<IApiResult> => {
+	sendEmailConfirmation = async (request: ISendEmailConfirmationModel): Promise<IApiResult> => {
 		return this.post(`${Constants.apiURL}/account/sendEmailConfirmation`, request);
 	};
 

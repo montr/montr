@@ -12,7 +12,7 @@ namespace Montr.Idx.Services
 
 		Guid GetUserUid();
 
-		ClaimsPrincipal GetUser();
+		ClaimsPrincipal GetUser(bool throwIfNotAuthenticated = true);
 	}
 
 	public class DefaultCurrentUserProvider : ICurrentUserProvider
@@ -47,7 +47,7 @@ namespace Montr.Idx.Services
 			return GetUserId<Guid>();
 		}
 
-		public ClaimsPrincipal GetUser()
+		public ClaimsPrincipal GetUser(bool throwIfNotAuthenticated = true)
 		{
 			var user = _httpContextAccessor.HttpContext.User;
 
@@ -56,7 +56,12 @@ namespace Montr.Idx.Services
 				return user;
 			}
 
-			throw new InvalidOperationException("User is not authenticated");
+			if (throwIfNotAuthenticated)
+			{
+				throw new InvalidOperationException("User is not authenticated");
+			}
+
+			return null;
 		}
 	}
 }

@@ -31,11 +31,11 @@ export default class ConfirmEmail extends React.Component<IProps, IState> {
 
 	componentDidMount = async () => {
 		await this.fetchData();
-	}
+	};
 
 	componentWillUnmount = async () => {
 		await this._accountService.abort();
-	}
+	};
 
 	fetchData = async () => {
 		const { userId, code } = this.props.match.params;
@@ -45,11 +45,12 @@ export default class ConfirmEmail extends React.Component<IProps, IState> {
 		if (result.success) {
 			this.setState({ loading: false });
 		}
-	}
+	};
 
 	handleContinue = async () => {
+		// todo: use route const
 		this.props.history.push("/dashboard");
-	}
+	};
 
 	render = () => {
 		const { loading } = this.state;
@@ -66,5 +67,5 @@ export default class ConfirmEmail extends React.Component<IProps, IState> {
 				</Page>}
 			</Translation>
 		);
-	}
+	};
 }

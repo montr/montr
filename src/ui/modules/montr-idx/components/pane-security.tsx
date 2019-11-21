@@ -1,10 +1,11 @@
 import React from "react";
 import { Translation } from "react-i18next";
 import { Button, List, Icon, Tooltip } from "antd";
+import { IApiResult } from "@montr-core/models";
 import { PageHeader } from "@montr-core/components";
 import { IProfileModel } from "../models";
 import { ModalChangePassword, ModalSetPassword } from "./";
-import { ProfileService } from "../services";
+import { ProfileService, AccountService } from "../services";
 import { ModalChangePhone } from "./modal-change-phone";
 
 declare const ModalTypes: ["changePassword", "setPassword", "changeEmail", "changePhone"];
@@ -20,6 +21,7 @@ interface IState {
 
 export class PaneSecurity extends React.Component<IProps, IState> {
 
+	private _accountService = new AccountService();
 	private _profileService = new ProfileService();
 
 	constructor(props: IProps) {
@@ -54,6 +56,10 @@ export class PaneSecurity extends React.Component<IProps, IState> {
 
 	handleModalCancel = () => {
 		this.setState({ displayModal: false });
+	};
+
+	sendEmailConfirmation = async (): Promise<IApiResult> => {
+		return await this._accountService.sendEmailConfirmation({});
 	};
 
 	render = () => {
@@ -109,7 +115,7 @@ export class PaneSecurity extends React.Component<IProps, IState> {
 						}
 
 						<List.Item actions={[
-							!data.isEmailConfirmed && <a>Send verification email</a>,
+							!data.isEmailConfirmed && <Button type="link" onClick={() => this.sendEmailConfirmation()}>Send verification email</Button>,
 							<Button onClick={() => this.handleDisplayModal("changeEmail")}>{t("button.changeEmail")}</Button>
 						].filter(x => x)}>
 							<List.Item.Meta
@@ -119,7 +125,7 @@ export class PaneSecurity extends React.Component<IProps, IState> {
 						</List.Item>
 
 						<List.Item actions={[
-							!data.isPhoneNumberConfirmed && <a>Send verification SMS</a>,
+							!data.isPhoneNumberConfirmed && <Button type="link" disabled>Send verification SMS</Button>,
 							<Button onClick={() => this.handleDisplayModal("changePhone")}>{t("button.changePhone")}</Button>
 						].filter(x => x)}>
 							<List.Item.Meta

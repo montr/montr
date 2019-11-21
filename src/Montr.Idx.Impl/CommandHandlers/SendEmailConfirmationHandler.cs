@@ -28,7 +28,9 @@ namespace Montr.Idx.Impl.CommandHandlers
 
 		public async Task<ApiResult> Handle(SendEmailConfirmation request, CancellationToken cancellationToken)
 		{
-			var user = await _userManager.FindByEmailAsync(request.Email);
+			var user = request.User != null
+				? await _userManager.GetUserAsync(request.User)
+				: await _userManager.FindByEmailAsync(request.Email);
 
 			if (user != null)
 			{

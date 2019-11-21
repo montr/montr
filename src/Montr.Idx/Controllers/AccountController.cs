@@ -6,6 +6,7 @@ using Montr.Core.Models;
 using Montr.Idx.Commands;
 using Montr.Idx.Models;
 using Montr.Idx.Queries;
+using Montr.Idx.Services;
 
 namespace Montr.Idx.Controllers
 {
@@ -13,10 +14,12 @@ namespace Montr.Idx.Controllers
 	public class AccountController : ControllerBase
 	{
 		private readonly IMediator _mediator;
+		private readonly ICurrentUserProvider _currentUserProvider;
 
-		public AccountController(IMediator mediator)
+		public AccountController(IMediator mediator, ICurrentUserProvider currentUserProvider)
 		{
 			_mediator = mediator;
+			_currentUserProvider = currentUserProvider;
 		}
 
 		[HttpPost]
@@ -34,6 +37,8 @@ namespace Montr.Idx.Controllers
 		[HttpPost]
 		public async Task<ApiResult> SendEmailConfirmation(SendEmailConfirmation request)
 		{
+			request.User = _currentUserProvider.GetUser(false);
+
 			return await _mediator.Send(request);
 		}
 
