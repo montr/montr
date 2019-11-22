@@ -34,7 +34,7 @@ namespace Montr.Idx.Impl.CommandHandlers
 
 			if (user != null)
 			{
-				await _emailConfirmationService.SendMessage(user, cancellationToken);
+				await _emailConfirmationService.SendConfirmEmailMessage(user, cancellationToken);
 			}
 
 			return new ApiResult

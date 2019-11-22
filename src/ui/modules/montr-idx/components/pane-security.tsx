@@ -4,7 +4,7 @@ import { Button, List, Icon, Tooltip } from "antd";
 import { IApiResult } from "@montr-core/models";
 import { PageHeader } from "@montr-core/components";
 import { IProfileModel } from "../models";
-import { ModalChangePassword, ModalSetPassword } from "./";
+import { ModalChangePassword, ModalSetPassword, ModalChangeEmail } from "./";
 import { ProfileService, AccountService } from "../services";
 import { ModalChangePhone } from "./modal-change-phone";
 
@@ -86,6 +86,12 @@ export class PaneSecurity extends React.Component<IProps, IState> {
 							onCancel={this.handleModalCancel}
 						/>}
 
+					{displayModal == "changeEmail" &&
+						<ModalChangeEmail
+							onSuccess={this.handleModalSuccess}
+							onCancel={this.handleModalCancel}
+						/>}
+
 					{displayModal == "changePhone" &&
 						<ModalChangePhone
 							onSuccess={this.handleModalSuccess}
@@ -120,7 +126,7 @@ export class PaneSecurity extends React.Component<IProps, IState> {
 						].filter(x => x)}>
 							<List.Item.Meta
 								title="Email"
-								description={<>{data.userName} {data.isEmailConfirmed ? confirmed : notConfirmed} </>}
+								description={<>{data.email} {data.isEmailConfirmed ? confirmed : notConfirmed} </>}
 							/>
 						</List.Item>
 

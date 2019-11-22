@@ -31,6 +31,7 @@ namespace Montr.Idx.Impl.QueryHandlers
 			return new ProfileModel
 			{
 				UserName = await _userManager.GetUserNameAsync(user),
+				Email = await _userManager.GetEmailAsync(user),
 				PhoneNumber = await _userManager.GetPhoneNumberAsync(user),
 				HasPassword = await _userManager.HasPasswordAsync(user),
 				IsEmailConfirmed = await _userManager.IsEmailConfirmedAsync(user),

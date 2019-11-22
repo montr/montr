@@ -12,6 +12,8 @@
 
 		public static readonly string ConfirmEmail = "/account/confirm-email";
 
+		public static readonly string ConfirmEmailChange = "/account/confirm-email-change";
+
 		public static readonly string ResetPassword = "/account/reset-password";
 
 		public static readonly string ExternalLogin = "/account/external-login";

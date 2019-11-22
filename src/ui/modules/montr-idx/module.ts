@@ -5,6 +5,7 @@ import { Layout } from "@montr-core/constants";
 export const Patterns = {
 	register: "/account/register",
 	confirmEmail: "/account/confirm-email/:userId/:code",
+	confirmEmailChange: "/account/confirm-email-change/:userId/:email/:code",
 	login: "/account/login",
 	logout: "/account/logout",
 	externalLogin: "/account/external-login",
@@ -31,6 +32,7 @@ export const Views = {
 AppRouteRegistry.add([
 	{ path: Patterns.register, layout: Layout.public, exact: true, component: React.lazy(() => import("./pages/register")) },
 	{ path: Patterns.confirmEmail, layout: Layout.public, exact: true, component: React.lazy(() => import("./pages/confirm-email")) },
+	{ path: Patterns.confirmEmailChange, layout: Layout.public, exact: true, component: React.lazy(() => import("./pages/confirm-email-change")) },
 	{ path: Patterns.login, layout: Layout.public, exact: true, component: React.lazy(() => import("./pages/login")) },
 	{ path: Patterns.logout, layout: Layout.public, exact: true, component: React.lazy(() => import("./pages/logout")) },
 	{ path: Patterns.externalLogin, layout: Layout.public, exact: true, component: React.lazy(() => import("./pages/external-login")) },

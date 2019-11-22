@@ -223,7 +223,7 @@ namespace Montr.Core.Services
 			{
 				result.Fields = new List<FormField>
 				{
-					new StringField { Key = "email", Name = "Email" }
+					new StringField { Key = "email", Name = "Email", Required = true }
 				};
 			}
 

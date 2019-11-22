@@ -3,5 +3,6 @@ export interface IProfileModel {
 	hasPassword?: boolean;
 	isEmailConfirmed?: boolean;
 	isPhoneNumberConfirmed?: boolean;
+	email?: string;
 	phoneNumber?: string;
 }

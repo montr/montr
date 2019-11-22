@@ -53,7 +53,7 @@ namespace Montr.Idx.Impl.CommandHandlers
 			{
 				_logger.LogInformation("User created a new account with password.");
 
-				await _emailConfirmationService.SendMessage(user, cancellationToken);
+				await _emailConfirmationService.SendConfirmEmailMessage(user, cancellationToken);
 
 				if (_userManager.Options.SignIn.RequireConfirmedAccount)
 				{

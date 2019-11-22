@@ -61,7 +61,7 @@ namespace Montr.Idx.Impl.CommandHandlers
 
 					_logger.LogInformation("User created an account using {Name} provider.", info.LoginProvider);
 
-					await _emailConfirmationService.SendMessage(user, cancellationToken);
+					await _emailConfirmationService.SendConfirmEmailMessage(user, cancellationToken);
 
 					// todo: check redirect is local
 					return new ApiResult { RedirectUrl = request.ReturnUrl };

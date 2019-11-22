@@ -34,7 +34,7 @@ namespace Montr.Idx.Impl.Services
 			_templateRenderer = templateRenderer;
 		}
 
-		public async Task SendMessage(DbUser user, CancellationToken cancellationToken)
+		public async Task SendConfirmEmailMessage(DbUser user, CancellationToken cancellationToken)
 		{
 			var code = await _userManager.GenerateEmailConfirmationTokenAsync(user);
 
@@ -50,6 +50,24 @@ namespace Montr.Idx.Impl.Services
 			var message = await _templateRenderer.Render(templateUid, messageModel, cancellationToken);
 
 			await _emailSender.Send(user.Email, message.Subject, message.Body);
+		}
+
+		public async Task SendConfirmEmailChangeMessage(DbUser user, string newEmail, CancellationToken cancellationToken)
+		{
+			var code = await _userManager.GenerateChangeEmailTokenAsync(user, newEmail);
+
+			code = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(code));
+
+			var messageModel = new ConfirmEmailMessageModel
+			{
+				CallbackUrl = _appUrlBuilder.Build($"{ClientRoutes.ConfirmEmailChange}/{user.Id}/{newEmail}/{code}")
+			};
+
+			var templateUid = Guid.Parse("CEEF2983-C083-448F-88B1-2DA6E6CB41A4");
+
+			var message = await _templateRenderer.Render(templateUid, messageModel, cancellationToken);
+
+			await _emailSender.Send(newEmail, message.Subject, message.Body);
 		}
 	}
 }
