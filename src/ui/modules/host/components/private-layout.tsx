@@ -7,18 +7,24 @@ export class PrivateLayout extends React.Component {
 
 	render = () => {
 
-		const siderWidth = 220;
+		const siderWidth = 220, theme = "light";
 
 		return (
 			<Layout hasSider className="private-layout bg-white">
-				<Layout.Sider theme="light" collapsible={false} width={siderWidth}
-					style={{ overflow: 'auto', height: "100vh", position: 'fixed', left: 0 }}>
+				<Layout.Sider
+					collapsible
+					theme={theme}
+					breakpoint="lg"
+					width={siderWidth}
+				/* onBreakpoint={broken => { console.log("Sider.onBreakpoint", broken); }}
+				onCollapse={(collapsed, type) => { console.log("Sider.onCollapse", collapsed, type); }} */
+				>
 					<ErrorBoundary>
 						{/* <div className="logo" /> */}
 
 						<DataMenu
 							menuId="SideMenu"
-							theme="light"
+							theme={theme}
 							mode="inline"
 							tail={
 								<UserWithCompanyMenu />
@@ -26,7 +32,7 @@ export class PrivateLayout extends React.Component {
 						/>
 					</ErrorBoundary>
 				</Layout.Sider>
-				<Layout style={{ marginLeft: siderWidth }} className="bg-white">
+				<Layout>
 					<Layout.Content className="bg-white">
 						<ErrorBoundary>
 
@@ -44,5 +50,5 @@ export class PrivateLayout extends React.Component {
 				</Layout>
 			</Layout>
 		);
-	}
+	};
 }

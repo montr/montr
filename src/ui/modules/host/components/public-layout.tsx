@@ -42,5 +42,5 @@ export class PublicLayout extends React.Component {
 				</Layout.Footer>
 			</Layout>
 		);
-	}
+	};
 }
