@@ -125,6 +125,7 @@ export class WrappedDataForm extends React.Component<IProps, IState> {
 				rules: [{
 					required: field.required,
 					whitespace: field.required,
+					// todo: translate
 					message: `Поле «${field.name}» обязательно для заполнения`
 				}]
 			};

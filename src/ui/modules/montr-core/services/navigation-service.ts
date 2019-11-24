@@ -9,9 +9,13 @@ export class NavigationService {
 		return window.location.href;
 	}
 
+	public getPathname(): string {
+		return window.location.pathname;
+	}
+
 	public getReturnUrlParameter = () => {
 		return this.getUrlParameter(Constants.returnUrlParam);
-	}
+	};
 
 	public getUrlParameter = (name: string) => {
 		/* name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
