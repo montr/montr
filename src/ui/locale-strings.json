@@ -13,6 +13,7 @@
       "dataForm.submit.error": "An error occurred while submit data.",
       "dataForm.submit.success": "Data successfully submitted.",
       "operation.error": "An error occurred while performing the operation.",
+      "operation.executing": "Please wait until the operation is completed...",
       "operation.success": "The operation completed successfully."
     },
     "idx": {
@@ -24,7 +25,10 @@
       "button.register": "Register",
       "button.removeLogin": "Remove",
       "button.resetPassword": "Reset",
+      "button.sendVerificationEmail": "Send verification email",
+      "button.sendVerificationSms": "Send verification SMS",
       "button.setPassword": "Set Password",
+      "button.updateEmail": "Update Email",
       "button.updatePhone": "Update Phone",
       "page.changePassword.title": "Change Password",
       "page.changePhone.title": "Change Phone",
@@ -70,6 +74,7 @@
       "dataForm.submit.error": "Ошибка при сохранении данных.",
       "dataForm.submit.success": "Данные успешно сохранены.",
       "operation.error": "Произошла ошибка при выполнении операции.",
+      "operation.executing": "Пожалуйста подождите, операция выполняется...",
       "operation.success": "Операция выполнена успешно."
     },
     "idx": {

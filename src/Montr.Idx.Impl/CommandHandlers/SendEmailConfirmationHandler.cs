@@ -37,13 +37,8 @@ namespace Montr.Idx.Impl.CommandHandlers
 				await _emailConfirmationService.SendConfirmEmailMessage(user, cancellationToken);
 			}
 
-			return new ApiResult
-			{
-				Errors = new[]
-				{
-					new ApiResultError { Messages = new [] { "Verification email sent. Please check your email." }},
-				}
-			};
+			// todo: localize
+			return new ApiResult { Message = "Verification email sent. Please check your email." };
 		}
 	}
 }

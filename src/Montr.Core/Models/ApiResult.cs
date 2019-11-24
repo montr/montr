@@ -27,6 +27,10 @@ namespace Montr.Core.Models
 		public bool Success { get; set; }
 
 		/// <summary>
+		/// Explanatory message for result.</summary>
+		public string Message { get; set; }
+
+		/// <summary>
 		/// Uid of new row in case of insert operation.</summary>
 		public Guid? Uid { get; set; }
 

@@ -1,8 +1,8 @@
 import React from "react";
 import { Translation } from "react-i18next";
 import { Button, List, Icon, Tooltip } from "antd";
-import { IApiResult } from "@montr-core/models";
 import { PageHeader } from "@montr-core/components";
+import { OperationService } from "@montr-core/services";
 import { IProfileModel } from "../models";
 import { ModalChangePassword, ModalSetPassword, ModalChangeEmail } from "./";
 import { ProfileService, AccountService } from "../services";
@@ -17,10 +17,13 @@ interface IState {
 	loading: boolean;
 	data: IProfileModel;
 	displayModal: (typeof ModalTypes)[number] | boolean;
+	sendEmailConfirmationDisabled: boolean;
+	sendPhoneConfirmationDisabled: boolean;
 }
 
 export class PaneSecurity extends React.Component<IProps, IState> {
 
+	private _operation = new OperationService();
 	private _accountService = new AccountService();
 	private _profileService = new ProfileService();
 
@@ -30,7 +33,9 @@ export class PaneSecurity extends React.Component<IProps, IState> {
 		this.state = {
 			loading: true,
 			data: {},
-			displayModal: false
+			displayModal: false,
+			sendEmailConfirmationDisabled: false,
+			sendPhoneConfirmationDisabled: true
 		};
 	}
 
@@ -58,12 +63,16 @@ export class PaneSecurity extends React.Component<IProps, IState> {
 		this.setState({ displayModal: false });
 	};
 
-	sendEmailConfirmation = async (): Promise<IApiResult> => {
-		return await this._accountService.sendEmailConfirmation({});
+	sendEmailConfirmation = async () => {
+		this.setState({ sendEmailConfirmationDisabled: true });
+
+		await this._operation.execute(() => this._accountService.sendEmailConfirmation({}));
+
+		this.setState({ sendEmailConfirmationDisabled: false });
 	};
 
 	render = () => {
-		const { data, displayModal } = this.state;
+		const { data, displayModal, sendEmailConfirmationDisabled, sendPhoneConfirmationDisabled } = this.state;
 
 		const confirmed = <Tooltip title="Confirmed"><Icon type="check-circle" theme="twoTone" twoToneColor="#52c41a" /></Tooltip>,
 			notConfirmed = <Tooltip title="Not confirmed"><Icon type="question-circle" /></Tooltip>;
@@ -121,7 +130,10 @@ export class PaneSecurity extends React.Component<IProps, IState> {
 						}
 
 						<List.Item actions={[
-							!data.isEmailConfirmed && <Button type="link" onClick={() => this.sendEmailConfirmation()}>Send verification email</Button>,
+							!data.isEmailConfirmed &&
+							<Button type="link"
+								disabled={sendEmailConfirmationDisabled}
+								onClick={() => this.sendEmailConfirmation()}>{t("button.sendVerificationEmail")}</Button>,
 							<Button onClick={() => this.handleDisplayModal("changeEmail")}>{t("button.changeEmail")}</Button>
 						].filter(x => x)}>
 							<List.Item.Meta
@@ -131,7 +143,9 @@ export class PaneSecurity extends React.Component<IProps, IState> {
 						</List.Item>
 
 						<List.Item actions={[
-							!data.isPhoneNumberConfirmed && <Button type="link" disabled>Send verification SMS</Button>,
+							!data.isPhoneNumberConfirmed &&
+							<Button type="link"
+								disabled={sendPhoneConfirmationDisabled}>{t("button.sendVerificationSms")}</Button>,
 							<Button onClick={() => this.handleDisplayModal("changePhone")}>{t("button.changePhone")}</Button>
 						].filter(x => x)}>
 							<List.Item.Meta
