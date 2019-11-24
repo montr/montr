@@ -1,12 +1,15 @@
 import * as React from "react";
-import { Page } from "../components";
+import { Result, Button } from "antd";
 
 export class Error404 extends React.Component {
 	render() {
 		return (
-			<Page title="404">
-
-			</Page>
+			<Result
+				status="404"
+				title="404"
+				subTitle="Sorry, the page you visited does not exist."
+				extra={<Button type="primary">Back Home</Button>}
+			/>
 		);
 	}
 }
