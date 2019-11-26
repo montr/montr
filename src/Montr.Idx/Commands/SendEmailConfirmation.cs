@@ -7,6 +7,11 @@ namespace Montr.Idx.Commands
 {
 	public class SendEmailConfirmation : IRequest<ApiResult>
 	{
+		public abstract class Resources
+		{
+			public abstract string Success { get; }
+		}
+
 		public ClaimsPrincipal User { get; set; }
 
 		/// <summary>

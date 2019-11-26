@@ -2,8 +2,8 @@
 using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.Extensions.Logging;
 using Montr.Core.Models;
+using Montr.Core.Services;
 using Montr.Idx.Commands;
 using Montr.Idx.Impl.Entities;
 using Montr.Idx.Impl.Services;
@@ -12,16 +12,16 @@ namespace Montr.Idx.Impl.CommandHandlers
 {
 	public class SendEmailConfirmationHandler : IRequestHandler<SendEmailConfirmation, ApiResult>
 	{
-		private readonly ILogger<SendEmailConfirmationHandler> _logger;
+		private readonly ILocalizer _localizer;
 		private readonly UserManager<DbUser> _userManager;
 		private readonly EmailConfirmationService _emailConfirmationService;
 
 		public SendEmailConfirmationHandler(
-			ILogger<SendEmailConfirmationHandler> logger,
+			ILocalizer localizer,
 			UserManager<DbUser> userManager,
 			EmailConfirmationService emailConfirmationService)
 		{
-			_logger = logger;
+			_localizer = localizer;
 			_userManager = userManager;
 			_emailConfirmationService = emailConfirmationService;
 		}
@@ -37,8 +37,7 @@ namespace Montr.Idx.Impl.CommandHandlers
 				await _emailConfirmationService.SendConfirmEmailMessage(user, cancellationToken);
 			}
 
-			// todo: localize
-			return new ApiResult { Message = "Verification email sent. Please check your email." };
+			return new ApiResult { Message = _localizer.Get<SendEmailConfirmation.Resources>(x => x.Success) };
 		}
 	}
 }

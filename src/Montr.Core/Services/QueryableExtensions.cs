@@ -29,7 +29,7 @@ namespace Montr.Core.Services
 
 			if (paging.SortColumn == null)
 			{
-				paging.SortColumn = GetMemberName(defaultSortColumn);
+				paging.SortColumn = ExpressionHelper.GetMemberName(defaultSortColumn);
 			}
 
 			if (paging.SortOrder == null)
@@ -99,31 +99,6 @@ namespace Montr.Core.Services
 				.Invoke(null, new object[] { source, lambda });
 
 			return (IOrderedQueryable<T>)result;
-		}
-
-		private static string GetMemberName(Expression expression)
-		{
-			var lambda = expression as LambdaExpression;
-
-			if (lambda == null) throw new ArgumentNullException(nameof(expression));
-
-			MemberExpression memberExpression = null;
-
-			if (lambda.Body.NodeType == ExpressionType.Convert)
-			{
-				memberExpression = ((UnaryExpression)lambda.Body).Operand as MemberExpression;
-			}
-			else if (lambda.Body.NodeType == ExpressionType.MemberAccess)
-			{
-				memberExpression = lambda.Body as MemberExpression;
-			}
-			
-			if (memberExpression == null)
-			{
-				throw new ArgumentException(nameof(expression));
-			}
-			
-			return memberExpression.Member.Name;
 		}
 	}
 }
