@@ -3,44 +3,60 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
+using System.Threading.Tasks;
 using Montr.Core.Models;
 
 namespace Montr.Core.Services
 {
 	public interface ILocalizer
 	{
-		string Get<T>(Expression<Func<T, string>> key);
+		Task<string> Get<T>(Expression<Func<T, string>> key, CancellationToken cancellationToken);
 
-		string Get(string key);
+		Task<string> Get(string key, CancellationToken cancellationToken);
 	}
 
 	public class DefaultLocalizer : ILocalizer
 	{
 		private readonly IRepository<LocaleString> _repository;
+		private readonly ICache _cache;
 
-		public DefaultLocalizer(IRepository<LocaleString> repository)
+		public DefaultLocalizer(
+			IRepository<LocaleString> repository,
+			ICache cache)
 		{
 			_repository = repository;
+			_cache = cache;
 		}
 
-		public string Get<T>(Expression<Func<T, string>> key)
+		public async Task<string> Get<T>(Expression<Func<T, string>> keyExpr, CancellationToken cancellationToken)
 		{
-			return Get(ExpressionHelper.GetFullName(key));
+			var key = ExpressionHelper.GetFullName(keyExpr);
+
+			return await Get(key, cancellationToken);
 		}
 
-		public string Get(string key)
+		public async Task<string> Get(string key, CancellationToken cancellationToken)
 		{
-			// todo: add caching
-			// todo: async
-			var result = _repository.Search(new LocaleStringSearchRequest
+			// todo: use fallback lang
+			var lang = Thread.CurrentThread.CurrentCulture.Name;
+
+			// todo: add module key to cache key
+			var cacheKey = $"{typeof(DefaultLocalizer).FullName}_{lang}";
+
+			var resources = await _cache.GetOrCreate(cacheKey, async () =>
 			{
-				Locale = Thread.CurrentThread.CurrentCulture.Name,
-				PageSize = 0 // disable paging
-			}, CancellationToken.None);
+				var request = new LocaleStringSearchRequest
+				{
+					Locale = lang,
+					PageSize = 0 // disable paging
+				};
 
-			var dict = result.Result.Rows.ToDictionary(x => x.Key);
+				var result = await _repository.Search(request, cancellationToken);
 
-			return dict.GetValueOrDefault(key)?.Value ?? key;
+				return result.Rows.ToDictionary(x => x.Key);
+			}, cancellationToken);
+
+			return resources.GetValueOrDefault(key)?.Value ?? key;
 		}
 	}
 }

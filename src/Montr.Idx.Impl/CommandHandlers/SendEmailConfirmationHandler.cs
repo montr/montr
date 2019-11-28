@@ -37,7 +37,7 @@ namespace Montr.Idx.Impl.CommandHandlers
 				await _emailConfirmationService.SendConfirmEmailMessage(user, cancellationToken);
 			}
 
-			return new ApiResult { Message = _localizer.Get<SendEmailConfirmation.Resources>(x => x.Success) };
+			return new ApiResult { Message = await _localizer.Get<SendEmailConfirmation.Resources>(x => x.Success, cancellationToken) };
 		}
 	}
 }

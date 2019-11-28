@@ -1,8 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace Montr.Core.Models
 {
+	[Serializable]
 	[DebuggerDisplay("{" + nameof(DebuggerDisplay) + ",nq}")]
 	public class LocaleString
 	{
