@@ -17,7 +17,7 @@ interface IState {
 	externalLogins: IUserLoginInfo[];
 }
 
-export class PaneExternalLogins extends React.Component<IProps, IState> {
+export default class PaneExternalLogins extends React.Component<IProps, IState> {
 
 	private _navigation = new NavigationService();
 	private _accountService = new AccountService();

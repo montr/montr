@@ -2,9 +2,15 @@ import React from "react";
 import { Menu } from "antd";
 import { Translation } from "react-i18next";
 import { Page, Toolbar, DataBreadcrumb } from "@montr-core/components";
-import { PaneEditProfile, PaneSecurity, PaneExternalLogins } from "../components/";
+import { Route, RouteComponentProps, Switch } from "react-router";
+import { Link } from "react-router-dom";
+import { Patterns } from "@montr-idx/module";
 
-interface IProps {
+interface IRouteProps {
+	tabKey?: string;
+}
+
+interface IProps extends RouteComponentProps<IRouteProps> {
 }
 
 interface IState {
@@ -21,7 +27,7 @@ export default class Profile extends React.Component<IProps, IState> {
 
 		this.state = {
 			mode: "inline",
-			selectedKey: "base"
+			selectedKey: "profile"
 		};
 	}
 
@@ -52,29 +58,13 @@ export default class Profile extends React.Component<IProps, IState> {
 		});
 	};
 
-	renderChildren = () => {
-		const { selectedKey } = this.state;
-
-		switch (selectedKey) {
-			case "base":
-				return <PaneEditProfile />;
-			case "security":
-				return <PaneSecurity />;
-			case "external-logins":
-				return <PaneExternalLogins />;
-			default:
-				break;
-		}
-
-		return null;
-	};
-
 	render = () => {
+		const { url, path } = this.props.match;
 		const { mode, selectedKey } = this.state;
 
 		return (
 			<Translation ns="idx">
-				{(t) => <Page
+				{() => <Page
 					title={<>
 						<Toolbar float="right">
 						</Toolbar>
@@ -90,15 +80,23 @@ export default class Profile extends React.Component<IProps, IState> {
 									mode={mode}
 									defaultSelectedKeys={[selectedKey]}
 									onSelect={({ key }) => this.setState({ selectedKey: key })}>
-									<Menu.Item key="base">Profile</Menu.Item>
-									<Menu.Item key="security">Security</Menu.Item>
-									<Menu.Item key="external-logins">External Logins</Menu.Item>
-									<Menu.Item key="notifications">Notifications</Menu.Item>
-									<Menu.Item key="history">History</Menu.Item>
+									<Menu.Item key="profile"><Link to={url}>Profile</Link></Menu.Item>
+									<Menu.Item key="security"><Link to={`${url}/security`}>Security</Link></Menu.Item>
+									<Menu.Item key="external-logins"><Link to={`${url}/external-logins`}>External Logins</Link></Menu.Item>
+									<Menu.Item key="notifications"><Link to={`${url}/notifications`}>Notifications</Link></Menu.Item>
+									<Menu.Item key="history"><Link to={`${url}/history`}>History</Link></Menu.Item>
 								</Menu>
 							</div>
 							<div className="content">
-								{this.renderChildren()}
+								<Switch>
+									<Route path={`${path}`} exact component={React.lazy(() => import("../components/pane-edit-profile"))} />
+									<Route path={`${path}/security`} component={React.lazy(() => import("../components/pane-security"))} />
+									<Route path={`${path}/external-logins`} component={React.lazy(() => import("../components/pane-external-logins"))} />
+									<Route path={Patterns.linkLogin} component={React.lazy(() => import("./link-login"))} />
+									<Route>
+										<h1>404</h1>
+									</Route>
+								</Switch>
 							</div>
 						</div>
 					</div>

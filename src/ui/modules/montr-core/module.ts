@@ -3,7 +3,7 @@ import { AppRouteRegistry } from "./services";
 import { Layout } from "./constants";
 
 import "./i18n";
-import "./index.less"
+import "./index.less";
 
 AppRouteRegistry.add([
 	{ path: "/", layout: Layout.public, exact: true, component: React.lazy(() => import("./pages/home")) },

@@ -55,6 +55,7 @@ namespace Montr.Core.Services
 			IServiceProvider serviceProvider = services.BuildServiceProvider();
 
 			// todo: order by module dependencies
+			// todo: create modules using ActivatorUtilities?
 			foreach (var type in types)
 			{
 				var module = (IModule)serviceProvider.GetService(type);

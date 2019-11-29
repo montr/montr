@@ -6,7 +6,7 @@ import { EventService, EventTemplateService } from "../../services";
 import { Page, IPaneComponent, Toolbar, PageHeader, DataBreadcrumb } from "@montr-core/components";
 import { MetadataService } from "@montr-core/services";
 import { IEvent } from "../../models";
-import * as panes from "../../components"
+import * as panes from "../../components";
 import { RouteBuilder } from "../../module";
 import { CompanyContextProps } from "@montr-kompany/components";
 import { RouteComponentProps } from "react-router";
@@ -60,28 +60,28 @@ class _EditEvent extends React.Component<IProps, IState> {
 		await this._metadataService.abort();
 		await this._eventTemplateService.abort();
 		await this._eventService.abort();
-	}
+	};
 
 	fetchConfigCodes = async () => {
 		const templates = await this._eventTemplateService.list();
 
 		this.setState({ configCodes: templates.rows });
-	}
+	};
 
 	fetchData = async () => {
 		this.setState({ data: await this._eventService.get(this.props.match.params.uid) });
-	}
+	};
 
 	resolveComponent = (component: string): React.ComponentClass => {
 		return componentToClass.get(component);
-	}
+	};
 
 	fetchMetadata = async () => {
 		// todo: get metadata key from server
 		const dataView = await this._metadataService.load("PrivateEvent/Edit", this.resolveComponent);
 
 		this.setState({ dataView: dataView });
-	}
+	};
 
 	formatPageTitle(): string {
 		const data = this.state.data;
@@ -105,7 +105,7 @@ class _EditEvent extends React.Component<IProps, IState> {
 	}
 
 	createRefForKey(key: string): React.RefObject<IProps> {
-		const ref: React.RefObject<IProps> = React.createRef()
+		const ref: React.RefObject<IProps> = React.createRef();
 		this._refsByKey.set(key, ref);
 		return ref;
 	}
@@ -160,8 +160,8 @@ class _EditEvent extends React.Component<IProps, IState> {
 
 		const path = RouteBuilder.editEvent(uid, tabKey);
 
-		this.props.history.replace(path)
-	}
+		this.props.history.replace(path);
+	};
 
 	render = () => {
 		const { t } = this.props;
@@ -224,7 +224,7 @@ class _EditEvent extends React.Component<IProps, IState> {
 				}
 			</Page>
 		);
-	}
+	};
 }
 
 const EditEvent = withTranslation("tendr")(_EditEvent);

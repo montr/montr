@@ -45,7 +45,7 @@ export default class LinkLogin extends React.Component<IProps, IState> {
 		this.setState({ loading: false });
 
 		if (result.success) {
-			this.props.history.push(Patterns.profile);
+			this.props.history.push(Patterns.profileExternalLogin);
 		}
 		else {
 			if (result.errors) {

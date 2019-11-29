@@ -17,7 +17,7 @@ interface IState {
 	fields?: IFormField[];
 }
 
-export class PaneEditProfile extends React.Component<IProps, IState> {
+export default class PaneEditProfile extends React.Component<IProps, IState> {
 
 	private _metadataService = new MetadataService();
 	private _profileService = new ProfileService();

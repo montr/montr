@@ -21,7 +21,7 @@ interface IState {
 	sendPhoneConfirmationDisabled: boolean;
 }
 
-export class PaneSecurity extends React.Component<IProps, IState> {
+export default class PaneSecurity extends React.Component<IProps, IState> {
 
 	private _operation = new OperationService();
 	private _accountService = new AccountService();

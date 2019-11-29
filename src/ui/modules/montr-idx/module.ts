@@ -13,6 +13,7 @@ export const Patterns = {
 	resetPassword: "/account/reset-password/:code",
 
 	profile: "/profile",
+	profileExternalLogin: "/profile/external-logins",
 	linkLogin: "/profile/link-login"
 };
 
@@ -39,6 +40,6 @@ AppRouteRegistry.add([
 	{ path: Patterns.forgotPassword, layout: Layout.public, exact: true, component: React.lazy(() => import("./pages/forgot-password")) },
 	{ path: Patterns.resetPassword, layout: Layout.public, exact: true, component: React.lazy(() => import("./pages/reset-password")) },
 
-	{ path: Patterns.profile, exact: true, component: React.lazy(() => import("./pages/profile")) },
-	{ path: Patterns.linkLogin, exact: true, component: React.lazy(() => import("./pages/link-login")) },
+	{ path: Patterns.profile, /* exact: true, */ component: React.lazy(() => import("./pages/profile")) },
+	// { path: Patterns.linkLogin, exact: true, component: React.lazy(() => import("./pages/link-login")) },
 ]);
