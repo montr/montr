@@ -38,30 +38,48 @@ export class DataMenu extends React.Component<Props, State> {
 			openKeys: string[] = [],
 			selectedKeys: string[] = [];
 
-		this.collectActiveAndOpenItems(menu, path, openKeys, selectedKeys);
+		this.collectOpenAndSelectedItems(menu, path, openKeys, selectedKeys);
 
 		this.setState({ menu, openKeys, selectedKeys });
 	};
 
-	// returns true, if parent item contains active menu item
-	collectActiveAndOpenItems = (parent: IMenu, path: string, openKeys: string[], selectedKeys: string[]): boolean => {
+	// returns true, if parent item contains selected menu item
+	collectOpenAndSelectedItems = (parent: IMenu, path: string, openKeys: string[], selectedKeys: string[]): boolean => {
 		if (parent.items) {
+
+			let selectedItem;
+
 			for (let i = 0; i < parent.items.length; i++) {
 				const item = parent.items[i];
 
-				if (this.collectActiveAndOpenItems(item, path, openKeys, selectedKeys)) {
+				if (this.collectOpenAndSelectedItems(item, path, openKeys, selectedKeys)) {
 					openKeys.push(item.id);
 				}
 
 				if (typeof item.route == "string") {
 					const route = item.route as string;
-					if ((route == "/" && path == route) ||
-						(route != "/" && path.startsWith(route))) {
-						selectedKeys.push(item.id);
-						return true;
+
+					const exactMatch = (path == route);
+					if (exactMatch) {
+						selectedItem = item;
+						break;
+					}
+
+					// last start with match will win, because last matches are longest
+					// otherwise should calculate match length to prevent select short matches
+					const startWithMatch = (
+						(route == "/" && path == route) ||
+						(route != "/" && path.startsWith(route))
+					);
+					if (startWithMatch) {
+						selectedItem = item;
 					}
 				}
+			}
 
+			if (selectedItem) {
+				selectedKeys.push(selectedItem.id);
+				return true;
 			}
 		}
 

@@ -28,6 +28,15 @@ namespace Montr.Core.Services
 				result.Items.Add(new Menu { Id = "p.2", Name = "Панель управления", Icon = "dashboard", Route = "/dashboard" });
 			}
 
+			if (menuId == "ProfileMenu")
+			{
+				result.Items.Add(new Menu { Id = "p.0", Name = "Profile", Route = "/profile" });
+				result.Items.Add(new Menu { Id = "p.1", Name = "Security", Route = "/profile/security" });
+				result.Items.Add(new Menu { Id = "p.2", Name = "External Logins", Route = "/profile/external-login" });
+				result.Items.Add(new Menu { Id = "p.3", Name = "Notifications", Route = "/profile/notifications" });
+				result.Items.Add(new Menu { Id = "p.4", Name = "History", Route = "/profile/history" });
+			}
+
 			if (menuId == "SideMenu")
 			{
 				result.Items.Add(new Menu { Id = "m.0", Name = "Панель управления", Icon = "dashboard", Route = "/dashboard" });

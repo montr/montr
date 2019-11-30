@@ -1,5 +1,5 @@
 import React from "react";
-import { Switch } from "react-router";
+import { Switch, Route } from "react-router";
 import { BrowserRouter } from "react-router-dom";
 import { AppRoute } from "./";
 import { IRoute } from "../models";
@@ -20,4 +20,19 @@ export const AppRouteList = ({ routes, layoutRegistry, defaultLayout, errorLayou
 			<AppRoute component={React.lazy(() => import("../pages/error-404"))} layoutComponent={layoutRegistry(errorLayout)} />
 		</Switch>
 	</BrowserRouter>
+);
+
+interface IRouteListProps {
+	routes: IRoute[];
+}
+
+export const RouteList = ({ routes }: IRouteListProps) => (
+	<Switch>
+		{routes.map(({ ...props }, _do_not_use_) => {
+			return <Route key={0} {...props} />;
+		})}
+		<Route>
+			<h1>404</h1>
+		</Route>
+	</Switch>
 );

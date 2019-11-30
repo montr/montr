@@ -3,7 +3,7 @@ import { RouteComponentProps } from "react-router";
 import { Spin } from "antd";
 import { Translation } from "react-i18next";
 import { Page } from "@montr-core/components";
-import { NavigationService, NotificationService } from "@montr-core/services";
+import { NotificationService } from "@montr-core/services";
 import { ProfileService } from "../services";
 import { Patterns } from "@montr-idx/module";
 
@@ -12,13 +12,10 @@ interface IProps extends RouteComponentProps {
 
 interface IState {
 	loading: boolean;
-	// data?: IExternalRegisterModel;
-	// fields?: IFormField[];
 }
 
-export default class LinkLogin extends React.Component<IProps, IState> {
+export default class PaneExternalLoginLink extends React.Component<IProps, IState> {
 
-	private _navigation = new NavigationService();
 	private _notification = new NotificationService();
 	private _profileService = new ProfileService();
 

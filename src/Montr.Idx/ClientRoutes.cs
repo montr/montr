@@ -18,6 +18,6 @@
 
 		public static readonly string ExternalLogin = "/account/external-login";
 
-		public static readonly string LinkLogin = "/profile/link-login";
+		public static readonly string LinkLogin = "/profile/external-login/link";
 	}
 }

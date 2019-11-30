@@ -13,8 +13,9 @@ export const Patterns = {
 	resetPassword: "/account/reset-password/:code",
 
 	profile: "/profile",
-	profileExternalLogin: "/profile/external-logins",
-	linkLogin: "/profile/link-login"
+	profileSecurity: "/profile/security",
+	profileExternalLogin: "/profile/external-login",
+	profileExternalLoginLink: "/profile/external-login/link"
 };
 
 export const Views = {
@@ -40,6 +41,12 @@ AppRouteRegistry.add([
 	{ path: Patterns.forgotPassword, layout: Layout.public, exact: true, component: React.lazy(() => import("./pages/forgot-password")) },
 	{ path: Patterns.resetPassword, layout: Layout.public, exact: true, component: React.lazy(() => import("./pages/reset-password")) },
 
-	{ path: Patterns.profile, /* exact: true, */ component: React.lazy(() => import("./pages/profile")) },
-	// { path: Patterns.linkLogin, exact: true, component: React.lazy(() => import("./pages/link-login")) },
+	{ path: Patterns.profile, component: React.lazy(() => import("./pages/profile")) },
 ]);
+
+export const ProfileRoutes = [
+	{ path: Patterns.profile, exact: true, component: React.lazy(() => import("./components/pane-edit-profile")) },
+	{ path: Patterns.profileSecurity, exact: true, component: React.lazy(() => import("./components/pane-security")) },
+	{ path: Patterns.profileExternalLogin, exact: true, component: React.lazy(() => import("./components/pane-external-logins")) },
+	{ path: Patterns.profileExternalLoginLink, exact: true, component: React.lazy(() => import("./components/pane-external-login-link")) },
+];
