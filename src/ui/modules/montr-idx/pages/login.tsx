@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Page, DataForm, WrappedDataForm } from "@montr-core/components";
 import { IFormField, IApiResult } from "@montr-core/models";
-import { Row, Spin, Col } from "antd";
+import { Spin } from "antd";
 import { MetadataService, NavigationService } from "@montr-core/services";
 import { ILoginModel } from "../models/";
 import { Link } from "react-router-dom";
@@ -38,35 +38,35 @@ export default class Login extends React.Component<IProps, IState> {
 
 	componentDidMount = async () => {
 		await this.fetchData();
-	}
+	};
 
 	componentWillUnmount = async () => {
 		await this._metadataService.abort();
 		await this._accountService.abort();
-	}
+	};
 
 	saveFormRef = (formRef: WrappedDataForm) => {
 		this._formRef = formRef;
-	}
+	};
 
 	fetchData = async () => {
 		const dataView = await this._metadataService.load(Views.formLogin);
 
 		this.setState({ loading: false, fields: dataView.fields });
-	}
+	};
 
 	login = async (values: ILoginModel): Promise<IApiResult> => {
 		return await this._accountService.login({
 			returnUrl: this._navigation.getReturnUrlParameter(),
 			...values
 		});
-	}
+	};
 
 	sendEmailConfirmation = async (): Promise<IApiResult> => {
 		return await this._accountService.sendEmailConfirmation({
 			email: await this._formRef.getFieldValue("email")
 		});
-	}
+	};
 
 	render = () => {
 		const { loading, fields, data } = this.state;
@@ -74,37 +74,30 @@ export default class Login extends React.Component<IProps, IState> {
 		return (
 			<Translation ns="idx">
 				{(t) => <Page title={t("page.login.title")}>
-					<Row>
-						<Col offset={4} span={8} style={{ padding: 12 }}>
 
-							<h3>{t("page.login.section.loginLocal")}</h3>
+					<h3>{t("page.login.section.loginLocal")}</h3>
 
-							<Spin spinning={loading}>
-								<DataForm
-									fields={fields}
-									data={data}
-									wrappedComponentRef={this.saveFormRef}
-									onSubmit={this.login}
-									submitButton={t("button.login")}
-									successMessage="User logged in."
-								/>
-							</Spin>
+					<Spin spinning={loading}>
+						<DataForm
+							fields={fields}
+							data={data}
+							wrappedComponentRef={this.saveFormRef}
+							onSubmit={this.login}
+							submitButton={t("button.login")}
+							successMessage="User logged in."
+						/>
+					</Spin>
 
-							<p><Link to="/account/forgot-password">{t("page.login.link.forgotPassword")}</Link></p>
-							<p><Link to="/account/register">{t("page.login.link.register")}</Link></p>
-							<p><a onClick={this.sendEmailConfirmation}>{t("page.login.link.resendEmailConfirmation")}</a></p>
+					<p><Link to="/account/forgot-password">{t("page.login.link.forgotPassword")}</Link></p>
+					<p><Link to="/account/register">{t("page.login.link.register")}</Link></p>
+					<p><a onClick={this.sendEmailConfirmation}>{t("page.login.link.resendEmailConfirmation")}</a></p>
 
-						</Col>
-						<Col span={8} style={{ padding: 12 }}>
+					<h3>{t("page.login.section.loginExternal")}</h3>
 
-							<h3>{t("page.login.section.loginExternal")}</h3>
+					<ExternalLoginForm />
 
-							<ExternalLoginForm />
-
-						</Col>
-					</Row>
 				</Page>}
 			</Translation>
 		);
-	}
+	};
 }

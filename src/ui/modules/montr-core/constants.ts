@@ -18,6 +18,7 @@ export const Constants = {
 };
 
 export const Layout = {
+	auth: "auth",
 	public: "public",
 	private: "private"
 };

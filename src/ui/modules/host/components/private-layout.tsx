@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Layout } from "antd";
+import { Layout, Icon } from "antd";
 import { DataMenu, ErrorBoundary, Footer } from "@montr-core/components";
 import { UserWithCompanyMenu } from "@montr-kompany/components";
 
@@ -20,8 +20,7 @@ export class PrivateLayout extends React.Component {
 				onCollapse={(collapsed, type) => { console.log("Sider.onCollapse", collapsed, type); }} */
 				>
 					<ErrorBoundary>
-						{/* <div className="logo" /> */}
-
+						{/* <Logo /> */}
 						<DataMenu
 							menuId="SideMenu"
 							theme={theme}

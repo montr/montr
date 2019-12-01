@@ -33,22 +33,22 @@ export default class ForgotPassword extends React.Component<IProps, IState> {
 
 	componentDidMount = async () => {
 		await this.fetchData();
-	}
+	};
 
 	componentWillUnmount = async () => {
 		await this._metadataService.abort();
 		await this._accountService.abort();
-	}
+	};
 
 	fetchData = async () => {
 		const dataView = await this._metadataService.load(Views.formForgotPassword);
 
 		this.setState({ loading: false, fields: dataView.fields });
-	}
+	};
 
 	send = async (values: ILoginModel): Promise<IApiResult> => {
 		return await this._accountService.forgotPassword(values);
-	}
+	};
 
 	render = () => {
 		const { fields, data, loading } = this.state;
@@ -59,19 +59,17 @@ export default class ForgotPassword extends React.Component<IProps, IState> {
 
 					<h3>{t("page.forgotPassword.subtitle")}</h3>
 
-					<div style={{ width: "50%" }} >
-						<Spin spinning={loading}>
-							<DataForm
-								fields={fields}
-								data={data}
-								onSubmit={this.send}
-								submitButton={t("button.submit")}
-							/>
-						</Spin>
-					</div>
+					<Spin spinning={loading}>
+						<DataForm
+							fields={fields}
+							data={data}
+							onSubmit={this.send}
+							submitButton={t("button.submit")}
+						/>
+					</Spin>
 
 				</Page>}
 			</Translation>
 		);
-	}
+	};
 }

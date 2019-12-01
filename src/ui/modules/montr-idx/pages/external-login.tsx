@@ -80,20 +80,18 @@ export default class ExternalLogin extends React.Component<IProps, IState> {
 					<Spin spinning={loading}>
 
 						{data && <>
-							<div style={{ width: "50%" }} >
-								<p>
-									You've successfully authenticated with <strong>{data.provider}</strong>.
-									Please enter an email address for this site below and click the Register button to finish
-									logging in.
+							<p>
+								You've successfully authenticated with <strong>{data.provider}</strong>.
+								Please enter an email address for this site below and click the Register button to finish
+								logging in.
 								</p>
 
-								<DataForm
-									fields={fields}
-									data={data}
-									onSubmit={this.handleSubmit}
-									submitButton={t("button.register")}
-								/>
-							</div>
+							<DataForm
+								fields={fields}
+								data={data}
+								onSubmit={this.handleSubmit}
+								submitButton={t("button.register")}
+							/>
 						</>}
 
 					</Spin>

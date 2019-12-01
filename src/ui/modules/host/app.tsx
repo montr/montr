@@ -7,12 +7,13 @@ import { Layout } from "@montr-core/constants";
 import { AppLayoutRegistry, AppRouteRegistry } from "@montr-core/services";
 import { ErrorBoundary, UserContextProvider, AuthCallbackHandler, AppRouteList, SuspenseFallback } from "@montr-core/components";
 import { CompanyContextProvider } from "@montr-kompany/components";
-import { PublicLayout, PrivateLayout } from "./components";
+import * as Layouts from "./components";
 
-import "./modules"
+import "./modules";
 
-AppLayoutRegistry.register(Layout.public, PublicLayout);
-AppLayoutRegistry.register(Layout.private, PrivateLayout);
+AppLayoutRegistry.register(Layout.auth, Layouts.AuthLayout);
+AppLayoutRegistry.register(Layout.public, Layouts.PublicLayout);
+AppLayoutRegistry.register(Layout.private, Layouts.PrivateLayout);
 
 class App extends React.Component {
 	render = () => {
@@ -38,7 +39,7 @@ class App extends React.Component {
 				</ErrorBoundary>
 			</React.Suspense>
 		);
-	}
+	};
 }
 
 ReactDOM.render(<App />, document.getElementById("root"));
