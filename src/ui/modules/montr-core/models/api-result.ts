@@ -1,12 +1,13 @@
 import { Guid } from ".";
 
-export interface IApiResult {
+export interface IApiResult<TData = any> {
 	success: boolean;
 	message?: string;
 	uid?: Guid;
 	affectedRows?: number;
 	errors?: IApiResultError[];
 	redirectUrl?: string;
+	data?: TData;
 }
 
 export interface IApiResultError {

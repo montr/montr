@@ -3,7 +3,6 @@ export * from "./change-password-model";
 export * from "./confirm-email-change-model";
 export * from "./confirm-email-model";
 export * from "./external-login-model";
-export * from "./external-login-result";
 export * from "./external-register-model";
 export * from "./forgot-password-model";
 export * from "./login-model";

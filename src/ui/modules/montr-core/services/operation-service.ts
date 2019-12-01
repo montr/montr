@@ -13,7 +13,7 @@ export class OperationService {
 	private _navigation = new NavigationService();
 	private _notification = new NotificationService();
 
-	execute = async (operation: () => Promise<IApiResult>, options?: IOperationExecuteOptions) => {
+	execute = async (operation: () => Promise<IApiResult>, options?: IOperationExecuteOptions): Promise<IApiResult> => {
 
 		const t = (key: string) => i18next.t(key);
 
@@ -41,6 +41,8 @@ export class OperationService {
 			if (result && result.redirectUrl) {
 				this._navigation.navigate(result.redirectUrl);
 			}
+
+			return result;
 		}
 		catch (error) {
 			this._notification.error(options?.errorMessage ?? t("operation.error"), error.message);

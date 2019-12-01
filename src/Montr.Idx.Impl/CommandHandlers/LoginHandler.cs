@@ -4,6 +4,7 @@ using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using Montr.Core.Models;
+using Montr.Core.Services;
 using Montr.Idx.Commands;
 using Montr.Idx.Impl.Entities;
 
@@ -12,13 +13,16 @@ namespace Montr.Idx.Impl.CommandHandlers
 	public class LoginHandler : IRequestHandler<Login, ApiResult>
 	{
 		private readonly ILogger<ConfirmEmailHandler> _logger;
+		private readonly ILocalizer _localizer;
 		private readonly SignInManager<DbUser> _signInManager;
 
 		public LoginHandler(
 			ILogger<ConfirmEmailHandler> logger,
+			ILocalizer localizer,
 			SignInManager<DbUser> signInManager)
 		{
 			_logger = logger;
+			_localizer = localizer;
 			_signInManager = signInManager;
 		}
 
@@ -40,22 +44,24 @@ namespace Montr.Idx.Impl.CommandHandlers
 			if (result.RequiresTwoFactor)
 			{
 				// return RedirectToPage("./LoginWith2fa", new { ReturnUrl = returnUrl, RememberMe = Input.RememberMe });
-				return new ApiResult { RedirectRoute = "./LoginWith2fa", RedirectUrl = request.ReturnUrl };
+				// return new ApiResult { RedirectRoute = "./LoginWith2fa", RedirectUrl = request.ReturnUrl };
+
+				return new ApiResult { Success = false, Message = await _localizer.Get<Login.Resources>(x => x.RequiresTwoFactor, cancellationToken) };
 			}
 
 			if (result.IsLockedOut)
 			{
 				_logger.LogWarning("User account locked out.");
 
-				return new ApiResult { Success = false, Message = "User account locked out." };
+				return new ApiResult { Success = false, Message = await _localizer.Get<Login.Resources>(x => x.IsLockedOut, cancellationToken) };
 			}
 
 			if (result.IsNotAllowed)
 			{
-				return new ApiResult { Success = false, Message = "User cannot sign in without a confirmed email." };
+				return new ApiResult { Success = false, Message = await _localizer.Get<Login.Resources>(x => x.IsNotAllowed, cancellationToken) };
 			}
 
-			return new ApiResult { Success = false, Message = "Invalid login attempt." };
+			return new ApiResult { Success = false, Message = await _localizer.Get<Login.Resources>(x => x.Error, cancellationToken) };
 		}
 	}
 }

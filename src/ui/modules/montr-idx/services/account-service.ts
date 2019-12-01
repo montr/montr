@@ -25,7 +25,7 @@ export class AccountService extends Fetcher {
 		return this.post(`${Constants.apiURL}/account/login`, request);
 	};
 
-	externalLoginCallback = async (request: IExternalLoginModel): Promise<IApiResult> => {
+	externalLoginCallback = async (request: IExternalLoginModel): Promise<IApiResult<IExternalRegisterModel>> => {
 		return this.post(`${Constants.apiURL}/account/externalLoginCallback`, request);
 	};
 

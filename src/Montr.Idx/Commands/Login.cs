@@ -6,6 +6,17 @@ namespace Montr.Idx.Commands
 {
 	public class Login : IRequest<ApiResult>
 	{
+		public abstract class Resources
+		{
+			public abstract string Error { get; }
+
+			public abstract string IsLockedOut { get; }
+
+			public abstract string IsNotAllowed { get; }
+
+			public abstract string RequiresTwoFactor { get; }
+		}
+
 		public string ReturnUrl { get; set; }
 
 		[Required]

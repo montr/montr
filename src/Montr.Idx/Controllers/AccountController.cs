@@ -67,7 +67,7 @@ namespace Montr.Idx.Controllers
 		}
 
 		[HttpPost]
-		public async Task<ExternalLoginCallback.Result> ExternalLoginCallback(ExternalLoginCallback request)
+		public async Task<ApiResult<ExternalRegisterModel>> ExternalLoginCallback(ExternalLoginCallback request)
 		{
 			return await _mediator.Send(request);
 		}

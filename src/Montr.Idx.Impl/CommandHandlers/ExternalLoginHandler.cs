@@ -30,6 +30,7 @@ namespace Montr.Idx.Impl.CommandHandlers
 				new Dictionary<string, string> { { "returnUrl", request.ReturnUrl ?? "/" } });
 
 			var properties = _signInManager.ConfigureExternalAuthenticationProperties(request.Provider, redirectUrl);
+
 			var result = new ChallengeResult(request.Provider, properties);
 
 			return Task.FromResult(result);

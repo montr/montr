@@ -7,7 +7,6 @@ namespace Montr.Core.Models
 	{
 		public ApiResult()
 		{
-			// todo: remove, use ApiResult.Success
 			Success = true;	
 		}
 
@@ -29,6 +28,11 @@ namespace Montr.Core.Models
 		public string RedirectRoute { get; set; }
 
 		public IList<ApiResultError> Errors { get; set; }
+	}
+
+	public class ApiResult<TData> : ApiResult
+	{
+		public TData Data { get; set; }
 	}
 
 	public class ApiResultError
