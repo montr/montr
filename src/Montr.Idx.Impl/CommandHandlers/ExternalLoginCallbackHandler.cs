@@ -27,13 +27,13 @@ namespace Montr.Idx.Impl.CommandHandlers
 		{
 			if (request.RemoteError != null)
 			{
-				return new ExternalLoginCallback.Result($"Error from external provider: {request.RemoteError}");
+				return new ExternalLoginCallback.Result { Success = false, Message = $"Error from external provider: {request.RemoteError}" };
 			}
 
 			var info = await _signInManager.GetExternalLoginInfoAsync();
 			if (info == null)
 			{
-				return new ExternalLoginCallback.Result("Error loading external login information.");
+				return new ExternalLoginCallback.Result { Success = false, Message = "Error loading external login information." };
 			}
 
 			// Sign in the user with this external login provider if the user already has a login.
@@ -52,7 +52,7 @@ namespace Montr.Idx.Impl.CommandHandlers
 
 			if (result.IsLockedOut)
 			{
-				return new ExternalLoginCallback.Result("This account has been locked out, please try again later.");
+				return new ExternalLoginCallback.Result { Success = false, Message = "This account has been locked out, please try again later." };
 			}
 
 			// If the user does not have an account, then ask the user to create an account.

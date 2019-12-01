@@ -37,7 +37,7 @@ namespace Montr.Idx.Impl.CommandHandlers
 			if (info == null)
 			{
 				// return RedirectToPage("./Login", new { ReturnUrl = returnUrl });
-				return new ApiResult("Error loading external login information during confirmation.");
+				return new ApiResult { Success = false, Message = "Error loading external login information during confirmation." };
 			}
 
 			var user = new DbUser

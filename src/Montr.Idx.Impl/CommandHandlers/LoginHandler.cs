@@ -47,16 +47,15 @@ namespace Montr.Idx.Impl.CommandHandlers
 			{
 				_logger.LogWarning("User account locked out.");
 
-				// return RedirectToPage("./Lockout");
-				return new ApiResult { RedirectRoute = "./Lockout" };
+				return new ApiResult { Success = false, Message = "User account locked out." };
 			}
 
-			// todo: implement
-			if (result.IsNotAllowed) // Email not confirmed?
+			if (result.IsNotAllowed)
 			{
+				return new ApiResult { Success = false, Message = "User cannot sign in without a confirmed email." };
 			}
 
-			return new ApiResult("Invalid login attempt.");
+			return new ApiResult { Success = false, Message = "Invalid login attempt." };
 		}
 	}
 }

@@ -7,21 +7,8 @@ namespace Montr.Core.Models
 	{
 		public ApiResult()
 		{
+			// todo: remove, use ApiResult.Success
 			Success = true;	
-		}
-
-		// todo: remove ctor
-		public ApiResult(params string[] errorMessages)
-		{
-			Success = false;
-
-			Errors = new[]
-			{
-				new ApiResultError
-				{
-					Messages = errorMessages
-				}
-			};
 		}
 
 		public bool Success { get; set; }

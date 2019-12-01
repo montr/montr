@@ -10,16 +10,9 @@ namespace Montr.Idx.Commands
 
 		public string RemoteError { get; set; }
 
+		// todo: create ApiResult<TModel>
 		public class Result : ApiResult
 		{
-			public Result()
-			{
-			}
-
-			public Result(params string[] errorMessages) : base(errorMessages)
-			{
-			}
-			
 			public ExternalRegisterModel Register { get; set; }
 		}
 	}

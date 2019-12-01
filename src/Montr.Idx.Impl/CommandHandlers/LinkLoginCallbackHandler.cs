@@ -38,13 +38,14 @@ namespace Montr.Idx.Impl.CommandHandlers
 			var info = await _signInManager.GetExternalLoginInfoAsync(await _userManager.GetUserIdAsync(user));
 			if (info == null)
 			{
-				return new ApiResult($"Unexpected error occurred loading external login info for user with ID '{user.Id}'.");
+				// todo: why user ID displayed to user?
+				return new ApiResult { Success = false, Message = $"Unexpected error occurred loading external login info for user with ID '{user.Id}'." };
 			}
 
 			var result = await _userManager.AddLoginAsync(user, info);
 			if (result.Succeeded == false)
 			{
-				return new ApiResult("The external login was not added. External logins can only be associated with one account.");
+				return new ApiResult { Success = false, Message = "The external login was not added. External logins can only be associated with one account." };
 				// return RedirectToPage();
 			}
 

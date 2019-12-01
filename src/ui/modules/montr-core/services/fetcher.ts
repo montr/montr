@@ -1,5 +1,5 @@
-import axios, { AxiosRequestConfig, AxiosResponse } from "axios"
-import { AuthService } from "./auth-service"
+import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
+import { AuthService } from "./auth-service";
 
 // axios.defaults.withCredentials = true;
 axios.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
@@ -67,7 +67,7 @@ export class Fetcher {
 		const response = await authenticated.post(url, body, config);
 
 		this.openFile(response);
-	}
+	};
 
 	public post = async (url: string, body?: any): Promise<any> => {
 
@@ -77,11 +77,11 @@ export class Fetcher {
 		const response = await authenticated.post(url, body || {}, config);
 
 		return response ? response.data : null;
-	}
+	};
 
 	public abort = async (message?: string): Promise<any> => {
 		this._cancelTokenSource.cancel(message || `${this.constructor.name} cancelled`);
-	}
+	};
 
 	private openFile(response: AxiosResponse<any>) {
 

@@ -3,9 +3,9 @@ import { Form, Button, Spin } from "antd";
 import { FormComponentProps } from "antd/lib/form";
 import { IFormField, IIndexer, IApiResult } from "../models";
 import { NotificationService } from "../services/notification-service";
+import { OperationService } from "../services";
 import { FormDefaults, FormFieldFactory } from ".";
 import { withTranslation, WithTranslation } from "react-i18next";
-import { NavigationService } from "@montr-core/services";
 
 declare const FormLayouts: ["horizontal", "inline", "vertical"];
 
@@ -27,7 +27,7 @@ interface IState {
 
 export class WrappedDataForm extends React.Component<IProps, IState> {
 
-	private _navigation = new NavigationService();
+	private _operation = new OperationService();
 	private _notificationService = new NotificationService();
 
 	constructor(props: IProps) {
@@ -51,36 +51,23 @@ export class WrappedDataForm extends React.Component<IProps, IState> {
 		const { t, form, onSubmit: onSave, successMessage, errorMessage } = this.props;
 
 		form.validateFieldsAndScroll(async (errors, values: any) => {
-			if (errors) {
-				// console.log(errors);
-			}
-			else {
-				try {
-					this.setState({ loading: true });
+			if (!errors) {
+				this.setState({ loading: true });
 
-					var result = await onSave(values);
-
-					if (result && result.success) {
-						this._notificationService.success(successMessage || t("dataForm.submit.success"));
-
-						if (result.redirectUrl) {
-							this._navigation.navigate(result.redirectUrl);
-						}
+				await this._operation.execute(() => onSave(values), {
+					successMessage: successMessage || t("dataForm.submit.success"),
+					errorMessage: errorMessage || t("dataForm.submit.error"),
+					showFieldErrors: async (result) => {
+						await this.setFieldErrors(result, values);
 					}
+				});
 
-					await this.setFieldErrors(result, values);
-
-				} catch (error) {
-					this._notificationService.error(errorMessage || t("dataForm.submit.error"), error.message);
-				}
-				finally {
-					this.setState({ loading: false });
-				}
+				this.setState({ loading: false });
 			}
 		});
 	};
 
-	setFieldErrors = async (result: IApiResult, values: any) => {
+	setFieldErrors = async (result: IApiResult, values: IIndexer) => {
 		const { form, fields } = this.props,
 			fieldErrors: any = {},
 			otherErrors: string[] = [];
@@ -88,9 +75,10 @@ export class WrappedDataForm extends React.Component<IProps, IState> {
 		if (result && result.errors) {
 			result.errors.forEach(error => {
 				// todo: check key exists in state.fields (ignore case + add tests)
-				if (fields.find(x => x.key == error.key)) {
-					fieldErrors[error.key] = {
-						value: values.code,
+				const field = fields.find(x => x.key && error.key && x.key.toLowerCase() == error.key.toLowerCase());
+				if (field) {
+					fieldErrors[field.key] = {
+						value: values[field.key],
 						errors: error.messages.map((x: string) => new Error(x))
 					};
 				}

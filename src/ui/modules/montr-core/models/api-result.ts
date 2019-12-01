@@ -13,3 +13,15 @@ export interface IApiResultError {
 	key: string;
 	messages: string[];
 }
+
+export interface IProblemDetails {
+	detail?: string;
+	instance?: string;
+	status?: number;
+	title?: string;
+	type?: string;
+}
+
+export interface IValidationProblemDetails extends IProblemDetails {
+	errors?: Map<string, string[]>;
+}
