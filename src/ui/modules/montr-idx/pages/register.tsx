@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Page, DataForm } from "@montr-core/components";
 import { IFormField, IApiResult } from "@montr-core/models";
-import { Spin } from "antd";
+import { Spin, Divider, Icon } from "antd";
 import { MetadataService } from "@montr-core/services";
 import { IRegisterModel } from "../models/";
 import { Translation } from "react-i18next";
@@ -59,7 +59,7 @@ export default class Register extends React.Component<IProps, IState> {
 			<Translation ns="idx">
 				{(t) => <Page title={t("page.register.title")}>
 
-					<h3>{t("page.register.subtitle")}</h3>
+					<p>{t("page.register.subtitle")}</p>
 
 					<Spin spinning={loading}>
 						<DataForm
@@ -70,9 +70,11 @@ export default class Register extends React.Component<IProps, IState> {
 						/>
 					</Spin>
 
-					<p><Link to="/account/login">{t("page.register.link.login")}</Link></p>
+					<p><Link to="/account/login"><Icon type="arrow-left" /> {t("page.register.link.login")}</Link></p>
 
-					<h3>Use another service to register.</h3>
+					<Divider />
+
+					<p>{t("page.register.section.registerExternal")}</p>
 
 					<ExternalLoginForm />
 

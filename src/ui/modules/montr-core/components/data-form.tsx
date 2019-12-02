@@ -92,6 +92,7 @@ export class WrappedDataForm extends React.Component<IProps, IState> {
 			form.setFields(fieldErrors);
 
 			if (otherErrors.length > 0) {
+				// todo: show as alert before form
 				this._notificationService.error(otherErrors);
 			}
 		}

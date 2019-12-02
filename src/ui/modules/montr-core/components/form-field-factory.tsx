@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Input, Select, Checkbox } from "antd";
+import { Input, Select, Checkbox, Icon } from "antd";
 import { IFormField, IIndexer, ISelectField, ITextAreaField } from "../models";
 
 export abstract class FormFieldFactory {
@@ -24,7 +24,12 @@ class BooleanFieldFactory implements FormFieldFactory {
 
 class StringFieldFactory implements FormFieldFactory {
 	createNode(field: IFormField, data: IIndexer): React.ReactNode {
-		return <Input allowClear placeholder={field.placeholder} disabled={field.readonly} />;
+		return <Input
+			allowClear
+			disabled={field.readonly}
+			placeholder={field.placeholder}
+			prefix={field.icon && <Icon type={field.icon} style={{ color: "rgba(0,0,0,.25)" }} />}
+		/>;
 	}
 }
 
@@ -47,7 +52,7 @@ class SelectFieldFactory implements FormFieldFactory {
 		return (
 			<Select allowClear placeholder={field.placeholder}>
 				{selectField && selectField.options && selectField.options.map(x => {
-					return <Select.Option key={x.value} value={x.value}>{x.name || x.value}</Select.Option>
+					return <Select.Option key={x.value} value={x.value}>{x.name || x.value}</Select.Option>;
 				})}
 			</Select>
 		);
@@ -56,7 +61,11 @@ class SelectFieldFactory implements FormFieldFactory {
 
 class PasswordFieldFactory implements FormFieldFactory {
 	createNode(field: IFormField, data: IIndexer): React.ReactNode {
-		return <Input.Password allowClear placeholder={field.placeholder} />;
+		return <Input.Password
+			allowClear
+			placeholder={field.placeholder}
+			prefix={field.icon && <Icon type={field.icon} style={{ color: "rgba(0,0,0,.25)" }} />}
+		/>;
 	}
 }
 

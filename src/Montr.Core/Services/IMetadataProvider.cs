@@ -154,8 +154,8 @@ namespace Montr.Core.Services
 			{
 				result.Fields = new List<FormField>
 				{
-					new StringField { Key = "email", Name = "Email", Required = true },
-					new PasswordField { Key = "password", Name = "Password", Required = true },
+					new StringField { Key = "email", /*Name = "Email",*/ Placeholder = "Your email", Icon = "user", Required = true },
+					new PasswordField { Key = "password", /*Name = "Password",*/ Placeholder = "Password", Icon = "lock", Required = true },
 					new BooleanField { Key = "rememberMe", Name = "Remember me?" }
 				};
 			}
@@ -164,7 +164,7 @@ namespace Montr.Core.Services
 			{
 				result.Fields = new List<FormField>
 				{
-					new StringField { Key = "email", Name = "Email", Required = true }
+					new StringField { Key = "email", Name = "Email", Icon = "mail", Required = true }
 				};
 			}
 
@@ -173,8 +173,8 @@ namespace Montr.Core.Services
 				result.Fields = new List<FormField>
 				{
 					new StringField { Key = "email", Name = "Email", Required = true },
-					new PasswordField { Key = "password", Name = "Password", Required = true }
-					// new PasswordField { Key = "confirmPassword", Name = "Confirm Password", Required = true }
+					new PasswordField { Key = "password", Name = "Password", Required = true },
+					new PasswordField { Key = "confirmPassword", Name = "Confirm Password", Required = true }
 				};
 			}
 

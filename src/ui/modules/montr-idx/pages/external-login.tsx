@@ -84,7 +84,7 @@ export default class ExternalLogin extends React.Component<IProps, IState> {
 								You've successfully authenticated with <strong>{data.provider}</strong>.
 								Please enter an email address for this site below and click the Register button to finish
 								logging in.
-								</p>
+							</p>
 
 							<DataForm
 								fields={fields}

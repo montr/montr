@@ -59,9 +59,7 @@ namespace Montr.Idx.Impl.CommandHandlers
 				await _emailSender.Send(user.Email, message.Subject, message.Body);
 			}
 
-			// Please check your email to reset your password.
-			// return RedirectToPage("./ForgotPasswordConfirmation");
-			return new ApiResult();
+			return new ApiResult { Message = "Please check your email to reset your password." };
 		}
 	}
 }

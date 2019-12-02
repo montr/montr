@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Page, DataForm, WrappedDataForm } from "@montr-core/components";
 import { IFormField, IApiResult } from "@montr-core/models";
-import { Spin } from "antd";
+import { Spin, Divider } from "antd";
 import { MetadataService, NavigationService } from "@montr-core/services";
 import { ILoginModel } from "../models/";
 import { Link } from "react-router-dom";
@@ -75,24 +75,31 @@ export default class Login extends React.Component<IProps, IState> {
 			<Translation ns="idx">
 				{(t) => <Page title={t("page.login.title")}>
 
-					<h3>{t("page.login.section.loginLocal")}</h3>
+					<p>{t("page.login.section.loginLocal")}</p>
 
 					<Spin spinning={loading}>
 						<DataForm
+							layout="vertical"
 							fields={fields}
 							data={data}
 							wrappedComponentRef={this.saveFormRef}
 							onSubmit={this.login}
 							submitButton={t("button.login")}
-							successMessage="User logged in."
+							successMessage={t("page.login.successMessage")}
 						/>
 					</Spin>
 
-					<p><Link to="/account/forgot-password">{t("page.login.link.forgotPassword")}</Link></p>
-					<p><Link to="/account/register">{t("page.login.link.register")}</Link></p>
-					<p><a onClick={this.sendEmailConfirmation}>{t("page.login.link.resendEmailConfirmation")}</a></p>
+					<p>
+						<Link to="/account/forgot-password">{t("page.login.link.forgotPassword")}</Link>
+						<Divider type="vertical" />
+						<Link to="/account/register">{t("page.login.link.register")}</Link>
+						<Divider type="vertical" />
+						<a onClick={this.sendEmailConfirmation}>{t("page.login.link.resendEmailConfirmation")}</a>
+					</p>
 
-					<h3>{t("page.login.section.loginExternal")}</h3>
+					<Divider />
+
+					<p>{t("page.login.section.loginExternal")}</p>
 
 					<ExternalLoginForm />
 

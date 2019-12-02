@@ -1,12 +1,13 @@
 import * as React from "react";
 import { Page, DataForm } from "@montr-core/components";
 import { IFormField, IApiResult } from "@montr-core/models";
-import { Spin } from "antd";
+import { Spin, Icon } from "antd";
 import { MetadataService } from "@montr-core/services";
 import { ILoginModel } from "../models/";
 import { Translation } from "react-i18next";
 import { AccountService } from "../services/account-service";
 import { Views } from "../module";
+import { Link } from "react-router-dom";
 
 interface IProps {
 }
@@ -57,16 +58,18 @@ export default class ForgotPassword extends React.Component<IProps, IState> {
 			<Translation ns="idx">
 				{(t) => <Page title={t("page.forgotPassword.title")}>
 
-					<h3>{t("page.forgotPassword.subtitle")}</h3>
+					<p>{t("page.forgotPassword.subtitle")}</p>
 
 					<Spin spinning={loading}>
 						<DataForm
 							fields={fields}
 							data={data}
 							onSubmit={this.send}
-							submitButton={t("button.submit")}
+							submitButton={t("button.forgotPassword")}
 						/>
 					</Spin>
+
+					<p><Link to="/account/login"><Icon type="arrow-left" /> {t("page.register.link.login")}</Link></p>
 
 				</Page>}
 			</Translation>

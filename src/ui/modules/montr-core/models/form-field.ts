@@ -6,6 +6,7 @@ export interface IFormField {
 	name: string;
 	description?: string;
 	placeholder?: string;
+	icon?: string;
 	multiple?: boolean;
 	readonly?: boolean;
 	required?: boolean;
@@ -43,7 +44,7 @@ export interface IDateTimeField extends IFormField {
 }
 
 export interface ISelectField extends IFormField {
-	options: IOption[]
+	options: IOption[];
 }
 
 export interface IOption {

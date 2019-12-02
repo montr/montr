@@ -12,6 +12,8 @@
 
 		public string Placeholder { get; set; }
 
+		public string Icon { get; set; }
+
 		public bool Multiple { get; set; }
 
 		public bool Readonly { get; set; }
