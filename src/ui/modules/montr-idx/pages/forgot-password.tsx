@@ -6,7 +6,7 @@ import { MetadataService } from "@montr-core/services";
 import { ILoginModel } from "../models/";
 import { Translation } from "react-i18next";
 import { AccountService } from "../services/account-service";
-import { Views } from "../module";
+import { Views, Patterns } from "../module";
 import { Link } from "react-router-dom";
 
 interface IProps {
@@ -69,7 +69,7 @@ export default class ForgotPassword extends React.Component<IProps, IState> {
 						/>
 					</Spin>
 
-					<p><Link to="/account/login"><Icon type="arrow-left" /> {t("page.register.link.login")}</Link></p>
+					<p><Link to={Patterns.login}><Icon type="arrow-left" /> {t("page.register.link.login")}</Link></p>
 
 				</Page>}
 			</Translation>

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Page, DataForm, WrappedDataForm } from "@montr-core/components";
+import { Page, DataForm } from "@montr-core/components";
 import { IFormField, IApiResult } from "@montr-core/models";
 import { Spin, Divider } from "antd";
 import { MetadataService, NavigationService } from "@montr-core/services";
@@ -7,8 +7,8 @@ import { ILoginModel } from "../models/";
 import { Link } from "react-router-dom";
 import { Translation } from "react-i18next";
 import { AccountService } from "../services/account-service";
-import { Views } from "@montr-idx/module";
 import { ExternalLoginForm } from "../components";
+import { Views, Patterns } from "../module";
 
 interface IProps {
 }
@@ -24,8 +24,6 @@ export default class Login extends React.Component<IProps, IState> {
 	private _navigation = new NavigationService();
 	private _metadataService = new MetadataService();
 	private _accountService = new AccountService();
-
-	private _formRef: WrappedDataForm;
 
 	constructor(props: IProps) {
 		super(props);
@@ -45,26 +43,16 @@ export default class Login extends React.Component<IProps, IState> {
 		await this._accountService.abort();
 	};
 
-	saveFormRef = (formRef: WrappedDataForm) => {
-		this._formRef = formRef;
-	};
-
 	fetchData = async () => {
 		const dataView = await this._metadataService.load(Views.formLogin);
 
 		this.setState({ loading: false, fields: dataView.fields });
 	};
 
-	login = async (values: ILoginModel): Promise<IApiResult> => {
+	handleSubmit = async (values: ILoginModel): Promise<IApiResult> => {
 		return await this._accountService.login({
 			returnUrl: this._navigation.getReturnUrlParameter(),
 			...values
-		});
-	};
-
-	sendEmailConfirmation = async (): Promise<IApiResult> => {
-		return await this._accountService.sendEmailConfirmation({
-			email: await this._formRef.getFieldValue("email")
 		});
 	};
 
@@ -82,19 +70,18 @@ export default class Login extends React.Component<IProps, IState> {
 							layout="vertical"
 							fields={fields}
 							data={data}
-							wrappedComponentRef={this.saveFormRef}
-							onSubmit={this.login}
+							onSubmit={this.handleSubmit}
 							submitButton={t("button.login")}
 							successMessage={t("page.login.successMessage")}
 						/>
 					</Spin>
 
 					<p>
-						<Link to="/account/forgot-password">{t("page.login.link.forgotPassword")}</Link>
+						<Link to={Patterns.forgotPassword}>{t("page.login.link.forgotPassword")}</Link>
 						<Divider type="vertical" />
-						<Link to="/account/register">{t("page.login.link.register")}</Link>
+						<Link to={Patterns.register}>{t("page.login.link.register")}</Link>
 						<Divider type="vertical" />
-						<a onClick={this.sendEmailConfirmation}>{t("page.login.link.resendEmailConfirmation")}</a>
+						<Link to={Patterns.sendEmailConfirmation}>{t("page.login.link.resendEmailConfirmation")}</Link>
 					</p>
 
 					<Divider />

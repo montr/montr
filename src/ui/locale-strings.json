@@ -26,6 +26,7 @@
       "button.register": "Register",
       "button.removeLogin": "Remove",
       "button.resetPassword": "Reset",
+      "button.sendEmailConfirmation": "Send email confirmation",
       "button.sendVerificationEmail": "Send verification email",
       "button.sendVerificationSms": "Send verification SMS",
       "button.setPassword": "Set Password",
@@ -61,6 +62,8 @@
       "page.resetPassword.title": "Reset password",
       "page.security.subtitle": "",
       "page.security.title": "Security",
+      "page.sendEmailConfirmation.subtitle": "Please enter your email address below. You will receive a link to confirm your email.",
+      "page.sendEmailConfirmation.title": "Resend email confirmation",
       "page.setPassword.info": "You do not have a local username/password for this site. Add a local account so you can log in without an external login.",
       "page.setPassword.title": "Set password"
     },

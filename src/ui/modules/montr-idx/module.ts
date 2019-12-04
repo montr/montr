@@ -6,6 +6,7 @@ export const Patterns = {
 	register: "/account/register",
 	confirmEmail: "/account/confirm-email/:userId/:code",
 	confirmEmailChange: "/account/confirm-email-change/:userId/:email/:code",
+	sendEmailConfirmation: "/account/send-email-confirmation",
 	login: "/account/login",
 	logout: "/account/logout",
 	externalLogin: "/account/external-login",
@@ -19,6 +20,7 @@ export const Patterns = {
 };
 
 export const Views = {
+	formSendEmailConfirmation: "SendEmailConfirmation/Form",
 	formLogin: "Login/Form",
 	formRegister: "Register/Form",
 	formExternalRegister: "ExternalRegister/Form",
@@ -35,6 +37,7 @@ AppRouteRegistry.add([
 	{ path: Patterns.register, layout: Layout.auth, exact: true, component: React.lazy(() => import("./pages/register")) },
 	{ path: Patterns.confirmEmail, layout: Layout.auth, exact: true, component: React.lazy(() => import("./pages/confirm-email")) },
 	{ path: Patterns.confirmEmailChange, layout: Layout.auth, exact: true, component: React.lazy(() => import("./pages/confirm-email-change")) },
+	{ path: Patterns.sendEmailConfirmation, layout: Layout.auth, exact: true, component: React.lazy(() => import("./pages/send-email-confirmation")) },
 	{ path: Patterns.login, layout: Layout.auth, exact: true, component: React.lazy(() => import("./pages/login")) },
 	{ path: Patterns.logout, layout: Layout.auth, exact: true, component: React.lazy(() => import("./pages/logout")) },
 	{ path: Patterns.externalLogin, layout: Layout.auth, exact: true, component: React.lazy(() => import("./pages/external-login")) },

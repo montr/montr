@@ -1,12 +1,11 @@
 import * as React from "react";
 import { Page, DataForm } from "@montr-core/components";
 import { IFormField, IApiResult } from "@montr-core/models";
-import { Spin, Divider, Icon } from "antd";
+import { Spin, Icon } from "antd";
 import { MetadataService } from "@montr-core/services";
-import { IRegisterModel } from "../models/";
+import { ISendEmailConfirmationModel } from "../models/";
 import { Translation } from "react-i18next";
 import { AccountService } from "../services/account-service";
-import { ExternalLoginForm } from "../components";
 import { Views, Patterns } from "../module";
 import { Link } from "react-router-dom";
 
@@ -15,11 +14,11 @@ interface IProps {
 
 interface IState {
 	loading: boolean;
-	data: IRegisterModel;
+	data: ISendEmailConfirmationModel;
 	fields?: IFormField[];
 }
 
-export default class Register extends React.Component<IProps, IState> {
+export default class SendEmailConfirmation extends React.Component<IProps, IState> {
 
 	private _metadataService = new MetadataService();
 	private _accountService = new AccountService();
@@ -43,40 +42,34 @@ export default class Register extends React.Component<IProps, IState> {
 	};
 
 	fetchData = async () => {
-		const dataView = await this._metadataService.load(Views.formRegister);
+		const dataView = await this._metadataService.load(Views.formSendEmailConfirmation);
 
 		this.setState({ loading: false, fields: dataView.fields });
 	};
 
-	save = async (values: IRegisterModel): Promise<IApiResult> => {
-		return await this._accountService.register(values);
+	handleSubmit = async (values: ISendEmailConfirmationModel): Promise<IApiResult> => {
+		return await this._accountService.sendEmailConfirmation(values);
 	};
 
 	render = () => {
-		const { loading, fields, data } = this.state;
+		const { fields, data, loading } = this.state;
 
 		return (
 			<Translation ns="idx">
-				{(t) => <Page title={t("page.register.title")}>
+				{(t) => <Page title={t("page.sendEmailConfirmation.title")}>
 
-					<p>{t("page.register.subtitle")}</p>
+					<p>{t("page.sendEmailConfirmation.subtitle")}</p>
 
 					<Spin spinning={loading}>
 						<DataForm
 							fields={fields}
 							data={data}
-							onSubmit={this.save}
-							submitButton={t("button.register")}
+							onSubmit={this.handleSubmit}
+							submitButton={t("button.sendEmailConfirmation")}
 						/>
 					</Spin>
 
 					<p><Link to={Patterns.login}><Icon type="arrow-left" /> {t("page.register.link.login")}</Link></p>
-
-					<Divider />
-
-					<p>{t("page.register.section.registerExternal")}</p>
-
-					<ExternalLoginForm />
 
 				</Page>}
 			</Translation>
