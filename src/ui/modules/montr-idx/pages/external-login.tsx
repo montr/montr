@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Page, DataForm } from "@montr-core/components";
-import { Spin } from "antd";
-import { Translation } from "react-i18next";
+import { Spin, Icon } from "antd";
+import { Translation, Trans } from "react-i18next";
 import { AccountService } from "../services/account-service";
 import { IExternalRegisterModel } from "../models";
 import { MetadataService, NavigationService, OperationService } from "@montr-core/services";
@@ -9,6 +9,7 @@ import { RouteComponentProps } from "react-router";
 import { Patterns, Views } from "@montr-idx/module";
 import { IFormField, IApiResult } from "@montr-core/models";
 import { Constants } from "@montr-core/constants";
+import { Link } from "react-router-dom";
 
 interface IProps extends RouteComponentProps {
 }
@@ -81,9 +82,9 @@ export default class ExternalLogin extends React.Component<IProps, IState> {
 
 						{data && <>
 							<p>
-								You've successfully authenticated with <strong>{data.provider}</strong>.
-								Please enter an email address for this site below and click the Register button to finish
-								logging in.
+								<Trans ns="idx" i18nKey="page.externalLogin.subtitle" values={{ provider: data.provider }}>
+									<strong>{data.provider}</strong>
+								</Trans>
 							</p>
 
 							<DataForm
@@ -92,6 +93,9 @@ export default class ExternalLogin extends React.Component<IProps, IState> {
 								onSubmit={this.handleSubmit}
 								submitButton={t("button.register")}
 							/>
+
+							<p><Link to={Patterns.login}><Icon type="arrow-left" /> {t("page.register.link.login")}</Link></p>
+
 						</>}
 
 					</Spin>

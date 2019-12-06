@@ -18,6 +18,7 @@ interface IProps extends WithTranslation, FormComponentProps {
 	resetButton?: string;
 	successMessage?: string;
 	errorMessage?: string;
+	hideLabels?: boolean;
 	onSubmit: (values: IIndexer) => Promise<IApiResult>;
 }
 
@@ -99,7 +100,7 @@ export class WrappedDataForm extends React.Component<IProps, IState> {
 	};
 
 	createItem = (field: IFormField): React.ReactNode => {
-		const { layout, data } = this.props;
+		const { layout, data, hideLabels } = this.props;
 		const { getFieldDecorator } = this.props.form;
 
 		const initialValue = data?.[field.key];
@@ -130,7 +131,7 @@ export class WrappedDataForm extends React.Component<IProps, IState> {
 		return (
 			<Form.Item
 				key={field.key}
-				label={field.type == "boolean" ? null : field.name}
+				label={hideLabels || field.type == "boolean" ? null : field.name}
 				extra={field.description}
 				{...itemLayout}>
 				{getFieldDecorator(field.key, fieldOptions)(fieldNode)}

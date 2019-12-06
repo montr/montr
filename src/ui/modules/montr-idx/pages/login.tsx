@@ -68,6 +68,7 @@ export default class Login extends React.Component<IProps, IState> {
 					<Spin spinning={loading}>
 						<DataForm
 							layout="vertical"
+							hideLabels
 							fields={fields}
 							data={data}
 							onSubmit={this.handleSubmit}
