@@ -25,11 +25,11 @@ export default class Logout extends React.Component<IProps, IState> {
 
 	componentDidMount = async () => {
 		await this.logout();
-	}
+	};
 
 	componentWillUnmount = async () => {
 		await this._accountService.abort();
-	}
+	};
 
 	logout = async () => {
 		await this._accountService.logout();
@@ -37,7 +37,7 @@ export default class Logout extends React.Component<IProps, IState> {
 		window.location.href = "/";
 
 		this.setState({ loading: false });
-	}
+	};
 
 	render = () => {
 		const { loading } = this.state;
@@ -51,5 +51,5 @@ export default class Logout extends React.Component<IProps, IState> {
 				</Page>}
 			</Translation>
 		);
-	}
+	};
 }

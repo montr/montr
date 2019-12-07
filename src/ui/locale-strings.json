@@ -111,6 +111,8 @@
       "page.login.section.loginLocal": "Использовать локальный аккаунт для входа.",
       "page.login.successMessage": "Пользователь успешно вошел в систему.",
       "page.login.title": "Войти",
+      "page.logout.message": "Вы успешно вышли из приложения.",
+      "page.logout.title": "Выход",
       "page.profile.subtitle": "",
       "page.profile.title": "Профиль",
       "page.register.link.login": "Вернуться на вход в систему",
