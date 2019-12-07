@@ -141,8 +141,6 @@ namespace Idx
 			app.UseStaticFiles();
 			app.UseCookiePolicy();
 
-			app.UseAuthorization();
-
 			// app.UseCors("default"); // not needed, since UseIdentityServer adds cors
 			// app.UseAuthentication(); // not needed, since UseIdentityServer adds the authentication middleware
 			app.UseIdentityServer();
@@ -153,6 +151,8 @@ namespace Idx
 			}
 
 			app.UseRouting();
+
+			app.UseAuthorization();
 
 			app.UseEndpoints(endpoints =>
 			{

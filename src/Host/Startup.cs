@@ -104,13 +104,13 @@ namespace Host
 			app.UseStaticFiles();
 			app.UseCookiePolicy();
 
+			app.UseRouting();
+
 			foreach (var module in _modules.OfType<IWebModule>())
 			{
 				module.Configure(app);
 			}
-
-			app.UseRouting();
-
+			
 			app.UseEndpoints(endpoints =>
 			{
 				endpoints.MapControllers();
