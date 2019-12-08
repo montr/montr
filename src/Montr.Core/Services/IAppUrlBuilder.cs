@@ -1,6 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.WebUtilities;
-using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 
 namespace Montr.Core.Services
 {
@@ -11,16 +12,18 @@ namespace Montr.Core.Services
 
 	public class DefaultAppUrlBuilder : IAppUrlBuilder
 	{
-		private readonly IConfiguration _configuration;
+		private readonly IOptionsMonitor<AppOptions> _optionsAccessor;
 
-		public DefaultAppUrlBuilder(IConfiguration configuration)
+		public DefaultAppUrlBuilder(IOptionsMonitor<AppOptions> optionsAccessor)
 		{
-			_configuration = configuration;
+			_optionsAccessor = optionsAccessor;
 		}
 
 		public string Build(string path, IDictionary<string, string> queryString = null)
 		{
-			var options = _configuration.GetSection("App").Get<AppOptions>();
+			var options = _optionsAccessor.CurrentValue;
+
+			if (options.AppUrl == null) throw new InvalidOperationException("AppOptions is not configured properly, AppUrl is not specified.");
 
 			var result = $"{options.AppUrl}{path}";
 

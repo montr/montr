@@ -48,7 +48,7 @@ export default class ConfirmEmail extends React.Component<IProps, IState> {
 	};
 
 	handleContinue = async () => {
-		// todo: use route const
+		// todo: use route const, redirect to profile
 		this.props.history.push("/dashboard");
 	};
 

@@ -53,7 +53,7 @@ namespace Montr.Idx.Impl
 
 			services
 				.AddIdentity<DbUser, DbRole>()
-				.AddLinqToDBStores(new DbConnectionFactory(),
+				.AddLinqToDBStores(new DbConnectionFactory(), // todo: why connection factory instance here?
 					typeof(Guid),
 					typeof(LinqToDB.Identity.IdentityUserClaim<Guid>),
 					typeof(LinqToDB.Identity.IdentityUserRole<Guid>),
@@ -62,6 +62,7 @@ namespace Montr.Idx.Impl
 					typeof(LinqToDB.Identity.IdentityRoleClaim<Guid>))
 				.AddDefaultTokenProviders();
 
+			// todo: use IOptions
 			var idxServerOptions = configuration.GetSection("IdxServer").Get<IdxServerOptions>();
 
 			/*services.ConfigureApplicationCookie(options =>
@@ -133,7 +134,7 @@ namespace Montr.Idx.Impl
 					options.ClientId = configuration["Authentication:Google:ClientId"];
 					options.ClientSecret = configuration["Authentication:Google:ClientSecret"];
 				})
-				.AddFacebook(options =>
+				.AddFacebook("Facebook", options =>
 				{
 					options.AppId = configuration["Authentication:Facebook:AppId"];
 					options.AppSecret = configuration["Authentication:Facebook:AppSecret"];

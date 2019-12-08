@@ -38,6 +38,8 @@ namespace Montr.Core
 					// options.JsonSerializerOptions.Converters.Add(new FormFieldJsonConverter());
 				});
 
+			services.Configure<AppOptions>(configuration.GetSection(typeof(AppOptions).FullName));
+
 			services.Configure<RequestLocalizationOptions>(options =>
 			{
 				var supportedCultures = new[] { "en", "ru" };

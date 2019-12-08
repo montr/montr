@@ -4,7 +4,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.WebUtilities;
-using Microsoft.Extensions.Logging;
 using Montr.Core.Services;
 using Montr.Idx.Impl.Entities;
 using Montr.Idx.Models;
@@ -14,20 +13,17 @@ namespace Montr.Idx.Impl.Services
 {
 	public class EmailConfirmationService
 	{
-		private readonly ILogger<EmailConfirmationService> _logger;
 		private readonly UserManager<DbUser> _userManager;
 		private readonly IAppUrlBuilder _appUrlBuilder;
 		private readonly IEmailSender _emailSender;
 		private readonly ITemplateRenderer _templateRenderer;
 
 		public EmailConfirmationService(
-			ILogger<EmailConfirmationService> logger,
 			UserManager<DbUser> userManager,
 			IAppUrlBuilder appUrlBuilder,
 			IEmailSender emailSender,
 			ITemplateRenderer templateRenderer)
 		{
-			_logger = logger;
 			_userManager = userManager;
 			_appUrlBuilder = appUrlBuilder;
 			_emailSender = emailSender;

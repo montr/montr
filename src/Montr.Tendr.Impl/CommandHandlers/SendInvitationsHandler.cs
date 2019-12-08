@@ -21,14 +21,20 @@ namespace Montr.Tendr.Impl.CommandHandlers
 	{
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IDbContextFactory _dbContextFactory;
+		private readonly IAppUrlBuilder _appUrlBuilder;
 		private readonly IEmailSender _emailSender;
 		private readonly ITemplateRenderer _templateRenderer;
 
-		public SendInvitationsHandler(IUnitOfWorkFactory unitOfWorkFactory, IDbContextFactory dbContextFactory,
-			IEmailSender emailSender, ITemplateRenderer templateRenderer)
+		public SendInvitationsHandler(
+			IUnitOfWorkFactory unitOfWorkFactory,
+			IDbContextFactory dbContextFactory,
+			IAppUrlBuilder appUrlBuilder,
+			IEmailSender emailSender,
+			ITemplateRenderer templateRenderer)
 		{
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_dbContextFactory = dbContextFactory;
+			_appUrlBuilder = appUrlBuilder;
 			_emailSender = emailSender;
 			_templateRenderer = templateRenderer;
 		}
@@ -49,7 +55,9 @@ namespace Montr.Tendr.Impl.CommandHandlers
 					{
 						EventNo = e.Id,
 						EventName = e.Name,
-						EventUrl = "http://app.tendr.montr.io:5010/events/edit/" + e.Uid + "/",
+						// todo: use IAppUrlBuilder
+						// todo: use client routes
+						EventUrl = "https://app.montr.io:5001/events/edit/" + e.Uid,
 						CompanyName = k.Name,
 						CounterpartyName = c.Name,
 						Email = i.Email
