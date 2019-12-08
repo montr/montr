@@ -79,7 +79,7 @@ export default class PaneExternalLogins extends React.Component<IProps, IState> 
 
 							{/* <input type="hidden" name={Constants.returnUrlParam} value={this._navigation.getReturnUrlParameter() || ""} /> */}
 
-							<List>
+							<List className="external-logins">
 
 								{externalLogins.map((x) => {
 									const scheme = authSchemes.find(s => s.name == x.loginProvider);

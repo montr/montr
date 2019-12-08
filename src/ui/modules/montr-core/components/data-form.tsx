@@ -100,7 +100,7 @@ export class WrappedDataForm extends React.Component<IProps, IState> {
 	};
 
 	createItem = (field: IFormField): React.ReactNode => {
-		const { layout, data, hideLabels } = this.props;
+		const { t, layout, data, hideLabels } = this.props;
 		const { getFieldDecorator } = this.props.form;
 
 		const initialValue = data?.[field.key];
@@ -115,8 +115,7 @@ export class WrappedDataForm extends React.Component<IProps, IState> {
 				rules: [{
 					required: field.required,
 					whitespace: field.required,
-					// todo: translate
-					message: `Поле «${field.name}» обязательно для заполнения`
+					message: t("dataForm.rule.required", { name: field.name })
 				}]
 			};
 
@@ -140,7 +139,7 @@ export class WrappedDataForm extends React.Component<IProps, IState> {
 	};
 
 	render = () => {
-		const { layout, fields, showControls, t, submitButton } = this.props,
+		const { t, layout, fields, showControls, submitButton } = this.props,
 			{ loading } = this.state;
 
 		const itemLayout = (layout == null || layout == "horizontal") ? FormDefaults.tailFormItemLayout : null;

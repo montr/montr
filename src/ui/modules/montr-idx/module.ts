@@ -13,6 +13,8 @@ export const Patterns = {
 	forgotPassword: "/account/forgot-password",
 	resetPassword: "/account/reset-password/:code",
 
+	authExternalLogin: "/authentication/externalLogin",
+
 	profile: "/profile",
 	profileSecurity: "/profile/security",
 	profileExternalLogin: "/profile/external-login",

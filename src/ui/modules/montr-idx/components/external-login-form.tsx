@@ -1,9 +1,11 @@
 import React from "react";
 import { IAuthScheme } from "../models";
-import { Button, Spin } from "antd";
+import { Button, Spin, Avatar } from "antd";
 import { NavigationService } from "@montr-core/services";
 import { AccountService } from "../services/account-service";
 import { Constants } from "@montr-core/constants";
+import { Translation } from "react-i18next";
+import { Patterns } from "../module";
 
 interface IProps {
 }
@@ -29,43 +31,45 @@ export class ExternalLoginForm extends React.Component<IProps, IState> {
 
 	componentDidMount = async () => {
 		await this.fetchData();
-	}
+	};
 
 	componentWillUnmount = async () => {
 		await this._accountService.abort();
-	}
+	};
 
 	fetchData = async () => {
 		const authSchemes = await this._accountService.authSchemes();
 
 		this.setState({ loading: false, authSchemes });
-	}
+	};
 
 	render = () => {
 		const { loading, authSchemes } = this.state;
 
 		return (
-			<Spin spinning={loading}>
+			<Translation ns="idx">
+				{(t) => <Spin spinning={loading}>
 
-				{authSchemes.length == 0 && <p>
-					There are no external authentication services configured.
-				</p>}
+					{/* {authSchemes.length == 3 && <p>{t("page.login.noExternalLogins")}</p>} */}
 
-				{authSchemes.length > 0 && <form method="post" action={`${Constants.apiURL}/authentication/externalLogin`}>
-					<input type="hidden" name={Constants.returnUrlParam} value={this._navigation.getReturnUrlParameter() || ""} />
-					{authSchemes.map(x => (
-						<Button
-							style={{ marginTop: 4 }}
-							key={x.name}
-							htmlType="submit"
-							name="provider"
-							value={x.name}
-							icon={x.icon}>
-							{`Log in using your ${x.displayName} account`}
-						</Button>
-					))}
-				</form>}
-			</Spin>
+					{authSchemes.length > 0 && <form method="post" className="external-logins"
+						action={`${Constants.apiURL}${Patterns.authExternalLogin}`}>
+						<input type="hidden" name={Constants.returnUrlParam} value={this._navigation.getReturnUrlParameter() || ""} />
+						{authSchemes.map(x => (
+							<Button
+								title={t("button.externalLogin.title", { provider: x.displayName })}
+								style={{ padding: 0, margin: "0 8px 8px 0" }}
+								type="link"
+								key={x.name}
+								htmlType="submit"
+								name="provider"
+								value={x.name}>
+								<Avatar icon={x.icon} className={x.icon} />
+							</Button>
+						))}
+					</form>}
+				</Spin>}
+			</Translation>
 		);
-	}
+	};
 }
