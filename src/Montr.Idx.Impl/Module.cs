@@ -120,6 +120,11 @@ namespace Montr.Idx.Impl
 			services
 				.AddAuthentication(/*options =>
 				{
+					// x.DefaultAuthenticateScheme = IdentityServerConstants.DefaultCookieAuthenticationScheme;
+					x.DefaultAuthenticateScheme = IdentityConstants.ApplicationScheme;
+					x.DefaultSignInScheme = IdentityConstants.ApplicationScheme;
+					x.DefaultSignOutScheme = IdentityConstants.ApplicationScheme;
+
 					options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
 					options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
 					options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
