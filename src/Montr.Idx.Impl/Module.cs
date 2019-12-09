@@ -8,8 +8,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Montr.Core;
+using Montr.Core.Services;
 using Montr.Idx.Impl.Entities;
 using Montr.Idx.Impl.Services;
+using Montr.Idx.Models;
 
 namespace Montr.Idx.Impl
 {
@@ -26,6 +28,7 @@ namespace Montr.Idx.Impl
 		public void ConfigureServices(IConfiguration configuration, IServiceCollection services)
 		{
 			services.AddTransient<EmailConfirmationService, EmailConfirmationService>();
+			services.AddTransient<IRepository<User>, DbUserRepository>();
 
 			// todo: move from impl?
 			services.Configure<IdentityOptions>(options =>

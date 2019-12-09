@@ -40,8 +40,7 @@ export default class SearchEvents extends React.Component<Props, State> {
 		this.setState({ configCodes: templates.rows });
 	};
 
-	render() {
-
+	render = () => {
 		const { configCodes } = this.state;
 
 		return (
@@ -79,5 +78,5 @@ export default class SearchEvents extends React.Component<Props, State> {
 
 			</Page>
 		);
-	}
+	};
 }

@@ -16,6 +16,19 @@ namespace Montr.Core.Services
 		{
 			var result = new DataView { Id = viewId };
 
+			if (viewId == "UserSearch/Grid")
+			{
+				result.Columns = new List<DataColumn>
+				{
+					new DataColumn { Key = "userName", Name = "Username", Sortable = true, Width = 400,
+						UrlProperty = "url", DefaultSortOrder = SortOrder.Descending },
+					new DataColumn { Key = "firstName", Name = "First Name", Sortable = true, Width = 400, UrlProperty = "url" },
+					new DataColumn { Key = "lastName", Name = "Last Name", Sortable = true, Width = 400, UrlProperty = "url" },
+					new DataColumn { Key = "email", Name = "Email", Sortable = true, Width = 400 },
+					new DataColumn { Key = "phoneNumber", Name = "Phone", Sortable = true, Width = 400 },
+				};
+			}
+
 			if (viewId == "PrivateEventSearch/Grid")
 			{
 				result.Columns = new List<DataColumn>

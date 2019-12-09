@@ -18,7 +18,9 @@ export const Patterns = {
 	profile: "/profile",
 	profileSecurity: "/profile/security",
 	profileExternalLogin: "/profile/external-login",
-	profileExternalLoginLink: "/profile/external-login/link"
+	profileExternalLoginLink: "/profile/external-login/link",
+
+	searchUsers: "/users",
 };
 
 export const Views = {
@@ -47,6 +49,8 @@ AppRouteRegistry.add([
 	{ path: Patterns.resetPassword, layout: Layout.auth, exact: true, component: React.lazy(() => import("./pages/reset-password")) },
 
 	{ path: Patterns.profile, component: React.lazy(() => import("./pages/profile")) },
+
+	{ path: Patterns.searchUsers, exact: true, component: React.lazy(() => import("./components/page-search-users")) },
 ]);
 
 export const ProfileRoutes = [
