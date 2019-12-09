@@ -34,7 +34,7 @@ export class _SearchLocaleString extends React.Component<IProps, IState> {
 
 	componentWillUnmount = async () => {
 		await this._localeService.abort();
-	}
+	};
 
 	onLoadTableData = async (loadUrl: string, postParams: any): Promise<IDataResult<{}>> => {
 
@@ -45,7 +45,7 @@ export class _SearchLocaleString extends React.Component<IProps, IState> {
 		};
 
 		return await this._localeService.post(loadUrl, params);
-	}
+	};
 
 	handleSubmit = async (e: React.SyntheticEvent) => {
 		e.preventDefault();
@@ -64,16 +64,16 @@ export class _SearchLocaleString extends React.Component<IProps, IState> {
 				await this.refreshTable();
 			}
 		});
-	}
+	};
 
 	handleImport = async (e: React.SyntheticEvent) => {
-	}
+	};
 
 	handleExport = async (e: React.SyntheticEvent) => {
 		const { locale, module } = this.state;
 
 		await this._localeService.export({ locale, module });
-	}
+	};
 
 	handleUploadChange = async (info: UploadChangeParam) => {
 		if (info.file.status === "done") {
@@ -83,13 +83,13 @@ export class _SearchLocaleString extends React.Component<IProps, IState> {
 		} else if (info.file.status === "error") {
 			this._notification.error(`File "${info.file.name}" upload failed.`);
 		}
-	}
+	};
 
 	refreshTable = async (resetSelectedRows?: boolean) => {
 		this.setState({
 			updateTableToken: { date: new Date(), resetSelectedRows }
 		});
-	}
+	};
 
 	render = () => {
 		const { locale, module, updateTableToken } = this.state;
@@ -132,9 +132,9 @@ export class _SearchLocaleString extends React.Component<IProps, IState> {
 								{getFieldDecorator("locale", {
 									rules: [{ required: false }], initialValue: locale
 								})(
-									<Select placeholder="Локаль" allowClear style={{ minWidth: 100 }}>
+									<Select placeholder="Язык" allowClear style={{ minWidth: 100 }}>
 										{locales.map(x => {
-											return <Select.Option key={`${x}`} value={`${x}`}>{x}</Select.Option>
+											return <Select.Option key={`${x}`} value={`${x}`}>{x}</Select.Option>;
 										})}
 									</Select>
 								)}
@@ -145,7 +145,7 @@ export class _SearchLocaleString extends React.Component<IProps, IState> {
 								})(
 									<Select placeholder="Модуль" allowClear style={{ minWidth: 100 }}>
 										{modules.map(x => {
-											return <Select.Option key={`${x}`} value={`${x}`}>{x}</Select.Option>
+											return <Select.Option key={`${x}`} value={`${x}`}>{x}</Select.Option>;
 										})}
 									</Select>
 								)}
@@ -170,7 +170,7 @@ export class _SearchLocaleString extends React.Component<IProps, IState> {
 				)}
 			</Translation>
 		);
-	}
+	};
 }
 
 const SearchLocaleString = Form.create<IProps>()(_SearchLocaleString);

@@ -32,13 +32,13 @@ export default class SearchEvents extends React.Component<Props, State> {
 	componentWillUnmount = async () => {
 		await this._eventTemplateService.abort();
 		await this._eventService.abort();
-	}
+	};
 
 	fetchConfigCodes = async () => {
 		const templates = await this._eventTemplateService.list();
 
 		this.setState({ configCodes: templates.rows });
-	}
+	};
 
 	render() {
 
@@ -58,12 +58,12 @@ export default class SearchEvents extends React.Component<Props, State> {
 					<Form.Item>
 						<Select mode="multiple" placeholder="Выберите тип" style={{ minWidth: 200 }}>
 							{configCodes && configCodes.map(x => {
-								return <Select.Option key={`${x.uid}`} value={`${x.uid}`}>{x.name}</Select.Option>
+								return <Select.Option key={`${x.uid}`} value={`${x.uid}`}>{x.name}</Select.Option>;
 							})}
 						</Select>
 					</Form.Item>
 					<Form.Item>
-						<DatePicker />
+						<DatePicker disabledTime={null} />
 					</Form.Item>
 					<Form.Item>
 						<Button type="primary" icon="search">Искать</Button>
