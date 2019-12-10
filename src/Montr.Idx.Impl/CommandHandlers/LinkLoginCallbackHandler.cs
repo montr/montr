@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using Montr.Core.Models;
 using Montr.Idx.Commands;
 using Montr.Idx.Impl.Entities;
+using Montr.Idx.Impl.Services;
 
 namespace Montr.Idx.Impl.CommandHandlers
 {
@@ -43,17 +44,16 @@ namespace Montr.Idx.Impl.CommandHandlers
 			}
 
 			var result = await _userManager.AddLoginAsync(user, info);
+
 			if (result.Succeeded == false)
 			{
-				return new ApiResult { Success = false, Message = "The external login was not added. External logins can only be associated with one account." };
-				// return RedirectToPage();
+				return result.ToApiResult();
 			}
 
 			// Clear the existing external cookie to ensure a clean login process
 			await _httpContextAccessor.HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
 
-			// StatusMessage = "The external login was added.";
-			return new ApiResult();
+			return new ApiResult { Message = "The external login was added." };
 		}
 	}
 }

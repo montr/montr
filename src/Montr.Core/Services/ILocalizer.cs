@@ -30,6 +30,7 @@ namespace Montr.Core.Services
 
 		public async Task<string> Get<T>(Expression<Func<T, string>> keyExpr, CancellationToken cancellationToken)
 		{
+			// todo: remove module name from key?
 			var key = ExpressionHelper.GetFullName(keyExpr);
 
 			return await Get(key, cancellationToken);
@@ -56,7 +57,7 @@ namespace Montr.Core.Services
 				return result.Rows.ToDictionary(x => x.Key);
 			}, cancellationToken);
 
-			return resources.GetValueOrDefault(key)?.Value ?? key;
+			return resources.GetValueOrDefault(key)?.Value /*?? key*/;
 		}
 	}
 }

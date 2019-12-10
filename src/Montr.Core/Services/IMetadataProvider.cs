@@ -35,8 +35,8 @@ namespace Montr.Core.Services
 				{
 					new DataColumn { Key = "id", Name = "Номер", Sortable = true, Width = 10,
 						UrlProperty = "url", DefaultSortOrder = SortOrder.Descending },
-					new DataColumn { Key = "configCode", Name = "Тип", Width = 40 },
-					new DataColumn { Key = "statusCode", Name = "Статус", Width = 40 /*, Align = DataColumnAlign.Center */ },
+					new DataColumn { Key = "configCode", Name = "Тип", Width = 25 },
+					new DataColumn { Key = "statusCode", Name = "Статус", Width = 25 /*, Align = DataColumnAlign.Center */ },
 					new DataColumn { Key = "name", Name = "Наименование", Sortable = true, Width = 400, UrlProperty = "url" },
 					// new DataColumn { Key = "description", Name = "Описание", Width = 300 },
 				};
@@ -212,6 +212,7 @@ namespace Montr.Core.Services
 
 			if (viewId == "Register/Form")
 			{
+				// todo: add terms and conditions checkbox
 				result.Fields = new List<FormField>
 				{
 					new StringField { Key = "email", Name = "Email", Required = true },

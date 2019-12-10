@@ -36,7 +36,7 @@ namespace Montr.Idx.Tests.CommandHandlers
 			var unitOfWorkFactory = new TransactionScopeUnitOfWorkFactory();
 			var dbContextFactory = new DefaultDbContextFactory();
 			var dbConnectionFactory = new DbConnectionFactory();
-			var identityErrorDescriber = new IdentityErrorDescriber(); // todo: use own localized error describer
+			var identityErrorDescriber = new IdentityErrorDescriber();
 
 			var identityOptionsAccessorMock = new Mock<IOptions<IdentityOptions>>();
 			identityOptionsAccessorMock.Setup(x => x.Value).Returns(() => new IdentityOptions

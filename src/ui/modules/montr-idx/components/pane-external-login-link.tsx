@@ -3,7 +3,7 @@ import { RouteComponentProps } from "react-router";
 import { Spin } from "antd";
 import { Translation } from "react-i18next";
 import { Page } from "@montr-core/components";
-import { NotificationService } from "@montr-core/services";
+import { OperationService } from "@montr-core/services";
 import { ProfileService } from "../services";
 import { Patterns } from "@montr-idx/module";
 
@@ -16,7 +16,7 @@ interface IState {
 
 export default class PaneExternalLoginLink extends React.Component<IProps, IState> {
 
-	private _notification = new NotificationService();
+	private _operation = new OperationService();
 	private _profileService = new ProfileService();
 
 	constructor(props: IProps) {
@@ -37,18 +37,12 @@ export default class PaneExternalLoginLink extends React.Component<IProps, IStat
 
 	fetchData = async () => {
 
-		const result = await this._profileService.linkLoginCallback();
+		await this._operation.execute(
+			() => this._profileService.linkLoginCallback());
 
 		this.setState({ loading: false });
 
-		if (result.success) {
-			this.props.history.push(Patterns.profileExternalLogin);
-		}
-		else {
-			if (result.errors) {
-				this._notification.error(result.errors[0].messages);
-			}
-		}
+		this.props.history.push(Patterns.profileExternalLogin);
 	};
 
 	render = () => {

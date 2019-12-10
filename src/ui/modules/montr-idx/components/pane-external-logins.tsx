@@ -1,7 +1,7 @@
 import React from "react";
 import { Translation } from "react-i18next";
 import { PageHeader } from "@montr-core/components";
-import { NavigationService } from "@montr-core/services";
+import { OperationService } from "@montr-core/services";
 import { IProfileModel, IUserLoginInfo, IAuthScheme } from "../models";
 import { ProfileService, AccountService } from "../services";
 import { Spin, List, Button, Avatar } from "antd";
@@ -19,7 +19,7 @@ interface IState {
 
 export default class PaneExternalLogins extends React.Component<IProps, IState> {
 
-	private _navigation = new NavigationService();
+	private _operation = new OperationService();
 	private _accountService = new AccountService();
 	private _profileService = new ProfileService();
 
@@ -53,7 +53,9 @@ export default class PaneExternalLogins extends React.Component<IProps, IState> 
 	};
 
 	handleRemoveLogin = async (info: IUserLoginInfo) => {
-		const result = await this._profileService.removeLogin(info);
+
+		const result = await this._operation.execute(
+			() => this._profileService.removeLogin(info));
 
 		if (result.success) {
 			await this.fetchData();
@@ -72,7 +74,7 @@ export default class PaneExternalLogins extends React.Component<IProps, IState> 
 				{(t) => <>
 
 					<PageHeader>{t("page.externalLogins.title")}</PageHeader>
-					<h3>{t("page.externalLogins.subtitle")}</h3>
+					<p>{t("page.externalLogins.subtitle")}</p>
 
 					<Spin spinning={loading}>
 						<form method="post" action={`${Constants.apiURL}/authentication/linkLogin`}>

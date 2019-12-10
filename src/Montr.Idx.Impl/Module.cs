@@ -12,6 +12,7 @@ using Montr.Core.Services;
 using Montr.Idx.Impl.Entities;
 using Montr.Idx.Impl.Services;
 using Montr.Idx.Models;
+using Montr.Idx.Services;
 
 namespace Montr.Idx.Impl
 {
@@ -56,6 +57,7 @@ namespace Montr.Idx.Impl
 
 			services
 				.AddIdentity<DbUser, DbRole>()
+				.AddErrorDescriber<LocalizedIdentityErrorDescriber>()
 				.AddLinqToDBStores(new DbConnectionFactory(), // todo: why connection factory instance here?
 					typeof(Guid),
 					typeof(LinqToDB.Identity.IdentityUserClaim<Guid>),

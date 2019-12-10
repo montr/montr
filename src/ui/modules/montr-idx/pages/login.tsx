@@ -51,7 +51,7 @@ export default class Login extends React.Component<IProps, IState> {
 
 	handleSubmit = async (values: ILoginModel): Promise<IApiResult> => {
 		return await this._accountService.login({
-			returnUrl: this._navigation.getReturnUrlParameter(),
+			returnUrl: this._navigation.getReturnUrlParameter() ?? "/",
 			...values
 		});
 	};

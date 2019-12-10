@@ -20,9 +20,16 @@ export class OperationService {
 		const hide = this._notification.loading(t("operation.executing"));
 
 		const showFieldErrors = (result: IApiResult) => {
-			// todo: show detailed dield errors as notification.error?
+			// todo: show detailed field errors as notification.error?
 			if (options?.showFieldErrors) {
 				options.showFieldErrors(result);
+			}
+			else if (result.errors) {
+				result.errors.forEach(x => {
+					x.messages.forEach(e => {
+						this._notification.error(e);
+					});
+				});
 			}
 		};
 
