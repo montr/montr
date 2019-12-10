@@ -62,7 +62,7 @@ export default class SearchEvents extends React.Component<Props, State> {
 						</Select>
 					</Form.Item>
 					<Form.Item>
-						<DatePicker disabledTime={null} />
+						<DatePicker />
 					</Form.Item>
 					<Form.Item>
 						<Button type="primary" icon="search">Искать</Button>
