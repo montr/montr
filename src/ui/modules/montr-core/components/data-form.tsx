@@ -19,6 +19,7 @@ interface IProps extends WithTranslation, FormComponentProps {
 	successMessage?: string;
 	errorMessage?: string;
 	hideLabels?: boolean;
+	onChange?: (values: IIndexer) => void;
 	onSubmit: (values: IIndexer) => Promise<IApiResult>;
 }
 
@@ -44,6 +45,16 @@ export class WrappedDataForm extends React.Component<IProps, IState> {
 		const { form } = this.props;
 
 		return form.getFieldValue(fieldName);
+	};
+
+	handleChange = async (e: React.SyntheticEvent) => {
+		const { form, onChange } = this.props;
+
+		if (onChange) {
+			var values = form.getFieldsValue();
+
+			onChange(values);
+		}
 	};
 
 	handleSubmit = async (e: React.SyntheticEvent) => {
@@ -146,7 +157,10 @@ export class WrappedDataForm extends React.Component<IProps, IState> {
 
 		return (
 			<Spin spinning={loading}>
-				<Form layout={layout || "horizontal"} onSubmit={this.handleSubmit}>
+				<Form layout={layout || "horizontal"}
+					onChange={this.handleChange}
+					onSubmit={this.handleSubmit}
+				>
 					{fields && fields.map(x => this.createItem(x))}
 					{fields && showControls !== false &&
 						<Form.Item {...itemLayout}>

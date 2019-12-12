@@ -1,78 +1,72 @@
 import * as React from "react";
+import { useLocalStorage } from "@montr-core/hooks";
 import { Page, DataForm } from "@montr-core/components";
 import { IFormField, IApiResult } from "@montr-core/models";
 import { Spin, Icon } from "antd";
 import { MetadataService } from "@montr-core/services";
 import { ILoginModel } from "../models/";
-import { Translation } from "react-i18next";
+import { useTranslation } from "react-i18next";
 import { AccountService } from "../services/account-service";
-import { Views, Patterns } from "../module";
+import { Views, Patterns, StorageNames } from "../module";
 import { Link } from "react-router-dom";
-
-interface IProps {
-}
 
 interface IState {
 	loading: boolean;
-	data: ILoginModel;
+	data?: ILoginModel;
 	fields?: IFormField[];
 }
 
-export default class ForgotPassword extends React.Component<IProps, IState> {
+export default function ForgotPassword() {
 
-	private _metadataService = new MetadataService();
-	private _accountService = new AccountService();
+	const metadataService = new MetadataService(),
+		accountService = new AccountService();
 
-	constructor(props: IProps) {
-		super(props);
+	const { t } = useTranslation("idx"),
+		[state, setState] = React.useState<IState>({ loading: true }),
+		[email, setEmail] = useLocalStorage(StorageNames.email, "");
 
-		this.state = {
-			data: {},
-			loading: true
+	React.useEffect(() => {
+		async function fetchData() {
+			const dataView = await metadataService.load(Views.formForgotPassword);
+
+			setState({ loading: false, fields: dataView.fields });
+		}
+
+		fetchData();
+
+		return async () => {
+			await metadataService.abort();
+			await accountService.abort();
 		};
-	}
+	}, []);
 
-	componentDidMount = async () => {
-		await this.fetchData();
+	async function handleChange(values: ILoginModel) {
+		setEmail(values.email);
 	};
 
-	componentWillUnmount = async () => {
-		await this._metadataService.abort();
-		await this._accountService.abort();
+	async function handleSubmit(values: ILoginModel): Promise<IApiResult> {
+		return await accountService.forgotPassword(values);
 	};
 
-	fetchData = async () => {
-		const dataView = await this._metadataService.load(Views.formForgotPassword);
+	const { loading, fields } = state;
 
-		this.setState({ loading: false, fields: dataView.fields });
-	};
+	return (
+		<Page title={t("page.forgotPassword.title")}>
 
-	send = async (values: ILoginModel): Promise<IApiResult> => {
-		return await this._accountService.forgotPassword(values);
-	};
+			<p>{t("page.forgotPassword.subtitle")}</p>
 
-	render = () => {
-		const { fields, data, loading } = this.state;
+			<Spin spinning={loading}>
+				<DataForm
+					fields={fields}
+					data={{ email }}
+					onChange={handleChange}
+					onSubmit={handleSubmit}
+					submitButton={t("button.forgotPassword")}
+				/>
+			</Spin>
 
-		return (
-			<Translation ns="idx">
-				{(t) => <Page title={t("page.forgotPassword.title")}>
+			<p><Link to={Patterns.login}><Icon type="arrow-left" /> {t("page.register.link.login")}</Link></p>
 
-					<p>{t("page.forgotPassword.subtitle")}</p>
-
-					<Spin spinning={loading}>
-						<DataForm
-							fields={fields}
-							data={data}
-							onSubmit={this.send}
-							submitButton={t("button.forgotPassword")}
-						/>
-					</Spin>
-
-					<p><Link to={Patterns.login}><Icon type="arrow-left" /> {t("page.register.link.login")}</Link></p>
-
-				</Page>}
-			</Translation>
-		);
-	};
+		</Page>
+	);
 }

@@ -2,9 +2,11 @@ import React from "react";
 import { AppRouteRegistry } from "@montr-core/services/";
 import { Layout, Constants } from "@montr-core/constants";
 
+export const StorageNames = {
+	email: "email"
+};
+
 export const Api = {
-
-
 	authLinkLogin: `${Constants.apiURL}/authentication/linkLogin`,
 	authExternalLogin: `${Constants.apiURL}/authentication/externalLogin`,
 

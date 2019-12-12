@@ -1,98 +1,89 @@
 import * as React from "react";
+import { Link } from "react-router-dom";
+import { Spin, Divider } from "antd";
+import { useTranslation } from "react-i18next";
+import { useLocalStorage } from "@montr-core/hooks";
 import { Page, DataForm } from "@montr-core/components";
 import { IFormField, IApiResult } from "@montr-core/models";
-import { Spin, Divider } from "antd";
 import { MetadataService, NavigationService } from "@montr-core/services";
 import { ILoginModel } from "../models/";
-import { Link } from "react-router-dom";
-import { Translation } from "react-i18next";
 import { AccountService } from "../services/account-service";
 import { ExternalLoginForm } from "../components";
-import { Views, Patterns } from "../module";
-
-interface IProps {
-}
+import { Views, Patterns, StorageNames } from "../module";
 
 interface IState {
 	loading: boolean;
-	data: ILoginModel;
 	fields?: IFormField[];
 }
 
-export default class Login extends React.Component<IProps, IState> {
+export default function Login() {
 
-	private _navigation = new NavigationService();
-	private _metadataService = new MetadataService();
-	private _accountService = new AccountService();
+	const navigation = new NavigationService(),
+		metadataService = new MetadataService(),
+		accountService = new AccountService();
 
-	constructor(props: IProps) {
-		super(props);
+	const { t } = useTranslation("idx"),
+		[state, setState] = React.useState<IState>({ loading: true }),
+		[email, setEmail] = useLocalStorage(StorageNames.email, "");
 
-		this.state = {
-			data: {},
-			loading: true
+	React.useEffect(() => {
+		async function fetchData() {
+			const dataView = await metadataService.load(Views.formLogin);
+
+			setState({ loading: false, fields: dataView.fields });
+		}
+
+		fetchData();
+
+		return async () => {
+			await metadataService.abort();
+			await accountService.abort();
 		};
-	}
+	}, []);
 
-	componentDidMount = async () => {
-		await this.fetchData();
+	async function handleChange(values: ILoginModel) {
+		setEmail(values.email);
 	};
 
-	componentWillUnmount = async () => {
-		await this._metadataService.abort();
-		await this._accountService.abort();
-	};
-
-	fetchData = async () => {
-		const dataView = await this._metadataService.load(Views.formLogin);
-
-		this.setState({ loading: false, fields: dataView.fields });
-	};
-
-	handleSubmit = async (values: ILoginModel): Promise<IApiResult> => {
-		return await this._accountService.login({
-			returnUrl: this._navigation.getReturnUrlParameter() ?? "/",
+	async function handleSubmit(values: ILoginModel): Promise<IApiResult> {
+		return await accountService.login({
+			returnUrl: navigation.getReturnUrlParameter() ?? "/",
 			...values
 		});
 	};
 
-	render = () => {
-		const { loading, fields, data } = this.state;
+	const { loading, fields } = state;
 
-		return (
-			<Translation ns="idx">
-				{(t) => <Page title={t("page.login.title")}>
+	return (
+		<Page title={t("page.login.title")}>
 
-					<p>{t("page.login.section.loginLocal")}</p>
+			<p>{t("page.login.section.loginLocal")}</p>
 
-					<Spin spinning={loading}>
-						<DataForm
-							layout="vertical"
-							hideLabels
-							fields={fields}
-							data={data}
-							onSubmit={this.handleSubmit}
-							submitButton={t("button.login")}
-							successMessage={t("page.login.successMessage")}
-						/>
-					</Spin>
+			<Spin spinning={loading}>
+				<DataForm
+					layout="vertical"
+					hideLabels
+					fields={fields}
+					data={{ email }}
+					onChange={handleChange}
+					onSubmit={handleSubmit}
+					submitButton={t("button.login")}
+					successMessage={t("page.login.successMessage")}
+				/>
+			</Spin>
 
-					<p>
-						<Link to={Patterns.forgotPassword}>{t("page.login.link.forgotPassword")}</Link>
-						<Divider type="vertical" />
-						<Link to={Patterns.register}>{t("page.login.link.register")}</Link>
-						<Divider type="vertical" />
-						<Link to={Patterns.sendEmailConfirmation}>{t("page.login.link.resendEmailConfirmation")}</Link>
-					</p>
+			<Link to={Patterns.forgotPassword}>{t("page.login.link.forgotPassword")}</Link>
+			<Divider type="vertical" />
+			<Link to={Patterns.register}>{t("page.login.link.register")}</Link>
+			<Divider type="vertical" />
+			<Link to={Patterns.sendEmailConfirmation}>{t("page.login.link.resendEmailConfirmation")}</Link>
 
-					<Divider />
+			<Divider />
 
-					<p>{t("page.login.section.loginExternal")}</p>
+			<p>{t("page.login.section.loginExternal")}</p>
 
-					<ExternalLoginForm />
+			<ExternalLoginForm />
 
-				</Page>}
-			</Translation>
-		);
-	};
+		</Page>
+	);
 }
