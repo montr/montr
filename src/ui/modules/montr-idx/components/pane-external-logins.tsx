@@ -6,6 +6,7 @@ import { IProfileModel, IUserLoginInfo, IAuthScheme } from "../models";
 import { ProfileService, AccountService } from "../services";
 import { Spin, List, Button, Avatar } from "antd";
 import { Constants } from "@montr-core/constants";
+import { Api } from "../module";
 
 interface IProps {
 }
@@ -77,7 +78,7 @@ export default class PaneExternalLogins extends React.Component<IProps, IState> 
 					<p>{t("page.externalLogins.subtitle")}</p>
 
 					<Spin spinning={loading}>
-						<form method="post" action={`${Constants.apiURL}/authentication/linkLogin`}>
+						<form method="post" action={Api.authLinkLogin}>
 
 							{/* <input type="hidden" name={Constants.returnUrlParam} value={this._navigation.getReturnUrlParameter() || ""} /> */}
 
@@ -98,7 +99,7 @@ export default class PaneExternalLogins extends React.Component<IProps, IState> 
 											<List.Item.Meta
 												avatar={<Avatar icon={scheme.icon} className={scheme.icon} />}
 												title={x.providerDisplayName}
-												description="Last used Feb 21, 2017"
+												description="Last used Feb 21, 2017" // todo: add real dates
 											/>
 										</List.Item>
 									);
@@ -119,7 +120,7 @@ export default class PaneExternalLogins extends React.Component<IProps, IState> 
 											<List.Item.Meta
 												avatar={<Avatar icon={x.icon} className={x.icon} />}
 												title={x.displayName}
-												description="Last used Feb 21, 2017"
+												description="Last used Feb 21, 2017" // todo: add real dates
 											/>
 										</List.Item>
 									);

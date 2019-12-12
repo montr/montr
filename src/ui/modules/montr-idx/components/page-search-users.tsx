@@ -2,7 +2,7 @@ import React from "react";
 import { Link } from "react-router-dom";
 import { Button } from "antd";
 import { Page, Toolbar, DataBreadcrumb, PageHeader, DataTable } from "@montr-core/components";
-import { Constants } from "@montr-core/.";
+import { Api } from "../module";
 
 interface IProps {
 }
@@ -25,7 +25,7 @@ export default class SearchUsers extends React.Component<IProps, IState> {
 				<DataTable
 					rowKey="uid"
 					viewId="UserSearch/Grid"
-					loadUrl={`${Constants.apiURL}/User/List`} />
+					loadUrl={Api.userList} />
 			</Page>
 		);
 	};

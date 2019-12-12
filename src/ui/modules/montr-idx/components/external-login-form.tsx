@@ -5,7 +5,7 @@ import { NavigationService } from "@montr-core/services";
 import { AccountService } from "../services/account-service";
 import { Constants } from "@montr-core/constants";
 import { Translation } from "react-i18next";
-import { Patterns } from "../module";
+import { Api } from "../module";
 
 interface IProps {
 }
@@ -52,8 +52,7 @@ export class ExternalLoginForm extends React.Component<IProps, IState> {
 
 					{/* {authSchemes.length == 3 && <p>{t("page.login.noExternalLogins")}</p>} */}
 
-					{authSchemes.length > 0 && <form method="post" className="external-logins"
-						action={`${Constants.apiURL}${Patterns.authExternalLogin}`}>
+					{authSchemes.length > 0 && <form method="post" action={Api.authExternalLogin} className="external-logins">
 						<input type="hidden" name={Constants.returnUrlParam} value={this._navigation.getReturnUrlParameter() || ""} />
 						{authSchemes.map(x => (
 							<Button

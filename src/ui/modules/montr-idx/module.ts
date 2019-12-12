@@ -1,6 +1,15 @@
 import React from "react";
 import { AppRouteRegistry } from "@montr-core/services/";
-import { Layout } from "@montr-core/constants";
+import { Layout, Constants } from "@montr-core/constants";
+
+export const Api = {
+
+
+	authLinkLogin: `${Constants.apiURL}/authentication/linkLogin`,
+	authExternalLogin: `${Constants.apiURL}/authentication/externalLogin`,
+
+	userList: `${Constants.apiURL}/user/list`,
+};
 
 export const Patterns = {
 	register: "/account/register",
@@ -12,8 +21,6 @@ export const Patterns = {
 	externalLogin: "/account/external-login",
 	forgotPassword: "/account/forgot-password",
 	resetPassword: "/account/reset-password/:code",
-
-	authExternalLogin: "/authentication/externalLogin",
 
 	profile: "/profile",
 	profileSecurity: "/profile/security",

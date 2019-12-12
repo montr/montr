@@ -114,7 +114,7 @@ export default class PaneSecurity extends React.Component<IProps, IState> {
 								<Button onClick={() => this.handleDisplayModal("changePassword")}>{t("button.changePassword")}</Button>]}>
 								<List.Item.Meta
 									title="Password"
-									description="Last changed Feb 21, 2017"
+									description="Last changed Feb 21, 2017" // todo: add real dates
 								/>
 							</List.Item>
 						}
