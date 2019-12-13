@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Page } from "../components";
+import { Page } from ".";
 import { List, Card, Skeleton } from "antd";
 import { IMenu } from "@montr-core/models";
 

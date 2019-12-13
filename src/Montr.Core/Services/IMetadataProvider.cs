@@ -126,7 +126,7 @@ namespace Montr.Core.Services
 					new DataColumn { Key = "name", Name = "Наименование", Sortable = true, Width = 100, UrlProperty = "url" },
 					new DataColumn { Key = "description", Name = "Описание", Width = 400 },
 					// new DataColumn { Key = "hierarchyType", Name = "Иерархия", Width = 10 }
-					new DataColumn { Key = "code", Name = "Код", Sortable = true, Width = 10, UrlProperty = "url" },
+					new DataColumn { Key = "code", Name = "Код", Sortable = true, Width = 50, UrlProperty = "url" },
 				};
 			}
 
@@ -136,7 +136,7 @@ namespace Montr.Core.Services
 				{
 					new DataColumn { Key = "code", Name = "Код", Sortable = true, Width = 10, UrlProperty = "url" },
 					new DataColumn { Key = "name", Name = "Наименование", Sortable = true, Width = 400 },
-					new DataColumn { Key = "statusCode", Name = "Статус", Sortable = true, Width = 10 },
+					new DataColumn { Key = "statusCode", Name = "Статус", Sortable = true, Width = 30 },
 				};
 			}
 

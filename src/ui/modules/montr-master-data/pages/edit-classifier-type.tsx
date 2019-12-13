@@ -2,7 +2,7 @@ import * as React from "react";
 import { RouteComponentProps } from "react-router";
 import { Spin, Tabs } from "antd";
 import { CompanyContextProps, withCompanyContext } from "@montr-kompany/components";
-import { Page, PageHeader } from "@montr-core/components";
+import { Page, PageHeader, PaneEditMetadata } from "@montr-core/components";
 import { ClassifierTypeService } from "../services";
 import { IClassifierType } from "../models";
 import { ClassifierBreadcrumb, TabEditClassifierType, TabEditClassifierTypeHierarchy } from "../components";
@@ -41,18 +41,18 @@ class _EditClassifierType extends React.Component<IProps, IState> {
 
 	componentDidMount = async () => {
 		await this.fetchData();
-	}
+	};
 
 	componentDidUpdate = async (prevProps: IProps) => {
 		if (this.props.match.params.uid !== prevProps.match.params.uid ||
 			this.props.currentCompany !== prevProps.currentCompany) {
 			await this.fetchData();
 		}
-	}
+	};
 
 	componentWillUnmount = async () => {
 		await this._classifierTypeService.abort();
-	}
+	};
 
 	fetchData = async () => {
 		const { uid } = this.props.match.params;
@@ -62,19 +62,19 @@ class _EditClassifierType extends React.Component<IProps, IState> {
 		const data = (uid) ? await this._classifierTypeService.get({ uid }) : this.state.data;
 
 		this.setState({ loading: false, data, types: types.rows });
-	}
+	};
 
 	handleDataChange = (data: IClassifierType) => {
 		this.setState({ data });
-	}
+	};
 
 	handleTabChange = (tabKey: string) => {
 		const { uid } = this.props.match.params;
 
 		const path = RouteBuilder.editClassifierType(uid, tabKey);
 
-		this.props.history.replace(path)
-	}
+		this.props.history.replace(path);
+	};
 
 	render = () => {
 		const { uid, tabKey } = this.props.match.params,
@@ -109,13 +109,15 @@ class _EditClassifierType extends React.Component<IProps, IState> {
 						<Tabs.TabPane key="hierarchy" tab="Иерархия" disabled={otherTabsDisabled}>
 							<TabEditClassifierTypeHierarchy type={data} />
 						</Tabs.TabPane>
-						<Tabs.TabPane key="fields" tab="Поля" disabled={otherTabsDisabled}></Tabs.TabPane>
+						<Tabs.TabPane key="fields" tab="Поля" disabled={otherTabsDisabled}>
+							<PaneEditMetadata />
+						</Tabs.TabPane>
 						<Tabs.TabPane key="history" tab="История изменений" disabled={otherTabsDisabled}></Tabs.TabPane>
 					</Tabs>
 				</Spin>
 			</Page>
-		)
-	}
+		);
+	};
 }
 
 const EditClassifierType = withCompanyContext(_EditClassifierType);

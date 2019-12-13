@@ -58,7 +58,7 @@ export class DataTable<TModel extends IIndexer> extends React.Component<IProps<T
 
 	componentDidMount = async () => {
 		await this.fetchMetadata();
-	}
+	};
 
 	componentDidUpdate = async (prevProps: IProps<TModel>) => {
 		if (this.props.updateToken !== prevProps.updateToken) {
@@ -75,12 +75,12 @@ export class DataTable<TModel extends IIndexer> extends React.Component<IProps<T
 
 			await this.fetchData();
 		}
-	}
+	};
 
 	componentWillUnmount = async () => {
 		await this._fetcher.abort();
 		await this._metadataService.abort();
-	}
+	};
 
 	private handleTableChange = async (pagination: PaginationConfig,
 		filters: Record<keyof TModel, string[]>, sorter: SorterResult<TModel>) => {
@@ -102,7 +102,7 @@ export class DataTable<TModel extends IIndexer> extends React.Component<IProps<T
 				? "ascending" : sorter.order == "descend" ? "descending" : null,
 			// ...filters,
 		});
-	}
+	};
 
 	private fetchMetadata = async () => {
 		const { viewId, rowActions } = this.props;
@@ -157,7 +157,7 @@ export class DataTable<TModel extends IIndexer> extends React.Component<IProps<T
 			columns.push({
 				key: "$action",
 				title: "Действие",
-				width: 1,
+				width: 50,
 				render: (text: any, record: TModel, index: number) => (
 					<span>
 						{rowActions.map((action, i) => {
@@ -188,7 +188,7 @@ export class DataTable<TModel extends IIndexer> extends React.Component<IProps<T
 			sortColumn: defaultSortColumn && defaultSortColumn.key,
 			sortOrder: defaultSortColumn && defaultSortColumn.defaultSortOrder,
 		});
-	}
+	};
 
 	private fetchData = async (params = {}) => {
 
@@ -225,7 +225,7 @@ export class DataTable<TModel extends IIndexer> extends React.Component<IProps<T
 			this._notification.error("Ошибка загрузки данных.", error.message);
 			throw error;
 		}
-	}
+	};
 
 	private onSelectionChange = async (selectedRowKeys: string[] | number[], selectedRows: TModel[]) => {
 		this.setState({ selectedRowKeys });
@@ -233,7 +233,7 @@ export class DataTable<TModel extends IIndexer> extends React.Component<IProps<T
 		if (this.props.onSelectionChange) {
 			this.props.onSelectionChange(selectedRowKeys, selectedRows);
 		}
-	}
+	};
 
 	render() {
 		const { selectedRowKeys } = this.state;
@@ -265,6 +265,6 @@ export class DataTable<TModel extends IIndexer> extends React.Component<IProps<T
 				onChange={this.handleTableChange}
 				rowSelection={rowSelection}
 			/>
-		)
+		);
 	}
 }
