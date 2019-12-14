@@ -1,6 +1,7 @@
 {
   "en": {
     "common": {
+      "button.add": "Add",
       "button.cancel": "Cancel",
       "button.continue": "Continue",
       "button.export": "Export",
@@ -79,6 +80,7 @@
   },
   "ru": {
     "common": {
+      "button.add": "Добавить",
       "button.cancel": "Отменить",
       "button.continue": "Продолжить",
       "button.export": "Экспорт",
