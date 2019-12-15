@@ -80,7 +80,7 @@ export class Fetcher {
 	};
 
 	public abort = async (message?: string): Promise<any> => {
-		this._cancelTokenSource.cancel(message || `${this.constructor.name} cancelled`);
+		this._cancelTokenSource.cancel(message /* || `${this.constructor.name} cancelled` */);
 	};
 
 	private openFile(response: AxiosResponse<any>) {
