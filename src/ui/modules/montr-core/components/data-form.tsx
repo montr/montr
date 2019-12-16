@@ -32,6 +32,8 @@ export class WrappedDataForm extends React.Component<IProps, IState> {
 	private _operation = new OperationService();
 	private _notificationService = new NotificationService();
 
+	private _isMounted: boolean = true;
+
 	constructor(props: IProps) {
 		super(props);
 
@@ -39,6 +41,10 @@ export class WrappedDataForm extends React.Component<IProps, IState> {
 			loading: false
 		};
 	}
+
+	componentWillUnmount = () => {
+		this._isMounted = false;
+	};
 
 	getFieldValue = async (fieldName: string) => {
 
@@ -64,7 +70,7 @@ export class WrappedDataForm extends React.Component<IProps, IState> {
 
 		form.validateFieldsAndScroll(async (errors, values: any) => {
 			if (!errors) {
-				this.setState({ loading: true });
+				if (this._isMounted) this.setState({ loading: true });
 
 				await this._operation.execute(() => onSave(values), {
 					successMessage: successMessage || t("dataForm.submit.success"),
@@ -74,7 +80,7 @@ export class WrappedDataForm extends React.Component<IProps, IState> {
 					}
 				});
 
-				this.setState({ loading: false });
+				if (this._isMounted) this.setState({ loading: false });
 			}
 		});
 	};

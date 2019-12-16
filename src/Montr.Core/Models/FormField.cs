@@ -1,5 +1,6 @@
 ﻿namespace Montr.Core.Models
 {
+	// todo: rename to DataField (?)
 	public abstract class FormField
 	{
 		public abstract string Type { get; }

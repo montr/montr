@@ -7,7 +7,7 @@ export interface IFormField {
 	description?: string;
 	placeholder?: string;
 	icon?: string;
-	multiple?: boolean;
+	// multiple?: boolean;
 	readonly?: boolean;
 	required?: boolean;
 }

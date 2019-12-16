@@ -1,0 +1,57 @@
+﻿using LinqToDB;
+using LinqToDB.Mapping;
+
+namespace Montr.Core.Impl.Entities
+{
+	[Table(Schema = "public", Name = "field_meta")]
+	public class DbFieldMeta
+	{
+		[Column(Name = "uid"), DataType(DataType.Guid), NotNull, PrimaryKey, Identity]
+		public System.Guid Uid { get; set; }
+
+		[Column(Name = "entity_type_code", Length = 32), DataType(DataType.VarChar), NotNull]
+		public string EntityTypeCode { get; set; }
+
+		[Column(Name = "key", Length = 32), DataType(DataType.VarChar), NotNull]
+		public string Key { get; set; }
+
+		[Column(Name = "type_code", Length = 32), DataType(DataType.VarChar), NotNull]
+		public string TypeCode { get; set; }
+
+		[Column(Name = "is_system"), DataType(DataType.Boolean), NotNull]
+		public string IsSystem { get; set; }
+
+		[Column(Name = "is_required"), DataType(DataType.Boolean), NotNull]
+		public string IsRequired { get; set; }
+
+		[Column(Name = "is_readonly"), DataType(DataType.Boolean), NotNull]
+		public string IsReadonly { get; set; }
+
+		[Column(Name = "created_by"), DataType(DataType.Guid)]
+		public System.Guid CreatedBy { get; set; }
+
+		[Column(Name = "created_at_utc"), DataType(DataType.DateTime2)]
+		public System.DateTime CreatedAtUtc { get; set; }
+
+		[Column(Name = "modified_by"), DataType(DataType.Guid)]
+		public System.Guid ModifiedBy { get; set; }
+
+		[Column(Name = "modified_at_utc"), DataType(DataType.DateTime2)]
+		public System.DateTime ModifiedAtUtc { get; set; }
+
+		[Column(Name = "name", Length = 128), DataType(DataType.VarChar)]
+		public string Name { get; set; }
+
+		[Column(Name = "description"), DataType(DataType.VarChar)]
+		public string Description { get; set; }
+
+		[Column(Name = "placeholder", Length = 128), DataType(DataType.VarChar)]
+		public string Placeholder { get; set; }
+
+		[Column(Name = "icon", Length = 32), DataType(DataType.VarChar)]
+		public string Icon { get; set; }
+
+		[Column(Name = "extra"), DataType(DataType.VarChar)]
+		public string Extra { get; set; }
+	}
+}

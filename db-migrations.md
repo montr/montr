@@ -5,6 +5,8 @@ Db Migrations Tools
 * https://github.com/lecaillon/Evolve
 * https://github.com/rebus-org/migr8
 * https://github.com/amityagov/dotnet-sql-migrations
+* https://flywaydb.org/
+* https://github.com/sqitchers/sqitch
 
 * https://github.com/fluentmigrator/fluentmigrator
 
