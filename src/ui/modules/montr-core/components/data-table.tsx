@@ -70,7 +70,7 @@ export class DataTable<TModel extends IIndexer> extends React.Component<IProps<T
 
 			this.setState({
 				pagination,
-				selectedRowKeys: updateToken.resetSelectedRows ? [] : selectedRowKeys
+				selectedRowKeys: updateToken?.resetSelectedRows ? [] : selectedRowKeys
 			});
 
 			await this.fetchData();

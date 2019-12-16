@@ -8,6 +8,7 @@ CREATE TABLE public.field_meta
     entity_type_code character varying(32) COLLATE pg_catalog."default" NOT NULL,
     key character varying(32) COLLATE pg_catalog."default" NOT NULL,
     type_code character varying(32) COLLATE pg_catalog."default" NOT NULL,
+    is_active boolean NOT NULL,
     is_system boolean NOT NULL,
     is_required boolean NOT NULL,
     is_readonly boolean NOT NULL,

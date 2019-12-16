@@ -16,6 +16,10 @@
 
 		public bool Multiple { get; set; }
 
+		public bool Active { get; set; }
+
+		public bool System { get; set; }
+
 		public bool Readonly { get; set; }
 
 		public bool Required { get; set; }

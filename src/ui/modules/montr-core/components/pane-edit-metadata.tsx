@@ -1,19 +1,25 @@
 import * as React from "react";
 import { useTranslation } from "react-i18next";
-import { Button, Spin, Icon, Divider, Input, Card, Form } from "antd";
+import { Button, Spin, Icon, Divider } from "antd";
 import { Toolbar } from "./toolbar";
 import { IDataField } from "@montr-core/models";
-import { FormDefaults } from ".";
+import { DataTable, DataTableUpdateToken } from ".";
+import { Constants } from "..";
+
+interface IProps {
+	entityTypeCode: string;
+}
 
 interface IState {
 	loading: boolean;
 	fields?: IDataField[];
+	updateTableToken?: DataTableUpdateToken;
 }
 
-export function PaneEditMetadata() {
+export function PaneEditMetadata(props: IProps) {
 
 	const { t } = useTranslation(),
-		[state, setState] = React.useState<IState>({ loading: true });
+		[state, setState] = React.useState<IState>({ loading: true, updateTableToken: { date: new Date() } });
 
 	React.useEffect(() => {
 		async function fetchData() {
@@ -39,42 +45,24 @@ export function PaneEditMetadata() {
 		};
 	}, []);
 
-	const { loading, fields } = state;
+	const { entityTypeCode } = props,
+		{ loading, fields, updateTableToken } = state;
 
 	return (
 		<Spin spinning={loading}>
 			<Toolbar>
-				<Button>{t("button.add")}</Button>
+				<Button><Icon type="plus" /> {t("button.add")}</Button>
 			</Toolbar>
 
 			<Divider />
 
-			{fields && fields.map(x =>
-				<Card key={x.key} style={{ marginBottom: 8 }}
-					actions={[
-						<Icon type="arrow-up" key="arrow-up" />,
-						<Icon type="arrow-down" key="arrow-down" />,
-						<Icon type="setting" key="setting" />,
-						<Icon type="edit" key="edit" />,
-						<Icon type="ellipsis" key="ellipsis" />,
-					]}>
-					{/* <Card.Meta
-							avatar={<svg style={{ width: 36, height: 36 }} aria-hidden="true" focusable="false" preserveAspectRatio="xMidYMid meet" viewBox="0 0 24 24">
-								<path d="M5 17v2h14v-2H5zm4.5-4.2h5l.9 2.2h2.1L12.75 4h-1.5L6.5 15h2.1l.9-2.2zM12 5.98L13.87 11h-3.74L12 5.98z" fill="#626262" />
-							</svg>} /> */}
-
-					<Form layout="horizontal">
-						<Form.Item label="Key" {...FormDefaults.formItemLayout}>
-							<Input value={x.key} />
-						</Form.Item>
-						<Form.Item label="Name" {...FormDefaults.formItemLayout}>
-							<Input.TextArea value={x.name} />
-						</Form.Item>
-					</Form>
-
-				</Card>
-			)}
-
+			<DataTable
+				rowKey="key"
+				// rowActions={rowActions}
+				viewId={`Metadata/Grid`}
+				loadUrl={`${Constants.apiURL}/metadata/list/`}
+				updateToken={updateTableToken}
+			/>
 		</Spin>
 	);
 }

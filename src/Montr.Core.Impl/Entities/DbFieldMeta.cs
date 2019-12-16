@@ -18,14 +18,17 @@ namespace Montr.Core.Impl.Entities
 		[Column(Name = "type_code", Length = 32), DataType(DataType.VarChar), NotNull]
 		public string TypeCode { get; set; }
 
+		[Column(Name = "is_active"), DataType(DataType.Boolean), NotNull]
+		public bool IsActive { get; set; }
+
 		[Column(Name = "is_system"), DataType(DataType.Boolean), NotNull]
-		public string IsSystem { get; set; }
+		public bool IsSystem { get; set; }
 
 		[Column(Name = "is_required"), DataType(DataType.Boolean), NotNull]
-		public string IsRequired { get; set; }
+		public bool IsRequired { get; set; }
 
 		[Column(Name = "is_readonly"), DataType(DataType.Boolean), NotNull]
-		public string IsReadonly { get; set; }
+		public bool IsReadonly { get; set; }
 
 		[Column(Name = "created_by"), DataType(DataType.Guid)]
 		public System.Guid CreatedBy { get; set; }

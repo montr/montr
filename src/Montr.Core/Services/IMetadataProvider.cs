@@ -16,6 +16,18 @@ namespace Montr.Core.Services
 		{
 			var result = new DataView { Id = viewId };
 
+			if (viewId == "Metadata/Grid")
+			{
+				result.Columns = new List<DataColumn>
+				{
+					new DataColumn { Key = "key", Name = "Key", Width = 100 },
+					new DataColumn { Key = "name", Name = "Name", Width = 200 },
+					new DataColumn { Key = "description", Name = "Description", Width = 200 },
+					new DataColumn { Key = "active", Name = "Active", Width = 10 },
+					new DataColumn { Key = "system", Name = "System", Width = 10 },
+				};
+			}
+
 			if (viewId == "UserSearch/Grid")
 			{
 				result.Columns = new List<DataColumn>
