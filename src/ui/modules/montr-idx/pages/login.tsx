@@ -4,7 +4,7 @@ import { Spin, Divider } from "antd";
 import { useTranslation } from "react-i18next";
 import { useLocalStorage } from "@montr-core/hooks";
 import { Page, DataForm } from "@montr-core/components";
-import { IFormField, IApiResult } from "@montr-core/models";
+import { IDataField, IApiResult } from "@montr-core/models";
 import { MetadataService, NavigationService } from "@montr-core/services";
 import { ILoginModel } from "../models/";
 import { AccountService } from "../services/account-service";
@@ -13,7 +13,7 @@ import { Views, Patterns, StorageNames } from "../module";
 
 interface IState {
 	loading: boolean;
-	fields?: IFormField[];
+	fields?: IDataField[];
 }
 
 export default function Login() {

@@ -3,7 +3,7 @@ import { Redirect } from "react-router";
 import { Spin } from "antd";
 import { CompanyContextProps, withCompanyContext } from "@montr-kompany/components";
 import { DataForm } from "@montr-core/components";
-import { IFormField, IApiResult } from "@montr-core/models";
+import { IDataField, IApiResult } from "@montr-core/models";
 import { MetadataService } from "@montr-core/services";
 import { IClassifierType } from "../models";
 import { ClassifierTypeService } from "../services";
@@ -11,12 +11,12 @@ import { RouteBuilder } from "../module";
 
 interface IProps extends CompanyContextProps {
 	data: IClassifierType;
-	onDataChange?: (values: IClassifierType) => void
+	onDataChange?: (values: IClassifierType) => void;
 }
 
 interface IState {
 	loading: boolean;
-	fields?: IFormField[];
+	fields?: IDataField[];
 	redirect?: string;
 }
 
@@ -34,24 +34,24 @@ class _TabEditClassifierType extends React.Component<IProps, IState> {
 
 	componentDidMount = async () => {
 		await this.fetchData();
-	}
+	};
 
 	componentDidUpdate = async (prevProps: IProps) => {
 		if (this.props.currentCompany !== prevProps.currentCompany) {
 			await this.fetchData();
 		}
-	}
+	};
 
 	componentWillUnmount = async () => {
 		await this._metadataService.abort();
 		await this._classifierTypeService.abort();
-	}
+	};
 
 	fetchData = async () => {
 		const dataView = await this._metadataService.load(`ClassifierType`);
 
 		this.setState({ loading: false, fields: dataView.fields });
-	}
+	};
 
 	save = async (values: IClassifierType): Promise<IApiResult> => {
 
@@ -77,7 +77,7 @@ class _TabEditClassifierType extends React.Component<IProps, IState> {
 
 			return result;
 		}
-	}
+	};
 
 	render() {
 		const { data } = this.props,
@@ -85,7 +85,7 @@ class _TabEditClassifierType extends React.Component<IProps, IState> {
 
 		if (redirect) {
 			this.setState({ redirect: null });
-			return <Redirect to={redirect} />
+			return <Redirect to={redirect} />;
 		}
 
 		return (

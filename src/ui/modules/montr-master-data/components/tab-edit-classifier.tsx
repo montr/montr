@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Spin } from "antd";
 import { CompanyContextProps, withCompanyContext } from "@montr-kompany/components";
-import { IFormField, IApiResult } from "@montr-core/models";
+import { IDataField, IApiResult } from "@montr-core/models";
 import { DataForm } from "@montr-core/components";
 import { ClassifierService, ClassifierMetadataService } from "../services";
 import { IClassifier, IClassifierType } from "../models";
@@ -9,12 +9,12 @@ import { IClassifier, IClassifierType } from "../models";
 interface IProps extends CompanyContextProps {
 	type: IClassifierType;
 	data: IClassifier;
-	onDataChange?: (values: IClassifier) => void
+	onDataChange?: (values: IClassifier) => void;
 }
 
 interface IState {
 	loading: boolean;
-	fields?: IFormField[];
+	fields?: IDataField[];
 }
 
 class _TabEditClassifier extends React.Component<IProps, IState> {
@@ -31,19 +31,19 @@ class _TabEditClassifier extends React.Component<IProps, IState> {
 
 	componentDidMount = async () => {
 		await this.fetchData();
-	}
+	};
 
 	componentDidUpdate = async (prevProps: IProps) => {
 		if (this.props.type !== prevProps.type ||
 			this.props.currentCompany !== prevProps.currentCompany) {
 			await this.fetchData();
 		}
-	}
+	};
 
 	componentWillUnmount = async () => {
 		await this._classifierMetadataService.abort();
 		await this._classifierService.abort();
-	}
+	};
 
 	fetchData = async () => {
 		const { type } = this.props;
@@ -63,7 +63,7 @@ class _TabEditClassifier extends React.Component<IProps, IState> {
 
 			this.setState({ loading: false, fields: dataView.fields });
 		}
-	}
+	};
 
 	save = async (values: IClassifier): Promise<IApiResult> => {
 		const { type, data, onDataChange } = this.props;
@@ -88,7 +88,7 @@ class _TabEditClassifier extends React.Component<IProps, IState> {
 
 			return result;
 		}
-	}
+	};
 
 	render = () => {
 		const { data } = this.props,
@@ -99,7 +99,7 @@ class _TabEditClassifier extends React.Component<IProps, IState> {
 				<DataForm fields={fields} data={data} onSubmit={this.save} />
 			</Spin>
 		);
-	}
+	};
 }
 
 export const TabEditClassifier = withCompanyContext(_TabEditClassifier);

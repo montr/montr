@@ -7,7 +7,7 @@ import { IExternalRegisterModel } from "../models";
 import { MetadataService, NavigationService, OperationService } from "@montr-core/services";
 import { RouteComponentProps } from "react-router";
 import { Patterns, Views } from "@montr-idx/module";
-import { IFormField, IApiResult } from "@montr-core/models";
+import { IDataField, IApiResult } from "@montr-core/models";
 import { Constants } from "@montr-core/constants";
 import { Link } from "react-router-dom";
 
@@ -17,7 +17,7 @@ interface IProps extends RouteComponentProps {
 interface IState {
 	loading: boolean;
 	data?: IExternalRegisterModel;
-	fields?: IFormField[];
+	fields?: IDataField[];
 }
 
 export default class ExternalLogin extends React.Component<IProps, IState> {

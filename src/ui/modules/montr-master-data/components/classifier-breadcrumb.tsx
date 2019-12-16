@@ -19,11 +19,11 @@ export class ClassifierBreadcrumb extends React.Component<IProps> {
 		];
 
 		if (type) {
-			const typeItem: IMenu = { name: type.name, route: `/classifiers/${type.code}` }
+			const typeItem: IMenu = { name: type.name, route: `/classifiers/${type.code}` };
 
 			if (types) {
 				typeItem.items = types.map(x => {
-					return { name: x.name, route: `/classifiers/${x.code}` }
+					return { name: x.name, route: `/classifiers/${x.code}` };
 				});
 			}
 

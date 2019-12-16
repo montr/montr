@@ -1,7 +1,6 @@
 ﻿namespace Montr.Core.Models
 {
-	// todo: rename to DataField (?)
-	public abstract class FormField
+	public abstract class DataField
 	{
 		public abstract string Type { get; }
 
@@ -22,12 +21,12 @@
 		public bool Required { get; set; }
 	}
 
-	public class BooleanField : FormField
+	public class BooleanField : DataField
 	{
 		public override string Type => "boolean";
 	}
 
-	public class StringField : FormField
+	public class StringField : DataField
 	{
 		public override string Type => "string";
 
@@ -42,12 +41,12 @@
 		public byte? Rows { get; set; }
 	}
 
-	public class PasswordField : FormField
+	public class PasswordField : DataField
 	{
 		public override string Type => "password";
 	}
 
-	public class NumberField : FormField
+	public class NumberField : DataField
 	{
 		public override string Type => "number";
 
@@ -56,7 +55,7 @@
 		public long? Max { get; set; }
 	}
 
-	public class DecimalField : FormField
+	public class DecimalField : DataField
 	{
 		public override string Type => "decimal";
 
@@ -67,22 +66,22 @@
 		public byte? Precision { get; set; }
 	}
 
-	public class DateField : FormField
+	public class DateField : DataField
 	{
 		public override string Type => "date";
 	}
 
-	public class TimeField : FormField
+	public class TimeField : DataField
 	{
 		public override string Type => "time";
 	}
 
-	public class DateTimeField : FormField
+	public class DateTimeField : DataField
 	{
 		public override string Type => "datetime";
 	}
 
-	public class SelectField : FormField
+	public class SelectField : DataField
 	{
 		public override string Type => "select";
 
@@ -96,7 +95,7 @@
 		public string Name { get; set; }
 	}
 
-	public class ClassifierGroupField : FormField
+	public class ClassifierGroupField : DataField
 	{
 		public override string Type => "classifier-group";
 
@@ -105,14 +104,14 @@
 		public string TreeCode { get; set; }
 	}
 
-	public class ClassifierField : FormField
+	public class ClassifierField : DataField
 	{
 		public override string Type => "classifier";
 
 		public string TypeCode { get; set; }
 	}
 
-	public class FileField : FormField
+	public class FileField : DataField
 	{
 		public override string Type => "file";
 	}

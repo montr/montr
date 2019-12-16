@@ -1,7 +1,7 @@
 import * as React from "react";
 import { useLocalStorage } from "@montr-core/hooks";
 import { Page, DataForm } from "@montr-core/components";
-import { IFormField, IApiResult } from "@montr-core/models";
+import { IDataField, IApiResult } from "@montr-core/models";
 import { Spin, Icon } from "antd";
 import { MetadataService } from "@montr-core/services";
 import { ILoginModel } from "../models/";
@@ -13,7 +13,7 @@ import { Link } from "react-router-dom";
 interface IState {
 	loading: boolean;
 	data?: ILoginModel;
-	fields?: IFormField[];
+	fields?: IDataField[];
 }
 
 export default function ForgotPassword() {

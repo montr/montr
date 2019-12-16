@@ -2,12 +2,12 @@ import * as React from "react";
 import { useTranslation } from "react-i18next";
 import { Button, Spin, Icon, Divider, Input, Card, Form } from "antd";
 import { Toolbar } from "./toolbar";
-import { IFormField } from "@montr-core/models";
+import { IDataField } from "@montr-core/models";
 import { FormDefaults } from ".";
 
 interface IState {
 	loading: boolean;
-	fields?: IFormField[];
+	fields?: IDataField[];
 }
 
 export function PaneEditMetadata() {
@@ -17,7 +17,7 @@ export function PaneEditMetadata() {
 
 	React.useEffect(() => {
 		async function fetchData() {
-			const fields: IFormField[] = [
+			const fields: IDataField[] = [
 				{ key: "fullName", name: "Полное наименование", type: "string" },
 				{ key: "shortName", name: "Сокращенное наименование", type: "string" },
 				{ key: "address", name: "Адрес в пределах места пребывания", type: "address" },

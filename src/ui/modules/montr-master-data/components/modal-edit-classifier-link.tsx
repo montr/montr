@@ -2,7 +2,7 @@ import * as React from "react";
 import { Modal, Spin } from "antd";
 import { IClassifierLink } from "../models";
 import { ClassifierLinkService } from "../services";
-import { IFormField, IApiResult, IClassifierField, Guid } from "@montr-core/models";
+import { IDataField, IApiResult, IClassifierField, Guid } from "@montr-core/models";
 import { WrappedDataForm, DataForm } from "@montr-core/components";
 import { CompanyContextProps, withCompanyContext } from "@montr-kompany/components";
 import { NotificationService, MetadataService } from "@montr-core/services";
@@ -16,7 +16,7 @@ interface IProps extends CompanyContextProps {
 
 interface IState {
 	loading: boolean;
-	fields?: IFormField[];
+	fields?: IDataField[];
 	data: IClassifierLink;
 }
 

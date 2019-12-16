@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Page, DataForm } from "@montr-core/components";
-import { IFormField, IApiResult } from "@montr-core/models";
+import { IDataField, IApiResult } from "@montr-core/models";
 import { Spin, Divider, Icon } from "antd";
 import { MetadataService } from "@montr-core/services";
 import { IRegisterModel } from "../models/";
@@ -16,7 +16,7 @@ interface IProps {
 interface IState {
 	loading: boolean;
 	data: IRegisterModel;
-	fields?: IFormField[];
+	fields?: IDataField[];
 }
 
 export default class Register extends React.Component<IProps, IState> {

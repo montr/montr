@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Modal, Spin } from "antd";
-import { Guid, IFormField, IApiResult, IClassifierGroupField } from "@montr-core/models";
+import { Guid, IDataField, IApiResult, IClassifierGroupField } from "@montr-core/models";
 import { withCompanyContext, CompanyContextProps } from "@montr-kompany/components";
 import { ClassifierGroupService } from "../services";
 import { IClassifierGroup } from "@montr-master-data/models";
@@ -19,7 +19,7 @@ interface IProps extends CompanyContextProps {
 
 interface IState {
 	loading: boolean;
-	fields?: IFormField[];
+	fields?: IDataField[];
 	data: IClassifierGroup;
 }
 

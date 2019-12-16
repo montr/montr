@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Modal, Spin } from "antd";
-import { Guid, IFormField, IApiResult } from "@montr-core/models";
+import { Guid, IDataField, IApiResult } from "@montr-core/models";
 import { withCompanyContext, CompanyContextProps } from "@montr-kompany/components";
 import { ClassifierTreeService } from "../services";
 import { IClassifierGroup } from "@montr-master-data/models";
@@ -16,7 +16,7 @@ interface IProps extends CompanyContextProps {
 
 interface IState {
 	loading: boolean;
-	fields?: IFormField[];
+	fields?: IDataField[];
 	data: IClassifierGroup;
 }
 
@@ -38,12 +38,12 @@ class _ModalEditClassifierTree extends React.Component<IProps, IState> {
 
 	componentDidMount = async () => {
 		await this.fetchData();
-	}
+	};
 
 	componentWillUnmount = async () => {
 		await this._metadataService.abort();
 		await this._classifierTreeService.abort();
-	}
+	};
 
 	fetchData = async () => {
 		const { typeCode, uid } = this.props;
@@ -71,19 +71,19 @@ class _ModalEditClassifierTree extends React.Component<IProps, IState> {
 			// todo: why call onCancel()?
 			this.onCancel();
 		}
-	}
+	};
 
 	saveFormRef = (formRef: WrappedDataForm) => {
 		this._formRef = formRef;
-	}
+	};
 
 	onOk = async (e: React.MouseEvent<any>) => {
 		await this._formRef.handleSubmit(e);
-	}
+	};
 
 	onCancel = () => {
 		if (this.props.onCancel) this.props.onCancel();
-	}
+	};
 
 	save = async (values: IClassifierGroup): Promise<IApiResult> => {
 		const { typeCode, uid, onSuccess } = this.props;
@@ -109,7 +109,7 @@ class _ModalEditClassifierTree extends React.Component<IProps, IState> {
 		}
 
 		return result;
-	}
+	};
 
 	render = () => {
 		const { loading, fields, data } = this.state;
@@ -129,7 +129,7 @@ class _ModalEditClassifierTree extends React.Component<IProps, IState> {
 				</Spin>
 			</Modal>
 		);
-	}
+	};
 }
 
 export const ModalEditClassifierTree = withCompanyContext(_ModalEditClassifierTree);

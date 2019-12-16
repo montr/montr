@@ -7,7 +7,7 @@ import { AccountService } from "../services/account-service";
 import { Patterns, Views } from "../module";
 import { MetadataService } from "@montr-core/services";
 import { IResetPasswordModel } from "../models";
-import { IApiResult, IFormField } from "@montr-core/models";
+import { IApiResult, IDataField } from "@montr-core/models";
 
 interface IRouteProps {
 	code: string;
@@ -18,7 +18,7 @@ interface IProps extends RouteComponentProps<IRouteProps> {
 
 interface IState {
 	loading: boolean;
-	fields?: IFormField[];
+	fields?: IDataField[];
 }
 
 export default class ResetPassword extends React.Component<IProps, IState> {

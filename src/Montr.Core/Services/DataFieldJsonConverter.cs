@@ -11,19 +11,19 @@ namespace Montr.Core.Services
 	/// https://github.com/dotnet/corefx/issues/37787
 	/// https://github.com/dotnet/corefx/blob/fbb8b5c4b9566ba81596aa35f42b71bbda601528/src/System.Text.Json/tests/Serialization/CustomConverterTests.Polymorphic.cs#L11-L147
 	/// </summary>
-	public class FormFieldJsonConverter /*WithTypeDiscriminator*/ : JsonConverter<FormField>
+	public class DataFieldJsonConverter /*WithTypeDiscriminator*/ : JsonConverter<DataField>
 	{
 		public override bool CanConvert(Type typeToConvert)
 		{
-			return typeof(FormField).IsAssignableFrom(typeToConvert);
+			return typeof(DataField).IsAssignableFrom(typeToConvert);
 		}
 
-		public override FormField Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+		public override DataField Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
 		{
 			throw new NotImplementedException();
 		}
 
-		public override void Write(Utf8JsonWriter writer, FormField value, JsonSerializerOptions options)
+		public override void Write(Utf8JsonWriter writer, DataField value, JsonSerializerOptions options)
 		{
 			writer.WriteStartObject();
 

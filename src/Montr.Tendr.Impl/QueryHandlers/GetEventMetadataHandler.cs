@@ -26,7 +26,7 @@ namespace Montr.Tendr.Impl.QueryHandlers
 
 			if (request.ViewId == "Event/Edit")
 			{
-				result.Fields = new List<FormField>
+				result.Fields = new List<DataField>
 				{
 					new TextAreaField { Key = "name", Name = "Наименование", Rows = 4, Required = true },
 					new TextAreaField { Key = "description", Name = "Описание", Rows = 4, Description = "Как можно подробнее опишите что вы хотите купить." }

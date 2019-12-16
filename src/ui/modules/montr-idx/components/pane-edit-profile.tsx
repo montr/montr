@@ -1,5 +1,5 @@
 import React from "react";
-import { IFormField, IApiResult } from "@montr-core/models";
+import { IDataField, IApiResult } from "@montr-core/models";
 import { MetadataService } from "@montr-core/services";
 import { IProfileModel } from "../models";
 import { ProfileService } from "../services";
@@ -14,7 +14,7 @@ interface IProps {
 interface IState {
 	loading: boolean;
 	data: IProfileModel;
-	fields?: IFormField[];
+	fields?: IDataField[];
 }
 
 export default class PaneEditProfile extends React.Component<IProps, IState> {

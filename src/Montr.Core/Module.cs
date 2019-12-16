@@ -34,8 +34,8 @@ namespace Montr.Core
 				.AddMvcCore()
 				.AddJsonOptions(options =>
 				{
-					options.JsonSerializerOptions.Converters.Add(new PolymorphicWriteOnlyJsonConverter<FormField>());
-					// options.JsonSerializerOptions.Converters.Add(new FormFieldJsonConverter());
+					options.JsonSerializerOptions.Converters.Add(new PolymorphicWriteOnlyJsonConverter<DataField>());
+					// options.JsonSerializerOptions.Converters.Add(new DataFieldJsonConverter());
 				});
 
 			services.Configure<AppOptions>(configuration.GetSection(typeof(AppOptions).FullName));

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Guid, IFormField, IApiResult } from "@montr-core/models";
+import { Guid, IDataField, IApiResult } from "@montr-core/models";
 import { CompanyContextProps, withCompanyContext } from "@montr-kompany/components";
 import { IInvitation } from "../models";
 import { Modal, Spin } from "antd";
@@ -16,7 +16,7 @@ interface IProps extends CompanyContextProps {
 
 interface IState {
 	loading: boolean;
-	fields?: IFormField[];
+	fields?: IDataField[];
 	data: IInvitation;
 }
 
@@ -39,12 +39,12 @@ class _ModalEditInvitation extends React.Component<IProps, IState> {
 
 	componentDidMount = async () => {
 		await this.fetchData();
-	}
+	};
 
 	componentWillUnmount = async () => {
 		await this._metadataService.abort();
 		await this._invitationService.abort();
-	}
+	};
 
 	fetchData = async () => {
 		const { currentCompany, uid } = this.props;
@@ -75,19 +75,19 @@ class _ModalEditInvitation extends React.Component<IProps, IState> {
 				this.onCancel();
 			}
 		}
-	}
+	};
 
 	saveFormRef = (formRef: WrappedDataForm) => {
 		this._formRef = formRef;
-	}
+	};
 
 	onOk = async (e: React.MouseEvent<any>) => {
 		await this._formRef.handleSubmit(e);
-	}
+	};
 
 	onCancel = () => {
 		if (this.props.onCancel) this.props.onCancel();
-	}
+	};
 
 	save = async (values: IInvitation): Promise<IApiResult> => {
 		const { eventUid, uid, onSuccess } = this.props,
@@ -115,7 +115,7 @@ class _ModalEditInvitation extends React.Component<IProps, IState> {
 		}
 
 		return result;
-	}
+	};
 
 	render = () => {
 		const { loading, fields, data } = this.state;
@@ -139,7 +139,7 @@ class _ModalEditInvitation extends React.Component<IProps, IState> {
 				</Spin>
 			</Modal>
 		);
-	}
+	};
 }
 
 export const ModalEditInvitation = withCompanyContext(_ModalEditInvitation);

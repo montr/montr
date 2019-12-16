@@ -1,7 +1,7 @@
 import React from "react";
 import { Modal, Spin } from "antd";
 import { Translation } from "react-i18next";
-import { IFormField, IApiResult } from "@montr-core/models";
+import { IDataField, IApiResult } from "@montr-core/models";
 import { DataForm, WrappedDataForm } from "@montr-core/components";
 import { MetadataService } from "@montr-core/services";
 import { ProfileService } from "../services";
@@ -16,7 +16,7 @@ interface IProps {
 interface IState {
 	loading: boolean;
 	data: IProfileModel;
-	fields?: IFormField[];
+	fields?: IDataField[];
 }
 
 export class ModalSetPassword extends React.Component<IProps, IState> {

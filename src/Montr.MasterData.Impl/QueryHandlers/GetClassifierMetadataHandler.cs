@@ -29,18 +29,18 @@ namespace Montr.MasterData.Impl.QueryHandlers
 
 			var type = await _classifierTypeService.GetClassifierType(request.CompanyUid, typeCode, cancellationToken);
 
-			ICollection<FormField> commonFields = null;
+			ICollection<DataField> commonFields = null;
 
 			if (type.HierarchyType == HierarchyType.Groups)
 			{
-				commonFields = new List<FormField>
+				commonFields = new List<DataField>
 				{
 					new ClassifierGroupField { Key = "parentUid", Name = "Группа", TypeCode = typeCode, TreeCode = ClassifierTree.DefaultCode, Required = true }
 				};
 			}
 			else if (type.HierarchyType == HierarchyType.Items)
 			{
-				commonFields = new List<FormField>
+				commonFields = new List<DataField>
 				{
 					new ClassifierGroupField { Key = "parentUid", Name = "Родительский элемент", TypeCode = typeCode },
 				};

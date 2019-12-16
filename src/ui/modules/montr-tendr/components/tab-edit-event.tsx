@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Form, Spin } from "antd";
 import { FormComponentProps } from "antd/lib/form";
-import { IApiResult, IPaneProps, IFormField } from "@montr-core/models";
+import { IApiResult, IPaneProps, IDataField } from "@montr-core/models";
 import { EventService, EventMetadataService } from "../services";
 import { IPaneComponent, DataForm } from "@montr-core/components";
 import { IEvent } from "../models";
@@ -12,7 +12,7 @@ interface IProps extends FormComponentProps {
 
 interface IState {
 	loading: boolean;
-	fields?: IFormField[];
+	fields?: IDataField[];
 }
 
 class EventForm extends React.Component<IProps, IState> {
@@ -29,22 +29,22 @@ class EventForm extends React.Component<IProps, IState> {
 
 	componentDidMount = async () => {
 		await this.fetchData();
-	}
+	};
 
 	componentWillUnmount = async () => {
 		await this._metadataService.abort();
 		await this._eventService.abort();
-	}
+	};
 
 	fetchData = async () => {
 		const dataView = await this._metadataService.load(`Event/Edit`);
 
 		this.setState({ loading: false, fields: dataView.fields });
-	}
+	};
 
 	save = async (values: IEvent): Promise<IApiResult> => {
 		return await this._eventService.update({ uid: this.props.data.uid, ...values });
-	}
+	};
 
 	render = () => {
 
@@ -54,7 +54,7 @@ class EventForm extends React.Component<IProps, IState> {
 		return (
 			<DataForm fields={fields} data={data} onSubmit={this.save} />
 		);
-	}
+	};
 }
 
 const WrappedForm = Form.create<IProps>()(EventForm);

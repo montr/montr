@@ -1,19 +1,19 @@
 import * as React from "react";
-import { FormFieldFactory } from "@montr-core/components";
-import { IIndexer, IFormField, IClassifierField, IClassifierGroupField } from "@montr-core/models";
+import { DataFieldFactory } from "@montr-core/components";
+import { IIndexer, IDataField, IClassifierField, IClassifierGroupField } from "@montr-core/models";
 import { ClassifierGroupSelect, ClassifierSelect } from ".";
 
-export class ClassifierGroupFieldFactory implements FormFieldFactory {
-	createNode(field: IFormField, data: IIndexer): React.ReactNode {
+export class ClassifierGroupFieldFactory implements DataFieldFactory {
+	createNode(field: IDataField, data: IIndexer): React.ReactNode {
 		return <ClassifierGroupSelect field={field as IClassifierGroupField} />;
 	}
 }
 
-export class ClassifierFieldFactory implements FormFieldFactory {
-	createNode(field: IFormField, data: IIndexer): React.ReactNode {
+export class ClassifierFieldFactory implements DataFieldFactory {
+	createNode(field: IDataField, data: IIndexer): React.ReactNode {
 		return <ClassifierSelect field={field as IClassifierField} />;
 	}
 }
 
-FormFieldFactory.register("classifier-group", new ClassifierGroupFieldFactory());
-FormFieldFactory.register("classifier", new ClassifierFieldFactory());
+DataFieldFactory.register("classifier-group", new ClassifierGroupFieldFactory());
+DataFieldFactory.register("classifier", new ClassifierFieldFactory());

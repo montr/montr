@@ -26,7 +26,7 @@ namespace Montr.Core.Controllers
 		}
 
 		[HttpPost]
-		public async Task<SearchResult<FormField>> List(GetMetadataList request)
+		public async Task<SearchResult<DataField>> List(GetMetadataList request)
 		{
 			return await _mediator.Send(request);
 		}

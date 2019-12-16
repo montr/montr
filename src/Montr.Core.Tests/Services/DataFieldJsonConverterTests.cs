@@ -8,7 +8,7 @@ using Montr.Core.Services;
 namespace Montr.Core.Tests.Services
 {
 	[TestClass]
-	public class FormFieldJsonConverterTests
+	public class DataFieldJsonConverterTests
 	{
 		[TestMethod]
 		public void Write_FieldsArrayWithConverter_ShouldSerializeAllProperties()
@@ -19,8 +19,8 @@ namespace Montr.Core.Tests.Services
 				PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
 				IgnoreNullValues = true,
 				WriteIndented = false,
-				// Converters = { new FormFieldJsonConverter() }
-				Converters = { new PolymorphicWriteOnlyJsonConverter<FormField>() }
+				// Converters = { new DataFieldJsonConverter() }
+				Converters = { new PolymorphicWriteOnlyJsonConverter<DataField>() }
 			};
 
 			var fields = GetTestFields();
@@ -51,7 +51,7 @@ namespace Montr.Core.Tests.Services
 			Assert.ThrowsException<AssertFailedException>(() => AssertAllPropertiesSerialized(result, fields));
 		}
 
-		private static void AssertAllPropertiesSerialized(string result, IReadOnlyList<FormField> fields)
+		private static void AssertAllPropertiesSerialized(string result, IReadOnlyList<DataField> fields)
 		{
 			var json = JsonDocument.Parse(result);
 
@@ -91,9 +91,9 @@ namespace Montr.Core.Tests.Services
 			}
 		}
 
-		private static FormField[] GetTestFields()
+		private static DataField[] GetTestFields()
 		{
-			return new FormField[]
+			return new DataField[]
 			{
 				new StringField
 				{

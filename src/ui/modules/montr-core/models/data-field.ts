@@ -1,6 +1,6 @@
 import { Guid } from ".";
 
-export interface IFormField {
+export interface IDataField {
 	type: string;
 	key: string;
 	name: string;
@@ -12,7 +12,7 @@ export interface IFormField {
 	required?: boolean;
 }
 
-export interface IStringField extends IFormField {
+export interface IStringField extends IDataField {
 	autosize: boolean;
 }
 
@@ -23,27 +23,27 @@ export interface ITextAreaField extends IStringField {
 export interface IPasswordField extends IStringField {
 }
 
-export interface INumberField extends IFormField {
+export interface INumberField extends IDataField {
 	min?: number;
 	max?: number;
 }
 
-export interface IDecimalField extends IFormField {
+export interface IDecimalField extends IDataField {
 	min?: number;
 	max?: number;
 	precision?: number;
 }
 
-export interface IDateField extends IFormField {
+export interface IDateField extends IDataField {
 }
 
-export interface ITimeField extends IFormField {
+export interface ITimeField extends IDataField {
 }
 
-export interface IDateTimeField extends IFormField {
+export interface IDateTimeField extends IDataField {
 }
 
-export interface ISelectField extends IFormField {
+export interface ISelectField extends IDataField {
 	options: IOption[];
 }
 
@@ -52,15 +52,15 @@ export interface IOption {
 	name: string;
 }
 
-export interface IClassifierGroupField extends IFormField {
+export interface IClassifierGroupField extends IDataField {
 	typeCode: string;
 	treeCode: string;
 	treeUid: Guid;
 }
 
-export interface IClassifierField extends IFormField {
+export interface IClassifierField extends IDataField {
 	typeCode: string;
 }
 
-export interface IFileField extends IFormField {
+export interface IFileField extends IDataField {
 }

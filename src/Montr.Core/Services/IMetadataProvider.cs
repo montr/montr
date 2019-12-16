@@ -46,7 +46,7 @@ namespace Montr.Core.Services
 			{
 				if (viewId.EndsWith("/okv"))
 				{
-					result.Fields = new List<FormField>
+					result.Fields = new List<DataField>
 					{
 						new StringField { Key = "code", Name = "Код", Required = true },
 						new TextAreaField { Key = "name", Name = "Наименование", Required = true, Rows = 10 },
@@ -56,7 +56,7 @@ namespace Montr.Core.Services
 				}
 				else
 				{
-					result.Fields = new List<FormField>
+					result.Fields = new List<DataField>
 					{
 						// new StringField { Key = "statusCode", Name = "Статус", Readonly = true },
 						new StringField { Key = "code", Name = "Код", Required = true },
@@ -67,7 +67,7 @@ namespace Montr.Core.Services
 
 			if (viewId == "ClassifierTree/Form")
 			{
-				result.Fields = new List<FormField>
+				result.Fields = new List<DataField>
 				{
 					new StringField { Key = "code", Name = "Код", Required = true },
 					new StringField { Key = "name", Name = "Наименование", Required = true },
@@ -76,7 +76,7 @@ namespace Montr.Core.Services
 
 			if (viewId == "ClassifierGroup/Form")
 			{
-				result.Fields = new List<FormField>
+				result.Fields = new List<DataField>
 				{
 					new StringField { Key = "code", Name = "Код", Required = true },
 					new StringField { Key = "name", Name = "Наименование", Required = true },
@@ -86,7 +86,7 @@ namespace Montr.Core.Services
 
 			if (viewId == "ClassifierLink/Form")
 			{
-				result.Fields = new List<FormField>
+				result.Fields = new List<DataField>
 				{
 					new ClassifierGroupField { Key = "group.uid", Name = "Группа", Required = true },
 				};
@@ -94,7 +94,7 @@ namespace Montr.Core.Services
 
 			if (viewId == "ClassifierType")
 			{
-				result.Fields = new List<FormField>
+				result.Fields = new List<DataField>
 				{
 					new StringField { Key = "code", Name = "Код", Required = true },
 					new TextAreaField { Key = "name", Name = "Наименование", Rows = 2, Required = true },
@@ -165,7 +165,7 @@ namespace Montr.Core.Services
 			// Montr.Idx
 			if (viewId == "Login/Form")
 			{
-				result.Fields = new List<FormField>
+				result.Fields = new List<DataField>
 				{
 					new StringField { Key = "email", Name = "Email", Placeholder = "Your email", Icon = "user", Required = true },
 					new PasswordField { Key = "password", Name = "Password", Placeholder = "Password", Icon = "lock", Required = true },
@@ -175,7 +175,7 @@ namespace Montr.Core.Services
 
 			if (viewId == "ForgotPassword/Form" || viewId == "SendEmailConfirmation/Form")
 			{
-				result.Fields = new List<FormField>
+				result.Fields = new List<DataField>
 				{
 					new StringField { Key = "email", Name = "Email", Icon = "mail", Required = true }
 				};
@@ -183,7 +183,7 @@ namespace Montr.Core.Services
 
 			if (viewId == "ResetPassword/Form")
 			{
-				result.Fields = new List<FormField>
+				result.Fields = new List<DataField>
 				{
 					new StringField { Key = "email", Name = "Email", Required = true },
 					new PasswordField { Key = "password", Name = "Password", Required = true },
@@ -193,7 +193,7 @@ namespace Montr.Core.Services
 
 			if (viewId == "ChangePassword/Form")
 			{
-				result.Fields = new List<FormField>
+				result.Fields = new List<DataField>
 				{
 					new PasswordField { Key = "oldPassword", Name = "Current password", Required = true },
 					new PasswordField { Key = "newPassword", Name = "New password", Required = true },
@@ -203,7 +203,7 @@ namespace Montr.Core.Services
 
 			if (viewId == "SetPassword/Form")
 			{
-				result.Fields = new List<FormField>
+				result.Fields = new List<DataField>
 				{
 					new PasswordField { Key = "newPassword", Name = "New password", Required = true },
 					new PasswordField { Key = "confirmPassword", Name = "Confirm new password", Required = true }
@@ -213,7 +213,7 @@ namespace Montr.Core.Services
 			if (viewId == "Register/Form")
 			{
 				// todo: add terms and conditions checkbox
-				result.Fields = new List<FormField>
+				result.Fields = new List<DataField>
 				{
 					new StringField { Key = "email", Name = "Email", Required = true },
 					new StringField { Key = "firstName", Name = "First Name", Required = true },
@@ -225,7 +225,7 @@ namespace Montr.Core.Services
 
 			if (viewId == "ExternalRegister/Form")
 			{
-				result.Fields = new List<FormField>
+				result.Fields = new List<DataField>
 				{
 					new StringField { Key = "email", Name = "Email", Required = true },
 					new StringField { Key = "firstName", Name = "First Name", Required = true },
@@ -235,7 +235,7 @@ namespace Montr.Core.Services
 
 			if (viewId == "ChangeEmail/Form")
 			{
-				result.Fields = new List<FormField>
+				result.Fields = new List<DataField>
 				{
 					new StringField { Key = "email", Name = "Email", Required = true }
 				};
@@ -243,7 +243,7 @@ namespace Montr.Core.Services
 
 			if (viewId == "ChangePhone/Form")
 			{
-				result.Fields = new List<FormField>
+				result.Fields = new List<DataField>
 				{
 					new StringField { Key = "phoneNumber", Name = "Номер телефона" } // todo: PhoneField
 				};
@@ -251,7 +251,7 @@ namespace Montr.Core.Services
 
 			if (viewId == "UpdateProfile/Form")
 			{
-				result.Fields = new List<FormField>
+				result.Fields = new List<DataField>
 				{
 					new StringField { Key = "userName", Name = "Имя пользователя", Readonly = true },
 					new StringField { Key = "firstName", Name = "Имя" },
@@ -295,7 +295,7 @@ namespace Montr.Core.Services
 
 			if (viewId == "Event/Invitation/Form")
 			{
-				result.Fields = new List<FormField>
+				result.Fields = new List<DataField>
 				{
 					new ClassifierField { Key = "counterpartyUid", Name = "Контрагент", TypeCode = "counterparty", Required = true },
 					new StringField { Key = "user", Name = "Пользователь" },

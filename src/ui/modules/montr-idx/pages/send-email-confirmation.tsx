@@ -2,7 +2,7 @@ import * as React from "react";
 import { Spin, Icon } from "antd";
 import { useTranslation } from "react-i18next";
 import { Page, DataForm } from "@montr-core/components";
-import { IFormField, IApiResult } from "@montr-core/models";
+import { IDataField, IApiResult } from "@montr-core/models";
 import { useLocalStorage } from "@montr-core/hooks";
 import { MetadataService } from "@montr-core/services";
 import { ISendEmailConfirmationModel } from "../models/";
@@ -12,7 +12,7 @@ import { Link } from "react-router-dom";
 
 interface IState {
 	loading: boolean;
-	fields?: IFormField[];
+	fields?: IDataField[];
 }
 
 export default function SendEmailConfirmation() {

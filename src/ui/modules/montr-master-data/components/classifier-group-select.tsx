@@ -51,19 +51,19 @@ class _ClassifierGroupSelect extends React.Component<IProps, IState> {
 
 	componentDidMount = async () => {
 		await this.fetchData();
-	}
+	};
 
 	componentDidUpdate = async (prevProps: IProps) => {
 		if (this.props.value !== prevProps.value) {
 			// await this.fetchData();
 		}
-	}
+	};
 
 	componentWillUnmount = async () => {
 		await this._classifierTypeService.abort();
 		await this._classifierTreeService.abort();
 		await this._classifierGroupService.abort();
-	}
+	};
 
 	fetchData = async () => {
 		const { field } = this.props,
@@ -98,7 +98,7 @@ class _ClassifierGroupSelect extends React.Component<IProps, IState> {
 		}
 
 		this.setState({ loading: false, type, trees, groups, expanded });
-	}
+	};
 
 	async collectExpanded(groups: IClassifierGroup[], expanded?: Guid[]) {
 		groups && groups.forEach(group => {
@@ -118,11 +118,11 @@ class _ClassifierGroupSelect extends React.Component<IProps, IState> {
 		if (onChange) {
 			onChange(value);
 		}
-	}
+	};
 
 	onSearch = (value: string) => {
 		// console.log("onSearch", value);
-	}
+	};
 
 	onLoadData = (node: any) => {
 		return new Promise(async (resolve) => {
@@ -160,7 +160,7 @@ class _ClassifierGroupSelect extends React.Component<IProps, IState> {
 
 			resolve();
 		});
-	}
+	};
 
 	buildTree(trees: IClassifierTree[], groups: IClassifierGroup[]): TreeNode[] {
 		if (trees) {

@@ -1,17 +1,17 @@
 import * as React from "react";
 import { Form, Button, Spin } from "antd";
 import { FormComponentProps } from "antd/lib/form";
-import { IFormField, IIndexer, IApiResult } from "../models";
+import { IDataField, IIndexer, IApiResult } from "../models";
 import { NotificationService } from "../services/notification-service";
 import { OperationService } from "../services";
-import { FormDefaults, FormFieldFactory } from ".";
+import { FormDefaults, DataFieldFactory } from ".";
 import { withTranslation, WithTranslation } from "react-i18next";
 
 declare const FormLayouts: ["horizontal", "inline", "vertical"];
 
 interface IProps extends WithTranslation, FormComponentProps {
 	layout?: (typeof FormLayouts)[number];
-	fields: IFormField[];
+	fields: IDataField[];
 	data: IIndexer;
 	showControls?: boolean;
 	submitButton?: string;
@@ -116,7 +116,7 @@ export class WrappedDataForm extends React.Component<IProps, IState> {
 		}
 	};
 
-	createItem = (field: IFormField): React.ReactNode => {
+	createItem = (field: IDataField): React.ReactNode => {
 		const { t, layout, data, hideLabels } = this.props;
 		const { getFieldDecorator } = this.props.form;
 
@@ -136,7 +136,7 @@ export class WrappedDataForm extends React.Component<IProps, IState> {
 				}]
 			};
 
-		const fieldFactory = FormFieldFactory.get(field.type);
+		const fieldFactory = DataFieldFactory.get(field.type);
 
 		const fieldNode = fieldFactory.createNode(field, data);
 
