@@ -2,7 +2,8 @@ import * as React from "react";
 import { useTranslation } from "react-i18next";
 import { Button, Spin, Icon, Divider } from "antd";
 import { Toolbar } from "./toolbar";
-import { IDataField } from "@montr-core/models";
+import { IDataField, IDataResult } from "../models";
+import { MetadataService } from "../services";
 import { DataTable, DataTableUpdateToken } from ".";
 import { Constants } from "..";
 
@@ -45,6 +46,17 @@ export function PaneEditMetadata(props: IProps) {
 		};
 	}, []);
 
+	async function onLoadTableData(loadUrl: string, postParams: any): Promise<IDataResult<{}>> {
+		const params = {
+			entityTypeCode: props.entityTypeCode,
+			...postParams
+		};
+
+		const metadataService = new MetadataService();
+
+		return await metadataService.post(loadUrl, params);
+	};
+
 	const { entityTypeCode } = props,
 		{ loading, fields, updateTableToken } = state;
 
@@ -61,6 +73,7 @@ export function PaneEditMetadata(props: IProps) {
 				// rowActions={rowActions}
 				viewId={`Metadata/Grid`}
 				loadUrl={`${Constants.apiURL}/metadata/list/`}
+				onLoadData={onLoadTableData}
 				updateToken={updateTableToken}
 			/>
 		</Spin>
