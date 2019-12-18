@@ -165,8 +165,7 @@ export class WrappedDataForm extends React.Component<IProps, IState> {
 			<Spin spinning={loading}>
 				<Form layout={layout || "horizontal"}
 					onChange={this.handleChange}
-					onSubmit={this.handleSubmit}
-				>
+					onSubmit={this.handleSubmit}>
 					{fields && fields.map(x => this.createItem(x))}
 					{fields && showControls !== false &&
 						<Form.Item {...itemLayout}>
