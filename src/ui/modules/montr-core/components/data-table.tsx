@@ -1,7 +1,8 @@
 import * as React from "react";
 import { Link } from "react-router-dom";
 import { Table, Tag, Divider } from "antd";
-import { ColumnProps, PaginationConfig, SorterResult, SortOrder } from "antd/lib/table";
+import { PaginationConfig } from "antd/lib/pagination";
+import { SorterResult, SortOrder, ColumnType } from "antd/lib/table/interface";
 import { Fetcher, NotificationService, MetadataService } from "../services";
 import { IIndexer, IDataColumn, IDataResult, IMenu } from "../models";
 import { Constants } from "..";
@@ -109,7 +110,7 @@ export class DataTable<TModel extends IIndexer> extends React.Component<IProps<T
 
 		const dataView = await this._metadataService.load(viewId);
 
-		const columns = dataView.columns.map((item: IDataColumn): ColumnProps<TModel> => {
+		const columns = dataView.columns.map((item: IDataColumn): ColumnType<TModel> => {
 
 			var render: (text: any, record: TModel, index: number) => React.ReactNode;
 
