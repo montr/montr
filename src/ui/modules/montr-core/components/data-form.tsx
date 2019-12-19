@@ -1,6 +1,7 @@
 import * as React from "react";
 import { Form, Button, Spin } from "antd";
-import { FormComponentProps } from "antd/lib/form";
+import { CheckOutlined } from '@ant-design/icons';
+import { FormInstance } from "antd/lib/form";
 import { IDataField, IIndexer, IApiResult } from "../models";
 import { NotificationService } from "../services/notification-service";
 import { OperationService } from "../services";
@@ -9,7 +10,7 @@ import { withTranslation, WithTranslation } from "react-i18next";
 
 declare const FormLayouts: ["horizontal", "inline", "vertical"];
 
-interface IProps extends WithTranslation, FormComponentProps {
+interface IProps extends WithTranslation {
 	layout?: (typeof FormLayouts)[number];
 	fields: IDataField[];
 	data: IIndexer;
@@ -33,6 +34,7 @@ export class WrappedDataForm extends React.Component<IProps, IState> {
 	private _notificationService = new NotificationService();
 
 	private _isMounted: boolean = true;
+	private _formRef = React.createRef<FormInstance>();
 
 	constructor(props: IProps) {
 		super(props);
@@ -47,46 +49,38 @@ export class WrappedDataForm extends React.Component<IProps, IState> {
 	};
 
 	getFieldValue = async (fieldName: string) => {
-
-		const { form } = this.props;
-
-		return form.getFieldValue(fieldName);
+		return this._formRef.current.getFieldValue(fieldName);
 	};
 
 	handleChange = async (e: React.SyntheticEvent) => {
-		const { form, onChange } = this.props;
+		const { onChange } = this.props;
 
 		if (onChange) {
-			var values = form.getFieldsValue();
+			var values = this._formRef.current.getFieldsValue();
 
 			onChange(values);
 		}
 	};
 
-	handleSubmit = async (e: React.SyntheticEvent) => {
-		e.preventDefault();
+	handleSubmit = async (values: IIndexer) => {
 
-		const { t, form, onSubmit: onSave, successMessage, errorMessage } = this.props;
+		const { t, onSubmit: onSave, successMessage, errorMessage } = this.props;
 
-		form.validateFieldsAndScroll(async (errors, values: any) => {
-			if (!errors) {
-				if (this._isMounted) this.setState({ loading: true });
+		if (this._isMounted) this.setState({ loading: true });
 
-				await this._operation.execute(() => onSave(values), {
-					successMessage: successMessage || t("dataForm.submit.success"),
-					errorMessage: errorMessage || t("dataForm.submit.error"),
-					showFieldErrors: async (result) => {
-						await this.setFieldErrors(result, values);
-					}
-				});
-
-				if (this._isMounted) this.setState({ loading: false });
+		await this._operation.execute(() => onSave(values), {
+			successMessage: successMessage || t("dataForm.submit.success"),
+			errorMessage: errorMessage || t("dataForm.submit.error"),
+			showFieldErrors: async (result) => {
+				await this.setFieldErrors(result, values);
 			}
 		});
+
+		if (this._isMounted) this.setState({ loading: false });
 	};
 
 	setFieldErrors = async (result: IApiResult, values: IIndexer) => {
-		const { form, fields } = this.props,
+		const { fields } = this.props,
 			fieldErrors: any = {},
 			otherErrors: string[] = [];
 
@@ -107,7 +101,7 @@ export class WrappedDataForm extends React.Component<IProps, IState> {
 				}
 			});
 
-			form.setFields(fieldErrors);
+			this._formRef.current.setFields(fieldErrors);
 
 			if (otherErrors.length > 0) {
 				// todo: show as alert before form
@@ -118,11 +112,10 @@ export class WrappedDataForm extends React.Component<IProps, IState> {
 
 	createItem = (field: IDataField): React.ReactNode => {
 		const { t, layout, data, hideLabels } = this.props;
-		const { getFieldDecorator } = this.props.form;
 
 		const initialValue = data?.[field.key];
 
-		const fieldOptions = field.type == "boolean"
+		/* const fieldOptions = field.type == "boolean"
 			? {
 				initialValue: initialValue,
 				valuePropName: "checked",
@@ -134,7 +127,13 @@ export class WrappedDataForm extends React.Component<IProps, IState> {
 					whitespace: field.required,
 					message: t("dataForm.rule.required", { name: field.name })
 				}]
-			};
+			}; */
+
+		const rules = field.type == "boolean" ? null : [{
+			required: field.required,
+			whitespace: field.required,
+			message: t("dataForm.rule.required", { name: field.name })
+		}];
 
 		const fieldFactory = DataFieldFactory.get(field.type);
 
@@ -146,31 +145,36 @@ export class WrappedDataForm extends React.Component<IProps, IState> {
 
 		return (
 			<Form.Item
-				key={field.key}
+				// key={field.key}
+				name={field.key}
 				label={hideLabels || field.type == "boolean" ? null : field.name}
 				extra={field.description}
+				rules={rules}
 				{...itemLayout}>
-				{getFieldDecorator(field.key, fieldOptions)(fieldNode)}
+				{fieldNode}
 			</Form.Item>
 		);
 	};
 
 	render = () => {
-		const { t, layout, fields, showControls, submitButton } = this.props,
+		const { t, layout, data, fields, showControls, submitButton } = this.props,
 			{ loading } = this.state;
 
 		const itemLayout = (layout == null || layout == "horizontal") ? FormDefaults.tailFormItemLayout : null;
 
 		return (
 			<Spin spinning={loading}>
-				<Form layout={layout || "horizontal"}
+				<Form ref={this._formRef}
+					initialValues={data}
+					layout={layout || "horizontal"}
 					onChange={this.handleChange}
-					onSubmit={this.handleSubmit}>
+					onFinish={this.handleSubmit}>
+
 					{fields && fields.map(x => this.createItem(x))}
+
 					{fields && showControls !== false &&
 						<Form.Item {...itemLayout}>
-							<Button type="primary" htmlType="submit" icon="check">{submitButton || t("button.save")}</Button>&#xA0;
-							{/* <Button htmlType="reset">{t("button.cancel")}</Button> */}
+							<Button type="primary" htmlType="submit" icon={<CheckOutlined />}>{submitButton || t("button.save")}</Button>
 						</Form.Item>
 					}
 				</Form>
@@ -179,4 +183,4 @@ export class WrappedDataForm extends React.Component<IProps, IState> {
 	};
 }
 
-export const DataForm = withTranslation()(Form.create<IProps>()(WrappedDataForm));
+export const DataForm = withTranslation()(WrappedDataForm);

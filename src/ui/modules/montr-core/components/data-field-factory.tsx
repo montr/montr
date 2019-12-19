@@ -13,17 +13,17 @@ export abstract class DataFieldFactory {
 		return DataFieldFactory.Map[key];
 	}
 
-	abstract createNode(field: IDataField, data: IIndexer): React.ReactNode;
+	abstract createNode(field: IDataField, data: IIndexer): React.ReactElement;
 }
 
 class BooleanFieldFactory implements DataFieldFactory {
-	createNode(field: IDataField, data: IIndexer): React.ReactNode {
+	createNode(field: IDataField, data: IIndexer): React.ReactElement {
 		return <Checkbox>{field.name}</Checkbox>;
 	}
 }
 
 class StringFieldFactory implements DataFieldFactory {
-	createNode(field: IDataField, data: IIndexer): React.ReactNode {
+	createNode(field: IDataField, data: IIndexer): React.ReactElement {
 		return <Input
 			allowClear
 			disabled={field.readonly}
@@ -34,18 +34,21 @@ class StringFieldFactory implements DataFieldFactory {
 }
 
 class TextAreaFieldFactory implements DataFieldFactory {
-	createNode(field: IDataField, data: IIndexer): React.ReactNode {
+	createNode(field: IDataField, data: IIndexer): React.ReactElement {
 
 		const textAreaField = field as ITextAreaField;
 
 		const minRows = textAreaField.rows || 4;
 
-		return <Input.TextArea allowClear placeholder={field.placeholder} autoSize={{ minRows: minRows, maxRows: 24 }} />;
+		return <Input.TextArea
+			allowClear
+			placeholder={field.placeholder}
+			autoSize={{ minRows: minRows, maxRows: 24 }} />;
 	}
 }
 
 class SelectFieldFactory implements DataFieldFactory {
-	createNode(field: IDataField, data: IIndexer): React.ReactNode {
+	createNode(field: IDataField, data: IIndexer): React.ReactElement {
 
 		const selectField = field as ISelectField;
 
@@ -60,7 +63,7 @@ class SelectFieldFactory implements DataFieldFactory {
 }
 
 class PasswordFieldFactory implements DataFieldFactory {
-	createNode(field: IDataField, data: IIndexer): React.ReactNode {
+	createNode(field: IDataField, data: IIndexer): React.ReactElement {
 		return <Input.Password
 			allowClear
 			placeholder={field.placeholder}

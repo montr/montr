@@ -1,5 +1,5 @@
 const path = require("path");
-const tsImportPluginFactory = require("ts-import-plugin")
+const tsImportPluginFactory = require("ts-import-plugin");
 const copyPlugin = require("copy-webpack-plugin");
 
 module.exports = {
