@@ -4,11 +4,10 @@ import { Constants } from "..";
 import { IMenu, ILocaleString, IDataResult } from "@montr-core/models";
 import { LocaleStringService, NotificationService } from "@montr-core/services";
 import { Form, Select, Button, Upload } from "antd";
-import { FormComponentProps } from "antd/lib/form";
 import { UploadChangeParam } from "antd/lib/upload";
 import { Translation } from "react-i18next";
 
-interface IProps extends FormComponentProps {
+interface IProps {
 }
 
 interface IState {
@@ -17,7 +16,7 @@ interface IState {
 	updateTableToken: DataTableUpdateToken;
 }
 
-export class _SearchLocaleString extends React.Component<IProps, IState> {
+export default class SearchLocaleString extends React.Component<IProps, IState> {
 
 	_notification = new NotificationService();
 	_localeService = new LocaleStringService();
@@ -47,23 +46,13 @@ export class _SearchLocaleString extends React.Component<IProps, IState> {
 		return await this._localeService.post(loadUrl, params);
 	};
 
-	handleSubmit = async (e: React.SyntheticEvent) => {
-		e.preventDefault();
-
-		const { form } = this.props;
-
-		form.validateFieldsAndScroll(async (errors, values: any) => {
-			if (errors) {
-				// console.log(errors);
-			} else {
-				this.setState({
-					locale: values.locale,
-					module: values.module
-				});
-
-				await this.refreshTable();
-			}
+	handleSubmit = async (values: any) => {
+		this.setState({
+			locale: values.locale,
+			module: values.module
 		});
+
+		await this.refreshTable();
 	};
 
 	handleImport = async (e: React.SyntheticEvent) => {
@@ -102,8 +91,6 @@ export class _SearchLocaleString extends React.Component<IProps, IState> {
 		const locales = ["en", "ru"],
 			modules = ["common", "idx", "master-data", "tendr"];
 
-		const { getFieldDecorator } = this.props.form;
-
 		return (
 			<Translation>
 				{(t) => (
@@ -127,28 +114,20 @@ export class _SearchLocaleString extends React.Component<IProps, IState> {
 							<PageHeader>Локализация</PageHeader>
 						</>}>
 
-						<Form layout="inline" onSubmit={this.handleSubmit}>
-							<Form.Item>
-								{getFieldDecorator("locale", {
-									rules: [{ required: false }], initialValue: locale
-								})(
-									<Select placeholder="Язык" allowClear style={{ minWidth: 100 }}>
-										{locales.map(x => {
-											return <Select.Option key={`${x}`} value={`${x}`}>{x}</Select.Option>;
-										})}
-									</Select>
-								)}
+						<Form layout="inline" onFinish={this.handleSubmit}>
+							<Form.Item name="locale" rules={[{ required: false }]}>
+								<Select placeholder="Язык" allowClear value={locale} style={{ minWidth: 100 }}>
+									{locales.map(x => {
+										return <Select.Option key={`${x}`} value={`${x}`}>{x}</Select.Option>;
+									})}
+								</Select>
 							</Form.Item>
-							<Form.Item>
-								{getFieldDecorator("module", {
-									rules: [{ required: false }], initialValue: module
-								})(
-									<Select placeholder="Модуль" allowClear style={{ minWidth: 100 }}>
-										{modules.map(x => {
-											return <Select.Option key={`${x}`} value={`${x}`}>{x}</Select.Option>;
-										})}
-									</Select>
-								)}
+							<Form.Item name="module" rules={[{ required: false }]}>
+								<Select placeholder="Модуль" allowClear value={module} style={{ minWidth: 100 }}>
+									{modules.map(x => {
+										return <Select.Option key={`${x}`} value={`${x}`}>{x}</Select.Option>;
+									})}
+								</Select>
 							</Form.Item>
 							<Form.Item>
 								<Button type="primary" htmlType="submit" icon="search">{t("button.search")}</Button>
@@ -159,7 +138,7 @@ export class _SearchLocaleString extends React.Component<IProps, IState> {
 
 						<DataTable
 							rowKey={(x: ILocaleString) => `${x.locale}-${x.module}-${x.key}`}
-							// rowActions={rowActions}
+							rowActions={rowActions}
 							viewId={`LocaleString/Grid/`}
 							loadUrl={`${Constants.apiURL}/locale/list/`}
 							onLoadData={this.onLoadTableData}
@@ -171,8 +150,4 @@ export class _SearchLocaleString extends React.Component<IProps, IState> {
 			</Translation>
 		);
 	};
-}
-
-const SearchLocaleString = Form.create<IProps>()(_SearchLocaleString);
-
-export default SearchLocaleString;
+};
