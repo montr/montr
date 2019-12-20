@@ -1,12 +1,12 @@
 import * as React from "react";
-import { Icon } from "antd";
+import { Icons } from "./icons";
 
 export class Logo extends React.Component {
 	public render() {
 		return (
 			<div className="logo">
 				<a href="/">
-					<Icon type="html5" theme="twoTone" /> <span>&lt;montr /&gt;</span>
+					{Icons.get("html5-2t")} <span>&lt;montr /&gt;</span>
 				</a>
 			</div>
 		);

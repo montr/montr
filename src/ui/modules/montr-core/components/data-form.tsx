@@ -145,10 +145,11 @@ export class WrappedDataForm extends React.Component<IProps, IState> {
 
 		return (
 			<Form.Item
-				// key={field.key}
+				key={field.key}
 				name={field.key}
 				label={hideLabels || field.type == "boolean" ? null : field.name}
 				extra={field.description}
+				valuePropName={field.type == "boolean" ? "checked" : "value"}
 				rules={rules}
 				{...itemLayout}>
 				{fieldNode}

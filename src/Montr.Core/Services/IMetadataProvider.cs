@@ -67,10 +67,10 @@ namespace Montr.Core.Services
 						new StringField { Key = "shortName", Name = "Краткое наименование" }
 					};
 
-					/*for (var i = 0; i < 100; i++)
+					for (var i = 0; i < 100; i++)
 					{
 						result.Fields.Add(new StringField { Key = "test" + i, Name = "Тестовое поле №" + i});
-					}*/
+					}
 				}
 				else
 				{

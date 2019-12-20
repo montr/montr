@@ -1,10 +1,11 @@
 import * as React from "react";
 import { Link } from "react-router-dom";
-import { Menu, Icon } from "antd";
+import { Menu } from "antd";
 import { IMenu } from "../models";
 import { MenuProps } from "antd/lib/menu";
 import { ContentService } from "../services/content-service";
 import { NavigationService } from "@montr-core/services";
+import { Icons } from "./icons";
 
 interface Props extends MenuProps {
 	menuId: string;
@@ -105,7 +106,7 @@ export class DataMenu extends React.Component<Props, State> {
 				return (
 					<Menu.SubMenu key={item.id} title={
 						<span>
-							{item.icon && <Icon type={item.icon} />}
+							{item.icon && Icons.get(item.icon)}
 							<span>{item.name}</span>
 						</span>
 					}>
@@ -118,7 +119,7 @@ export class DataMenu extends React.Component<Props, State> {
 				return (
 					<Menu.Item key={item.id}>
 						<Link to={this.getItemRoute(item)}>
-							{item.icon && <Icon type={item.icon} />}
+							{item.icon && Icons.get(item.icon)}
 							<span className="nav-text">{item.name}</span>
 						</Link>
 					</Menu.Item>
@@ -128,7 +129,7 @@ export class DataMenu extends React.Component<Props, State> {
 			return (
 				<Menu.Item key={item.id}>
 					<a href={item.url}>
-						{item.icon && <Icon type={item.icon} />}
+						{item.icon && Icons.get(item.icon)}
 						<span className="nav-text">{item.name}</span>
 					</a>
 				</Menu.Item>

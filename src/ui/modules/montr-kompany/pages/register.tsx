@@ -1,13 +1,13 @@
 import * as React from "react";
 import { Form, Input, Checkbox, Button, Radio, Modal, message } from "antd";
-import { FormComponentProps } from "antd/lib/form";
 import { CompanyService } from "../services";
 import { RadioChangeEvent } from "antd/lib/radio/interface";
 import { NavigationService } from "@montr-core/services";
 import { Constants } from "@montr-core/.";
 import { withCompanyContext, CompanyContextProps } from "../components";
+import { FormInstance } from "antd/lib/form";
 
-interface IProps extends CompanyContextProps, FormComponentProps {
+interface IProps extends CompanyContextProps {
 }
 
 interface IState {
@@ -19,6 +19,7 @@ class _RegistrationForm extends React.Component<IProps, IState> {
 
 	private _navigation = new NavigationService();
 	private _companyService = new CompanyService();
+	private _formRef = React.createRef<FormInstance>();
 
 	constructor(props: IProps) {
 		super(props);
@@ -31,32 +32,26 @@ class _RegistrationForm extends React.Component<IProps, IState> {
 
 	componentWillUnmount = async () => {
 		await this._companyService.abort();
-	}
+	};
 
-	handleSubmit = (e: React.SyntheticEvent) => {
-		e.preventDefault();
-
+	handleSubmit = async (values: any) => {
 		const { manageCompany, switchCompany } = this.props;
 
-		this.props.form.validateFieldsAndScroll(async (err, values) => {
-			if (!err) {
-				const companyUid = await this._companyService.create(values);
+		const companyUid = await this._companyService.create(values);
 
-				await switchCompany(companyUid)
+		await switchCompany(companyUid);
 
-				message.info(`Организация успешно зарегистрирована.`);
+		message.info(`Организация успешно зарегистрирована.`);
 
-				const returnUrl = this._navigation.getUrlParameter(Constants.returnUrlParam)
+		const returnUrl = this._navigation.getUrlParameter(Constants.returnUrlParam);
 
-				if (returnUrl) {
-					this._navigation.navigate(returnUrl);
-				}
-				else {
-					manageCompany();
-				}
-			}
-		});
-	}
+		if (returnUrl) {
+			this._navigation.navigate(returnUrl);
+		}
+		else {
+			manageCompany();
+		}
+	};
 
 	// todo: use types
 	checkIsChecked = (rule: any, value: any, callback: any) => {
@@ -65,20 +60,20 @@ class _RegistrationForm extends React.Component<IProps, IState> {
 		} else {
 			callback();
 		}
-	}
+	};
 
 	clearFormErrors = () => {
-		const values = this.props.form.getFieldsValue();
-		this.props.form.resetFields();
-		this.props.form.setFieldsValue(values);
-	}
+		const values = this._formRef.current.getFieldsValue();
+		this._formRef.current.resetFields();
+		this._formRef.current.setFieldsValue(values);
+	};
 
 	onChange = (e: RadioChangeEvent) => {
 		this.setState({
 			configCode: e.target.value as string
 		});
 		this.clearFormErrors();
-	}
+	};
 
 	showModal = (e: React.MouseEvent) => {
 		e.preventDefault();
@@ -86,16 +81,15 @@ class _RegistrationForm extends React.Component<IProps, IState> {
 		this.setState({
 			modalVisible: true,
 		});
-	}
+	};
 
 	handleModalCancel = () => {
 		this.setState({
 			modalVisible: false
 		});
-	}
+	};
 
 	render() {
-		const { getFieldDecorator } = this.props.form;
 
 		const formItemLayout = {
 			labelCol: {
@@ -127,37 +121,23 @@ class _RegistrationForm extends React.Component<IProps, IState> {
 			fieldRequiredMessage = `Поле обязательно для заполнения`;
 
 		return <>
-			<Form onSubmit={this.handleSubmit} style={{ maxWidth: 600 }}>
-				<Form.Item {...tailFormItemLayout}>
-					{getFieldDecorator("configCode", {
-						rules: [{ required: true }],
-						initialValue: configCode
-					})(
-						<Radio.Group buttonStyle="solid" onChange={this.onChange}>
-							<Radio.Button value="company">Организация</Radio.Button>
-							<Radio.Button value="person">Физическое лицо</Radio.Button>
-						</Radio.Group>
-					)}
+			<Form onFinish={this.handleSubmit} style={{ maxWidth: 600 }} initialValues={{ configCode, agreement: false }}>
+				<Form.Item name="configCode" rules={[{ required: true }]} {...tailFormItemLayout}>
+					<Radio.Group buttonStyle="solid" onChange={this.onChange}>
+						<Radio.Button value="company">Организация</Radio.Button>
+						<Radio.Button value="person">Физическое лицо</Radio.Button>
+					</Radio.Group>
 				</Form.Item>
-				<Form.Item
-					{...formItemLayout}
+				<Form.Item name="name"{...formItemLayout}
+					rules={[{ required: true, whitespace: true, message: nameRequiredMessage }]}
 					label={nameLabel}>
-					{getFieldDecorator("name", {
-						rules: [{ required: true, whitespace: true, message: nameRequiredMessage }],
-					})(
-						<Input />
-					)}
+					<Input />
 				</Form.Item>
-				<Form.Item {...tailFormItemLayout}>
-					{getFieldDecorator("agreement", {
-						rules: [{ required: true, message: fieldRequiredMessage }, {
-							validator: this.checkIsChecked,
-						}],
-						initialValue: false,
-						valuePropName: "checked",
-					})(
-						<Checkbox>Прочитал и согласен с <a onClick={this.showModal}>Условиями использования</a></Checkbox>
-					)}
+				<Form.Item name="agreement" valuePropName="checked" {...tailFormItemLayout}
+					rules={[{ required: true, message: fieldRequiredMessage }, {
+						validator: this.checkIsChecked,
+					}]}>
+					<Checkbox>Прочитал и согласен с <a onClick={this.showModal}>Условиями использования</a></Checkbox>
 				</Form.Item>
 				<Form.Item {...tailFormItemLayout}>
 					<Button type="primary" htmlType="submit">Зарегистрироваться</Button>
@@ -171,11 +151,11 @@ class _RegistrationForm extends React.Component<IProps, IState> {
 				<p>Some contents...</p>
 				<p>Some contents...</p>
 			</Modal>
-		</>
+		</>;
 	}
 }
 
-const RegistrationForm = Form.create()(withCompanyContext(_RegistrationForm));
+const RegistrationForm = withCompanyContext(_RegistrationForm);
 
 export default class Registration extends React.Component {
 	render() {

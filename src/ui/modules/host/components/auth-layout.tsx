@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Layout, Icon } from "antd";
+import { Layout } from "antd";
 import { ErrorBoundary, Footer, Logo } from "@montr-core/components";
 
 export class AuthLayout extends React.Component {
