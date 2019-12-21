@@ -1,10 +1,11 @@
 import * as React from "react";
-import { TreeSelect, Spin, Icon } from "antd";
+import { TreeSelect, Spin } from "antd";
 import { Guid, IClassifierGroupField } from "@montr-core/models";
 import { ClassifierGroupService, ClassifierTreeService, ClassifierTypeService } from "../services";
 import { IClassifierGroup, IClassifierTree, IClassifierType } from "../models";
 import { CompanyContextProps, withCompanyContext } from "@montr-kompany/components";
 import { TreeNode } from "antd/lib/tree-select";
+import { Icon } from "@montr-core/components";
 
 interface IProps extends CompanyContextProps {
 	// mode: "Tree" | "Group";
@@ -169,7 +170,7 @@ class _ClassifierGroupSelect extends React.Component<IProps, IState> {
 				const result: TreeNode = {
 					selectable: false,
 					value: tree.uid,
-					title: <span><Icon type="folder" /> {tree.name}</span>,
+					title: <span>{Icon.Folder} {tree.name}</span>,
 					dataRef: tree,
 					dataType: "Tree"
 				};
@@ -186,7 +187,7 @@ class _ClassifierGroupSelect extends React.Component<IProps, IState> {
 
 				const result: TreeNode = {
 					value: group.uid,
-					title: <span><Icon type="file" /> {group.name} ({group.code})</span>,
+					title: <span>{Icon.File} {group.name} ({group.code})</span>,
 					dataRef: group,
 					dataType: "Group"
 				};

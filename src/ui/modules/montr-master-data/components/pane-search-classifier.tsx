@@ -1,7 +1,7 @@
 import * as React from "react";
-import { Page, PageHeader, Toolbar, DataTable, DataTableUpdateToken } from "@montr-core/components";
+import { Page, PageHeader, Toolbar, DataTable, DataTableUpdateToken, Icon } from "@montr-core/components";
 import { Link } from "react-router-dom";
-import { Icon, Button, Tree, Select, Radio, Layout, Modal, Spin } from "antd";
+import { Button, Tree, Select, Radio, Layout, Modal, Spin } from "antd";
 import { Constants } from "@montr-core/.";
 import { Guid, IDataResult } from "@montr-core/models";
 import { NotificationService } from "@montr-core/services";
@@ -56,7 +56,7 @@ class _PaneSearchClassifier extends React.Component<IProps, IState> {
 	componentDidMount = async () => {
 		await this.loadClassifierTypes();
 		// await this.loadClassifierType();
-	}
+	};
 
 	componentDidUpdate = async (prevProps: IProps) => {
 		if (this.props.currentCompany !== prevProps.currentCompany) {
@@ -74,14 +74,14 @@ class _PaneSearchClassifier extends React.Component<IProps, IState> {
 			await this.loadClassifierType();
 			await this.refreshTable(true);
 		}
-	}
+	};
 
 	componentWillUnmount = async () => {
 		await this._classifierTypeService.abort();
 		await this._classifierTreeService.abort();
 		await this._classifierGroupService.abort();
 		await this._classifierService.abort();
-	}
+	};
 
 	loadClassifierTypes = async () => {
 		const types = (await this._classifierTypeService.list()).rows;
@@ -89,7 +89,7 @@ class _PaneSearchClassifier extends React.Component<IProps, IState> {
 		this.setState({ types });
 
 		await this.loadClassifierType();
-	}
+	};
 
 	loadClassifierType = async () => {
 		const { typeCode } = this.props;
@@ -99,7 +99,7 @@ class _PaneSearchClassifier extends React.Component<IProps, IState> {
 		this.setState({ type });
 
 		await this.loadClassifierTrees();
-	}
+	};
 
 	loadClassifierTrees = async () => {
 		const { type } = this.state;
@@ -123,7 +123,7 @@ class _PaneSearchClassifier extends React.Component<IProps, IState> {
 
 			await this.loadClassifierGroups();
 		}
-	}
+	};
 
 	loadClassifierGroups = async (focusGroupUid?: Guid) => {
 		// to re-render page w/o groups tree, otherwise tree not refreshed
@@ -144,7 +144,7 @@ class _PaneSearchClassifier extends React.Component<IProps, IState> {
 
 			this.setState({ groups });
 		}
-	}
+	};
 
 	fetchClassifierGroups = async (typeCode: string, treeUid?: Guid, parentUid?: Guid, focusUid?: Guid, expandSingleChild?: boolean): Promise<IClassifierGroup[]> => {
 		const result = await this._classifierGroupService.list({
@@ -156,7 +156,7 @@ class _PaneSearchClassifier extends React.Component<IProps, IState> {
 		});
 
 		return result.rows;
-	}
+	};
 
 	// todo: move button to separate class?
 	delete = async () => {
@@ -166,17 +166,17 @@ class _PaneSearchClassifier extends React.Component<IProps, IState> {
 		this._notificationService.success("Выбранные записи удалены. " + rowsAffected);
 
 		await this.refreshTable();
-	}
+	};
 
 	// todo: move button to separate class?
 	export = async () => {
 		// todo: show export dialog: all pages, current page, export format
 		await this._classifierService.export({ typeCode: this.props.typeCode });
-	}
+	};
 
 	onTableSelectionChange = async (selectedRowKeys: string[] | number[]) => {
 		this.setState({ selectedRowKeys });
-	}
+	};
 
 	onTreeSelect = async (value: string) => {
 		const { trees } = this.state;
@@ -191,7 +191,7 @@ class _PaneSearchClassifier extends React.Component<IProps, IState> {
 				await this.refreshTable();
 			});
 		}
-	}
+	};
 
 	onTreeLoadData = async (node: AntTreeNode) => new Promise<void>(async (resolve) => {
 		const group: IClassifierGroup = node.props.dataRef;
@@ -201,7 +201,7 @@ class _PaneSearchClassifier extends React.Component<IProps, IState> {
 
 			const treeUid = selectedTree ? selectedTree.uid : null;
 
-			const children = await this.fetchClassifierGroups(type.code, treeUid, group.uid, null, true)
+			const children = await this.fetchClassifierGroups(type.code, treeUid, group.uid, null, true);
 
 			// todo: refactor - only to populate new expanded keys parameter
 			this.buildGroupsTree(children, expandedKeys);
@@ -215,7 +215,7 @@ class _PaneSearchClassifier extends React.Component<IProps, IState> {
 		}
 
 		resolve();
-	})
+	});
 
 	onTreeNodeSelect = async (selectedKeys: string[], e: AntTreeNodeSelectedEvent) => {
 		this.setState({
@@ -223,11 +223,11 @@ class _PaneSearchClassifier extends React.Component<IProps, IState> {
 		});
 
 		await this.refreshTable();
-	}
+	};
 
 	onTreeExpand = (expandedKeys: string[], e: AntTreeNodeExpandedEvent) => {
 		this.setState({ expandedKeys });
-	}
+	};
 
 	onDepthChange = async (e: RadioChangeEvent) => {
 		// todo: store depth in local storage
@@ -235,7 +235,7 @@ class _PaneSearchClassifier extends React.Component<IProps, IState> {
 		this.setState({ depth: e.target.value as string });
 
 		await this.refreshTable();
-	}
+	};
 
 	buildGroupsTree = (groups: IClassifierGroup[], expanded?: string[]) => {
 		return groups && groups.map(x => {
@@ -254,13 +254,13 @@ class _PaneSearchClassifier extends React.Component<IProps, IState> {
 				</Tree.TreeNode>
 			);
 		});
-	}
+	};
 
 	showAddGroupModal = () => {
 		const { selectedGroup } = this.state;
 
 		this.setState({ groupEditData: { parentUid: selectedGroup ? selectedGroup.uid : null } });
-	}
+	};
 
 	showEditGroupModal = () => {
 		const { selectedGroup } = this.state;
@@ -268,7 +268,7 @@ class _PaneSearchClassifier extends React.Component<IProps, IState> {
 		if (selectedGroup) {
 			this.setState({ groupEditData: { uid: selectedGroup.uid } });
 		}
-	}
+	};
 
 	showDeleteGroupConfirm = () => {
 		Modal.confirm({
@@ -276,7 +276,7 @@ class _PaneSearchClassifier extends React.Component<IProps, IState> {
 			content: "Дочерние группы и элементы будут перенесены к родительской группе.",
 			onOk: this.deleteSelectedGroup
 		});
-	}
+	};
 
 	deleteSelectedGroup = async () => {
 		const { type, selectedGroup } = this.state;
@@ -287,18 +287,18 @@ class _PaneSearchClassifier extends React.Component<IProps, IState> {
 
 		// todo: select deleted group parent?
 		this.refreshTree(selectedGroup.parentUid);
-	}
+	};
 
 	refreshTree = async (focusGroupUid?: Guid) => {
 		await this.loadClassifierGroups(focusGroupUid);
 		await this.refreshTable();
-	}
+	};
 
 	refreshTable = async (resetSelectedRows?: boolean) => {
 		this.setState({
 			updateTableToken: { date: new Date(), resetSelectedRows }
 		});
-	}
+	};
 
 	onGroupModalSuccess = async (data: IClassifierGroup) => {
 		const { expandedKeys } = this.state;
@@ -312,11 +312,11 @@ class _PaneSearchClassifier extends React.Component<IProps, IState> {
 		this.setState({ groupEditData: null, selectedGroup: data, expandedKeys });
 
 		await this.refreshTree(data.uid);
-	}
+	};
 
 	onGroupModalCancel = () => {
 		this.setState({ groupEditData: null });
-	}
+	};
 
 	onTableLoadData = async (loadUrl: string, postParams: any): Promise<IDataResult<{}>> => {
 		const { currentCompany } = this.props,
@@ -337,7 +337,7 @@ class _PaneSearchClassifier extends React.Component<IProps, IState> {
 		}
 
 		return null;
-	}
+	};
 
 	select = () => {
 		const { onSelect } = this.props,
@@ -346,7 +346,7 @@ class _PaneSearchClassifier extends React.Component<IProps, IState> {
 		if (onSelect) {
 			onSelect(selectedRowKeys);
 		}
-	}
+	};
 
 	render() {
 		const { mode, currentCompany } = this.props,
@@ -363,14 +363,14 @@ class _PaneSearchClassifier extends React.Component<IProps, IState> {
 		if (type.hierarchyType == "Groups") {
 			groupControls = <>
 				<Select defaultValue="default" size="small" onSelect={this.onTreeSelect} style={{ minWidth: 200 }}>
-					{trees && trees.map(x => <Select.Option key={x.code}>{x.name || x.code}</Select.Option>)}
+					{trees && trees.map(x => <Select.Option key={x.code} value={x.code}>{x.name || x.code}</Select.Option>)}
 				</Select>
 				<Button.Group size="small">
 					<Button icon="plus" onClick={this.showAddGroupModal} />
 					<Button icon="edit" onClick={this.showEditGroupModal} disabled={!selectedGroup} />
 					<Button icon="delete" onClick={this.showDeleteGroupConfirm} disabled={!selectedGroup} />
 				</Button.Group>
-			</>
+			</>;
 		}
 
 		let tree;
@@ -429,12 +429,12 @@ class _PaneSearchClassifier extends React.Component<IProps, IState> {
 				title={<>
 					<Toolbar float="right">
 						<Link to={RouteBuilder.addClassifier(type.code, selectedGroup ? selectedGroup.uid : null)}>
-							<Button type="primary"><Icon type="plus" /> Добавить</Button>
+							<Button type="primary">{Icon.Plus} Добавить</Button>
 						</Link>
-						<Button onClick={this.delete}><Icon type="delete" /> Удалить</Button>
-						<Button onClick={this.export}><Icon type="export" /> Экспорт</Button>
+						<Button onClick={this.delete}>{Icon.Delete} Удалить</Button>
+						<Button onClick={this.export}>{Icon.Export} Экспорт</Button>
 						<Link to={`/classifiers/edit/${type.uid}`}>
-							<Button><Icon type="setting" /> Настройка</Button>
+							<Button>{Icon.Setting} Настройка</Button>
 						</Link>
 					</Toolbar>
 
@@ -444,7 +444,7 @@ class _PaneSearchClassifier extends React.Component<IProps, IState> {
 					</>}
 
 					{mode == "Drawer" && <Toolbar>
-						<Button type="primary" onClick={this.select}><Icon type="select" /> Выбрать</Button>
+						<Button type="primary" onClick={this.select}>{Icon.Select} Выбрать</Button>
 					</Toolbar>}
 
 				</>}>
@@ -464,8 +464,8 @@ class _PaneSearchClassifier extends React.Component<IProps, IState> {
 							{/* <Input.Search size="small" allowClear style={{ width: 200 }} /> */}
 							{/* todo: show only when Items or Groups hierarchy type */}
 							<Radio.Group defaultValue="0" size="small" onChange={this.onDepthChange}>
-								<Radio.Button value="0"><Icon type="folder" /> Группа</Radio.Button>
-								<Radio.Button value="1"><Icon type="cluster" /> Иерархия</Radio.Button>
+								<Radio.Button value="0">{Icon.Folder} Группа</Radio.Button>
+								<Radio.Button value="1">{Icon.Cluster} Иерархия</Radio.Button>
 							</Radio.Group>
 						</Toolbar>
 

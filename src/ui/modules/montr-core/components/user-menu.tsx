@@ -2,7 +2,7 @@ import * as React from "react";
 import { Menu } from "antd";
 import { UserContextProps, withUserContext } from "./";
 import { MenuProps } from "antd/lib/menu";
-import { Icons } from "./icons";
+import { Icon } from "./";
 
 interface Props {
 	strongTitle?: string;
@@ -51,7 +51,7 @@ class _UserMenu extends React.Component<MenuProps & UserContextProps & Props> {
 
 		return (
 			<Menu.SubMenu {...props} title={
-				<span>{Icons.get("login")}<a onClick={login}>Войти</a></span>
+				<span>{Icon.get("login")}<a onClick={login}>Войти</a></span>
 			} />
 		);
 	};

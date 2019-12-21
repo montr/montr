@@ -1,11 +1,12 @@
 import * as React from "react";
-import { Spin, Icon, Select, Divider, Button } from "antd";
+import { Spin, Select, Divider, Button } from "antd";
 import { IClassifierField, Guid } from "@montr-core/models";
 import { ClassifierService } from "../services";
 import { IClassifierGroup, IClassifierTree, IClassifierType, IClassifier } from "../models";
 import { CompanyContextProps, withCompanyContext } from "@montr-kompany/components";
 import { RouteBuilder } from "../module";
 import { Link } from "react-router-dom";
+import { Icon } from "@montr-core/components";
 // import { debounce } from "lodash";
 
 interface IProps extends CompanyContextProps {
@@ -58,17 +59,17 @@ class _ClassifierSelect extends React.Component<IProps, IState> {
 
 	componentDidMount = async () => {
 		await this.fetchData();
-	}
+	};
 
 	componentDidUpdate = async (prevProps: IProps) => {
 		if (this.props.value !== prevProps.value) {
 			// await this.fetchData();
 		}
-	}
+	};
 
 	componentWillUnmount = async () => {
 		await this._classifierService.abort();
-	}
+	};
 
 	fetchData = async () => {
 		const { field } = this.props,
@@ -79,7 +80,7 @@ class _ClassifierSelect extends React.Component<IProps, IState> {
 		});
 
 		this.setState({ loading: false, items: data.rows });
-	}
+	};
 
 	handleChange = (value: any/* , label: any, extra: any */) => {
 		// Should provide an event to pass value to Form.
@@ -94,7 +95,7 @@ class _ClassifierSelect extends React.Component<IProps, IState> {
 		if (onChange) {
 			onChange(value);
 		}
-	}
+	};
 
 	onSearch = async (value: string) => {
 		const { field } = this.props;
@@ -106,14 +107,14 @@ class _ClassifierSelect extends React.Component<IProps, IState> {
 		});
 
 		this.setState({ items: data.rows, fetching: false });
-	}
+	};
 
 	render() {
 		const { value, field } = this.props,
 			{ loading, fetching, items } = this.state;
 
 		const options = items
-			&& items.map(x => <Select.Option key={x.uid.toString()}>{x.name}</Select.Option>);
+			&& items.map(x => <Select.Option key={x.uid.toString()} value={x.uid.toString()}>{x.name}</Select.Option>);
 
 		// https://github.com/ant-design/ant-design/issues/13448
 		// https://codesandbox.io/s/oo6q47mnr9
@@ -136,7 +137,7 @@ class _ClassifierSelect extends React.Component<IProps, IState> {
 					<Divider style={{ margin: "1px 0" }} />
 					<div onMouseDown={e => e.preventDefault()}>
 						<Link to={RouteBuilder.addClassifier(field.typeCode, null)}>
-							<Button type="link"><Icon type="plus" /> Добавить элемент</Button>
+							<Button type="link">{Icon.Plus} Добавить элемент</Button>
 						</Link>
 					</div >
 				</div>

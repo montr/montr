@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Layout, Icon } from "antd";
+import { Layout } from "antd";
 import { DataMenu, ErrorBoundary, Footer } from "@montr-core/components";
 import { UserWithCompanyMenu } from "@montr-kompany/components";
 

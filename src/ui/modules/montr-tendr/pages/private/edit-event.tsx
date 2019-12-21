@@ -1,9 +1,9 @@
 import * as React from "react";
 import { withTranslation, WithTranslation } from 'react-i18next';
-import { Tabs, Button, Icon, Modal, message, Tag } from "antd";
+import { Tabs, Button, Modal, message, Tag } from "antd";
 import { IApiResult, IDataView, IPaneProps } from "@montr-core/models";
 import { EventService, EventTemplateService } from "../../services";
-import { Page, IPaneComponent, Toolbar, PageHeader, DataBreadcrumb } from "@montr-core/components";
+import { Page, IPaneComponent, Toolbar, PageHeader, DataBreadcrumb, Icon } from "@montr-core/components";
 import { MetadataService } from "@montr-core/services";
 import { IEvent } from "../../models";
 import * as panes from "../../components";
@@ -215,7 +215,7 @@ class _EditEvent extends React.Component<IProps, IState> {
 
 							return (
 								<Tabs.TabPane key={pane.key}
-									tab={<span>{pane.icon && <Icon type={pane.icon} />} {pane.name}</span>}>
+									tab={<span>{pane.icon && Icon.get(pane.icon)} {pane.name}</span>}>
 									{component}
 								</Tabs.TabPane>
 							);

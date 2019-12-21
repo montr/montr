@@ -1,8 +1,8 @@
 import * as React from "react";
 import { Breadcrumb, Dropdown, Menu } from "antd";
-import { HomeOutlined, DownOutlined } from "@ant-design/icons";
 import { IMenu } from "@montr-core/models";
 import { Link } from "react-router-dom";
+import { Icon } from ".";
 
 interface IProps {
 	items: IMenu[];
@@ -34,7 +34,7 @@ export class DataBreadcrumb extends React.Component<IProps> {
 				<Breadcrumb.Item key={index}>
 					<Dropdown overlay={overlay} trigger={['click']}>
 						<a className="ant-dropdown-link">
-							{value.name} <DownOutlined />
+							{value.name} {Icon.Down}
 						</a>
 					</Dropdown>
 				</Breadcrumb.Item>
@@ -55,7 +55,7 @@ export class DataBreadcrumb extends React.Component<IProps> {
 	public render() {
 		return (
 			<Breadcrumb>
-				<Breadcrumb.Item><HomeOutlined /></Breadcrumb.Item>
+				<Breadcrumb.Item>{Icon.Home}</Breadcrumb.Item>
 				{this.props.items.map(this.getItem)}
 			</Breadcrumb>
 		);

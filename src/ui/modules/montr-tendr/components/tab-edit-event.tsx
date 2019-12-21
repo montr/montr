@@ -1,12 +1,11 @@
 import * as React from "react";
 import { Form, Spin } from "antd";
-import { FormComponentProps } from "antd/lib/form";
 import { IApiResult, IPaneProps, IDataField } from "@montr-core/models";
 import { EventService, EventMetadataService } from "../services";
 import { IPaneComponent, DataForm } from "@montr-core/components";
 import { IEvent } from "../models";
 
-interface IProps extends FormComponentProps {
+interface IProps {
 	data: IEvent;
 }
 

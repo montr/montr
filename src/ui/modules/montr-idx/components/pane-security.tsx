@@ -1,7 +1,7 @@
 import React from "react";
 import { Translation } from "react-i18next";
-import { Button, List, Icon, Tooltip } from "antd";
-import { PageHeader } from "@montr-core/components";
+import { Button, List, Tooltip } from "antd";
+import { PageHeader, Icon } from "@montr-core/components";
 import { OperationService } from "@montr-core/services";
 import { IProfileModel } from "../models";
 import { ModalChangePassword, ModalSetPassword, ModalChangeEmail } from "./";
@@ -74,8 +74,8 @@ export default class PaneSecurity extends React.Component<IProps, IState> {
 	render = () => {
 		const { data, displayModal, sendEmailConfirmationDisabled, sendPhoneConfirmationDisabled } = this.state;
 
-		const confirmed = <Tooltip title="Confirmed"><Icon type="check-circle" theme="twoTone" twoToneColor="#52c41a" /></Tooltip>,
-			notConfirmed = <Tooltip title="Not confirmed"><Icon type="question-circle" /></Tooltip>;
+		const confirmed = <Tooltip title="Confirmed">{Icon.CheckCircleTwoTone}</Tooltip>,
+			notConfirmed = <Tooltip title="Not confirmed">{Icon.QuestionCircle}</Tooltip>;
 
 		return (
 			<Translation ns="idx">

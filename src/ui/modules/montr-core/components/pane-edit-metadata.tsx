@@ -1,11 +1,12 @@
 import * as React from "react";
 import { useTranslation } from "react-i18next";
-import { Button, Spin, Icon, Divider } from "antd";
+import { Button, Spin, Divider } from "antd";
 import { Toolbar } from "./toolbar";
 import { IDataField, IDataResult } from "../models";
 import { MetadataService } from "../services";
 import { DataTable, DataTableUpdateToken } from ".";
 import { Constants } from "..";
+import { Icon } from "./icon";
 
 interface IProps {
 	entityTypeCode: string;
@@ -63,7 +64,8 @@ export function PaneEditMetadata(props: IProps) {
 	return (
 		<Spin spinning={loading}>
 			<Toolbar>
-				<Button><Icon type="plus" /> {t("button.add")}</Button>
+				{/* todo: move to separate component */}
+				<Button>{Icon.Plus} {t("button.add")}</Button>
 			</Toolbar>
 
 			<Divider />

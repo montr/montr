@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Input, Select, Checkbox } from "antd";
 import { IDataField, IIndexer, ISelectField, ITextAreaField } from "../models";
-import { Icons } from "./icons";
+import { Icon } from "./";
 
 export abstract class DataFieldFactory {
 	private static Map: { [key: string]: DataFieldFactory; } = {};
@@ -29,7 +29,7 @@ class StringFieldFactory implements DataFieldFactory {
 			allowClear
 			disabled={field.readonly}
 			placeholder={field.placeholder}
-			prefix={field.icon && Icons.get(field.icon)}
+			prefix={field.icon && Icon.get(field.icon)}
 		/>;
 		{/* <Icon type={field.icon} style={{ color: "rgba(0,0,0,.25)" }} /> */ }
 	}
@@ -69,7 +69,7 @@ class PasswordFieldFactory implements DataFieldFactory {
 		return <Input.Password
 			allowClear
 			placeholder={field.placeholder}
-			prefix={field.icon && Icons.get(field.icon)}
+			prefix={field.icon && Icon.get(field.icon)}
 		/>;
 	}
 }

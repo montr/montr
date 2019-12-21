@@ -1,8 +1,8 @@
 import * as React from "react";
 import { Translation } from "react-i18next";
 import { Menu, Dropdown } from "antd";
-import { GlobalOutlined, DownOutlined } from "@ant-design/icons";
 import { IIndexer } from "../models";
+import { Icon } from ".";
 
 export const LanguageSelector = () => {
 
@@ -27,7 +27,9 @@ export const LanguageSelector = () => {
 								);
 							})}
 						</Menu>}>
-					<a className="ant-dropdown-link" href="#"><GlobalOutlined /> {langs[i18n.language].title} <DownOutlined /></a>
+					<a className="ant-dropdown-link" href="#">
+						{Icon.Global} {langs[i18n.language].title} {Icon.Down}
+					</a>
 				</Dropdown>
 			)}
 		</Translation>

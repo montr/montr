@@ -1,11 +1,10 @@
 import * as React from "react";
 import { Form, Button, Spin } from "antd";
-import { CheckOutlined } from '@ant-design/icons';
 import { FormInstance } from "antd/lib/form";
 import { IDataField, IIndexer, IApiResult } from "../models";
 import { NotificationService } from "../services/notification-service";
 import { OperationService } from "../services";
-import { FormDefaults, DataFieldFactory } from ".";
+import { FormDefaults, DataFieldFactory, Icon } from ".";
 import { withTranslation, WithTranslation } from "react-i18next";
 
 declare const FormLayouts: ["horizontal", "inline", "vertical"];
@@ -175,7 +174,7 @@ export class WrappedDataForm extends React.Component<IProps, IState> {
 
 					{fields && showControls !== false &&
 						<Form.Item {...itemLayout}>
-							<Button type="primary" htmlType="submit" icon={<CheckOutlined />}>{submitButton || t("button.save")}</Button>
+							<Button type="primary" htmlType="submit" icon={Icon.Check}>{submitButton || t("button.save")}</Button>
 						</Form.Item>
 					}
 				</Form>

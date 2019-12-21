@@ -1,7 +1,7 @@
 import * as React from "react";
-import { Button, Icon, Drawer, Alert, Modal } from "antd";
+import { Button, Drawer, Alert, Modal } from "antd";
 import { IPaneProps, Guid, IDataResult, IMenu } from "@montr-core/models";
-import { IPaneComponent, DataTable, Toolbar, DataTableUpdateToken } from "@montr-core/components";
+import { IPaneComponent, DataTable, Toolbar, DataTableUpdateToken, Icon } from "@montr-core/components";
 import { PaneSearchClassifier } from "@montr-master-data/components";
 import { CompanyContextProps, withCompanyContext } from "@montr-kompany/components";
 import { ModalEditInvitation } from "../components";
@@ -35,7 +35,7 @@ class _TabEditInvitations extends React.Component<IProps, IState> {
 
 	componentWillUnmount = async () => {
 		await this._invitationService.abort();
-	}
+	};
 
 	onLoadTableData = async (loadUrl: string, postParams: any): Promise<IDataResult<{}>> => {
 		const { currentCompany, data } = this.props;
@@ -52,11 +52,11 @@ class _TabEditInvitations extends React.Component<IProps, IState> {
 		}
 
 		return null;
-	}
+	};
 
 	onSelectionChange = async (selectedRowKeys: string[] | number[]) => {
 		this.setState({ selectedRowKeys });
-	}
+	};
 
 	refreshTable = async (resetSelectedRows?: boolean) => {
 
@@ -66,7 +66,7 @@ class _TabEditInvitations extends React.Component<IProps, IState> {
 			updateTableToken: { date: new Date(), resetSelectedRows },
 			selectedRowKeys: resetSelectedRows ? [] : selectedRowKeys
 		});
-	}
+	};
 
 	showAddDrawer = () => {
 		this.setState({ showDrawer: true });
@@ -91,25 +91,25 @@ class _TabEditInvitations extends React.Component<IProps, IState> {
 
 			await this.refreshTable();
 		}
-	}
+	};
 
 	showAddModal = () => {
 		this.setState({ editData: {} });
-	}
+	};
 
 	showEditModal = (data: IInvitation) => {
 		this.setState({ editData: data });
-	}
+	};
 
 	onModalSuccess = async (data: IInvitation) => {
 		this.setState({ editData: null });
 
 		await this.refreshTable();
-	}
+	};
 
 	onModalCancel = () => {
 		this.setState({ editData: null });
-	}
+	};
 
 	delete = () => {
 		Modal.confirm({
@@ -124,7 +124,7 @@ class _TabEditInvitations extends React.Component<IProps, IState> {
 				this.refreshTable(true);
 			}
 		});
-	}
+	};
 
 	render() {
 		const { data } = this.props,
@@ -136,9 +136,9 @@ class _TabEditInvitations extends React.Component<IProps, IState> {
 
 		return <>
 			<Toolbar>
-				<Button onClick={this.showAddDrawer} type="primary"><Icon type="plus" /> Пригласить</Button>
-				<Button onClick={this.showAddModal}><Icon type="plus" /> Добавить</Button>
-				<Button onClick={this.delete} disabled={selectedRowKeys.length == 0}><Icon type="delete" /> Удалить</Button>
+				<Button onClick={this.showAddDrawer} type="primary">{Icon.Plus} Пригласить</Button>
+				<Button onClick={this.showAddModal}>{Icon.Plus} Добавить</Button>
+				<Button onClick={this.delete} disabled={selectedRowKeys.length == 0}>{Icon.Delete} Удалить</Button>
 			</Toolbar>
 
 			<div style={{ clear: "both" }} />

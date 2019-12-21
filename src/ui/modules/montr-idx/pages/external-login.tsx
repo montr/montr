@@ -1,6 +1,6 @@
 import * as React from "react";
-import { Page, DataForm } from "@montr-core/components";
-import { Spin, Icon } from "antd";
+import { Page, DataForm, Icon } from "@montr-core/components";
+import { Spin } from "antd";
 import { Translation, Trans } from "react-i18next";
 import { AccountService } from "../services/account-service";
 import { IExternalRegisterModel } from "../models";
@@ -94,7 +94,7 @@ export default class ExternalLogin extends React.Component<IProps, IState> {
 								submitButton={t("button.register")}
 							/>
 
-							<p><Link to={Patterns.login}><Icon type="arrow-left" /> {t("page.register.link.login")}</Link></p>
+							<p><Link to={Patterns.login}>{Icon.ArrowLeft} {t("page.register.link.login")}</Link></p>
 
 						</>}
 
