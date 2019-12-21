@@ -6,6 +6,7 @@ import { IDataField, IApiResult, IClassifierField, Guid } from "@montr-core/mode
 import { WrappedDataForm, DataForm } from "@montr-core/components";
 import { CompanyContextProps, withCompanyContext } from "@montr-kompany/components";
 import { NotificationService, MetadataService } from "@montr-core/services";
+import { FormInstance } from "antd/lib/form";
 
 interface IProps extends CompanyContextProps {
 	typeCode: string;
@@ -25,7 +26,7 @@ class _ModalEditClassifierLink extends React.Component<IProps, IState> {
 	private _metadataService = new MetadataService();
 	private _classifierLinkService = new ClassifierLinkService();
 
-	_formRef: WrappedDataForm;
+	private _formRef = React.createRef<FormInstance>();
 
 	constructor(props: IProps) {
 		super(props);
@@ -38,12 +39,12 @@ class _ModalEditClassifierLink extends React.Component<IProps, IState> {
 
 	componentDidMount = async () => {
 		await this.fetchData();
-	}
+	};
 
 	componentWillUnmount = async () => {
 		await this._metadataService.abort();
 		await this._classifierLinkService.abort();
-	}
+	};
 
 	fetchData = async () => {
 		const { currentCompany, typeCode } = this.props;
@@ -68,19 +69,15 @@ class _ModalEditClassifierLink extends React.Component<IProps, IState> {
 				this.onCancel();
 			}
 		}
-	}
-
-	saveFormRef = (formRef: WrappedDataForm) => {
-		this._formRef = formRef;
-	}
+	};
 
 	onOk = async (e: React.MouseEvent<any>) => {
-		await this._formRef.handleSubmit(e);
-	}
+		await this._formRef.current.submit();
+	};
 
 	onCancel = () => {
 		if (this.props.onCancel) this.props.onCancel();
-	}
+	};
 
 	save = async (values: IClassifierLink): Promise<IApiResult> => {
 		const { typeCode, itemUid, onSuccess } = this.props;
@@ -92,7 +89,7 @@ class _ModalEditClassifierLink extends React.Component<IProps, IState> {
 		}
 
 		return result;
-	}
+	};
 
 	render = () => {
 		const { loading, fields, data } = this.state;
@@ -103,7 +100,7 @@ class _ModalEditClassifierLink extends React.Component<IProps, IState> {
 				okText="Сохранить" width="640px">
 				<Spin spinning={loading}>
 					<DataForm
-						wrappedComponentRef={this.saveFormRef}
+						formRef={this._formRef}
 						fields={fields}
 						data={data}
 						showControls={false}
@@ -112,7 +109,7 @@ class _ModalEditClassifierLink extends React.Component<IProps, IState> {
 				</Spin>
 			</Modal>
 		);
-	}
+	};
 }
 
 export const ModalEditClassifierLink = withCompanyContext(_ModalEditClassifierLink);

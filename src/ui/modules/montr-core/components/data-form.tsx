@@ -21,6 +21,7 @@ interface IProps extends WithTranslation {
 	hideLabels?: boolean;
 	onChange?: (values: IIndexer) => void;
 	onSubmit: (values: IIndexer) => Promise<IApiResult>;
+	formRef?: React.RefObject<FormInstance>;
 }
 
 interface IState {
@@ -47,15 +48,15 @@ export class WrappedDataForm extends React.Component<IProps, IState> {
 		this._isMounted = false;
 	};
 
-	getFieldValue = async (fieldName: string) => {
-		return this._formRef.current.getFieldValue(fieldName);
+	getFormRef = (): React.RefObject<FormInstance> => {
+		return (this.props.formRef ?? this._formRef);
 	};
 
 	handleChange = async (e: React.SyntheticEvent) => {
 		const { onChange } = this.props;
 
 		if (onChange) {
-			var values = this._formRef.current.getFieldsValue();
+			var values = this.getFormRef().current.getFieldsValue();
 
 			onChange(values);
 		}
@@ -63,11 +64,11 @@ export class WrappedDataForm extends React.Component<IProps, IState> {
 
 	handleSubmit = async (values: IIndexer) => {
 
-		const { t, onSubmit: onSave, successMessage, errorMessage } = this.props;
+		const { t, onSubmit, successMessage, errorMessage } = this.props;
 
 		if (this._isMounted) this.setState({ loading: true });
 
-		await this._operation.execute(() => onSave(values), {
+		await this._operation.execute(() => onSubmit(values), {
 			successMessage: successMessage || t("dataForm.submit.success"),
 			errorMessage: errorMessage || t("dataForm.submit.error"),
 			showFieldErrors: async (result) => {
@@ -100,7 +101,7 @@ export class WrappedDataForm extends React.Component<IProps, IState> {
 				}
 			});
 
-			this._formRef.current.setFields(fieldErrors);
+			this.getFormRef().current.setFields(fieldErrors);
 
 			if (otherErrors.length > 0) {
 				// todo: show as alert before form
@@ -112,9 +113,9 @@ export class WrappedDataForm extends React.Component<IProps, IState> {
 	createItem = (field: IDataField): React.ReactNode => {
 		const { t, layout, data, hideLabels } = this.props;
 
-		const initialValue = data?.[field.key];
+		/* const initialValue = data?.[field.key];
 
-		/* const fieldOptions = field.type == "boolean"
+		const fieldOptions = field.type == "boolean"
 			? {
 				initialValue: initialValue,
 				valuePropName: "checked",
@@ -164,7 +165,7 @@ export class WrappedDataForm extends React.Component<IProps, IState> {
 
 		return (
 			<Spin spinning={loading}>
-				<Form ref={this._formRef}
+				<Form ref={this.getFormRef()}
 					initialValues={data}
 					layout={layout || "horizontal"}
 					onChange={this.handleChange}

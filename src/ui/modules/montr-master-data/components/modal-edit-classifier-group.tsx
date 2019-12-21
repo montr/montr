@@ -6,6 +6,7 @@ import { ClassifierGroupService } from "../services";
 import { IClassifierGroup } from "@montr-master-data/models";
 import { NotificationService, MetadataService } from "@montr-core/services";
 import { DataForm, WrappedDataForm } from "@montr-core/components";
+import { FormInstance } from "antd/lib/form";
 
 interface IProps extends CompanyContextProps {
 	typeCode: string;
@@ -28,7 +29,7 @@ class _ModalEditClassifierGroup extends React.Component<IProps, IState> {
 	private _metadataService = new MetadataService();
 	private _classifierGroupService = new ClassifierGroupService();
 
-	private _formRef: WrappedDataForm;
+	private _formRef = React.createRef<FormInstance>();
 
 	constructor(props: IProps) {
 		super(props);
@@ -41,12 +42,12 @@ class _ModalEditClassifierGroup extends React.Component<IProps, IState> {
 
 	componentDidMount = async () => {
 		await this.fetchData();
-	}
+	};
 
 	componentWillUnmount = async () => {
 		await this._metadataService.abort();
 		await this._classifierGroupService.abort();
-	}
+	};
 
 	fetchData = async () => {
 		const { typeCode, treeUid, uid, parentUid, hideFields } = this.props;
@@ -82,19 +83,15 @@ class _ModalEditClassifierGroup extends React.Component<IProps, IState> {
 			this._notificationService.error("Ошибка при загрузке данных", error.message);
 			this.onCancel();
 		}
-	}
-
-	saveFormRef = (formRef: WrappedDataForm) => {
-		this._formRef = formRef;
-	}
+	};
 
 	onOk = async (e: React.MouseEvent<any>) => {
-		await this._formRef.handleSubmit(e);
-	}
+		await this._formRef.current.submit();
+	};
 
 	onCancel = () => {
 		if (this.props.onCancel) this.props.onCancel();
-	}
+	};
 
 	save = async (values: IClassifierGroup): Promise<IApiResult> => {
 		const { typeCode, treeUid, uid, onSuccess } = this.props;
@@ -120,7 +117,7 @@ class _ModalEditClassifierGroup extends React.Component<IProps, IState> {
 		}
 
 		return result;
-	}
+	};
 
 	render = () => {
 		const { loading, fields, data } = this.state;
@@ -132,7 +129,7 @@ class _ModalEditClassifierGroup extends React.Component<IProps, IState> {
 				<Spin spinning={loading}>
 					<DataForm
 						layout="vertical"
-						wrappedComponentRef={this.saveFormRef}
+						formRef={this._formRef}
 						fields={fields}
 						data={data}
 						showControls={false}
@@ -141,7 +138,7 @@ class _ModalEditClassifierGroup extends React.Component<IProps, IState> {
 				</Spin>
 			</Modal>
 		);
-	}
+	};
 }
 
 export const ModalEditClassifierGroup = withCompanyContext(_ModalEditClassifierGroup);

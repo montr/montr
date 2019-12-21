@@ -2,11 +2,12 @@ import React from "react";
 import { Modal, Spin } from "antd";
 import { Translation } from "react-i18next";
 import { IDataField, IApiResult } from "@montr-core/models";
-import { DataForm, WrappedDataForm } from "@montr-core/components";
+import { DataForm } from "@montr-core/components";
 import { MetadataService } from "@montr-core/services";
 import { ProfileService } from "../services";
 import { IProfileModel } from "../models";
 import { Views } from "../module";
+import { FormInstance } from "antd/lib/form";
 
 interface IProps {
 	onSuccess?: () => void;
@@ -24,7 +25,7 @@ export class ModalChangePhone extends React.Component<IProps, IState> {
 	private _metadataService = new MetadataService();
 	private _profileService = new ProfileService();
 
-	_formRef: WrappedDataForm;
+	private _formRef = React.createRef<FormInstance>();
 
 	constructor(props: IProps) {
 		super(props);
@@ -52,12 +53,8 @@ export class ModalChangePhone extends React.Component<IProps, IState> {
 		this.setState({ loading: false, data, fields: dataView.fields });
 	};
 
-	saveFormRef = (formRef: WrappedDataForm) => {
-		this._formRef = formRef;
-	};
-
 	onOk = async (e: React.MouseEvent<any>) => {
-		await this._formRef.handleSubmit(e);
+		await this._formRef.current.submit();
 	};
 
 	onCancel = () => {
@@ -87,7 +84,7 @@ export class ModalChangePhone extends React.Component<IProps, IState> {
 
 					<Spin spinning={loading}>
 						<DataForm
-							wrappedComponentRef={this.saveFormRef}
+							formRef={this._formRef}
 							fields={fields}
 							data={data}
 							showControls={false}

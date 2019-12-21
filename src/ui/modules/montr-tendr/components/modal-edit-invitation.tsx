@@ -3,9 +3,10 @@ import { Guid, IDataField, IApiResult } from "@montr-core/models";
 import { CompanyContextProps, withCompanyContext } from "@montr-kompany/components";
 import { IInvitation } from "../models";
 import { Modal, Spin } from "antd";
-import { DataForm, WrappedDataForm } from "@montr-core/components";
+import { DataForm } from "@montr-core/components";
 import { NotificationService, MetadataService } from "@montr-core/services";
 import { InvitationService } from "../services";
+import { FormInstance } from "antd/lib/form";
 
 interface IProps extends CompanyContextProps {
 	eventUid: Guid;
@@ -26,7 +27,7 @@ class _ModalEditInvitation extends React.Component<IProps, IState> {
 	private _metadataService = new MetadataService();
 	private _invitationService = new InvitationService();
 
-	_formRef: WrappedDataForm;
+	private _formRef = React.createRef<FormInstance>();
 
 	constructor(props: IProps) {
 		super(props);
@@ -77,12 +78,8 @@ class _ModalEditInvitation extends React.Component<IProps, IState> {
 		}
 	};
 
-	saveFormRef = (formRef: WrappedDataForm) => {
-		this._formRef = formRef;
-	};
-
 	onOk = async (e: React.MouseEvent<any>) => {
-		await this._formRef.handleSubmit(e);
+		await this._formRef.current.submit();
 	};
 
 	onCancel = () => {
@@ -130,7 +127,7 @@ class _ModalEditInvitation extends React.Component<IProps, IState> {
 				width="640px">
 				<Spin spinning={loading}>
 					<DataForm
-						wrappedComponentRef={this.saveFormRef}
+						formRef={this._formRef}
 						fields={fields}
 						data={data}
 						showControls={false}

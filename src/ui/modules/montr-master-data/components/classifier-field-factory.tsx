@@ -4,13 +4,13 @@ import { IIndexer, IDataField, IClassifierField, IClassifierGroupField } from "@
 import { ClassifierGroupSelect, ClassifierSelect } from ".";
 
 export class ClassifierGroupFieldFactory implements DataFieldFactory {
-	createNode(field: IDataField, data: IIndexer): React.ReactNode {
+	createNode(field: IDataField, data: IIndexer): React.ReactElement {
 		return <ClassifierGroupSelect field={field as IClassifierGroupField} />;
 	}
 }
 
 export class ClassifierFieldFactory implements DataFieldFactory {
-	createNode(field: IDataField, data: IIndexer): React.ReactNode {
+	createNode(field: IDataField, data: IIndexer): React.ReactElement {
 		return <ClassifierSelect field={field as IClassifierField} />;
 	}
 }
