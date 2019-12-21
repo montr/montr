@@ -1,5 +1,6 @@
 const path = require("path");
 const tsImportPluginFactory = require("ts-import-plugin");
+const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
 const copyPlugin = require("copy-webpack-plugin");
 
 module.exports = {
@@ -27,7 +28,8 @@ module.exports = {
 		rules: [
 			{
 				test: /\.(jsx|tsx|js|ts)$/,
-				// loader: "ts-loader",
+				loader: "babel-loader",
+				/* loader: "ts-loader",
 				loader: "awesome-typescript-loader",
 				options: {
 					transpileOnly: false,
@@ -38,10 +40,7 @@ module.exports = {
 							style: true
 						})]
 					}),
-					/* compilerOptions: {
-						// module: "es2015"
-					} */
-				},
+				}, */
 				exclude: /node_modules/
 			},
 
@@ -76,6 +75,7 @@ module.exports = {
 		],
 	},
 	plugins: [
+		new ForkTsCheckerWebpackPlugin(),
 		new copyPlugin([
 			{ from: "assets", to: "../../Host/wwwroot/assets" }
 		]),
