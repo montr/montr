@@ -136,9 +136,9 @@ class _TabEditInvitations extends React.Component<IProps, IState> {
 
 		return <>
 			<Toolbar>
-				<Button onClick={this.showAddDrawer} type="primary">{Icon.Plus} Пригласить</Button>
-				<Button onClick={this.showAddModal}>{Icon.Plus} Добавить</Button>
-				<Button onClick={this.delete} disabled={selectedRowKeys.length == 0}>{Icon.Delete} Удалить</Button>
+				<Button onClick={this.showAddDrawer} type="primary" icon={Icon.Plus}>Пригласить</Button>
+				<Button onClick={this.showAddModal} icon={Icon.Plus}>Добавить</Button>
+				<Button onClick={this.delete} icon={Icon.Delete} disabled={selectedRowKeys.length == 0}>Удалить</Button>
 			</Toolbar>
 
 			<div style={{ clear: "both" }} />

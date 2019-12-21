@@ -137,7 +137,7 @@ class _ClassifierSelect extends React.Component<IProps, IState> {
 					<Divider style={{ margin: "1px 0" }} />
 					<div onMouseDown={e => e.preventDefault()}>
 						<Link to={RouteBuilder.addClassifier(field.typeCode, null)}>
-							<Button type="link">{Icon.Plus} Добавить элемент</Button>
+							<Button type="link" icon={Icon.Plus}>Добавить элемент</Button>
 						</Link>
 					</div >
 				</div>

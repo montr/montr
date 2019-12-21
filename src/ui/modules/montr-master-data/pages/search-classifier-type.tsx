@@ -81,9 +81,9 @@ class _SearchClassifierType extends React.Component<IProps, IState> {
 				title={<>
 					<Toolbar float="right">
 						<Link to={`/classifiers/add`}>
-							<Button type="primary">{Icon.Plus} Добавить</Button>
+							<Button type="primary" icon={Icon.Plus}>Добавить</Button>
 						</Link>
-						<Button onClick={this.delete}>{Icon.Delete} Удалить</Button>
+						<Button icon={Icon.Delete} onClick={this.delete}> Удалить</Button>
 					</Toolbar>
 
 					<ClassifierBreadcrumb />

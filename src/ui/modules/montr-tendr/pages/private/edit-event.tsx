@@ -175,7 +175,7 @@ class _EditEvent extends React.Component<IProps, IState> {
 
 		toolbar = (<>
 			<Button type="primary" onClick={() => this.handlePublish()}>{t("button.publish")}</Button>
-			<Button icon="check" onClick={() => this.handleSave()}>{t("button.save")}</Button>
+			<Button icon={Icon.Check} onClick={() => this.handleSave()}>{t("button.save")}</Button>
 			<Button onClick={() => this.handleCancel()}>{t("button.cancel")}</Button>
 		</>);
 

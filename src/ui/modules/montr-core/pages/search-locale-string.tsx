@@ -1,5 +1,5 @@
 import React from "react";
-import { DataTableUpdateToken, Page, DataTable, Toolbar, PageHeader, DataBreadcrumb } from "@montr-core/components";
+import { DataTableUpdateToken, Page, DataTable, Toolbar, PageHeader, DataBreadcrumb, Icon } from "@montr-core/components";
 import { Constants } from "..";
 import { IMenu, ILocaleString, IDataResult } from "@montr-core/models";
 import { LocaleStringService, NotificationService } from "@montr-core/services";
@@ -105,9 +105,9 @@ export default class SearchLocaleString extends React.Component<IProps, IState> 
 									style={{ display: "inline-block" }}
 									// customRequest={this.handleUpload}
 									onChange={this.handleUploadChange}>
-									<Button icon="import" onClick={this.handleImport}>{t("button.import")}</Button>
+									<Button icon={Icon.Import} onClick={this.handleImport}>{t("button.import")}</Button>
 								</Upload>
-								<Button icon="export" onClick={this.handleExport}>{t("button.export")}</Button>
+								<Button icon={Icon.Export} onClick={this.handleExport}>{t("button.export")}</Button>
 							</Toolbar>
 
 							<DataBreadcrumb items={[{ name: "Локализация" }]} />
@@ -130,7 +130,7 @@ export default class SearchLocaleString extends React.Component<IProps, IState> 
 								</Select>
 							</Form.Item>
 							<Form.Item>
-								<Button type="primary" htmlType="submit" icon="search">{t("button.search")}</Button>
+								<Button type="primary" htmlType="submit" icon={Icon.Search}>{t("button.search")}</Button>
 							</Form.Item>
 						</Form>
 

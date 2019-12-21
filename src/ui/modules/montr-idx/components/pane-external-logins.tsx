@@ -1,11 +1,10 @@
 import React from "react";
 import { Translation } from "react-i18next";
-import { PageHeader } from "@montr-core/components";
+import { PageHeader, Icon } from "@montr-core/components";
 import { OperationService } from "@montr-core/services";
 import { IProfileModel, IUserLoginInfo, IAuthScheme } from "../models";
 import { ProfileService, AccountService } from "../services";
 import { Spin, List, Button, Avatar } from "antd";
-import { Constants } from "@montr-core/constants";
 import { Api } from "../module";
 
 interface IProps {
@@ -97,7 +96,7 @@ export default class PaneExternalLogins extends React.Component<IProps, IState> 
 													</Button>
 												] : null}>
 											<List.Item.Meta
-												avatar={<Avatar icon={scheme.icon} className={scheme.icon} />}
+												avatar={<Avatar icon={Icon.get(scheme.icon)} className={scheme.icon} />}
 												title={x.providerDisplayName}
 												description="Last used Feb 21, 2017" // todo: add real dates
 											/>
@@ -118,7 +117,7 @@ export default class PaneExternalLogins extends React.Component<IProps, IState> 
 												</Button>
 											]}>
 											<List.Item.Meta
-												avatar={<Avatar icon={x.icon} className={x.icon} />}
+												avatar={<Avatar icon={Icon.get(x.icon)} className={x.icon} />}
 												title={x.displayName}
 												description="Last used Feb 21, 2017" // todo: add real dates
 											/>

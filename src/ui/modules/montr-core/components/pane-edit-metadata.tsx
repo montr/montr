@@ -65,7 +65,7 @@ export function PaneEditMetadata(props: IProps) {
 		<Spin spinning={loading}>
 			<Toolbar>
 				{/* todo: move to separate component */}
-				<Button>{Icon.Plus} {t("button.add")}</Button>
+				<Button icon={Icon.Plus}>{t("button.add")}</Button>
 			</Toolbar>
 
 			<Divider />

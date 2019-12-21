@@ -6,6 +6,7 @@ import { AccountService } from "../services/account-service";
 import { Constants } from "@montr-core/constants";
 import { Translation } from "react-i18next";
 import { Api } from "../module";
+import { Icon } from "@montr-core/components";
 
 interface IProps {
 }
@@ -63,7 +64,7 @@ export class ExternalLoginForm extends React.Component<IProps, IState> {
 								htmlType="submit"
 								name="provider"
 								value={x.name}>
-								<Avatar icon={x.icon} className={x.icon} />
+								<Avatar icon={Icon.get(x.icon)} className={x.icon} />
 							</Button>
 						))}
 					</form>}

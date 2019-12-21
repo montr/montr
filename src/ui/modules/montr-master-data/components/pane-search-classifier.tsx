@@ -366,9 +366,9 @@ class _PaneSearchClassifier extends React.Component<IProps, IState> {
 					{trees && trees.map(x => <Select.Option key={x.code} value={x.code}>{x.name || x.code}</Select.Option>)}
 				</Select>
 				<Button.Group size="small">
-					<Button icon="plus" onClick={this.showAddGroupModal} />
-					<Button icon="edit" onClick={this.showEditGroupModal} disabled={!selectedGroup} />
-					<Button icon="delete" onClick={this.showDeleteGroupConfirm} disabled={!selectedGroup} />
+					<Button icon={Icon.Plus} onClick={this.showAddGroupModal} />
+					<Button icon={Icon.Edit} onClick={this.showEditGroupModal} disabled={!selectedGroup} />
+					<Button icon={Icon.Delete} onClick={this.showDeleteGroupConfirm} disabled={!selectedGroup} />
 				</Button.Group>
 			</>;
 		}
@@ -429,12 +429,12 @@ class _PaneSearchClassifier extends React.Component<IProps, IState> {
 				title={<>
 					<Toolbar float="right">
 						<Link to={RouteBuilder.addClassifier(type.code, selectedGroup ? selectedGroup.uid : null)}>
-							<Button type="primary">{Icon.Plus} Добавить</Button>
+							<Button type="primary" icon={Icon.Plus}>Добавить</Button>
 						</Link>
-						<Button onClick={this.delete}>{Icon.Delete} Удалить</Button>
-						<Button onClick={this.export}>{Icon.Export} Экспорт</Button>
+						<Button onClick={this.delete} icon={Icon.Delete}>Удалить</Button>
+						<Button onClick={this.export} icon={Icon.Export}>Экспорт</Button>
 						<Link to={`/classifiers/edit/${type.uid}`}>
-							<Button>{Icon.Setting} Настройка</Button>
+							<Button icon={Icon.Setting}> Настройка</Button>
 						</Link>
 					</Toolbar>
 
@@ -444,7 +444,7 @@ class _PaneSearchClassifier extends React.Component<IProps, IState> {
 					</>}
 
 					{mode == "Drawer" && <Toolbar>
-						<Button type="primary" onClick={this.select}>{Icon.Select} Выбрать</Button>
+						<Button type="primary" icon={Icon.Select} onClick={this.select}>Выбрать</Button>
 					</Toolbar>}
 
 				</>}>

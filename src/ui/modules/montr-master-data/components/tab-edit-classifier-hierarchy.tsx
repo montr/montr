@@ -110,7 +110,7 @@ class _TabEditClassifierHierarchy extends React.Component<IProps, IState> {
 
 			{type.hierarchyType == "Groups" && (<>
 				<Toolbar>
-					<Button onClick={this.showAddLinkModal}>{Icon.Plus} Добавить</Button>
+					<Button icon={Icon.Plus} onClick={this.showAddLinkModal}>Добавить</Button>
 				</Toolbar>
 
 				<div style={{ clear: "both" }} />
