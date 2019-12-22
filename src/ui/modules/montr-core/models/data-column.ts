@@ -1,5 +1,6 @@
 export interface IDataColumn {
 	key: string;
+	type: string;
 	path: string;
 	name: string;
 	align?: "left" | "right" | "center";

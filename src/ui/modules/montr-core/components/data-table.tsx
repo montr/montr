@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Link } from "react-router-dom";
-import { Table, Tag, Divider } from "antd";
+import { Table, Tag, Divider, Icon } from "antd";
 import { ColumnProps, PaginationConfig, SorterResult, SortOrder } from "antd/lib/table";
 import { Fetcher, NotificationService, MetadataService } from "../services";
 import { IIndexer, IDataColumn, IDataResult, IMenu } from "../models";
@@ -117,6 +117,12 @@ export class DataTable<TModel extends IIndexer> extends React.Component<IProps<T
 				render = (text: any, record: TModel, index: number): React.ReactNode => {
 					const cellUrl: string = record[item.urlProperty];
 					return (cellUrl ? <Link to={cellUrl}>{text}</Link> : text);
+				};
+			}
+
+			if (item.type == "boolean") {
+				render = (text: any, record: TModel, index: number): React.ReactNode => {
+					return text ? <Icon type="check" /> : null;
 				};
 			}
 

@@ -1,5 +1,10 @@
 ﻿namespace Montr.Core.Models
 {
+	public class DataFieldType
+	{
+		public static readonly string Boolean = "boolean";
+	}
+
 	public abstract class DataField
 	{
 		public abstract string Type { get; }
@@ -27,7 +32,7 @@
 
 	public class BooleanField : DataField
 	{
-		public override string Type => "boolean";
+		public override string Type => DataFieldType.Boolean;
 	}
 
 	public class StringField : DataField
