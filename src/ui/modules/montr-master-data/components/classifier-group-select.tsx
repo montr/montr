@@ -23,6 +23,22 @@ interface IState {
 	expanded: Guid[];
 }
 
+/* copied not exported types from rc-tree-select lib */
+declare type Key = string | number;
+declare type RawValueType = string | number;
+interface DataNode {
+	value?: RawValueType;
+	title?: React.ReactNode;
+	label?: React.ReactNode;
+	key?: Key;
+	disabled?: boolean;
+	disableCheckbox?: boolean;
+	checkable?: boolean;
+	children?: DataNode[];
+	/** Customize data info */
+	[prop: string]: any;
+}
+
 // http://ant.design/components/form/?locale=en-US#components-form-demo-customized-form-controls
 // https://github.com/ant-design/ant-design/blob/master/components/form/demo/customized-form-controls.md
 // todo: rewrite to functional component (see link above)
@@ -163,13 +179,13 @@ class _ClassifierGroupSelect extends React.Component<IProps, IState> {
 		});
 	};
 
-	buildTree(trees: IClassifierTree[], groups: IClassifierGroup[]): TreeNode[] {
+	buildTree(trees: IClassifierTree[], groups: IClassifierGroup[]): DataNode[] {
 		if (trees) {
 			return trees.map(tree => {
 
-				const result: TreeNode = {
+				const result: DataNode = {
 					selectable: false,
-					value: tree.uid,
+					value: tree.uid.toString(),
 					title: <span>{Icon.Folder} {tree.name}</span>,
 					dataRef: tree,
 					dataType: "Tree"
@@ -185,8 +201,8 @@ class _ClassifierGroupSelect extends React.Component<IProps, IState> {
 		else if (groups) {
 			return groups && groups.map(group => {
 
-				const result: TreeNode = {
-					value: group.uid,
+				const result: DataNode = {
+					value: group.uid.toString(),
 					title: <span>{Icon.File} {group.name} ({group.code})</span>,
 					dataRef: group,
 					dataType: "Group"
