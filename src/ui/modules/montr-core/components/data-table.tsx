@@ -121,6 +121,12 @@ export class DataTable<TModel extends IIndexer> extends React.Component<IProps<T
 				};
 			}
 
+			if (item.type == "boolean") {
+				render = (text: any, record: TModel, index: number): React.ReactNode => {
+					return text ? <Icon type="check" /> : null;
+				};
+			}
+
 			// todo: remove
 			if (item.key == "configCode") {
 				render = (text: any, record: TModel, index: number): React.ReactNode => {
