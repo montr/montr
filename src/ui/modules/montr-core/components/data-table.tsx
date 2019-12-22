@@ -6,6 +6,7 @@ import { SorterResult, SortOrder, ColumnType } from "antd/lib/table/interface";
 import { Fetcher, NotificationService, MetadataService } from "../services";
 import { IIndexer, IDataColumn, IDataResult, IMenu } from "../models";
 import { Constants } from "..";
+import { Icon } from ".";
 
 interface IProps<TModel> {
 	rowKey?: string | ((record: TModel, index: number) => string);
@@ -123,7 +124,7 @@ export class DataTable<TModel extends IIndexer> extends React.Component<IProps<T
 
 			if (item.type == "boolean") {
 				render = (text: any, record: TModel, index: number): React.ReactNode => {
-					return text ? <Icon type="check" /> : null;
+					return text ? Icon.get("check") : null;
 				};
 			}
 
