@@ -1,5 +1,5 @@
 const path = require("path");
-const tsImportPluginFactory = require("ts-import-plugin")
+const tsImportPluginFactory = require("ts-import-plugin");
 const copyPlugin = require("copy-webpack-plugin");
 
 module.exports = {
@@ -68,6 +68,7 @@ module.exports = {
 								// "border-radius-base": "4px",
 								// "font-size-base": "13px",
 								// "font-family": "'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif"
+								"font-family": "Nunito, 'Helvetica Neue', Helvetica, Arial, sans-serif"
 							},
 						}
 					}
