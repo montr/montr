@@ -1,10 +1,9 @@
 import * as React from "react";
-import { useTranslation } from "react-i18next";
-import { Button, Spin, Icon, Divider } from "antd";
+import { Divider, Drawer } from "antd";
 import { Toolbar } from "./toolbar";
 import { IDataField, IDataResult } from "../models";
 import { MetadataService } from "../services";
-import { DataTable, DataTableUpdateToken } from ".";
+import { DataTable, DataTableUpdateToken, ButtonAdd } from ".";
 import { Constants } from "..";
 
 interface IProps {
@@ -12,58 +11,69 @@ interface IProps {
 }
 
 interface IState {
-	loading: boolean;
-	fields?: IDataField[];
+	showDrawer?: boolean;
 	updateTableToken?: DataTableUpdateToken;
 }
 
-export function PaneEditMetadata(props: IProps) {
+export class PaneEditMetadata extends React.Component<IProps, IState> {
 
-	const { t } = useTranslation(),
-		[state, setState] = React.useState<IState>({ loading: true, updateTableToken: { date: new Date() } });
+	private _metadataService = new MetadataService();
 
-	React.useEffect(() => {
-		async function fetchData() {
-			const fields: IDataField[] = [
-				{ key: "fullName", name: "Полное наименование", type: "string" },
-				{ key: "shortName", name: "Сокращенное наименование", type: "string" },
-				{ key: "address", name: "Адрес в пределах места пребывания", type: "address" },
-				{ key: "okved", name: "Код(ы) ОКВЭД", type: "classifier" },
-				{ key: "inn", name: "ИНН", type: "string" },
-				{ key: "kpp", name: "КПП", type: "string" },
-				{ key: "dp", name: "Дата постановки на учет в налоговом органе", type: "date" },
-				{ key: "ogrn", name: "ОГРН", type: "string" },
-				{ key: "is_msp", name: "Участник закупки является субъектом малого предпринимательства", type: "boolean" },
-			];
+	constructor(props: IProps) {
+		super(props);
 
-			setState({ loading: false, fields: fields });
-		}
-
-		fetchData();
-
-		return async () => {
-			// await metadataService.abort();
-		};
-	}, []);
-
-	async function onLoadTableData(loadUrl: string, postParams: any): Promise<IDataResult<{}>> {
-		const params = {
-			entityTypeCode: props.entityTypeCode,
-			...postParams
+		this.state = {
 		};
 
-		const metadataService = new MetadataService();
+		const fields: IDataField[] = [
+			{ key: "fullName", name: "Полное наименование", type: "string" },
+			{ key: "shortName", name: "Сокращенное наименование", type: "string" },
+			{ key: "address", name: "Адрес в пределах места пребывания", type: "address" },
+			{ key: "okved", name: "Код(ы) ОКВЭД", type: "classifier" },
+			{ key: "inn", name: "ИНН", type: "string" },
+			{ key: "kpp", name: "КПП", type: "string" },
+			{ key: "dp", name: "Дата постановки на учет в налоговом органе", type: "date" },
+			{ key: "ogrn", name: "ОГРН", type: "string" },
+			{ key: "is_msp", name: "Участник закупки является субъектом малого предпринимательства", type: "boolean" },
+		];
+	}
 
-		return await metadataService.post(loadUrl, params);
+	componentDidMount = async () => {
 	};
 
-	const { entityTypeCode } = props,
-		{ loading, fields, updateTableToken } = state;
+	componentWillUnmount = async () => {
+		await this._metadataService.abort();
+	};
 
-	return (
-		<Spin spinning={loading}>
+	refreshTable = async () => {
+
+		this.setState({
+			updateTableToken: { date: new Date() }
+		});
+	};
+
+	onLoadTableData = async (loadUrl: string, postParams: any): Promise<IDataResult<{}>> => {
+		const { entityTypeCode } = this.props;
+
+		const params = { entityTypeCode, ...postParams };
+
+		return await this._metadataService.post(loadUrl, params);
+	};
+
+	showAddDrawer = () => {
+		this.setState({ showDrawer: true });
+	};
+
+	onCloseDrawer = () => {
+		this.setState({ showDrawer: false });
+	};
+
+	render = () => {
+		const { showDrawer, updateTableToken } = this.state;
+
+		return (<>
 			<Toolbar>
-				<Button><Icon type="plus" /> {t("button.add")}</Button>
+				<ButtonAdd onClick={this.showAddDrawer} />
 			</Toolbar>
 
 			<Divider />
@@ -73,9 +83,19 @@ export function PaneEditMetadata(props: IProps) {
 				// rowActions={rowActions}
 				viewId={`Metadata/Grid`}
 				loadUrl={`${Constants.apiURL}/metadata/list/`}
-				onLoadData={onLoadTableData}
+				onLoadData={this.onLoadTableData}
 				updateToken={updateTableToken}
 			/>
-		</Spin>
-	);
+
+			{showDrawer &&
+				<Drawer
+					title="View/Edit Metadata"
+					closable={false}
+					onClose={this.onCloseDrawer}
+					visible={true}
+					width={1024}>
+					<p>View/Edit Metadata Content</p>
+				</Drawer>}
+		</>);
+	};
 }
