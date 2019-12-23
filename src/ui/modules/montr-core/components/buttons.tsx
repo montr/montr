@@ -1,15 +1,12 @@
 import React from "react";
 import { useTranslation } from "react-i18next";
 import { Button } from "antd";
+import { ButtonProps } from "antd/lib/button";
 
-interface IButtonProps {
-	onClick?: React.MouseEventHandler<HTMLElement>;
-}
-
-export function ButtonAdd({ onClick }: IButtonProps) {
+export function ButtonAdd(props: ButtonProps) {
 	const { t } = useTranslation();
 
 	return (
-		<Button icon="plus" onClick={onClick}>{t("button.add")}</Button >
+		<Button icon="plus" {...props}>{t("button.add")}</Button >
 	);
 }
