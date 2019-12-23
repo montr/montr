@@ -15,6 +15,7 @@ export * from "./page";
 export * from "./logo";
 export * from "./page-header";
 export * from "./pane-component";
+export * from "./pane-edit-metadata-form";
 export * from "./pane-edit-metadata";
 export * from "./suspense-fallback";
 export * from "./toolbar";

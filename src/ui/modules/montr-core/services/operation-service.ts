@@ -24,7 +24,7 @@ export class OperationService {
 			if (options?.showFieldErrors) {
 				options.showFieldErrors(result);
 			}
-			else if (result.errors) {
+			else if (result?.errors) {
 				result.errors.forEach(x => {
 					x.messages.forEach(e => {
 						this._notification.error(e);
@@ -40,7 +40,7 @@ export class OperationService {
 				this._notification.success(result.message ?? options?.successMessage ?? t("operation.success"));
 			}
 			else {
-				this._notification.error(result.message ?? options?.errorMessage ?? t("operation.error"));
+				this._notification.error(result?.message ?? options?.errorMessage ?? t("operation.error"));
 
 				showFieldErrors(result);
 			}

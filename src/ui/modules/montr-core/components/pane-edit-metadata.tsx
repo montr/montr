@@ -3,7 +3,7 @@ import { Divider, Drawer } from "antd";
 import { Toolbar } from "./toolbar";
 import { IDataField, IDataResult } from "../models";
 import { MetadataService } from "../services";
-import { DataTable, DataTableUpdateToken, ButtonAdd } from ".";
+import { DataTable, DataTableUpdateToken, ButtonAdd, PaneEditMetadataForm } from ".";
 import { Constants } from "..";
 
 interface IProps {
@@ -69,7 +69,8 @@ export class PaneEditMetadata extends React.Component<IProps, IState> {
 	};
 
 	render = () => {
-		const { showDrawer, updateTableToken } = this.state;
+		const { entityTypeCode } = this.props,
+			{ showDrawer, updateTableToken } = this.state;
 
 		return (<>
 			<Toolbar>
@@ -89,12 +90,14 @@ export class PaneEditMetadata extends React.Component<IProps, IState> {
 
 			{showDrawer &&
 				<Drawer
-					title="View/Edit Metadata"
+					title="Metadata"
 					closable={false}
 					onClose={this.onCloseDrawer}
 					visible={true}
-					width={1024}>
-					<p>View/Edit Metadata Content</p>
+					width={800}>
+					<PaneEditMetadataForm
+						entityTypeCode={entityTypeCode}
+					/>
 				</Drawer>}
 		</>);
 	};
