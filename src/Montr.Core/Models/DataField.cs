@@ -1,8 +1,42 @@
-﻿namespace Montr.Core.Models
+﻿using System;
+using System.Collections.Concurrent;
+
+namespace Montr.Core.Models
 {
 	public class DataFieldType
 	{
+		public static readonly ConcurrentDictionary<string, Type> Map = new ConcurrentDictionary<string, Type>();
+
+		static DataFieldType()
+		{
+			Map[Boolean] = typeof(BooleanField);
+			Map[String] = typeof(StringField);
+			Map[TextArea] = typeof(TextAreaField);
+			Map[Password] = typeof(PasswordField);
+			Map[Number] = typeof(NumberField);
+			Map[Decimal] = typeof(DecimalField);
+			Map[Date] = typeof(DateField);
+			Map[Time] = typeof(TimeField);
+			Map[DateTime] = typeof(DateTimeField);
+			Map[Select] = typeof(SelectField);
+			Map[Classifier] = typeof(ClassifierField);
+			Map[ClassifierGroup] = typeof(ClassifierGroupField);
+			Map[File] = typeof(FileField);
+		}
+
 		public static readonly string Boolean = "boolean";
+		public static readonly string String = "string";
+		public static readonly string TextArea = "textarea";
+		public static readonly string Password = "password";
+		public static readonly string Number = "number";
+		public static readonly string Decimal = "decimal";
+		public static readonly string Date = "date";
+		public static readonly string Time = "time";
+		public static readonly string DateTime = "datetime";
+		public static readonly string Select = "select";
+		public static readonly string Classifier = "classifier";
+		public static readonly string ClassifierGroup = "classifier-group";
+		public static readonly string File = "file";
 	}
 
 	public abstract class DataField
@@ -37,7 +71,7 @@
 
 	public class StringField : DataField
 	{
-		public override string Type => "string";
+		public override string Type => DataFieldType.String;
 
 		public bool Autosize { get; set; }
 	}
@@ -80,11 +114,13 @@
 		public override string Type => "date";
 	}
 
+	// todo join with Date?
 	public class TimeField : DataField
 	{
 		public override string Type => "time";
 	}
 
+	// todo join with Date?
 	public class DateTimeField : DataField
 	{
 		public override string Type => "datetime";

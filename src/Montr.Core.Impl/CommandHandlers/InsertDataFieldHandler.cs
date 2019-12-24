@@ -35,7 +35,7 @@ namespace Montr.Core.Impl.CommandHandlers
 					await db.GetTable<DbFieldMeta>()
 						.Value(x => x.Uid, itemUid)
 						.Value(x => x.EntityTypeCode, request.EntityTypeCode)
-						.Value(x => x.TypeCode, "string")
+						.Value(x => x.TypeCode, item.Type)
 						.Value(x => x.Key, item.Key)
 						.Value(x => x.Name, item.Name)
 						.Value(x => x.Description, item.Description)

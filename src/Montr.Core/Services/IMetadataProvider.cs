@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Montr.Core.Models;
 
@@ -36,12 +37,7 @@ namespace Montr.Core.Services
 					new SelectField
 					{
 						Key = "type", Name = "Тип", Required = true,
-						Options = new []
-						{
-							new SelectFieldOption { Value = "string", Name = "string" },
-							new SelectFieldOption { Value = "textarea", Name = "textarea" },
-							new SelectFieldOption { Value = "password", Name = "password" }
-						}
+						Options = DataFieldType.Map.Keys.Select(x => new SelectFieldOption { Value = x, Name = x }).ToArray()
 					},
 					new StringField { Key = "key", Name = "Код", Required = true },
 					new StringField { Key = "name", Name = "Наименование", Required = true },
