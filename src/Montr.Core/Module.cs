@@ -12,6 +12,7 @@ using Microsoft.Extensions.Options;
 using Montr.Core.Models;
 using Montr.Core.Services;
 using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 
 namespace Montr.Core
@@ -49,6 +50,7 @@ namespace Montr.Core
 				mvcBuilder.AddNewtonsoftJson(options =>
 				{
 					options.SerializerSettings.DefaultValueHandling = DefaultValueHandling.Ignore;
+					options.SerializerSettings.Converters.Add(new StringEnumConverter());
 					options.SerializerSettings.Converters.Add(new PolymorphicNewtonsoftJsonConverter<DataField>("type", DataFieldType.Map));
 					options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
 				});

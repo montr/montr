@@ -22,7 +22,7 @@ namespace Montr.Core.Services
 				result.Columns = new List<DataColumn>
 				{
 					new DataColumn { Key = "key", Name = "Key", Width = 100, Sortable = true },
-					new DataColumn { Key = "type", Name = "Type", Width = 100, Sortable = true },
+					new DataColumn { Key = "type", Name = "Type", Width = 100, /*Sortable = true*/ },
 					new DataColumn { Key = "name", Name = "Name", Width = 200, Sortable = true },
 					new DataColumn { Key = "description", Name = "Description", Width = 200 },
 					new DataColumn { Key = "active", Name = "Active", Width = 10, Sortable = true, Type = DataFieldType.Boolean },
