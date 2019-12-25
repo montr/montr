@@ -26,13 +26,18 @@ namespace Montr.Core.Impl.Services
 
 			using (var db = _dbContextFactory.Create())
 			{
-				var all = db
+				var query = db
 					.GetTable<DbFieldMeta>()
 					.Where(x => x.EntityTypeCode == request.EntityTypeCode);
 
+				if (request.Uid != null)
+				{
+					query = query.Where(x => x.Uid == request.Uid);
+				}
+
 				var withPaging = request.PageSize > 0;
 
-				var paged = withPaging ? all.Apply(request, x => x.Key) : all;
+				var paged = withPaging ? query.Apply(request, x => x.Key) : query;
 
 				var data = await paged
 					.Select(x => x)
@@ -45,6 +50,7 @@ namespace Montr.Core.Impl.Services
 					// todo: use factory
 					var field = (DataField) Activator.CreateInstance(DataFieldType.Map[dbField.TypeCode]);
 
+					field.Uid = dbField.Uid;
 					field.Key = dbField.Key;
 					field.Name = dbField.Name;
 					field.Description = dbField.Description;
@@ -60,7 +66,7 @@ namespace Montr.Core.Impl.Services
 
 				return new SearchResult<DataField>
 				{
-					TotalCount = withPaging ? all.Count() : (int?)null,
+					TotalCount = withPaging ? query.Count() : (int?)null,
 					Rows = result
 				};
 			}

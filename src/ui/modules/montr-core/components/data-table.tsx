@@ -163,7 +163,7 @@ export class DataTable<TModel extends IIndexer> extends React.Component<IProps<T
 			columns.push({
 				key: "$action",
 				title: "Действие",
-				width: 50,
+				width: 80,
 				render: (text: any, record: TModel, index: number) => (
 					<span>
 						{rowActions.map((action, i) => {

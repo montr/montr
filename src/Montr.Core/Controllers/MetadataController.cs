@@ -34,6 +34,14 @@ namespace Montr.Core.Controllers
 		}
 
 		[HttpPost]
+		public async Task<DataField> Get(GetDataField request)
+		{
+			// request.UserUid = _currentUserProvider.GetUserUid();
+
+			return await _mediator.Send(request);
+		}
+
+		[HttpPost]
 		public async Task<ApiResult> Insert(InsertDataField request)
 		{
 			// request.UserUid = _currentUserProvider.GetUserUid();

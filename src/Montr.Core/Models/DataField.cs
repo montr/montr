@@ -43,6 +43,8 @@ namespace Montr.Core.Models
 	{
 		public abstract string Type { get; }
 
+		public Guid Uid { get; set; }
+
 		public string Key { get; set; }
 
 		public string Name { get; set; }

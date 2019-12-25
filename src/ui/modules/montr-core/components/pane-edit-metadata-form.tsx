@@ -1,11 +1,13 @@
 import React from "react";
 import { DataForm } from "./";
 import { MetadataService } from "../services";
-import { IDataField, IApiResult } from "../models";
+import { IDataField, IApiResult, Guid } from "../models";
 import { Spin } from "antd";
 
 interface IProps {
 	entityTypeCode: string;
+	uid?: Guid;
+	onSuccess?: () => void;
 }
 
 interface IState {
@@ -32,29 +34,36 @@ export class PaneEditMetadataForm extends React.Component<IProps, IState> {
 	};
 
 	fetchData = async () => {
+		const { entityTypeCode, uid } = this.props;
+
+		const data = (uid) ? await this._metadataService.get(entityTypeCode, uid) : null;
+
 		const dataView = await this._metadataService.load("Metadata/Edit");
 
-		this.setState({ loading: false, fields: dataView.fields });
+		this.setState({ loading: false, data, fields: dataView.fields });
 	};
 
 	handleSubmit = async (values: IDataField): Promise<IApiResult> => {
+		const { entityTypeCode, uid, onSuccess } = this.props;
 
-		const { entityTypeCode } = this.props;
+		let result;
 
-		if (false /* data.uid */) {
+		if (uid) {
+			result = await this._metadataService.update(entityTypeCode, { uid, ...values });
 		}
 		else {
-			const result = await this._metadataService.insert({ entityTypeCode, item: values });
-
-			return result;
+			result = await this._metadataService.insert({ entityTypeCode, item: values });
 		}
 
-		return null;
+		if (result.success && onSuccess) {
+			onSuccess();
+		}
+
+		return result;
 	};
 
 	render = () => {
-		const // { data } = this.props,
-			{ loading, fields, data } = this.state;
+		const { loading, fields, data } = this.state;
 
 		return (
 			<Spin spinning={loading}>
