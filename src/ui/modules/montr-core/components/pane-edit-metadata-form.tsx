@@ -36,7 +36,7 @@ export class PaneEditMetadataForm extends React.Component<IProps, IState> {
 	fetchData = async () => {
 		const { entityTypeCode, uid } = this.props;
 
-		const data = (uid) ? await this._metadataService.get(entityTypeCode, uid) : null;
+		const data: IDataField = (uid) ? await this._metadataService.get(entityTypeCode, uid) : { type: "string" };
 
 		const dataView = await this._metadataService.load("Metadata/Edit");
 

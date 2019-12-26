@@ -37,7 +37,7 @@ export class MetadataService extends Fetcher {
 		return this.post(`${Constants.apiURL}/metadata/update`, { entityTypeCode, item });
 	};
 
-	delete = async (entityTypeCode: string, uids: Guid[]): Promise<IApiResult> => {
+	delete = async (entityTypeCode: string, uids: string[] | number[]): Promise<IApiResult> => {
 		return this.post(`${Constants.apiURL}/metadata/delete`, { entityTypeCode, uids });
 	};
 };

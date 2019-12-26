@@ -3,8 +3,8 @@ import { Guid } from ".";
 export interface IDataField {
 	uid?: Guid;
 	type: string;
-	key: string;
-	name: string;
+	key?: string;
+	name?: string;
 	description?: string;
 	placeholder?: string;
 	icon?: string;

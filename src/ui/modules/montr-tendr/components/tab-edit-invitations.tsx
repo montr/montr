@@ -8,6 +8,7 @@ import { ModalEditInvitation } from "../components";
 import { IEvent, IInvitation } from "../models";
 import { InvitationService } from "../services";
 import { Constants } from "@montr-core/.";
+import { OperationService } from "@montr-core/services";
 
 interface IProps extends CompanyContextProps, IPaneProps<IEvent> {
 	data: IEvent;
@@ -16,19 +17,19 @@ interface IProps extends CompanyContextProps, IPaneProps<IEvent> {
 interface IState {
 	showDrawer?: boolean;
 	editData?: IInvitation;
-	selectedRowKeys: string[] | number[];
+	selectedRowKeys?: string[] | number[];
 	updateTableToken: DataTableUpdateToken;
 }
 
 class _TabEditInvitations extends React.Component<IProps, IState> {
 
-	_invitationService = new InvitationService();
+	private _operation = new OperationService();
+	private _invitationService = new InvitationService();
 
 	constructor(props: IProps) {
 		super(props);
 
 		this.state = {
-			selectedRowKeys: [],
 			updateTableToken: { date: new Date() }
 		};
 	}
@@ -59,7 +60,6 @@ class _TabEditInvitations extends React.Component<IProps, IState> {
 	};
 
 	refreshTable = async (resetSelectedRows?: boolean) => {
-
 		const { selectedRowKeys } = this.state;
 
 		this.setState({
@@ -119,9 +119,12 @@ class _TabEditInvitations extends React.Component<IProps, IState> {
 				const { currentCompany } = this.props,
 					{ selectedRowKeys } = this.state;
 
-				await this._invitationService.delete(currentCompany.uid, selectedRowKeys);
+				const result = await this._operation.execute(() =>
+					this._invitationService.delete(currentCompany.uid, selectedRowKeys));
 
-				this.refreshTable(true);
+				if (result.success) {
+					this.refreshTable(true);
+				}
 			}
 		});
 	};
@@ -138,7 +141,7 @@ class _TabEditInvitations extends React.Component<IProps, IState> {
 			<Toolbar clear>
 				<Button icon="plus" onClick={this.showAddDrawer} type="primary">Пригласить</Button>
 				<ButtonAdd onClick={this.showAddModal} />
-				<ButtonDelete onClick={this.delete} disabled={selectedRowKeys.length == 0} />
+				<ButtonDelete onClick={this.delete} disabled={!selectedRowKeys?.length} />
 			</Toolbar>
 
 			<DataTable

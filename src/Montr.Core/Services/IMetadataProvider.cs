@@ -22,7 +22,7 @@ namespace Montr.Core.Services
 				result.Columns = new List<DataColumn>
 				{
 					new DataColumn { Key = "key", Name = "Key", Width = 100, Sortable = true },
-					new DataColumn { Key = "type", Name = "Type", Width = 100, /*Sortable = true*/ },
+					new DataColumn { Key = "type", Name = "Type", Width = 70, /*Sortable = true*/ },
 					new DataColumn { Key = "name", Name = "Name", Width = 200, Sortable = true },
 					new DataColumn { Key = "description", Name = "Description", Width = 200 },
 					new DataColumn { Key = "active", Name = "Active", Width = 10, Sortable = true, Type = DataFieldType.Boolean },
@@ -37,7 +37,7 @@ namespace Montr.Core.Services
 					new SelectField
 					{
 						Key = "type", Name = "Тип", Required = true,
-						Options = DataFieldType.Map.Keys.Select(x => new SelectFieldOption { Value = x, Name = x }).ToArray()
+						Options = DataFieldType.Map.Keys.OrderBy(x => x).Select(x => new SelectFieldOption { Value = x, Name = x }).ToArray()
 					},
 					new StringField { Key = "key", Name = "Код", Required = true },
 					new StringField { Key = "name", Name = "Наименование", Required = true },

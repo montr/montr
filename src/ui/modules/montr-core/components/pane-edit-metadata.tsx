@@ -1,8 +1,8 @@
 import * as React from "react";
 import { Drawer, Modal } from "antd";
 import { Toolbar } from "./toolbar";
-import { IDataField, IDataResult, Guid, IMenu } from "../models";
-import { MetadataService } from "../services";
+import { IDataField, IDataResult, Guid } from "../models";
+import { MetadataService, OperationService } from "../services";
 import { DataTable, DataTableUpdateToken, ButtonAdd, PaneEditMetadataForm, ButtonDelete } from ".";
 import { Constants } from "..";
 import { Translation } from "react-i18next";
@@ -14,11 +14,13 @@ interface IProps {
 interface IState {
 	showDrawer?: boolean;
 	editUid?: Guid;
+	selectedRowKeys?: string[] | number[];
 	updateTableToken?: DataTableUpdateToken;
 }
 
 export class PaneEditMetadata extends React.Component<IProps, IState> {
 
+	private _operation = new OperationService();
 	private _metadataService = new MetadataService();
 
 	constructor(props: IProps) {
@@ -47,19 +49,26 @@ export class PaneEditMetadata extends React.Component<IProps, IState> {
 		await this._metadataService.abort();
 	};
 
-	// todo: do not copy this method from class to class - move to DataTable somehow?
-	refreshTable = async (resetSelectedRows?: boolean) => {
-		this.setState({
-			updateTableToken: { date: new Date(), resetSelectedRows }
-		});
-	};
-
 	onLoadTableData = async (loadUrl: string, postParams: any): Promise<IDataResult<{}>> => {
 		const { entityTypeCode } = this.props;
 
 		const params = { entityTypeCode, ...postParams };
 
 		return await this._metadataService.post(loadUrl, params);
+	};
+
+	onSelectionChange = async (selectedRowKeys: string[] | number[]) => {
+		this.setState({ selectedRowKeys });
+	};
+
+	// todo: do not copy this method from class to class - move to DataTable somehow?
+	refreshTable = async (resetSelectedRows?: boolean) => {
+		const { selectedRowKeys } = this.state;
+
+		this.setState({
+			updateTableToken: { date: new Date(), resetSelectedRows },
+			selectedRowKeys: resetSelectedRows ? [] : selectedRowKeys
+		});
 	};
 
 	showAddDrawer = () => {
@@ -79,52 +88,58 @@ export class PaneEditMetadata extends React.Component<IProps, IState> {
 		this.refreshTable();
 	};
 
-	showDeleteConfirm = (data: IDataField) => {
+	showDeleteConfirm = () => {
 		Modal.confirm({
-			title: "Вы действительно хотите удалить выбранное поле?",
+			title: "Вы действительно хотите удалить выбранные записи?",
 			content: "Наверняка что-то случится ...",
 			onOk: async () => {
-				const { entityTypeCode } = this.props;
+				const { entityTypeCode } = this.props,
+					{ selectedRowKeys } = this.state;
 
-				await this._metadataService.delete(entityTypeCode, [data.uid]);
+				const result = await this._operation.execute(() =>
+					this._metadataService.delete(entityTypeCode, selectedRowKeys));
 
-				this.refreshTable();
+				if (result.success) {
+					this.refreshTable(true);
+				}
 			}
 		});
 	};
 
 	render = () => {
 		const { entityTypeCode } = this.props,
-			{ showDrawer, editUid, updateTableToken } = this.state;
+			{ showDrawer, editUid, selectedRowKeys, updateTableToken } = this.state;
 
-		return (
-			<Translation>{(t) => <>
-				<Toolbar clear>
-					<ButtonAdd type="primary" onClick={this.showAddDrawer} />
-					<ButtonDelete />
-				</Toolbar>
+		return (<Translation>{(t) => <>
 
-				<DataTable
-					rowKey="key"
-					rowActions={[{ name: t("button.edit"), onClick: this.showEditDrawer }]}
-					viewId={`Metadata/Grid`}
-					loadUrl={`${Constants.apiURL}/metadata/list/`}
-					onLoadData={this.onLoadTableData}
-					updateToken={updateTableToken}
-				/>
+			<Toolbar clear>
+				<ButtonAdd type="primary" onClick={this.showAddDrawer} />
+				<ButtonDelete onClick={this.showDeleteConfirm} disabled={!selectedRowKeys?.length} />
+			</Toolbar>
 
-				{showDrawer &&
-					<Drawer
-						title="Metadata"
-						closable={false}
-						onClose={this.closeDrawer}
-						visible={true}
-						width={800}>
-						<PaneEditMetadataForm
-							entityTypeCode={entityTypeCode} uid={editUid}
-							onSuccess={this.handleSuccess}
-						/>
-					</Drawer>}
-			</>}</Translation>);
+			<DataTable
+				rowKey="uid"
+				rowActions={[{ name: t("button.edit"), onClick: this.showEditDrawer }]}
+				viewId={`Metadata/Grid`}
+				loadUrl={`${Constants.apiURL}/metadata/list/`}
+				onLoadData={this.onLoadTableData}
+				onSelectionChange={this.onSelectionChange}
+				updateToken={updateTableToken}
+			/>
+
+			{showDrawer &&
+				<Drawer
+					title="Metadata"
+					closable={false}
+					onClose={this.closeDrawer}
+					visible={true}
+					width={800}>
+					<PaneEditMetadataForm
+						entityTypeCode={entityTypeCode} uid={editUid}
+						onSuccess={this.handleSuccess}
+					/>
+				</Drawer>}
+
+		</>}</Translation>);
 	};
 }
