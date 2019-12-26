@@ -41,9 +41,11 @@ namespace Montr.Core.Services
 					},
 					new StringField { Key = "key", Name = "Код", Required = true },
 					new StringField { Key = "name", Name = "Наименование", Required = true },
+					new TextAreaField { Key = "description", Name = "Описание", Rows = 2 },
 					new StringField { Key = "placeholder", Name = "Placeholder" },
 					new StringField { Key = "icon", Name = "Icon" },
-					new TextAreaField { Key = "description", Name = "Описание", Rows = 2 }
+					new BooleanField { Key = "readonly", Name = "Readonly" },
+					new BooleanField { Key = "required", Name = "Required" }
 				};
 			}
 
