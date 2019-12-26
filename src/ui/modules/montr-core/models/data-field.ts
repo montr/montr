@@ -1,6 +1,7 @@
 import { Guid } from ".";
 
 export interface IDataField {
+	uid?: Guid;
 	type: string;
 	key: string;
 	name: string;

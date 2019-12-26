@@ -1,9 +1,9 @@
 import * as React from "react";
-import { Divider, Drawer } from "antd";
+import { Drawer, Modal } from "antd";
 import { Toolbar } from "./toolbar";
-import { IDataField, IDataResult } from "../models";
+import { IDataField, IDataResult, Guid, IMenu } from "../models";
 import { MetadataService } from "../services";
-import { DataTable, DataTableUpdateToken, ButtonAdd } from ".";
+import { DataTable, DataTableUpdateToken, ButtonAdd, PaneEditMetadataForm } from ".";
 import { Constants } from "..";
 import { Icon } from "./icon";
 
@@ -13,6 +13,7 @@ interface IProps {
 
 interface IState {
 	showDrawer?: boolean;
+	editUid?: Guid;
 	updateTableToken?: DataTableUpdateToken;
 }
 
@@ -46,10 +47,10 @@ export class PaneEditMetadata extends React.Component<IProps, IState> {
 		await this._metadataService.abort();
 	};
 
-	refreshTable = async () => {
-
+	// todo: do not copy this method from class to class - move to DataTable somehow?
+	refreshTable = async (resetSelectedRows?: boolean) => {
 		this.setState({
-			updateTableToken: { date: new Date() }
+			updateTableToken: { date: new Date(), resetSelectedRows }
 		});
 	};
 
@@ -62,26 +63,51 @@ export class PaneEditMetadata extends React.Component<IProps, IState> {
 	};
 
 	showAddDrawer = () => {
-		this.setState({ showDrawer: true });
+		this.setState({ showDrawer: true, editUid: null });
 	};
 
-	onCloseDrawer = () => {
+	showEditDrawer = (data: IDataField) => {
+		this.setState({ showDrawer: true, editUid: data?.uid });
+	};
+
+	closeDrawer = () => {
 		this.setState({ showDrawer: false });
 	};
 
+	handleSuccess = () => {
+		this.setState({ showDrawer: false });
+		this.refreshTable();
+	};
+
+	showDeleteConfirm = (data: IDataField) => {
+		Modal.confirm({
+			title: "Вы действительно хотите удалить выбранное поле?",
+			content: "Наверняка что-то случится ...",
+			onOk: async () => {
+				const { entityTypeCode } = this.props;
+
+				await this._metadataService.delete(entityTypeCode, [data.uid]);
+
+				this.refreshTable();
+			}
+		});
+	};
+
 	render = () => {
-		const { showDrawer, updateTableToken } = this.state;
+		const { entityTypeCode } = this.props,
+			{ showDrawer, editUid, updateTableToken } = this.state;
 
 		return (<>
-			<Toolbar>
+			<Toolbar clear>
 				<ButtonAdd onClick={this.showAddDrawer} />
 			</Toolbar>
 
-			<Divider />
-
 			<DataTable
 				rowKey="key"
-				// rowActions={rowActions}
+				rowActions={[
+					{ name: "Редактировать", onClick: this.showEditDrawer },
+					// { name: "Удалить", onClick: this.showDeleteConfirm }
+				]}
 				viewId={`Metadata/Grid`}
 				loadUrl={`${Constants.apiURL}/metadata/list/`}
 				onLoadData={this.onLoadTableData}
@@ -90,12 +116,15 @@ export class PaneEditMetadata extends React.Component<IProps, IState> {
 
 			{showDrawer &&
 				<Drawer
-					title="View/Edit Metadata"
+					title="Metadata"
 					closable={false}
-					onClose={this.onCloseDrawer}
+					onClose={this.closeDrawer}
 					visible={true}
-					width={1024}>
-					<p>View/Edit Metadata Content</p>
+					width={800}>
+					<PaneEditMetadataForm
+						entityTypeCode={entityTypeCode} uid={editUid}
+						onSuccess={this.handleSuccess}
+					/>
 				</Drawer>}
 		</>);
 	};

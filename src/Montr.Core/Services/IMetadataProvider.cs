@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using Montr.Core.Models;
 
@@ -21,11 +22,28 @@ namespace Montr.Core.Services
 				result.Columns = new List<DataColumn>
 				{
 					new DataColumn { Key = "key", Name = "Key", Width = 100, Sortable = true },
-					new DataColumn { Key = "type", Name = "Type", Width = 100, Sortable = true },
+					new DataColumn { Key = "type", Name = "Type", Width = 100, /*Sortable = true*/ },
 					new DataColumn { Key = "name", Name = "Name", Width = 200, Sortable = true },
 					new DataColumn { Key = "description", Name = "Description", Width = 200 },
 					new DataColumn { Key = "active", Name = "Active", Width = 10, Sortable = true, Type = DataFieldType.Boolean },
 					new DataColumn { Key = "system", Name = "System", Width = 10, Sortable = true, Type = DataFieldType.Boolean },
+				};
+			}
+
+			if (viewId == "Metadata/Edit")
+			{
+				result.Fields = new List<DataField>
+				{
+					new SelectField
+					{
+						Key = "type", Name = "Тип", Required = true,
+						Options = DataFieldType.Map.Keys.Select(x => new SelectFieldOption { Value = x, Name = x }).ToArray()
+					},
+					new StringField { Key = "key", Name = "Код", Required = true },
+					new StringField { Key = "name", Name = "Наименование", Required = true },
+					new StringField { Key = "placeholder", Name = "Placeholder" },
+					new StringField { Key = "icon", Name = "Icon" },
+					new TextAreaField { Key = "description", Name = "Описание", Rows = 2 }
 				};
 			}
 
@@ -124,7 +142,7 @@ namespace Montr.Core.Services
 							new SelectFieldOption { Value = "None", Name = "Нет" },
 							new SelectFieldOption { Value = "Groups", Name = "Группы" },
 							new SelectFieldOption { Value = "Items", Name = "Элементы" }
-						}},
+						}}
 				};
 			}
 

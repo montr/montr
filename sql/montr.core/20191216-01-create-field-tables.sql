@@ -15,7 +15,7 @@ CREATE TABLE public.field_meta
     created_by uuid,
     created_at_utc timestamp with time zone,
     modified_by uuid,
-    modified_by_utc timestamp with time zone,
+    modified_at_utc timestamp with time zone,
     name character varying(128) COLLATE pg_catalog."default",
     description text COLLATE pg_catalog."default",
     placeholder character varying(128) COLLATE pg_catalog."default",

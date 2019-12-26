@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -25,33 +26,48 @@ namespace Montr.Core.Impl.Services
 
 			using (var db = _dbContextFactory.Create())
 			{
-				var all = db
+				var query = db
 					.GetTable<DbFieldMeta>()
 					.Where(x => x.EntityTypeCode == request.EntityTypeCode);
 
+				if (request.Uid != null)
+				{
+					query = query.Where(x => x.Uid == request.Uid);
+				}
+
 				var withPaging = request.PageSize > 0;
 
-				var paged = withPaging ? all.Apply(request, x => x.Key) : all;
+				var paged = withPaging ? query.Apply(request, x => x.Key) : query;
 
 				var data = await paged
-					.Select(x => new StringField // todo: use factory
-					{
-						Key = x.Key,
-						Name = x.Name,
-						Description = x.Description,
-						Placeholder = x.Placeholder,
-						Icon = x.Icon,
-						Active = x.IsActive,
-						System = x.IsSystem,
-						Readonly = x.IsReadonly,
-						Required = x.IsRequired,
-					})
+					.Select(x => x)
 					.ToListAsync(cancellationToken);
+
+				var result = new List<DataField>();
+
+				foreach (var dbField in data)
+				{
+					// todo: use factory
+					var field = (DataField) Activator.CreateInstance(DataFieldType.Map[dbField.TypeCode]);
+
+					field.Uid = dbField.Uid;
+					field.Key = dbField.Key;
+					field.Name = dbField.Name;
+					field.Description = dbField.Description;
+					field.Placeholder = dbField.Placeholder;
+					field.Icon = dbField.Icon;
+					field.Active = dbField.IsActive;
+					field.System = dbField.IsSystem;
+					field.Readonly = dbField.IsReadonly;
+					field.Required = dbField.IsRequired;
+
+					result.Add(field);
+				}
 
 				return new SearchResult<DataField>
 				{
-					TotalCount = withPaging ? all.Count() : (int?)null,
-					Rows = data.Cast<DataField>().ToList()
+					TotalCount = withPaging ? query.Count() : (int?)null,
+					Rows = result
 				};
 			}
 		}

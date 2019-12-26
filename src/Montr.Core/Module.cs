@@ -11,12 +11,17 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Montr.Core.Models;
 using Montr.Core.Services;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Converters;
+using Newtonsoft.Json.Serialization;
 
 namespace Montr.Core
 {
 	// ReSharper disable once UnusedMember.Global
 	public class Module : IWebModule
 	{
+		public static readonly bool UseSystemJson = false;
+
 		public void ConfigureServices(IConfiguration configuration, IServiceCollection services)
 		{
 			services.AddHttpContextAccessor();
@@ -30,13 +35,26 @@ namespace Montr.Core
 				return factory.GetUrlHelper(actionContext);
 			});
 
-			services
-				.AddMvcCore()
-				.AddJsonOptions(options =>
+			var mvcBuilder = services.AddMvcCore();
+
+			if (UseSystemJson)
+			{
+				mvcBuilder.AddJsonOptions(options =>
 				{
 					options.JsonSerializerOptions.Converters.Add(new PolymorphicWriteOnlyJsonConverter<DataField>());
 					// options.JsonSerializerOptions.Converters.Add(new DataFieldJsonConverter());
 				});
+			}
+			else
+			{
+				mvcBuilder.AddNewtonsoftJson(options =>
+				{
+					options.SerializerSettings.DefaultValueHandling = DefaultValueHandling.Ignore;
+					options.SerializerSettings.Converters.Add(new StringEnumConverter());
+					options.SerializerSettings.Converters.Add(new PolymorphicNewtonsoftJsonConverter<DataField>("type", DataFieldType.Map));
+					options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+				});
+			}
 
 			services.Configure<AppOptions>(configuration.GetSection(typeof(AppOptions).FullName));
 
@@ -56,15 +74,22 @@ namespace Montr.Core
 				}));
 			});
 
+			if (UseSystemJson)
+			{
+				services.AddSingleton<IJsonSerializer, DefaultJsonSerializer>();
+			}
+			else
+			{
+				services.AddSingleton<IJsonSerializer, NewtonsoftJsonSerializer>();
+			}
+
 			services.AddSingleton<IAppUrlBuilder, DefaultAppUrlBuilder>();
 			services.AddSingleton<IDateTimeProvider, DefaultDateTimeProvider>();
 			services.AddSingleton<IBinarySerializer, DefaultBinarySerializer>();
-			services.AddSingleton<IJsonSerializer, DefaultJsonSerializer>();
 			services.AddSingleton<IUnitOfWorkFactory, TransactionScopeUnitOfWorkFactory>();
-
 			services.AddSingleton<IMetadataProvider, DefaultMetadataProvider>();
 			services.AddSingleton<IContentProvider, DefaultContentProvider>();
-
+			
 			services.AddTransient<ICache, CombinedCache>();
 			services.AddTransient<ILocalizer, DefaultLocalizer>();
 		}

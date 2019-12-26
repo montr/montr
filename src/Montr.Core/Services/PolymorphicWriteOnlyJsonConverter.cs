@@ -9,6 +9,8 @@ namespace Montr.Core.Services
 		public override T Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
 		{
 			throw new NotImplementedException();
+
+			// return (T)JsonSerializer.Deserialize(ref reader, typeof(Montr.Core.Models.StringField), options);
 		}
 
 		public override void Write(Utf8JsonWriter writer, T value, JsonSerializerOptions options)
