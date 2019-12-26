@@ -1,10 +1,9 @@
 import * as React from "react";
-import { Page, PageHeader, Toolbar, DataTable, DataTableUpdateToken } from "@montr-core/components";
+import { Page, PageHeader, Toolbar, DataTable, DataTableUpdateToken, ButtonAdd, ButtonDelete } from "@montr-core/components";
 import { Constants } from "@montr-core/.";
 import { withCompanyContext, CompanyContextProps } from "@montr-kompany/components";
 import { ClassifierBreadcrumb } from "../components";
 import { Link } from "react-router-dom";
-import { Button, Icon } from "antd";
 import { ClassifierTypeService } from "../services";
 import { NotificationService } from "@montr-core/services";
 import { IMenu } from "@montr-core/models";
@@ -38,15 +37,15 @@ class _SearchClassifierType extends React.Component<IProps, IState> {
 		if (this.props.currentCompany !== prevProps.currentCompany) {
 			this.refreshTable(true);
 		}
-	}
+	};
 
 	componentWillUnmount = async () => {
 		await this._classifierTypeService.abort();
-	}
+	};
 
 	onSelectionChange = async (selectedRowKeys: string[] | number[]) => {
 		this.setState({ selectedRowKeys });
-	}
+	};
 
 	// todo: show confirm
 	// todo: localize
@@ -60,13 +59,13 @@ class _SearchClassifierType extends React.Component<IProps, IState> {
 		} catch (error) {
 			this._notificationService.error("Ошибка при удалении данных", error.message);
 		}
-	}
+	};
 
 	refreshTable = async (resetSelectedRows?: boolean) => {
 		this.setState({
 			updateTableToken: { date: new Date(), resetSelectedRows }
 		});
-	}
+	};
 
 	render = () => {
 		const { updateTableToken } = this.state;
@@ -81,9 +80,9 @@ class _SearchClassifierType extends React.Component<IProps, IState> {
 				title={<>
 					<Toolbar float="right">
 						<Link to={`/classifiers/add`}>
-							<Button type="primary"><Icon type="plus" /> Добавить</Button>
+							<ButtonAdd type="primary" />
 						</Link>
-						<Button onClick={this.delete}><Icon type="delete" /> Удалить</Button>
+						<ButtonDelete onClick={this.delete} />
 					</Toolbar>
 
 					<ClassifierBreadcrumb />
@@ -101,7 +100,7 @@ class _SearchClassifierType extends React.Component<IProps, IState> {
 
 			</Page>
 		);
-	}
+	};
 }
 
 const SearchClassifierType = withCompanyContext(_SearchClassifierType);

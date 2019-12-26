@@ -1,11 +1,11 @@
 import * as React from "react";
 import { CompanyContextProps, withCompanyContext } from "@montr-kompany/components";
-import { DataTable, DataTableUpdateToken, Toolbar } from "@montr-core/components";
+import { DataTable, DataTableUpdateToken, Toolbar, ButtonAdd } from "@montr-core/components";
 import { IClassifierType, IClassifierTree } from "../models";
 import { Constants } from "@montr-core/.";
 import { ClassifierTreeService } from "../services";
 import { IDataResult, IMenu } from "@montr-core/models";
-import { Alert, Button, Icon, Modal } from "antd";
+import { Alert, Modal } from "antd";
 import { ModalEditClassifierTree } from ".";
 
 interface IProps extends CompanyContextProps {
@@ -34,17 +34,17 @@ class _TabEditClassifierTypeHierarchy extends React.Component<IProps, IState> {
 			this.props.type !== prevProps.type) {
 			await this.refreshTable();
 		}
-	}
+	};
 
 	componentWillUnmount = async () => {
 		await this._classifierTreeService.abort();
-	}
+	};
 
 	refreshTable = async (resetSelectedRows?: boolean) => {
 		this.setState({
 			updateTableToken: { date: new Date(), resetSelectedRows }
 		});
-	}
+	};
 
 	onLoadTableData = async (loadUrl: string, postParams: any): Promise<IDataResult<{}>> => {
 		const { currentCompany, type } = this.props;
@@ -61,39 +61,39 @@ class _TabEditClassifierTypeHierarchy extends React.Component<IProps, IState> {
 		}
 
 		return null;
-	}
+	};
 
 	showAddGroupModal = () => {
 		this.setState({ editData: {} });
-	}
+	};
 
 	showEditModal = (data: IClassifierTree) => {
 		this.setState({ editData: data });
-	}
+	};
 
 	showDeleteConfirm = (data: IClassifierTree) => {
 		Modal.confirm({
 			title: "Вы действительно хотите удалить выбранную иерархию?",
 			content: "Наверняка что-то случится с группами и элементами справочника...",
 			onOk: async () => {
-				const { type } = this.props
+				const { type } = this.props;
 
 				await this._classifierTreeService.delete(type.code, [data.uid]);
 
 				this.refreshTable();
 			}
 		});
-	}
+	};
 
 	onGroupModalSuccess = async (data: IClassifierTree) => {
 		this.setState({ editData: null });
 
 		await this.refreshTable();
-	}
+	};
 
 	onGroupModalCancel = () => {
 		this.setState({ editData: null });
-	}
+	};
 
 	render() {
 		const { type } = this.props,
@@ -109,11 +109,9 @@ class _TabEditClassifierTypeHierarchy extends React.Component<IProps, IState> {
 				message="Настройка иерархий групп доступна для справочников, у которых на вкладке «Информация» выбран тип иерархии «Группы»." />
 
 			{type.hierarchyType == "Groups" && (<>
-				<Toolbar>
-					<Button onClick={this.showAddGroupModal}><Icon type="plus" /> Добавить</Button>
+				<Toolbar clear>
+					<ButtonAdd onClick={this.showAddGroupModal} />
 				</Toolbar>
-
-				<div style={{ clear: "both" }} />
 
 				<DataTable
 					rowKey="code"

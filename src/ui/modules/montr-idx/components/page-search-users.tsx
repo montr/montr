@@ -1,7 +1,6 @@
 import React from "react";
 import { Link } from "react-router-dom";
-import { Button } from "antd";
-import { Page, Toolbar, DataBreadcrumb, PageHeader, DataTable } from "@montr-core/components";
+import { Page, Toolbar, DataBreadcrumb, PageHeader, DataTable, ButtonAdd } from "@montr-core/components";
 import { Api } from "../module";
 
 interface IProps {
@@ -15,7 +14,7 @@ export default class SearchUsers extends React.Component<IProps, IState> {
 		return (
 			<Page title={<>
 				<Toolbar float="right">
-					<Link to="/events/new"><Button icon="plus">Создать</Button></Link>
+					<Link to="/users/new"><ButtonAdd /></Link>
 				</Toolbar>
 
 				<DataBreadcrumb items={[]} />

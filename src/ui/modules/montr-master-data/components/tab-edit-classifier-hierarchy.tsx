@@ -1,17 +1,17 @@
 import * as React from "react";
-import { Alert, Button, Icon, Modal } from "antd";
+import { Alert, Modal } from "antd";
 import { Constants } from "@montr-core/.";
-import { DataTableUpdateToken, Toolbar, DataTable } from "@montr-core/components";
+import { DataTableUpdateToken, Toolbar, DataTable, ButtonAdd } from "@montr-core/components";
 import { withCompanyContext, CompanyContextProps } from "@montr-kompany/components";
 import { IClassifierType, IClassifier, IClassifierLink } from "../models";
 import { IDataResult, IMenu, Guid } from "@montr-core/models";
-import { ClassifierLinkService } from "@montr-master-data/services";
+import { ClassifierLinkService } from "../services";
 import { ModalEditClassifierLink } from ".";
 
 interface IProps extends CompanyContextProps {
 	type: IClassifierType;
 	data: IClassifier;
-	onDataChange?: (values: IClassifier) => void
+	onDataChange?: (values: IClassifier) => void;
 }
 
 interface IState {
@@ -37,17 +37,17 @@ class _TabEditClassifierHierarchy extends React.Component<IProps, IState> {
 			this.props.data !== prevProps.data) {
 			await this.refreshTable();
 		}
-	}
+	};
 
 	componentWillUnmount = async () => {
 		await this._classifierLinkService.abort();
-	}
+	};
 
 	refreshTable = async (resetSelectedRows?: boolean) => {
 		this.setState({
 			updateTableToken: { date: new Date(), resetSelectedRows }
 		});
-	}
+	};
 
 	onLoadTableData = async (loadUrl: string, postParams: any): Promise<IDataResult<{}>> => {
 		const { type, data } = this.props;
@@ -64,35 +64,35 @@ class _TabEditClassifierHierarchy extends React.Component<IProps, IState> {
 		}
 
 		return null;
-	}
+	};
 
 	showAddLinkModal = () => {
 		this.setState({ modalData: {} });
-	}
+	};
 
 	showDeleteLinkConfirm = (data: IClassifierLink) => {
 		Modal.confirm({
 			title: "Вы действительно хотите удалить связь с выбранной группой?",
 			content: "При удалении связи с группой иерархии по-умолчанию, элемент будет привязан к корню иерархии по-умолчанию.",
 			onOk: async () => {
-				const { type } = this.props
+				const { type } = this.props;
 
 				await this._classifierLinkService.delete(type.code, data.group.uid, data.item.uid);
 
 				this.refreshTable();
 			}
 		});
-	}
+	};
 
 	onModalSuccess = async (data: IClassifierLink) => {
 		this.setState({ modalData: null });
 
 		await this.refreshTable();
-	}
+	};
 
 	onModalCancel = () => {
 		this.setState({ modalData: null });
-	}
+	};
 
 	render() {
 		const { type, data } = this.props,
@@ -109,11 +109,9 @@ class _TabEditClassifierHierarchy extends React.Component<IProps, IState> {
 				message="Настройка иерархий групп доступна для типов справочников, у которых на вкладке «Информация» выбран тип иерархии «Группы»." />
 
 			{type.hierarchyType == "Groups" && (<>
-				<Toolbar>
-					<Button onClick={this.showAddLinkModal}><Icon type="plus" /> Добавить</Button>
+				<Toolbar clear>
+					<ButtonAdd onClick={this.showAddLinkModal} />
 				</Toolbar>
-
-				<div style={{ clear: "both" }} />
 
 				<DataTable
 					viewId="ClassifierLink/Grid"

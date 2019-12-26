@@ -3,8 +3,9 @@ import { Drawer, Modal } from "antd";
 import { Toolbar } from "./toolbar";
 import { IDataField, IDataResult, Guid, IMenu } from "../models";
 import { MetadataService } from "../services";
-import { DataTable, DataTableUpdateToken, ButtonAdd, PaneEditMetadataForm } from ".";
+import { DataTable, DataTableUpdateToken, ButtonAdd, PaneEditMetadataForm, ButtonDelete } from ".";
 import { Constants } from "..";
+import { Translation } from "react-i18next";
 
 interface IProps {
 	entityTypeCode: string;
@@ -96,35 +97,34 @@ export class PaneEditMetadata extends React.Component<IProps, IState> {
 		const { entityTypeCode } = this.props,
 			{ showDrawer, editUid, updateTableToken } = this.state;
 
-		return (<>
-			<Toolbar clear>
-				<ButtonAdd onClick={this.showAddDrawer} />
-			</Toolbar>
+		return (
+			<Translation>{(t) => <>
+				<Toolbar clear>
+					<ButtonAdd type="primary" onClick={this.showAddDrawer} />
+					<ButtonDelete />
+				</Toolbar>
 
-			<DataTable
-				rowKey="key"
-				rowActions={[
-					{ name: "Редактировать", onClick: this.showEditDrawer },
-					// { name: "Удалить", onClick: this.showDeleteConfirm }
-				]}
-				viewId={`Metadata/Grid`}
-				loadUrl={`${Constants.apiURL}/metadata/list/`}
-				onLoadData={this.onLoadTableData}
-				updateToken={updateTableToken}
-			/>
+				<DataTable
+					rowKey="key"
+					rowActions={[{ name: t("button.edit"), onClick: this.showEditDrawer }]}
+					viewId={`Metadata/Grid`}
+					loadUrl={`${Constants.apiURL}/metadata/list/`}
+					onLoadData={this.onLoadTableData}
+					updateToken={updateTableToken}
+				/>
 
-			{showDrawer &&
-				<Drawer
-					title="Metadata"
-					closable={false}
-					onClose={this.closeDrawer}
-					visible={true}
-					width={800}>
-					<PaneEditMetadataForm
-						entityTypeCode={entityTypeCode} uid={editUid}
-						onSuccess={this.handleSuccess}
-					/>
-				</Drawer>}
-		</>);
+				{showDrawer &&
+					<Drawer
+						title="Metadata"
+						closable={false}
+						onClose={this.closeDrawer}
+						visible={true}
+						width={800}>
+						<PaneEditMetadataForm
+							entityTypeCode={entityTypeCode} uid={editUid}
+							onSuccess={this.handleSuccess}
+						/>
+					</Drawer>}
+			</>}</Translation>);
 	};
 }
