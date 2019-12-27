@@ -35,9 +35,9 @@ namespace Montr.Core.Impl.Services
 					query = query.Where(x => x.Uid == request.Uid);
 				}
 
-				var withPaging = true; // request.PageSize > 0;
+				var withPaging = request.PageSize > 0;
 
-				var paged = withPaging ? query.Apply(request, x => x.DisplayOrder) : query;
+				var paged = withPaging ? query.Apply(request, x => x.DisplayOrder) : query.OrderBy(x => x.DisplayOrder);
 
 				var data = await paged
 					.Select(x => x)

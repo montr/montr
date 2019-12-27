@@ -16,11 +16,14 @@ namespace Montr.MasterData.Impl.QueryHandlers
 	{
 		private readonly IClassifierTypeService _classifierTypeService;
 		private readonly IMetadataProvider _metadataProvider;
+		private readonly IRepository<DataField> _repository;
 
-		public GetClassifierMetadataHandler(IClassifierTypeService classifierTypeService, IMetadataProvider metadataProvider)
+		public GetClassifierMetadataHandler(IClassifierTypeService classifierTypeService,
+			IMetadataProvider metadataProvider, IRepository<DataField> repository)
 		{
 			_classifierTypeService = classifierTypeService;
 			_metadataProvider = metadataProvider;
+			_repository = repository;
 		}
 
 		public async Task<DataView> Handle(GetClassifierMetadata request, CancellationToken cancellationToken)
@@ -46,7 +49,19 @@ namespace Montr.MasterData.Impl.QueryHandlers
 				};
 			}
 
-			var result = await _metadataProvider.GetView("Classifier/" + type.Code);
+			var metadata = await _repository.Search(new MetadataSearchRequest { EntityTypeCode = "classifier." + type.Code }, cancellationToken);
+
+			DataView result;
+
+			if (metadata.Rows.Count > 0)
+			{
+				result = new DataView { Fields = metadata.Rows };
+			}
+			else
+			{
+				// todo: remove
+				result = await _metadataProvider.GetView("Classifier/" + type.Code);
+			}
 
 			if (commonFields != null)
 			{

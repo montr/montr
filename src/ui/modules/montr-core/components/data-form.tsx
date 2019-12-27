@@ -125,6 +125,8 @@ export class WrappedDataForm extends React.Component<IProps, IState> {
 
 		const fieldFactory = DataFieldFactory.get(field.type);
 
+		if (!fieldFactory) return null;
+
 		const required: ValidationRule = {
 			required: field.required,
 			message: t("dataForm.rule.required", { name: field.name })
