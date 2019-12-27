@@ -11,6 +11,7 @@ export interface IDataField {
 	// multiple?: boolean;
 	readonly?: boolean;
 	required?: boolean;
+	displayOrder?: number;
 }
 
 export interface IStringField extends IDataField {

@@ -64,6 +64,8 @@ namespace Montr.Core.Models
 		public bool Readonly { get; set; }
 
 		public bool Required { get; set; }
+
+		public int DisplayOrder { get; set; }
 	}
 
 	public class BooleanField : DataField

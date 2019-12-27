@@ -1,11 +1,12 @@
 import * as React from "react";
 import { Form, Button, Spin } from "antd";
-import { FormComponentProps } from "antd/lib/form";
+import { FormComponentProps, ValidationRule } from "antd/lib/form";
 import { IDataField, IIndexer, IApiResult } from "../models";
 import { NotificationService } from "../services/notification-service";
 import { OperationService } from "../services";
 import { FormDefaults, DataFieldFactory } from ".";
 import { withTranslation, WithTranslation } from "react-i18next";
+import { GetFieldDecoratorOptions } from "antd/lib/form/Form";
 
 declare const FormLayouts: ["horizontal", "inline", "vertical"];
 
@@ -122,21 +123,25 @@ export class WrappedDataForm extends React.Component<IProps, IState> {
 
 		const initialValue = data?.[field.key];
 
-		const fieldOptions = field.type == "boolean"
-			? {
-				initialValue: initialValue,
-				valuePropName: "checked",
-			}
-			: {
-				initialValue: initialValue,
-				rules: [{
-					required: field.required,
-					whitespace: field.required,
-					message: t("dataForm.rule.required", { name: field.name })
-				}]
-			};
-
 		const fieldFactory = DataFieldFactory.get(field.type);
+
+		const required: ValidationRule = {
+			required: field.required,
+			message: t("dataForm.rule.required", { name: field.name })
+		};
+
+		if (field.type != "number") {
+			required.whitespace = field.required;
+		}
+
+		const fieldOptions: GetFieldDecoratorOptions = {
+			initialValue: initialValue,
+			valuePropName: fieldFactory.valuePropName
+		};
+
+		if (field.type != "boolean") {
+			fieldOptions.rules = [required];
+		}
 
 		const fieldNode = fieldFactory.createNode(field, data);
 

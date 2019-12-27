@@ -21,12 +21,14 @@ namespace Montr.Core.Services
 			{
 				result.Columns = new List<DataColumn>
 				{
+					new DataColumn { Key = "displayOrder", Name = "#", Width = 10, Sortable = true },
 					new DataColumn { Key = "key", Name = "Key", Width = 100, Sortable = true },
 					new DataColumn { Key = "type", Name = "Type", Width = 70, /*Sortable = true*/ },
-					new DataColumn { Key = "name", Name = "Name", Width = 200, Sortable = true },
-					new DataColumn { Key = "description", Name = "Description", Width = 200 },
+					new DataColumn { Key = "name", Name = "Name", Width = 150, Sortable = true },
+					new DataColumn { Key = "description", Name = "Description", Width = 150 },
 					new DataColumn { Key = "active", Name = "Active", Width = 10, Sortable = true, Type = DataFieldType.Boolean },
 					new DataColumn { Key = "system", Name = "System", Width = 10, Sortable = true, Type = DataFieldType.Boolean },
+					new DataColumn { Key = "required", Name = "Required", Width = 10, Sortable = true, Type = DataFieldType.Boolean },
 				};
 			}
 
@@ -39,12 +41,13 @@ namespace Montr.Core.Services
 						Key = "type", Name = "Тип", Required = true,
 						Options = DataFieldType.Map.Keys.OrderBy(x => x).Select(x => new SelectFieldOption { Value = x, Name = x }).ToArray()
 					},
+					new NumberField { Key = "displayOrder", Name = "#", Required = true, Min = 0, Max = 256 },
 					new StringField { Key = "key", Name = "Код", Required = true },
 					new StringField { Key = "name", Name = "Наименование", Required = true },
 					new TextAreaField { Key = "description", Name = "Описание", Rows = 2 },
 					new StringField { Key = "placeholder", Name = "Placeholder" },
 					new StringField { Key = "icon", Name = "Icon" },
-					new BooleanField { Key = "readonly", Name = "Readonly" },
+					// new BooleanField { Key = "readonly", Name = "Readonly" },
 					new BooleanField { Key = "required", Name = "Required" }
 				};
 			}

@@ -43,6 +43,7 @@ namespace Montr.Core.Impl.CommandHandlers
 						.Set(x => x.Icon, item.Icon)
 						.Set(x => x.IsReadonly, item.Readonly)
 						.Set(x => x.IsRequired, item.Required)
+						.Set(x => x.DisplayOrder, item.DisplayOrder)
 						.UpdateAsync(cancellationToken);
 				}
 

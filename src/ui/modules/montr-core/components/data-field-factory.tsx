@@ -1,6 +1,6 @@
 import * as React from "react";
-import { Input, Select, Checkbox, Icon } from "antd";
-import { IDataField, IIndexer, ISelectField, ITextAreaField } from "../models";
+import { Input, InputNumber, Select, Checkbox, Icon } from "antd";
+import { IDataField, IIndexer, ISelectField, ITextAreaField, INumberField } from "../models";
 
 export abstract class DataFieldFactory {
 	private static Map: { [key: string]: DataFieldFactory; } = {};
@@ -13,16 +13,23 @@ export abstract class DataFieldFactory {
 		return DataFieldFactory.Map[key];
 	}
 
+	public valuePropName: string = "value";
+
 	abstract createNode(field: IDataField, data: IIndexer): React.ReactNode;
 }
 
-class BooleanFieldFactory implements DataFieldFactory {
+class BooleanFieldFactory extends DataFieldFactory {
+	constructor() {
+		super();
+		this.valuePropName = "checked";
+	}
+
 	createNode(field: IDataField, data: IIndexer): React.ReactNode {
 		return <Checkbox>{field.name}</Checkbox>;
 	}
 }
 
-class StringFieldFactory implements DataFieldFactory {
+class StringFieldFactory extends DataFieldFactory {
 	createNode(field: IDataField, data: IIndexer): React.ReactNode {
 		return <Input
 			allowClear
@@ -33,7 +40,20 @@ class StringFieldFactory implements DataFieldFactory {
 	}
 }
 
-class TextAreaFieldFactory implements DataFieldFactory {
+class NumberFieldFactory extends DataFieldFactory {
+	createNode(field: IDataField, data: IIndexer): React.ReactNode {
+		const numberField = field as INumberField;
+
+		return <InputNumber
+			min={numberField.min}
+			max={numberField.max}
+			disabled={field.readonly}
+			placeholder={field.placeholder}
+		/>;
+	}
+}
+
+class TextAreaFieldFactory extends DataFieldFactory {
 	createNode(field: IDataField, data: IIndexer): React.ReactNode {
 
 		const textAreaField = field as ITextAreaField;
@@ -44,7 +64,7 @@ class TextAreaFieldFactory implements DataFieldFactory {
 	}
 }
 
-class SelectFieldFactory implements DataFieldFactory {
+class SelectFieldFactory extends DataFieldFactory {
 	createNode(field: IDataField, data: IIndexer): React.ReactNode {
 
 		const selectField = field as ISelectField;
@@ -59,7 +79,7 @@ class SelectFieldFactory implements DataFieldFactory {
 	}
 }
 
-class PasswordFieldFactory implements DataFieldFactory {
+class PasswordFieldFactory extends DataFieldFactory {
 	createNode(field: IDataField, data: IIndexer): React.ReactNode {
 		return <Input.Password
 			allowClear
@@ -70,6 +90,7 @@ class PasswordFieldFactory implements DataFieldFactory {
 }
 
 DataFieldFactory.register("boolean", new BooleanFieldFactory());
+DataFieldFactory.register("number", new NumberFieldFactory());
 DataFieldFactory.register("string", new StringFieldFactory());
 DataFieldFactory.register("textarea", new TextAreaFieldFactory());
 DataFieldFactory.register("select", new SelectFieldFactory());

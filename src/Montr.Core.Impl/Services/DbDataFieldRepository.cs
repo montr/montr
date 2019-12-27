@@ -35,9 +35,9 @@ namespace Montr.Core.Impl.Services
 					query = query.Where(x => x.Uid == request.Uid);
 				}
 
-				var withPaging = request.PageSize > 0;
+				var withPaging = true; // request.PageSize > 0;
 
-				var paged = withPaging ? query.Apply(request, x => x.Key) : query;
+				var paged = withPaging ? query.Apply(request, x => x.DisplayOrder) : query;
 
 				var data = await paged
 					.Select(x => x)
@@ -60,6 +60,7 @@ namespace Montr.Core.Impl.Services
 					field.System = dbField.IsSystem;
 					field.Readonly = dbField.IsReadonly;
 					field.Required = dbField.IsRequired;
+					field.DisplayOrder = dbField.DisplayOrder;
 
 					result.Add(field);
 				}
