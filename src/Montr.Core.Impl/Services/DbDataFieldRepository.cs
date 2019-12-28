@@ -48,7 +48,7 @@ namespace Montr.Core.Impl.Services
 				foreach (var dbField in data)
 				{
 					// todo: use factory
-					var field = (DataField) Activator.CreateInstance(DataFieldType.Map[dbField.TypeCode]);
+					var field = (DataField) Activator.CreateInstance(DataFieldTypes.Map[dbField.TypeCode]);
 
 					field.Uid = dbField.Uid;
 					field.Key = dbField.Key;

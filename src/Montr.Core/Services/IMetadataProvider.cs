@@ -26,9 +26,9 @@ namespace Montr.Core.Services
 					new DataColumn { Key = "type", Name = "Type", Width = 70, /*Sortable = true*/ },
 					new DataColumn { Key = "name", Name = "Name", Width = 150, Sortable = true },
 					new DataColumn { Key = "description", Name = "Description", Width = 150 },
-					new DataColumn { Key = "active", Name = "Active", Width = 10, Sortable = true, Type = DataFieldType.Boolean },
-					new DataColumn { Key = "system", Name = "System", Width = 10, Sortable = true, Type = DataFieldType.Boolean },
-					new DataColumn { Key = "required", Name = "Required", Width = 10, Sortable = true, Type = DataFieldType.Boolean },
+					new DataColumn { Key = "active", Name = "Active", Width = 10, Sortable = true, Type = DataFieldTypes.Boolean },
+					new DataColumn { Key = "system", Name = "System", Width = 10, Sortable = true, Type = DataFieldTypes.Boolean },
+					new DataColumn { Key = "required", Name = "Required", Width = 10, Sortable = true, Type = DataFieldTypes.Boolean },
 				};
 			}
 
@@ -39,7 +39,7 @@ namespace Montr.Core.Services
 					new SelectField
 					{
 						Key = "type", Name = "Тип", Required = true,
-						Options = DataFieldType.Map.Keys.OrderBy(x => x).Select(x => new SelectFieldOption { Value = x, Name = x }).ToArray()
+						Options = DataFieldTypes.Map.Keys.OrderBy(x => x).Select(x => new SelectFieldOption { Value = x, Name = x }).ToArray()
 					},
 					new NumberField { Key = "displayOrder", Name = "#", Required = true, Min = 0, Max = 256 },
 					new StringField { Key = "key", Name = "Код", Required = true },

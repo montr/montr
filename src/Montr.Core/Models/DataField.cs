@@ -3,11 +3,11 @@ using System.Collections.Concurrent;
 
 namespace Montr.Core.Models
 {
-	public class DataFieldType
+	public class DataFieldTypes
 	{
 		public static readonly ConcurrentDictionary<string, Type> Map = new ConcurrentDictionary<string, Type>();
 
-		static DataFieldType()
+		static DataFieldTypes()
 		{
 			Map[Boolean] = typeof(BooleanField);
 			Map[String] = typeof(StringField);
@@ -37,6 +37,15 @@ namespace Montr.Core.Models
 		public static readonly string Classifier = "classifier";
 		public static readonly string ClassifierGroup = "classifier-group";
 		public static readonly string File = "file";
+	}
+
+	public class FieldType
+	{
+		public string Code { get; set; }
+
+		public string Name { get; set; }
+
+		public string Icon { get; set; }
 	}
 
 	public abstract class DataField
@@ -70,12 +79,12 @@ namespace Montr.Core.Models
 
 	public class BooleanField : DataField
 	{
-		public override string Type => DataFieldType.Boolean;
+		public override string Type => DataFieldTypes.Boolean;
 	}
 
 	public class StringField : DataField
 	{
-		public override string Type => DataFieldType.String;
+		public override string Type => DataFieldTypes.String;
 
 		public bool Autosize { get; set; }
 	}

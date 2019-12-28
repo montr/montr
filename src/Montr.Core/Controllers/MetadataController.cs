@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Montr.Core.Commands;
@@ -30,6 +31,14 @@ namespace Montr.Core.Controllers
 		[HttpPost]
 		public async Task<SearchResult<DataField>> List(GetMetadataList request)
 		{
+			return await _mediator.Send(request);
+		}
+
+		[HttpPost]
+		public async Task<IList<FieldType>> FieldTypes(GetFieldTypes request)
+		{
+			// request.UserUid = _currentUserProvider.GetUserUid();
+
 			return await _mediator.Send(request);
 		}
 

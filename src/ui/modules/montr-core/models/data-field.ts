@@ -1,5 +1,11 @@
 import { Guid } from ".";
 
+export interface IFieldType {
+	code?: string;
+	name?: string;
+	icon?: string;
+}
+
 export interface IDataField {
 	uid?: Guid;
 	type: string;

@@ -50,7 +50,7 @@ namespace Montr.Core
 				{
 					// options.SerializerSettings.DefaultValueHandling = DefaultValueHandling.Ignore; // zeros in numbers ignored also
 					options.SerializerSettings.Converters.Add(new StringEnumConverter());
-					options.SerializerSettings.Converters.Add(new PolymorphicNewtonsoftJsonConverter<DataField>("type", DataFieldType.Map));
+					options.SerializerSettings.Converters.Add(new PolymorphicNewtonsoftJsonConverter<DataField>("type", DataFieldTypes.Map));
 					options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
 				});
 			}

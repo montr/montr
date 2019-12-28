@@ -55,27 +55,25 @@ class NumberFieldFactory extends DataFieldFactory {
 
 class TextAreaFieldFactory extends DataFieldFactory {
 	createNode(field: IDataField, data: IIndexer): React.ReactNode {
-
 		const textAreaField = field as ITextAreaField;
 
-		const minRows = textAreaField.rows || 4;
-
-		return <Input.TextArea allowClear placeholder={field.placeholder} autoSize={{ minRows: minRows, maxRows: 24 }} />;
+		return <Input.TextArea
+			allowClear
+			placeholder={field.placeholder}
+			autoSize={{ minRows: textAreaField?.rows || 4, maxRows: 24 }}
+		/>;
 	}
 }
 
 class SelectFieldFactory extends DataFieldFactory {
 	createNode(field: IDataField, data: IIndexer): React.ReactNode {
-
 		const selectField = field as ISelectField;
 
-		return (
-			<Select allowClear showSearch placeholder={field.placeholder}>
-				{selectField && selectField.options && selectField.options.map(x => {
-					return <Select.Option key={x.value} value={x.value}>{x.name || x.value}</Select.Option>;
-				})}
-			</Select>
-		);
+		return <Select allowClear showSearch placeholder={field.placeholder}>
+			{selectField && selectField.options && selectField.options.map(x => {
+				return <Select.Option key={x.value} value={x.value}>{x.name || x.value}</Select.Option>;
+			})}
+		</Select>;
 	}
 }
 

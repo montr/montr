@@ -1,6 +1,6 @@
 import { Fetcher } from "./fetcher";
 import { Constants } from "..";
-import { IDataView, IPaneProps, IDataField, IApiResult, Guid } from "../models";
+import { IDataView, IPaneProps, IDataField, IApiResult, Guid, IFieldType } from "../models";
 
 interface IInsertDataFieldRequest {
 	entityTypeCode: string;
@@ -23,6 +23,10 @@ export class MetadataService extends Fetcher {
 		}
 
 		return data;
+	};
+
+	fieldTypes = async (entityTypeCode: string): Promise<IFieldType[]> => {
+		return this.post(`${Constants.apiURL}/metadata/fieldTypes`, { entityTypeCode });
 	};
 
 	get = async (entityTypeCode: string, uid: Guid): Promise<IDataField> => {

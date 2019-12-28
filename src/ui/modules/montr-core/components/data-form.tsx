@@ -21,7 +21,7 @@ interface IProps extends WithTranslation, FormComponentProps {
 	errorMessage?: string;
 	hideLabels?: boolean;
 	onChange?: (values: IIndexer) => void;
-	onSubmit: (values: IIndexer) => Promise<IApiResult>;
+	onSubmit?: (values: IIndexer) => Promise<IApiResult>;
 }
 
 interface IState {
@@ -171,11 +171,11 @@ export class WrappedDataForm extends React.Component<IProps, IState> {
 		return (
 			<Spin spinning={loading}>
 				<Form layout={layout || "horizontal"}
-					onChange={this.handleChange}
+					// onChange={this.handleChange} // todo: restore when on change will be working for select, classifer-select etc.
 					onSubmit={this.handleSubmit}>
 					{fields && fields.map(x => this.createItem(x))}
 					{fields && showControls !== false &&
-						<Form.Item {...itemLayout}>
+						<Form.Item /* hasFeedback */ {...itemLayout}>
 							<Button type="primary" htmlType="submit" icon="check">{submitButton || t("button.save")}</Button>&#xA0;
 							{/* <Button htmlType="reset">{t("button.cancel")}</Button> */}
 						</Form.Item>
@@ -186,4 +186,12 @@ export class WrappedDataForm extends React.Component<IProps, IState> {
 	};
 }
 
-export const DataForm = withTranslation()(Form.create<IProps>()(WrappedDataForm));
+export const DataForm = withTranslation()(Form.create<IProps>({
+	// Form.onChange is not working - not triggered when Select field changes
+	// https://github.com/ant-design/ant-design/issues/18867
+	onValuesChange: (props, values, allFieldsValues) => {
+		if (props.onChange) {
+			props.onChange(allFieldsValues);
+		}
+	}
+})(WrappedDataForm));
