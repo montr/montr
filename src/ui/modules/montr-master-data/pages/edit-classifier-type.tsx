@@ -2,7 +2,7 @@ import * as React from "react";
 import { RouteComponentProps } from "react-router";
 import { Spin, Tabs } from "antd";
 import { CompanyContextProps, withCompanyContext } from "@montr-kompany/components";
-import { Page, PageHeader, PaneEditMetadata } from "@montr-core/components";
+import { Page, PageHeader, PaneSearchMetadata } from "@montr-core/components";
 import { ClassifierTypeService } from "../services";
 import { IClassifierType } from "../models";
 import { ClassifierBreadcrumb, TabEditClassifierType, TabEditClassifierTypeHierarchy } from "../components";
@@ -110,7 +110,7 @@ class _EditClassifierType extends React.Component<IProps, IState> {
 							<TabEditClassifierTypeHierarchy type={data} />
 						</Tabs.TabPane>
 						<Tabs.TabPane key="fields" tab="Поля" disabled={otherTabsDisabled}>
-							{data.code && <PaneEditMetadata entityTypeCode={`classifier.${data.code}`} />}
+							{data.code && <PaneSearchMetadata entityTypeCode={`classifier.${data.code}`} />}
 						</Tabs.TabPane>
 						<Tabs.TabPane key="history" tab="История изменений" disabled={otherTabsDisabled}></Tabs.TabPane>
 					</Tabs>
