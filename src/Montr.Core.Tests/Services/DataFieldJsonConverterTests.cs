@@ -116,7 +116,7 @@ namespace Montr.Core.Tests.Services
 					Icon = "Icon 2",
 					Multiple = true,
 					Readonly = true,
-					Required = true
+					Required = true,
 					Rows = 15
 				},
 
