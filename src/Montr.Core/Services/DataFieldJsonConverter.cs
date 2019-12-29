@@ -36,15 +36,10 @@ namespace Montr.Core.Services
 			writer.WriteBoolean("readonly", value.Readonly);
 			writer.WriteBoolean("required", value.Required);
 
-			/*if (value is BooleanField booleanField)
+			/*if (value is StringField stringField)
 			{
 				// writer.WriteNumber("TypeDiscriminator", (int)TypeDiscriminator.StringField);
 			}*/
-
-			if (value is StringField stringField)
-			{
-				writer.WriteBoolean("autosize", stringField.Autosize);
-			}
 
 			if (value is TextAreaField textAreaField)
 			{

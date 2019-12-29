@@ -51,6 +51,57 @@ namespace Montr.Core.Services
 					new BooleanField { Key = "required", Name = "Required" }
 				};
 			}
+			else if (viewId.StartsWith("Metadata/Edit/"))
+			{
+				var code = viewId.Substring("Metadata/Edit/".Length);
+
+				if (code == DataFieldTypes.TextArea)
+				{
+					result.Fields = new List<DataField>
+					{
+						new NumberField { Key = "rows", Name = "Количество строк", Min = 1, Max = byte.MaxValue }
+					};
+				}
+				else if (code == DataFieldTypes.Number)
+				{
+					result.Fields = new List<DataField>
+					{
+						new NumberField { Key = "min", Name = "Минимум", Min = long.MinValue, Max = long.MaxValue },
+						new NumberField { Key = "max", Name = "Максимум", Min = long.MinValue, Max = long.MaxValue }
+					};
+				}
+				else if (code == DataFieldTypes.Decimal)
+				{
+					result.Fields = new List<DataField>
+					{
+						new NumberField { Key = "min", Name = "Минимум", Min = decimal.MinValue, Max = decimal.MaxValue },
+						new NumberField { Key = "max", Name = "Максимум", Min = decimal.MinValue, Max = decimal.MaxValue },
+						new NumberField { Key = "precision", Name = "Точность", Description = "Количество знаков после запятой", Min = 0, Max = 5 }
+					};
+				}
+				else if (code == DataFieldTypes.Select)
+				{
+					result.Fields = new List<DataField>
+					{
+						new TextAreaField { Key = "options", Name = "Options", Required = true }
+					};
+				}
+				else if (code == DataFieldTypes.Classifier)
+				{
+					result.Fields = new List<DataField>
+					{
+						new StringField { Key = "typeCode", Name = "TypeCode" }
+					};
+				}
+				else if (code == DataFieldTypes.ClassifierGroup)
+				{
+					result.Fields = new List<DataField>
+					{
+						new StringField { Key = "typeCode", Name = "TypeCode" },
+						new StringField { Key = "treeCode", Name = "TreeCode" }
+					};
+				}
+			}
 
 			if (viewId == "UserSearch/Grid")
 			{

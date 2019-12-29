@@ -104,8 +104,7 @@ namespace Montr.Core.Tests.Services
 					Icon = "Icon 1",
 					Multiple = true,
 					Readonly = true,
-					Required = true,
-					Autosize = true
+					Required = true
 				},
 
 				new TextAreaField
@@ -117,8 +116,7 @@ namespace Montr.Core.Tests.Services
 					Icon = "Icon 2",
 					Multiple = true,
 					Readonly = true,
-					Required = true,
-					Autosize = true,
+					Required = true
 					Rows = 15
 				},
 

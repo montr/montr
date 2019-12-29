@@ -13,11 +13,13 @@ interface IProps {
 
 interface IState {
 	loading: boolean;
+	typeFieldMap: { [key: string]: IDataField[]; };
 	typeData?: IDataField;
 	data?: IDataField;
 	typeFields?: IDataField[];
 	commonFields?: IDataField[];
 	optionalFields?: IDataField[];
+	visibleFields?: IDataField[];
 }
 
 export class PaneEditMetadata extends React.Component<IProps, IState> {
@@ -28,7 +30,8 @@ export class PaneEditMetadata extends React.Component<IProps, IState> {
 		super(props);
 
 		this.state = {
-			loading: true
+			loading: true,
+			typeFieldMap: {}
 		};
 	}
 
@@ -36,15 +39,19 @@ export class PaneEditMetadata extends React.Component<IProps, IState> {
 		await this.fetchData();
 	};
 
+	componentWillUnmount = async () => {
+		await this._metadataService.abort();
+	};
+
 	fetchData = async () => {
 		const { entityTypeCode, uid } = this.props;
 
 		const { type, ...values } = (uid) ? await this._metadataService.get(entityTypeCode, uid) : { type: "string" };
 
-		const dataView = await this._metadataService.load("Metadata/Edit");
+		const commonView = await this._metadataService.load("Metadata/Edit");
 
-		const typeFields = dataView.fields.slice(0, 1),
-			commonFields = dataView.fields.slice(1);
+		const typeFields = commonView.fields.slice(0, 1),
+			commonFields = commonView.fields.slice(1);
 
 		const optionalFields = this.getOptionalFields(commonFields, values as IDataField);
 
@@ -55,7 +62,7 @@ export class PaneEditMetadata extends React.Component<IProps, IState> {
 			typeFields,
 			commonFields,
 			optionalFields
-		});
+		}, () => this.setVisibleFields());
 	};
 
 	getOptionalFields = (fields: IDataField[], data: IDataField): IDataField[] => {
@@ -67,8 +74,30 @@ export class PaneEditMetadata extends React.Component<IProps, IState> {
 			});
 	};
 
+	setVisibleFields = async () => {
+		const { typeData, typeFieldMap, commonFields, optionalFields } = this.state;
+
+		let specificFields = typeFieldMap[typeData.type];
+
+		if (!specificFields) {
+			const typeView = await this._metadataService.load("Metadata/Edit/" + typeData.type);
+
+			specificFields = typeFieldMap[typeData.type] = typeView.fields || [];
+		}
+
+		const visibleCommonFields = commonFields?.filter(field => {
+			const optional = optionalFields.find(optional => field.key == optional.key);
+			return !optional || optional.active;
+		}) || [];
+
+		const visibleFields = [...visibleCommonFields, ...specificFields];
+
+		this.setState({ typeFieldMap, visibleFields });
+	};
+
 	handleTypeChange = async (values: IDataField) => {
-		this.setState({ typeData: { type: values.type } });
+		// todo: save/restore data between switching fields
+		this.setState({ typeData: { type: values.type } }, () => this.setVisibleFields());
 	};
 
 	handleCheckOptionalField = (key: string, checked: boolean) => {
@@ -79,7 +108,7 @@ export class PaneEditMetadata extends React.Component<IProps, IState> {
 		if (field) {
 			field.active = checked;
 
-			this.setState({ optionalFields });
+			this.setState({ optionalFields }, () => this.setVisibleFields());
 		}
 	};
 
@@ -125,13 +154,7 @@ export class PaneEditMetadata extends React.Component<IProps, IState> {
 	};
 
 	render = () => {
-		const { loading, typeFields, commonFields, optionalFields, typeData, data } = this.state;
-
-		// todo: move to fetchData
-		const visibleCommonFields = commonFields?.filter(field => {
-			const optional = optionalFields.find(optional => field.key == optional.key);
-			return !optional || optional.active;
-		});
+		const { loading, typeFields, visibleFields, optionalFields, typeData, data } = this.state;
 
 		return (
 			<Spin spinning={loading}>
@@ -143,7 +166,7 @@ export class PaneEditMetadata extends React.Component<IProps, IState> {
 					onChange={this.handleTypeChange} />
 
 				<DataForm
-					fields={visibleCommonFields}
+					fields={visibleFields}
 					data={data}
 					onSubmit={this.handleSubmit} />
 

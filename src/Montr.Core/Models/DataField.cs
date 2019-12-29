@@ -85,8 +85,6 @@ namespace Montr.Core.Models
 	public class StringField : DataField
 	{
 		public override string Type => DataFieldTypes.String;
-
-		public bool Autosize { get; set; }
 	}
 
 	// todo join with StringField?
@@ -106,11 +104,12 @@ namespace Montr.Core.Models
 	{
 		public override string Type => "number";
 
-		public long? Min { get; set; }
+		public decimal? Min { get; set; }
 
-		public long? Max { get; set; }
+		public decimal? Max { get; set; }
 	}
 
+	// todo: merge with number?
 	public class DecimalField : DataField
 	{
 		public override string Type => "decimal";
