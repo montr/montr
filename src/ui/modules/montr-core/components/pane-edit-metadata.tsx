@@ -22,6 +22,9 @@ interface IState {
 	visibleFields?: IDataField[];
 }
 
+// todo: read from server
+const DefaultFieldType = "text";
+
 export class PaneEditMetadata extends React.Component<IProps, IState> {
 
 	private _metadataService = new MetadataService();
@@ -46,7 +49,7 @@ export class PaneEditMetadata extends React.Component<IProps, IState> {
 	fetchData = async () => {
 		const { entityTypeCode, uid } = this.props;
 
-		const { type, ...values } = (uid) ? await this._metadataService.get(entityTypeCode, uid) : { type: "string" };
+		const { type, ...values } = (uid) ? await this._metadataService.get(entityTypeCode, uid) : { type: DefaultFieldType };
 
 		const commonView = await this._metadataService.load("Metadata/Edit");
 
@@ -67,7 +70,8 @@ export class PaneEditMetadata extends React.Component<IProps, IState> {
 
 	getOptionalFields = (fields: IDataField[], data: IDataField): IDataField[] => {
 		return fields
-			.filter(x => !x.required && (x.type == "string" || x.type == "textarea"))
+			// todo: read optional field types from server
+			.filter(x => !x.required && (x.type == "text" || x.type == "textarea"))
 			.map(x => {
 				// in optional fields using active as flag of visible field
 				return { type: x.type, key: x.key, name: x.name, active: !!data[x.key] };

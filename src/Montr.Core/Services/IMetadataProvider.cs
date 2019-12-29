@@ -42,11 +42,11 @@ namespace Montr.Core.Services
 						Options = DataFieldTypes.Map.Keys.OrderBy(x => x).Select(x => new SelectFieldOption { Value = x, Name = x }).ToArray()
 					},
 					new NumberField { Key = "displayOrder", Name = "#", Required = true, Min = 0, Max = 256 },
-					new StringField { Key = "key", Name = "Код", Required = true },
-					new StringField { Key = "name", Name = "Наименование", Required = true },
+					new TextField { Key = "key", Name = "Код", Required = true },
+					new TextField { Key = "name", Name = "Наименование", Required = true },
 					new TextAreaField { Key = "description", Name = "Описание", Rows = 2 },
-					new StringField { Key = "placeholder", Name = "Placeholder" },
-					new StringField { Key = "icon", Name = "Icon" },
+					new TextField { Key = "placeholder", Name = "Placeholder" },
+					new TextField { Key = "icon", Name = "Icon" },
 					// new BooleanField { Key = "readonly", Name = "Readonly" },
 					new BooleanField { Key = "required", Name = "Required" }
 				};
@@ -90,15 +90,15 @@ namespace Montr.Core.Services
 				{
 					result.Fields = new List<DataField>
 					{
-						new StringField { Key = "typeCode", Name = "TypeCode" }
+						new TextField { Key = "typeCode", Name = "TypeCode" }
 					};
 				}
 				else if (code == DataFieldTypes.ClassifierGroup)
 				{
 					result.Fields = new List<DataField>
 					{
-						new StringField { Key = "typeCode", Name = "TypeCode" },
-						new StringField { Key = "treeCode", Name = "TreeCode" }
+						new TextField { Key = "typeCode", Name = "TypeCode" },
+						new TextField { Key = "treeCode", Name = "TreeCode" }
 					};
 				}
 			}
@@ -135,18 +135,18 @@ namespace Montr.Core.Services
 				{
 					result.Fields = new List<DataField>
 					{
-						new StringField { Key = "code", Name = "Код", Required = true },
+						new TextField { Key = "code", Name = "Код", Required = true },
 						new TextAreaField { Key = "name", Name = "Наименование", Required = true, Rows = 10 },
-						new StringField { Key = "digitalCode", Name = "Цифровой код", Required = true },
-						new StringField { Key = "shortName", Name = "Краткое наименование" }
+						new TextField { Key = "digitalCode", Name = "Цифровой код", Required = true },
+						new TextField { Key = "shortName", Name = "Краткое наименование" }
 					};
 				}
 				else
 				{
 					result.Fields = new List<DataField>
 					{
-						// new StringField { Key = "statusCode", Name = "Статус", Readonly = true },
-						new StringField { Key = "code", Name = "Код", Required = true },
+						// new TextField { Key = "statusCode", Name = "Статус", Readonly = true },
+						new TextField { Key = "code", Name = "Код", Required = true },
 						new TextAreaField { Key = "name", Name = "Наименование", Required = true, Rows = 10 }
 					};
 				}
@@ -156,8 +156,8 @@ namespace Montr.Core.Services
 			{
 				result.Fields = new List<DataField>
 				{
-					new StringField { Key = "code", Name = "Код", Required = true },
-					new StringField { Key = "name", Name = "Наименование", Required = true },
+					new TextField { Key = "code", Name = "Код", Required = true },
+					new TextField { Key = "name", Name = "Наименование", Required = true },
 				};
 			}
 
@@ -165,8 +165,8 @@ namespace Montr.Core.Services
 			{
 				result.Fields = new List<DataField>
 				{
-					new StringField { Key = "code", Name = "Код", Required = true },
-					new StringField { Key = "name", Name = "Наименование", Required = true },
+					new TextField { Key = "code", Name = "Код", Required = true },
+					new TextField { Key = "name", Name = "Наименование", Required = true },
 					new ClassifierGroupField { Key = "parentUid", Name = "Родительская группа" },
 				};
 			}
@@ -183,7 +183,7 @@ namespace Montr.Core.Services
 			{
 				result.Fields = new List<DataField>
 				{
-					new StringField { Key = "code", Name = "Код", Required = true },
+					new TextField { Key = "code", Name = "Код", Required = true },
 					new TextAreaField { Key = "name", Name = "Наименование", Rows = 2, Required = true },
 					new TextAreaField { Key = "description", Name = "Описание" },
 					new SelectField { Key = "hierarchyType", Name = "Иерархия",
@@ -254,7 +254,7 @@ namespace Montr.Core.Services
 			{
 				result.Fields = new List<DataField>
 				{
-					new StringField { Key = "email", Name = "Email", Placeholder = "Your email", Icon = "user", Required = true },
+					new TextField { Key = "email", Name = "Email", Placeholder = "Your email", Icon = "user", Required = true },
 					new PasswordField { Key = "password", Name = "Password", Placeholder = "Password", Icon = "lock", Required = true },
 					new BooleanField { Key = "rememberMe", Name = "Remember me?" }
 				};
@@ -264,7 +264,7 @@ namespace Montr.Core.Services
 			{
 				result.Fields = new List<DataField>
 				{
-					new StringField { Key = "email", Name = "Email", Icon = "mail", Required = true }
+					new TextField { Key = "email", Name = "Email", Icon = "mail", Required = true }
 				};
 			}
 
@@ -272,7 +272,7 @@ namespace Montr.Core.Services
 			{
 				result.Fields = new List<DataField>
 				{
-					new StringField { Key = "email", Name = "Email", Required = true },
+					new TextField { Key = "email", Name = "Email", Required = true },
 					new PasswordField { Key = "password", Name = "Password", Required = true },
 					new PasswordField { Key = "confirmPassword", Name = "Confirm Password", Required = true }
 				};
@@ -302,9 +302,9 @@ namespace Montr.Core.Services
 				// todo: add terms and conditions checkbox
 				result.Fields = new List<DataField>
 				{
-					new StringField { Key = "email", Name = "Email", Required = true },
-					new StringField { Key = "firstName", Name = "First Name", Required = true },
-					new StringField { Key = "lastName", Name = "Last Name", Required = true },
+					new TextField { Key = "email", Name = "Email", Required = true },
+					new TextField { Key = "firstName", Name = "First Name", Required = true },
+					new TextField { Key = "lastName", Name = "Last Name", Required = true },
 					new PasswordField { Key = "password", Name = "Password", Required = true },
 					// new PasswordField { Key = "confirmPassword", Name = "Confirm Password", Required = true }
 				};
@@ -314,9 +314,9 @@ namespace Montr.Core.Services
 			{
 				result.Fields = new List<DataField>
 				{
-					new StringField { Key = "email", Name = "Email", Required = true },
-					new StringField { Key = "firstName", Name = "First Name", Required = true },
-					new StringField { Key = "lastName", Name = "Last Name", Required = true }
+					new TextField { Key = "email", Name = "Email", Required = true },
+					new TextField { Key = "firstName", Name = "First Name", Required = true },
+					new TextField { Key = "lastName", Name = "Last Name", Required = true }
 				};
 			}
 
@@ -324,7 +324,7 @@ namespace Montr.Core.Services
 			{
 				result.Fields = new List<DataField>
 				{
-					new StringField { Key = "email", Name = "Email", Required = true }
+					new TextField { Key = "email", Name = "Email", Required = true }
 				};
 			}
 
@@ -332,7 +332,7 @@ namespace Montr.Core.Services
 			{
 				result.Fields = new List<DataField>
 				{
-					new StringField { Key = "phoneNumber", Name = "Номер телефона" } // todo: PhoneField
+					new TextField { Key = "phoneNumber", Name = "Номер телефона" } // todo: PhoneField
 				};
 			}
 
@@ -340,9 +340,9 @@ namespace Montr.Core.Services
 			{
 				result.Fields = new List<DataField>
 				{
-					new StringField { Key = "userName", Name = "Имя пользователя", Readonly = true },
-					new StringField { Key = "firstName", Name = "Имя" },
-					new StringField { Key = "lastName", Name = "Фамилия" }
+					new TextField { Key = "userName", Name = "Имя пользователя", Readonly = true },
+					new TextField { Key = "firstName", Name = "Имя" },
+					new TextField { Key = "lastName", Name = "Фамилия" }
 				};
 			}
 
@@ -385,9 +385,9 @@ namespace Montr.Core.Services
 				result.Fields = new List<DataField>
 				{
 					new ClassifierField { Key = "counterpartyUid", Name = "Контрагент", TypeCode = "counterparty", Required = true },
-					new StringField { Key = "user", Name = "Пользователь" },
-					new StringField { Key = "email", Name = "Email", Required = true },
-					new StringField { Key = "phone", Name = "Телефон" },
+					new TextField { Key = "user", Name = "Пользователь" },
+					new TextField { Key = "email", Name = "Email", Required = true },
+					new TextField { Key = "phone", Name = "Телефон" },
 				};
 			}
 

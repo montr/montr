@@ -21,15 +21,14 @@ export interface IDataField extends IIndexer {
 	displayOrder?: number;
 }
 
-export interface IStringField extends IDataField {
-	autosize: boolean;
+export interface ITextField extends IDataField {
 }
 
-export interface ITextAreaField extends IStringField {
+export interface ITextAreaField extends IDataField {
 	rows?: number;
 }
 
-export interface IPasswordField extends IStringField {
+export interface IPasswordField extends IDataField {
 }
 
 export interface INumberField extends IDataField {

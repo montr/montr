@@ -95,7 +95,7 @@ namespace Montr.Core.Tests.Services
 		{
 			return new DataField[]
 			{
-				new StringField
+				new TextField
 				{
 					Key = "Key 1",
 					Name = "Name 1",

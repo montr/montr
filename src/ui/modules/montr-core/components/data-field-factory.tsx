@@ -29,7 +29,7 @@ class BooleanFieldFactory extends DataFieldFactory {
 	}
 }
 
-class StringFieldFactory extends DataFieldFactory {
+class TextFieldFactory extends DataFieldFactory {
 	createNode(field: IDataField, data: IIndexer): React.ReactNode {
 		return <Input
 			allowClear
@@ -89,7 +89,7 @@ class PasswordFieldFactory extends DataFieldFactory {
 
 DataFieldFactory.register("boolean", new BooleanFieldFactory());
 DataFieldFactory.register("number", new NumberFieldFactory());
-DataFieldFactory.register("string", new StringFieldFactory());
+DataFieldFactory.register("text", new TextFieldFactory());
 DataFieldFactory.register("textarea", new TextAreaFieldFactory());
 DataFieldFactory.register("select", new SelectFieldFactory());
 DataFieldFactory.register("password", new PasswordFieldFactory());

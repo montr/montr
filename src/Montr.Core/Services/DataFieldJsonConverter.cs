@@ -36,9 +36,9 @@ namespace Montr.Core.Services
 			writer.WriteBoolean("readonly", value.Readonly);
 			writer.WriteBoolean("required", value.Required);
 
-			/*if (value is StringField stringField)
+			/*if (value is TextField stringField)
 			{
-				// writer.WriteNumber("TypeDiscriminator", (int)TypeDiscriminator.StringField);
+				// writer.WriteNumber("TypeDiscriminator", (int)TypeDiscriminator.TextField);
 			}*/
 
 			if (value is TextAreaField textAreaField)

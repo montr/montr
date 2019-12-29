@@ -10,7 +10,7 @@ namespace Montr.Core.Models
 		static DataFieldTypes()
 		{
 			Map[Boolean] = typeof(BooleanField);
-			Map[String] = typeof(StringField);
+			Map[Text] = typeof(TextField);
 			Map[TextArea] = typeof(TextAreaField);
 			Map[Password] = typeof(PasswordField);
 			Map[Number] = typeof(NumberField);
@@ -25,7 +25,7 @@ namespace Montr.Core.Models
 		}
 
 		public static readonly string Boolean = "boolean";
-		public static readonly string String = "string";
+		public static readonly string Text = "text";
 		public static readonly string TextArea = "textarea";
 		public static readonly string Password = "password";
 		public static readonly string Number = "number";
@@ -82,13 +82,13 @@ namespace Montr.Core.Models
 		public override string Type => DataFieldTypes.Boolean;
 	}
 
-	public class StringField : DataField
+	public class TextField : DataField
 	{
-		public override string Type => DataFieldTypes.String;
+		public override string Type => DataFieldTypes.Text;
 	}
 
-	// todo join with StringField?
-	public class TextAreaField : StringField
+	// todo join with TextField?
+	public class TextAreaField : DataField
 	{
 		public override string Type => "textarea";
 
