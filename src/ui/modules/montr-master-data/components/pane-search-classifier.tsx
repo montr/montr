@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Page, PageHeader, Toolbar, DataTable, DataTableUpdateToken, Icon } from "@montr-core/components";
+import { Page, PageHeader, Toolbar, DataTable, DataTableUpdateToken, ButtonAdd, ButtonDelete, ButtonExport, Icon } from "@montr-core/components";
 import { Link } from "react-router-dom";
 import { Button, Tree, Select, Radio, Layout, Modal, Spin } from "antd";
 import { Constants } from "@montr-core/.";
@@ -429,10 +429,10 @@ class _PaneSearchClassifier extends React.Component<IProps, IState> {
 				title={<>
 					<Toolbar float="right">
 						<Link to={RouteBuilder.addClassifier(type.code, selectedGroup ? selectedGroup.uid : null)}>
-							<Button type="primary" icon={Icon.Plus}>Добавить</Button>
+							<ButtonAdd type="primary" />
 						</Link>
-						<Button onClick={this.delete} icon={Icon.Delete}>Удалить</Button>
-						<Button onClick={this.export} icon={Icon.Export}>Экспорт</Button>
+						<ButtonDelete onClick={this.delete} />
+						<ButtonExport onClick={this.export} />
 						<Link to={`/classifiers/edit/${type.uid}`}>
 							<Button icon={Icon.Setting}> Настройка</Button>
 						</Link>
@@ -443,13 +443,11 @@ class _PaneSearchClassifier extends React.Component<IProps, IState> {
 						<PageHeader>{type.name}</PageHeader>
 					</>}
 
-					{mode == "Drawer" && <Toolbar>
+					{mode == "Drawer" && <Toolbar clear>
 						<Button type="primary" icon={Icon.Select} onClick={this.select}>Выбрать</Button>
 					</Toolbar>}
 
 				</>}>
-
-				<div style={{ clear: "both" }} />
 
 				<Layout>
 					<Layout.Header className="bg-white" style={{ padding: "0", lineHeight: 1.5, height: 36 }}>

@@ -193,8 +193,8 @@ export class DataTable<TModel extends IIndexer> extends React.Component<IProps<T
 			dataView.columns.filter((col: IDataColumn) => col.defaultSortOrder)[0];
 
 		await this.fetchData({
-			sortColumn: defaultSortColumn && defaultSortColumn.key,
-			sortOrder: defaultSortColumn && defaultSortColumn.defaultSortOrder,
+			sortColumn: defaultSortColumn?.key,
+			sortOrder: defaultSortColumn?.defaultSortOrder,
 		});
 	};
 
@@ -203,10 +203,14 @@ export class DataTable<TModel extends IIndexer> extends React.Component<IProps<T
 		this.setState({ loading: true });
 
 		try {
-			let postParams = {
+			let postParams: any = {
 				// pageSize: Constants.defaultPageSize,
 				...params,
 			};
+
+			if (!postParams.pageSize) {
+				postParams.pageSize = Constants.defaultPageSize;
+			}
 
 			const { loadUrl, onLoadData } = this.props;
 

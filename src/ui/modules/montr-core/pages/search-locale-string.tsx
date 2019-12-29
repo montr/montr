@@ -1,8 +1,8 @@
 import React from "react";
-import { DataTableUpdateToken, Page, DataTable, Toolbar, PageHeader, DataBreadcrumb, Icon } from "@montr-core/components";
+import { DataTableUpdateToken, Page, DataTable, Toolbar, PageHeader, DataBreadcrumb, ButtonImport, ButtonExport, Icon } from "../components";
 import { Constants } from "..";
-import { IMenu, ILocaleString, IDataResult } from "@montr-core/models";
-import { LocaleStringService, NotificationService } from "@montr-core/services";
+import { IMenu, ILocaleString, IDataResult } from "../models";
+import { LocaleStringService, NotificationService } from "../services";
 import { Form, Select, Button, Upload } from "antd";
 import { UploadChangeParam } from "antd/lib/upload";
 import { Translation } from "react-i18next";
@@ -105,9 +105,9 @@ export default class SearchLocaleString extends React.Component<IProps, IState> 
 									style={{ display: "inline-block" }}
 									// customRequest={this.handleUpload}
 									onChange={this.handleUploadChange}>
-									<Button icon={Icon.Import} onClick={this.handleImport}>{t("button.import")}</Button>
+									<ButtonImport onClick={this.handleImport} />
 								</Upload>
-								<Button icon={Icon.Export} onClick={this.handleExport}>{t("button.export")}</Button>
+								<ButtonExport onClick={this.handleExport} />
 							</Toolbar>
 
 							<DataBreadcrumb items={[{ name: "Локализация" }]} />

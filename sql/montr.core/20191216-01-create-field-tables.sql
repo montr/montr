@@ -12,6 +12,7 @@ CREATE TABLE public.field_meta
     is_system boolean NOT NULL,
     is_required boolean NOT NULL,
     is_readonly boolean NOT NULL,
+    display_order integer NOT NULL DEFAULT 0,
     created_by uuid,
     created_at_utc timestamp with time zone,
     modified_by uuid,

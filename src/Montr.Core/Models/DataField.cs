@@ -3,11 +3,11 @@ using System.Collections.Concurrent;
 
 namespace Montr.Core.Models
 {
-	public class DataFieldType
+	public class DataFieldTypes
 	{
 		public static readonly ConcurrentDictionary<string, Type> Map = new ConcurrentDictionary<string, Type>();
 
-		static DataFieldType()
+		static DataFieldTypes()
 		{
 			Map[Boolean] = typeof(BooleanField);
 			Map[String] = typeof(StringField);
@@ -39,6 +39,15 @@ namespace Montr.Core.Models
 		public static readonly string File = "file";
 	}
 
+	public class FieldType
+	{
+		public string Code { get; set; }
+
+		public string Name { get; set; }
+
+		public string Icon { get; set; }
+	}
+
 	public abstract class DataField
 	{
 		public abstract string Type { get; }
@@ -64,18 +73,18 @@ namespace Montr.Core.Models
 		public bool Readonly { get; set; }
 
 		public bool Required { get; set; }
+
+		public int DisplayOrder { get; set; }
 	}
 
 	public class BooleanField : DataField
 	{
-		public override string Type => DataFieldType.Boolean;
+		public override string Type => DataFieldTypes.Boolean;
 	}
 
 	public class StringField : DataField
 	{
-		public override string Type => DataFieldType.String;
-
-		public bool Autosize { get; set; }
+		public override string Type => DataFieldTypes.String;
 	}
 
 	// todo join with StringField?
@@ -95,11 +104,12 @@ namespace Montr.Core.Models
 	{
 		public override string Type => "number";
 
-		public long? Min { get; set; }
+		public decimal? Min { get; set; }
 
-		public long? Max { get; set; }
+		public decimal? Max { get; set; }
 	}
 
+	// todo: merge with number?
 	public class DecimalField : DataField
 	{
 		public override string Type => "decimal";

@@ -1,6 +1,7 @@
 import * as React from "react";
 import { Form, Button, Spin } from "antd";
 import { FormInstance } from "antd/lib/form";
+import { Rule } from "rc-field-form/lib/interface";
 import { IDataField, IIndexer, IApiResult } from "../models";
 import { NotificationService } from "../services/notification-service";
 import { OperationService } from "../services";
@@ -20,7 +21,7 @@ interface IProps extends WithTranslation {
 	errorMessage?: string;
 	hideLabels?: boolean;
 	onChange?: (values: IIndexer) => void;
-	onSubmit: (values: IIndexer) => Promise<IApiResult>;
+	onSubmit?: (values: IIndexer) => Promise<IApiResult>;
 	formRef?: React.RefObject<FormInstance>;
 }
 
@@ -113,29 +114,20 @@ export class WrappedDataForm extends React.Component<IProps, IState> {
 	createItem = (field: IDataField): React.ReactNode => {
 		const { t, layout, data, hideLabels } = this.props;
 
-		/* const initialValue = data?.[field.key];
-
-		const fieldOptions = field.type == "boolean"
-			? {
-				initialValue: initialValue,
-				valuePropName: "checked",
-			}
-			: {
-				initialValue: initialValue,
-				rules: [{
-					required: field.required,
-					whitespace: field.required,
-					message: t("dataForm.rule.required", { name: field.name })
-				}]
-			}; */
-
-		const rules = field.type == "boolean" ? null : [{
-			required: field.required,
-			whitespace: field.required,
-			message: t("dataForm.rule.required", { name: field.name })
-		}];
-
 		const fieldFactory = DataFieldFactory.get(field.type);
+
+		if (!fieldFactory) return null;
+
+		const required: Rule = {
+			required: field.required,
+			message: t("dataForm.rule.required", { name: field.name })
+		};
+
+		if (field.type != "number") {
+			required.whitespace = field.required;
+		}
+
+		const rules = (field.type != "boolean") ? [required] : null;
 
 		const fieldNode = fieldFactory.createNode(field, data);
 
@@ -149,7 +141,7 @@ export class WrappedDataForm extends React.Component<IProps, IState> {
 				name={field.key}
 				label={hideLabels || field.type == "boolean" ? null : field.name}
 				extra={field.description}
-				valuePropName={field.type == "boolean" ? "checked" : "value"}
+				valuePropName={fieldFactory.valuePropName}
 				rules={rules}
 				{...itemLayout}>
 				{fieldNode}
@@ -168,13 +160,13 @@ export class WrappedDataForm extends React.Component<IProps, IState> {
 				<Form ref={this.getFormRef()}
 					initialValues={data}
 					layout={layout || "horizontal"}
-					onChange={this.handleChange}
+					onChange={this.handleChange} // todo: restore when on change will be working for select, classifer-select etc.
 					onFinish={this.handleSubmit}>
 
 					{fields && fields.map(x => this.createItem(x))}
 
 					{fields && showControls !== false &&
-						<Form.Item {...itemLayout}>
+						<Form.Item /* hasFeedback */ {...itemLayout}>
 							<Button type="primary" htmlType="submit" icon={Icon.Check}>{submitButton || t("button.save")}</Button>
 						</Form.Item>
 					}
@@ -183,5 +175,15 @@ export class WrappedDataForm extends React.Component<IProps, IState> {
 		);
 	};
 }
+
+/* export const DataForm = withTranslation()(Form.create<IProps>({
+	// Form.onChange is not working - not triggered when Select field changes
+	// https://github.com/ant-design/ant-design/issues/18867
+	onValuesChange: (props, values, allFieldsValues) => {
+		if (props.onChange) {
+			props.onChange(allFieldsValues);
+		}
+	}
+})(WrappedDataForm)); */
 
 export const DataForm = withTranslation()(WrappedDataForm);

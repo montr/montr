@@ -45,6 +45,7 @@ namespace Montr.Core.Impl.CommandHandlers
 						.Value(x => x.IsSystem, false)
 						.Value(x => x.IsReadonly, false)
 						.Value(x => x.IsRequired, false)
+						.Value(x => x.DisplayOrder, item.DisplayOrder)
 						.InsertAsync(cancellationToken);
 
 					scope.Commit();

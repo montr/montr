@@ -1,20 +1,25 @@
-import * as React from "react";
-import { Drawer, Modal } from "antd";
-import { Toolbar } from "./toolbar";
-import { IDataField, IDataResult, Guid, IMenu } from "../models";
+import React from "react";
+import { DataForm, Icon } from ".";
 import { MetadataService } from "../services";
-import { DataTable, DataTableUpdateToken, ButtonAdd, PaneEditMetadataForm } from ".";
-import { Constants } from "..";
-import { Icon } from "./icon";
+import { IDataField, IApiResult, Guid } from "../models";
+import { Spin, Button, Popover, Switch, List } from "antd";
+import { Toolbar } from "./toolbar";
 
 interface IProps {
 	entityTypeCode: string;
+	uid?: Guid;
+	onSuccess?: () => void;
 }
 
 interface IState {
-	showDrawer?: boolean;
-	editUid?: Guid;
-	updateTableToken?: DataTableUpdateToken;
+	loading: boolean;
+	typeFieldMap: { [key: string]: IDataField[]; };
+	typeData?: IDataField;
+	data?: IDataField;
+	typeFields?: IDataField[];
+	commonFields?: IDataField[];
+	optionalFields?: IDataField[];
+	visibleFields?: IDataField[];
 }
 
 export class PaneEditMetadata extends React.Component<IProps, IState> {
@@ -25,107 +30,153 @@ export class PaneEditMetadata extends React.Component<IProps, IState> {
 		super(props);
 
 		this.state = {
+			loading: true,
+			typeFieldMap: {}
 		};
-
-		const fields: IDataField[] = [
-			{ key: "fullName", name: "Полное наименование", type: "string" },
-			{ key: "shortName", name: "Сокращенное наименование", type: "string" },
-			{ key: "address", name: "Адрес в пределах места пребывания", type: "address" },
-			{ key: "okved", name: "Код(ы) ОКВЭД", type: "classifier" },
-			{ key: "inn", name: "ИНН", type: "string" },
-			{ key: "kpp", name: "КПП", type: "string" },
-			{ key: "dp", name: "Дата постановки на учет в налоговом органе", type: "date" },
-			{ key: "ogrn", name: "ОГРН", type: "string" },
-			{ key: "is_msp", name: "Участник закупки является субъектом малого предпринимательства", type: "boolean" },
-		];
 	}
 
 	componentDidMount = async () => {
+		await this.fetchData();
 	};
 
 	componentWillUnmount = async () => {
 		await this._metadataService.abort();
 	};
 
-	// todo: do not copy this method from class to class - move to DataTable somehow?
-	refreshTable = async (resetSelectedRows?: boolean) => {
+	fetchData = async () => {
+		const { entityTypeCode, uid } = this.props;
+
+		const { type, ...values } = (uid) ? await this._metadataService.get(entityTypeCode, uid) : { type: "string" };
+
+		const commonView = await this._metadataService.load("Metadata/Edit");
+
+		const typeFields = commonView.fields.slice(0, 1),
+			commonFields = commonView.fields.slice(1);
+
+		const optionalFields = this.getOptionalFields(commonFields, values as IDataField);
+
 		this.setState({
-			updateTableToken: { date: new Date(), resetSelectedRows }
-		});
+			loading: false,
+			typeData: { type: type },
+			data: values as IDataField,
+			typeFields,
+			commonFields,
+			optionalFields
+		}, () => this.setVisibleFields());
 	};
 
-	onLoadTableData = async (loadUrl: string, postParams: any): Promise<IDataResult<{}>> => {
-		const { entityTypeCode } = this.props;
-
-		const params = { entityTypeCode, ...postParams };
-
-		return await this._metadataService.post(loadUrl, params);
+	getOptionalFields = (fields: IDataField[], data: IDataField): IDataField[] => {
+		return fields
+			.filter(x => !x.required && (x.type == "string" || x.type == "textarea"))
+			.map(x => {
+				// in optional fields using active as flag of visible field
+				return { type: x.type, key: x.key, name: x.name, active: !!data[x.key] };
+			});
 	};
 
-	showAddDrawer = () => {
-		this.setState({ showDrawer: true, editUid: null });
+	setVisibleFields = async () => {
+		const { typeData, typeFieldMap, commonFields, optionalFields } = this.state;
+
+		let specificFields = typeFieldMap[typeData.type];
+
+		if (!specificFields) {
+			const typeView = await this._metadataService.load("Metadata/Edit/" + typeData.type);
+
+			specificFields = typeFieldMap[typeData.type] = typeView.fields || [];
+		}
+
+		const visibleCommonFields = commonFields?.filter(field => {
+			const optional = optionalFields.find(optional => field.key == optional.key);
+			return !optional || optional.active;
+		}) || [];
+
+		const visibleFields = [...visibleCommonFields, ...specificFields];
+
+		this.setState({ typeFieldMap, visibleFields });
 	};
 
-	showEditDrawer = (data: IDataField) => {
-		this.setState({ showDrawer: true, editUid: data?.uid });
+	handleTypeChange = async (values: IDataField) => {
+		// todo: save/restore data between switching fields
+		this.setState({ typeData: { type: values.type } }, () => this.setVisibleFields());
 	};
 
-	closeDrawer = () => {
-		this.setState({ showDrawer: false });
+	handleCheckOptionalField = (key: string, checked: boolean) => {
+		const { optionalFields } = this.state;
+
+		const field = optionalFields?.find(x => x.key == key);
+
+		if (field) {
+			field.active = checked;
+
+			this.setState({ optionalFields }, () => this.setVisibleFields());
+		}
 	};
 
-	handleSuccess = () => {
-		this.setState({ showDrawer: false });
-		this.refreshTable();
+	handleSubmit = async (values: IDataField): Promise<IApiResult> => {
+		const { entityTypeCode, uid, onSuccess } = this.props,
+			{ typeData } = this.state;
+
+		const item = { type: typeData.type, ...values };
+
+		let result;
+
+		if (uid) {
+			result = await this._metadataService.update(entityTypeCode, { uid, ...item });
+		}
+		else {
+			result = await this._metadataService.insert({ entityTypeCode, item });
+		}
+
+		if (result.success && onSuccess) {
+			onSuccess();
+		}
+
+		return result;
 	};
 
-	showDeleteConfirm = (data: IDataField) => {
-		Modal.confirm({
-			title: "Вы действительно хотите удалить выбранное поле?",
-			content: "Наверняка что-то случится ...",
-			onOk: async () => {
-				const { entityTypeCode } = this.props;
-
-				await this._metadataService.delete(entityTypeCode, [data.uid]);
-
-				this.refreshTable();
-			}
-		});
+	renderPopover = (optionalFields: IDataField[]) => {
+		return (
+			<List size="small" bordered={false}>
+				{optionalFields && optionalFields.map(x => {
+					return (
+						<List.Item key={x.key} style={{ border: 0, padding: 2 }}
+							actions={[
+								<Switch size="small" checked={x.active} onChange={(checked) => {
+									this.handleCheckOptionalField(x.key, checked);
+								}} />
+							]} >
+							<div style={{ width: "100%" }}>{x.name}</div>
+						</List.Item>
+					);
+				})}
+			</List>
+		);
 	};
 
 	render = () => {
-		const { entityTypeCode } = this.props,
-			{ showDrawer, editUid, updateTableToken } = this.state;
+		const { loading, typeFields, visibleFields, optionalFields, typeData, data } = this.state;
 
-		return (<>
-			<Toolbar clear>
-				<ButtonAdd onClick={this.showAddDrawer} />
-			</Toolbar>
+		return (
+			<Spin spinning={loading}>
 
-			<DataTable
-				rowKey="key"
-				rowActions={[
-					{ name: "Редактировать", onClick: this.showEditDrawer },
-					// { name: "Удалить", onClick: this.showDeleteConfirm }
-				]}
-				viewId={`Metadata/Grid`}
-				loadUrl={`${Constants.apiURL}/metadata/list/`}
-				onLoadData={this.onLoadTableData}
-				updateToken={updateTableToken}
-			/>
+				<DataForm
+					showControls={false}
+					fields={typeFields}
+					data={typeData}
+					onChange={this.handleTypeChange} />
 
-			{showDrawer &&
-				<Drawer
-					title="Metadata"
-					closable={false}
-					onClose={this.closeDrawer}
-					visible={true}
-					width={800}>
-					<PaneEditMetadataForm
-						entityTypeCode={entityTypeCode} uid={editUid}
-						onSuccess={this.handleSuccess}
-					/>
-				</Drawer>}
-		</>);
+				<DataForm
+					fields={visibleFields}
+					data={data}
+					onSubmit={this.handleSubmit} />
+
+				<Toolbar clear size="small">
+					<Popover content={this.renderPopover(optionalFields)} trigger="click" placement="topLeft">
+						<Button type="link" icon={Icon.Setting} />
+					</Popover>
+				</Toolbar>
+
+			</Spin>
+		);
 	};
 }

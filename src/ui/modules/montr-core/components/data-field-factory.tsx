@@ -1,6 +1,6 @@
 import * as React from "react";
-import { Input, Select, Checkbox } from "antd";
-import { IDataField, IIndexer, ISelectField, ITextAreaField } from "../models";
+import { Input, InputNumber, Select, Checkbox } from "antd";
+import { IDataField, IIndexer, ISelectField, ITextAreaField, INumberField } from "../models";
 import { Icon } from "./";
 
 export abstract class DataFieldFactory {
@@ -14,16 +14,23 @@ export abstract class DataFieldFactory {
 		return DataFieldFactory.Map[key];
 	}
 
+	public valuePropName: string = "value";
+
 	abstract createNode(field: IDataField, data: IIndexer): React.ReactElement;
 }
 
-class BooleanFieldFactory implements DataFieldFactory {
+class BooleanFieldFactory extends DataFieldFactory {
+	constructor() {
+		super();
+		this.valuePropName = "checked";
+	}
+
 	createNode(field: IDataField, data: IIndexer): React.ReactElement {
 		return <Checkbox>{field.name}</Checkbox>;
 	}
 }
 
-class StringFieldFactory implements DataFieldFactory {
+class StringFieldFactory extends DataFieldFactory {
 	createNode(field: IDataField, data: IIndexer): React.ReactElement {
 		return <Input
 			allowClear
@@ -35,36 +42,44 @@ class StringFieldFactory implements DataFieldFactory {
 	}
 }
 
-class TextAreaFieldFactory implements DataFieldFactory {
+class NumberFieldFactory extends DataFieldFactory {
 	createNode(field: IDataField, data: IIndexer): React.ReactElement {
+		const numberField = field as INumberField;
 
+		return <InputNumber
+			min={numberField.min}
+			max={numberField.max}
+			disabled={field.readonly}
+			placeholder={field.placeholder}
+		/>;
+	}
+}
+
+class TextAreaFieldFactory extends DataFieldFactory {
+	createNode(field: IDataField, data: IIndexer): React.ReactElement {
 		const textAreaField = field as ITextAreaField;
-
-		const minRows = textAreaField.rows || 4;
 
 		return <Input.TextArea
 			allowClear
 			placeholder={field.placeholder}
-			autoSize={{ minRows: minRows, maxRows: 24 }} />;
+			autoSize={{ minRows: textAreaField?.rows || 4, maxRows: 24 }}
+		/>;
 	}
 }
 
-class SelectFieldFactory implements DataFieldFactory {
+class SelectFieldFactory extends DataFieldFactory {
 	createNode(field: IDataField, data: IIndexer): React.ReactElement {
-
 		const selectField = field as ISelectField;
 
-		return (
-			<Select allowClear placeholder={field.placeholder}>
-				{selectField && selectField.options && selectField.options.map(x => {
-					return <Select.Option key={x.value} value={x.value}>{x.name || x.value}</Select.Option>;
-				})}
-			</Select>
-		);
+		return <Select allowClear showSearch placeholder={field.placeholder}>
+			{selectField && selectField.options && selectField.options.map(x => {
+				return <Select.Option key={x.value} value={x.value}>{x.name || x.value}</Select.Option>;
+			})}
+		</Select>;
 	}
 }
 
-class PasswordFieldFactory implements DataFieldFactory {
+class PasswordFieldFactory extends DataFieldFactory {
 	createNode(field: IDataField, data: IIndexer): React.ReactElement {
 		return <Input.Password
 			allowClear
@@ -75,6 +90,7 @@ class PasswordFieldFactory implements DataFieldFactory {
 }
 
 DataFieldFactory.register("boolean", new BooleanFieldFactory());
+DataFieldFactory.register("number", new NumberFieldFactory());
 DataFieldFactory.register("string", new StringFieldFactory());
 DataFieldFactory.register("textarea", new TextAreaFieldFactory());
 DataFieldFactory.register("select", new SelectFieldFactory());

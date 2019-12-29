@@ -37,7 +37,7 @@ namespace Montr.Core.Impl.Services
 
 				var withPaging = request.PageSize > 0;
 
-				var paged = withPaging ? query.Apply(request, x => x.Key) : query;
+				var paged = withPaging ? query.Apply(request, x => x.DisplayOrder) : query.OrderBy(x => x.DisplayOrder);
 
 				var data = await paged
 					.Select(x => x)
@@ -48,7 +48,7 @@ namespace Montr.Core.Impl.Services
 				foreach (var dbField in data)
 				{
 					// todo: use factory
-					var field = (DataField) Activator.CreateInstance(DataFieldType.Map[dbField.TypeCode]);
+					var field = (DataField) Activator.CreateInstance(DataFieldTypes.Map[dbField.TypeCode]);
 
 					field.Uid = dbField.Uid;
 					field.Key = dbField.Key;
@@ -60,6 +60,7 @@ namespace Montr.Core.Impl.Services
 					field.System = dbField.IsSystem;
 					field.Readonly = dbField.IsReadonly;
 					field.Required = dbField.IsRequired;
+					field.DisplayOrder = dbField.DisplayOrder;
 
 					result.Add(field);
 				}

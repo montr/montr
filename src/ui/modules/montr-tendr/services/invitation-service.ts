@@ -27,7 +27,7 @@ export class InvitationService extends Fetcher {
 		return this.post(`${Constants.apiURL}/invitation/update`, { companyUid, ...request });
 	};
 
-	delete = async (companyUid: Guid, uids: string[] | number[]): Promise<number> => {
+	delete = async (companyUid: Guid, uids: string[] | number[]): Promise<IApiResult> => {
 		return this.post(`${Constants.apiURL}/invitation/delete`, { companyUid, uids });
 	};
 }

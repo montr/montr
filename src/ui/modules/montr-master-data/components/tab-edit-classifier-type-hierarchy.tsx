@@ -1,11 +1,11 @@
 import * as React from "react";
 import { CompanyContextProps, withCompanyContext } from "@montr-kompany/components";
-import { DataTable, DataTableUpdateToken, Toolbar, Icon } from "@montr-core/components";
+import { DataTable, DataTableUpdateToken, Toolbar, ButtonAdd } from "@montr-core/components";
 import { IClassifierType, IClassifierTree } from "../models";
 import { Constants } from "@montr-core/.";
 import { ClassifierTreeService } from "../services";
 import { IDataResult, IMenu } from "@montr-core/models";
-import { Alert, Button, Modal } from "antd";
+import { Alert, Modal } from "antd";
 import { ModalEditClassifierTree } from ".";
 
 interface IProps extends CompanyContextProps {
@@ -109,11 +109,9 @@ class _TabEditClassifierTypeHierarchy extends React.Component<IProps, IState> {
 				message="Настройка иерархий групп доступна для справочников, у которых на вкладке «Информация» выбран тип иерархии «Группы»." />
 
 			{type.hierarchyType == "Groups" && (<>
-				<Toolbar>
-					<Button onClick={this.showAddGroupModal}>{Icon.Plus} Добавить</Button>
+				<Toolbar clear>
+					<ButtonAdd onClick={this.showAddGroupModal} />
 				</Toolbar>
-
-				<div style={{ clear: "both" }} />
 
 				<DataTable
 					rowKey="code"

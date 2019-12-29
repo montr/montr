@@ -141,8 +141,7 @@ class _ClassifierSelect extends React.Component<IProps, IState> {
 						</Link>
 					</div >
 				</div>
-			)}
-		>
+			)}>
 			{options}
 		</Select>);
 	}

@@ -1,10 +1,9 @@
 import * as React from "react";
-import { Page, PageHeader, Toolbar, DataTable, DataTableUpdateToken, Icon } from "@montr-core/components";
+import { Page, PageHeader, Toolbar, DataTable, DataTableUpdateToken, ButtonAdd, ButtonDelete } from "@montr-core/components";
 import { Constants } from "@montr-core/.";
 import { withCompanyContext, CompanyContextProps } from "@montr-kompany/components";
 import { ClassifierBreadcrumb } from "../components";
 import { Link } from "react-router-dom";
-import { Button } from "antd";
 import { ClassifierTypeService } from "../services";
 import { NotificationService } from "@montr-core/services";
 import { IMenu } from "@montr-core/models";
@@ -81,9 +80,9 @@ class _SearchClassifierType extends React.Component<IProps, IState> {
 				title={<>
 					<Toolbar float="right">
 						<Link to={`/classifiers/add`}>
-							<Button type="primary" icon={Icon.Plus}>Добавить</Button>
+							<ButtonAdd type="primary" />
 						</Link>
-						<Button icon={Icon.Delete} onClick={this.delete}> Удалить</Button>
+						<ButtonDelete onClick={this.delete} />
 					</Toolbar>
 
 					<ClassifierBreadcrumb />

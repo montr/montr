@@ -27,6 +27,9 @@ namespace Montr.Core.Impl.Entities
 		[Column(Name = "is_required"), DataType(DataType.Boolean), NotNull]
 		public bool IsRequired { get; set; }
 
+		[Column(Name = "display_order"), DataType(DataType.Int32), NotNull]
+		public int DisplayOrder { get; set; }
+
 		[Column(Name = "is_readonly"), DataType(DataType.Boolean), NotNull]
 		public bool IsReadonly { get; set; }
 

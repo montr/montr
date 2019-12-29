@@ -1,13 +1,14 @@
 import * as React from "react";
 import { Button, Drawer, Alert, Modal } from "antd";
 import { IPaneProps, Guid, IDataResult, IMenu } from "@montr-core/models";
-import { IPaneComponent, DataTable, Toolbar, DataTableUpdateToken, Icon } from "@montr-core/components";
+import { DataTable, Toolbar, DataTableUpdateToken, ButtonAdd, ButtonDelete } from "@montr-core/components";
 import { PaneSearchClassifier } from "@montr-master-data/components";
 import { CompanyContextProps, withCompanyContext } from "@montr-kompany/components";
 import { ModalEditInvitation } from "../components";
 import { IEvent, IInvitation } from "../models";
 import { InvitationService } from "../services";
 import { Constants } from "@montr-core/.";
+import { OperationService } from "@montr-core/services";
 
 interface IProps extends CompanyContextProps, IPaneProps<IEvent> {
 	data: IEvent;
@@ -16,19 +17,19 @@ interface IProps extends CompanyContextProps, IPaneProps<IEvent> {
 interface IState {
 	showDrawer?: boolean;
 	editData?: IInvitation;
-	selectedRowKeys: string[] | number[];
+	selectedRowKeys?: string[] | number[];
 	updateTableToken: DataTableUpdateToken;
 }
 
 class _TabEditInvitations extends React.Component<IProps, IState> {
 
-	_invitationService = new InvitationService();
+	private _operation = new OperationService();
+	private _invitationService = new InvitationService();
 
 	constructor(props: IProps) {
 		super(props);
 
 		this.state = {
-			selectedRowKeys: [],
 			updateTableToken: { date: new Date() }
 		};
 	}
@@ -59,7 +60,6 @@ class _TabEditInvitations extends React.Component<IProps, IState> {
 	};
 
 	refreshTable = async (resetSelectedRows?: boolean) => {
-
 		const { selectedRowKeys } = this.state;
 
 		this.setState({
@@ -119,9 +119,12 @@ class _TabEditInvitations extends React.Component<IProps, IState> {
 				const { currentCompany } = this.props,
 					{ selectedRowKeys } = this.state;
 
-				await this._invitationService.delete(currentCompany.uid, selectedRowKeys);
+				const result = await this._operation.execute(() =>
+					this._invitationService.delete(currentCompany.uid, selectedRowKeys));
 
-				this.refreshTable(true);
+				if (result.success) {
+					this.refreshTable(true);
+				}
 			}
 		});
 	};
@@ -135,13 +138,11 @@ class _TabEditInvitations extends React.Component<IProps, IState> {
 		];
 
 		return <>
-			<Toolbar>
-				<Button onClick={this.showAddDrawer} type="primary" icon={Icon.Plus}>Пригласить</Button>
-				<Button onClick={this.showAddModal} icon={Icon.Plus}>Добавить</Button>
-				<Button onClick={this.delete} icon={Icon.Delete} disabled={selectedRowKeys.length == 0}>Удалить</Button>
+			<Toolbar clear>
+				<Button icon="plus" onClick={this.showAddDrawer} type="primary">Пригласить</Button>
+				<ButtonAdd onClick={this.showAddModal} />
+				<ButtonDelete onClick={this.delete} disabled={!selectedRowKeys?.length} />
 			</Toolbar>
-
-			<div style={{ clear: "both" }} />
 
 			<DataTable
 				rowKey="uid"
