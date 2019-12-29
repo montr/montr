@@ -1,4 +1,4 @@
-import { Guid } from ".";
+import { Guid, IIndexer } from ".";
 
 export interface IFieldType {
 	code?: string;
@@ -6,7 +6,7 @@ export interface IFieldType {
 	icon?: string;
 }
 
-export interface IDataField {
+export interface IDataField extends IIndexer {
 	uid?: Guid;
 	type: string;
 	key?: string;
@@ -15,6 +15,7 @@ export interface IDataField {
 	placeholder?: string;
 	icon?: string;
 	// multiple?: boolean;
+	active?: boolean;
 	readonly?: boolean;
 	required?: boolean;
 	displayOrder?: number;

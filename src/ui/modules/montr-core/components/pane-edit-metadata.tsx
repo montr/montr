@@ -2,7 +2,7 @@ import React from "react";
 import { DataForm } from ".";
 import { MetadataService } from "../services";
 import { IDataField, IApiResult, Guid } from "../models";
-import { Spin, Button } from "antd";
+import { Spin, Button, Popover, Switch, List } from "antd";
 import { Toolbar } from "./toolbar";
 
 interface IProps {
@@ -17,6 +17,7 @@ interface IState {
 	data?: IDataField;
 	typeFields?: IDataField[];
 	commonFields?: IDataField[];
+	optionalFields?: IDataField[];
 }
 
 export class PaneEditMetadata extends React.Component<IProps, IState> {
@@ -42,18 +43,44 @@ export class PaneEditMetadata extends React.Component<IProps, IState> {
 
 		const dataView = await this._metadataService.load("Metadata/Edit");
 
+		const typeFields = dataView.fields.slice(0, 1),
+			commonFields = dataView.fields.slice(1);
+
+		const optionalFields = this.getOptionalFields(commonFields, values as IDataField);
+
 		this.setState({
 			loading: false,
 			typeData: { type: type },
 			data: values as IDataField,
-			typeFields: dataView.fields.slice(0, 1),
-			commonFields: dataView.fields.slice(1)
+			typeFields,
+			commonFields,
+			optionalFields
 		});
 	};
 
+	getOptionalFields = (fields: IDataField[], data: IDataField): IDataField[] => {
+		return fields
+			.filter(x => !x.required && (x.type == "string" || x.type == "textarea"))
+			.map(x => {
+				// in optional fields using active as flag of visible field
+				return { type: x.type, key: x.key, name: x.name, active: !!data[x.key] };
+			});
+	};
+
 	handleTypeChange = async (values: IDataField) => {
-		console.log(values);
 		this.setState({ typeData: { type: values.type } });
+	};
+
+	handleCheckOptionalField = (key: string, checked: boolean) => {
+		const { optionalFields } = this.state;
+
+		const field = optionalFields?.find(x => x.key == key);
+
+		if (field) {
+			field.active = checked;
+
+			this.setState({ optionalFields });
+		}
 	};
 
 	handleSubmit = async (values: IDataField): Promise<IApiResult> => {
@@ -78,8 +105,33 @@ export class PaneEditMetadata extends React.Component<IProps, IState> {
 		return result;
 	};
 
+	renderPopover = (optionalFields: IDataField[]) => {
+		return (
+			<List size="small" bordered={false}>
+				{optionalFields && optionalFields.map(x => {
+					return (
+						<List.Item key={x.key} style={{ border: 0, padding: 2 }}
+							actions={[
+								<Switch size="small" checked={x.active} onChange={(checked) => {
+									this.handleCheckOptionalField(x.key, checked);
+								}} />
+							]} >
+							<div style={{ width: "100%" }}>{x.name}</div>
+						</List.Item>
+					);
+				})}
+			</List>
+		);
+	};
+
 	render = () => {
-		const { loading, typeFields, commonFields, typeData, data } = this.state;
+		const { loading, typeFields, commonFields, optionalFields, typeData, data } = this.state;
+
+		// todo: move to fetchData
+		const visibleCommonFields = commonFields?.filter(field => {
+			const optional = optionalFields.find(optional => field.key == optional.key);
+			return !optional || optional.active;
+		});
 
 		return (
 			<Spin spinning={loading}>
@@ -91,12 +143,14 @@ export class PaneEditMetadata extends React.Component<IProps, IState> {
 					onChange={this.handleTypeChange} />
 
 				<DataForm
-					fields={commonFields}
+					fields={visibleCommonFields}
 					data={data}
 					onSubmit={this.handleSubmit} />
 
 				<Toolbar clear size="small">
-					<Button size="small" icon="setting" />
+					<Popover content={this.renderPopover(optionalFields)} trigger="click" placement="topLeft">
+						<Button type="link" icon="setting" />
+					</Popover>
 				</Toolbar>
 
 			</Spin>

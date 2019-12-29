@@ -118,7 +118,7 @@ export class PaneSearchMetadata extends React.Component<IProps, IState> {
 			{showDrawer &&
 				<Drawer
 					title="Metadata"
-					closable={false}
+					closable={true}
 					onClose={this.closeDrawer}
 					visible={true}
 					width={800}>
