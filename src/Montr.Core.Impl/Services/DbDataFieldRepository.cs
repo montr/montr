@@ -14,10 +14,12 @@ namespace Montr.Core.Impl.Services
 	public class DbDataFieldRepository : IRepository<DataField>
 	{
 		private readonly IDbContextFactory _dbContextFactory;
+		private readonly IJsonSerializer _jsonSerializer;
 
-		public DbDataFieldRepository(IDbContextFactory dbContextFactory)
+		public DbDataFieldRepository(IDbContextFactory dbContextFactory, IJsonSerializer jsonSerializer)
 		{
 			_dbContextFactory = dbContextFactory;
+			_jsonSerializer = jsonSerializer;
 		}
 
 		public async Task<SearchResult<DataField>> Search(SearchRequest searchRequest, CancellationToken cancellationToken)
@@ -61,6 +63,15 @@ namespace Montr.Core.Impl.Services
 					field.Readonly = dbField.IsReadonly;
 					field.Required = dbField.IsRequired;
 					field.DisplayOrder = dbField.DisplayOrder;
+
+					var propertiesType = field.GetPropertiesType();
+
+					if (propertiesType != null && dbField.Extra != null)
+					{
+						var properties = _jsonSerializer.Deserialize(dbField.Extra, propertiesType);
+
+						field.SetProperties(properties);
+					}
 
 					result.Add(field);
 				}

@@ -28,8 +28,9 @@ namespace Montr.Tendr.Impl.QueryHandlers
 			{
 				result.Fields = new List<DataField>
 				{
-					new TextAreaField { Key = "name", Name = "Наименование", Rows = 4, Required = true },
-					new TextAreaField { Key = "description", Name = "Описание", Rows = 4, Description = "Как можно подробнее опишите что вы хотите купить." }
+					new TextAreaField { Key = "name", Name = "Наименование", Required = true, Properties = new TextAreaField.Props { Rows = 4 } },
+					new TextAreaField { Key = "description", Name = "Описание", Properties = new TextAreaField.Props { Rows = 4 },
+						Description = "Как можно подробнее опишите что вы хотите купить." }
 				};
 			}
 

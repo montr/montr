@@ -44,7 +44,7 @@ namespace Montr.Core.Services
 					new NumberField { Key = "displayOrder", Name = "#", Required = true, Min = 0, Max = 256 },
 					new TextField { Key = "key", Name = "Код", Required = true },
 					new TextField { Key = "name", Name = "Наименование", Required = true },
-					new TextAreaField { Key = "description", Name = "Описание", Rows = 2 },
+					new TextAreaField { Key = "description", Name = "Описание", Properties = new TextAreaField.Props { Rows = 2 } },
 					new TextField { Key = "placeholder", Name = "Placeholder" },
 					new TextField { Key = "icon", Name = "Icon" },
 					// new BooleanField { Key = "readonly", Name = "Readonly" },
@@ -59,7 +59,7 @@ namespace Montr.Core.Services
 				{
 					result.Fields = new List<DataField>
 					{
-						new NumberField { Key = "rows", Name = "Количество строк", Min = 1, Max = byte.MaxValue }
+						new NumberField { Key = "properties.rows", Name = "Количество строк", Min = 1, Max = byte.MaxValue }
 					};
 				}
 				else if (code == DataFieldTypes.Number)
@@ -136,7 +136,7 @@ namespace Montr.Core.Services
 					result.Fields = new List<DataField>
 					{
 						new TextField { Key = "code", Name = "Код", Required = true },
-						new TextAreaField { Key = "name", Name = "Наименование", Required = true, Rows = 10 },
+						new TextAreaField { Key = "name", Name = "Наименование", Required = true, Properties = new TextAreaField.Props { Rows = 10 } },
 						new TextField { Key = "digitalCode", Name = "Цифровой код", Required = true },
 						new TextField { Key = "shortName", Name = "Краткое наименование" }
 					};
@@ -147,7 +147,7 @@ namespace Montr.Core.Services
 					{
 						// new TextField { Key = "statusCode", Name = "Статус", Readonly = true },
 						new TextField { Key = "code", Name = "Код", Required = true },
-						new TextAreaField { Key = "name", Name = "Наименование", Required = true, Rows = 10 }
+						new TextAreaField { Key = "name", Name = "Наименование", Required = true, Properties = new TextAreaField.Props { Rows = 10 } }
 					};
 				}
 			}
@@ -184,7 +184,7 @@ namespace Montr.Core.Services
 				result.Fields = new List<DataField>
 				{
 					new TextField { Key = "code", Name = "Код", Required = true },
-					new TextAreaField { Key = "name", Name = "Наименование", Rows = 2, Required = true },
+					new TextAreaField { Key = "name", Name = "Наименование", Required = true, Properties = new TextAreaField.Props { Rows = 2 } },
 					new TextAreaField { Key = "description", Name = "Описание" },
 					new SelectField { Key = "hierarchyType", Name = "Иерархия",
 						Description = "Справочник может быть без иерархии, с иерархией групп (например, контрагентов можно распределить по группам по их регионам, размеру или отношению к нашей организации) или иерархией элементов (например, одни виды деятельности уточняются другими видами деятельности)",

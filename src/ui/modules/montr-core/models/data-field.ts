@@ -21,10 +21,17 @@ export interface IDataField extends IIndexer {
 	displayOrder?: number;
 }
 
+export interface IDataFieldWithProps<TProps> extends IDataField {
+	properties?: TProps;
+}
+
 export interface ITextField extends IDataField {
 }
 
-export interface ITextAreaField extends IDataField {
+export interface ITextAreaField extends IDataFieldWithProps<ITextAreaProps> {
+}
+
+export interface ITextAreaProps {
 	rows?: number;
 }
 

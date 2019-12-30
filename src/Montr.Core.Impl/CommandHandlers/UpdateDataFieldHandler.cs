@@ -16,16 +16,22 @@ namespace Montr.Core.Impl.CommandHandlers
 	{
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IDbContextFactory _dbContextFactory;
+		private readonly IJsonSerializer _jsonSerializer;
 
-		public UpdateDataFieldHandler(IUnitOfWorkFactory unitOfWorkFactory, IDbContextFactory dbContextFactory)
+		public UpdateDataFieldHandler(IUnitOfWorkFactory unitOfWorkFactory, IDbContextFactory dbContextFactory, IJsonSerializer jsonSerializer)
 		{
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_dbContextFactory = dbContextFactory;
+			_jsonSerializer = jsonSerializer;
 		}
 
 		public async Task<ApiResult> Handle(UpdateDataField request, CancellationToken cancellationToken)
 		{
 			var item = request.Item ?? throw new ArgumentNullException(nameof(request.Item));
+
+			var properties = item.GetProperties();
+
+			var extra = properties != null ? _jsonSerializer.Serialize(properties) : null;
 
 			using (var scope = _unitOfWorkFactory.Create())
 			{
@@ -44,6 +50,7 @@ namespace Montr.Core.Impl.CommandHandlers
 						.Set(x => x.IsReadonly, item.Readonly)
 						.Set(x => x.IsRequired, item.Required)
 						.Set(x => x.DisplayOrder, item.DisplayOrder)
+						.Set(x => x.Extra, extra)
 						.UpdateAsync(cancellationToken);
 				}
 

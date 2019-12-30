@@ -15,16 +15,22 @@ namespace Montr.Core.Impl.CommandHandlers
 	{
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IDbContextFactory _dbContextFactory;
+		private readonly IJsonSerializer _jsonSerializer;
 
-		public InsertDataFieldHandler(IUnitOfWorkFactory unitOfWorkFactory, IDbContextFactory dbContextFactory)
+		public InsertDataFieldHandler(IUnitOfWorkFactory unitOfWorkFactory, IDbContextFactory dbContextFactory, IJsonSerializer jsonSerializer)
 		{
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_dbContextFactory = dbContextFactory;
+			_jsonSerializer = jsonSerializer;
 		}
 
 		public async Task<ApiResult> Handle(InsertDataField request, CancellationToken cancellationToken)
 		{
 			var item = request.Item ?? throw new ArgumentNullException(nameof(request.Item));
+
+			var properties = item.GetProperties();
+
+			var extra = properties != null ? _jsonSerializer.Serialize(properties) : null;
 
 			using (var scope = _unitOfWorkFactory.Create())
 			{
@@ -46,6 +52,7 @@ namespace Montr.Core.Impl.CommandHandlers
 						.Value(x => x.IsReadonly, false)
 						.Value(x => x.IsRequired, false)
 						.Value(x => x.DisplayOrder, item.DisplayOrder)
+						.Value(x => x.Extra, extra)
 						.InsertAsync(cancellationToken);
 
 					scope.Commit();

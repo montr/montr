@@ -1,4 +1,5 @@
-﻿using Newtonsoft.Json;
+﻿using System;
+using Newtonsoft.Json;
 
 namespace Montr.Core.Services
 {
@@ -9,9 +10,14 @@ namespace Montr.Core.Services
 			return JsonConvert.SerializeObject(value);
 		}
 
+		public object Deserialize(string value, Type type)
+		{
+			return JsonConvert.DeserializeObject(value, type);
+		}
+
 		public T Deserialize<T>(string value)
 		{
-			throw new System.NotImplementedException();
+			return JsonConvert.DeserializeObject<T>(value);
 		}
 	}
 }

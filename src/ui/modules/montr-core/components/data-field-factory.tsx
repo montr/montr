@@ -60,7 +60,7 @@ class TextAreaFieldFactory extends DataFieldFactory {
 		return <Input.TextArea
 			allowClear
 			placeholder={field.placeholder}
-			autoSize={{ minRows: textAreaField?.rows || 4, maxRows: 24 }}
+			autoSize={{ minRows: textAreaField?.properties?.rows || 4, maxRows: 24 }}
 		/>;
 	}
 }

@@ -117,11 +117,23 @@ export class WrappedDataForm extends React.Component<IProps, IState> {
 		}
 	};
 
+	indexer = (obj: any, is: string | string[], value: any): any => {
+		if (typeof is == 'string')
+			return this.indexer(obj, is.split('.'), value);
+		else if (is.length == 1 && value !== undefined)
+			return obj[is[0]] = value;
+		else if (is.length == 0)
+			return obj;
+		else
+			return this.indexer(obj[is[0]], is.slice(1), value);
+	};
+
 	createItem = (field: IDataField): React.ReactNode => {
 		const { t, layout, data, hideLabels } = this.props;
 		const { getFieldDecorator } = this.props.form;
 
-		const initialValue = data?.[field.key];
+		// const initialValue = data?.[field.key];
+		const initialValue = this.indexer(data, field.key, undefined);
 
 		const fieldFactory = DataFieldFactory.get(field.type);
 

@@ -39,7 +39,7 @@ namespace Montr.Core.Services
 			/*if (value is TextField stringField)
 			{
 				// writer.WriteNumber("TypeDiscriminator", (int)TypeDiscriminator.TextField);
-			}*/
+			}
 
 			if (value is TextAreaField textAreaField)
 			{
@@ -88,7 +88,7 @@ namespace Montr.Core.Services
 			if (value is ClassifierField classifierField)
 			{
 				writer.WriteString("typeCode", classifierField.TypeCode);
-			}
+			}*/
 
 			writer.WriteEndObject();
 		}

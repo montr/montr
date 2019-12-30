@@ -117,7 +117,7 @@ namespace Montr.Core.Tests.Services
 					Multiple = true,
 					Readonly = true,
 					Required = true,
-					Rows = 15
+					Properties = new TextAreaField.Props { Rows = 15 }
 				},
 
 				new PasswordField

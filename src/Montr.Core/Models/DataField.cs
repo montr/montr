@@ -75,6 +75,40 @@ namespace Montr.Core.Models
 		public bool Required { get; set; }
 
 		public int DisplayOrder { get; set; }
+
+		public virtual Type GetPropertiesType()
+		{
+			return null;
+		}
+
+		public virtual object GetProperties()
+		{
+			return null;
+		}
+
+		public virtual void SetProperties(object value)
+		{
+		}
+	}
+
+	public abstract class DataField<TProps> : DataField
+	{
+		public TProps Properties { get; set; }
+
+		public override Type GetPropertiesType()
+		{
+			return typeof(TProps);
+		}
+
+		public override object GetProperties()
+		{
+			return Properties;
+		}
+
+		public override void SetProperties(object value)
+		{
+			Properties = (TProps)value;
+		}
 	}
 
 	public class BooleanField : DataField
@@ -88,11 +122,14 @@ namespace Montr.Core.Models
 	}
 
 	// todo join with TextField?
-	public class TextAreaField : DataField
+	public class TextAreaField : DataField<TextAreaField.Props>
 	{
 		public override string Type => "textarea";
 
-		public byte? Rows { get; set; }
+		public class Props
+		{
+			public byte? Rows { get; set; }
+		}
 	}
 
 	public class PasswordField : DataField
