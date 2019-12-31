@@ -10,6 +10,11 @@ namespace Montr.Core.Services
 			return $"{typeof(T).FullName}.{GetMemberName(expr)}";
 		}
 
+		public static string GetMemberName<T>(Expression<Func<T, object>> expr)
+		{
+			return GetMemberName((Expression)expr);
+		}
+
 		public static string GetMemberName(Expression expression)
 		{
 			if (!(expression is LambdaExpression lambda)) throw new ArgumentNullException(nameof(expression));

@@ -117,7 +117,7 @@ namespace Montr.Core.Tests.Services
 					Multiple = true,
 					Readonly = true,
 					Required = true,
-					Properties = new TextAreaField.Props { Rows = 15 }
+					Props = new TextAreaField.Properties { Rows = 15 }
 				},
 
 				new PasswordField
@@ -142,7 +142,7 @@ namespace Montr.Core.Tests.Services
 					Multiple = true,
 					Readonly = true,
 					Required = true,
-					Properties =
+					Props =
 					{
 						Min = 12,
 						Max = 42
@@ -159,7 +159,7 @@ namespace Montr.Core.Tests.Services
 					Multiple = true,
 					Readonly = true,
 					Required = true,
-					Properties =
+					Props =
 					{
 						Min = 2,
 						Max = 22,
@@ -225,7 +225,7 @@ namespace Montr.Core.Tests.Services
 					Multiple = true,
 					Readonly = true,
 					Required = true,
-					Properties =
+					Props =
 					{
 						Options = new []
 						{
@@ -246,7 +246,7 @@ namespace Montr.Core.Tests.Services
 					Multiple = true,
 					Readonly = true,
 					Required = true,
-					Properties =
+					Props =
 					{
 						TypeCode = "TypeCode 1",
 						TreeCode = "TreeCode 1"
@@ -263,7 +263,7 @@ namespace Montr.Core.Tests.Services
 					Multiple = true,
 					Readonly = true,
 					Required = true,
-					Properties =
+					Props =
 					{
 						TypeCode = "TypeCode 2"
 					}

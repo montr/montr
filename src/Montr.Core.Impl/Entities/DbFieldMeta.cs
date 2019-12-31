@@ -57,7 +57,7 @@ namespace Montr.Core.Impl.Entities
 		[Column(Name = "icon", Length = 32), DataType(DataType.VarChar)]
 		public string Icon { get; set; }
 
-		[Column(Name = "extra"), DataType(DataType.VarChar)]
-		public string Extra { get; set; }
+		[Column(Name = "props"), DataType(DataType.VarChar)]
+		public string Props { get; set; }
 	}
 }

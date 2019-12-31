@@ -69,16 +69,16 @@ class _ClassifierGroupSelect extends React.Component<IProps, IState> {
 		const { field } = this.props,
 			{ value, expanded } = this.state;
 
-		const type = await this._classifierTypeService.get({ typeCode: field.properties.typeCode });
+		const type = await this._classifierTypeService.get({ typeCode: field.props.typeCode });
 
 		let trees: IClassifierTree[], groups: IClassifierGroup[];
 
 		if (type.hierarchyType == "Groups") {
-			if (field.properties.treeCode || field.properties.treeUid) {
+			if (field.props.treeCode || field.props.treeUid) {
 				const result = await this._classifierGroupService.list({
-					typeCode: field.properties.typeCode,
-					treeCode: field.properties.treeCode,
-					treeUid: field.properties.treeUid,
+					typeCode: field.props.typeCode,
+					treeCode: field.props.treeCode,
+					treeUid: field.props.treeUid,
 					focusUid: value
 				});
 
@@ -87,14 +87,14 @@ class _ClassifierGroupSelect extends React.Component<IProps, IState> {
 				await this.collectExpanded(groups, expanded);
 			}
 			else {
-				const result = await this._classifierTreeService.list({ typeCode: field.properties.typeCode });
+				const result = await this._classifierTreeService.list({ typeCode: field.props.typeCode });
 
 				trees = result.rows;
 			}
 		}
 		else if (type.hierarchyType == "Items") {
 			const result = await this._classifierGroupService.list(
-				{ typeCode: field.properties.typeCode, focusUid: value });
+				{ typeCode: field.props.typeCode, focusUid: value });
 
 			groups = result.rows;
 
@@ -139,7 +139,7 @@ class _ClassifierGroupSelect extends React.Component<IProps, IState> {
 						{ trees } = this.state;
 
 					const children = await this._classifierGroupService.list(
-						{ typeCode: field.properties.typeCode, treeUid: tree.uid, parentUid: null });
+						{ typeCode: field.props.typeCode, treeUid: tree.uid, parentUid: null });
 
 					tree.children = children.rows;
 
@@ -154,7 +154,7 @@ class _ClassifierGroupSelect extends React.Component<IProps, IState> {
 						{ groups } = this.state;
 
 					const children = await this._classifierGroupService.list(
-						{ typeCode: field.properties.typeCode, treeUid: group.treeUid, parentUid: group.uid });
+						{ typeCode: field.props.typeCode, treeUid: group.treeUid, parentUid: group.uid });
 
 					group.children = children.rows;
 

@@ -52,7 +52,7 @@ namespace Montr.Core.Impl.CommandHandlers
 						.Value(x => x.IsReadonly, false)
 						.Value(x => x.IsRequired, false)
 						.Value(x => x.DisplayOrder, item.DisplayOrder)
-						.Value(x => x.Extra, extra)
+						.Value(x => x.Props, extra)
 						.InsertAsync(cancellationToken);
 
 					scope.Commit();

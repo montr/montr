@@ -44,7 +44,7 @@ class TextFieldFactory extends DataFieldFactory {
 class NumberFieldFactory extends DataFieldFactory {
 	createNode(field: IDataField, data: IIndexer): React.ReactNode {
 		const numberField = field as INumberField;
-		const props = numberField?.properties;
+		const props = numberField?.props;
 
 		return <InputNumber
 			min={props?.min}
@@ -58,7 +58,7 @@ class NumberFieldFactory extends DataFieldFactory {
 class TextAreaFieldFactory extends DataFieldFactory {
 	createNode(field: IDataField, data: IIndexer): React.ReactNode {
 		const textAreaField = field as ITextAreaField;
-		const props = textAreaField?.properties;
+		const props = textAreaField?.props;
 
 		return <Input.TextArea
 			allowClear
@@ -71,7 +71,7 @@ class TextAreaFieldFactory extends DataFieldFactory {
 class SelectFieldFactory extends DataFieldFactory {
 	createNode(field: IDataField, data: IIndexer): React.ReactNode {
 		const selectField = field as ISelectField;
-		const props = selectField?.properties;
+		const props = selectField?.props;
 
 		return <Select allowClear showSearch placeholder={field.placeholder}>
 			{props?.options.map(x => {

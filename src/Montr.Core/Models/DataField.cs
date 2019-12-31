@@ -95,10 +95,10 @@ namespace Montr.Core.Models
 	{
 		protected DataField()
 		{
-			Properties= new TProps();
+			Props= new TProps();
 		}
 
-		public TProps Properties { get; set; }
+		public TProps Props { get; set; }
 
 		public override Type GetPropertiesType()
 		{
@@ -107,12 +107,12 @@ namespace Montr.Core.Models
 
 		public override object GetProperties()
 		{
-			return Properties;
+			return Props;
 		}
 
 		public override void SetProperties(object value)
 		{
-			Properties = (TProps)value;
+			Props = (TProps)value;
 		}
 	}
 
@@ -127,11 +127,11 @@ namespace Montr.Core.Models
 	}
 
 	// todo join with TextField?
-	public class TextAreaField : DataField<TextAreaField.Props>
+	public class TextAreaField : DataField<TextAreaField.Properties>
 	{
 		public override string Type => "textarea";
 
-		public class Props
+		public class Properties
 		{
 			public byte? Rows { get; set; }
 		}
@@ -142,11 +142,11 @@ namespace Montr.Core.Models
 		public override string Type => "password";
 	}
 
-	public class NumberField : DataField<NumberField.Props>
+	public class NumberField : DataField<NumberField.Properties>
 	{
 		public override string Type => "number";
 
-		public class Props
+		public class Properties
 		{
 			public decimal? Min { get; set; }
 
@@ -155,11 +155,11 @@ namespace Montr.Core.Models
 	}
 
 	// todo: merge with number?
-	public class DecimalField : DataField<DecimalField.Props>
+	public class DecimalField : DataField<DecimalField.Properties>
 	{
 		public override string Type => "decimal";
 
-		public class Props
+		public class Properties
 		{
 			public decimal? Min { get; set; }
 
@@ -186,11 +186,11 @@ namespace Montr.Core.Models
 		public override string Type => "datetime";
 	}
 
-	public class SelectField : DataField<SelectField.Props>
+	public class SelectField : DataField<SelectField.Properties>
 	{
 		public override string Type => "select";
 
-		public class Props
+		public class Properties
 		{
 			public SelectFieldOption[] Options { get; set; }
 		}
@@ -203,11 +203,11 @@ namespace Montr.Core.Models
 		public string Name { get; set; }
 	}
 
-	public class ClassifierGroupField : DataField<ClassifierGroupField.Props>
+	public class ClassifierGroupField : DataField<ClassifierGroupField.Properties>
 	{
 		public override string Type => "classifier-group";
 
-		public class Props
+		public class Properties
 		{
 			public string TypeCode { get; set; }
 
@@ -215,11 +215,11 @@ namespace Montr.Core.Models
 		}
 	}
 
-	public class ClassifierField : DataField<ClassifierField.Props>
+	public class ClassifierField : DataField<ClassifierField.Properties>
 	{
 		public override string Type => "classifier";
 
-		public class Props
+		public class Properties
 		{
 			public string TypeCode { get; set; }
 		}

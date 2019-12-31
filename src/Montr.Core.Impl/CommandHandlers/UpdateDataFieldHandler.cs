@@ -50,7 +50,7 @@ namespace Montr.Core.Impl.CommandHandlers
 						.Set(x => x.IsReadonly, item.Readonly)
 						.Set(x => x.IsRequired, item.Required)
 						.Set(x => x.DisplayOrder, item.DisplayOrder)
-						.Set(x => x.Extra, extra)
+						.Set(x => x.Props, extra)
 						.UpdateAsync(cancellationToken);
 				}
 

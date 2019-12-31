@@ -41,7 +41,7 @@ namespace Montr.MasterData.Impl.QueryHandlers
 					new ClassifierGroupField
 					{
 						Key = "parentUid", Name = "Группа", Required = true,
-						Properties = { TypeCode = typeCode, TreeCode = ClassifierTree.DefaultCode }
+						Props = { TypeCode = typeCode, TreeCode = ClassifierTree.DefaultCode }
 					}
 				};
 			}
@@ -51,7 +51,7 @@ namespace Montr.MasterData.Impl.QueryHandlers
 				{
 					new ClassifierGroupField
 					{
-						Key = "parentUid", Name = "Родительский элемент", Properties = { TypeCode = typeCode }
+						Key = "parentUid", Name = "Родительский элемент", Props = { TypeCode = typeCode }
 					},
 				};
 			}

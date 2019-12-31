@@ -66,9 +66,9 @@ namespace Montr.Core.Impl.Services
 
 					var propertiesType = field.GetPropertiesType();
 
-					if (propertiesType != null && dbField.Extra != null)
+					if (propertiesType != null && dbField.Props != null)
 					{
-						var properties = _jsonSerializer.Deserialize(dbField.Extra, propertiesType);
+						var properties = _jsonSerializer.Deserialize(dbField.Props, propertiesType);
 
 						field.SetProperties(properties);
 					}

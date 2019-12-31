@@ -21,7 +21,7 @@ CREATE TABLE public.field_meta
     description text COLLATE pg_catalog."default",
     placeholder character varying(128) COLLATE pg_catalog."default",
     icon character varying(32) COLLATE pg_catalog."default",
-	extra text COLLATE pg_catalog."default",
+	props text COLLATE pg_catalog."default",
     CONSTRAINT field_meta_pkey PRIMARY KEY (uid)
 );
 

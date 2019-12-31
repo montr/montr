@@ -62,7 +62,7 @@ class _ModalEditClassifierGroup extends React.Component<IProps, IState> {
 			const parentUidField = fields.find(x => x.key == "parentUid") as IClassifierGroupField;
 
 			if (parentUidField) {
-				parentUidField.properties = { typeCode, treeUid };
+				parentUidField.props = { typeCode, treeUid };
 			}
 
 			let data;

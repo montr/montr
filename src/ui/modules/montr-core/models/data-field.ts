@@ -22,7 +22,7 @@ export interface IDataField /* extends IIndexer */ {
 }
 
 export interface IDataFieldWithProps<TProps> extends IDataField {
-	properties?: TProps;
+	props?: TProps;
 }
 
 export interface ITextField extends IDataField {
