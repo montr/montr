@@ -41,12 +41,12 @@ class _ModalEditClassifierGroup extends React.Component<IProps, IState> {
 
 	componentDidMount = async () => {
 		await this.fetchData();
-	}
+	};
 
 	componentWillUnmount = async () => {
 		await this._metadataService.abort();
 		await this._classifierGroupService.abort();
-	}
+	};
 
 	fetchData = async () => {
 		const { typeCode, treeUid, uid, parentUid, hideFields } = this.props;
@@ -62,8 +62,7 @@ class _ModalEditClassifierGroup extends React.Component<IProps, IState> {
 			const parentUidField = fields.find(x => x.key == "parentUid") as IClassifierGroupField;
 
 			if (parentUidField) {
-				parentUidField.typeCode = typeCode;
-				parentUidField.treeUid = treeUid;
+				parentUidField.properties = { typeCode, treeUid };
 			}
 
 			let data;
@@ -82,19 +81,19 @@ class _ModalEditClassifierGroup extends React.Component<IProps, IState> {
 			this._notificationService.error("Ошибка при загрузке данных", error.message);
 			this.onCancel();
 		}
-	}
+	};
 
 	saveFormRef = (formRef: WrappedDataForm) => {
 		this._formRef = formRef;
-	}
+	};
 
 	onOk = async (e: React.MouseEvent<any>) => {
 		await this._formRef.handleSubmit(e);
-	}
+	};
 
 	onCancel = () => {
 		if (this.props.onCancel) this.props.onCancel();
-	}
+	};
 
 	save = async (values: IClassifierGroup): Promise<IApiResult> => {
 		const { typeCode, treeUid, uid, onSuccess } = this.props;
@@ -120,7 +119,7 @@ class _ModalEditClassifierGroup extends React.Component<IProps, IState> {
 		}
 
 		return result;
-	}
+	};
 
 	render = () => {
 		const { loading, fields, data } = this.state;
@@ -141,7 +140,7 @@ class _ModalEditClassifierGroup extends React.Component<IProps, IState> {
 				</Spin>
 			</Modal>
 		);
-	}
+	};
 }
 
 export const ModalEditClassifierGroup = withCompanyContext(_ModalEditClassifierGroup);

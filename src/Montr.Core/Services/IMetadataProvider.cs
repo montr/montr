@@ -34,14 +34,12 @@ namespace Montr.Core.Services
 
 			if (viewId == "Metadata/Edit")
 			{
+				var options = DataFieldTypes.Map.Keys.OrderBy(x => x).Select(x => new SelectFieldOption { Value = x, Name = x }).ToArray();
+
 				result.Fields = new List<DataField>
 				{
-					new SelectField
-					{
-						Key = "type", Name = "Тип", Required = true,
-						Options = DataFieldTypes.Map.Keys.OrderBy(x => x).Select(x => new SelectFieldOption { Value = x, Name = x }).ToArray()
-					},
-					new NumberField { Key = "displayOrder", Name = "#", Required = true, Min = 0, Max = 256 },
+					new SelectField { Key = "type", Name = "Тип", Required = true, Properties = { Options = options } },
+					new NumberField { Key = "displayOrder", Name = "#", Required = true, Properties = { Min = 0, Max = 256 } },
 					new TextField { Key = "key", Name = "Код", Required = true },
 					new TextField { Key = "name", Name = "Наименование", Required = true },
 					new TextAreaField { Key = "description", Name = "Описание", Properties = new TextAreaField.Props { Rows = 2 } },
@@ -59,46 +57,46 @@ namespace Montr.Core.Services
 				{
 					result.Fields = new List<DataField>
 					{
-						new NumberField { Key = "properties.rows", Name = "Количество строк", Min = 1, Max = byte.MaxValue }
+						new NumberField { Key = "properties.rows", Name = "Количество строк", Properties = { Min = 1, Max = byte.MaxValue } }
 					};
 				}
 				else if (code == DataFieldTypes.Number)
 				{
 					result.Fields = new List<DataField>
 					{
-						new NumberField { Key = "min", Name = "Минимум", Min = long.MinValue, Max = long.MaxValue },
-						new NumberField { Key = "max", Name = "Максимум", Min = long.MinValue, Max = long.MaxValue }
+						new NumberField { Key = "properties.min", Name = "Минимум", Properties = { Min = long.MinValue, Max = long.MaxValue } },
+						new NumberField { Key = "properties.max", Name = "Максимум", Properties = { Min = long.MinValue, Max = long.MaxValue } }
 					};
 				}
 				else if (code == DataFieldTypes.Decimal)
 				{
 					result.Fields = new List<DataField>
 					{
-						new NumberField { Key = "min", Name = "Минимум", Min = decimal.MinValue, Max = decimal.MaxValue },
-						new NumberField { Key = "max", Name = "Максимум", Min = decimal.MinValue, Max = decimal.MaxValue },
-						new NumberField { Key = "precision", Name = "Точность", Description = "Количество знаков после запятой", Min = 0, Max = 5 }
+						new NumberField { Key = "properties.min", Name = "Минимум", Properties = { Min = decimal.MinValue, Max = decimal.MaxValue } },
+						new NumberField { Key = "properties.max", Name = "Максимум", Properties = { Min = decimal.MinValue, Max = decimal.MaxValue } },
+						new NumberField { Key = "properties.precision", Name = "Точность", Description = "Количество знаков после запятой", Properties = { Min = 0, Max = 5 } }
 					};
 				}
 				else if (code == DataFieldTypes.Select)
 				{
 					result.Fields = new List<DataField>
 					{
-						new TextAreaField { Key = "options", Name = "Options", Required = true }
+						new TextAreaField { Key = "properties.options", Name = "Options", Required = true }
 					};
 				}
 				else if (code == DataFieldTypes.Classifier)
 				{
 					result.Fields = new List<DataField>
 					{
-						new TextField { Key = "typeCode", Name = "TypeCode" }
+						new TextField { Key = "properties.typeCode", Name = "TypeCode" }
 					};
 				}
 				else if (code == DataFieldTypes.ClassifierGroup)
 				{
 					result.Fields = new List<DataField>
 					{
-						new TextField { Key = "typeCode", Name = "TypeCode" },
-						new TextField { Key = "treeCode", Name = "TreeCode" }
+						new TextField { Key = "properties.typeCode", Name = "TypeCode" },
+						new TextField { Key = "properties.treeCode", Name = "TreeCode" }
 					};
 				}
 			}
@@ -186,14 +184,20 @@ namespace Montr.Core.Services
 					new TextField { Key = "code", Name = "Код", Required = true },
 					new TextAreaField { Key = "name", Name = "Наименование", Required = true, Properties = new TextAreaField.Props { Rows = 2 } },
 					new TextAreaField { Key = "description", Name = "Описание" },
-					new SelectField { Key = "hierarchyType", Name = "Иерархия",
+					new SelectField
+					{
+						Key = "hierarchyType", Name = "Иерархия",
 						Description = "Справочник может быть без иерархии, с иерархией групп (например, контрагентов можно распределить по группам по их регионам, размеру или отношению к нашей организации) или иерархией элементов (например, одни виды деятельности уточняются другими видами деятельности)",
-						Options = new []
+						Properties =
 						{
-							new SelectFieldOption { Value = "None", Name = "Нет" },
-							new SelectFieldOption { Value = "Groups", Name = "Группы" },
-							new SelectFieldOption { Value = "Items", Name = "Элементы" }
-						}}
+							Options = new []
+							{
+								new SelectFieldOption { Value = "None", Name = "Нет" },
+								new SelectFieldOption { Value = "Groups", Name = "Группы" },
+								new SelectFieldOption { Value = "Items", Name = "Элементы" }
+							}
+						}
+					}
 				};
 			}
 
@@ -384,7 +388,7 @@ namespace Montr.Core.Services
 			{
 				result.Fields = new List<DataField>
 				{
-					new ClassifierField { Key = "counterpartyUid", Name = "Контрагент", TypeCode = "counterparty", Required = true },
+					new ClassifierField { Key = "counterpartyUid", Name = "Контрагент", Required = true, Properties = { TypeCode = "counterparty" } },
 					new TextField { Key = "user", Name = "Пользователь" },
 					new TextField { Key = "email", Name = "Email", Required = true },
 					new TextField { Key = "phone", Name = "Телефон" },

@@ -1,6 +1,6 @@
 import React from "react";
 import { DataForm } from ".";
-import { MetadataService } from "../services";
+import { MetadataService, DataHelper } from "../services";
 import { IDataField, IApiResult, Guid } from "../models";
 import { Spin, Button, Popover, Switch, List } from "antd";
 import { Toolbar } from "./toolbar";
@@ -73,8 +73,9 @@ export class PaneEditMetadata extends React.Component<IProps, IState> {
 			// todo: read optional field types from server
 			.filter(x => !x.required && (x.type == "text" || x.type == "textarea"))
 			.map(x => {
+				const value = DataHelper.indexer(data, x.key, undefined);
 				// in optional fields using active as flag of visible field
-				return { type: x.type, key: x.key, name: x.name, active: !!data[x.key] };
+				return { type: x.type, key: x.key, name: x.name, active: !!value };
 			});
 	};
 

@@ -38,14 +38,21 @@ namespace Montr.MasterData.Impl.QueryHandlers
 			{
 				commonFields = new List<DataField>
 				{
-					new ClassifierGroupField { Key = "parentUid", Name = "Группа", TypeCode = typeCode, TreeCode = ClassifierTree.DefaultCode, Required = true }
+					new ClassifierGroupField
+					{
+						Key = "parentUid", Name = "Группа", Required = true,
+						Properties = { TypeCode = typeCode, TreeCode = ClassifierTree.DefaultCode }
+					}
 				};
 			}
 			else if (type.HierarchyType == HierarchyType.Items)
 			{
 				commonFields = new List<DataField>
 				{
-					new ClassifierGroupField { Key = "parentUid", Name = "Родительский элемент", TypeCode = typeCode },
+					new ClassifierGroupField
+					{
+						Key = "parentUid", Name = "Родительский элемент", Properties = { TypeCode = typeCode }
+					},
 				};
 			}
 

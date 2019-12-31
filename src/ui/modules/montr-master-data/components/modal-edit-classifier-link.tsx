@@ -38,12 +38,12 @@ class _ModalEditClassifierLink extends React.Component<IProps, IState> {
 
 	componentDidMount = async () => {
 		await this.fetchData();
-	}
+	};
 
 	componentWillUnmount = async () => {
 		await this._metadataService.abort();
 		await this._classifierLinkService.abort();
-	}
+	};
 
 	fetchData = async () => {
 		const { currentCompany, typeCode } = this.props;
@@ -58,7 +58,7 @@ class _ModalEditClassifierLink extends React.Component<IProps, IState> {
 				const classifierField = fields.find(x => x.key == "group.uid") as IClassifierField;
 
 				if (classifierField) {
-					classifierField.typeCode = typeCode;
+					classifierField.properties = { typeCode };
 				}
 
 				this.setState({ loading: false, fields });
@@ -68,19 +68,19 @@ class _ModalEditClassifierLink extends React.Component<IProps, IState> {
 				this.onCancel();
 			}
 		}
-	}
+	};
 
 	saveFormRef = (formRef: WrappedDataForm) => {
 		this._formRef = formRef;
-	}
+	};
 
 	onOk = async (e: React.MouseEvent<any>) => {
 		await this._formRef.handleSubmit(e);
-	}
+	};
 
 	onCancel = () => {
 		if (this.props.onCancel) this.props.onCancel();
-	}
+	};
 
 	save = async (values: IClassifierLink): Promise<IApiResult> => {
 		const { typeCode, itemUid, onSuccess } = this.props;
@@ -92,7 +92,7 @@ class _ModalEditClassifierLink extends React.Component<IProps, IState> {
 		}
 
 		return result;
-	}
+	};
 
 	render = () => {
 		const { loading, fields, data } = this.state;
@@ -112,7 +112,7 @@ class _ModalEditClassifierLink extends React.Component<IProps, IState> {
 				</Spin>
 			</Modal>
 		);
-	}
+	};
 }
 
 export const ModalEditClassifierLink = withCompanyContext(_ModalEditClassifierLink);

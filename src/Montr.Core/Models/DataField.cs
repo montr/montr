@@ -91,8 +91,13 @@ namespace Montr.Core.Models
 		}
 	}
 
-	public abstract class DataField<TProps> : DataField
+	public abstract class DataField<TProps> : DataField where TProps : new()
 	{
+		protected DataField()
+		{
+			Properties= new TProps();
+		}
+
 		public TProps Properties { get; set; }
 
 		public override Type GetPropertiesType()
@@ -137,25 +142,31 @@ namespace Montr.Core.Models
 		public override string Type => "password";
 	}
 
-	public class NumberField : DataField
+	public class NumberField : DataField<NumberField.Props>
 	{
 		public override string Type => "number";
 
-		public decimal? Min { get; set; }
+		public class Props
+		{
+			public decimal? Min { get; set; }
 
-		public decimal? Max { get; set; }
+			public decimal? Max { get; set; }
+		}
 	}
 
 	// todo: merge with number?
-	public class DecimalField : DataField
+	public class DecimalField : DataField<DecimalField.Props>
 	{
 		public override string Type => "decimal";
 
-		public decimal? Min { get; set; }
+		public class Props
+		{
+			public decimal? Min { get; set; }
 
-		public decimal? Max { get; set; }
+			public decimal? Max { get; set; }
 
-		public byte? Precision { get; set; }
+			public byte? Precision { get; set; }
+		}
 	}
 
 	public class DateField : DataField
@@ -175,11 +186,14 @@ namespace Montr.Core.Models
 		public override string Type => "datetime";
 	}
 
-	public class SelectField : DataField
+	public class SelectField : DataField<SelectField.Props>
 	{
 		public override string Type => "select";
 
-		public SelectFieldOption[] Options { get; set; }
+		public class Props
+		{
+			public SelectFieldOption[] Options { get; set; }
+		}
 	}
 
 	public class SelectFieldOption
@@ -189,20 +203,26 @@ namespace Montr.Core.Models
 		public string Name { get; set; }
 	}
 
-	public class ClassifierGroupField : DataField
+	public class ClassifierGroupField : DataField<ClassifierGroupField.Props>
 	{
 		public override string Type => "classifier-group";
 
-		public string TypeCode { get; set; }
+		public class Props
+		{
+			public string TypeCode { get; set; }
 
-		public string TreeCode { get; set; }
+			public string TreeCode { get; set; }
+		}
 	}
 
-	public class ClassifierField : DataField
+	public class ClassifierField : DataField<ClassifierField.Props>
 	{
 		public override string Type => "classifier";
 
-		public string TypeCode { get; set; }
+		public class Props
+		{
+			public string TypeCode { get; set; }
+		}
 	}
 
 	public class FileField : DataField

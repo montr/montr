@@ -142,8 +142,11 @@ namespace Montr.Core.Tests.Services
 					Multiple = true,
 					Readonly = true,
 					Required = true,
-					Min = 12,
-					Max = 42
+					Properties =
+					{
+						Min = 12,
+						Max = 42
+					}
 				},
 
 				new DecimalField
@@ -156,9 +159,12 @@ namespace Montr.Core.Tests.Services
 					Multiple = true,
 					Readonly = true,
 					Required = true,
-					Min = 2,
-					Max = 22,
-					Precision = 4
+					Properties =
+					{
+						Min = 2,
+						Max = 22,
+						Precision = 4
+					}
 				},
 
 				new DateField
@@ -219,11 +225,14 @@ namespace Montr.Core.Tests.Services
 					Multiple = true,
 					Readonly = true,
 					Required = true,
-					Options = new []
+					Properties =
 					{
-						new SelectFieldOption { Name = "Option 1", Value = "val_1" }, 
-						new SelectFieldOption { Name = "Option 2", Value = "val_2" }, 
-						new SelectFieldOption { Name = "Option 3", Value = "val_3" }, 
+						Options = new []
+						{
+							new SelectFieldOption { Name = "Option 1", Value = "val_1" },
+							new SelectFieldOption { Name = "Option 2", Value = "val_2" },
+							new SelectFieldOption { Name = "Option 3", Value = "val_3" },
+						}
 					}
 				},
 
@@ -237,8 +246,11 @@ namespace Montr.Core.Tests.Services
 					Multiple = true,
 					Readonly = true,
 					Required = true,
-					TypeCode = "TypeCode 1",
-					TreeCode = "TreeCode 1"
+					Properties =
+					{
+						TypeCode = "TypeCode 1",
+						TreeCode = "TreeCode 1"
+					}
 				},
 
 				new ClassifierField
@@ -251,7 +263,10 @@ namespace Montr.Core.Tests.Services
 					Multiple = true,
 					Readonly = true,
 					Required = true,
-					TypeCode = "TypeCode 2",
+					Properties =
+					{
+						TypeCode = "TypeCode 2"
+					}
 				},
 
 				new FileField

@@ -21,6 +21,7 @@ export abstract class DataFieldFactory {
 class BooleanFieldFactory extends DataFieldFactory {
 	constructor() {
 		super();
+
 		this.valuePropName = "checked";
 	}
 
@@ -43,10 +44,11 @@ class TextFieldFactory extends DataFieldFactory {
 class NumberFieldFactory extends DataFieldFactory {
 	createNode(field: IDataField, data: IIndexer): React.ReactNode {
 		const numberField = field as INumberField;
+		const props = numberField?.properties;
 
 		return <InputNumber
-			min={numberField.min}
-			max={numberField.max}
+			min={props?.min}
+			max={props?.max}
 			disabled={field.readonly}
 			placeholder={field.placeholder}
 		/>;
@@ -56,11 +58,12 @@ class NumberFieldFactory extends DataFieldFactory {
 class TextAreaFieldFactory extends DataFieldFactory {
 	createNode(field: IDataField, data: IIndexer): React.ReactNode {
 		const textAreaField = field as ITextAreaField;
+		const props = textAreaField?.properties;
 
 		return <Input.TextArea
 			allowClear
 			placeholder={field.placeholder}
-			autoSize={{ minRows: textAreaField?.properties?.rows || 4, maxRows: 24 }}
+			autoSize={{ minRows: props?.rows || 4, maxRows: 24 }}
 		/>;
 	}
 }
@@ -68,9 +71,10 @@ class TextAreaFieldFactory extends DataFieldFactory {
 class SelectFieldFactory extends DataFieldFactory {
 	createNode(field: IDataField, data: IIndexer): React.ReactNode {
 		const selectField = field as ISelectField;
+		const props = selectField?.properties;
 
 		return <Select allowClear showSearch placeholder={field.placeholder}>
-			{selectField && selectField.options && selectField.options.map(x => {
+			{props?.options.map(x => {
 				return <Select.Option key={x.value} value={x.value}>{x.name || x.value}</Select.Option>;
 			})}
 		</Select>;
