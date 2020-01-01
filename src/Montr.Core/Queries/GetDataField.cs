@@ -4,7 +4,7 @@ using Montr.Core.Models;
 
 namespace Montr.Core.Queries
 {
-	public class GetDataField : IRequest<DataField>
+	public class GetDataField : IRequest<FieldMetadata>
 	{
 		public Guid UserUid { get; set; }
 

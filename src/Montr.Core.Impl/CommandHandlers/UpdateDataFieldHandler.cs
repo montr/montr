@@ -39,7 +39,7 @@ namespace Montr.Core.Impl.CommandHandlers
 
 				using (var db = _dbContextFactory.Create())
 				{
-					affected = await db.GetTable<DbFieldMeta>()
+					affected = await db.GetTable<DbFieldMetadata>()
 						.Where(x => x.Uid == item.Uid)
 						.Set(x => x.TypeCode, item.Type)
 						.Set(x => x.Key, item.Key)

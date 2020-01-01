@@ -48,7 +48,7 @@ namespace Montr.Core.Models
 		public string Icon { get; set; }
 	}
 
-	public abstract class DataField
+	public abstract class FieldMetadata
 	{
 		public abstract string Type { get; }
 
@@ -91,9 +91,9 @@ namespace Montr.Core.Models
 		}
 	}
 
-	public abstract class DataField<TProps> : DataField where TProps : new()
+	public abstract class FieldMetadata<TProps> : FieldMetadata where TProps : new()
 	{
-		protected DataField()
+		protected FieldMetadata()
 		{
 			Props= new TProps();
 		}
@@ -116,18 +116,18 @@ namespace Montr.Core.Models
 		}
 	}
 
-	public class BooleanField : DataField
+	public class BooleanField : FieldMetadata
 	{
 		public override string Type => DataFieldTypes.Boolean;
 	}
 
-	public class TextField : DataField
+	public class TextField : FieldMetadata
 	{
 		public override string Type => DataFieldTypes.Text;
 	}
 
 	// todo join with TextField?
-	public class TextAreaField : DataField<TextAreaField.Properties>
+	public class TextAreaField : FieldMetadata<TextAreaField.Properties>
 	{
 		public override string Type => "textarea";
 
@@ -137,12 +137,12 @@ namespace Montr.Core.Models
 		}
 	}
 
-	public class PasswordField : DataField
+	public class PasswordField : FieldMetadata
 	{
 		public override string Type => "password";
 	}
 
-	public class NumberField : DataField<NumberField.Properties>
+	public class NumberField : FieldMetadata<NumberField.Properties>
 	{
 		public override string Type => "number";
 
@@ -155,7 +155,7 @@ namespace Montr.Core.Models
 	}
 
 	// todo: merge with number?
-	public class DecimalField : DataField<DecimalField.Properties>
+	public class DecimalField : FieldMetadata<DecimalField.Properties>
 	{
 		public override string Type => "decimal";
 
@@ -169,24 +169,24 @@ namespace Montr.Core.Models
 		}
 	}
 
-	public class DateField : DataField
+	public class DateField : FieldMetadata
 	{
 		public override string Type => "date";
 	}
 
 	// todo join with Date?
-	public class TimeField : DataField
+	public class TimeField : FieldMetadata
 	{
 		public override string Type => "time";
 	}
 
 	// todo join with Date?
-	public class DateTimeField : DataField
+	public class DateTimeField : FieldMetadata
 	{
 		public override string Type => "datetime";
 	}
 
-	public class SelectField : DataField<SelectField.Properties>
+	public class SelectField : FieldMetadata<SelectField.Properties>
 	{
 		public override string Type => "select";
 
@@ -203,7 +203,7 @@ namespace Montr.Core.Models
 		public string Name { get; set; }
 	}
 
-	public class ClassifierGroupField : DataField<ClassifierGroupField.Properties>
+	public class ClassifierGroupField : FieldMetadata<ClassifierGroupField.Properties>
 	{
 		public override string Type => "classifier-group";
 
@@ -215,7 +215,7 @@ namespace Montr.Core.Models
 		}
 	}
 
-	public class ClassifierField : DataField<ClassifierField.Properties>
+	public class ClassifierField : FieldMetadata<ClassifierField.Properties>
 	{
 		public override string Type => "classifier";
 
@@ -225,7 +225,7 @@ namespace Montr.Core.Models
 		}
 	}
 
-	public class FileField : DataField
+	public class FileField : FieldMetadata
 	{
 		public override string Type => "file";
 	}

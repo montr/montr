@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using Montr.Core.Models;
 
 namespace Montr.MasterData.Models
 {
@@ -21,5 +22,7 @@ namespace Montr.MasterData.Models
 		public string ParentCode { get; set; }
 
 		public string Url { get; set; }
+
+		public FieldData Fields { get; set; }
 	}
 }

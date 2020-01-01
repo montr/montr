@@ -21,14 +21,16 @@ namespace Montr.MasterData.Impl.CommandHandlers
 		private readonly IDbContextFactory _dbContextFactory;
 		private readonly IDateTimeProvider _dateTimeProvider;
 		private readonly IClassifierTypeService _classifierTypeService;
+		private readonly IFieldDataRepository _fieldDataRepository;
 
 		public InsertClassifierHandler(IUnitOfWorkFactory unitOfWorkFactory, IDbContextFactory dbContextFactory,
-			IDateTimeProvider dateTimeProvider, IClassifierTypeService classifierTypeService)
+			IDateTimeProvider dateTimeProvider, IClassifierTypeService classifierTypeService, IFieldDataRepository fieldDataRepository)
 		{
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_dbContextFactory = dbContextFactory;
 			_dateTimeProvider = dateTimeProvider;
 			_classifierTypeService = classifierTypeService;
+			_fieldDataRepository = fieldDataRepository;
 		}
 
 		public async Task<ApiResult> Handle(InsertClassifier request, CancellationToken cancellationToken)
@@ -70,6 +72,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 						.Value(x => x.ParentUid, type.HierarchyType == HierarchyType.Items ? item.ParentUid : null)
 						.InsertAsync(cancellationToken);
 
+
 					if (type.HierarchyType == HierarchyType.Groups)
 					{
 						// todo: validate group belongs to the same classifier
@@ -109,9 +112,12 @@ namespace Montr.MasterData.Impl.CommandHandlers
 					}
 
 					// todo: events
-
-					scope.Commit();
 				}
+
+				// insert fields
+				await _fieldDataRepository.Insert("classifier", itemUid, item.Fields, cancellationToken);
+
+				scope.Commit();
 
 				return new ApiResult { Uid = itemUid };
 			}

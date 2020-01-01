@@ -11,25 +11,25 @@ using Montr.Data.Linq2Db;
 
 namespace Montr.Core.Impl.Services
 {
-	public class DbDataFieldRepository : IRepository<DataField>
+	public class DbFieldMetadataRepository : IRepository<FieldMetadata>
 	{
 		private readonly IDbContextFactory _dbContextFactory;
 		private readonly IJsonSerializer _jsonSerializer;
 
-		public DbDataFieldRepository(IDbContextFactory dbContextFactory, IJsonSerializer jsonSerializer)
+		public DbFieldMetadataRepository(IDbContextFactory dbContextFactory, IJsonSerializer jsonSerializer)
 		{
 			_dbContextFactory = dbContextFactory;
 			_jsonSerializer = jsonSerializer;
 		}
 
-		public async Task<SearchResult<DataField>> Search(SearchRequest searchRequest, CancellationToken cancellationToken)
+		public async Task<SearchResult<FieldMetadata>> Search(SearchRequest searchRequest, CancellationToken cancellationToken)
 		{
 			var request = (MetadataSearchRequest)searchRequest ?? throw new ArgumentNullException(nameof(searchRequest));
 
 			using (var db = _dbContextFactory.Create())
 			{
 				var query = db
-					.GetTable<DbFieldMeta>()
+					.GetTable<DbFieldMetadata>()
 					.Where(x => x.EntityTypeCode == request.EntityTypeCode);
 
 				if (request.Uid != null)
@@ -45,12 +45,12 @@ namespace Montr.Core.Impl.Services
 					.Select(x => x)
 					.ToListAsync(cancellationToken);
 
-				var result = new List<DataField>();
+				var result = new List<FieldMetadata>();
 
 				foreach (var dbField in data)
 				{
 					// todo: use factory
-					var field = (DataField) Activator.CreateInstance(DataFieldTypes.Map[dbField.TypeCode]);
+					var field = (FieldMetadata) Activator.CreateInstance(DataFieldTypes.Map[dbField.TypeCode]);
 
 					field.Uid = dbField.Uid;
 					field.Key = dbField.Key;
@@ -76,7 +76,7 @@ namespace Montr.Core.Impl.Services
 					result.Add(field);
 				}
 
-				return new SearchResult<DataField>
+				return new SearchResult<FieldMetadata>
 				{
 					TotalCount = withPaging ? query.Count() : (int?)null,
 					Rows = result

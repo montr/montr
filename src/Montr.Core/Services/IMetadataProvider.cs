@@ -38,7 +38,7 @@ namespace Montr.Core.Services
 			{
 				var options = DataFieldTypes.Map.Keys.OrderBy(x => x).Select(x => new SelectFieldOption { Value = x, Name = x }).ToArray();
 
-				result.Fields = new List<DataField>
+				result.Fields = new List<FieldMetadata>
 				{
 					new SelectField { Key = "type", Name = "Тип", Required = true, Props = { Options = options } },
 					new NumberField { Key = "displayOrder", Name = "#", Required = true, Props = { Min = 0, Max = 256 } },
@@ -57,14 +57,14 @@ namespace Montr.Core.Services
 
 				if (code == DataFieldTypes.TextArea)
 				{
-					result.Fields = new List<DataField>
+					result.Fields = new List<FieldMetadata>
 					{
 						new NumberField { Key = PropsPrefix + ".rows", Name = "Количество строк", Props = { Min = 1, Max = byte.MaxValue } }
 					};
 				}
 				else if (code == DataFieldTypes.Number)
 				{
-					result.Fields = new List<DataField>
+					result.Fields = new List<FieldMetadata>
 					{
 						new NumberField { Key = PropsPrefix + ".min", Name = "Минимум", Props = { Min = long.MinValue, Max = long.MaxValue } },
 						new NumberField { Key = PropsPrefix + ".max", Name = "Максимум", Props = { Min = long.MinValue, Max = long.MaxValue } }
@@ -72,7 +72,7 @@ namespace Montr.Core.Services
 				}
 				else if (code == DataFieldTypes.Decimal)
 				{
-					result.Fields = new List<DataField>
+					result.Fields = new List<FieldMetadata>
 					{
 						new NumberField { Key = PropsPrefix + ".min", Name = "Минимум", Props = { Min = decimal.MinValue, Max = decimal.MaxValue } },
 						new NumberField { Key = PropsPrefix + ".max", Name = "Максимум", Props = { Min = decimal.MinValue, Max = decimal.MaxValue } },
@@ -81,21 +81,21 @@ namespace Montr.Core.Services
 				}
 				else if (code == DataFieldTypes.Select)
 				{
-					result.Fields = new List<DataField>
+					result.Fields = new List<FieldMetadata>
 					{
 						new TextAreaField { Key = PropsPrefix + ".options", Name = "Options", Required = true }
 					};
 				}
 				else if (code == DataFieldTypes.Classifier)
 				{
-					result.Fields = new List<DataField>
+					result.Fields = new List<FieldMetadata>
 					{
 						new TextField { Key = PropsPrefix + ".typeCode", Name = "TypeCode" }
 					};
 				}
 				else if (code == DataFieldTypes.ClassifierGroup)
 				{
-					result.Fields = new List<DataField>
+					result.Fields = new List<FieldMetadata>
 					{
 						new TextField { Key = PropsPrefix + ".typeCode", Name = "TypeCode" },
 						new TextField { Key = PropsPrefix + ".treeCode", Name = "TreeCode" }
@@ -133,7 +133,7 @@ namespace Montr.Core.Services
 			{
 				if (viewId.EndsWith("/okv"))
 				{
-					result.Fields = new List<DataField>
+					result.Fields = new List<FieldMetadata>
 					{
 						new TextField { Key = "code", Name = "Код", Required = true },
 						new TextAreaField { Key = "name", Name = "Наименование", Required = true, Props = new TextAreaField.Properties { Rows = 10 } },
@@ -143,7 +143,7 @@ namespace Montr.Core.Services
 				}
 				else
 				{
-					result.Fields = new List<DataField>
+					result.Fields = new List<FieldMetadata>
 					{
 						// new TextField { Key = "statusCode", Name = "Статус", Readonly = true },
 						new TextField { Key = "code", Name = "Код", Required = true },
@@ -154,7 +154,7 @@ namespace Montr.Core.Services
 
 			if (viewId == "ClassifierTree/Form")
 			{
-				result.Fields = new List<DataField>
+				result.Fields = new List<FieldMetadata>
 				{
 					new TextField { Key = "code", Name = "Код", Required = true },
 					new TextField { Key = "name", Name = "Наименование", Required = true },
@@ -163,7 +163,7 @@ namespace Montr.Core.Services
 
 			if (viewId == "ClassifierGroup/Form")
 			{
-				result.Fields = new List<DataField>
+				result.Fields = new List<FieldMetadata>
 				{
 					new TextField { Key = "code", Name = "Код", Required = true },
 					new TextField { Key = "name", Name = "Наименование", Required = true },
@@ -173,7 +173,7 @@ namespace Montr.Core.Services
 
 			if (viewId == "ClassifierLink/Form")
 			{
-				result.Fields = new List<DataField>
+				result.Fields = new List<FieldMetadata>
 				{
 					new ClassifierGroupField { Key = "group.uid", Name = "Группа", Required = true },
 				};
@@ -181,7 +181,7 @@ namespace Montr.Core.Services
 
 			if (viewId == "ClassifierType")
 			{
-				result.Fields = new List<DataField>
+				result.Fields = new List<FieldMetadata>
 				{
 					new TextField { Key = "code", Name = "Код", Required = true },
 					new TextAreaField { Key = "name", Name = "Наименование", Required = true, Props = new TextAreaField.Properties { Rows = 2 } },
@@ -258,7 +258,7 @@ namespace Montr.Core.Services
 			// Montr.Idx
 			if (viewId == "Login/Form")
 			{
-				result.Fields = new List<DataField>
+				result.Fields = new List<FieldMetadata>
 				{
 					new TextField { Key = "email", Name = "Email", Placeholder = "Your email", Icon = "user", Required = true },
 					new PasswordField { Key = "password", Name = "Password", Placeholder = "Password", Icon = "lock", Required = true },
@@ -268,7 +268,7 @@ namespace Montr.Core.Services
 
 			if (viewId == "ForgotPassword/Form" || viewId == "SendEmailConfirmation/Form")
 			{
-				result.Fields = new List<DataField>
+				result.Fields = new List<FieldMetadata>
 				{
 					new TextField { Key = "email", Name = "Email", Icon = "mail", Required = true }
 				};
@@ -276,7 +276,7 @@ namespace Montr.Core.Services
 
 			if (viewId == "ResetPassword/Form")
 			{
-				result.Fields = new List<DataField>
+				result.Fields = new List<FieldMetadata>
 				{
 					new TextField { Key = "email", Name = "Email", Required = true },
 					new PasswordField { Key = "password", Name = "Password", Required = true },
@@ -286,7 +286,7 @@ namespace Montr.Core.Services
 
 			if (viewId == "ChangePassword/Form")
 			{
-				result.Fields = new List<DataField>
+				result.Fields = new List<FieldMetadata>
 				{
 					new PasswordField { Key = "oldPassword", Name = "Current password", Required = true },
 					new PasswordField { Key = "newPassword", Name = "New password", Required = true },
@@ -296,7 +296,7 @@ namespace Montr.Core.Services
 
 			if (viewId == "SetPassword/Form")
 			{
-				result.Fields = new List<DataField>
+				result.Fields = new List<FieldMetadata>
 				{
 					new PasswordField { Key = "newPassword", Name = "New password", Required = true },
 					new PasswordField { Key = "confirmPassword", Name = "Confirm new password", Required = true }
@@ -306,7 +306,7 @@ namespace Montr.Core.Services
 			if (viewId == "Register/Form")
 			{
 				// todo: add terms and conditions checkbox
-				result.Fields = new List<DataField>
+				result.Fields = new List<FieldMetadata>
 				{
 					new TextField { Key = "email", Name = "Email", Required = true },
 					new TextField { Key = "firstName", Name = "First Name", Required = true },
@@ -318,7 +318,7 @@ namespace Montr.Core.Services
 
 			if (viewId == "ExternalRegister/Form")
 			{
-				result.Fields = new List<DataField>
+				result.Fields = new List<FieldMetadata>
 				{
 					new TextField { Key = "email", Name = "Email", Required = true },
 					new TextField { Key = "firstName", Name = "First Name", Required = true },
@@ -328,7 +328,7 @@ namespace Montr.Core.Services
 
 			if (viewId == "ChangeEmail/Form")
 			{
-				result.Fields = new List<DataField>
+				result.Fields = new List<FieldMetadata>
 				{
 					new TextField { Key = "email", Name = "Email", Required = true }
 				};
@@ -336,7 +336,7 @@ namespace Montr.Core.Services
 
 			if (viewId == "ChangePhone/Form")
 			{
-				result.Fields = new List<DataField>
+				result.Fields = new List<FieldMetadata>
 				{
 					new TextField { Key = "phoneNumber", Name = "Номер телефона" } // todo: PhoneField
 				};
@@ -344,7 +344,7 @@ namespace Montr.Core.Services
 
 			if (viewId == "UpdateProfile/Form")
 			{
-				result.Fields = new List<DataField>
+				result.Fields = new List<FieldMetadata>
 				{
 					new TextField { Key = "userName", Name = "Имя пользователя", Readonly = true },
 					new TextField { Key = "firstName", Name = "Имя" },
@@ -388,7 +388,7 @@ namespace Montr.Core.Services
 
 			if (viewId == "Event/Invitation/Form")
 			{
-				result.Fields = new List<DataField>
+				result.Fields = new List<FieldMetadata>
 				{
 					new ClassifierField { Key = "counterpartyUid", Name = "Контрагент", Required = true, Props = { TypeCode = "counterparty" } },
 					new TextField { Key = "user", Name = "Пользователь" },

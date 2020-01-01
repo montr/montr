@@ -38,7 +38,7 @@ namespace Montr.Core.Impl.CommandHandlers
 
 				using (var db = _dbContextFactory.Create())
 				{
-					await db.GetTable<DbFieldMeta>()
+					await db.GetTable<DbFieldMetadata>()
 						.Value(x => x.Uid, itemUid)
 						.Value(x => x.EntityTypeCode, request.EntityTypeCode)
 						.Value(x => x.TypeCode, item.Type)
@@ -49,8 +49,8 @@ namespace Montr.Core.Impl.CommandHandlers
 						.Value(x => x.Icon, item.Icon)
 						.Value(x => x.IsActive, true)
 						.Value(x => x.IsSystem, false)
-						.Value(x => x.IsReadonly, false)
-						.Value(x => x.IsRequired, false)
+						.Value(x => x.IsReadonly, item.Readonly)
+						.Value(x => x.IsRequired, item.Required)
 						.Value(x => x.DisplayOrder, item.DisplayOrder)
 						.Value(x => x.Props, extra)
 						.InsertAsync(cancellationToken);

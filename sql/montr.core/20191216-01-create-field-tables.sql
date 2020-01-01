@@ -1,8 +1,8 @@
--- Table: public.field_meta
+-- Table: public.field_metadata
 
--- DROP TABLE public.field_meta;
+-- DROP TABLE public.field_metadata;
 
-CREATE TABLE public.field_meta
+CREATE TABLE public.field_metadata
 (
     uid uuid NOT NULL,
     entity_type_code character varying(32) COLLATE pg_catalog."default" NOT NULL,
@@ -25,22 +25,55 @@ CREATE TABLE public.field_meta
     CONSTRAINT field_meta_pkey PRIMARY KEY (uid)
 );
 
-ALTER TABLE public.field_meta OWNER to postgres;
+ALTER TABLE public.field_metadata OWNER to postgres;
 
-GRANT ALL ON TABLE public.field_meta TO web;
+GRANT ALL ON TABLE public.field_metadata TO web;
 
-GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE public.field_meta TO web;
+GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE public.field_metadata TO web;
 
--- Index: ix_field_entity_type_code
+-- Index: ix_field_metadata_entity_type_code
 
--- DROP INDEX public.ix_field_entity_type_code;
+-- DROP INDEX public.ix_field_metadata_entity_type_code;
 
-CREATE INDEX ix_field_entity_type_code
-    ON public.field_meta (entity_type_code);
+CREATE INDEX ix_field_metadata_entity_type_code
+    ON public.field_metadata (entity_type_code);
 	
--- Index: ux_field_meta_entity_type_code_key
+-- Index: ux_field_metadata_entity_type_code_key
 
--- DROP INDEX public.ux_field_meta_entity_type_code_key;
+-- DROP INDEX public.ux_field_metadata_entity_type_code_key;
 
-CREATE UNIQUE INDEX ux_field_meta_entity_type_code_key
-    ON public.field_meta (entity_type_code, key);
+CREATE UNIQUE INDEX ux_field_metadata_entity_type_code_key
+    ON public.field_metadata (entity_type_code, key);
+
+
+-- Table: public.field_data
+
+-- DROP TABLE public.field_data;
+
+CREATE TABLE public.field_data
+(
+    uid uuid NOT NULL,
+    entity_type_code character varying(32) COLLATE pg_catalog."default" NOT NULL,
+    entity_uid uuid NOT NULL,
+    key character varying(32) COLLATE pg_catalog."default" NOT NULL,
+    value text COLLATE pg_catalog."default",
+    CONSTRAINT field_data_pkey PRIMARY KEY (uid),
+    CONSTRAINT ux_field_data_entity_type_code_entity_uid_key UNIQUE (entity_type_code, entity_uid, key)
+
+)
+
+TABLESPACE pg_default;
+
+ALTER TABLE public.field_data
+    OWNER to postgres;
+
+GRANT ALL ON TABLE public.field_data TO postgres;
+
+GRANT ALL ON TABLE public.field_data TO web;
+
+-- Index: ix_field_data_entity_type_code_entity_uid
+
+-- DROP INDEX public.ix_field_data_entity_type_code_entity_uid;
+
+CREATE INDEX ix_field_data_entity_type_code_entity_uid ON public.field_data
+    (entity_type_code COLLATE pg_catalog."default", entity_uid);

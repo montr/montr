@@ -16,10 +16,10 @@ namespace Montr.MasterData.Impl.QueryHandlers
 	{
 		private readonly IClassifierTypeService _classifierTypeService;
 		private readonly IMetadataProvider _metadataProvider;
-		private readonly IRepository<DataField> _repository;
+		private readonly IRepository<FieldMetadata> _repository;
 
 		public GetClassifierMetadataHandler(IClassifierTypeService classifierTypeService,
-			IMetadataProvider metadataProvider, IRepository<DataField> repository)
+			IMetadataProvider metadataProvider, IRepository<FieldMetadata> repository)
 		{
 			_classifierTypeService = classifierTypeService;
 			_metadataProvider = metadataProvider;
@@ -32,11 +32,11 @@ namespace Montr.MasterData.Impl.QueryHandlers
 
 			var type = await _classifierTypeService.GetClassifierType(request.CompanyUid, typeCode, cancellationToken);
 
-			ICollection<DataField> commonFields = null;
+			ICollection<FieldMetadata> commonFields = null;
 
 			if (type.HierarchyType == HierarchyType.Groups)
 			{
-				commonFields = new List<DataField>
+				commonFields = new List<FieldMetadata>
 				{
 					new ClassifierGroupField
 					{
@@ -47,7 +47,7 @@ namespace Montr.MasterData.Impl.QueryHandlers
 			}
 			else if (type.HierarchyType == HierarchyType.Items)
 			{
-				commonFields = new List<DataField>
+				commonFields = new List<FieldMetadata>
 				{
 					new ClassifierGroupField
 					{
@@ -63,6 +63,15 @@ namespace Montr.MasterData.Impl.QueryHandlers
 			if (metadata.Rows.Count > 0)
 			{
 				result = new DataView { Fields = metadata.Rows };
+
+				foreach (var field in result.Fields)
+				{
+					if (field.System == false)
+					{
+						// todo: remove hardcoded property name
+						field.Key = "fields." + field.Key;
+					}
+				}
 			}
 			else
 			{

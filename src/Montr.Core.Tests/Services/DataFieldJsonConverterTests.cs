@@ -20,7 +20,7 @@ namespace Montr.Core.Tests.Services
 				IgnoreNullValues = true,
 				WriteIndented = false,
 				// Converters = { new DataFieldJsonConverter() }
-				Converters = { new PolymorphicWriteOnlyJsonConverter<DataField>() }
+				Converters = { new PolymorphicWriteOnlyJsonConverter<FieldMetadata>() }
 			};
 
 			var fields = GetTestFields();
@@ -51,7 +51,7 @@ namespace Montr.Core.Tests.Services
 			Assert.ThrowsException<AssertFailedException>(() => AssertAllPropertiesSerialized(result, fields));
 		}
 
-		private static void AssertAllPropertiesSerialized(string result, IReadOnlyList<DataField> fields)
+		private static void AssertAllPropertiesSerialized(string result, IReadOnlyList<FieldMetadata> fields)
 		{
 			var json = JsonDocument.Parse(result);
 
@@ -91,9 +91,9 @@ namespace Montr.Core.Tests.Services
 			}
 		}
 
-		private static DataField[] GetTestFields()
+		private static FieldMetadata[] GetTestFields()
 		{
-			return new DataField[]
+			return new FieldMetadata[]
 			{
 				new TextField
 				{

@@ -3,8 +3,8 @@ using LinqToDB.Mapping;
 
 namespace Montr.Core.Impl.Entities
 {
-	[Table(Schema = "public", Name = "field_meta")]
-	public class DbFieldMeta
+	[Table(Schema = "public", Name = "field_metadata")]
+	public class DbFieldMetadata
 	{
 		[Column(Name = "uid"), DataType(DataType.Guid), NotNull, PrimaryKey, Identity]
 		public System.Guid Uid { get; set; }
@@ -57,7 +57,7 @@ namespace Montr.Core.Impl.Entities
 		[Column(Name = "icon", Length = 32), DataType(DataType.VarChar)]
 		public string Icon { get; set; }
 
-		[Column(Name = "props"), DataType(DataType.VarChar)]
+		[Column(Name = "props"), DataType(DataType.NText)]
 		public string Props { get; set; }
 	}
 }

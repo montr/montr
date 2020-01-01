@@ -12,6 +12,6 @@ namespace Montr.Core.Commands
 
 		public string EntityTypeCode { get; set; }
 
-		public DataField Item { get; set; }
+		public FieldMetadata Item { get; set; }
 	}
 }
