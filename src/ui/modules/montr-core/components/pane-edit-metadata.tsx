@@ -1,9 +1,10 @@
 import React from "react";
-import { DataForm } from ".";
+import { DataForm, ButtonSave, WrappedDataForm } from ".";
 import { MetadataService, DataHelper } from "../services";
 import { IDataField, IApiResult, Guid } from "../models";
 import { Spin, Button, Popover, Switch, List } from "antd";
 import { Toolbar } from "./toolbar";
+import { ButtonCancel } from "./buttons";
 
 interface IProps {
 	entityTypeCode: string;
@@ -29,6 +30,8 @@ export class PaneEditMetadata extends React.Component<IProps, IState> {
 
 	private _metadataService = new MetadataService();
 
+	_formRef: WrappedDataForm;
+
 	constructor(props: IProps) {
 		super(props);
 
@@ -44,6 +47,10 @@ export class PaneEditMetadata extends React.Component<IProps, IState> {
 
 	componentWillUnmount = async () => {
 		await this._metadataService.abort();
+	};
+
+	saveFormRef = (formRef: WrappedDataForm) => {
+		this._formRef = formRef;
 	};
 
 	fetchData = async () => {
@@ -139,6 +146,10 @@ export class PaneEditMetadata extends React.Component<IProps, IState> {
 		return result;
 	};
 
+	handleSubmitClick = async (e: React.MouseEvent<any>) => {
+		await this._formRef.handleSubmit(e);
+	};
+
 	renderPopover = (optionalFields: IDataField[]) => {
 		return (
 			<List size="small" bordered={false}>
@@ -161,7 +172,7 @@ export class PaneEditMetadata extends React.Component<IProps, IState> {
 	render = () => {
 		const { loading, typeFields, visibleFields, optionalFields, typeData, data } = this.state;
 
-		return (
+		return (<>
 			<Spin spinning={loading}>
 
 				<DataForm
@@ -171,17 +182,21 @@ export class PaneEditMetadata extends React.Component<IProps, IState> {
 					onChange={this.handleTypeChange} />
 
 				<DataForm
+					wrappedComponentRef={this.saveFormRef}
+					showControls={false}
 					fields={visibleFields}
 					data={data}
 					onSubmit={this.handleSubmit} />
 
-				<Toolbar clear size="small">
-					<Popover content={this.renderPopover(optionalFields)} trigger="click" placement="topLeft">
-						<Button type="link" icon="setting" />
-					</Popover>
-				</Toolbar>
-
 			</Spin>
-		);
+
+			<Toolbar clear size="small" float="bottom">
+				<Popover content={this.renderPopover(optionalFields)} trigger="click" placement="topLeft">
+					<Button type="link" icon="setting" />
+				</Popover>
+				<ButtonSave onClick={this.handleSubmitClick} />
+			</Toolbar>
+
+		</>);
 	};
 }

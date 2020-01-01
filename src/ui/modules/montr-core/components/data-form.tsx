@@ -4,7 +4,7 @@ import { FormComponentProps, ValidationRule } from "antd/lib/form";
 import { IDataField, IIndexer, IApiResult } from "../models";
 import { NotificationService } from "../services/notification-service";
 import { OperationService, DataHelper } from "../services";
-import { FormDefaults, DataFieldFactory } from ".";
+import { FormDefaults, DataFieldFactory, ButtonSave } from ".";
 import { withTranslation, WithTranslation } from "react-i18next";
 import { GetFieldDecoratorOptions } from "antd/lib/form/Form";
 
@@ -177,7 +177,7 @@ export class WrappedDataForm extends React.Component<IProps, IState> {
 					{fields && fields.map(x => this.createItem(x))}
 					{fields && showControls !== false &&
 						<Form.Item /* hasFeedback */ {...itemLayout}>
-							<Button type="primary" htmlType="submit" icon="check">{submitButton || t("button.save")}</Button>&#xA0;
+							<ButtonSave htmlType="submit">{submitButton}</ButtonSave>&#xA0;
 							{/* <Button htmlType="reset">{t("button.cancel")}</Button> */}
 						</Form.Item>
 					}

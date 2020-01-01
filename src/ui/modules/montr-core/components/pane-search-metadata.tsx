@@ -116,12 +116,14 @@ export class PaneSearchMetadata extends React.Component<IProps, IState> {
 			/>
 
 			{showDrawer &&
+				// todo: move drawer to pane-edit-metadata
 				<Drawer
 					title="Metadata"
 					closable={true}
 					onClose={this.closeDrawer}
 					visible={true}
-					width={800}>
+					width={720}
+					bodyStyle={{ paddingBottom: "80px" }}>
 					<PaneEditMetadata
 						entityTypeCode={entityTypeCode} uid={editUid}
 						onSuccess={this.handleSuccess}
