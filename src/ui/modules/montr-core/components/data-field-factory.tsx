@@ -1,7 +1,8 @@
 import * as React from "react";
-import { Input, InputNumber, Select, Checkbox, Icon } from "antd";
+import { Input, InputNumber, Select, Checkbox, Icon, DatePicker, TimePicker } from "antd";
 import { IDataField, IIndexer, ISelectField, ITextAreaField, INumberField } from "../models";
 
+// todo: rename after migrate to antd 4.0
 export abstract class DataFieldFactory {
 	private static Map: { [key: string]: DataFieldFactory; } = {};
 
@@ -91,9 +92,31 @@ class PasswordFieldFactory extends DataFieldFactory {
 	}
 }
 
+class DateFieldFactory extends DataFieldFactory {
+	createNode(field: IDataField, data: IIndexer): React.ReactNode {
+		return <DatePicker
+			allowClear
+			disabled={field.readonly}
+			placeholder={field.placeholder}
+		/>;
+	}
+}
+
+class TimeFieldFactory extends DataFieldFactory {
+	createNode(field: IDataField, data: IIndexer): React.ReactNode {
+		return <TimePicker
+			allowClear
+			disabled={field.readonly}
+			placeholder={field.placeholder}
+		/>;
+	}
+}
+
 DataFieldFactory.register("boolean", new BooleanFieldFactory());
 DataFieldFactory.register("number", new NumberFieldFactory());
 DataFieldFactory.register("text", new TextFieldFactory());
 DataFieldFactory.register("textarea", new TextAreaFieldFactory());
 DataFieldFactory.register("select", new SelectFieldFactory());
 DataFieldFactory.register("password", new PasswordFieldFactory());
+DataFieldFactory.register("date", new DateFieldFactory());
+DataFieldFactory.register("time", new TimeFieldFactory());

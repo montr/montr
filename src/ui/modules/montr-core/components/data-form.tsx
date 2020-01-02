@@ -133,7 +133,7 @@ export class WrappedDataForm extends React.Component<IProps, IState> {
 			message: t("dataForm.rule.required", { name: field.name })
 		};
 
-		if (field.type != "number") {
+		if (field.type == "text" || field.type == "textarea") {
 			required.whitespace = field.required;
 		}
 
@@ -142,10 +142,12 @@ export class WrappedDataForm extends React.Component<IProps, IState> {
 			valuePropName: fieldFactory.valuePropName
 		};
 
+		// todo: why boolean can't be required?
 		if (field.type != "boolean") {
 			fieldOptions.rules = [required];
 		}
-		else {
+
+		if (field.type == "boolean") {
 			// todo: fix server value convert
 			fieldOptions.initialValue = fieldOptions.initialValue === "true" || fieldOptions.initialValue === true;
 		}
