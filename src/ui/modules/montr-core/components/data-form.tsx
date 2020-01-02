@@ -1,10 +1,10 @@
 import * as React from "react";
-import { Form, Button, Spin } from "antd";
+import { Form, Spin } from "antd";
 import { FormComponentProps, ValidationRule } from "antd/lib/form";
 import { IDataField, IIndexer, IApiResult } from "../models";
 import { NotificationService } from "../services/notification-service";
 import { OperationService, DataHelper } from "../services";
-import { FormDefaults, DataFieldFactory, ButtonSave } from ".";
+import { FormDefaults, DataFieldFactory, ButtonSave, Toolbar } from ".";
 import { withTranslation, WithTranslation } from "react-i18next";
 import { GetFieldDecoratorOptions } from "antd/lib/form/Form";
 
@@ -145,6 +145,10 @@ export class WrappedDataForm extends React.Component<IProps, IState> {
 		if (field.type != "boolean") {
 			fieldOptions.rules = [required];
 		}
+		else {
+			// todo: fix server value convert
+			fieldOptions.initialValue = fieldOptions.initialValue === "true" || fieldOptions.initialValue === true;
+		}
 
 		const fieldNode = fieldFactory.createNode(field, data);
 
@@ -164,7 +168,7 @@ export class WrappedDataForm extends React.Component<IProps, IState> {
 	};
 
 	render = () => {
-		const { t, layout, fields, showControls, submitButton } = this.props,
+		const { t, layout, fields, showControls, submitButton, resetButton } = this.props,
 			{ loading } = this.state;
 
 		const itemLayout = (layout == null || layout == "horizontal") ? FormDefaults.tailFormItemLayout : null;
@@ -175,12 +179,12 @@ export class WrappedDataForm extends React.Component<IProps, IState> {
 					// onChange={this.handleChange} // todo: restore when on change will be working for select, classifer-select etc.
 					onSubmit={this.handleSubmit}>
 					{fields && fields.map(x => this.createItem(x))}
-					{fields && showControls !== false &&
-						<Form.Item /* hasFeedback */ {...itemLayout}>
-							<ButtonSave htmlType="submit">{submitButton}</ButtonSave>&#xA0;
-							{/* <Button htmlType="reset">{t("button.cancel")}</Button> */}
-						</Form.Item>
-					}
+					{fields && <Form.Item /* hasFeedback */ {...itemLayout} style={{ display: showControls === false ? "none" : "block" }}>
+						<Toolbar>
+							<ButtonSave htmlType="submit">{submitButton}</ButtonSave>
+							{/* <ButtonCancel htmlType="reset">{resetButton}</ButtonCancel> */}
+						</Toolbar>
+					</Form.Item>}
 				</Form>
 			</Spin>
 		);

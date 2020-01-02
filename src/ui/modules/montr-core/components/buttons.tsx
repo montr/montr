@@ -12,7 +12,7 @@ export function ButtonSave(props: ButtonProps) {
 export function ButtonCancel(props: ButtonProps) {
 	const { t } = useTranslation();
 
-	return <Button {...props}>{t("button.cancel")}</Button>;
+	return <Button {...props}>{props.children || t("button.cancel")}</Button>;
 }
 
 export function ButtonAdd(props: ButtonProps) {

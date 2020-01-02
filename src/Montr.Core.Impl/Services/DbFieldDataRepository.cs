@@ -29,7 +29,7 @@ namespace Montr.Core.Impl.Services
 			{
 				var result = await db.GetTable<DbFieldData>()
 					// todo: load multiple items
-					.Where(x => x.EntityTypeCode == request.EntityTypeCode && x.Uid == request.EntityUids[0])
+					.Where(x => x.EntityTypeCode == request.EntityTypeCode && request.EntityUids.Contains(x.EntityUid))
 					.GroupBy(x => x.EntityUid)
 					.Select(x => x)
 					.ToListAsync(cancellationToken);
