@@ -25,7 +25,7 @@ namespace Montr.MasterData.Tests.CommandHandlers
 			var classifierTypeRepository = new DbClassifierTypeRepository(dbContextFactory);
 			var classifierTypeService = new DefaultClassifierTypeService(classifierTypeRepository);
 			var generator = new DbHelper(unitOfWorkFactory, dbContextFactory);
-			var handler = new InsertClassifierHandler(unitOfWorkFactory, dbContextFactory, dateTimeProvider, classifierTypeService);
+			var handler = new InsertClassifierHandler(unitOfWorkFactory, dbContextFactory, dateTimeProvider, classifierTypeService, null, null);
 
 			using (var _ = unitOfWorkFactory.Create())
 			{
@@ -66,7 +66,7 @@ namespace Montr.MasterData.Tests.CommandHandlers
 			var classifierTypeRepository = new DbClassifierTypeRepository(dbContextFactory);
 			var classifierTypeService = new DefaultClassifierTypeService(classifierTypeRepository);
 			var generator = new DbHelper(unitOfWorkFactory, dbContextFactory);
-			var handler = new InsertClassifierHandler(unitOfWorkFactory, dbContextFactory, dateTimeProvider, classifierTypeService);
+			var handler = new InsertClassifierHandler(unitOfWorkFactory, dbContextFactory, dateTimeProvider, classifierTypeService, null, null);
 
 			using (var _ = unitOfWorkFactory.Create())
 			{

@@ -20,7 +20,7 @@ namespace Montr.Tendr.Tests.QueryHandlers
 			var dbContextFactory = new DefaultDbContextFactory();
 			var classifierTypeRepository = new DbClassifierTypeRepository(dbContextFactory);
 			var classifierTypeService = new DefaultClassifierTypeService(classifierTypeRepository);
-			var classifierRepository = new DbClassifierRepository(dbContextFactory, classifierTypeService);
+			var classifierRepository = new DbClassifierRepository(dbContextFactory, classifierTypeService, null);
 			var handler = new GetInvitationListHandler(dbContextFactory, classifierRepository);
 
 			// act

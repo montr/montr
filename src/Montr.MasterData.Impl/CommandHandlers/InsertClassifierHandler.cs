@@ -21,15 +21,18 @@ namespace Montr.MasterData.Impl.CommandHandlers
 		private readonly IDbContextFactory _dbContextFactory;
 		private readonly IDateTimeProvider _dateTimeProvider;
 		private readonly IClassifierTypeService _classifierTypeService;
+		private readonly IRepository<FieldMetadata> _fieldMetadataRepository;
 		private readonly IFieldDataRepository _fieldDataRepository;
 
 		public InsertClassifierHandler(IUnitOfWorkFactory unitOfWorkFactory, IDbContextFactory dbContextFactory,
-			IDateTimeProvider dateTimeProvider, IClassifierTypeService classifierTypeService, IFieldDataRepository fieldDataRepository)
+			IDateTimeProvider dateTimeProvider, IClassifierTypeService classifierTypeService,
+			IRepository<FieldMetadata> fieldMetadataRepository, IFieldDataRepository fieldDataRepository)
 		{
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_dbContextFactory = dbContextFactory;
 			_dateTimeProvider = dateTimeProvider;
 			_classifierTypeService = classifierTypeService;
+			_fieldMetadataRepository = fieldMetadataRepository;
 			_fieldDataRepository = fieldDataRepository;
 		}
 
@@ -110,12 +113,25 @@ namespace Montr.MasterData.Impl.CommandHandlers
 							return new ApiResult { Success = false, Errors = closureTable.Errors };
 						}
 					}
-
-					// todo: events
 				}
 
 				// insert fields
-				await _fieldDataRepository.Insert("classifier", itemUid, item.Fields, cancellationToken);
+				var metadata = await _fieldMetadataRepository.Search(new MetadataSearchRequest
+				{
+					EntityTypeCode = Classifier.EntityTypeCode + "." + type.Code,
+					IsSystem = false,
+					IsActive = true
+				}, cancellationToken);
+
+				await _fieldDataRepository.Insert(new FieldDataRequest
+				{
+					EntityTypeCode = Classifier.EntityTypeCode,
+					EntityUid = itemUid,
+					Metadata = metadata.Rows,
+					Data = item.Fields
+				}, cancellationToken);
+
+				// todo: events
 
 				scope.Commit();
 

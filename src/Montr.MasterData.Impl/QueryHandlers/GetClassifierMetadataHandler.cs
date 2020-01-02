@@ -56,7 +56,11 @@ namespace Montr.MasterData.Impl.QueryHandlers
 				};
 			}
 
-			var metadata = await _repository.Search(new MetadataSearchRequest { EntityTypeCode = "classifier." + type.Code }, cancellationToken);
+			var metadata = await _repository.Search(new MetadataSearchRequest
+			{
+				EntityTypeCode = Classifier.EntityTypeCode + "." + type.Code,
+				IsActive = true
+			}, cancellationToken);
 
 			DataView result;
 

@@ -37,6 +37,16 @@ namespace Montr.Core.Impl.Services
 					query = query.Where(x => x.Uid == request.Uid);
 				}
 
+				if (request.IsSystem != null)
+				{
+					query = query.Where(x => x.IsSystem == request.IsSystem);
+				}
+
+				if (request.IsActive != null)
+				{
+					query = query.Where(x => x.IsActive == request.IsActive);
+				}
+
 				var withPaging = request.PageSize > 0;
 
 				var paged = withPaging ? query.Apply(request, x => x.DisplayOrder) : query.OrderBy(x => x.DisplayOrder);

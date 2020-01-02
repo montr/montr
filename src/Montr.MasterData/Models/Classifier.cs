@@ -9,6 +9,8 @@ namespace Montr.MasterData.Models
 	{
 		private string DebuggerDisplay => $"{Code}, {Name}";
 
+		public static readonly string EntityTypeCode = typeof(Classifier).Name;
+
 		public Guid? Uid { get; set; }
 
 		public string StatusCode { get; set; }

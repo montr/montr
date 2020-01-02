@@ -20,7 +20,7 @@ namespace Montr.Core.Models
 		/// Uid of new row in case of insert operation.</summary>
 		public Guid? Uid { get; set; }
 
-		public int? AffectedRows { get; set; }
+		public long? AffectedRows { get; set; }
 
 		public string RedirectUrl { get; set; }
 
