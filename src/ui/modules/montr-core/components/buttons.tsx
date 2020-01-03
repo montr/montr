@@ -7,7 +7,7 @@ import { Icon } from ".";
 export function ButtonSave(props: ButtonProps) {
 	const { t } = useTranslation();
 
-	return <Button type="primary" icon="check" {...props}>{props.children || t("button.save")}</Button>;
+	return <Button type="primary" icon={Icon.Check} {...props}>{props.children || t("button.save")}</Button>;
 }
 
 export function ButtonCancel(props: ButtonProps) {
