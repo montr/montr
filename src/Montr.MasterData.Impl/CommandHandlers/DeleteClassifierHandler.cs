@@ -9,6 +9,7 @@ using Montr.Core.Services;
 using Montr.Data.Linq2Db;
 using Montr.MasterData.Commands;
 using Montr.MasterData.Impl.Entities;
+using Montr.MasterData.Models;
 using Montr.MasterData.Services;
 
 namespace Montr.MasterData.Impl.CommandHandlers
@@ -18,13 +19,15 @@ namespace Montr.MasterData.Impl.CommandHandlers
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IDbContextFactory _dbContextFactory;
 		private readonly IClassifierTypeService _classifierTypeService;
+		private readonly IFieldDataRepository _fieldDataRepository;
 
 		public DeleteClassifierHandler(IUnitOfWorkFactory unitOfWorkFactory, IDbContextFactory dbContextFactory,
-			IClassifierTypeService classifierTypeService)
+			IClassifierTypeService classifierTypeService, IFieldDataRepository fieldDataRepository)
 		{
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_dbContextFactory = dbContextFactory;
 			_classifierTypeService = classifierTypeService;
+			_fieldDataRepository = fieldDataRepository;
 		}
 
 		public async Task<ApiResult> Handle(DeleteClassifier request, CancellationToken cancellationToken)
@@ -45,6 +48,13 @@ namespace Montr.MasterData.Impl.CommandHandlers
 						.Where(x => x.TypeUid == type.Uid && request.Uids.Contains(x.Uid))
 						.DeleteAsync(cancellationToken);
 				}
+
+				// delete fields
+				await _fieldDataRepository.Delete(new DeleteFieldDataRequest
+				{
+					EntityTypeCode = Classifier.EntityTypeCode,
+					EntityUids = request.Uids
+				}, cancellationToken);
 
 				// todo: (события)
 

@@ -86,28 +86,32 @@ class _ClassifierGroupSelect extends React.Component<IProps, IState> {
 		const { field } = this.props,
 			{ value, expanded } = this.state;
 
-		const type = await this._classifierTypeService.get({ typeCode: field.typeCode });
+		const type = await this._classifierTypeService.get({ typeCode: field.props.typeCode });
 
 		let trees: IClassifierTree[], groups: IClassifierGroup[];
 
 		if (type.hierarchyType == "Groups") {
-			if (field.treeCode || field.treeUid) {
-				const result = await this._classifierGroupService.list(
-					{ typeCode: field.typeCode, treeCode: field.treeCode, treeUid: field.treeUid, focusUid: value });
+			if (field.props.treeCode || field.props.treeUid) {
+				const result = await this._classifierGroupService.list({
+					typeCode: field.props.typeCode,
+					treeCode: field.props.treeCode,
+					treeUid: field.props.treeUid,
+					focusUid: value
+				});
 
 				groups = result.rows;
 
 				await this.collectExpanded(groups, expanded);
 			}
 			else {
-				const result = await this._classifierTreeService.list({ typeCode: field.typeCode });
+				const result = await this._classifierTreeService.list({ typeCode: field.props.typeCode });
 
 				trees = result.rows;
 			}
 		}
 		else if (type.hierarchyType == "Items") {
 			const result = await this._classifierGroupService.list(
-				{ typeCode: field.typeCode, focusUid: value });
+				{ typeCode: field.props.typeCode, focusUid: value });
 
 			groups = result.rows;
 
@@ -152,7 +156,7 @@ class _ClassifierGroupSelect extends React.Component<IProps, IState> {
 						{ trees } = this.state;
 
 					const children = await this._classifierGroupService.list(
-						{ typeCode: field.typeCode, treeUid: tree.uid, parentUid: null });
+						{ typeCode: field.props.typeCode, treeUid: tree.uid, parentUid: null });
 
 					tree.children = children.rows;
 
@@ -167,7 +171,7 @@ class _ClassifierGroupSelect extends React.Component<IProps, IState> {
 						{ groups } = this.state;
 
 					const children = await this._classifierGroupService.list(
-						{ typeCode: field.typeCode, treeUid: group.treeUid, parentUid: group.uid });
+						{ typeCode: field.props.typeCode, treeUid: group.treeUid, parentUid: group.uid });
 
 					group.children = children.rows;
 

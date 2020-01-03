@@ -26,10 +26,11 @@ namespace Montr.Tendr.Impl.QueryHandlers
 
 			if (request.ViewId == "Event/Edit")
 			{
-				result.Fields = new List<DataField>
+				result.Fields = new List<FieldMetadata>
 				{
-					new TextAreaField { Key = "name", Name = "Наименование", Rows = 4, Required = true },
-					new TextAreaField { Key = "description", Name = "Описание", Rows = 4, Description = "Как можно подробнее опишите что вы хотите купить." }
+					new TextAreaField { Key = "name", Name = "Наименование", Required = true, Props = new TextAreaField.Properties { Rows = 4 } },
+					new TextAreaField { Key = "description", Name = "Описание", Props = new TextAreaField.Properties { Rows = 4 },
+						Description = "Как можно подробнее опишите что вы хотите купить." }
 				};
 			}
 

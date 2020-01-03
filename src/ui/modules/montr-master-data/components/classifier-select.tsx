@@ -76,7 +76,7 @@ class _ClassifierSelect extends React.Component<IProps, IState> {
 			{ value } = this.state;
 
 		const data = await this._classifierService.list({
-			typeCode: field.typeCode, focusUid: value, pageSize: 1000
+			typeCode: field.props.typeCode, focusUid: value, pageSize: 1000
 		});
 
 		this.setState({ loading: false, items: data.rows });
@@ -103,7 +103,7 @@ class _ClassifierSelect extends React.Component<IProps, IState> {
 		this.setState({ items: [], fetching: true });
 
 		const data = await this._classifierService.list({
-			typeCode: field.typeCode, searchTerm: value
+			typeCode: field.props.typeCode, searchTerm: value
 		});
 
 		this.setState({ items: data.rows, fetching: false });
@@ -136,7 +136,7 @@ class _ClassifierSelect extends React.Component<IProps, IState> {
 					{menu}
 					<Divider style={{ margin: "1px 0" }} />
 					<div onMouseDown={e => e.preventDefault()}>
-						<Link to={RouteBuilder.addClassifier(field.typeCode, null)}>
+						<Link to={RouteBuilder.addClassifier(field.props.typeCode, null)}>
 							<Button type="link" icon={Icon.Plus}>Добавить элемент</Button>
 						</Link>
 					</div >

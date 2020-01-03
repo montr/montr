@@ -10,6 +10,6 @@ namespace Montr.Core.Models
 
 		public ICollection<DataPane> Panes { get; set; }
 
-		public ICollection<DataField> Fields { get; set; }
+		public ICollection<FieldMetadata> Fields { get; set; }
 	}
 }

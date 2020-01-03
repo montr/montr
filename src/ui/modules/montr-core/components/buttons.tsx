@@ -4,6 +4,18 @@ import { Button } from "antd";
 import { ButtonProps } from "antd/lib/button";
 import { Icon } from ".";
 
+export function ButtonSave(props: ButtonProps) {
+	const { t } = useTranslation();
+
+	return <Button type="primary" icon="check" {...props}>{props.children || t("button.save")}</Button>;
+}
+
+export function ButtonCancel(props: ButtonProps) {
+	const { t } = useTranslation();
+
+	return <Button {...props}>{props.children || t("button.cancel")}</Button>;
+}
+
 export function ButtonAdd(props: ButtonProps) {
 	const { t } = useTranslation();
 

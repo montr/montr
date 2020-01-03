@@ -29,7 +29,7 @@ namespace Montr.Core.Controllers
 		}
 
 		[HttpPost]
-		public async Task<SearchResult<DataField>> List(GetMetadataList request)
+		public async Task<SearchResult<FieldMetadata>> List(GetMetadataList request)
 		{
 			return await _mediator.Send(request);
 		}
@@ -43,7 +43,7 @@ namespace Montr.Core.Controllers
 		}
 
 		[HttpPost]
-		public async Task<DataField> Get(GetDataField request)
+		public async Task<FieldMetadata> Get(GetDataField request)
 		{
 			// request.UserUid = _currentUserProvider.GetUserUid();
 

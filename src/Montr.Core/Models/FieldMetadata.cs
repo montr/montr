@@ -10,14 +10,13 @@ namespace Montr.Core.Models
 		static DataFieldTypes()
 		{
 			Map[Boolean] = typeof(BooleanField);
-			Map[String] = typeof(StringField);
+			Map[Text] = typeof(TextField);
 			Map[TextArea] = typeof(TextAreaField);
 			Map[Password] = typeof(PasswordField);
 			Map[Number] = typeof(NumberField);
 			Map[Decimal] = typeof(DecimalField);
 			Map[Date] = typeof(DateField);
 			Map[Time] = typeof(TimeField);
-			Map[DateTime] = typeof(DateTimeField);
 			Map[Select] = typeof(SelectField);
 			Map[Classifier] = typeof(ClassifierField);
 			Map[ClassifierGroup] = typeof(ClassifierGroupField);
@@ -25,14 +24,13 @@ namespace Montr.Core.Models
 		}
 
 		public static readonly string Boolean = "boolean";
-		public static readonly string String = "string";
+		public static readonly string Text = "text";
 		public static readonly string TextArea = "textarea";
 		public static readonly string Password = "password";
 		public static readonly string Number = "number";
 		public static readonly string Decimal = "decimal";
 		public static readonly string Date = "date";
 		public static readonly string Time = "time";
-		public static readonly string DateTime = "datetime";
 		public static readonly string Select = "select";
 		public static readonly string Classifier = "classifier";
 		public static readonly string ClassifierGroup = "classifier-group";
@@ -48,7 +46,7 @@ namespace Montr.Core.Models
 		public string Icon { get; set; }
 	}
 
-	public abstract class DataField
+	public abstract class FieldMetadata
 	{
 		public abstract string Type { get; }
 
@@ -75,74 +73,127 @@ namespace Montr.Core.Models
 		public bool Required { get; set; }
 
 		public int DisplayOrder { get; set; }
+
+		public virtual Type GetPropertiesType()
+		{
+			return null;
+		}
+
+		public virtual object GetProperties()
+		{
+			return null;
+		}
+
+		public virtual void SetProperties(object value)
+		{
+		}
 	}
 
-	public class BooleanField : DataField
+	public abstract class FieldMetadata<TProps> : FieldMetadata where TProps : new()
+	{
+		protected FieldMetadata()
+		{
+			Props= new TProps();
+		}
+
+		public TProps Props { get; set; }
+
+		public override Type GetPropertiesType()
+		{
+			return typeof(TProps);
+		}
+
+		public override object GetProperties()
+		{
+			return Props;
+		}
+
+		public override void SetProperties(object value)
+		{
+			Props = (TProps)value;
+		}
+	}
+
+	public class BooleanField : FieldMetadata
 	{
 		public override string Type => DataFieldTypes.Boolean;
 	}
 
-	public class StringField : DataField
+	public class TextField : FieldMetadata
 	{
-		public override string Type => DataFieldTypes.String;
+		public override string Type => DataFieldTypes.Text;
 	}
 
-	// todo join with StringField?
-	public class TextAreaField : StringField
+	// todo join with TextField?
+	public class TextAreaField : FieldMetadata<TextAreaField.Properties>
 	{
 		public override string Type => "textarea";
 
-		public byte? Rows { get; set; }
+		public class Properties
+		{
+			public byte? Rows { get; set; }
+		}
 	}
 
-	public class PasswordField : DataField
+	public class PasswordField : FieldMetadata
 	{
 		public override string Type => "password";
 	}
 
-	public class NumberField : DataField
+	public class NumberField : FieldMetadata<NumberField.Properties>
 	{
 		public override string Type => "number";
 
-		public decimal? Min { get; set; }
+		public class Properties
+		{
+			public decimal? Min { get; set; }
 
-		public decimal? Max { get; set; }
+			public decimal? Max { get; set; }
+		}
 	}
 
 	// todo: merge with number?
-	public class DecimalField : DataField
+	public class DecimalField : FieldMetadata<DecimalField.Properties>
 	{
 		public override string Type => "decimal";
 
-		public decimal? Min { get; set; }
+		public class Properties
+		{
+			public decimal? Min { get; set; }
 
-		public decimal? Max { get; set; }
+			public decimal? Max { get; set; }
 
-		public byte? Precision { get; set; }
+			public byte? Precision { get; set; }
+		}
 	}
 
-	public class DateField : DataField
+	public class DateField : FieldMetadata<DateField.Properties>
 	{
 		public override string Type => "date";
+
+		public class Properties
+		{
+			public bool IncludeTime { get; set; }
+		}
 	}
 
-	// todo join with Date?
-	public class TimeField : DataField
+	public class TimeField : FieldMetadata<TimeField.Properties>
 	{
 		public override string Type => "time";
+
+		public class Properties
+		{
+		}
 	}
 
-	// todo join with Date?
-	public class DateTimeField : DataField
-	{
-		public override string Type => "datetime";
-	}
-
-	public class SelectField : DataField
+	public class SelectField : FieldMetadata<SelectField.Properties>
 	{
 		public override string Type => "select";
 
-		public SelectFieldOption[] Options { get; set; }
+		public class Properties
+		{
+			public SelectFieldOption[] Options { get; set; }
+		}
 	}
 
 	public class SelectFieldOption
@@ -152,23 +203,29 @@ namespace Montr.Core.Models
 		public string Name { get; set; }
 	}
 
-	public class ClassifierGroupField : DataField
+	public class ClassifierGroupField : FieldMetadata<ClassifierGroupField.Properties>
 	{
 		public override string Type => "classifier-group";
 
-		public string TypeCode { get; set; }
+		public class Properties
+		{
+			public string TypeCode { get; set; }
 
-		public string TreeCode { get; set; }
+			public string TreeCode { get; set; }
+		}
 	}
 
-	public class ClassifierField : DataField
+	public class ClassifierField : FieldMetadata<ClassifierField.Properties>
 	{
 		public override string Type => "classifier";
 
-		public string TypeCode { get; set; }
+		public class Properties
+		{
+			public string TypeCode { get; set; }
+		}
 	}
 
-	public class FileField : DataField
+	public class FileField : FieldMetadata
 	{
 		public override string Type => "file";
 	}

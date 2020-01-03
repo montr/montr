@@ -6,7 +6,7 @@ export interface IFieldType {
 	icon?: string;
 }
 
-export interface IDataField extends IIndexer {
+export interface IDataField /* extends IIndexer */ {
 	uid?: Guid;
 	type: string;
 	key?: string;
@@ -21,54 +21,76 @@ export interface IDataField extends IIndexer {
 	displayOrder?: number;
 }
 
-export interface IStringField extends IDataField {
-	autosize: boolean;
+export interface IDataFieldWithProps<TProps> extends IDataField {
+	props?: TProps;
 }
 
-export interface ITextAreaField extends IStringField {
+export interface ITextField extends IDataField {
+}
+
+export interface ITextAreaField extends IDataFieldWithProps<ITextAreaFieldProps> {
+}
+
+interface ITextAreaFieldProps {
 	rows?: number;
 }
 
-export interface IPasswordField extends IStringField {
+export interface IPasswordField extends IDataField {
 }
 
-export interface INumberField extends IDataField {
+export interface INumberField extends IDataFieldWithProps<INumberFieldProps> {
+}
+
+interface INumberFieldProps {
 	min?: number;
 	max?: number;
 }
 
-export interface IDecimalField extends IDataField {
+export interface IDecimalField extends IDataFieldWithProps<IDecimalFieldProps> {
+}
+
+interface IDecimalFieldProps {
 	min?: number;
 	max?: number;
 	precision?: number;
 }
 
-export interface IDateField extends IDataField {
+export interface IDateField extends IDataFieldWithProps<IDateFieldProps> {
+}
+
+interface IDateFieldProps {
+	includeTime?: boolean;
 }
 
 export interface ITimeField extends IDataField {
 }
 
-export interface IDateTimeField extends IDataField {
+export interface ISelectField extends IDataFieldWithProps<ISelectFieldProps> {
 }
 
-export interface ISelectField extends IDataField {
+interface ISelectFieldProps {
 	options: IOption[];
 }
 
-export interface IOption {
+interface IOption {
 	value: string;
 	name: string;
 }
 
-export interface IClassifierGroupField extends IDataField {
-	typeCode: string;
-	treeCode: string;
-	treeUid: Guid;
+export interface IClassifierGroupField extends IDataFieldWithProps<IClassifierGroupFieldProps> {
 }
 
-export interface IClassifierField extends IDataField {
-	typeCode: string;
+interface IClassifierGroupFieldProps {
+	typeCode?: string;
+	treeCode?: string;
+	treeUid?: Guid;
+}
+
+export interface IClassifierField extends IDataFieldWithProps<IClassifierFieldProps> {
+}
+
+interface IClassifierFieldProps {
+	typeCode?: string;
 }
 
 export interface IFileField extends IDataField {

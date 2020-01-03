@@ -23,7 +23,8 @@ namespace Montr.MasterData.Impl.QueryHandlers
 			{
 				CompanyUid = request.CompanyUid,
 				TypeCode = request.TypeCode,
-				Uid = request.Uid
+				Uid = request.Uid,
+				IncludeFields = true
 			}, cancellationToken);
 
 			return result.Rows.Single();

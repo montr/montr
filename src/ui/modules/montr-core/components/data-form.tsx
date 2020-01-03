@@ -4,8 +4,8 @@ import { FormInstance } from "antd/lib/form";
 import { Rule } from "rc-field-form/lib/interface";
 import { IDataField, IIndexer, IApiResult } from "../models";
 import { NotificationService } from "../services/notification-service";
-import { OperationService } from "../services";
-import { FormDefaults, DataFieldFactory, Icon } from ".";
+import { OperationService, DataHelper } from "../services";
+import { FormDefaults, DataFieldFactory, ButtonSave, Toolbar } from ".";
 import { withTranslation, WithTranslation } from "react-i18next";
 
 declare const FormLayouts: ["horizontal", "inline", "vertical"];
@@ -114,6 +114,9 @@ export class WrappedDataForm extends React.Component<IProps, IState> {
 	createItem = (field: IDataField): React.ReactNode => {
 		const { t, layout, data, hideLabels } = this.props;
 
+		// const initialValue = data?.[field.key];
+		// const initialValue = DataHelper.indexer(data, field.key, undefined);
+
 		const fieldFactory = DataFieldFactory.get(field.type);
 
 		if (!fieldFactory) return null;
@@ -123,11 +126,25 @@ export class WrappedDataForm extends React.Component<IProps, IState> {
 			message: t("dataForm.rule.required", { name: field.name })
 		};
 
-		if (field.type != "number") {
+		if (field.type == "text" || field.type == "textarea") {
 			required.whitespace = field.required;
 		}
 
-		const rules = (field.type != "boolean") ? [required] : null;
+		/* const fieldOptions: GetFieldDecoratorOptions = {
+			initialValue: initialValue,
+			valuePropName: fieldFactory.valuePropName
+		}; */
+
+		// todo: why boolean can't be required?
+		let rules: Rule[];
+		if (field.type != "boolean") {
+			rules = [required];
+		}
+
+		if (field.type == "boolean") {
+			// todo: fix server value convert
+			// fieldOptions.initialValue = fieldOptions.initialValue === "true" || fieldOptions.initialValue === true;
+		}
 
 		const fieldNode = fieldFactory.createNode(field, data);
 
@@ -150,7 +167,7 @@ export class WrappedDataForm extends React.Component<IProps, IState> {
 	};
 
 	render = () => {
-		const { t, layout, data, fields, showControls, submitButton } = this.props,
+		const { t, layout, data, fields, showControls, submitButton, resetButton } = this.props,
 			{ loading } = this.state;
 
 		const itemLayout = (layout == null || layout == "horizontal") ? FormDefaults.tailFormItemLayout : null;
@@ -164,12 +181,12 @@ export class WrappedDataForm extends React.Component<IProps, IState> {
 					onFinish={this.handleSubmit}>
 
 					{fields && fields.map(x => this.createItem(x))}
-
-					{fields && showControls !== false &&
-						<Form.Item /* hasFeedback */ {...itemLayout}>
-							<Button type="primary" htmlType="submit" icon={Icon.Check}>{submitButton || t("button.save")}</Button>
-						</Form.Item>
-					}
+					{fields && <Form.Item /* hasFeedback */ {...itemLayout} style={{ display: showControls === false ? "none" : "block" }}>
+						<Toolbar>
+							<ButtonSave htmlType="submit">{submitButton}</ButtonSave>
+							{/* <ButtonCancel htmlType="reset">{resetButton}</ButtonCancel> */}
+						</Toolbar>
+					</Form.Item>}
 				</Form>
 			</Spin>
 		);

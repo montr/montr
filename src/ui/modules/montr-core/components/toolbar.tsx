@@ -1,7 +1,7 @@
 import * as React from "react";
 
 declare const Sizes: ["small", "default", "large"];
-declare const Floats: ["left", "right"];
+declare const Floats: ["left", "right", "bottom"];
 
 interface IProps {
 	size?: (typeof Sizes)[number];

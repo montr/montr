@@ -30,7 +30,7 @@ namespace Montr.Core.Impl.CommandHandlers
 
 				using (var db = _dbContextFactory.Create())
 				{
-					affected = await db.GetTable<DbFieldMeta>()
+					affected = await db.GetTable<DbFieldMetadata>()
 						.Where(x => x.EntityTypeCode == request.EntityTypeCode && request.Uids.Contains(x.Uid))
 						.DeleteAsync(cancellationToken);
 				}

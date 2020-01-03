@@ -11,19 +11,19 @@ namespace Montr.Core.Services
 	/// https://github.com/dotnet/corefx/issues/37787
 	/// https://github.com/dotnet/corefx/blob/fbb8b5c4b9566ba81596aa35f42b71bbda601528/src/System.Text.Json/tests/Serialization/CustomConverterTests.Polymorphic.cs#L11-L147
 	/// </summary>
-	public class DataFieldJsonConverter /*WithTypeDiscriminator*/ : JsonConverter<DataField>
+	public class DataFieldJsonConverter /*WithTypeDiscriminator*/ : JsonConverter<FieldMetadata>
 	{
 		public override bool CanConvert(Type typeToConvert)
 		{
-			return typeof(DataField).IsAssignableFrom(typeToConvert);
+			return typeof(FieldMetadata).IsAssignableFrom(typeToConvert);
 		}
 
-		public override DataField Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+		public override FieldMetadata Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
 		{
 			throw new NotImplementedException();
 		}
 
-		public override void Write(Utf8JsonWriter writer, DataField value, JsonSerializerOptions options)
+		public override void Write(Utf8JsonWriter writer, FieldMetadata value, JsonSerializerOptions options)
 		{
 			writer.WriteStartObject();
 
@@ -36,10 +36,10 @@ namespace Montr.Core.Services
 			writer.WriteBoolean("readonly", value.Readonly);
 			writer.WriteBoolean("required", value.Required);
 
-			/*if (value is StringField stringField)
+			/*if (value is TextField stringField)
 			{
-				// writer.WriteNumber("TypeDiscriminator", (int)TypeDiscriminator.StringField);
-			}*/
+				// writer.WriteNumber("TypeDiscriminator", (int)TypeDiscriminator.TextField);
+			}
 
 			if (value is TextAreaField textAreaField)
 			{
@@ -88,7 +88,7 @@ namespace Montr.Core.Services
 			if (value is ClassifierField classifierField)
 			{
 				writer.WriteString("typeCode", classifierField.TypeCode);
-			}
+			}*/
 
 			writer.WriteEndObject();
 		}

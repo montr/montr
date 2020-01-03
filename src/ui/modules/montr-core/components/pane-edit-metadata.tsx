@@ -1,9 +1,11 @@
 import React from "react";
-import { DataForm, Icon } from ".";
-import { MetadataService } from "../services";
+import { DataForm, ButtonSave, Icon } from ".";
+import { MetadataService, DataHelper } from "../services";
 import { IDataField, IApiResult, Guid } from "../models";
 import { Spin, Button, Popover, Switch, List } from "antd";
 import { Toolbar } from "./toolbar";
+import { ButtonCancel } from "./buttons";
+import { FormInstance } from "antd/lib/form";
 
 interface IProps {
 	entityTypeCode: string;
@@ -22,9 +24,13 @@ interface IState {
 	visibleFields?: IDataField[];
 }
 
+// todo: read from server
+const DefaultFieldType = "text";
+
 export class PaneEditMetadata extends React.Component<IProps, IState> {
 
 	private _metadataService = new MetadataService();
+	private _formRef = React.createRef<FormInstance>();
 
 	constructor(props: IProps) {
 		super(props);
@@ -46,7 +52,7 @@ export class PaneEditMetadata extends React.Component<IProps, IState> {
 	fetchData = async () => {
 		const { entityTypeCode, uid } = this.props;
 
-		const { type, ...values } = (uid) ? await this._metadataService.get(entityTypeCode, uid) : { type: "string" };
+		const { type, ...values } = (uid) ? await this._metadataService.get(entityTypeCode, uid) : { type: DefaultFieldType };
 
 		const commonView = await this._metadataService.load("Metadata/Edit");
 
@@ -67,10 +73,12 @@ export class PaneEditMetadata extends React.Component<IProps, IState> {
 
 	getOptionalFields = (fields: IDataField[], data: IDataField): IDataField[] => {
 		return fields
-			.filter(x => !x.required && (x.type == "string" || x.type == "textarea"))
+			// todo: read optional field types from server
+			.filter(x => !x.required && (x.type == "text" || x.type == "textarea"))
 			.map(x => {
+				const value = DataHelper.indexer(data, x.key, undefined);
 				// in optional fields using active as flag of visible field
-				return { type: x.type, key: x.key, name: x.name, active: !!data[x.key] };
+				return { type: x.type, key: x.key, name: x.name, active: !!value };
 			});
 	};
 
@@ -134,6 +142,10 @@ export class PaneEditMetadata extends React.Component<IProps, IState> {
 		return result;
 	};
 
+	handleSubmitClick = async (e: React.MouseEvent<any>) => {
+		await this._formRef.current.submit();
+	};
+
 	renderPopover = (optionalFields: IDataField[]) => {
 		return (
 			<List size="small" bordered={false}>
@@ -156,7 +168,7 @@ export class PaneEditMetadata extends React.Component<IProps, IState> {
 	render = () => {
 		const { loading, typeFields, visibleFields, optionalFields, typeData, data } = this.state;
 
-		return (
+		return (<>
 			<Spin spinning={loading}>
 
 				<DataForm
@@ -166,17 +178,21 @@ export class PaneEditMetadata extends React.Component<IProps, IState> {
 					onChange={this.handleTypeChange} />
 
 				<DataForm
+					formRef={this._formRef}
+					showControls={false}
 					fields={visibleFields}
 					data={data}
 					onSubmit={this.handleSubmit} />
 
-				<Toolbar clear size="small">
-					<Popover content={this.renderPopover(optionalFields)} trigger="click" placement="topLeft">
-						<Button type="link" icon={Icon.Setting} />
-					</Popover>
-				</Toolbar>
-
 			</Spin>
-		);
+
+			<Toolbar clear size="small" float="bottom">
+				<Popover content={this.renderPopover(optionalFields)} trigger="click" placement="topLeft">
+					<Button type="link" icon={Icon.Setting} />
+				</Popover>
+				<ButtonSave onClick={this.handleSubmitClick} />
+			</Toolbar>
+
+		</>);
 	};
 }

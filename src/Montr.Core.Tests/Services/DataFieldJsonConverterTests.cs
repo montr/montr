@@ -20,7 +20,7 @@ namespace Montr.Core.Tests.Services
 				IgnoreNullValues = true,
 				WriteIndented = false,
 				// Converters = { new DataFieldJsonConverter() }
-				Converters = { new PolymorphicWriteOnlyJsonConverter<DataField>() }
+				Converters = { new PolymorphicWriteOnlyJsonConverter<FieldMetadata>() }
 			};
 
 			var fields = GetTestFields();
@@ -51,7 +51,7 @@ namespace Montr.Core.Tests.Services
 			Assert.ThrowsException<AssertFailedException>(() => AssertAllPropertiesSerialized(result, fields));
 		}
 
-		private static void AssertAllPropertiesSerialized(string result, IReadOnlyList<DataField> fields)
+		private static void AssertAllPropertiesSerialized(string result, IReadOnlyList<FieldMetadata> fields)
 		{
 			var json = JsonDocument.Parse(result);
 
@@ -91,11 +91,11 @@ namespace Montr.Core.Tests.Services
 			}
 		}
 
-		private static DataField[] GetTestFields()
+		private static FieldMetadata[] GetTestFields()
 		{
-			return new DataField[]
+			return new FieldMetadata[]
 			{
-				new StringField
+				new TextField
 				{
 					Key = "Key 1",
 					Name = "Name 1",
@@ -117,7 +117,7 @@ namespace Montr.Core.Tests.Services
 					Multiple = true,
 					Readonly = true,
 					Required = true,
-					Rows = 15
+					Props = new TextAreaField.Properties { Rows = 15 }
 				},
 
 				new PasswordField
@@ -142,8 +142,11 @@ namespace Montr.Core.Tests.Services
 					Multiple = true,
 					Readonly = true,
 					Required = true,
-					Min = 12,
-					Max = 42
+					Props =
+					{
+						Min = 12,
+						Max = 42
+					}
 				},
 
 				new DecimalField
@@ -156,9 +159,12 @@ namespace Montr.Core.Tests.Services
 					Multiple = true,
 					Readonly = true,
 					Required = true,
-					Min = 2,
-					Max = 22,
-					Precision = 4
+					Props =
+					{
+						Min = 2,
+						Max = 22,
+						Precision = 4
+					}
 				},
 
 				new DateField
@@ -170,22 +176,14 @@ namespace Montr.Core.Tests.Services
 					Icon = "Icon 5",
 					Multiple = true,
 					Readonly = true,
-					Required = true
+					Required = true,
+					Props =
+					{
+						IncludeTime = true
+					}
 				},
 
 				new TimeField
-				{
-					Key = "Key 5",
-					Name = "Name 5",
-					Description = "Description 5",
-					Placeholder = "Placeholder 5",
-					Icon = "Icon 5",
-					Multiple = true,
-					Readonly = true,
-					Required = true
-				},
-
-				new DateTimeField
 				{
 					Key = "Key 5",
 					Name = "Name 5",
@@ -219,11 +217,14 @@ namespace Montr.Core.Tests.Services
 					Multiple = true,
 					Readonly = true,
 					Required = true,
-					Options = new []
+					Props =
 					{
-						new SelectFieldOption { Name = "Option 1", Value = "val_1" }, 
-						new SelectFieldOption { Name = "Option 2", Value = "val_2" }, 
-						new SelectFieldOption { Name = "Option 3", Value = "val_3" }, 
+						Options = new []
+						{
+							new SelectFieldOption { Name = "Option 1", Value = "val_1" },
+							new SelectFieldOption { Name = "Option 2", Value = "val_2" },
+							new SelectFieldOption { Name = "Option 3", Value = "val_3" },
+						}
 					}
 				},
 
@@ -237,8 +238,11 @@ namespace Montr.Core.Tests.Services
 					Multiple = true,
 					Readonly = true,
 					Required = true,
-					TypeCode = "TypeCode 1",
-					TreeCode = "TreeCode 1"
+					Props =
+					{
+						TypeCode = "TypeCode 1",
+						TreeCode = "TreeCode 1"
+					}
 				},
 
 				new ClassifierField
@@ -251,7 +255,10 @@ namespace Montr.Core.Tests.Services
 					Multiple = true,
 					Readonly = true,
 					Required = true,
-					TypeCode = "TypeCode 2",
+					Props =
+					{
+						TypeCode = "TypeCode 2"
+					}
 				},
 
 				new FileField

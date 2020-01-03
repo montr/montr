@@ -8,16 +8,16 @@ using Montr.Core.Services;
 
 namespace Montr.Core.Impl.QueryHandlers
 {
-	public class GetMetadataListHandler : IRequestHandler<GetMetadataList, SearchResult<DataField>>
+	public class GetMetadataListHandler : IRequestHandler<GetMetadataList, SearchResult<FieldMetadata>>
 	{
-		private readonly IRepository<DataField> _repository;
+		private readonly IRepository<FieldMetadata> _repository;
 
-		public GetMetadataListHandler(IRepository<DataField> repository)
+		public GetMetadataListHandler(IRepository<FieldMetadata> repository)
 		{
 			_repository = repository;
 		}
 
-		public async Task<SearchResult<DataField>> Handle(GetMetadataList request, CancellationToken cancellationToken)
+		public async Task<SearchResult<FieldMetadata>> Handle(GetMetadataList request, CancellationToken cancellationToken)
 		{
 			if (request == null) throw new ArgumentNullException(nameof(request));
 

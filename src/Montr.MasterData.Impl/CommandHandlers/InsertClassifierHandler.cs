@@ -21,14 +21,19 @@ namespace Montr.MasterData.Impl.CommandHandlers
 		private readonly IDbContextFactory _dbContextFactory;
 		private readonly IDateTimeProvider _dateTimeProvider;
 		private readonly IClassifierTypeService _classifierTypeService;
+		private readonly IRepository<FieldMetadata> _fieldMetadataRepository;
+		private readonly IFieldDataRepository _fieldDataRepository;
 
 		public InsertClassifierHandler(IUnitOfWorkFactory unitOfWorkFactory, IDbContextFactory dbContextFactory,
-			IDateTimeProvider dateTimeProvider, IClassifierTypeService classifierTypeService)
+			IDateTimeProvider dateTimeProvider, IClassifierTypeService classifierTypeService,
+			IRepository<FieldMetadata> fieldMetadataRepository, IFieldDataRepository fieldDataRepository)
 		{
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_dbContextFactory = dbContextFactory;
 			_dateTimeProvider = dateTimeProvider;
 			_classifierTypeService = classifierTypeService;
+			_fieldMetadataRepository = fieldMetadataRepository;
+			_fieldDataRepository = fieldDataRepository;
 		}
 
 		public async Task<ApiResult> Handle(InsertClassifier request, CancellationToken cancellationToken)
@@ -70,6 +75,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 						.Value(x => x.ParentUid, type.HierarchyType == HierarchyType.Items ? item.ParentUid : null)
 						.InsertAsync(cancellationToken);
 
+
 					if (type.HierarchyType == HierarchyType.Groups)
 					{
 						// todo: validate group belongs to the same classifier
@@ -107,11 +113,27 @@ namespace Montr.MasterData.Impl.CommandHandlers
 							return new ApiResult { Success = false, Errors = closureTable.Errors };
 						}
 					}
-
-					// todo: events
-
-					scope.Commit();
 				}
+
+				// insert fields
+				var metadata = await _fieldMetadataRepository.Search(new MetadataSearchRequest
+				{
+					EntityTypeCode = Classifier.EntityTypeCode + "." + type.Code,
+					IsSystem = false,
+					IsActive = true
+				}, cancellationToken);
+
+				await _fieldDataRepository.Insert(new FieldDataRequest
+				{
+					EntityTypeCode = Classifier.EntityTypeCode,
+					EntityUid = itemUid,
+					Metadata = metadata.Rows,
+					Data = item.Fields
+				}, cancellationToken);
+
+				// todo: events
+
+				scope.Commit();
 
 				return new ApiResult { Uid = itemUid };
 			}

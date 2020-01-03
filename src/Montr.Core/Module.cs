@@ -40,7 +40,7 @@ namespace Montr.Core
 			{
 				mvcBuilder.AddJsonOptions(options =>
 				{
-					options.JsonSerializerOptions.Converters.Add(new PolymorphicWriteOnlyJsonConverter<DataField>());
+					options.JsonSerializerOptions.Converters.Add(new PolymorphicWriteOnlyJsonConverter<FieldMetadata>());
 					// options.JsonSerializerOptions.Converters.Add(new DataFieldJsonConverter());
 				});
 			}
@@ -50,7 +50,7 @@ namespace Montr.Core
 				{
 					// options.SerializerSettings.DefaultValueHandling = DefaultValueHandling.Ignore; // zeros in numbers ignored also
 					options.SerializerSettings.Converters.Add(new StringEnumConverter());
-					options.SerializerSettings.Converters.Add(new PolymorphicNewtonsoftJsonConverter<DataField>("type", DataFieldTypes.Map));
+					options.SerializerSettings.Converters.Add(new PolymorphicNewtonsoftJsonConverter<FieldMetadata>("type", DataFieldTypes.Map));
 					options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
 				});
 			}

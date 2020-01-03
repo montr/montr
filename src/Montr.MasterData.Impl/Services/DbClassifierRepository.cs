@@ -17,11 +17,13 @@ namespace Montr.MasterData.Impl.Services
 	{
 		private readonly IDbContextFactory _dbContextFactory;
 		private readonly IClassifierTypeService _classifierTypeService;
+		private readonly IFieldDataRepository _fieldDataRepository;
 
-		public DbClassifierRepository(IDbContextFactory dbContextFactory, IClassifierTypeService classifierTypeService)
+		public DbClassifierRepository(IDbContextFactory dbContextFactory, IClassifierTypeService classifierTypeService, IFieldDataRepository fieldDataRepository)
 		{
 			_dbContextFactory = dbContextFactory;
 			_classifierTypeService = classifierTypeService;
+			_fieldDataRepository = fieldDataRepository;
 		}
 
 		public async Task<SearchResult<Classifier>> Search(SearchRequest searchRequest, CancellationToken cancellationToken)
@@ -133,6 +135,23 @@ namespace Montr.MasterData.Impl.Services
 							type, cancellationToken);
 
 					data.InsertRange(0, focused);
+				}
+
+				// todo: add load fields for multiple items
+				if (request.IncludeFields)
+				{
+					foreach (var item in data)
+					{
+						var fields = await _fieldDataRepository.Search(new FieldDataSearchRequest
+						{
+							EntityTypeCode = Classifier.EntityTypeCode,
+							// ReSharper disable once PossibleInvalidOperationException
+							EntityUids = new[] { item.Uid.Value }
+						}, cancellationToken);
+
+						
+						item.Fields = fields.Rows.SingleOrDefault();
+					}
 				}
 
 				return new SearchResult<Classifier>

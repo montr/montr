@@ -59,7 +59,7 @@ class _ModalEditClassifierLink extends React.Component<IProps, IState> {
 				const classifierField = fields.find(x => x.key == "group.uid") as IClassifierField;
 
 				if (classifierField) {
-					classifierField.typeCode = typeCode;
+					classifierField.props = { typeCode };
 				}
 
 				this.setState({ loading: false, fields });

@@ -11,7 +11,7 @@ namespace Montr.MasterData.Impl.Entities
 	{
 		private string DebuggerDisplay => $"{Code}, {Name}";
 
-		[Column(Name = "uid"), DataType(DataType.Guid), PrimaryKey]
+		[Column(Name = "uid"), DataType(DataType.Guid), NotNull, PrimaryKey]
 		public Guid Uid { get; set; }
 
 		[Column(Name = "type_uid"), DataType(DataType.Guid), NotNull]

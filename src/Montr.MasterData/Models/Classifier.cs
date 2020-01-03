@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using Montr.Core.Models;
 
 namespace Montr.MasterData.Models
 {
@@ -7,6 +8,8 @@ namespace Montr.MasterData.Models
 	public class Classifier
 	{
 		private string DebuggerDisplay => $"{Code}, {Name}";
+
+		public static readonly string EntityTypeCode = typeof(Classifier).Name;
 
 		public Guid? Uid { get; set; }
 
@@ -21,5 +24,7 @@ namespace Montr.MasterData.Models
 		public string ParentCode { get; set; }
 
 		public string Url { get; set; }
+
+		public FieldData Fields { get; set; }
 	}
 }
