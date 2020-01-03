@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Input, InputNumber, Select, Checkbox, Icon, DatePicker, TimePicker } from "antd";
-import { IDataField, IIndexer, ISelectField, ITextAreaField, INumberField } from "../models";
+import { IDataField, IIndexer, ISelectField, ITextAreaField, INumberField, IDateField } from "../models";
 
 // todo: rename after migrate to antd 4.0
 export abstract class DataFieldFactory {
@@ -94,8 +94,12 @@ class PasswordFieldFactory extends DataFieldFactory {
 
 class DateFieldFactory extends DataFieldFactory {
 	createNode(field: IDataField, data: IIndexer): React.ReactNode {
+		const dateField = field as IDateField;
+		const props = dateField?.props;
+
 		return <DatePicker
 			allowClear
+			showTime={props?.includeTime}
 			disabled={field.readonly}
 			placeholder={field.placeholder}
 		/>;

@@ -79,6 +79,13 @@ namespace Montr.Core.Services
 						new NumberField { Key = PropsPrefix + ".precision", Name = "Точность", Description = "Количество знаков после запятой", Props = { Min = 0, Max = 5 } }
 					};
 				}
+				else if (code == DataFieldTypes.Date)
+				{
+					result.Fields = new List<FieldMetadata>
+					{
+						new BooleanField { Key = PropsPrefix + ".includeTime", Name = "Include Time" }
+					};
+				}
 				else if (code == DataFieldTypes.Select)
 				{
 					result.Fields = new List<FieldMetadata>

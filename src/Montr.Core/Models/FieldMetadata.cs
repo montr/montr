@@ -17,7 +17,6 @@ namespace Montr.Core.Models
 			Map[Decimal] = typeof(DecimalField);
 			Map[Date] = typeof(DateField);
 			Map[Time] = typeof(TimeField);
-			Map[DateTime] = typeof(DateTimeField);
 			Map[Select] = typeof(SelectField);
 			Map[Classifier] = typeof(ClassifierField);
 			Map[ClassifierGroup] = typeof(ClassifierGroupField);
@@ -32,7 +31,6 @@ namespace Montr.Core.Models
 		public static readonly string Decimal = "decimal";
 		public static readonly string Date = "date";
 		public static readonly string Time = "time";
-		public static readonly string DateTime = "datetime";
 		public static readonly string Select = "select";
 		public static readonly string Classifier = "classifier";
 		public static readonly string ClassifierGroup = "classifier-group";
@@ -169,21 +167,23 @@ namespace Montr.Core.Models
 		}
 	}
 
-	public class DateField : FieldMetadata
+	public class DateField : FieldMetadata<DateField.Properties>
 	{
 		public override string Type => "date";
+
+		public class Properties
+		{
+			public bool IncludeTime { get; set; }
+		}
 	}
 
-	// todo join with Date?
-	public class TimeField : FieldMetadata
+	public class TimeField : FieldMetadata<TimeField.Properties>
 	{
 		public override string Type => "time";
-	}
 
-	// todo join with Date?
-	public class DateTimeField : FieldMetadata
-	{
-		public override string Type => "datetime";
+		public class Properties
+		{
+		}
 	}
 
 	public class SelectField : FieldMetadata<SelectField.Properties>

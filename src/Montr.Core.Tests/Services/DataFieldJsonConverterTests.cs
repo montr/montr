@@ -176,22 +176,14 @@ namespace Montr.Core.Tests.Services
 					Icon = "Icon 5",
 					Multiple = true,
 					Readonly = true,
-					Required = true
+					Required = true,
+					Props =
+					{
+						IncludeTime = true
+					}
 				},
 
 				new TimeField
-				{
-					Key = "Key 5",
-					Name = "Name 5",
-					Description = "Description 5",
-					Placeholder = "Placeholder 5",
-					Icon = "Icon 5",
-					Multiple = true,
-					Readonly = true,
-					Required = true
-				},
-
-				new DateTimeField
 				{
 					Key = "Key 5",
 					Name = "Name 5",

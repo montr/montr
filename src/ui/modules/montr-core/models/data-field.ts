@@ -55,13 +55,14 @@ interface IDecimalFieldProps {
 	precision?: number;
 }
 
-export interface IDateField extends IDataField {
+export interface IDateField extends IDataFieldWithProps<IDateFieldProps> {
+}
+
+interface IDateFieldProps {
+	includeTime?: boolean;
 }
 
 export interface ITimeField extends IDataField {
-}
-
-export interface IDateTimeField extends IDataField {
 }
 
 export interface ISelectField extends IDataFieldWithProps<ISelectFieldProps> {
