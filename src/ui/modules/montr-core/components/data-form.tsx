@@ -1,11 +1,11 @@
 import * as React from "react";
-import { Form, Button, Spin } from "antd";
+import { Form, Spin } from "antd";
 import { FormInstance } from "antd/lib/form";
-import { Rule } from "rc-field-form/lib/interface";
+import { Store, StoreValue, Rule } from "rc-field-form/lib/interface";
 import { IDataField, IIndexer, IApiResult } from "../models";
 import { NotificationService } from "../services/notification-service";
 import { OperationService, DataHelper } from "../services";
-import { FormDefaults, DataFieldFactory, ButtonSave, Toolbar } from ".";
+import { FormDefaults, DataFieldFactory, ButtonSave, Toolbar, ButtonCancel } from ".";
 import { withTranslation, WithTranslation } from "react-i18next";
 
 declare const FormLayouts: ["horizontal", "inline", "vertical"];
@@ -13,14 +13,14 @@ declare const FormLayouts: ["horizontal", "inline", "vertical"];
 interface IProps extends WithTranslation {
 	layout?: (typeof FormLayouts)[number];
 	fields: IDataField[];
-	data: IIndexer;
+	data: any; // IIndexer;
 	showControls?: boolean;
 	submitButton?: string;
 	resetButton?: string;
 	successMessage?: string;
 	errorMessage?: string;
 	hideLabels?: boolean;
-	onChange?: (values: IIndexer) => void;
+	onChange?: (values: IIndexer, changedValues: IIndexer) => void;
 	onSubmit?: (values: IIndexer) => Promise<IApiResult>;
 	formRef?: React.RefObject<FormInstance>;
 }
@@ -53,19 +53,23 @@ export class WrappedDataForm extends React.Component<IProps, IState> {
 		return (this.props.formRef ?? this._formRef);
 	};
 
-	handleChange = async (e: React.SyntheticEvent) => {
+	handleValuesChange = async (changedValues: Store, values: Store) => {
 		const { onChange } = this.props;
 
-		if (onChange) {
-			var values = this.getFormRef().current.getFieldsValue();
+		// console.log("Form.onChange", changedValues, values);
 
-			onChange(values);
+		if (onChange) {
+			// var values = this.getFormRef().current.getFieldsValue();
+
+			onChange(values, changedValues);
 		}
 	};
 
 	handleSubmit = async (values: IIndexer) => {
 
 		const { t, onSubmit, successMessage, errorMessage } = this.props;
+
+		// console.log("Form.onFinish", this.getFormRef().current.getFieldsValue());
 
 		if (this._isMounted) this.setState({ loading: true });
 
@@ -144,6 +148,8 @@ export class WrappedDataForm extends React.Component<IProps, IState> {
 		if (field.type == "boolean") {
 			// todo: fix server value convert
 			// fieldOptions.initialValue = fieldOptions.initialValue === "true" || fieldOptions.initialValue === true;
+			const value = DataHelper.indexer(data, field.key, undefined);
+			DataHelper.indexer(data, field.key, value === "true" || value === true);
 		}
 
 		const fieldNode = fieldFactory.createNode(field, data);
@@ -155,7 +161,7 @@ export class WrappedDataForm extends React.Component<IProps, IState> {
 		return (
 			<Form.Item
 				key={field.key}
-				name={field.key}
+				name={field.key.split(".")}
 				label={hideLabels || field.type == "boolean" ? null : field.name}
 				extra={field.description}
 				valuePropName={fieldFactory.valuePropName}
@@ -172,22 +178,27 @@ export class WrappedDataForm extends React.Component<IProps, IState> {
 
 		const itemLayout = (layout == null || layout == "horizontal") ? FormDefaults.tailFormItemLayout : null;
 
+		// console.log("Form.render", data, fields);
+
 		return (
 			<Spin spinning={loading}>
-				<Form ref={this.getFormRef()}
+				{fields && <Form
+					name="data_form"
+					ref={this.getFormRef()}
 					initialValues={data}
 					layout={layout || "horizontal"}
-					onChange={this.handleChange} // todo: restore when on change will be working for select, classifer-select etc.
+					onValuesChange={this.handleValuesChange}
 					onFinish={this.handleSubmit}>
 
-					{fields && fields.map(x => this.createItem(x))}
-					{fields && <Form.Item /* hasFeedback */ {...itemLayout} style={{ display: showControls === false ? "none" : "block" }}>
+					{fields.map(x => this.createItem(x))}
+
+					<Form.Item {...itemLayout} style={{ display: showControls === false ? "none" : "block" }}>
 						<Toolbar>
 							<ButtonSave htmlType="submit">{submitButton}</ButtonSave>
-							{/* <ButtonCancel htmlType="reset">{resetButton}</ButtonCancel> */}
+							<ButtonCancel htmlType="reset">{resetButton}</ButtonCancel>
 						</Toolbar>
-					</Form.Item>}
-				</Form>
+					</Form.Item>
+				</Form>}
 			</Spin>
 		);
 	};
