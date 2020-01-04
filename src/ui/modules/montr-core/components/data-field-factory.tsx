@@ -75,7 +75,10 @@ class SelectFieldFactory extends DataFieldFactory {
 		const selectField = field as ISelectField;
 		const props = selectField?.props;
 
-		return <Select allowClear showSearch placeholder={field.placeholder}>
+		return <Select
+			allowClear
+			showSearch
+			placeholder={field.placeholder}>
 			{props?.options.map(x => {
 				return <Select.Option key={x.value} value={x.value}>{x.name || x.value}</Select.Option>;
 			})}

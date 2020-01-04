@@ -161,6 +161,7 @@ export class WrappedDataForm extends React.Component<IProps, IState> {
 		return (
 			<Form.Item
 				key={field.key}
+				htmlFor={field.key}
 				name={field.key.split(".")}
 				label={hideLabels || field.type == "boolean" ? null : field.name}
 				extra={field.description}
@@ -183,7 +184,6 @@ export class WrappedDataForm extends React.Component<IProps, IState> {
 		return (
 			<Spin spinning={loading}>
 				{fields && <Form
-					name="data_form"
 					ref={this.getFormRef()}
 					initialValues={data}
 					layout={layout || "horizontal"}

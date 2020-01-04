@@ -2,14 +2,15 @@ import * as React from "react";
 import { Page, PageHeader, Toolbar, DataTable, DataTableUpdateToken, ButtonAdd, ButtonDelete, ButtonExport, Icon } from "@montr-core/components";
 import { Link } from "react-router-dom";
 import { Button, Tree, Select, Radio, Layout, Modal, Spin } from "antd";
+import { AntTreeNode, AntTreeNodeSelectedEvent, AntTreeNodeExpandedEvent } from "antd/lib/tree";
+import { TreeNodeNormal } from "antd/lib/tree/Tree";
+import { RadioChangeEvent } from "antd/lib/radio";
 import { Constants } from "@montr-core/.";
 import { Guid, IDataResult } from "@montr-core/models";
 import { NotificationService } from "@montr-core/services";
 import { withCompanyContext, CompanyContextProps } from "@montr-kompany/components";
 import { ClassifierService, ClassifierTypeService, ClassifierGroupService, ClassifierTreeService } from "../services";
 import { IClassifierType, IClassifierGroup, IClassifierTree } from "../models";
-import { RadioChangeEvent } from "antd/lib/radio";
-import { AntTreeNode, AntTreeNodeSelectedEvent, AntTreeNodeExpandedEvent } from "antd/lib/tree";
 import { ClassifierBreadcrumb, ModalEditClassifierGroup } from "../components";
 import { RouteBuilder } from "../module";
 
@@ -31,6 +32,10 @@ interface IState {
 	selectedRowKeys: string[] | number[];
 	depth: string; // todo: make enum
 	updateTableToken: DataTableUpdateToken;
+}
+
+interface ITreeNode extends AntTreeNode {
+	dataRef: IClassifierGroup;
 }
 
 class _PaneSearchClassifier extends React.Component<IProps, IState> {
@@ -193,36 +198,37 @@ class _PaneSearchClassifier extends React.Component<IProps, IState> {
 		}
 	};
 
-	onTreeLoadData = async (node: AntTreeNode) => new Promise<void>(async (resolve) => {
-		const group: IClassifierGroup = node.props.dataRef;
+	onTreeLoadData = async (node: ITreeNode /* AntTreeNode */) => {
+		return new Promise<void>(async (resolve) => {
+			const group: IClassifierGroup = node.dataRef;
 
-		if (!group.children) {
-			const { type, selectedTree, expandedKeys } = this.state;
+			if (!group.children) {
+				const { type, selectedTree, expandedKeys } = this.state;
 
-			const treeUid = selectedTree ? selectedTree.uid : null;
+				const treeUid = selectedTree ? selectedTree.uid : null;
 
-			const children = await this.fetchClassifierGroups(type.code, treeUid, group.uid, null, true);
+				const children = await this.fetchClassifierGroups(type.code, treeUid, group.uid, null, true);
 
-			// todo: refactor - only to populate new expanded keys parameter
-			this.buildGroupsTree(children, expandedKeys);
+				// todo: refactor - only to populate new expanded keys parameter
+				this.buildGroupsTree(children, expandedKeys);
 
-			group.children = children;
+				group.children = children;
 
-			this.setState({
-				groups: [...this.state.groups],
-				expandedKeys
-			});
-		}
+				this.setState({
+					groups: [...this.state.groups],
+					expandedKeys
+				});
+			}
 
-		resolve();
-	});
+			resolve();
+		});
+	};
 
 	onTreeNodeSelect = async (selectedKeys: string[], e: AntTreeNodeSelectedEvent) => {
+		const node = e.node as ITreeNode;
 		this.setState({
-			selectedGroup: (e.selected) ? e.node.props.dataRef : null
-		});
-
-		await this.refreshTable();
+			selectedGroup: (e.selected) ? node?.dataRef : null
+		}, async () => await this.refreshTable());
 	};
 
 	onTreeExpand = (expandedKeys: string[], e: AntTreeNodeExpandedEvent) => {
@@ -237,22 +243,20 @@ class _PaneSearchClassifier extends React.Component<IProps, IState> {
 		await this.refreshTable();
 	};
 
-	buildGroupsTree = (groups: IClassifierGroup[], expanded?: string[]) => {
+	buildGroupsTree = (groups: IClassifierGroup[], expanded?: string[]): TreeNodeNormal[] => {
 		return groups && groups.map(x => {
 
 			if (expanded && x.children) {
 				expanded.push(x.uid.toString());
 			}
 
-			return (
-				<Tree.TreeNode
-					// todo: convert to component
-					title={<span><span style={{ color: "silver" }}>{x.code}</span> {x.name}</span>}
-					key={`${x.uid}`}
-					dataRef={x}>
-					{x.children && this.buildGroupsTree(x.children, expanded)}
-				</Tree.TreeNode>
-			);
+			// todo: convert to component (?)
+			return {
+				title: <span><span style={{ color: "silver" }}>{x.code}</span> {x.name}</span>,
+				key: `${x.uid}`,
+				dataRef: x,
+				children: x.children && this.buildGroupsTree(x.children, expanded)
+			};
 		});
 	};
 
@@ -387,14 +391,13 @@ class _PaneSearchClassifier extends React.Component<IProps, IState> {
 
 				tree = (
 					<Tree blockNode
+						treeData={nodes}
 						defaultExpandedKeys={defaultExpandedKeys}
 						defaultSelectedKeys={selectedKeys.map(x => x.toString())}
 						expandedKeys={expandedKeys}
 						loadData={this.onTreeLoadData}
 						onSelect={this.onTreeNodeSelect}
-						onExpand={this.onTreeExpand}>
-						{nodes}
-					</Tree>
+						onExpand={this.onTreeExpand} />
 				);
 			}
 			else {

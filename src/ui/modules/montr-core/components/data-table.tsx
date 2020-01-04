@@ -4,7 +4,7 @@ import { Table, Tag, Divider } from "antd";
 import { PaginationConfig } from "antd/lib/pagination";
 import { SorterResult, SortOrder, ColumnType } from "antd/lib/table/interface";
 import { Fetcher, NotificationService, MetadataService } from "../services";
-import { IIndexer, IDataColumn, IDataResult, IMenu } from "../models";
+import { IIndexer, IDataColumn, IDataResult, IMenu, IPaging } from "../models";
 import { Constants } from "..";
 import { Icon } from ".";
 
@@ -68,7 +68,7 @@ export class DataTable<TModel extends IIndexer> extends React.Component<IProps<T
 			const { updateToken } = this.props,
 				{ pagination, selectedRowKeys } = this.state;
 
-			pagination.current = 0;
+			pagination.current = 1;
 
 			this.setState({
 				pagination,
@@ -84,10 +84,10 @@ export class DataTable<TModel extends IIndexer> extends React.Component<IProps<T
 		await this._metadataService.abort();
 	};
 
-	private handleTableChange = async (pagination: PaginationConfig,
+	handleTableChange = async (pagination: PaginationConfig,
 		filters: Record<keyof TModel, string[]>, sorter: SorterResult<TModel>) => {
 
-		const pager = { ...this.state.pagination };
+		const pager: PaginationConfig = { ...this.state.pagination };
 
 		pager.current = pagination.current;
 		pager.pageSize = pagination.pageSize;
@@ -99,14 +99,14 @@ export class DataTable<TModel extends IIndexer> extends React.Component<IProps<T
 		await this.fetchData({
 			pageSize: pagination.pageSize,
 			pageNo: pagination.current,
-			sortColumn: sorter.field,
+			sortColumn: sorter.field as string, // todo: check other field types
 			sortOrder: sorter.order == "ascend"
 				? "ascending" : sorter.order == "descend" ? "descending" : null,
 			// ...filters,
 		});
 	};
 
-	private fetchMetadata = async () => {
+	fetchMetadata = async () => {
 		const { viewId, rowActions } = this.props;
 
 		const dataView = await this._metadataService.load(viewId);
@@ -142,7 +142,7 @@ export class DataTable<TModel extends IIndexer> extends React.Component<IProps<T
 				};
 			}
 
-			var defaultSortOrder: SortOrder;
+			let defaultSortOrder: SortOrder;
 			if (item.defaultSortOrder == "ascending") defaultSortOrder = "ascend";
 			else if (item.defaultSortOrder == "descending") defaultSortOrder = "descend";
 
@@ -198,7 +198,7 @@ export class DataTable<TModel extends IIndexer> extends React.Component<IProps<T
 		});
 	};
 
-	private fetchData = async (params = {}) => {
+	fetchData = async (params: IPaging = {}) => {
 
 		this.setState({ loading: true });
 
@@ -239,7 +239,7 @@ export class DataTable<TModel extends IIndexer> extends React.Component<IProps<T
 		}
 	};
 
-	private onSelectionChange = async (selectedRowKeys: string[] | number[], selectedRows: TModel[]) => {
+	onSelectionChange = async (selectedRowKeys: string[] | number[], selectedRows: TModel[]) => {
 		this.setState({ selectedRowKeys });
 
 		if (this.props.onSelectionChange) {
