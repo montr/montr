@@ -148,7 +148,7 @@ export class DataTable<TModel extends IIndexer> extends React.Component<IProps<T
 
 			return {
 				key: item.key,
-				dataIndex: item.path || item.key,
+				dataIndex: (item.path || item.key).split("."),
 				title: item.name,
 				align: item.align,
 				sorter: item.sortable,
