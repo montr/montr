@@ -1,11 +1,11 @@
 import * as React from "react";
 import { Form, Spin } from "antd";
 import { FormInstance } from "antd/lib/form";
-import { Store, StoreValue, Rule } from "rc-field-form/lib/interface";
+import { Store, Rule } from "rc-field-form/lib/interface";
 import { IDataField, IIndexer, IApiResult } from "../models";
 import { NotificationService } from "../services/notification-service";
 import { OperationService, DataHelper } from "../services";
-import { FormDefaults, DataFieldFactory, ButtonSave, Toolbar, ButtonCancel } from ".";
+import { FormDefaults, DataFieldFactory, ButtonSave, Toolbar } from ".";
 import { withTranslation, WithTranslation } from "react-i18next";
 
 declare const FormLayouts: ["horizontal", "inline", "vertical"];
@@ -195,7 +195,6 @@ export class WrappedDataForm extends React.Component<IProps, IState> {
 					<Form.Item {...itemLayout} style={{ display: showControls === false ? "none" : "block" }}>
 						<Toolbar>
 							<ButtonSave htmlType="submit">{submitButton}</ButtonSave>
-							<ButtonCancel htmlType="reset">{resetButton}</ButtonCancel>
 						</Toolbar>
 					</Form.Item>
 				</Form>}

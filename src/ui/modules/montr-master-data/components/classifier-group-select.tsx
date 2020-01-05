@@ -47,7 +47,7 @@ class _ClassifierGroupSelect extends React.Component<IProps, IState> {
 	static getDerivedStateFromProps(nextProps: any) {
 		// Should be a controlled component.
 		if ("value" in nextProps) {
-			return nextProps.value;
+			return nextProps.value ?? null;
 		}
 		return null;
 	}
@@ -229,7 +229,7 @@ class _ClassifierGroupSelect extends React.Component<IProps, IState> {
 
 		return (
 			<Spin spinning={loading}>
-				<TreeSelect
+				{!loading && <TreeSelect
 					onChange={this.handleChange}
 					allowClear={!field.required}
 					showSearch onSearch={this.onSearch}
@@ -238,7 +238,7 @@ class _ClassifierGroupSelect extends React.Component<IProps, IState> {
 					loadData={this.onLoadData}
 					treeData={treeData}
 					value={value}
-				/>
+				/>}
 			</Spin>
 		);
 	}
