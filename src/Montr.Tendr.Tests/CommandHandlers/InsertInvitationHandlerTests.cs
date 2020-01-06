@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Montr.Core.Impl.Services;
 using Montr.Core.Services;
 using Montr.Data.Linq2Db;
 using Montr.MasterData.Impl.Services;
@@ -16,7 +17,7 @@ namespace Montr.Tendr.Tests.CommandHandlers
 	public class InsertInvitationHandlerTests
 	{
 		[TestMethod]
-		public async Task Handle_NormalValues_InsertClassifier()
+		public async Task Handle_NormalValues_InsertInvitation()
 		{
 			// arrange
 			var cancellationToken = new CancellationToken();
@@ -24,7 +25,8 @@ namespace Montr.Tendr.Tests.CommandHandlers
 			var dbContextFactory = new DefaultDbContextFactory();
 			var classifierTypeRepository = new DbClassifierTypeRepository(dbContextFactory);
 			var classifierTypeService = new DefaultClassifierTypeService(classifierTypeRepository);
-			var classifierRepository = new DbClassifierRepository(dbContextFactory, classifierTypeService, null);
+			var dbFieldDataRepository = new DbFieldDataRepository(dbContextFactory);
+			var classifierRepository = new DbClassifierRepository(dbContextFactory, classifierTypeService, dbFieldDataRepository);
 			var handler = new InsertInvitationHandler(unitOfWorkFactory, dbContextFactory, classifierRepository);
 			var helper = new DbHelper(unitOfWorkFactory, dbContextFactory);
 

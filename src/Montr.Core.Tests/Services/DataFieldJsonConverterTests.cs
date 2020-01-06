@@ -78,6 +78,10 @@ namespace Montr.Core.Tests.Services
 						{
 							// todo: assert arrays
 						}
+						else if (jsonProperty.ValueKind == JsonValueKind.Object)
+						{
+							// todo: assert objects
+						}
 						else
 						{
 							Assert.AreEqual(expected, JsonSerializer.Deserialize(actual, property.PropertyType));
@@ -97,6 +101,7 @@ namespace Montr.Core.Tests.Services
 			{
 				new TextField
 				{
+					Uid = Guid.NewGuid(),
 					Key = "Key 1",
 					Name = "Name 1",
 					Description = "Description 1",
@@ -109,6 +114,7 @@ namespace Montr.Core.Tests.Services
 
 				new TextAreaField
 				{
+					Uid = Guid.NewGuid(),
 					Key = "Key 2",
 					Name = "Name 2",
 					Description = "Description 2",
@@ -122,6 +128,7 @@ namespace Montr.Core.Tests.Services
 
 				new PasswordField
 				{
+					Uid = Guid.NewGuid(),
 					Key = "Key 3",
 					Name = "Name 3",
 					Description = "Description 3",
@@ -134,6 +141,7 @@ namespace Montr.Core.Tests.Services
 
 				new NumberField
 				{
+					Uid = Guid.NewGuid(),
 					Key = "Key 4",
 					Name = "Name 4",
 					Description = "Description 4",
@@ -151,6 +159,7 @@ namespace Montr.Core.Tests.Services
 
 				new DecimalField
 				{
+					Uid = Guid.NewGuid(),
 					Key = "Key 5",
 					Name = "Name 5",
 					Description = "Description 5",
@@ -169,6 +178,7 @@ namespace Montr.Core.Tests.Services
 
 				new DateField
 				{
+					Uid = Guid.NewGuid(),
 					Key = "Key 5",
 					Name = "Name 5",
 					Description = "Description 5",
@@ -185,6 +195,7 @@ namespace Montr.Core.Tests.Services
 
 				new TimeField
 				{
+					Uid = Guid.NewGuid(),
 					Key = "Key 5",
 					Name = "Name 5",
 					Description = "Description 5",
@@ -197,6 +208,7 @@ namespace Montr.Core.Tests.Services
 
 				/*new SelectField
 				{
+					Uid = Guid.NewGuid(),
 					Key = "Key 5",
 					Name = "Name 5",
 					Description = "Description 5",
@@ -209,6 +221,7 @@ namespace Montr.Core.Tests.Services
 
 				new SelectField
 				{
+					Uid = Guid.NewGuid(),
 					Key = "Key 5",
 					Name = "Name 5",
 					Description = "Description 5",
@@ -230,6 +243,7 @@ namespace Montr.Core.Tests.Services
 
 				new ClassifierGroupField
 				{
+					Uid = Guid.NewGuid(),
 					Key = "Key 5",
 					Name = "Name 5",
 					Description = "Description 5",
@@ -247,6 +261,7 @@ namespace Montr.Core.Tests.Services
 
 				new ClassifierField
 				{
+					Uid = Guid.NewGuid(),
 					Key = "Key 5",
 					Name = "Name 5",
 					Description = "Description 5",
@@ -263,6 +278,7 @@ namespace Montr.Core.Tests.Services
 
 				new FileField
 				{
+					Uid = Guid.NewGuid(),
 					Key = "Key 5",
 					Name = "Name 5",
 					Description = "Description 5",

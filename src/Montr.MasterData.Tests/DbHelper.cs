@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using LinqToDB;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Montr.Core.Impl.Services;
 using Montr.Core.Models;
 using Montr.Core.Services;
 using Montr.Data.Linq2Db;
@@ -39,12 +40,14 @@ namespace Montr.MasterData.Tests
 			var classifierTreeRepository = new DbClassifierTreeRepository(dbContextFactory);
 			var classifierTypeRepository = new DbClassifierTypeRepository(dbContextFactory);
 			var classifierTypeService = new DefaultClassifierTypeService(classifierTypeRepository);
+			var dbFieldMetadataRepository = new DbFieldMetadataRepository(dbContextFactory, new NewtonsoftJsonSerializer());
+			var dbFieldDataRepository = new DbFieldDataRepository(dbContextFactory);
 
 			_getClassifierTreeListHandler = new GetClassifierTreeListHandler(classifierTreeRepository);
 			_insertClassifierTreeTypeHandler = new InsertClassifierTreeHandler(unitOfWorkFactory, dbContextFactory, classifierTypeService);
 			_insertClassifierTypeHandler = new InsertClassifierTypeHandler(unitOfWorkFactory, dbContextFactory);
 			_insertClassifierGroupHandler = new InsertClassifierGroupHandler(unitOfWorkFactory, dbContextFactory, classifierTypeService);
-			_insertClassifierHandler = new InsertClassifierHandler(unitOfWorkFactory, dbContextFactory, dateTimeProvider, classifierTypeService, null, null);
+			_insertClassifierHandler = new InsertClassifierHandler(unitOfWorkFactory, dbContextFactory, dateTimeProvider, classifierTypeService, dbFieldMetadataRepository, dbFieldDataRepository);
 			_updateClassifierGroupHandler = new UpdateClassifierGroupHandler(unitOfWorkFactory, dbContextFactory, classifierTypeService);
 			_deleteClassifierGroupHandler = new DeleteClassifierGroupHandler(unitOfWorkFactory, dbContextFactory, classifierTypeService);
 			_insertClassifierLinkHandler = new InsertClassifierLinkHandler(unitOfWorkFactory, dbContextFactory, classifierTypeService);
