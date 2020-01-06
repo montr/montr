@@ -1,7 +1,7 @@
 import * as React from "react";
-import { Spin, Icon } from "antd";
+import { Spin } from "antd";
 import { useTranslation } from "react-i18next";
-import { Page, DataForm } from "@montr-core/components";
+import { Page, DataForm, Icon } from "@montr-core/components";
 import { IDataField, IApiResult } from "@montr-core/models";
 import { useLocalStorage } from "@montr-core/hooks";
 import { MetadataService } from "@montr-core/services";
@@ -65,7 +65,7 @@ export default function SendEmailConfirmation() {
 				/>
 			</Spin>
 
-			<p><Link to={Patterns.login}><Icon type="arrow-left" /> {t("page.register.link.login")}</Link></p>
+			<p><Link to={Patterns.login}>{Icon.ArrowLeft} {t("page.register.link.login")}</Link></p>
 
 		</Page>
 	);

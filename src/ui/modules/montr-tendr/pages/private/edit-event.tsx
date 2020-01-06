@@ -1,9 +1,9 @@
 import * as React from "react";
 import { withTranslation, WithTranslation } from 'react-i18next';
-import { Tabs, Button, Icon, Modal, message, Tag } from "antd";
+import { Tabs, Button, Modal, message, Tag } from "antd";
 import { IApiResult, IDataView, IPaneProps } from "@montr-core/models";
 import { EventService, EventTemplateService } from "../../services";
-import { Page, IPaneComponent, Toolbar, PageHeader, DataBreadcrumb } from "@montr-core/components";
+import { Page, IPaneComponent, Toolbar, PageHeader, DataBreadcrumb, Icon } from "@montr-core/components";
 import { MetadataService } from "@montr-core/services";
 import { IEvent } from "../../models";
 import * as panes from "../../components";
@@ -175,7 +175,7 @@ class _EditEvent extends React.Component<IProps, IState> {
 
 		toolbar = (<>
 			<Button type="primary" onClick={() => this.handlePublish()}>{t("button.publish")}</Button>
-			<Button icon="check" onClick={() => this.handleSave()}>{t("button.save")}</Button>
+			{/* <Button icon={Icon.Check} onClick={() => this.handleSave()}>{t("button.save")}</Button> */}
 			<Button onClick={() => this.handleCancel()}>{t("button.cancel")}</Button>
 		</>);
 
@@ -210,12 +210,12 @@ class _EditEvent extends React.Component<IProps, IState> {
 							let component: React.ReactElement<IPaneProps<IEvent>>;
 							if (pane.component) {
 								component = React.createElement(pane.component,
-									{ data: data, ref: this.createRefForKey(pane.key) });
+									{ data: data /* , ref: this.createRefForKey(pane.key) */ });
 							}
 
 							return (
 								<Tabs.TabPane key={pane.key}
-									tab={<span>{pane.icon && <Icon type={pane.icon} />} {pane.name}</span>}>
+									tab={<span>{pane.icon && Icon.get(pane.icon)} {pane.name}</span>}>
 									{component}
 								</Tabs.TabPane>
 							);

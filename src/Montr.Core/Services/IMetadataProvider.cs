@@ -114,8 +114,7 @@ namespace Montr.Core.Services
 			{
 				result.Columns = new List<DataColumn>
 				{
-					new DataColumn { Key = "userName", Name = "Username", Sortable = true, Width = 400,
-						UrlProperty = "url", DefaultSortOrder = SortOrder.Descending },
+					new DataColumn { Key = "userName", Name = "Username", Sortable = true, Width = 400, UrlProperty = "url" },
 					new DataColumn { Key = "firstName", Name = "First Name", Sortable = true, Width = 400, UrlProperty = "url" },
 					new DataColumn { Key = "lastName", Name = "Last Name", Sortable = true, Width = 400, UrlProperty = "url" },
 					new DataColumn { Key = "email", Name = "Email", Sortable = true, Width = 400 },
@@ -147,6 +146,12 @@ namespace Montr.Core.Services
 						new TextField { Key = "digitalCode", Name = "Цифровой код", Required = true },
 						new TextField { Key = "shortName", Name = "Краткое наименование" }
 					};
+
+					// todo: remove, only to test long form
+					for (var i = 0; i < 100; i++)
+					{
+						result.Fields.Add(new TextField { Key = "test" + i, Name = "Тестовое поле №" + i});
+					}
 				}
 				else
 				{
@@ -258,7 +263,7 @@ namespace Montr.Core.Services
 					new DataColumn { Key = "locale", Name = "Язык", Width = 20, Sortable = true },
 					new DataColumn { Key = "module", Name = "Модуль", Width = 60, Sortable = true },
 					new DataColumn { Key = "key", Name = "Ключ", Width = 100, Sortable = true },
-					new DataColumn { Key = "value", Name = "Значение", Width = 400 }
+					new DataColumn { Key = "value", Name = "Значение", Width = 200 }
 				};
 			}
 

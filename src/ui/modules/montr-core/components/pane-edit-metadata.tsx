@@ -1,10 +1,11 @@
 import React from "react";
-import { DataForm, ButtonSave, WrappedDataForm } from ".";
+import { DataForm, ButtonSave, Icon } from ".";
 import { MetadataService, DataHelper } from "../services";
 import { IDataField, IApiResult, Guid } from "../models";
 import { Spin, Button, Popover, Switch, List } from "antd";
 import { Toolbar } from "./toolbar";
 import { ButtonCancel } from "./buttons";
+import { FormInstance } from "antd/lib/form";
 
 interface IProps {
 	entityTypeCode: string;
@@ -29,8 +30,7 @@ const DefaultFieldType = "text";
 export class PaneEditMetadata extends React.Component<IProps, IState> {
 
 	private _metadataService = new MetadataService();
-
-	_formRef: WrappedDataForm;
+	private _formRef = React.createRef<FormInstance>();
 
 	constructor(props: IProps) {
 		super(props);
@@ -47,10 +47,6 @@ export class PaneEditMetadata extends React.Component<IProps, IState> {
 
 	componentWillUnmount = async () => {
 		await this._metadataService.abort();
-	};
-
-	saveFormRef = (formRef: WrappedDataForm) => {
-		this._formRef = formRef;
 	};
 
 	fetchData = async () => {
@@ -147,7 +143,7 @@ export class PaneEditMetadata extends React.Component<IProps, IState> {
 	};
 
 	handleSubmitClick = async (e: React.MouseEvent<any>) => {
-		await this._formRef.handleSubmit(e);
+		await this._formRef.current.submit();
 	};
 
 	renderPopover = (optionalFields: IDataField[]) => {
@@ -182,7 +178,7 @@ export class PaneEditMetadata extends React.Component<IProps, IState> {
 					onChange={this.handleTypeChange} />
 
 				<DataForm
-					wrappedComponentRef={this.saveFormRef}
+					formRef={this._formRef}
 					showControls={false}
 					fields={visibleFields}
 					data={data}
@@ -192,7 +188,7 @@ export class PaneEditMetadata extends React.Component<IProps, IState> {
 
 			<Toolbar clear size="small" float="bottom">
 				<Popover content={this.renderPopover(optionalFields)} trigger="click" placement="topLeft">
-					<Button type="link" icon="setting" />
+					<Button type="link" icon={Icon.Setting} />
 				</Popover>
 				<ButtonSave onClick={this.handleSubmitClick} />
 			</Toolbar>

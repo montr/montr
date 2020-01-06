@@ -1,7 +1,7 @@
 import * as React from "react";
-import { Page, DataForm } from "@montr-core/components";
+import { Page, DataForm, Icon } from "@montr-core/components";
 import { IDataField, IApiResult } from "@montr-core/models";
-import { Spin, Divider, Icon } from "antd";
+import { Spin, Divider } from "antd";
 import { MetadataService } from "@montr-core/services";
 import { IRegisterModel } from "../models/";
 import { Translation } from "react-i18next";
@@ -70,7 +70,8 @@ export default class Register extends React.Component<IProps, IState> {
 						/>
 					</Spin>
 
-					<p><Link to={Patterns.login}><Icon type="arrow-left" /> {t("page.register.link.login")}</Link></p>
+					{/* todo: move link to separate component */}
+					<p><Link to={Patterns.login}>{Icon.ArrowLeft} {t("page.register.link.login")}</Link></p>
 
 					<Divider />
 

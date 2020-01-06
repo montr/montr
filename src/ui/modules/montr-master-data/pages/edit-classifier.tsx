@@ -21,7 +21,7 @@ interface IProps extends CompanyContextProps, RouteComponentProps<IRouteProps> {
 interface IState {
 	loading: boolean;
 	type?: IClassifierType;
-	data: IClassifier;
+	data?: IClassifier;
 }
 
 class _EditClassifier extends React.Component<IProps, IState> {
@@ -33,16 +33,13 @@ class _EditClassifier extends React.Component<IProps, IState> {
 		super(props);
 
 		this.state = {
-			loading: true,
-			data: {
-				parentUid: props.match.params.parentUid
-			}
+			loading: true
 		};
 	}
 
 	componentDidMount = async () => {
 		await this.fetchData();
-	}
+	};
 
 	componentDidUpdate = async (prevProps: IProps) => {
 		if (this.props.match.params.typeCode !== prevProps.match.params.typeCode ||
@@ -50,22 +47,23 @@ class _EditClassifier extends React.Component<IProps, IState> {
 			this.props.currentCompany !== prevProps.currentCompany) {
 			await this.fetchData();
 		}
-	}
+	};
 
 	componentWillUnmount = async () => {
 		await this._classifierTypeService.abort();
 		await this._classifierService.abort();
 		await this._classifierLinkService.abort();
-	}
+	};
 
 	fetchData = async () => {
-		const { typeCode, uid } = this.props.match.params;
+		const { typeCode, uid, parentUid } = this.props.match.params;
 
 		const type = await this._classifierTypeService.get({ typeCode });
 
 		const data = (uid)
 			? await this._classifierService.get(typeCode, uid)
-			: this.state.data;
+			// todo: load defaults from server
+			: { parentUid };
 
 		if (uid && type.hierarchyType == "Groups") {
 			const links = await this._classifierLinkService.list({ typeCode: type.code, itemUid: uid });
@@ -76,7 +74,7 @@ class _EditClassifier extends React.Component<IProps, IState> {
 		}
 
 		this.setState({ loading: false, type, data });
-	}
+	};
 
 	handleDataChange = (data: IClassifier) => {
 		const { typeCode, uid } = this.props.match.params;
@@ -87,30 +85,30 @@ class _EditClassifier extends React.Component<IProps, IState> {
 		else {
 			const path = RouteBuilder.editClassifier(typeCode, data.uid);
 
-			this.props.history.push(path)
+			this.props.history.push(path);
 		}
-	}
+	};
 
 	handleTabChange = (tabKey: string) => {
 		const { typeCode, uid } = this.props.match.params;
 
 		const path = RouteBuilder.editClassifier(typeCode, uid, tabKey);
 
-		this.props.history.replace(path)
-	}
+		this.props.history.replace(path);
+	};
 
 	render = () => {
 		const { tabKey } = this.props.match.params;
-		const { type, data } = this.state;
+		const { loading, type, data } = this.state;
 
-		const otherTabsDisabled = !data.uid;
+		const otherTabsDisabled = !data?.uid;
 
 		return (
 			<Page title={<>
 				<ClassifierBreadcrumb type={type} item={data} />
-				<PageHeader>{data.name}</PageHeader>
+				<PageHeader>{data?.name}</PageHeader>
 			</>}>
-				<Spin spinning={this.state.loading}>
+				<Spin spinning={loading}>
 					<Tabs size="small" defaultActiveKey={tabKey} onChange={this.handleTabChange}>
 						<Tabs.TabPane key="info" tab="Информация">
 							<TabEditClassifier type={type} data={data} onDataChange={this.handleDataChange} />
@@ -124,7 +122,7 @@ class _EditClassifier extends React.Component<IProps, IState> {
 				</Spin>
 			</Page>
 		);
-	}
+	};
 }
 
 const EditClassifier = withCompanyContext(_EditClassifier);

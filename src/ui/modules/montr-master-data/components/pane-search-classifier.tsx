@@ -1,15 +1,16 @@
 import * as React from "react";
-import { Page, PageHeader, Toolbar, DataTable, DataTableUpdateToken, ButtonAdd, ButtonDelete, ButtonExport } from "@montr-core/components";
+import { Page, PageHeader, Toolbar, DataTable, DataTableUpdateToken, ButtonAdd, ButtonDelete, ButtonExport, Icon } from "@montr-core/components";
 import { Link } from "react-router-dom";
-import { Icon, Button, Tree, Select, Radio, Layout, Modal, Spin } from "antd";
+import { Button, Tree, Select, Radio, Layout, Modal, Spin } from "antd";
+import { AntTreeNode, AntTreeNodeSelectedEvent, AntTreeNodeExpandedEvent } from "antd/lib/tree";
+import { TreeNodeNormal } from "antd/lib/tree/Tree";
+import { RadioChangeEvent } from "antd/lib/radio";
 import { Constants } from "@montr-core/.";
 import { Guid, IDataResult } from "@montr-core/models";
 import { NotificationService } from "@montr-core/services";
 import { withCompanyContext, CompanyContextProps } from "@montr-kompany/components";
 import { ClassifierService, ClassifierTypeService, ClassifierGroupService, ClassifierTreeService } from "../services";
 import { IClassifierType, IClassifierGroup, IClassifierTree } from "../models";
-import { RadioChangeEvent } from "antd/lib/radio";
-import { AntTreeNode, AntTreeNodeSelectedEvent, AntTreeNodeExpandedEvent } from "antd/lib/tree";
 import { ClassifierBreadcrumb, ModalEditClassifierGroup } from "../components";
 import { RouteBuilder } from "../module";
 
@@ -31,6 +32,10 @@ interface IState {
 	selectedRowKeys: string[] | number[];
 	depth: string; // todo: make enum
 	updateTableToken: DataTableUpdateToken;
+}
+
+interface ITreeNode extends AntTreeNode {
+	dataRef: IClassifierGroup;
 }
 
 class _PaneSearchClassifier extends React.Component<IProps, IState> {
@@ -193,36 +198,37 @@ class _PaneSearchClassifier extends React.Component<IProps, IState> {
 		}
 	};
 
-	onTreeLoadData = async (node: AntTreeNode) => new Promise<void>(async (resolve) => {
-		const group: IClassifierGroup = node.props.dataRef;
+	onTreeLoadData = async (node: ITreeNode /* AntTreeNode */) => {
+		return new Promise<void>(async (resolve) => {
+			const group: IClassifierGroup = node.dataRef;
 
-		if (!group.children) {
-			const { type, selectedTree, expandedKeys } = this.state;
+			if (!group.children) {
+				const { type, selectedTree, expandedKeys } = this.state;
 
-			const treeUid = selectedTree ? selectedTree.uid : null;
+				const treeUid = selectedTree ? selectedTree.uid : null;
 
-			const children = await this.fetchClassifierGroups(type.code, treeUid, group.uid, null, true);
+				const children = await this.fetchClassifierGroups(type.code, treeUid, group.uid, null, true);
 
-			// todo: refactor - only to populate new expanded keys parameter
-			this.buildGroupsTree(children, expandedKeys);
+				// todo: refactor - only to populate new expanded keys parameter
+				this.buildGroupsTree(children, expandedKeys);
 
-			group.children = children;
+				group.children = children;
 
-			this.setState({
-				groups: [...this.state.groups],
-				expandedKeys
-			});
-		}
+				this.setState({
+					groups: [...this.state.groups],
+					expandedKeys
+				});
+			}
 
-		resolve();
-	});
+			resolve();
+		});
+	};
 
 	onTreeNodeSelect = async (selectedKeys: string[], e: AntTreeNodeSelectedEvent) => {
+		const node = e.node as ITreeNode;
 		this.setState({
-			selectedGroup: (e.selected) ? e.node.props.dataRef : null
-		});
-
-		await this.refreshTable();
+			selectedGroup: (e.selected) ? node?.dataRef : null
+		}, async () => await this.refreshTable());
 	};
 
 	onTreeExpand = (expandedKeys: string[], e: AntTreeNodeExpandedEvent) => {
@@ -237,22 +243,20 @@ class _PaneSearchClassifier extends React.Component<IProps, IState> {
 		await this.refreshTable();
 	};
 
-	buildGroupsTree = (groups: IClassifierGroup[], expanded?: string[]) => {
+	buildGroupsTree = (groups: IClassifierGroup[], expanded?: string[]): TreeNodeNormal[] => {
 		return groups && groups.map(x => {
 
 			if (expanded && x.children) {
 				expanded.push(x.uid.toString());
 			}
 
-			return (
-				<Tree.TreeNode
-					// todo: convert to component
-					title={<span><span style={{ color: "silver" }}>{x.code}</span> {x.name}</span>}
-					key={`${x.uid}`}
-					dataRef={x}>
-					{x.children && this.buildGroupsTree(x.children, expanded)}
-				</Tree.TreeNode>
-			);
+			// todo: convert to component (?)
+			return {
+				title: <span><span style={{ color: "silver" }}>{x.code}</span> {x.name}</span>,
+				key: `${x.uid}`,
+				dataRef: x,
+				children: x.children && this.buildGroupsTree(x.children, expanded)
+			};
 		});
 	};
 
@@ -363,12 +367,12 @@ class _PaneSearchClassifier extends React.Component<IProps, IState> {
 		if (type.hierarchyType == "Groups") {
 			groupControls = <>
 				<Select defaultValue="default" size="small" onSelect={this.onTreeSelect} style={{ minWidth: 200 }}>
-					{trees && trees.map(x => <Select.Option key={x.code}>{x.name || x.code}</Select.Option>)}
+					{trees && trees.map(x => <Select.Option key={x.code} value={x.code}>{x.name || x.code}</Select.Option>)}
 				</Select>
 				<Button.Group size="small">
-					<Button icon="plus" onClick={this.showAddGroupModal} />
-					<Button icon="edit" onClick={this.showEditGroupModal} disabled={!selectedGroup} />
-					<Button icon="delete" onClick={this.showDeleteGroupConfirm} disabled={!selectedGroup} />
+					<Button icon={Icon.Plus} onClick={this.showAddGroupModal} />
+					<Button icon={Icon.Edit} onClick={this.showEditGroupModal} disabled={!selectedGroup} />
+					<Button icon={Icon.Delete} onClick={this.showDeleteGroupConfirm} disabled={!selectedGroup} />
 				</Button.Group>
 			</>;
 		}
@@ -387,14 +391,13 @@ class _PaneSearchClassifier extends React.Component<IProps, IState> {
 
 				tree = (
 					<Tree blockNode
+						treeData={nodes}
 						defaultExpandedKeys={defaultExpandedKeys}
 						defaultSelectedKeys={selectedKeys.map(x => x.toString())}
 						expandedKeys={expandedKeys}
 						loadData={this.onTreeLoadData}
 						onSelect={this.onTreeNodeSelect}
-						onExpand={this.onTreeExpand}>
-						{nodes}
-					</Tree>
+						onExpand={this.onTreeExpand} />
 				);
 			}
 			else {
@@ -434,7 +437,7 @@ class _PaneSearchClassifier extends React.Component<IProps, IState> {
 						<ButtonDelete onClick={this.delete} />
 						<ButtonExport onClick={this.export} />
 						<Link to={`/classifiers/edit/${type.uid}`}>
-							<Button><Icon type="setting" /> Настройка</Button>
+							<Button icon={Icon.Setting}> Настройка</Button>
 						</Link>
 					</Toolbar>
 
@@ -444,7 +447,7 @@ class _PaneSearchClassifier extends React.Component<IProps, IState> {
 					</>}
 
 					{mode == "Drawer" && <Toolbar clear>
-						<Button type="primary" onClick={this.select}><Icon type="select" /> Выбрать</Button>
+						<Button type="primary" icon={Icon.Select} onClick={this.select}>Выбрать</Button>
 					</Toolbar>}
 
 				</>}>
@@ -462,8 +465,8 @@ class _PaneSearchClassifier extends React.Component<IProps, IState> {
 							{/* <Input.Search size="small" allowClear style={{ width: 200 }} /> */}
 							{/* todo: show only when Items or Groups hierarchy type */}
 							<Radio.Group defaultValue="0" size="small" onChange={this.onDepthChange}>
-								<Radio.Button value="0"><Icon type="folder" /> Группа</Radio.Button>
-								<Radio.Button value="1"><Icon type="cluster" /> Иерархия</Radio.Button>
+								<Radio.Button value="0">{Icon.Folder} Группа</Radio.Button>
+								<Radio.Button value="1">{Icon.Cluster} Иерархия</Radio.Button>
 							</Radio.Group>
 						</Toolbar>
 

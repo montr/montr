@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Button, Drawer, Alert, Modal } from "antd";
 import { IPaneProps, Guid, IDataResult, IMenu } from "@montr-core/models";
-import { DataTable, Toolbar, DataTableUpdateToken, ButtonAdd, ButtonDelete } from "@montr-core/components";
+import { DataTable, Toolbar, DataTableUpdateToken, ButtonAdd, ButtonDelete, Icon } from "@montr-core/components";
 import { PaneSearchClassifier } from "@montr-master-data/components";
 import { CompanyContextProps, withCompanyContext } from "@montr-kompany/components";
 import { ModalEditInvitation } from "../components";
@@ -72,7 +72,7 @@ class _TabEditInvitations extends React.Component<IProps, IState> {
 		this.setState({ showDrawer: true });
 	};
 
-	onCloseDrawer = () => {
+	onCloseDrawer = async () => {
 		this.setState({ showDrawer: false });
 	};
 
@@ -87,7 +87,7 @@ class _TabEditInvitations extends React.Component<IProps, IState> {
 				})
 			});
 
-			this.onCloseDrawer();
+			await this.onCloseDrawer();
 
 			await this.refreshTable();
 		}
@@ -139,7 +139,7 @@ class _TabEditInvitations extends React.Component<IProps, IState> {
 
 		return <>
 			<Toolbar clear>
-				<Button icon="plus" onClick={this.showAddDrawer} type="primary">Пригласить</Button>
+				<Button icon={Icon.Plus} onClick={this.showAddDrawer} type="primary">Пригласить</Button>
 				<ButtonAdd onClick={this.showAddModal} />
 				<ButtonDelete onClick={this.delete} disabled={!selectedRowKeys?.length} />
 			</Toolbar>

@@ -1,13 +1,14 @@
 import * as React from "react";
 import { Form, Spin } from "antd";
-import { FormComponentProps } from "antd/lib/form";
 import { IApiResult, IPaneProps, IDataField } from "@montr-core/models";
 import { EventService, EventMetadataService } from "../services";
 import { IPaneComponent, DataForm } from "@montr-core/components";
 import { IEvent } from "../models";
+import { FormInstance } from "antd/lib/form";
 
-interface IProps extends FormComponentProps {
+interface IProps {
 	data: IEvent;
+	formRef?: React.RefObject<FormInstance>;
 }
 
 interface IState {
@@ -48,16 +49,18 @@ class EventForm extends React.Component<IProps, IState> {
 
 	render = () => {
 
-		const { data } = this.props,
+		const { data, formRef } = this.props,
 			{ loading, fields } = this.state;
 
 		return (
-			<DataForm fields={fields} data={data} onSubmit={this.save} />
+			<DataForm
+				formRef={formRef}
+				fields={fields}
+				data={data}
+				onSubmit={this.save} />
 		);
 	};
 }
-
-const WrappedForm = Form.create<IProps>()(EventForm);
 
 interface IEditEventPaneProps extends IPaneProps<IEvent> {
 	data: IEvent;
@@ -68,15 +71,15 @@ interface IEditEventTabState {
 
 export class TabEditEvent extends React.Component<IEditEventPaneProps, IEditEventTabState> {
 
-	private _formRef: IPaneComponent;
+	private _formRef = React.createRef<FormInstance>();
 
 	save() {
-		this._formRef.save();
+		this._formRef.current.submit();
 	}
 
 	render() {
 		return (
-			<WrappedForm data={this.props.data} wrappedComponentRef={(form: any) => this._formRef = form} />
+			<EventForm data={this.props.data} formRef={this._formRef} />
 		);
 	}
 }

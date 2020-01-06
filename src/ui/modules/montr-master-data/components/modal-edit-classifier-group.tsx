@@ -6,6 +6,7 @@ import { ClassifierGroupService } from "../services";
 import { IClassifierGroup } from "@montr-master-data/models";
 import { NotificationService, MetadataService } from "@montr-core/services";
 import { DataForm, WrappedDataForm } from "@montr-core/components";
+import { FormInstance } from "antd/lib/form";
 
 interface IProps extends CompanyContextProps {
 	typeCode: string;
@@ -28,7 +29,7 @@ class _ModalEditClassifierGroup extends React.Component<IProps, IState> {
 	private _metadataService = new MetadataService();
 	private _classifierGroupService = new ClassifierGroupService();
 
-	private _formRef: WrappedDataForm;
+	private _formRef = React.createRef<FormInstance>();
 
 	constructor(props: IProps) {
 		super(props);
@@ -83,12 +84,8 @@ class _ModalEditClassifierGroup extends React.Component<IProps, IState> {
 		}
 	};
 
-	saveFormRef = (formRef: WrappedDataForm) => {
-		this._formRef = formRef;
-	};
-
 	onOk = async (e: React.MouseEvent<any>) => {
-		await this._formRef.handleSubmit(e);
+		await this._formRef.current.submit();
 	};
 
 	onCancel = () => {
@@ -131,7 +128,7 @@ class _ModalEditClassifierGroup extends React.Component<IProps, IState> {
 				<Spin spinning={loading}>
 					<DataForm
 						layout="vertical"
-						wrappedComponentRef={this.saveFormRef}
+						formRef={this._formRef}
 						fields={fields}
 						data={data}
 						showControls={false}

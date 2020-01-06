@@ -1,27 +1,28 @@
 import * as React from "react";
 import { Form, Spin } from "antd";
-import { FormComponentProps, ValidationRule } from "antd/lib/form";
+import { FormInstance } from "antd/lib/form";
+import { Store, Rule } from "rc-field-form/lib/interface";
 import { IDataField, IIndexer, IApiResult } from "../models";
 import { NotificationService } from "../services/notification-service";
 import { OperationService, DataHelper } from "../services";
 import { FormDefaults, DataFieldFactory, ButtonSave, Toolbar } from ".";
 import { withTranslation, WithTranslation } from "react-i18next";
-import { GetFieldDecoratorOptions } from "antd/lib/form/Form";
 
 declare const FormLayouts: ["horizontal", "inline", "vertical"];
 
-interface IProps extends WithTranslation, FormComponentProps {
+interface IProps extends WithTranslation {
 	layout?: (typeof FormLayouts)[number];
 	fields: IDataField[];
-	data: IIndexer;
+	data: any; // IIndexer;
 	showControls?: boolean;
 	submitButton?: string;
 	resetButton?: string;
 	successMessage?: string;
 	errorMessage?: string;
 	hideLabels?: boolean;
-	onChange?: (values: IIndexer) => void;
+	onChange?: (values: IIndexer, changedValues: IIndexer) => void;
 	onSubmit?: (values: IIndexer) => Promise<IApiResult>;
+	formRef?: React.RefObject<FormInstance>;
 }
 
 interface IState {
@@ -34,6 +35,7 @@ export class WrappedDataForm extends React.Component<IProps, IState> {
 	private _notificationService = new NotificationService();
 
 	private _isMounted: boolean = true;
+	private _formRef = React.createRef<FormInstance>();
 
 	constructor(props: IProps) {
 		super(props);
@@ -47,47 +49,43 @@ export class WrappedDataForm extends React.Component<IProps, IState> {
 		this._isMounted = false;
 	};
 
-	getFieldValue = async (fieldName: string) => {
-
-		const { form } = this.props;
-
-		return form.getFieldValue(fieldName);
+	getFormRef = (): React.RefObject<FormInstance> => {
+		return (this.props.formRef ?? this._formRef);
 	};
 
-	handleChange = async (e: React.SyntheticEvent) => {
-		const { form, onChange } = this.props;
+	handleValuesChange = async (changedValues: Store, values: Store) => {
+		const { onChange } = this.props;
+
+		// console.log("Form.onChange", changedValues, values);
 
 		if (onChange) {
-			var values = form.getFieldsValue();
+			// var values = this.getFormRef().current.getFieldsValue();
 
-			onChange(values);
+			onChange(values, changedValues);
 		}
 	};
 
-	handleSubmit = async (e: React.SyntheticEvent) => {
-		e.preventDefault();
+	handleSubmit = async (values: IIndexer) => {
 
-		const { t, form, onSubmit: onSave, successMessage, errorMessage } = this.props;
+		const { t, onSubmit, successMessage, errorMessage } = this.props;
 
-		form.validateFieldsAndScroll(async (errors, values: any) => {
-			if (!errors) {
-				if (this._isMounted) this.setState({ loading: true });
+		// console.log("Form.onFinish", this.getFormRef().current.getFieldsValue());
 
-				await this._operation.execute(() => onSave(values), {
-					successMessage: successMessage || t("dataForm.submit.success"),
-					errorMessage: errorMessage || t("dataForm.submit.error"),
-					showFieldErrors: async (result) => {
-						await this.setFieldErrors(result, values);
-					}
-				});
+		if (this._isMounted) this.setState({ loading: true });
 
-				if (this._isMounted) this.setState({ loading: false });
+		await this._operation.execute(() => onSubmit(values), {
+			successMessage: successMessage || t("dataForm.submit.success"),
+			errorMessage: errorMessage || t("dataForm.submit.error"),
+			showFieldErrors: async (result) => {
+				await this.setFieldErrors(result, values);
 			}
 		});
+
+		if (this._isMounted) this.setState({ loading: false });
 	};
 
 	setFieldErrors = async (result: IApiResult, values: IIndexer) => {
-		const { form, fields } = this.props,
+		const { fields } = this.props,
 			fieldErrors: any = {},
 			otherErrors: string[] = [];
 
@@ -108,7 +106,7 @@ export class WrappedDataForm extends React.Component<IProps, IState> {
 				}
 			});
 
-			form.setFields(fieldErrors);
+			this.getFormRef().current.setFields(fieldErrors);
 
 			if (otherErrors.length > 0) {
 				// todo: show as alert before form
@@ -119,16 +117,15 @@ export class WrappedDataForm extends React.Component<IProps, IState> {
 
 	createItem = (field: IDataField): React.ReactNode => {
 		const { t, layout, data, hideLabels } = this.props;
-		const { getFieldDecorator } = this.props.form;
 
 		// const initialValue = data?.[field.key];
-		const initialValue = DataHelper.indexer(data, field.key, undefined);
+		// const initialValue = DataHelper.indexer(data, field.key, undefined);
 
 		const fieldFactory = DataFieldFactory.get(field.type);
 
 		if (!fieldFactory) return null;
 
-		const required: ValidationRule = {
+		const required: Rule = {
 			required: field.required,
 			message: t("dataForm.rule.required", { name: field.name })
 		};
@@ -137,19 +134,22 @@ export class WrappedDataForm extends React.Component<IProps, IState> {
 			required.whitespace = field.required;
 		}
 
-		const fieldOptions: GetFieldDecoratorOptions = {
+		/* const fieldOptions: GetFieldDecoratorOptions = {
 			initialValue: initialValue,
 			valuePropName: fieldFactory.valuePropName
-		};
+		}; */
 
 		// todo: why boolean can't be required?
+		let rules: Rule[];
 		if (field.type != "boolean") {
-			fieldOptions.rules = [required];
+			rules = [required];
 		}
 
 		if (field.type == "boolean") {
 			// todo: fix server value convert
-			fieldOptions.initialValue = fieldOptions.initialValue === "true" || fieldOptions.initialValue === true;
+			// fieldOptions.initialValue = fieldOptions.initialValue === "true" || fieldOptions.initialValue === true;
+			const value = DataHelper.indexer(data, field.key, undefined);
+			DataHelper.indexer(data, field.key, value === "true" || value === true);
 		}
 
 		const fieldNode = fieldFactory.createNode(field, data);
@@ -161,39 +161,49 @@ export class WrappedDataForm extends React.Component<IProps, IState> {
 		return (
 			<Form.Item
 				key={field.key}
+				htmlFor={field.key}
+				name={field.key.split(".")}
 				label={hideLabels || field.type == "boolean" ? null : field.name}
 				extra={field.description}
+				valuePropName={fieldFactory.valuePropName}
+				rules={rules}
 				{...itemLayout}>
-				{getFieldDecorator(field.key, fieldOptions)(fieldNode)}
+				{fieldNode}
 			</Form.Item>
 		);
 	};
 
 	render = () => {
-		const { t, layout, fields, showControls, submitButton, resetButton } = this.props,
+		const { t, layout, data, fields, showControls, submitButton, resetButton } = this.props,
 			{ loading } = this.state;
 
 		const itemLayout = (layout == null || layout == "horizontal") ? FormDefaults.tailFormItemLayout : null;
 
+		// console.log("Form.render", data, fields);
+
 		return (
 			<Spin spinning={loading}>
-				<Form layout={layout || "horizontal"}
-					// onChange={this.handleChange} // todo: restore when on change will be working for select, classifer-select etc.
-					onSubmit={this.handleSubmit}>
-					{fields && fields.map(x => this.createItem(x))}
-					{fields && <Form.Item /* hasFeedback */ {...itemLayout} style={{ display: showControls === false ? "none" : "block" }}>
+				{fields && <Form
+					ref={this.getFormRef()}
+					initialValues={data}
+					layout={layout || "horizontal"}
+					onValuesChange={this.handleValuesChange}
+					onFinish={this.handleSubmit}>
+
+					{fields.map(x => this.createItem(x))}
+
+					<Form.Item {...itemLayout} style={{ display: showControls === false ? "none" : "block" }}>
 						<Toolbar>
 							<ButtonSave htmlType="submit">{submitButton}</ButtonSave>
-							{/* <ButtonCancel htmlType="reset">{resetButton}</ButtonCancel> */}
 						</Toolbar>
-					</Form.Item>}
-				</Form>
+					</Form.Item>
+				</Form>}
 			</Spin>
 		);
 	};
 }
 
-export const DataForm = withTranslation()(Form.create<IProps>({
+/* export const DataForm = withTranslation()(Form.create<IProps>({
 	// Form.onChange is not working - not triggered when Select field changes
 	// https://github.com/ant-design/ant-design/issues/18867
 	onValuesChange: (props, values, allFieldsValues) => {
@@ -201,4 +211,6 @@ export const DataForm = withTranslation()(Form.create<IProps>({
 			props.onChange(allFieldsValues);
 		}
 	}
-})(WrappedDataForm));
+})(WrappedDataForm)); */
+
+export const DataForm = withTranslation()(WrappedDataForm);

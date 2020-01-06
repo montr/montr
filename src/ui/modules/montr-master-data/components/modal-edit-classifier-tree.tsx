@@ -6,6 +6,7 @@ import { ClassifierTreeService } from "../services";
 import { IClassifierGroup } from "@montr-master-data/models";
 import { NotificationService, MetadataService } from "@montr-core/services";
 import { DataForm, WrappedDataForm } from "@montr-core/components";
+import { FormInstance } from "antd/lib/form";
 
 interface IProps extends CompanyContextProps {
 	typeCode: string;
@@ -25,7 +26,7 @@ class _ModalEditClassifierTree extends React.Component<IProps, IState> {
 	private _metadataService = new MetadataService();
 	private _classifierTreeService = new ClassifierTreeService();
 
-	_formRef: WrappedDataForm;
+	private _formRef = React.createRef<FormInstance>();
 
 	constructor(props: IProps) {
 		super(props);
@@ -73,12 +74,8 @@ class _ModalEditClassifierTree extends React.Component<IProps, IState> {
 		}
 	};
 
-	saveFormRef = (formRef: WrappedDataForm) => {
-		this._formRef = formRef;
-	};
-
 	onOk = async (e: React.MouseEvent<any>) => {
-		await this._formRef.handleSubmit(e);
+		await this._formRef.current.submit();
 	};
 
 	onCancel = () => {
@@ -120,7 +117,7 @@ class _ModalEditClassifierTree extends React.Component<IProps, IState> {
 				okText="Сохранить" width="640px">
 				<Spin spinning={loading}>
 					<DataForm
-						wrappedComponentRef={this.saveFormRef}
+						formRef={this._formRef}
 						fields={fields}
 						data={data}
 						showControls={false}

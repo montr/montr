@@ -10,6 +10,7 @@ export * from "./data-table";
 export * from "./error-boundary";
 export * from "./footer";
 export * from "./form-defaults";
+export * from "./icon";
 export * from "./language-selector";
 export * from "./page";
 export * from "./logo";

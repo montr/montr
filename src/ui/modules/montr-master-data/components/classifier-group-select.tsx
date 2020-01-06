@@ -1,10 +1,11 @@
 import * as React from "react";
-import { TreeSelect, Spin, Icon } from "antd";
+import { TreeSelect, Spin, Select } from "antd";
+import { DataNode } from "rc-tree-select/lib/interface";
 import { Guid, IClassifierGroupField } from "@montr-core/models";
 import { ClassifierGroupService, ClassifierTreeService, ClassifierTypeService } from "../services";
 import { IClassifierGroup, IClassifierTree, IClassifierType } from "../models";
 import { CompanyContextProps, withCompanyContext } from "@montr-kompany/components";
-import { TreeNode } from "antd/lib/tree-select";
+import { Icon } from "@montr-core/components";
 
 interface IProps extends CompanyContextProps {
 	// mode: "Tree" | "Group";
@@ -27,13 +28,14 @@ interface IState {
 // todo: rewrite to functional component (see link above)
 class _ClassifierGroupSelect extends React.Component<IProps, IState> {
 
-	static getDerivedStateFromProps(nextProps: any) {
+	/* static getDerivedStateFromProps(nextProps: any) {
 		// Should be a controlled component.
+		console.log("_ClassifierGroupSelect.getDerivedStateFromProps", arguments);
 		if ("value" in nextProps) {
-			return nextProps.value;
+			return nextProps.value ?? null;
 		}
 		return null;
-	}
+	} */
 
 	private _classifierTypeService = new ClassifierTypeService();
 	private _classifierTreeService = new ClassifierTreeService();
@@ -128,11 +130,10 @@ class _ClassifierGroupSelect extends React.Component<IProps, IState> {
 		// console.log("onSearch", value);
 	};
 
-	onLoadData = (node: any) => {
+	onLoadData = (node: DataNode) => {
 		return new Promise(async (resolve) => {
-
-			if (node.props.dataType == "Tree") {
-				const tree: IClassifierTree = node.props.dataRef;
+			if (node.dataType == "Tree") {
+				const tree: IClassifierTree = node.dataRef;
 
 				if (!tree.children) {
 					const { field } = this.props,
@@ -147,7 +148,7 @@ class _ClassifierGroupSelect extends React.Component<IProps, IState> {
 				}
 			}
 			else {
-				const group: IClassifierGroup = node.props.dataRef;
+				const group: IClassifierGroup = node.dataRef;
 
 				if (!group.children) {
 					const { field } = this.props,
@@ -166,14 +167,14 @@ class _ClassifierGroupSelect extends React.Component<IProps, IState> {
 		});
 	};
 
-	buildTree(trees: IClassifierTree[], groups: IClassifierGroup[]): TreeNode[] {
+	buildTree(trees: IClassifierTree[], groups: IClassifierGroup[]): DataNode[] {
 		if (trees) {
 			return trees.map(tree => {
 
-				const result: TreeNode = {
+				const result: DataNode = {
 					selectable: false,
-					value: tree.uid,
-					title: <span><Icon type="folder" /> {tree.name}</span>,
+					value: tree.uid.toString(),
+					title: <span>{Icon.Folder} {tree.name}</span>,
 					dataRef: tree,
 					dataType: "Tree"
 				};
@@ -188,9 +189,9 @@ class _ClassifierGroupSelect extends React.Component<IProps, IState> {
 		else if (groups) {
 			return groups && groups.map(group => {
 
-				const result: TreeNode = {
-					value: group.uid,
-					title: <span><Icon type="file" /> {group.name} ({group.code})</span>,
+				const result: DataNode = {
+					value: group.uid.toString(),
+					title: <span>{Icon.File} {group.name} ({group.code})</span>,
 					dataRef: group,
 					dataType: "Group"
 				};
@@ -212,7 +213,13 @@ class _ClassifierGroupSelect extends React.Component<IProps, IState> {
 
 		return (
 			<Spin spinning={loading}>
-				<TreeSelect
+				{/* For empty data show Select instead of TreeSelect.
+					Empty TreeSelect fails with TypeError: Cannot read property 'scrollTo' of undefined */}
+				{!loading && (!treeData || treeData.length == 0) && <Select
+					placeholder={field.placeholder}
+					value={value}
+				/>}
+				{!loading && treeData?.length > 0 && <TreeSelect
 					onChange={this.handleChange}
 					allowClear={!field.required}
 					showSearch onSearch={this.onSearch}
@@ -221,7 +228,7 @@ class _ClassifierGroupSelect extends React.Component<IProps, IState> {
 					loadData={this.onLoadData}
 					treeData={treeData}
 					value={value}
-				/>
+				/>}
 			</Spin>
 		);
 	}

@@ -19,7 +19,7 @@ interface IProps extends CompanyContextProps, RouteComponentProps<IRouteProps> {
 interface IState {
 	loading: boolean;
 	types?: IClassifierType[];
-	data: IClassifierType;
+	data?: IClassifierType;
 }
 
 class _EditClassifierType extends React.Component<IProps, IState> {
@@ -30,12 +30,7 @@ class _EditClassifierType extends React.Component<IProps, IState> {
 		super(props);
 
 		this.state = {
-			loading: true,
-			data: {
-				// todo: load defaults with metadata
-				name: "",
-				hierarchyType: "None"
-			}
+			loading: true
 		};
 	}
 
@@ -59,7 +54,10 @@ class _EditClassifierType extends React.Component<IProps, IState> {
 
 		const types = await this._classifierTypeService.list();
 
-		const data = (uid) ? await this._classifierTypeService.get({ uid }) : this.state.data;
+		const data: IClassifierType = (uid)
+			? await this._classifierTypeService.get({ uid })
+			// todo: load defaults with metadata
+			: { name: "", hierarchyType: "None" };
 
 		this.setState({ loading: false, data, types: types.rows });
 	};
@@ -81,6 +79,7 @@ class _EditClassifierType extends React.Component<IProps, IState> {
 			{ loading, data, types } = this.state;
 
 		let title;
+		// todo: remove this sh*t
 		if (loading) {
 			title = <>
 				<ClassifierBreadcrumb /* types={types} */ />
@@ -97,12 +96,12 @@ class _EditClassifierType extends React.Component<IProps, IState> {
 			</>;
 		}
 
-		const otherTabsDisabled = !data.uid;
+		const otherTabsDisabled = !data?.uid;
 
 		return (
 			<Page title={title}>
 				<Spin spinning={loading}>
-					<Tabs size="small" defaultActiveKey={tabKey} onChange={this.handleTabChange}>
+					{data && <Tabs size="small" defaultActiveKey={tabKey} onChange={this.handleTabChange}>
 						<Tabs.TabPane key="info" tab="Информация">
 							<TabEditClassifierType data={data} onDataChange={this.handleDataChange} />
 						</Tabs.TabPane>
@@ -110,10 +109,10 @@ class _EditClassifierType extends React.Component<IProps, IState> {
 							<TabEditClassifierTypeHierarchy type={data} />
 						</Tabs.TabPane>
 						<Tabs.TabPane key="fields" tab="Поля" disabled={otherTabsDisabled}>
-							{data.code && <PaneSearchMetadata entityTypeCode={`Classifier.${data.code}`} />}
+							{data?.code && <PaneSearchMetadata entityTypeCode={`Classifier.${data.code}`} />}
 						</Tabs.TabPane>
 						<Tabs.TabPane key="history" tab="История изменений" disabled={otherTabsDisabled}></Tabs.TabPane>
-					</Tabs>
+					</Tabs>}
 				</Spin>
 			</Page>
 		);

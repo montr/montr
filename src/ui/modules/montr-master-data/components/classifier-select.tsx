@@ -6,6 +6,7 @@ import { IClassifierGroup, IClassifierTree, IClassifierType, IClassifier } from 
 import { CompanyContextProps, withCompanyContext } from "@montr-kompany/components";
 import { RouteBuilder } from "../module";
 import { Link } from "react-router-dom";
+import { Icon } from "@montr-core/components";
 // import { debounce } from "lodash";
 
 interface IProps extends CompanyContextProps {
@@ -34,7 +35,7 @@ class _ClassifierSelect extends React.Component<IProps, IState> {
 	static getDerivedStateFromProps(nextProps: any) {
 		// Should be a controlled component.
 		if ("value" in nextProps) {
-			return nextProps.value;
+			return nextProps.value ?? null;
 		}
 		return null;
 	}
@@ -113,7 +114,7 @@ class _ClassifierSelect extends React.Component<IProps, IState> {
 			{ loading, fetching, items } = this.state;
 
 		const options = items
-			&& items.map(x => <Select.Option key={x.uid.toString()}>{x.name}</Select.Option>);
+			&& items.map(x => <Select.Option key={x.uid.toString()} value={x.uid.toString()}>{x.name}</Select.Option>);
 
 		// https://github.com/ant-design/ant-design/issues/13448
 		// https://codesandbox.io/s/oo6q47mnr9
@@ -136,7 +137,7 @@ class _ClassifierSelect extends React.Component<IProps, IState> {
 					<Divider style={{ margin: "1px 0" }} />
 					<div onMouseDown={e => e.preventDefault()}>
 						<Link to={RouteBuilder.addClassifier(field.props.typeCode, null)}>
-							<Button icon="plus" type="link">Добавить элемент</Button>
+							<Button type="link" icon={Icon.Plus}>Добавить элемент</Button>
 						</Link>
 					</div >
 				</div>

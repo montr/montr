@@ -1,8 +1,8 @@
 import * as React from "react";
 import { useLocalStorage } from "@montr-core/hooks";
-import { Page, DataForm } from "@montr-core/components";
+import { Page, DataForm, Icon } from "@montr-core/components";
 import { IDataField, IApiResult } from "@montr-core/models";
-import { Spin, Icon } from "antd";
+import { Spin } from "antd";
 import { MetadataService } from "@montr-core/services";
 import { ILoginModel } from "../models/";
 import { useTranslation } from "react-i18next";
@@ -65,7 +65,7 @@ export default function ForgotPassword() {
 				/>
 			</Spin>
 
-			<p><Link to={Patterns.login}><Icon type="arrow-left" /> {t("page.register.link.login")}</Link></p>
+			<p><Link to={Patterns.login}>{Icon.ArrowLeft} {t("page.register.link.login")}</Link></p>
 
 		</Page>
 	);
