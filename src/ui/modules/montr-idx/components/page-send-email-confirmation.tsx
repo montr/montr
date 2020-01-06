@@ -1,11 +1,10 @@
 import * as React from "react";
 import { Spin } from "antd";
 import { useTranslation } from "react-i18next";
-import { Page, DataForm, Icon } from "@montr-core/components";
+import { useLocalStorage, Page, DataForm, Icon } from "@montr-core/components";
 import { IDataField, IApiResult } from "@montr-core/models";
-import { useLocalStorage } from "@montr-core/hooks";
 import { MetadataService } from "@montr-core/services";
-import { ISendEmailConfirmationModel } from "../models/";
+import { ISendEmailConfirmationModel } from "../models";
 import { AccountService } from "../services/account-service";
 import { Views, Patterns, StorageNames } from "../module";
 import { Link } from "react-router-dom";

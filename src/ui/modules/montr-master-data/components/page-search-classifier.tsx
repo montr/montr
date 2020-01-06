@@ -1,6 +1,6 @@
 import * as React from "react";
 import { RouteComponentProps } from "react-router";
-import { PaneSearchClassifier } from "../components";
+import { PaneSearchClassifier } from ".";
 
 interface IRouteProps {
 	typeCode: string;

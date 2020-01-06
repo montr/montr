@@ -4,7 +4,7 @@ import { RouteComponentProps } from "react-router";
 import { Spin, Tabs } from "antd";
 import { ClassifierService, ClassifierTypeService, ClassifierLinkService } from "../services";
 import { IClassifier, IClassifierType } from "../models";
-import { ClassifierBreadcrumb, TabEditClassifier, TabEditClassifierHierarchy } from "../components";
+import { ClassifierBreadcrumb, TabEditClassifier, TabEditClassifierHierarchy } from ".";
 import { RouteBuilder } from "../module";
 
 interface IRouteProps {

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Page } from "../components";
+import { Page } from ".";
 
 export default class Home extends React.Component {
 	render() {

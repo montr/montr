@@ -1,10 +1,9 @@
 import * as React from "react";
-import { useLocalStorage } from "@montr-core/hooks";
-import { Page, DataForm, Icon } from "@montr-core/components";
+import { useLocalStorage, Page, DataForm, Icon } from "@montr-core/components";
 import { IDataField, IApiResult } from "@montr-core/models";
 import { Spin } from "antd";
 import { MetadataService } from "@montr-core/services";
-import { ILoginModel } from "../models/";
+import { ILoginModel } from "../models";
 import { useTranslation } from "react-i18next";
 import { AccountService } from "../services/account-service";
 import { Views, Patterns, StorageNames } from "../module";

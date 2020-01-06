@@ -22,10 +22,10 @@ export const RouteBuilder = {
 };
 
 AppRouteRegistry.add([
-	{ path: "/classifiers/", exact: true, component: React.lazy(() => import("./pages/search-classifier-type")) },
-	{ path: "/classifiers/add/", exact: true, component: React.lazy(() => import("./pages/edit-classifier-type")) },
-	{ path: Patterns.editClassifierType, exact: true, component: React.lazy(() => import("./pages/edit-classifier-type")) },
-	{ path: "/classifiers/:typeCode/", exact: true, component: React.lazy(() => import("./pages/search-classifier")) },
-	{ path: Patterns.addClassifier, exact: true, component: React.lazy(() => import("./pages/edit-classifier")) },
-	{ path: Patterns.editClassifier, exact: true, component: React.lazy(() => import("./pages/edit-classifier")) }
+	{ path: "/classifiers/", exact: true, component: React.lazy(() => import("./components/page-search-classifier-type")) },
+	{ path: "/classifiers/add/", exact: true, component: React.lazy(() => import("./components/page-edit-classifier-type")) },
+	{ path: Patterns.editClassifierType, exact: true, component: React.lazy(() => import("./components/page-edit-classifier-type")) },
+	{ path: "/classifiers/:typeCode/", exact: true, component: React.lazy(() => import("./components/page-search-classifier")) },
+	{ path: Patterns.addClassifier, exact: true, component: React.lazy(() => import("./components/page-edit-classifier")) },
+	{ path: Patterns.editClassifier, exact: true, component: React.lazy(() => import("./components/page-edit-classifier")) }
 ]);

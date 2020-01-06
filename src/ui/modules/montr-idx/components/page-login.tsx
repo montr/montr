@@ -2,13 +2,12 @@ import * as React from "react";
 import { Link } from "react-router-dom";
 import { Spin, Divider } from "antd";
 import { useTranslation } from "react-i18next";
-import { useLocalStorage } from "@montr-core/hooks";
-import { Page, DataForm } from "@montr-core/components";
+import { useLocalStorage, Page, DataForm } from "@montr-core/components";
 import { IDataField, IApiResult } from "@montr-core/models";
 import { MetadataService, NavigationService } from "@montr-core/services";
-import { ILoginModel } from "../models/";
+import { ILoginModel } from "../models";
 import { AccountService } from "../services/account-service";
-import { ExternalLoginForm } from "../components";
+import { ExternalLoginForm } from ".";
 import { Views, Patterns, StorageNames } from "../module";
 
 interface IState {

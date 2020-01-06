@@ -1,11 +1,11 @@
 import * as React from "react";
-import { EventService } from "../../services";
+import { EventService } from "../services";
 import { Redirect } from "react-router-dom";
 import { Constants } from "@montr-core/.";
 import { Page, DataTable } from "@montr-core/components";
-import { IEvent } from "../../models";
+import { IEvent } from "../models";
 import { IApiResult, Guid, IMenu } from "@montr-core/models";
-import { RouteBuilder } from "../../module";
+import { RouteBuilder } from "../module";
 
 interface IProps {
 }
@@ -27,7 +27,7 @@ export default class SelectEventTemplate extends React.Component<IProps, IState>
 
 	componentWillUnmount = async () => {
 		await this._eventService.abort();
-	}
+	};
 
 	handleSelect = async (data: IEvent) => {
 		const result: IApiResult = await this._eventService.insert({
@@ -36,13 +36,13 @@ export default class SelectEventTemplate extends React.Component<IProps, IState>
 		});
 
 		this.setState({ newUid: result.uid });
-	}
+	};
 
 	render = () => {
 		const { newUid } = this.state;
 
 		if (newUid) {
-			return <Redirect to={RouteBuilder.editEvent(newUid.toString())} />
+			return <Redirect to={RouteBuilder.editEvent(newUid.toString())} />;
 		}
 
 		const rowActions: IMenu[] = [
@@ -61,5 +61,5 @@ export default class SelectEventTemplate extends React.Component<IProps, IState>
 
 			</Page>
 		);
-	}
+	};
 }

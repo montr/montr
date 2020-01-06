@@ -1,5 +1,5 @@
 import React from "react";
-import { DataTableUpdateToken, Page, DataTable, Toolbar, PageHeader, DataBreadcrumb, ButtonImport, ButtonExport, Icon } from "../components";
+import { DataTableUpdateToken, Page, DataTable, Toolbar, PageHeader, DataBreadcrumb, ButtonImport, ButtonExport, Icon } from ".";
 import { Constants } from "..";
 import { IMenu, ILocaleString, IDataResult } from "../models";
 import { LocaleStringService, NotificationService } from "../services";

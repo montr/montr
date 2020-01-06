@@ -20,6 +20,7 @@ export * from "./pane-edit-metadata";
 export * from "./pane-search-metadata";
 export * from "./suspense-fallback";
 export * from "./toolbar";
+export * from "./use-local-storage";
 export * from "./user-context";
 export * from "./user-context-provider";
 export * from "./user-menu";

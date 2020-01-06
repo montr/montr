@@ -2,7 +2,7 @@ import * as React from "react";
 import { Page, PageHeader, Toolbar, DataTable, DataTableUpdateToken, ButtonAdd, ButtonDelete } from "@montr-core/components";
 import { Constants } from "@montr-core/.";
 import { withCompanyContext, CompanyContextProps } from "@montr-kompany/components";
-import { ClassifierBreadcrumb } from "../components";
+import { ClassifierBreadcrumb } from ".";
 import { Link } from "react-router-dom";
 import { ClassifierTypeService } from "../services";
 import { NotificationService } from "@montr-core/services";

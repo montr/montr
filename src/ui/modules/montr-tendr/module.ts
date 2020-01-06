@@ -14,9 +14,9 @@ export const RouteBuilder = {
 };
 
 AppRouteRegistry.add([
-	{ path: "/register/", layout: Layout.public, exact: true, component: React.lazy(() => import("./pages/public/registration")) },
-	{ path: "/register/company/", layout: Layout.public, exact: true, component: React.lazy(() => import("@montr-kompany/pages/register")) },
-	{ path: "/events/", exact: true, component: React.lazy(() => import("./pages/private/search-events")) },
-	{ path: "/events/new", exact: true, component: React.lazy(() => import("./pages/private/select-event-template")) },
-	{ path: Patterns.editEvent, exact: true, component: React.lazy(() => import("./pages/private/edit-event")) }
+	{ path: "/register/", layout: Layout.public, exact: true, component: React.lazy(() => import("./components/page-registration")) },
+	{ path: "/register/company/", layout: Layout.public, exact: true, component: React.lazy(() => import("@montr-kompany/components/page-register")) },
+	{ path: "/events/", exact: true, component: React.lazy(() => import("./components/page-search-events")) },
+	{ path: "/events/new", exact: true, component: React.lazy(() => import("./components/page-select-event-template")) },
+	{ path: Patterns.editEvent, exact: true, component: React.lazy(() => import("./components/page-edit-event")) }
 ]);

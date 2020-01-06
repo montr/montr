@@ -17,7 +17,7 @@ export const AppRouteList = ({ routes, layoutRegistry, defaultLayout, errorLayou
 			{routes.map(({ layout, ...props }, _do_not_use_) => {
 				return <AppRoute key={0} {...props} layoutComponent={layoutRegistry(layout || defaultLayout)} />;
 			})}
-			<AppRoute component={React.lazy(() => import("../pages/error-404"))} layoutComponent={layoutRegistry(errorLayout)} />
+			<AppRoute component={React.lazy(() => import("./page-error-404"))} layoutComponent={layoutRegistry(errorLayout)} />
 		</Switch>
 	</BrowserRouter>
 );

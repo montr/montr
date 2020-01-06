@@ -4,7 +4,7 @@ import { CompanyService } from "../services";
 import { RadioChangeEvent } from "antd/lib/radio/interface";
 import { NavigationService } from "@montr-core/services";
 import { Constants } from "@montr-core/.";
-import { withCompanyContext, CompanyContextProps } from "../components";
+import { withCompanyContext, CompanyContextProps } from ".";
 import { FormInstance } from "antd/lib/form";
 
 interface IProps extends CompanyContextProps {

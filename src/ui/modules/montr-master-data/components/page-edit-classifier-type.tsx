@@ -4,7 +4,7 @@ import { Spin, Tabs } from "antd";
 import { Page, PageHeader, PaneSearchMetadata } from "@montr-core/components";
 import { ClassifierTypeService } from "../services";
 import { IClassifierType } from "../models";
-import { ClassifierBreadcrumb, TabEditClassifierType, TabEditClassifierTypeHierarchy } from "../components";
+import { ClassifierBreadcrumb, TabEditClassifierType, TabEditClassifierTypeHierarchy } from ".";
 import { RouteBuilder } from "../module";
 
 interface IRouteProps {

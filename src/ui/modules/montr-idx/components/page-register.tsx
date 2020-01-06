@@ -3,10 +3,10 @@ import { Page, DataForm, Icon } from "@montr-core/components";
 import { IDataField, IApiResult } from "@montr-core/models";
 import { Spin, Divider } from "antd";
 import { MetadataService } from "@montr-core/services";
-import { IRegisterModel } from "../models/";
+import { IRegisterModel } from "../models";
 import { Translation } from "react-i18next";
 import { AccountService } from "../services/account-service";
-import { ExternalLoginForm } from "../components";
+import { ExternalLoginForm } from ".";
 import { Views, Patterns } from "../module";
 import { Link } from "react-router-dom";
 

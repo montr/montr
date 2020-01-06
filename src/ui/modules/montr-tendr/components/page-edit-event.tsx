@@ -2,12 +2,12 @@ import * as React from "react";
 import { withTranslation, WithTranslation } from 'react-i18next';
 import { Tabs, Button, Modal, message, Tag } from "antd";
 import { IApiResult, IDataView, IPaneProps } from "@montr-core/models";
-import { EventService, EventTemplateService } from "../../services";
+import { EventService, EventTemplateService } from "../services";
 import { Page, IPaneComponent, Toolbar, PageHeader, DataBreadcrumb, Icon } from "@montr-core/components";
 import { MetadataService } from "@montr-core/services";
-import { IEvent } from "../../models";
-import * as panes from "../../components";
-import { RouteBuilder } from "../../module";
+import { IEvent } from "../models";
+import * as panes from ".";
+import { RouteBuilder } from "../module";
 import { RouteComponentProps } from "react-router";
 
 const componentToClass: Map<string, React.ComponentClass> = new Map<string, React.ComponentClass>();

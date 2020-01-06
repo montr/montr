@@ -1,9 +1,9 @@
 import * as React from "react";
 import { Link } from "react-router-dom";
 import { Form, Select, Button, DatePicker } from "antd";
-import { EventService, EventTemplateService } from "../../services";
+import { EventService, EventTemplateService } from "../services";
 import { Page, DataTable, PageHeader, DataBreadcrumb, Toolbar, ButtonCreate, Icon } from "@montr-core/components";
-import { IEvent } from "../../models";
+import { IEvent } from "../models";
 
 interface Props {
 }

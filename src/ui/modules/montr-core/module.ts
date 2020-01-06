@@ -6,9 +6,9 @@ import "./i18n";
 import "./index.less";
 
 AppRouteRegistry.add([
-	{ path: "/", layout: Layout.public, exact: true, component: React.lazy(() => import("./pages/home")) },
+	{ path: "/", layout: Layout.public, exact: true, component: React.lazy(() => import("./components/page-home")) },
 
 	{ path: "/dashboard/", exact: true, component: React.lazy(() => import("./components/page-dashboard")) },
-	{ path: "/locales/", exact: true, component: React.lazy(() => import("./pages/search-locale-string")) },
-	{ path: "/settings/", exact: true, component: React.lazy(() => import("./pages/settings")) },
+	{ path: "/locales/", exact: true, component: React.lazy(() => import("./components/page-search-locale-string")) },
+	{ path: "/settings/", exact: true, component: React.lazy(() => import("./components/page-settings")) },
 ]);
