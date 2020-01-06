@@ -1,12 +1,11 @@
 import * as React from "react";
 import { Spin } from "antd";
-import { CompanyContextProps, withCompanyContext } from "@montr-kompany/components";
 import { IDataField, IApiResult } from "@montr-core/models";
 import { DataForm } from "@montr-core/components";
 import { ClassifierService, ClassifierMetadataService } from "../services";
 import { IClassifier, IClassifierType } from "../models";
 
-interface IProps extends CompanyContextProps {
+interface IProps {
 	type: IClassifierType;
 	data: IClassifier;
 	onDataChange?: (values: IClassifier) => void;
@@ -17,7 +16,7 @@ interface IState {
 	fields?: IDataField[];
 }
 
-class _TabEditClassifier extends React.Component<IProps, IState> {
+export class TabEditClassifier extends React.Component<IProps, IState> {
 	private _classifierMetadataService = new ClassifierMetadataService();
 	private _classifierService = new ClassifierService();
 
@@ -34,8 +33,7 @@ class _TabEditClassifier extends React.Component<IProps, IState> {
 	};
 
 	componentDidUpdate = async (prevProps: IProps) => {
-		if (this.props.type !== prevProps.type ||
-			this.props.currentCompany !== prevProps.currentCompany) {
+		if (this.props.type !== prevProps.type) {
 			await this.fetchData();
 		}
 	};
@@ -101,5 +99,3 @@ class _TabEditClassifier extends React.Component<IProps, IState> {
 		);
 	};
 }
-
-export const TabEditClassifier = withCompanyContext(_TabEditClassifier);

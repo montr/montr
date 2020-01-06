@@ -3,12 +3,11 @@ import { Modal, Spin } from "antd";
 import { IClassifierLink } from "../models";
 import { ClassifierLinkService } from "../services";
 import { IDataField, IApiResult, IClassifierField, Guid } from "@montr-core/models";
-import { WrappedDataForm, DataForm } from "@montr-core/components";
-import { CompanyContextProps, withCompanyContext } from "@montr-kompany/components";
+import { DataForm } from "@montr-core/components";
 import { NotificationService, MetadataService } from "@montr-core/services";
 import { FormInstance } from "antd/lib/form";
 
-interface IProps extends CompanyContextProps {
+interface IProps {
 	typeCode: string;
 	itemUid: Guid;
 	onSuccess?: (data: IClassifierLink) => void;
@@ -21,7 +20,7 @@ interface IState {
 	data: IClassifierLink;
 }
 
-class _ModalEditClassifierLink extends React.Component<IProps, IState> {
+export class ModalEditClassifierLink extends React.Component<IProps, IState> {
 	private _notificationService = new NotificationService();
 	private _metadataService = new MetadataService();
 	private _classifierLinkService = new ClassifierLinkService();
@@ -47,27 +46,24 @@ class _ModalEditClassifierLink extends React.Component<IProps, IState> {
 	};
 
 	fetchData = async () => {
-		const { currentCompany, typeCode } = this.props;
+		const { typeCode } = this.props;
 
-		if (currentCompany) {
+		try {
+			const dataView = await this._metadataService.load(`ClassifierLink/Form`);
 
-			try {
-				const dataView = await this._metadataService.load(`ClassifierLink/Form`);
+			const fields = dataView.fields;
 
-				const fields = dataView.fields;
+			const classifierField = fields.find(x => x.key == "group.uid") as IClassifierField;
 
-				const classifierField = fields.find(x => x.key == "group.uid") as IClassifierField;
-
-				if (classifierField) {
-					classifierField.props = { typeCode };
-				}
-
-				this.setState({ loading: false, fields });
-
-			} catch (error) {
-				this._notificationService.error("Ошибка при загрузке данных", error.message);
-				this.onCancel();
+			if (classifierField) {
+				classifierField.props = { typeCode };
 			}
+
+			this.setState({ loading: false, fields });
+
+		} catch (error) {
+			this._notificationService.error("Ошибка при загрузке данных", error.message);
+			this.onCancel();
 		}
 	};
 
@@ -111,5 +107,3 @@ class _ModalEditClassifierLink extends React.Component<IProps, IState> {
 		);
 	};
 }
-
-export const ModalEditClassifierLink = withCompanyContext(_ModalEditClassifierLink);

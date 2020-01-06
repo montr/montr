@@ -4,10 +4,9 @@ import { DataNode } from "rc-tree-select/lib/interface";
 import { Guid, IClassifierGroupField } from "@montr-core/models";
 import { ClassifierGroupService, ClassifierTreeService, ClassifierTypeService } from "../services";
 import { IClassifierGroup, IClassifierTree, IClassifierType } from "../models";
-import { CompanyContextProps, withCompanyContext } from "@montr-kompany/components";
 import { Icon } from "@montr-core/components";
 
-interface IProps extends CompanyContextProps {
+interface IProps {
 	// mode: "Tree" | "Group";
 	value?: string;
 	field: IClassifierGroupField;
@@ -26,7 +25,7 @@ interface IState {
 // http://ant.design/components/form/?locale=en-US#components-form-demo-customized-form-controls
 // https://github.com/ant-design/ant-design/blob/master/components/form/demo/customized-form-controls.md
 // todo: rewrite to functional component (see link above)
-class _ClassifierGroupSelect extends React.Component<IProps, IState> {
+export class ClassifierGroupSelect extends React.Component<IProps, IState> {
 
 	/* static getDerivedStateFromProps(nextProps: any) {
 		// Should be a controlled component.
@@ -233,5 +232,3 @@ class _ClassifierGroupSelect extends React.Component<IProps, IState> {
 		);
 	}
 }
-
-export const ClassifierGroupSelect = withCompanyContext(_ClassifierGroupSelect);

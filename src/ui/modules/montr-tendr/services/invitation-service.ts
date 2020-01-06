@@ -15,19 +15,19 @@ interface IUpdateInvitationRequest {
 
 export class InvitationService extends Fetcher {
 
-	get = async (companyUid: Guid, uid: Guid | string): Promise<IInvitation> => {
-		return this.post(`${Constants.apiURL}/invitation/get`, { companyUid, uid });
+	get = async (uid: Guid | string): Promise<IInvitation> => {
+		return this.post(`${Constants.apiURL}/invitation/get`, { uid });
 	};
 
-	insert = async (companyUid: Guid, request: IInsertInvitationRequest): Promise<IApiResult> => {
-		return this.post(`${Constants.apiURL}/invitation/insert`, { companyUid, ...request });
+	insert = async (request: IInsertInvitationRequest): Promise<IApiResult> => {
+		return this.post(`${Constants.apiURL}/invitation/insert`, request);
 	};
 
-	update = async (companyUid: Guid, request: IUpdateInvitationRequest): Promise<IApiResult> => {
-		return this.post(`${Constants.apiURL}/invitation/update`, { companyUid, ...request });
+	update = async (request: IUpdateInvitationRequest): Promise<IApiResult> => {
+		return this.post(`${Constants.apiURL}/invitation/update`, request);
 	};
 
-	delete = async (companyUid: Guid, uids: string[] | number[]): Promise<IApiResult> => {
-		return this.post(`${Constants.apiURL}/invitation/delete`, { companyUid, uids });
+	delete = async (uids: string[] | number[]): Promise<IApiResult> => {
+		return this.post(`${Constants.apiURL}/invitation/delete`, { uids });
 	};
 }

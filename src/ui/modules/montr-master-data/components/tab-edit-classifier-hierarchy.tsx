@@ -2,13 +2,12 @@ import * as React from "react";
 import { Alert, Modal } from "antd";
 import { Constants } from "@montr-core/.";
 import { DataTableUpdateToken, Toolbar, DataTable, ButtonAdd } from "@montr-core/components";
-import { withCompanyContext, CompanyContextProps } from "@montr-kompany/components";
 import { IClassifierType, IClassifier, IClassifierLink } from "../models";
 import { IDataResult, IMenu, Guid } from "@montr-core/models";
 import { ClassifierLinkService } from "../services";
 import { ModalEditClassifierLink } from ".";
 
-interface IProps extends CompanyContextProps {
+interface IProps {
 	type: IClassifierType;
 	data: IClassifier;
 	onDataChange?: (values: IClassifier) => void;
@@ -19,7 +18,7 @@ interface IState {
 	updateTableToken: DataTableUpdateToken;
 }
 
-class _TabEditClassifierHierarchy extends React.Component<IProps, IState> {
+export class TabEditClassifierHierarchy extends React.Component<IProps, IState> {
 
 	_classifierLinkService = new ClassifierLinkService();
 
@@ -32,8 +31,7 @@ class _TabEditClassifierHierarchy extends React.Component<IProps, IState> {
 	}
 
 	componentDidUpdate = async (prevProps: IProps) => {
-		if (this.props.currentCompany !== prevProps.currentCompany ||
-			this.props.type !== prevProps.type ||
+		if (this.props.type !== prevProps.type ||
 			this.props.data !== prevProps.data) {
 			await this.refreshTable();
 		}
@@ -133,5 +131,3 @@ class _TabEditClassifierHierarchy extends React.Component<IProps, IState> {
 		</>);
 	}
 }
-
-export const TabEditClassifierHierarchy = withCompanyContext(_TabEditClassifierHierarchy);

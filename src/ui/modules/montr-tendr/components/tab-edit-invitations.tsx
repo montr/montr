@@ -3,14 +3,13 @@ import { Button, Drawer, Alert, Modal } from "antd";
 import { IPaneProps, Guid, IDataResult, IMenu } from "@montr-core/models";
 import { DataTable, Toolbar, DataTableUpdateToken, ButtonAdd, ButtonDelete, Icon } from "@montr-core/components";
 import { PaneSearchClassifier } from "@montr-master-data/components";
-import { CompanyContextProps, withCompanyContext } from "@montr-kompany/components";
 import { ModalEditInvitation } from "../components";
 import { IEvent, IInvitation } from "../models";
 import { InvitationService } from "../services";
 import { Constants } from "@montr-core/.";
 import { OperationService } from "@montr-core/services";
 
-interface IProps extends CompanyContextProps, IPaneProps<IEvent> {
+interface IProps extends IPaneProps<IEvent> {
 	data: IEvent;
 }
 
@@ -21,7 +20,7 @@ interface IState {
 	updateTableToken: DataTableUpdateToken;
 }
 
-class _TabEditInvitations extends React.Component<IProps, IState> {
+export class TabEditInvitations extends React.Component<IProps, IState> {
 
 	private _operation = new OperationService();
 	private _invitationService = new InvitationService();
@@ -39,12 +38,11 @@ class _TabEditInvitations extends React.Component<IProps, IState> {
 	};
 
 	onLoadTableData = async (loadUrl: string, postParams: any): Promise<IDataResult<{}>> => {
-		const { currentCompany, data } = this.props;
+		const { data } = this.props;
 
-		if (currentCompany && data) {
+		if (data) {
 
 			const params = {
-				companyUid: currentCompany.uid,
 				eventUid: data.uid,
 				...postParams
 			};
@@ -77,20 +75,18 @@ class _TabEditInvitations extends React.Component<IProps, IState> {
 	};
 
 	onSelect = async (keys: string[]) => {
-		const { data, currentCompany } = this.props;
+		const { data } = this.props;
 
-		if (currentCompany) {
-			await this._invitationService.insert(currentCompany.uid, {
-				eventUid: data.uid,
-				items: keys.map(x => {
-					return { counterpartyUid: new Guid(x) };
-				})
-			});
+		await this._invitationService.insert({
+			eventUid: data.uid,
+			items: keys.map(x => {
+				return { counterpartyUid: new Guid(x) };
+			})
+		});
 
-			await this.onCloseDrawer();
+		await this.onCloseDrawer();
 
-			await this.refreshTable();
-		}
+		await this.refreshTable();
 	};
 
 	showAddModal = () => {
@@ -116,11 +112,10 @@ class _TabEditInvitations extends React.Component<IProps, IState> {
 			title: "Вы действительно хотите удалить выбранные приглашения?",
 			content: "При удалении будут ... и ...",
 			onOk: async () => {
-				const { currentCompany } = this.props,
-					{ selectedRowKeys } = this.state;
+				const { selectedRowKeys } = this.state;
 
 				const result = await this._operation.execute(() =>
-					this._invitationService.delete(currentCompany.uid, selectedRowKeys));
+					this._invitationService.delete(selectedRowKeys));
 
 				if (result.success) {
 					this.refreshTable(true);
@@ -192,5 +187,3 @@ class _TabEditInvitations extends React.Component<IProps, IState> {
 		</>;
 	}
 }
-
-export const TabEditInvitations = withCompanyContext(_TabEditInvitations);

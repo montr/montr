@@ -1,6 +1,5 @@
 import * as React from "react";
 import { Guid, IDataField, IApiResult } from "@montr-core/models";
-import { CompanyContextProps, withCompanyContext } from "@montr-kompany/components";
 import { IInvitation } from "../models";
 import { Modal, Spin } from "antd";
 import { DataForm } from "@montr-core/components";
@@ -8,7 +7,7 @@ import { NotificationService, MetadataService } from "@montr-core/services";
 import { InvitationService } from "../services";
 import { FormInstance } from "antd/lib/form";
 
-interface IProps extends CompanyContextProps {
+interface IProps {
 	eventUid: Guid;
 	uid?: Guid;
 	onSuccess?: (data: IInvitation) => void;
@@ -21,7 +20,7 @@ interface IState {
 	data: IInvitation;
 }
 
-class _ModalEditInvitation extends React.Component<IProps, IState> {
+export class ModalEditInvitation extends React.Component<IProps, IState> {
 
 	private _notificationService = new NotificationService();
 	private _metadataService = new MetadataService();
@@ -48,33 +47,30 @@ class _ModalEditInvitation extends React.Component<IProps, IState> {
 	};
 
 	fetchData = async () => {
-		const { currentCompany, uid } = this.props;
+		const { uid } = this.props;
 
-		if (currentCompany) {
+		try {
 
-			try {
+			const dataView = await this._metadataService.load(`Event/Invitation/Form`);
 
-				const dataView = await this._metadataService.load(`Event/Invitation/Form`);
+			const fields = dataView.fields;
 
-				const fields = dataView.fields;
+			let data;
 
-				let data;
-
-				if (uid) {
-					data = await this._invitationService.get(currentCompany.uid, uid);
-				}
-				else {
-					// todo: load defaults from server
-					data = {};
-				}
-
-				this.setState({ loading: false, fields, data });
-
-			} catch (error) {
-				this._notificationService.error("Ошибка при загрузке данных", error.message);
-				// todo: why call onCancel()?
-				this.onCancel();
+			if (uid) {
+				data = await this._invitationService.get(uid);
 			}
+			else {
+				// todo: load defaults from server
+				data = {};
+			}
+
+			this.setState({ loading: false, fields, data });
+
+		} catch (error) {
+			this._notificationService.error("Ошибка при загрузке данных", error.message);
+			// todo: why call onCancel()?
+			this.onCancel();
 		}
 	};
 
@@ -87,8 +83,7 @@ class _ModalEditInvitation extends React.Component<IProps, IState> {
 	};
 
 	save = async (values: IInvitation): Promise<IApiResult> => {
-		const { eventUid, uid, onSuccess } = this.props,
-			{ uid: companyUid } = this.props.currentCompany;
+		const { eventUid, uid, onSuccess } = this.props;
 
 		let data: IInvitation,
 			result: IApiResult;
@@ -96,11 +91,11 @@ class _ModalEditInvitation extends React.Component<IProps, IState> {
 		if (uid) {
 			data = { uid: uid, ...values };
 
-			result = await this._invitationService.update(companyUid, { eventUid, item: data });
+			result = await this._invitationService.update({ eventUid, item: data });
 		}
 		else {
 			const insertResult =
-				await this._invitationService.insert(companyUid, { eventUid, items: [values] });
+				await this._invitationService.insert({ eventUid, items: [values] });
 
 			data = { uid: insertResult.uid, ...values };
 
@@ -138,5 +133,3 @@ class _ModalEditInvitation extends React.Component<IProps, IState> {
 		);
 	};
 }
-
-export const ModalEditInvitation = withCompanyContext(_ModalEditInvitation);

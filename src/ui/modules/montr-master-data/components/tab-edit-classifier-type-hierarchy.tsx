@@ -1,5 +1,4 @@
 import * as React from "react";
-import { CompanyContextProps, withCompanyContext } from "@montr-kompany/components";
 import { DataTable, DataTableUpdateToken, Toolbar, ButtonAdd } from "@montr-core/components";
 import { IClassifierType, IClassifierTree } from "../models";
 import { Constants } from "@montr-core/.";
@@ -8,7 +7,7 @@ import { IDataResult, IMenu } from "@montr-core/models";
 import { Alert, Modal } from "antd";
 import { ModalEditClassifierTree } from ".";
 
-interface IProps extends CompanyContextProps {
+interface IProps {
 	type: IClassifierType;
 }
 
@@ -17,7 +16,7 @@ interface IState {
 	updateTableToken: DataTableUpdateToken;
 }
 
-class _TabEditClassifierTypeHierarchy extends React.Component<IProps, IState> {
+export class TabEditClassifierTypeHierarchy extends React.Component<IProps, IState> {
 
 	_classifierTreeService = new ClassifierTreeService();
 
@@ -30,8 +29,7 @@ class _TabEditClassifierTypeHierarchy extends React.Component<IProps, IState> {
 	}
 
 	componentDidUpdate = async (prevProps: IProps) => {
-		if (this.props.currentCompany !== prevProps.currentCompany ||
-			this.props.type !== prevProps.type) {
+		if (this.props.type !== prevProps.type) {
 			await this.refreshTable();
 		}
 	};
@@ -47,12 +45,11 @@ class _TabEditClassifierTypeHierarchy extends React.Component<IProps, IState> {
 	};
 
 	onLoadTableData = async (loadUrl: string, postParams: any): Promise<IDataResult<{}>> => {
-		const { currentCompany, type } = this.props;
+		const { type } = this.props;
 
-		if (currentCompany && type.code) {
+		if (type.code) {
 
 			const params = {
-				companyUid: currentCompany.uid,
 				typeCode: type.code,
 				...postParams
 			};
@@ -134,5 +131,3 @@ class _TabEditClassifierTypeHierarchy extends React.Component<IProps, IState> {
 		</>);
 	}
 }
-
-export const TabEditClassifierTypeHierarchy = withCompanyContext(_TabEditClassifierTypeHierarchy);

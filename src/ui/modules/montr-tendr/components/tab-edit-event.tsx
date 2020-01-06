@@ -69,6 +69,7 @@ interface IEditEventPaneProps extends IPaneProps<IEvent> {
 interface IEditEventTabState {
 }
 
+// todo: remove
 export class TabEditEvent extends React.Component<IEditEventPaneProps, IEditEventTabState> {
 
 	private _formRef = React.createRef<FormInstance>();

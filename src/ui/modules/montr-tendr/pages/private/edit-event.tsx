@@ -8,7 +8,6 @@ import { MetadataService } from "@montr-core/services";
 import { IEvent } from "../../models";
 import * as panes from "../../components";
 import { RouteBuilder } from "../../module";
-import { CompanyContextProps } from "@montr-kompany/components";
 import { RouteComponentProps } from "react-router";
 
 const componentToClass: Map<string, React.ComponentClass> = new Map<string, React.ComponentClass>();
@@ -23,7 +22,7 @@ interface IRouteProps {
 	tabKey?: string;
 }
 
-interface IProps extends WithTranslation, CompanyContextProps, RouteComponentProps<IRouteProps> {
+interface IProps extends WithTranslation, RouteComponentProps<IRouteProps> {
 }
 
 interface IState {

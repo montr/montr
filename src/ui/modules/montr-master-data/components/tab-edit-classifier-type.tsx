@@ -1,7 +1,6 @@
 import * as React from "react";
 import { Redirect } from "react-router";
 import { Spin } from "antd";
-import { CompanyContextProps, withCompanyContext } from "@montr-kompany/components";
 import { DataForm } from "@montr-core/components";
 import { IDataField, IApiResult } from "@montr-core/models";
 import { MetadataService } from "@montr-core/services";
@@ -9,7 +8,7 @@ import { IClassifierType } from "../models";
 import { ClassifierTypeService } from "../services";
 import { RouteBuilder } from "../module";
 
-interface IProps extends CompanyContextProps {
+interface IProps {
 	data: IClassifierType;
 	onDataChange?: (values: IClassifierType) => void;
 }
@@ -20,7 +19,7 @@ interface IState {
 	redirect?: string;
 }
 
-class _TabEditClassifierType extends React.Component<IProps, IState> {
+export class TabEditClassifierType extends React.Component<IProps, IState> {
 	private _metadataService = new MetadataService();
 	private _classifierTypeService = new ClassifierTypeService();
 
@@ -34,12 +33,6 @@ class _TabEditClassifierType extends React.Component<IProps, IState> {
 
 	componentDidMount = async () => {
 		await this.fetchData();
-	};
-
-	componentDidUpdate = async (prevProps: IProps) => {
-		if (this.props.currentCompany !== prevProps.currentCompany) {
-			await this.fetchData();
-		}
 	};
 
 	componentWillUnmount = async () => {
@@ -95,5 +88,3 @@ class _TabEditClassifierType extends React.Component<IProps, IState> {
 		);
 	}
 }
-
-export const TabEditClassifierType = withCompanyContext(_TabEditClassifierType);

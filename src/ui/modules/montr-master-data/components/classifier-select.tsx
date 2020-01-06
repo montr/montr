@@ -3,13 +3,12 @@ import { Spin, Select, Divider, Button } from "antd";
 import { IClassifierField, Guid } from "@montr-core/models";
 import { ClassifierService } from "../services";
 import { IClassifierGroup, IClassifierTree, IClassifierType, IClassifier } from "../models";
-import { CompanyContextProps, withCompanyContext } from "@montr-kompany/components";
 import { RouteBuilder } from "../module";
 import { Link } from "react-router-dom";
 import { Icon } from "@montr-core/components";
 // import { debounce } from "lodash";
 
-interface IProps extends CompanyContextProps {
+interface IProps {
 	value?: string;
 	field: IClassifierField;
 	onChange?: (value: any) => void;
@@ -30,7 +29,7 @@ interface IState {
 // http://ant.design/components/form/?locale=en-US#components-form-demo-customized-form-controls
 // https://github.com/ant-design/ant-design/blob/master/components/form/demo/customized-form-controls.md
 // todo: rewrite to functional component (see link above)
-class _ClassifierSelect extends React.Component<IProps, IState> {
+export class ClassifierSelect extends React.Component<IProps, IState> {
 
 	static getDerivedStateFromProps(nextProps: any) {
 		// Should be a controlled component.
@@ -146,5 +145,3 @@ class _ClassifierSelect extends React.Component<IProps, IState> {
 		</Select>);
 	}
 }
-
-export const ClassifierSelect = withCompanyContext(_ClassifierSelect);

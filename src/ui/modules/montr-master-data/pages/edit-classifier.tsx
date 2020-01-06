@@ -3,7 +3,6 @@ import { Page, PageHeader } from "@montr-core/components";
 import { RouteComponentProps } from "react-router";
 import { Spin, Tabs } from "antd";
 import { ClassifierService, ClassifierTypeService, ClassifierLinkService } from "../services";
-import { CompanyContextProps, withCompanyContext } from "@montr-kompany/components";
 import { IClassifier, IClassifierType } from "../models";
 import { ClassifierBreadcrumb, TabEditClassifier, TabEditClassifierHierarchy } from "../components";
 import { RouteBuilder } from "../module";
@@ -15,7 +14,7 @@ interface IRouteProps {
 	tabKey?: string;
 }
 
-interface IProps extends CompanyContextProps, RouteComponentProps<IRouteProps> {
+interface IProps extends RouteComponentProps<IRouteProps> {
 }
 
 interface IState {
@@ -24,7 +23,7 @@ interface IState {
 	data?: IClassifier;
 }
 
-class _EditClassifier extends React.Component<IProps, IState> {
+export default class EditClassifier extends React.Component<IProps, IState> {
 	private _classifierTypeService = new ClassifierTypeService();
 	private _classifierService = new ClassifierService();
 	private _classifierLinkService = new ClassifierLinkService();
@@ -43,8 +42,7 @@ class _EditClassifier extends React.Component<IProps, IState> {
 
 	componentDidUpdate = async (prevProps: IProps) => {
 		if (this.props.match.params.typeCode !== prevProps.match.params.typeCode ||
-			this.props.match.params.uid !== prevProps.match.params.uid ||
-			this.props.currentCompany !== prevProps.currentCompany) {
+			this.props.match.params.uid !== prevProps.match.params.uid) {
 			await this.fetchData();
 		}
 	};
@@ -124,7 +122,3 @@ class _EditClassifier extends React.Component<IProps, IState> {
 		);
 	};
 }
-
-const EditClassifier = withCompanyContext(_EditClassifier);
-
-export default EditClassifier;

@@ -64,6 +64,7 @@ class _PaneSearchClassifier extends React.Component<IProps, IState> {
 	};
 
 	componentDidUpdate = async (prevProps: IProps) => {
+		// todo: remove after current company will be selected on separate page
 		if (this.props.currentCompany !== prevProps.currentCompany) {
 			// todo: check if selected type belongs to company (show 404)
 			await this.loadClassifierTypes();

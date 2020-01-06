@@ -1,14 +1,13 @@
 import * as React from "react";
 import { Modal, Spin } from "antd";
 import { Guid, IDataField, IApiResult, IClassifierGroupField } from "@montr-core/models";
-import { withCompanyContext, CompanyContextProps } from "@montr-kompany/components";
 import { ClassifierGroupService } from "../services";
 import { IClassifierGroup } from "@montr-master-data/models";
 import { NotificationService, MetadataService } from "@montr-core/services";
-import { DataForm, WrappedDataForm } from "@montr-core/components";
+import { DataForm } from "@montr-core/components";
 import { FormInstance } from "antd/lib/form";
 
-interface IProps extends CompanyContextProps {
+interface IProps {
 	typeCode: string;
 	treeUid: Guid;
 	uid?: Guid;
@@ -24,7 +23,7 @@ interface IState {
 	data: IClassifierGroup;
 }
 
-class _ModalEditClassifierGroup extends React.Component<IProps, IState> {
+export class ModalEditClassifierGroup extends React.Component<IProps, IState> {
 	private _notificationService = new NotificationService();
 	private _metadataService = new MetadataService();
 	private _classifierGroupService = new ClassifierGroupService();
@@ -139,5 +138,3 @@ class _ModalEditClassifierGroup extends React.Component<IProps, IState> {
 		);
 	};
 }
-
-export const ModalEditClassifierGroup = withCompanyContext(_ModalEditClassifierGroup);

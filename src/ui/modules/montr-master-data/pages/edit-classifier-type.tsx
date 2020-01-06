@@ -1,7 +1,6 @@
 import * as React from "react";
 import { RouteComponentProps } from "react-router";
 import { Spin, Tabs } from "antd";
-import { CompanyContextProps, withCompanyContext } from "@montr-kompany/components";
 import { Page, PageHeader, PaneSearchMetadata } from "@montr-core/components";
 import { ClassifierTypeService } from "../services";
 import { IClassifierType } from "../models";
@@ -13,7 +12,7 @@ interface IRouteProps {
 	tabKey?: string;
 }
 
-interface IProps extends CompanyContextProps, RouteComponentProps<IRouteProps> {
+interface IProps extends RouteComponentProps<IRouteProps> {
 }
 
 interface IState {
@@ -22,7 +21,7 @@ interface IState {
 	data?: IClassifierType;
 }
 
-class _EditClassifierType extends React.Component<IProps, IState> {
+export default class EditClassifierType extends React.Component<IProps, IState> {
 
 	private _classifierTypeService = new ClassifierTypeService();
 
@@ -39,8 +38,7 @@ class _EditClassifierType extends React.Component<IProps, IState> {
 	};
 
 	componentDidUpdate = async (prevProps: IProps) => {
-		if (this.props.match.params.uid !== prevProps.match.params.uid ||
-			this.props.currentCompany !== prevProps.currentCompany) {
+		if (this.props.match.params.uid !== prevProps.match.params.uid) {
 			await this.fetchData();
 		}
 	};
@@ -56,7 +54,7 @@ class _EditClassifierType extends React.Component<IProps, IState> {
 
 		const data: IClassifierType = (uid)
 			? await this._classifierTypeService.get({ uid })
-			// todo: load defaults with metadata
+			// todo: load defaults from server
 			: { name: "", hierarchyType: "None" };
 
 		this.setState({ loading: false, data, types: types.rows });
@@ -118,7 +116,3 @@ class _EditClassifierType extends React.Component<IProps, IState> {
 		);
 	};
 }
-
-const EditClassifierType = withCompanyContext(_EditClassifierType);
-
-export default EditClassifierType;
