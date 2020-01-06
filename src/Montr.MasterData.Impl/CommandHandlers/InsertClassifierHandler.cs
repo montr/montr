@@ -12,6 +12,8 @@ using Montr.MasterData.Impl.Entities;
 using Montr.MasterData.Impl.Services;
 using Montr.MasterData.Models;
 using Montr.MasterData.Services;
+using Montr.Metadata.Models;
+using Montr.Metadata.Services;
 
 namespace Montr.MasterData.Impl.CommandHandlers
 {
@@ -123,7 +125,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 					IsActive = true
 				}, cancellationToken);
 
-				await _fieldDataRepository.Insert(new FieldDataRequest
+				await _fieldDataRepository.Insert(new ManageFieldDataRequest
 				{
 					EntityTypeCode = Classifier.EntityTypeCode,
 					EntityUid = itemUid,

@@ -16,6 +16,7 @@ using Montr.MasterData.Impl.QueryHandlers;
 using Montr.MasterData.Impl.Services;
 using Montr.MasterData.Models;
 using Montr.MasterData.Queries;
+using Montr.Metadata.Impl.Services;
 
 namespace Montr.MasterData.Tests
 {

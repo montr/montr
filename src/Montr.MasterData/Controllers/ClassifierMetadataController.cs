@@ -6,6 +6,7 @@ using Montr.Core.Models;
 using Montr.Idx.Services;
 using Montr.Kompany.Services;
 using Montr.MasterData.Queries;
+using Montr.Metadata.Models;
 
 namespace Montr.MasterData.Controllers
 {

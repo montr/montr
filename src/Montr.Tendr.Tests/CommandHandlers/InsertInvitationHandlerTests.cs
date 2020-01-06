@@ -2,11 +2,11 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Montr.Core.Impl.Services;
 using Montr.Core.Services;
 using Montr.Data.Linq2Db;
 using Montr.MasterData.Impl.Services;
 using Montr.MasterData.Tests;
+using Montr.Metadata.Impl.Services;
 using Montr.Tendr.Commands;
 using Montr.Tendr.Impl.CommandHandlers;
 using Montr.Tendr.Models;

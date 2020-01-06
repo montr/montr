@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
-using Montr.Core.Models;
+using Montr.Metadata.Models;
 
 namespace Montr.MasterData.Models
 {

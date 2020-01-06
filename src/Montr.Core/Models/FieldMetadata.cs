@@ -37,15 +37,6 @@ namespace Montr.Core.Models
 		public static readonly string File = "file";
 	}
 
-	public class FieldType
-	{
-		public string Code { get; set; }
-
-		public string Name { get; set; }
-
-		public string Icon { get; set; }
-	}
-
 	public abstract class FieldMetadata
 	{
 		public abstract string Type { get; }

@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Montr.Core.Models;
 using Montr.Idx.Services;
 using Montr.Kompany.Services;
+using Montr.Metadata.Models;
 using Montr.Tendr.Queries;
 
 namespace Montr.Tendr.Controllers

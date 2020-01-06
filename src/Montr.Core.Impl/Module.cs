@@ -11,8 +11,6 @@ namespace Montr.Core.Impl
 		public void ConfigureServices(IConfiguration configuration, IServiceCollection services)
 		{
 			services.AddSingleton<LocaleStringSerializer, LocaleStringSerializer>();
-			services.AddSingleton<IRepository<FieldMetadata>, DbFieldMetadataRepository>();
-			services.AddSingleton<IFieldDataRepository, DbFieldDataRepository>();
 			services.AddSingleton<IRepository<LocaleString>, DbLocaleStringRepository>();
 			services.AddSingleton<IAuditLogService, DbAuditLogService>();
 		}

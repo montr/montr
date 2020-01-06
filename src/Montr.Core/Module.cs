@@ -86,7 +86,6 @@ namespace Montr.Core
 			services.AddSingleton<IDateTimeProvider, DefaultDateTimeProvider>();
 			services.AddSingleton<IBinarySerializer, DefaultBinarySerializer>();
 			services.AddSingleton<IUnitOfWorkFactory, TransactionScopeUnitOfWorkFactory>();
-			services.AddSingleton<IMetadataProvider, DefaultMetadataProvider>();
 			services.AddSingleton<IContentProvider, DefaultContentProvider>();
 			
 			services.AddTransient<ICache, CombinedCache>();

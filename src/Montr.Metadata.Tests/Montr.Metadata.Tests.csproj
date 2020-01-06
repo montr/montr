@@ -1,0 +1,20 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+	<PropertyGroup>
+		<TargetFramework>netcoreapp3.1</TargetFramework>
+	</PropertyGroup>
+
+	<ItemGroup>
+		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.4.0" />
+		<PackageReference Include="Moq" Version="4.13.1" />
+		<PackageReference Include="MSTest.TestAdapter" Version="2.0.0" />
+		<PackageReference Include="MSTest.TestFramework" Version="2.0.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\Montr.Core\Montr.Core.csproj" />
+		<ProjectReference Include="..\Montr.Metadata.Impl\Montr.Metadata.Impl.csproj" />
+		<ProjectReference Include="..\Montr.Metadata\Montr.Metadata.csproj" />
+	</ItemGroup>
+
+</Project>

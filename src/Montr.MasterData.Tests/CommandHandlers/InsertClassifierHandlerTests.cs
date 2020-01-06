@@ -9,6 +9,7 @@ using Montr.MasterData.Commands;
 using Montr.MasterData.Impl.CommandHandlers;
 using Montr.MasterData.Impl.Services;
 using Montr.MasterData.Models;
+using Montr.Metadata.Impl.Services;
 
 namespace Montr.MasterData.Tests.CommandHandlers
 {
