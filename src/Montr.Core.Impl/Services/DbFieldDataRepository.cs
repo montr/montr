@@ -54,8 +54,9 @@ namespace Montr.Core.Impl.Services
 
 		public async Task<ApiResult> Insert(FieldDataRequest request, CancellationToken cancellationToken)
 		{
-			var data = request.Data ?? throw new ArgumentNullException(nameof(request.Data));
 			var metadata = request.Metadata ?? throw new ArgumentNullException(nameof(request.Metadata));
+
+			var data = request.Data ?? new FieldData();
 
 			var metadataKeys = new HashSet<string>(metadata.Select(x => x.Key));
 			var workingData = data.Where(x => metadataKeys.Contains(x.Key)).ToList();
@@ -79,8 +80,9 @@ namespace Montr.Core.Impl.Services
 
 		public async Task<ApiResult> Update(FieldDataRequest request, CancellationToken cancellationToken)
 		{
-			var data = request.Data ?? throw new ArgumentNullException(nameof(request.Data));
 			var metadata = request.Metadata ?? throw new ArgumentNullException(nameof(request.Metadata));
+
+			var data = request.Data ?? new FieldData();
 
 			var metadataKeys = new HashSet<string>(metadata.Select(x => x.Key));
 			var workingData = data.Where(x => metadataKeys.Contains(x.Key)).ToList();
