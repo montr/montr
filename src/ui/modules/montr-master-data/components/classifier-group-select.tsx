@@ -1,10 +1,10 @@
 import * as React from "react";
-import { TreeSelect, Spin } from "antd";
+import { TreeSelect, Spin, Select } from "antd";
+import { DataNode } from "rc-tree-select/lib/interface";
 import { Guid, IClassifierGroupField } from "@montr-core/models";
 import { ClassifierGroupService, ClassifierTreeService, ClassifierTypeService } from "../services";
 import { IClassifierGroup, IClassifierTree, IClassifierType } from "../models";
 import { CompanyContextProps, withCompanyContext } from "@montr-kompany/components";
-import { TreeNode } from "antd/lib/tree-select";
 import { Icon } from "@montr-core/components";
 
 interface IProps extends CompanyContextProps {
@@ -23,34 +23,19 @@ interface IState {
 	expanded: Guid[];
 }
 
-/* copied not exported types from rc-tree-select lib */
-declare type Key = string | number;
-declare type RawValueType = string | number;
-interface DataNode {
-	value?: RawValueType;
-	title?: React.ReactNode;
-	label?: React.ReactNode;
-	key?: Key;
-	disabled?: boolean;
-	disableCheckbox?: boolean;
-	checkable?: boolean;
-	children?: DataNode[];
-	/** Customize data info */
-	[prop: string]: any;
-}
-
 // http://ant.design/components/form/?locale=en-US#components-form-demo-customized-form-controls
 // https://github.com/ant-design/ant-design/blob/master/components/form/demo/customized-form-controls.md
 // todo: rewrite to functional component (see link above)
 class _ClassifierGroupSelect extends React.Component<IProps, IState> {
 
-	static getDerivedStateFromProps(nextProps: any) {
+	/* static getDerivedStateFromProps(nextProps: any) {
 		// Should be a controlled component.
+		console.log("_ClassifierGroupSelect.getDerivedStateFromProps", arguments);
 		if ("value" in nextProps) {
 			return nextProps.value ?? null;
 		}
 		return null;
-	}
+	} */
 
 	private _classifierTypeService = new ClassifierTypeService();
 	private _classifierTreeService = new ClassifierTreeService();
@@ -145,11 +130,10 @@ class _ClassifierGroupSelect extends React.Component<IProps, IState> {
 		// console.log("onSearch", value);
 	};
 
-	onLoadData = (node: any) => {
+	onLoadData = (node: DataNode) => {
 		return new Promise(async (resolve) => {
-
-			if (node.props.dataType == "Tree") {
-				const tree: IClassifierTree = node.props.dataRef;
+			if (node.dataType == "Tree") {
+				const tree: IClassifierTree = node.dataRef;
 
 				if (!tree.children) {
 					const { field } = this.props,
@@ -164,7 +148,7 @@ class _ClassifierGroupSelect extends React.Component<IProps, IState> {
 				}
 			}
 			else {
-				const group: IClassifierGroup = node.props.dataRef;
+				const group: IClassifierGroup = node.dataRef;
 
 				if (!group.children) {
 					const { field } = this.props,
@@ -229,7 +213,13 @@ class _ClassifierGroupSelect extends React.Component<IProps, IState> {
 
 		return (
 			<Spin spinning={loading}>
-				{!loading && <TreeSelect
+				{/* For empty data show Select instead of TreeSelect.
+					Empty TreeSelect fails with TypeError: Cannot read property 'scrollTo' of undefined */}
+				{!loading && (!treeData || treeData.length == 0) && <Select
+					placeholder={field.placeholder}
+					value={value}
+				/>}
+				{!loading && treeData?.length > 0 && <TreeSelect
 					onChange={this.handleChange}
 					allowClear={!field.required}
 					showSearch onSearch={this.onSearch}
