@@ -9,17 +9,20 @@ using Montr.Core.Services;
 using Montr.Data.Linq2Db;
 using Montr.Metadata.Impl.Entities;
 using Montr.Metadata.Models;
+using Montr.Metadata.Services;
 
-namespace Montr.Core.Impl.Services
+namespace Montr.Metadata.Impl.Services
 {
 	public class DbFieldMetadataRepository : IRepository<FieldMetadata>
 	{
 		private readonly IDbContextFactory _dbContextFactory;
+		private readonly IFieldProviderRegistry _fieldProviderRegistry;
 		private readonly IJsonSerializer _jsonSerializer;
 
-		public DbFieldMetadataRepository(IDbContextFactory dbContextFactory, IJsonSerializer jsonSerializer)
+		public DbFieldMetadataRepository(IDbContextFactory dbContextFactory, IFieldProviderRegistry fieldProviderRegistry, IJsonSerializer jsonSerializer)
 		{
 			_dbContextFactory = dbContextFactory;
+			_fieldProviderRegistry = fieldProviderRegistry;
 			_jsonSerializer = jsonSerializer;
 		}
 
@@ -60,8 +63,9 @@ namespace Montr.Core.Impl.Services
 
 				foreach (var dbField in data)
 				{
-					// todo: use factory
-					var field = (FieldMetadata) Activator.CreateInstance(DataFieldTypes.Map[dbField.TypeCode]);
+					var fieldTypeProvider = _fieldProviderRegistry.GetFieldTypeProvider(dbField.TypeCode);
+					// todo: use factory (?) move to provider (?)
+					var field = (FieldMetadata)Activator.CreateInstance(fieldTypeProvider.FieldType);
 
 					field.Uid = dbField.Uid;
 					field.Key = dbField.Key;

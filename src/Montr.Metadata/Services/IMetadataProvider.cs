@@ -15,7 +15,13 @@ namespace Montr.Metadata.Services
 	// todo: move to db?
 	public class DefaultMetadataProvider : IMetadataProvider
 	{
+		private readonly IFieldProviderRegistry _fieldProviderRegistry;
 		private static readonly string PropsPrefix = ExpressionHelper.GetMemberName<TextAreaField>(x => x.Props).ToLowerInvariant();
+
+		public DefaultMetadataProvider(IFieldProviderRegistry fieldProviderRegistry)
+		{
+			_fieldProviderRegistry = fieldProviderRegistry;
+		}
 
 		public async Task<DataView> GetView(string viewId)
 		{
@@ -30,15 +36,15 @@ namespace Montr.Metadata.Services
 					new DataColumn { Key = "type", Name = "Type", Width = 70, /*Sortable = true*/ },
 					new DataColumn { Key = "name", Name = "Name", Width = 150, Sortable = true },
 					new DataColumn { Key = "description", Name = "Description", Width = 150 },
-					new DataColumn { Key = "active", Name = "Active", Width = 10, Sortable = true, Type = DataFieldTypes.Boolean },
-					new DataColumn { Key = "system", Name = "System", Width = 10, Sortable = true, Type = DataFieldTypes.Boolean },
-					new DataColumn { Key = "required", Name = "Required", Width = 10, Sortable = true, Type = DataFieldTypes.Boolean },
+					new DataColumn { Key = "active", Name = "Active", Width = 10, Sortable = true, Type = BooleanField.TypeCode },
+					new DataColumn { Key = "system", Name = "System", Width = 10, Sortable = true, Type = BooleanField.TypeCode },
+					new DataColumn { Key = "required", Name = "Required", Width = 10, Sortable = true, Type = BooleanField.TypeCode },
 				};
 			}
 
 			if (viewId == "Metadata/Edit")
 			{
-				var options = DataFieldTypes.Map.Keys.OrderBy(x => x).Select(x => new SelectFieldOption { Value = x, Name = x }).ToArray();
+				var options = _fieldProviderRegistry.GetFieldTypes().Select(x => new SelectFieldOption { Value = x.Code, Name = x.Name }).ToArray();
 
 				result.Fields = new List<FieldMetadata>
 				{
@@ -57,14 +63,14 @@ namespace Montr.Metadata.Services
 			{
 				var code = viewId.Substring("Metadata/Edit/".Length);
 
-				if (code == DataFieldTypes.TextArea)
+				if (code == TextAreaField.TypeCode)
 				{
 					result.Fields = new List<FieldMetadata>
 					{
 						new NumberField { Key = PropsPrefix + ".rows", Name = "Количество строк", Props = { Min = 1, Max = byte.MaxValue } }
 					};
 				}
-				else if (code == DataFieldTypes.Number)
+				else if (code == NumberField.TypeCode)
 				{
 					result.Fields = new List<FieldMetadata>
 					{
@@ -72,7 +78,7 @@ namespace Montr.Metadata.Services
 						new NumberField { Key = PropsPrefix + ".max", Name = "Максимум", Props = { Min = long.MinValue, Max = long.MaxValue } }
 					};
 				}
-				else if (code == DataFieldTypes.Decimal)
+				else if (code == DecimalField.TypeCode)
 				{
 					result.Fields = new List<FieldMetadata>
 					{
@@ -81,28 +87,28 @@ namespace Montr.Metadata.Services
 						new NumberField { Key = PropsPrefix + ".precision", Name = "Точность", Description = "Количество знаков после запятой", Props = { Min = 0, Max = 5 } }
 					};
 				}
-				else if (code == DataFieldTypes.Date)
+				else if (code == DateField.TypeCode)
 				{
 					result.Fields = new List<FieldMetadata>
 					{
 						new BooleanField { Key = PropsPrefix + ".includeTime", Name = "Include Time" }
 					};
 				}
-				else if (code == DataFieldTypes.Select)
+				else if (code == SelectField.TypeCode)
 				{
 					result.Fields = new List<FieldMetadata>
 					{
 						new TextAreaField { Key = PropsPrefix + ".options", Name = "Options", Required = true }
 					};
 				}
-				else if (code == DataFieldTypes.Classifier)
+				else if (code == ClassifierField.Code)
 				{
 					result.Fields = new List<FieldMetadata>
 					{
 						new TextField { Key = PropsPrefix + ".typeCode", Name = "TypeCode" }
 					};
 				}
-				else if (code == DataFieldTypes.ClassifierGroup)
+				else if (code == ClassifierGroupField.Code)
 				{
 					result.Fields = new List<FieldMetadata>
 					{

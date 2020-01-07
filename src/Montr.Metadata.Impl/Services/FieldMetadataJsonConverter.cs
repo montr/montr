@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using Montr.Core.Models;
+using Montr.Metadata.Models;
 
 namespace Montr.Metadata.Impl.Services
 {

@@ -1,6 +1,6 @@
 ﻿using System;
 using MediatR;
-using Montr.Core.Models;
+using Montr.Metadata.Models;
 
 namespace Montr.Metadata.Queries
 {

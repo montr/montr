@@ -1,42 +1,7 @@
 ﻿using System;
-using System.Collections.Concurrent;
 
-namespace Montr.Core.Models
+namespace Montr.Metadata.Models
 {
-	public class DataFieldTypes
-	{
-		public static readonly ConcurrentDictionary<string, Type> Map = new ConcurrentDictionary<string, Type>();
-
-		static DataFieldTypes()
-		{
-			Map[Boolean] = typeof(BooleanField);
-			Map[Text] = typeof(TextField);
-			Map[TextArea] = typeof(TextAreaField);
-			Map[Password] = typeof(PasswordField);
-			Map[Number] = typeof(NumberField);
-			Map[Decimal] = typeof(DecimalField);
-			Map[Date] = typeof(DateField);
-			Map[Time] = typeof(TimeField);
-			Map[Select] = typeof(SelectField);
-			Map[Classifier] = typeof(ClassifierField);
-			Map[ClassifierGroup] = typeof(ClassifierGroupField);
-			Map[File] = typeof(FileField);
-		}
-
-		public static readonly string Boolean = "boolean";
-		public static readonly string Text = "text";
-		public static readonly string TextArea = "textarea";
-		public static readonly string Password = "password";
-		public static readonly string Number = "number";
-		public static readonly string Decimal = "decimal";
-		public static readonly string Date = "date";
-		public static readonly string Time = "time";
-		public static readonly string Select = "select";
-		public static readonly string Classifier = "classifier";
-		public static readonly string ClassifierGroup = "classifier-group";
-		public static readonly string File = "file";
-	}
-
 	public abstract class FieldMetadata
 	{
 		public abstract string Type { get; }
@@ -107,18 +72,24 @@ namespace Montr.Core.Models
 
 	public class BooleanField : FieldMetadata
 	{
-		public override string Type => DataFieldTypes.Boolean;
+		public static readonly string TypeCode = "boolean";
+
+		public override string Type => TypeCode;
 	}
 
 	public class TextField : FieldMetadata
 	{
-		public override string Type => DataFieldTypes.Text;
+		public static readonly string TypeCode = "text";
+
+		public override string Type => TypeCode;
 	}
 
 	// todo join with TextField?
 	public class TextAreaField : FieldMetadata<TextAreaField.Properties>
 	{
-		public override string Type => "textarea";
+		public static readonly string TypeCode = "textarea";
+
+		public override string Type => TypeCode;
 
 		public class Properties
 		{
@@ -128,12 +99,16 @@ namespace Montr.Core.Models
 
 	public class PasswordField : FieldMetadata
 	{
-		public override string Type => "password";
+		public static readonly string TypeCode = "password";
+
+		public override string Type => TypeCode;
 	}
 
 	public class NumberField : FieldMetadata<NumberField.Properties>
 	{
-		public override string Type => "number";
+		public static readonly string TypeCode = "number";
+
+		public override string Type => TypeCode;
 
 		public class Properties
 		{
@@ -146,7 +121,9 @@ namespace Montr.Core.Models
 	// todo: merge with number?
 	public class DecimalField : FieldMetadata<DecimalField.Properties>
 	{
-		public override string Type => "decimal";
+		public static readonly string TypeCode = "decimal";
+
+		public override string Type => TypeCode;
 
 		public class Properties
 		{
@@ -160,7 +137,9 @@ namespace Montr.Core.Models
 
 	public class DateField : FieldMetadata<DateField.Properties>
 	{
-		public override string Type => "date";
+		public static readonly string TypeCode = "date";
+
+		public override string Type => TypeCode;
 
 		public class Properties
 		{
@@ -170,7 +149,9 @@ namespace Montr.Core.Models
 
 	public class TimeField : FieldMetadata<TimeField.Properties>
 	{
-		public override string Type => "time";
+		public static readonly string TypeCode = "time";
+
+		public override string Type => TypeCode;
 
 		public class Properties
 		{
@@ -179,7 +160,9 @@ namespace Montr.Core.Models
 
 	public class SelectField : FieldMetadata<SelectField.Properties>
 	{
-		public override string Type => "select";
+		public static readonly string TypeCode = "select";
+
+		public override string Type => TypeCode;
 
 		public class Properties
 		{
@@ -194,9 +177,23 @@ namespace Montr.Core.Models
 		public string Name { get; set; }
 	}
 
+	public class ClassifierField : FieldMetadata<ClassifierField.Properties>
+	{
+		public static readonly string Code = "classifier";
+
+		public override string Type => Code;
+
+		public class Properties
+		{
+			public string TypeCode { get; set; }
+		}
+	}
+
 	public class ClassifierGroupField : FieldMetadata<ClassifierGroupField.Properties>
 	{
-		public override string Type => "classifier-group";
+		public static readonly string Code = "classifier-group";
+
+		public override string Type => Code;
 
 		public class Properties
 		{
@@ -206,18 +203,10 @@ namespace Montr.Core.Models
 		}
 	}
 
-	public class ClassifierField : FieldMetadata<ClassifierField.Properties>
-	{
-		public override string Type => "classifier";
-
-		public class Properties
-		{
-			public string TypeCode { get; set; }
-		}
-	}
-
 	public class FileField : FieldMetadata
 	{
-		public override string Type => "file";
+		public static readonly string TypeCode = "file";
+
+		public override string Type => TypeCode;
 	}
 }

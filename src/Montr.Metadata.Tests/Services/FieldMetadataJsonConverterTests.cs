@@ -2,8 +2,8 @@
 using System.Collections.Generic;
 using System.Text.Json;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Montr.Core.Models;
 using Montr.Core.Services;
+using Montr.Metadata.Models;
 
 namespace Montr.Metadata.Tests.Services
 {

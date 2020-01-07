@@ -9,10 +9,7 @@ using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using Montr.Core.Models;
 using Montr.Core.Services;
-using Newtonsoft.Json.Converters;
-using Newtonsoft.Json.Serialization;
 
 namespace Montr.Core
 {
@@ -33,27 +30,6 @@ namespace Montr.Core
 
 				return factory.GetUrlHelper(actionContext);
 			});
-
-			var mvcBuilder = services.AddMvcCore();
-
-			if (UseSystemJson)
-			{
-				mvcBuilder.AddJsonOptions(options =>
-				{
-					options.JsonSerializerOptions.Converters.Add(new PolymorphicWriteOnlyJsonConverter<FieldMetadata>());
-					// options.JsonSerializerOptions.Converters.Add(new DataFieldJsonConverter());
-				});
-			}
-			else
-			{
-				mvcBuilder.AddNewtonsoftJson(options =>
-				{
-					// options.SerializerSettings.DefaultValueHandling = DefaultValueHandling.Ignore; // zeros in numbers ignored also
-					options.SerializerSettings.Converters.Add(new StringEnumConverter());
-					options.SerializerSettings.Converters.Add(new PolymorphicNewtonsoftJsonConverter<FieldMetadata>("type", DataFieldTypes.Map));
-					options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
-				});
-			}
 
 			services.Configure<AppOptions>(configuration.GetSection(typeof(AppOptions).FullName));
 

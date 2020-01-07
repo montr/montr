@@ -3,8 +3,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using Montr.Core.Models;
-using Montr.Core.Queries;
 using Montr.Core.Services;
+using Montr.Metadata.Models;
 using Montr.Metadata.Queries;
 
 namespace Montr.Metadata.Impl.QueryHandlers

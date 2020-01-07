@@ -1,19 +1,25 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
-using Montr.Core.Models;
 using Montr.Metadata.Models;
 using Montr.Metadata.Queries;
+using Montr.Metadata.Services;
 
 namespace Montr.Metadata.Impl.QueryHandlers
 {
 	public class GetFieldTypesHandler : IRequestHandler<GetFieldTypes, IList<FieldType>>
 	{
+		private readonly IFieldProviderRegistry _fieldProviderRegistry;
+
+		public GetFieldTypesHandler(IFieldProviderRegistry fieldProviderRegistry)
+		{
+			_fieldProviderRegistry = fieldProviderRegistry;
+		}
+
 		public async Task<IList<FieldType>> Handle(GetFieldTypes request, CancellationToken cancellationToken)
 		{
-			var result = DataFieldTypes.Map.Keys.OrderBy(x => x).Select(x => new FieldType { Code = x, Name = x }).ToList();
+			var result = _fieldProviderRegistry.GetFieldTypes();
 
 			return await Task.FromResult(result);
 		}

@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json.Serialization;
 using MediatR;
@@ -12,12 +14,17 @@ using Microsoft.Extensions.Logging;
 using Montr.Core;
 using Montr.Core.Services;
 using Montr.Idx;
+using Montr.Metadata.Models;
+using Montr.Metadata.Services;
+using Newtonsoft.Json.Converters;
+using Newtonsoft.Json.Serialization;
 
 namespace Host
 {
 	public class Startup
 	{
 		private ICollection<IModule> _modules;
+		private IDictionary<string, Type> _fieldTypeMap;
 
 		public Startup(ILoggerFactory loggerFactory, IWebHostEnvironment environment, IConfiguration configuration)
 		{
@@ -41,6 +48,7 @@ namespace Host
 				options.MinimumSameSitePolicy = SameSiteMode.None;
 			});
 
+			// todo: move to idx?
 			var idxServerOptions = Configuration.GetSection("IdxServer").Get<IdxServerOptions>();
 
 			services.AddCors(options =>
@@ -61,19 +69,13 @@ namespace Host
 			_modules = services.AddModules(Configuration, Logger);
 			var assemblies = _modules.Select(x => x.GetType().Assembly).ToArray();
 
-			var mvc = services.AddMvc();
+			var mvcBuilder = services.AddMvc()
+				.SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
 
 			services
 				.AddControllers(options =>
 				{
 					options.EnableEndpointRouting = false; // todo: remove legacy routing support
-				})
-				.SetCompatibilityVersion(CompatibilityVersion.Version_3_0)
-				.AddJsonOptions(options =>
-				{
-					options.JsonSerializerOptions.IgnoreNullValues = true;
-					options.JsonSerializerOptions.WriteIndented = false;
-					options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
 				})
 				.AddRazorPagesOptions(options =>
 				{
@@ -82,9 +84,11 @@ namespace Host
 					// options.Conventions.AuthorizeAreaPage("Identity", "/Account/Logout");
 				});
 
+			AddJsonOptions(mvcBuilder);
+
 			foreach (var assembly in assemblies)
 			{
-				mvc.AddApplicationPart(assembly);
+				mvcBuilder.AddApplicationPart(assembly);
 			}
 
 			Microsoft.IdentityModel.Logging.IdentityModelEventSource.ShowPII = true;
@@ -92,6 +96,35 @@ namespace Host
 			services.AddMediatR(assemblies);
 		}
 
+		private void AddJsonOptions(IMvcBuilder mvcBuilder)
+		{
+			if (Montr.Core.Module.UseSystemJson)
+			{
+				mvcBuilder.AddJsonOptions(options =>
+				{
+					options.JsonSerializerOptions.IgnoreNullValues = true;
+					options.JsonSerializerOptions.WriteIndented = false;
+					options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+					options.JsonSerializerOptions.Converters.Add(new PolymorphicWriteOnlyJsonConverter<FieldMetadata>());
+					// options.JsonSerializerOptions.Converters.Add(new DataFieldJsonConverter());
+				});
+			}
+			else
+			{
+				// todo: use event (?)
+				var propName = ExpressionHelper.GetMemberName<FieldMetadata>(x => x.Type).ToLowerInvariant();
+				_fieldTypeMap = new ConcurrentDictionary<string, Type>();
+
+				mvcBuilder.AddNewtonsoftJson(options =>
+				{
+					// options.SerializerSettings.DefaultValueHandling = DefaultValueHandling.Ignore; // do not use - zeros in numbers ignored also
+					options.SerializerSettings.Converters.Add(new StringEnumConverter());
+					options.SerializerSettings.Converters.Add(new PolymorphicNewtonsoftJsonConverter<FieldMetadata>(propName, _fieldTypeMap));
+					options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+				});
+			}
+		}
+		
 		public void Configure(IApplicationBuilder app)
 		{
 			app.UseWhen(context => context.Request.Path.StartsWithSegments("/api") == false, x =>
@@ -110,7 +143,14 @@ namespace Host
 			{
 				module.Configure(app);
 			}
-			
+
+			// todo: try to remove hack to fill field type map
+			var fieldProviderRegistry = app.ApplicationServices.GetRequiredService<IFieldProviderRegistry>();
+			foreach (var fieldType in fieldProviderRegistry.GetFieldTypes())
+			{
+				_fieldTypeMap[fieldType.Code] = fieldProviderRegistry.GetFieldTypeProvider(fieldType.Code).FieldType;
+			}
+
 			app.UseEndpoints(endpoints =>
 			{
 				endpoints.MapControllers();

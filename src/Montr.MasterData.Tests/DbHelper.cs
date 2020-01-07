@@ -5,7 +5,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using LinqToDB;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Montr.Core.Impl.Services;
 using Montr.Core.Models;
 using Montr.Core.Services;
 using Montr.Data.Linq2Db;
@@ -41,7 +40,7 @@ namespace Montr.MasterData.Tests
 			var classifierTreeRepository = new DbClassifierTreeRepository(dbContextFactory);
 			var classifierTypeRepository = new DbClassifierTypeRepository(dbContextFactory);
 			var classifierTypeService = new DefaultClassifierTypeService(classifierTypeRepository);
-			var dbFieldMetadataRepository = new DbFieldMetadataRepository(dbContextFactory, new NewtonsoftJsonSerializer());
+			var dbFieldMetadataRepository = new DbFieldMetadataRepository(dbContextFactory, null, new NewtonsoftJsonSerializer());
 			var dbFieldDataRepository = new DbFieldDataRepository(dbContextFactory);
 
 			_getClassifierTreeListHandler = new GetClassifierTreeListHandler(classifierTreeRepository);
