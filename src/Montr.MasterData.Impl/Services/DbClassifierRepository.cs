@@ -19,12 +19,15 @@ namespace Montr.MasterData.Impl.Services
 	{
 		private readonly IDbContextFactory _dbContextFactory;
 		private readonly IClassifierTypeService _classifierTypeService;
+		private readonly IRepository<FieldMetadata> _fieldMetadataRepository;
 		private readonly IFieldDataRepository _fieldDataRepository;
 
-		public DbClassifierRepository(IDbContextFactory dbContextFactory, IClassifierTypeService classifierTypeService, IFieldDataRepository fieldDataRepository)
+		public DbClassifierRepository(IDbContextFactory dbContextFactory, IClassifierTypeService classifierTypeService,
+			IRepository<FieldMetadata> fieldMetadataRepository,  IFieldDataRepository fieldDataRepository)
 		{
 			_dbContextFactory = dbContextFactory;
 			_classifierTypeService = classifierTypeService;
+			_fieldMetadataRepository = fieldMetadataRepository;
 			_fieldDataRepository = fieldDataRepository;
 		}
 
@@ -142,10 +145,19 @@ namespace Montr.MasterData.Impl.Services
 				// todo: add load fields for multiple items
 				if (request.IncludeFields)
 				{
+					var metadata = await _fieldMetadataRepository.Search(new MetadataSearchRequest
+					{
+						EntityTypeCode = Classifier.EntityTypeCode + "." + type.Code,
+						// todo: check flags
+						IsSystem = false,
+						IsActive = true
+					}, cancellationToken);
+
 					foreach (var item in data)
 					{
 						var fields = await _fieldDataRepository.Search(new FieldDataSearchRequest
 						{
+							Metadata = metadata.Rows,
 							EntityTypeCode = Classifier.EntityTypeCode,
 							// ReSharper disable once PossibleInvalidOperationException
 							EntityUids = new[] { item.Uid.Value }

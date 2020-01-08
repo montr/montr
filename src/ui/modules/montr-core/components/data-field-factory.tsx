@@ -2,6 +2,7 @@ import * as React from "react";
 import { Input, InputNumber, Select, Checkbox, DatePicker, TimePicker } from "antd";
 import { IDataField, IIndexer, ISelectField, ITextAreaField, INumberField, IDateField } from "../models";
 import { Icon } from ".";
+import moment from "moment";
 
 // todo: rename after migrate to antd 4.0
 export abstract class DataFieldFactory {
@@ -15,7 +16,13 @@ export abstract class DataFieldFactory {
 		return DataFieldFactory.Map[key];
 	}
 
-	public valuePropName: string = "value";
+	valuePropName: string = "value";
+
+	shouldFormatValue: boolean = false;
+
+	formatValue(field: IDataField, data: IIndexer, value: any): any {
+		return value;
+	}
 
 	abstract createNode(field: IDataField, data: IIndexer): React.ReactElement;
 }
@@ -23,7 +30,6 @@ export abstract class DataFieldFactory {
 class BooleanFieldFactory extends DataFieldFactory {
 	constructor() {
 		super();
-
 		this.valuePropName = "checked";
 	}
 
@@ -97,6 +103,15 @@ class PasswordFieldFactory extends DataFieldFactory {
 }
 
 class DateFieldFactory extends DataFieldFactory {
+	constructor() {
+		super();
+		this.shouldFormatValue = true;
+	}
+
+	formatValue(field: IDataField, data: IIndexer, value: any): any {
+		return moment.parseZone(value);
+	}
+
 	createNode(field: IDataField, data: IIndexer): React.ReactElement {
 		const dateField = field as IDateField;
 		const props = dateField?.props;
@@ -111,6 +126,15 @@ class DateFieldFactory extends DataFieldFactory {
 }
 
 class TimeFieldFactory extends DataFieldFactory {
+	constructor() {
+		super();
+		this.shouldFormatValue = true;
+	}
+
+	formatValue(field: IDataField, data: IIndexer, value: any): any {
+		return moment.parseZone(value, "HH:mm:ss");
+	}
+
 	createNode(field: IDataField, data: IIndexer): React.ReactElement {
 		return <TimePicker
 			allowClear

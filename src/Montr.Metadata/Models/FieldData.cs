@@ -2,7 +2,7 @@
 
 namespace Montr.Metadata.Models
 {
-	public class FieldData : Dictionary<string, string>
+	public class FieldData : Dictionary<string, object>
 	{
 	}
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using System;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Montr.Core;
@@ -23,19 +24,19 @@ namespace Montr.Metadata.Impl
 		{
 			app.ConfigureMetadata(options =>
 			{
-				options.Registry.AddFieldType(BooleanField.TypeCode, new DefaultFieldProvider<BooleanField>());
-				options.Registry.AddFieldType(TextField.TypeCode, new DefaultFieldProvider<TextField>());
-				options.Registry.AddFieldType(TextAreaField.TypeCode, new DefaultFieldProvider<TextAreaField>());
-				options.Registry.AddFieldType(PasswordField.TypeCode, new DefaultFieldProvider<PasswordField>());
-				options.Registry.AddFieldType(NumberField.TypeCode, new DefaultFieldProvider<NumberField>());
-				options.Registry.AddFieldType(DecimalField.TypeCode, new DefaultFieldProvider<DecimalField>());
-				options.Registry.AddFieldType(DateField.TypeCode, new DefaultFieldProvider<DateField>());
-				options.Registry.AddFieldType(TimeField.TypeCode, new DefaultFieldProvider<TimeField>());
-				options.Registry.AddFieldType(SelectField.TypeCode, new DefaultFieldProvider<SelectField>());
+				options.Registry.AddFieldType(BooleanField.TypeCode, new DefaultFieldProvider<BooleanField, bool>());
+				options.Registry.AddFieldType(TextField.TypeCode, new DefaultFieldProvider<TextField, string>());
+				options.Registry.AddFieldType(TextAreaField.TypeCode, new DefaultFieldProvider<TextAreaField, string>());
+				options.Registry.AddFieldType(PasswordField.TypeCode, new DefaultFieldProvider<PasswordField, string>());
+				options.Registry.AddFieldType(NumberField.TypeCode, new DefaultFieldProvider<NumberField, long>());
+				options.Registry.AddFieldType(DecimalField.TypeCode, new DefaultFieldProvider<DecimalField, decimal>());
+				options.Registry.AddFieldType(DateField.TypeCode, new DateFieldProvider());
+				options.Registry.AddFieldType(TimeField.TypeCode, new TimeFieldProvider());
+				options.Registry.AddFieldType(SelectField.TypeCode, new DefaultFieldProvider<SelectField, string>());
 				// todo: move classifier fields to MasterData
-				options.Registry.AddFieldType(ClassifierField.Code, new DefaultFieldProvider<ClassifierField>());
-				options.Registry.AddFieldType(ClassifierGroupField.Code, new DefaultFieldProvider<ClassifierGroupField>());
-				options.Registry.AddFieldType(FileField.TypeCode, new DefaultFieldProvider<FileField>());
+				options.Registry.AddFieldType(ClassifierField.Code, new DefaultFieldProvider<ClassifierField, string>());
+				options.Registry.AddFieldType(ClassifierGroupField.Code, new DefaultFieldProvider<ClassifierGroupField, string>());
+				options.Registry.AddFieldType(FileField.TypeCode, new DefaultFieldProvider<FileField, string>());
 			});
 		}
 	}

@@ -25,8 +25,8 @@ namespace Montr.Tendr.Tests.CommandHandlers
 			var dbContextFactory = new DefaultDbContextFactory();
 			var classifierTypeRepository = new DbClassifierTypeRepository(dbContextFactory);
 			var classifierTypeService = new DefaultClassifierTypeService(classifierTypeRepository);
-			var dbFieldDataRepository = new DbFieldDataRepository(dbContextFactory);
-			var classifierRepository = new DbClassifierRepository(dbContextFactory, classifierTypeService, dbFieldDataRepository);
+			var dbFieldDataRepository = new DbFieldDataRepository(dbContextFactory, null);
+			var classifierRepository = new DbClassifierRepository(dbContextFactory, classifierTypeService, null, dbFieldDataRepository);
 			var handler = new InsertInvitationHandler(unitOfWorkFactory, dbContextFactory, classifierRepository);
 			var helper = new DbHelper(unitOfWorkFactory, dbContextFactory);
 

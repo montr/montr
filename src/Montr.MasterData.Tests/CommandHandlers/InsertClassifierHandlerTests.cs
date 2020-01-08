@@ -27,7 +27,7 @@ namespace Montr.MasterData.Tests.CommandHandlers
 			var classifierTypeService = new DefaultClassifierTypeService(classifierTypeRepository);
 			var generator = new DbHelper(unitOfWorkFactory, dbContextFactory);
 			var dbFieldMetadataRepository = new DbFieldMetadataRepository(dbContextFactory, null, new NewtonsoftJsonSerializer());
-			var dbFieldDataRepository = new DbFieldDataRepository(dbContextFactory);
+			var dbFieldDataRepository = new DbFieldDataRepository(dbContextFactory, null);
 			var handler = new InsertClassifierHandler(unitOfWorkFactory, dbContextFactory, dateTimeProvider, classifierTypeService, dbFieldMetadataRepository, dbFieldDataRepository);
 
 			using (var _ = unitOfWorkFactory.Create())
@@ -70,7 +70,7 @@ namespace Montr.MasterData.Tests.CommandHandlers
 			var classifierTypeService = new DefaultClassifierTypeService(classifierTypeRepository);
 			var generator = new DbHelper(unitOfWorkFactory, dbContextFactory);
 			var dbFieldMetadataRepository = new DbFieldMetadataRepository(dbContextFactory, null, new NewtonsoftJsonSerializer());
-			var dbFieldDataRepository = new DbFieldDataRepository(dbContextFactory);
+			var dbFieldDataRepository = new DbFieldDataRepository(dbContextFactory, null);
 			var handler = new InsertClassifierHandler(unitOfWorkFactory, dbContextFactory, dateTimeProvider, classifierTypeService, dbFieldMetadataRepository, dbFieldDataRepository);
 
 			using (var _ = unitOfWorkFactory.Create())

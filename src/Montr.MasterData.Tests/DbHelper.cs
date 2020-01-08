@@ -41,7 +41,7 @@ namespace Montr.MasterData.Tests
 			var classifierTypeRepository = new DbClassifierTypeRepository(dbContextFactory);
 			var classifierTypeService = new DefaultClassifierTypeService(classifierTypeRepository);
 			var dbFieldMetadataRepository = new DbFieldMetadataRepository(dbContextFactory, null, new NewtonsoftJsonSerializer());
-			var dbFieldDataRepository = new DbFieldDataRepository(dbContextFactory);
+			var dbFieldDataRepository = new DbFieldDataRepository(dbContextFactory, null);
 
 			_getClassifierTreeListHandler = new GetClassifierTreeListHandler(classifierTreeRepository);
 			_insertClassifierTreeTypeHandler = new InsertClassifierTreeHandler(unitOfWorkFactory, dbContextFactory, classifierTypeService);

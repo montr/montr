@@ -118,9 +118,6 @@ export class WrappedDataForm extends React.Component<IProps, IState> {
 	createItem = (field: IDataField): React.ReactNode => {
 		const { t, layout, data, hideLabels } = this.props;
 
-		// const initialValue = data?.[field.key];
-		// const initialValue = DataHelper.indexer(data, field.key, undefined);
-
 		const fieldFactory = DataFieldFactory.get(field.type);
 
 		if (!fieldFactory) return null;
@@ -130,26 +127,14 @@ export class WrappedDataForm extends React.Component<IProps, IState> {
 			message: t("dataForm.rule.required", { name: field.name })
 		};
 
-		if (field.type == "text" || field.type == "textarea") {
+		if (field.type == "text" || field.type == "textarea" || field.type == "password") {
 			required.whitespace = field.required;
 		}
 
-		/* const fieldOptions: GetFieldDecoratorOptions = {
-			initialValue: initialValue,
-			valuePropName: fieldFactory.valuePropName
-		}; */
-
-		// todo: why boolean can't be required?
-		let rules: Rule[];
-		if (field.type != "boolean") {
-			rules = [required];
-		}
-
-		if (field.type == "boolean") {
-			// todo: fix server value convert
-			// fieldOptions.initialValue = fieldOptions.initialValue === "true" || fieldOptions.initialValue === true;
+		if (fieldFactory.shouldFormatValue) {
 			const value = DataHelper.indexer(data, field.key, undefined);
-			DataHelper.indexer(data, field.key, value === "true" || value === true);
+			const formattedValue = fieldFactory.formatValue(field, data, value);
+			DataHelper.indexer(data, field.key, formattedValue);
 		}
 
 		const fieldNode = fieldFactory.createNode(field, data);
@@ -166,7 +151,7 @@ export class WrappedDataForm extends React.Component<IProps, IState> {
 				label={hideLabels || field.type == "boolean" ? null : field.name}
 				extra={field.description}
 				valuePropName={fieldFactory.valuePropName}
-				rules={rules}
+				rules={[required]}
 				{...itemLayout}>
 				{fieldNode}
 			</Form.Item>
@@ -202,15 +187,5 @@ export class WrappedDataForm extends React.Component<IProps, IState> {
 		);
 	};
 }
-
-/* export const DataForm = withTranslation()(Form.create<IProps>({
-	// Form.onChange is not working - not triggered when Select field changes
-	// https://github.com/ant-design/ant-design/issues/18867
-	onValuesChange: (props, values, allFieldsValues) => {
-		if (props.onChange) {
-			props.onChange(allFieldsValues);
-		}
-	}
-})(WrappedDataForm)); */
 
 export const DataForm = withTranslation()(WrappedDataForm);
