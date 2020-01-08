@@ -1,8 +1,8 @@
 import * as React from "react";
 import { Form, Spin } from "antd";
 import { FormInstance } from "antd/lib/form";
-import { Store, Rule } from "rc-field-form/lib/interface";
-import { IDataField, IIndexer, IApiResult } from "../models";
+import { FieldData, Store, Rule } from "rc-field-form/lib/interface";
+import { IDataField, IApiResult } from "../models";
 import { NotificationService } from "../services/notification-service";
 import { OperationService, DataHelper } from "../services";
 import { FormDefaults, DataFieldFactory, ButtonSave, Toolbar } from ".";
@@ -20,8 +20,8 @@ interface IProps extends WithTranslation {
 	successMessage?: string;
 	errorMessage?: string;
 	hideLabels?: boolean;
-	onChange?: (values: IIndexer, changedValues: IIndexer) => void;
-	onSubmit?: (values: IIndexer) => Promise<IApiResult>;
+	onChange?: (values: any /* IIndexer */, changedValues: any /* IIndexer */) => void;
+	onSubmit?: (values: any /* IIndexer */) => Promise<IApiResult>;
 	formRef?: React.RefObject<FormInstance>;
 }
 
@@ -59,13 +59,11 @@ export class WrappedDataForm extends React.Component<IProps, IState> {
 		// console.log("Form.onChange", changedValues, values);
 
 		if (onChange) {
-			// var values = this.getFormRef().current.getFieldsValue();
-
 			onChange(values, changedValues);
 		}
 	};
 
-	handleSubmit = async (values: IIndexer) => {
+	handleSubmit = async (values: any /* IIndexer */) => {
 
 		const { t, onSubmit, successMessage, errorMessage } = this.props;
 
@@ -84,9 +82,9 @@ export class WrappedDataForm extends React.Component<IProps, IState> {
 		if (this._isMounted) this.setState({ loading: false });
 	};
 
-	setFieldErrors = async (result: IApiResult, values: IIndexer) => {
+	setFieldErrors = async (result: IApiResult, values: any /* IIndexer */) => {
 		const { fields } = this.props,
-			fieldErrors: any = {},
+			fieldErrors: FieldData[] = [],
 			otherErrors: string[] = [];
 
 		if (result && result.errors) {
@@ -94,14 +92,17 @@ export class WrappedDataForm extends React.Component<IProps, IState> {
 				// todo: check key exists in state.fields (ignore case + add tests)
 				const field = fields.find(x => x.key && error.key && x.key.toLowerCase() == error.key.toLowerCase());
 				if (field) {
-					fieldErrors[field.key] = {
-						value: values[field.key],
-						errors: error.messages.map((x: string) => new Error(x))
-					};
+					fieldErrors.push({
+						name: field.key.split("."),
+						value: DataHelper.indexer(values, field.key, undefined),
+						errors: error.messages
+					});
 				}
 				else {
+					// todo: display one message with list of errors
 					error.messages.forEach(message => {
-						otherErrors.push(message);
+						// todo: remove key (?)
+						otherErrors.push(`${message} (${error.key})`);
 					});
 				}
 			});

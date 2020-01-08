@@ -40,6 +40,7 @@ export class OperationService {
 				this._notification.success(result.message ?? options?.successMessage ?? t("operation.success"));
 			}
 			else {
+				// todo: do not show common error if options.showFieldErrors passed
 				this._notification.error(result?.message ?? options?.errorMessage ?? t("operation.error"));
 
 				showFieldErrors(result);

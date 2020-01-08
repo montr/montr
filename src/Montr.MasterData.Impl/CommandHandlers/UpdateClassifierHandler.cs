@@ -52,6 +52,29 @@ namespace Montr.MasterData.Impl.CommandHandlers
 				? await _classifierTreeService.GetClassifierTree(request.CompanyUid, request.TypeCode, ClassifierTree.DefaultCode, cancellationToken)
 				: null;
 
+			// validate fields
+			var metadata = await _fieldMetadataRepository.Search(new MetadataSearchRequest
+			{
+				EntityTypeCode = Classifier.EntityTypeCode + "." + type.Code,
+				IsActive = true
+			}, cancellationToken);
+
+			var manageFieldRequest = new ManageFieldDataRequest
+			{
+				EntityTypeCode = Classifier.EntityTypeCode,
+				// ReSharper disable once PossibleInvalidOperationException
+				EntityUid = item.Uid.Value,
+				Metadata = metadata.Rows,
+				Data = item.Fields
+			};
+
+			var result = await _fieldDataRepository.Validate(manageFieldRequest, cancellationToken);
+
+			if (result.Success == false)
+			{
+				return result;
+			}
+
 			using (var scope = _unitOfWorkFactory.Create())
 			{
 				int affected;
@@ -106,21 +129,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 				}
 
 				// update fields
-				var metadata = await _fieldMetadataRepository.Search(new MetadataSearchRequest
-				{
-					EntityTypeCode = Classifier.EntityTypeCode + "." + type.Code,
-					IsSystem = false,
-					IsActive = true
-				}, cancellationToken);
-
-				await _fieldDataRepository.Update(new ManageFieldDataRequest
-				{
-					EntityTypeCode = Classifier.EntityTypeCode,
-					// ReSharper disable once PossibleInvalidOperationException
-					EntityUid = item.Uid.Value,
-					Metadata = metadata.Rows,
-					Data = item.Fields
-				}, cancellationToken);
+				await _fieldDataRepository.Update(manageFieldRequest, cancellationToken);
 
 				// todo: (события)
 

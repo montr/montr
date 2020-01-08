@@ -8,6 +8,14 @@ namespace Montr.Metadata.Impl.Services
 	{
 		public Type FieldType => typeof(TFieldType);
 
+		public bool Validate(object value, out object parsed, out string[] errors)
+		{
+			parsed = value;
+			errors = new[] { "Something went wrong" };
+
+			return true;
+		}
+
 		public object Read(string value)
 		{
 			return value != null ? ReadInternal(value) : (object) null;

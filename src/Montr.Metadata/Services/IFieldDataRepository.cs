@@ -8,6 +8,8 @@ namespace Montr.Metadata.Services
 {
 	public interface IFieldDataRepository : IRepository<FieldData>
 	{
+		Task<ApiResult> Validate(ManageFieldDataRequest request, CancellationToken cancellationToken);
+
 		Task<ApiResult> Insert(ManageFieldDataRequest request, CancellationToken cancellationToken);
 
 		Task<ApiResult> Update(ManageFieldDataRequest request, CancellationToken cancellationToken);

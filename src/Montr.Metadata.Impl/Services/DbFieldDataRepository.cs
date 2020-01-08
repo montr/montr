@@ -63,6 +63,38 @@ namespace Montr.Metadata.Impl.Services
 			}
 		}
 
+		public async Task<ApiResult> Validate(ManageFieldDataRequest request, CancellationToken cancellationToken)
+		{
+			var metadata = request.Metadata ?? throw new ArgumentNullException(nameof(request.Metadata));
+
+			var data = request.Data ?? new FieldData();
+
+			var errors = new List<ApiResultError>();
+
+			foreach (var field in metadata)
+			{
+				data.TryGetValue(field.Key, out var value);
+
+				var fieldProvider = _fieldProviderRegistry.GetFieldTypeProvider(field.Type);
+
+				if (fieldProvider.Validate(value, out var parsed, out var fieldErrors))
+				{
+					data[field.Key] = parsed;
+				}
+				else
+				{
+					errors.Add(new ApiResultError
+					{
+						// todo: remove hardcoded prefix
+						Key = (field.System ? "" : "fields.") + field.Key,
+						Messages = fieldErrors
+					});
+				}
+			}
+
+			return await Task.FromResult(new ApiResult { Success = errors.Count == 0, Errors = errors });
+		}
+
 		public async Task<ApiResult> Insert(ManageFieldDataRequest request, CancellationToken cancellationToken)
 		{
 			var metadata = request.Metadata ?? throw new ArgumentNullException(nameof(request.Metadata));
@@ -86,7 +118,7 @@ namespace Montr.Metadata.Impl.Services
 							EntityUid = request.EntityUid,
 							Key = data.Key,
 							Value = fieldProvider.Write(data.Value)
-					});
+						});
 					}
 				}
 
