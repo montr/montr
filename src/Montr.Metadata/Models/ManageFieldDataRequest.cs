@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Montr.Metadata.Services;
 
 namespace Montr.Metadata.Models
 {
@@ -11,6 +12,6 @@ namespace Montr.Metadata.Models
 
 		public IList<FieldMetadata> Metadata { get; set; }
 
-		public FieldData Data { get; set; }
+		public IFieldDataContainer Item { get; set; }
 	}
 }

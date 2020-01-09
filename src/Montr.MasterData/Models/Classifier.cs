@@ -5,7 +5,7 @@ using Montr.Metadata.Models;
 namespace Montr.MasterData.Models
 {
 	[DebuggerDisplay("{" + nameof(DebuggerDisplay) + ",nq}")]
-	public class Classifier
+	public class Classifier : IFieldDataContainer
 	{
 		private string DebuggerDisplay => $"{Code}, {Name}";
 

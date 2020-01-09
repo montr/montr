@@ -59,16 +59,17 @@ namespace Montr.MasterData.Impl.CommandHandlers
 				IsActive = true
 			}, cancellationToken);
 
-			var manageFieldRequest = new ManageFieldDataRequest
+			var manageFieldDataRequest = new ManageFieldDataRequest
 			{
 				EntityTypeCode = Classifier.EntityTypeCode,
 				// ReSharper disable once PossibleInvalidOperationException
 				EntityUid = item.Uid.Value,
 				Metadata = metadata.Rows,
-				Data = item.Fields
+				Item = item
 			};
 
-			var result = await _fieldDataRepository.Validate(manageFieldRequest, cancellationToken);
+			// todo: move to ClassifierValidator (?)
+			var result = await _fieldDataRepository.Validate(manageFieldDataRequest, cancellationToken);
 
 			if (result.Success == false)
 			{
@@ -129,7 +130,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 				}
 
 				// update fields
-				await _fieldDataRepository.Update(manageFieldRequest, cancellationToken);
+				await _fieldDataRepository.Update(manageFieldDataRequest, cancellationToken);
 
 				// todo: (события)
 

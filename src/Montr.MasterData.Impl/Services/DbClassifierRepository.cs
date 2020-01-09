@@ -163,7 +163,6 @@ namespace Montr.MasterData.Impl.Services
 							EntityUids = new[] { item.Uid.Value }
 						}, cancellationToken);
 
-						
 						item.Fields = fields.Rows.SingleOrDefault();
 					}
 				}

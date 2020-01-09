@@ -1,6 +1,7 @@
 import * as React from "react";
 import { Form, Spin } from "antd";
 import { FormInstance } from "antd/lib/form";
+import { getFieldId } from "antd/lib/form/util";
 import { FieldData, Store, Rule } from "rc-field-form/lib/interface";
 import { IDataField, IApiResult } from "../models";
 import { NotificationService } from "../services/notification-service";
@@ -144,11 +145,13 @@ export class WrappedDataForm extends React.Component<IProps, IState> {
 			? (field.type == "boolean" ? FormDefaults.tailFormItemLayout : FormDefaults.formItemLayout)
 			: {};
 
+		const namePath = field.key.split(".");
+
 		return (
 			<Form.Item
 				key={field.key}
-				htmlFor={field.key}
-				name={field.key.split(".")}
+				name={namePath}
+				htmlFor={getFieldId(namePath)} // replace(".", "_")
 				label={hideLabels || field.type == "boolean" ? null : field.name}
 				extra={field.description}
 				valuePropName={fieldFactory.valuePropName}

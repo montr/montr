@@ -65,13 +65,15 @@ namespace Montr.Metadata.Impl.Services
 
 		public async Task<ApiResult> Validate(ManageFieldDataRequest request, CancellationToken cancellationToken)
 		{
+			var item = request.Item ?? throw new ArgumentNullException(nameof(request.Metadata));
 			var metadata = request.Metadata ?? throw new ArgumentNullException(nameof(request.Metadata));
 
-			var data = request.Data ?? new FieldData();
+			var data = item.Fields ?? (item.Fields = new FieldData());
 
 			var errors = new List<ApiResultError>();
 
-			foreach (var field in metadata)
+			// todo: validate/insert/update system fields stored in FieldData
+			foreach (var field in metadata.Where(x => x.System == false))
 			{
 				data.TryGetValue(field.Key, out var value);
 
@@ -85,8 +87,7 @@ namespace Montr.Metadata.Impl.Services
 				{
 					errors.Add(new ApiResultError
 					{
-						// todo: remove hardcoded prefix
-						Key = (field.System ? "" : "fields.") + field.Key,
+						Key = FieldKey.FormatFullKey(field.Key),
 						Messages = fieldErrors
 					});
 				}
@@ -97,107 +98,104 @@ namespace Montr.Metadata.Impl.Services
 
 		public async Task<ApiResult> Insert(ManageFieldDataRequest request, CancellationToken cancellationToken)
 		{
+			var item = request.Item ?? throw new ArgumentNullException(nameof(request.Metadata));
 			var metadata = request.Metadata ?? throw new ArgumentNullException(nameof(request.Metadata));
 
-			if (request.Data != null)
+			var data = item.Fields ?? (item.Fields = new FieldData());
+
+			var insertable = new List<DbFieldData>();
+
+			// todo: validate/insert/update system fields stored in FieldData
+			foreach (var field in metadata.Where(x => x.System == false))
 			{
-				var metadataMap = metadata.ToDictionary(x => x.Key);
+				var fieldProvider = _fieldProviderRegistry.GetFieldTypeProvider(field.Type);
 
-				var fields = new List<DbFieldData>();
+				data.TryGetValue(field.Key, out var value);
 
-				foreach (var data in request.Data)
+				var storageValue = fieldProvider.Write(value);
+
+				insertable.Add(new DbFieldData
 				{
-					if (metadataMap.TryGetValue(data.Key, out var field))
-					{
-						var fieldProvider = _fieldProviderRegistry.GetFieldTypeProvider(field.Type);
-
-						fields.Add(new DbFieldData
-						{
-							Uid = Guid.NewGuid(),
-							EntityTypeCode = request.EntityTypeCode,
-							EntityUid = request.EntityUid,
-							Key = data.Key,
-							Value = fieldProvider.Write(data.Value)
-						});
-					}
-				}
-
-				using (var db = _dbContextFactory.Create())
-				{
-					var bcr = await Task.Run(() => db.GetTable<DbFieldData>().BulkCopy(fields), cancellationToken);
-
-					return new ApiResult { AffectedRows = bcr.RowsCopied };
-				}
+					Uid = Guid.NewGuid(),
+					EntityTypeCode = request.EntityTypeCode,
+					EntityUid = request.EntityUid,
+					Key = field.Key,
+					Value = storageValue
+				});
 			}
 
-			return new ApiResult { AffectedRows = 0 };
+			using (var db = _dbContextFactory.Create())
+			{
+				var bcr = await Task.Run(() => db.GetTable<DbFieldData>().BulkCopy(insertable), cancellationToken);
+
+				return new ApiResult { AffectedRows = bcr.RowsCopied };
+			}
 		}
 
 		public async Task<ApiResult> Update(ManageFieldDataRequest request, CancellationToken cancellationToken)
 		{
+			var item = request.Item ?? throw new ArgumentNullException(nameof(request.Metadata));
 			var metadata = request.Metadata ?? throw new ArgumentNullException(nameof(request.Metadata));
 
-			if (request.Data != null)
+			var data = item.Fields ?? (item.Fields = new FieldData());
+
+			using (var db = _dbContextFactory.Create())
 			{
-				var metadataMap = metadata.ToDictionary(x => x.Key);
+				// todo: reuse from context in request
+				var existingData = await db.GetTable<DbFieldData>()
+					.Where(x => x.EntityTypeCode == request.EntityTypeCode && x.EntityUid == request.EntityUid)
+					.ToListAsync(cancellationToken);
 
-				using (var db = _dbContextFactory.Create())
+				var existingMap = existingData.ToDictionary(x => x.Key);
+
+				var insertable = new List<DbFieldData>();
+				var updatable = new List<DbFieldData>();
+
+				// todo: validate/insert/update system fields stored in FieldData
+				foreach (var field in metadata.Where(x => x.System == false))
 				{
-					// todo: reuse from context in request
-					var existingData = await db.GetTable<DbFieldData>()
-						.Where(x => x.EntityTypeCode == request.EntityTypeCode && x.EntityUid == request.EntityUid)
-						.ToListAsync(cancellationToken);
+					var fieldProvider = _fieldProviderRegistry.GetFieldTypeProvider(field.Type);
 
-					var existingMap = existingData.ToDictionary(x => x.Key);
+					data.TryGetValue(field.Key, out var value);
 
-					var insertable = new List<DbFieldData>();
-					var updatable = new List<DbFieldData>();
+					var storageValue = fieldProvider.Write(value);
 
-					foreach (var (key, value) in request.Data)
+					if (existingMap.TryGetValue(field.Key, out var dbField))
 					{
-						if (metadataMap.TryGetValue(key, out var field))
+						updatable.Add(new DbFieldData
 						{
-							var fieldProvider = _fieldProviderRegistry.GetFieldTypeProvider(field.Type);
-							var storageValue = fieldProvider.Write(value);
-
-							if (existingMap.TryGetValue(key, out var dbField))
-							{
-								updatable.Add(new DbFieldData
-								{
-									Uid = dbField.Uid,
-									Key = dbField.Key,
-									Value = storageValue
-								});
-							}
-							else
-							{
-								insertable.Add(new DbFieldData
-								{
-									Uid = Guid.NewGuid(),
-									EntityTypeCode = request.EntityTypeCode,
-									EntityUid = request.EntityUid,
-									Key = key,
-									Value = storageValue,
-								});
-							}
-						}
+							Uid = dbField.Uid,
+							Key = dbField.Key,
+							Value = storageValue
+						});
 					}
-
-					// insert
-					db.GetTable<DbFieldData>().BulkCopy(insertable);
-
-					// update
-					foreach (var field in updatable)
+					else
 					{
-						await db.GetTable<DbFieldData>()
-							.Where(x => x.Uid == field.Uid)
-							.Set(x => x.Value, field.Value)
-							.UpdateAsync(cancellationToken);
+						insertable.Add(new DbFieldData
+						{
+							Uid = Guid.NewGuid(),
+							EntityTypeCode = request.EntityTypeCode,
+							EntityUid = request.EntityUid,
+							Key = field.Key,
+							Value = storageValue
+						});
 					}
-
-					// delete (-)? or leave non-active data in db (+)?
-					// not used keys should be deleted when corresponding metadata deleted
 				}
+
+				// insert
+				db.GetTable<DbFieldData>().BulkCopy(insertable);
+
+				// update
+				foreach (var field in updatable)
+				{
+					await db.GetTable<DbFieldData>()
+						.Where(x => x.Uid == field.Uid)
+						.Set(x => x.Value, field.Value)
+						.UpdateAsync(cancellationToken);
+				}
+
+				// delete (-)? or leave non-active data in db (+)?
+				// not used keys should be deleted when corresponding metadata deleted
 			}
 
 			return new ApiResult();

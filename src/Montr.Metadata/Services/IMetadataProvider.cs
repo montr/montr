@@ -15,8 +15,9 @@ namespace Montr.Metadata.Services
 	// todo: move to db?
 	public class DefaultMetadataProvider : IMetadataProvider
 	{
-		private readonly IFieldProviderRegistry _fieldProviderRegistry;
 		private static readonly string PropsPrefix = ExpressionHelper.GetMemberName<TextAreaField>(x => x.Props).ToLowerInvariant();
+
+		private readonly IFieldProviderRegistry _fieldProviderRegistry;
 
 		public DefaultMetadataProvider(IFieldProviderRegistry fieldProviderRegistry)
 		{

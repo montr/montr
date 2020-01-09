@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Montr.Metadata.Impl.Services;
 
@@ -7,6 +8,21 @@ namespace Montr.Metadata.Tests.Services
 	[TestClass]
 	public class FieldProviderTests
 	{
+		[TestMethod]
+		[DataRow("2020-01-31 12:40:00", "2020-01-31T12:40:00")]
+		public void DateFieldProvider_ReadNormalValues_ShouldDeserialize(string value, string expectedValue)
+		{
+			// arrange
+			var expected = DateTime.Parse(expectedValue, null, DateTimeStyles.RoundtripKind);
+			var provider = new DateFieldProvider();
+
+			// act
+			var result = provider.ReadInternal(value);
+
+			// assert
+			Assert.AreEqual(expected, result);
+		}
+
 		[TestMethod]
 		[DataRow("12:45:36", "12:45:36")]
 		[DataRow("23:01:15", "23:01:15")]

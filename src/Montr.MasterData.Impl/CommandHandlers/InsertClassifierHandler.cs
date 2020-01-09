@@ -50,10 +50,34 @@ namespace Montr.MasterData.Impl.CommandHandlers
 			// todo: check company belongs to user
 			var type = await _classifierTypeService.GetClassifierType(request.CompanyUid, request.TypeCode, cancellationToken);
 
+			var itemUid = Guid.NewGuid();
+
+			// validate fields
+			var metadata = await _fieldMetadataRepository.Search(new MetadataSearchRequest
+			{
+				EntityTypeCode = Classifier.EntityTypeCode + "." + type.Code,
+				IsSystem = false,
+				IsActive = true
+			}, cancellationToken);
+
+			var manageFieldDataRequest = new ManageFieldDataRequest
+			{
+				EntityTypeCode = Classifier.EntityTypeCode,
+				EntityUid = itemUid,
+				Metadata = metadata.Rows,
+				Item = item
+			};
+
+			// todo: move to ClassifierValidator (?)
+			var result = await _fieldDataRepository.Validate(manageFieldDataRequest, cancellationToken);
+
+			if (result.Success == false)
+			{
+				return result;
+			}
+
 			using (var scope = _unitOfWorkFactory.Create())
 			{
-				var itemUid = Guid.NewGuid();
-
 				using (var db = _dbContextFactory.Create())
 				{
 					var validator = new ClassifierValidator(db, type);
@@ -118,20 +142,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 				}
 
 				// insert fields
-				var metadata = await _fieldMetadataRepository.Search(new MetadataSearchRequest
-				{
-					EntityTypeCode = Classifier.EntityTypeCode + "." + type.Code,
-					IsSystem = false,
-					IsActive = true
-				}, cancellationToken);
-
-				await _fieldDataRepository.Insert(new ManageFieldDataRequest
-				{
-					EntityTypeCode = Classifier.EntityTypeCode,
-					EntityUid = itemUid,
-					Metadata = metadata.Rows,
-					Data = item.Fields
-				}, cancellationToken);
+				await _fieldDataRepository.Insert(manageFieldDataRequest, cancellationToken);
 
 				// todo: events
 

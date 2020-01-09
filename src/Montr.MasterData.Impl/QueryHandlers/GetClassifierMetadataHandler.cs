@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
-using Montr.Core.Models;
 using Montr.Core.Services;
 using Montr.MasterData.Models;
 using Montr.MasterData.Queries;
@@ -74,8 +73,7 @@ namespace Montr.MasterData.Impl.QueryHandlers
 				{
 					if (field.System == false)
 					{
-						// todo: remove hardcoded property name
-						field.Key = "fields." + field.Key;
+						field.Key = FieldKey.FormatFullKey(field.Key);
 					}
 				}
 			}
