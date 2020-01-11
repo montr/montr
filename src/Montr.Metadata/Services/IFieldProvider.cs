@@ -6,6 +6,10 @@ namespace Montr.Metadata.Services
 	{
 		Type FieldType { get; }
 
+		// todo:
+		// move to other service?
+		// split read from client and validate?
+		// metadata should be passed to validate.
 		bool Validate(object value, out object parsed, out string[] errors);
 
 		/// <summary>
@@ -13,13 +17,13 @@ namespace Montr.Metadata.Services
 		/// </summary>
 		/// <param name="value"></param>
 		/// <returns></returns>
-		object Read(string value);
+		object ReadFromStorage(string value);
 
 		/// <summary>
 		/// Write object value to string for storage.
 		/// </summary>
 		/// <param name="value"></param>
 		/// <returns></returns>
-		string Write(object value);
+		string WriteToStorage(object value);
 	}
 }

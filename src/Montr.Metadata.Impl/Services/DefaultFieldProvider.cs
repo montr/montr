@@ -36,14 +36,14 @@ namespace Montr.Metadata.Impl.Services
 
 			if (value is string stringValue)
 			{
-				return Read(stringValue);
+				return ReadFromStorage(stringValue);
 			}
 
 			// todo: check clr type
 			return (TClrType)value;
 		}
 
-		public object Read(string value)
+		public object ReadFromStorage(string value)
 		{
 			return value != null ? ReadInternal(value) : (object)null;
 		}
@@ -53,7 +53,7 @@ namespace Montr.Metadata.Impl.Services
 			return (TClrType)Convert.ChangeType(value, typeof(TClrType));
 		}
 
-		public string Write(object value)
+		public string WriteToStorage(object value)
 		{
 			return value != null ? WriteInternal((TClrType)value) : null;
 		}

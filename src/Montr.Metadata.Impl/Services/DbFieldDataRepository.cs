@@ -52,7 +52,7 @@ namespace Montr.Metadata.Impl.Services
 							{
 								var fieldProvider = _fieldProviderRegistry.GetFieldTypeProvider(field.Type);
 
-								data[dbData.Key] = fieldProvider.Read(dbData.Value);
+								data[dbData.Key] = fieldProvider.ReadFromStorage(dbData.Value);
 							}
 						}
 
@@ -112,7 +112,7 @@ namespace Montr.Metadata.Impl.Services
 
 				data.TryGetValue(field.Key, out var value);
 
-				var storageValue = fieldProvider.Write(value);
+				var storageValue = fieldProvider.WriteToStorage(value);
 
 				insertable.Add(new DbFieldData
 				{
@@ -158,7 +158,7 @@ namespace Montr.Metadata.Impl.Services
 
 					data.TryGetValue(field.Key, out var value);
 
-					var storageValue = fieldProvider.Write(value);
+					var storageValue = fieldProvider.WriteToStorage(value);
 
 					if (existingMap.TryGetValue(field.Key, out var dbField))
 					{
