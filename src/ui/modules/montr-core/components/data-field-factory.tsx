@@ -1,18 +1,18 @@
 import * as React from "react";
 import { Input, InputNumber, Select, Checkbox, DatePicker, TimePicker } from "antd";
-import { IDataField, IIndexer, ISelectField, ITextAreaField, INumberField, IDateField } from "../models";
-import { Icon } from ".";
+import { IDataField, IIndexer, ISelectField, ITextAreaField, INumberField, IDateField, IBooleanField, ITextField, IDesignSelectOptionsField, IPasswordField, ITimeField } from "../models";
+import { Icon, DesignSelectOptions } from ".";
 import moment from "moment";
 
 // todo: rename after migrate to antd 4.0
-export abstract class DataFieldFactory {
-	private static Map: { [key: string]: DataFieldFactory; } = {};
+export abstract class DataFieldFactory<TField extends IDataField> {
+	private static Map: { [key: string]: DataFieldFactory<IDataField>; } = {};
 
-	static register(key: string, factory: DataFieldFactory) {
+	static register(key: string, factory: DataFieldFactory<IDataField>) {
 		DataFieldFactory.Map[key] = factory;
 	}
 
-	static get(key: string): DataFieldFactory {
+	static get(key: string): DataFieldFactory<IDataField> {
 		return DataFieldFactory.Map[key];
 	}
 
@@ -20,26 +20,26 @@ export abstract class DataFieldFactory {
 
 	shouldFormatValue: boolean = false;
 
-	formatValue(field: IDataField, data: IIndexer, value: any): any {
+	formatValue(field: TField, data: IIndexer, value: any): any {
 		return value;
 	}
 
-	abstract createNode(field: IDataField, data: IIndexer): React.ReactElement;
+	abstract createNode(field: TField, data: IIndexer): React.ReactElement;
 }
 
-class BooleanFieldFactory extends DataFieldFactory {
+class BooleanFieldFactory extends DataFieldFactory<IBooleanField> {
 	constructor() {
 		super();
 		this.valuePropName = "checked";
 	}
 
-	createNode(field: IDataField, data: IIndexer): React.ReactElement {
+	createNode(field: IBooleanField, data: IIndexer): React.ReactElement {
 		return <Checkbox>{field.name}</Checkbox>;
 	}
 }
 
-class TextFieldFactory extends DataFieldFactory {
-	createNode(field: IDataField, data: IIndexer): React.ReactElement {
+class TextFieldFactory extends DataFieldFactory<ITextField> {
+	createNode(field: ITextField, data: IIndexer): React.ReactElement {
 		return <Input
 			allowClear
 			disabled={field.readonly}
@@ -49,10 +49,9 @@ class TextFieldFactory extends DataFieldFactory {
 	}
 }
 
-class NumberFieldFactory extends DataFieldFactory {
-	createNode(field: IDataField, data: IIndexer): React.ReactElement {
-		const numberField = field as INumberField;
-		const props = numberField?.props;
+class NumberFieldFactory extends DataFieldFactory<INumberField> {
+	createNode(field: INumberField, data: IIndexer): React.ReactElement {
+		const props = field?.props;
 
 		return <InputNumber
 			min={props?.min}
@@ -63,23 +62,21 @@ class NumberFieldFactory extends DataFieldFactory {
 	}
 }
 
-class TextAreaFieldFactory extends DataFieldFactory {
-	createNode(field: IDataField, data: IIndexer): React.ReactElement {
-		const textAreaField = field as ITextAreaField;
-		const props = textAreaField?.props;
+class TextAreaFieldFactory extends DataFieldFactory<ITextAreaField> {
+	createNode(field: ITextAreaField, data: IIndexer): React.ReactElement {
+		const props = field?.props;
 
 		return <Input.TextArea
 			allowClear
 			placeholder={field.placeholder}
-			autoSize={{ minRows: props?.rows || 4, maxRows: 24 }}
+			autoSize={{ minRows: props?.rows || 4, maxRows: 12 }}
 		/>;
 	}
 }
 
-class SelectFieldFactory extends DataFieldFactory {
-	createNode(field: IDataField, data: IIndexer): React.ReactElement {
-		const selectField = field as ISelectField;
-		const props = selectField?.props;
+class SelectFieldFactory extends DataFieldFactory<ISelectField> {
+	createNode(field: ISelectField, data: IIndexer): React.ReactElement {
+		const props = field?.props;
 
 		return <Select
 			allowClear
@@ -92,7 +89,13 @@ class SelectFieldFactory extends DataFieldFactory {
 	}
 }
 
-class PasswordFieldFactory extends DataFieldFactory {
+class DesignSelectOptionsFieldFactory extends DataFieldFactory<IDesignSelectOptionsField> {
+	createNode(field: IDesignSelectOptionsField, data: IIndexer): React.ReactElement {
+		return <DesignSelectOptions />;
+	}
+}
+
+class PasswordFieldFactory extends DataFieldFactory<IPasswordField> {
 	createNode(field: IDataField, data: IIndexer): React.ReactElement {
 		return <Input.Password
 			allowClear
@@ -102,19 +105,18 @@ class PasswordFieldFactory extends DataFieldFactory {
 	}
 }
 
-class DateFieldFactory extends DataFieldFactory {
+class DateFieldFactory extends DataFieldFactory<IDateField> {
 	constructor() {
 		super();
 		this.shouldFormatValue = true;
 	}
 
-	formatValue(field: IDataField, data: IIndexer, value: any): any {
+	formatValue(field: IDateField, data: IIndexer, value: any): any {
 		return moment.parseZone(value);
 	}
 
-	createNode(field: IDataField, data: IIndexer): React.ReactElement {
-		const dateField = field as IDateField;
-		const props = dateField?.props;
+	createNode(field: IDateField, data: IIndexer): React.ReactElement {
+		const props = field?.props;
 
 		return <DatePicker
 			allowClear
@@ -125,17 +127,17 @@ class DateFieldFactory extends DataFieldFactory {
 	}
 }
 
-class TimeFieldFactory extends DataFieldFactory {
+class TimeFieldFactory extends DataFieldFactory<ITimeField> {
 	constructor() {
 		super();
 		this.shouldFormatValue = true;
 	}
 
-	formatValue(field: IDataField, data: IIndexer, value: any): any {
+	formatValue(field: ITimeField, data: IIndexer, value: any): any {
 		return moment.parseZone(value, "HH:mm:ss");
 	}
 
-	createNode(field: IDataField, data: IIndexer): React.ReactElement {
+	createNode(field: ITimeField, data: IIndexer): React.ReactElement {
 		return <TimePicker
 			allowClear
 			disabled={field.readonly}
@@ -149,6 +151,7 @@ DataFieldFactory.register("number", new NumberFieldFactory());
 DataFieldFactory.register("text", new TextFieldFactory());
 DataFieldFactory.register("textarea", new TextAreaFieldFactory());
 DataFieldFactory.register("select", new SelectFieldFactory());
+DataFieldFactory.register("select-options", new DesignSelectOptionsFieldFactory());
 DataFieldFactory.register("password", new PasswordFieldFactory());
 DataFieldFactory.register("date", new DateFieldFactory());
 DataFieldFactory.register("time", new TimeFieldFactory());

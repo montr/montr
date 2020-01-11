@@ -25,6 +25,9 @@ export interface IDataFieldWithProps<TProps> extends IDataField {
 	props?: TProps;
 }
 
+export interface IBooleanField extends IDataField {
+}
+
 export interface ITextField extends IDataField {
 }
 
@@ -72,9 +75,19 @@ interface ISelectFieldProps {
 	options: IOption[];
 }
 
-interface IOption {
+export interface IOption {
 	value: string;
 	name: string;
+}
+
+export interface IDesignSelectOptionsField extends IDataField {
+}
+
+export interface IClassifierField extends IDataFieldWithProps<IClassifierFieldProps> {
+}
+
+interface IClassifierFieldProps {
+	typeCode?: string;
 }
 
 export interface IClassifierGroupField extends IDataFieldWithProps<IClassifierGroupFieldProps> {
@@ -84,13 +97,6 @@ interface IClassifierGroupFieldProps {
 	typeCode?: string;
 	treeCode?: string;
 	treeUid?: Guid;
-}
-
-export interface IClassifierField extends IDataFieldWithProps<IClassifierFieldProps> {
-}
-
-interface IClassifierFieldProps {
-	typeCode?: string;
 }
 
 export interface IFileField extends IDataField {

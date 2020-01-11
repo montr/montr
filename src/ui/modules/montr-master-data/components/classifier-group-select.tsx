@@ -117,7 +117,6 @@ export class ClassifierGroupSelect extends React.Component<IProps, IState> {
 	}
 
 	handleChange = (value: any, label: any, extra: any) => {
-		// Should provide an event to pass value to Form.
 		const { onChange } = this.props;
 
 		if (onChange) {

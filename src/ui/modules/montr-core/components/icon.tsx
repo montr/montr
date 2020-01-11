@@ -1,6 +1,6 @@
 import * as React from "react";
 import {
-	ArrowLeftOutlined, BarChartOutlined, CheckOutlined, CheckCircleOutlined, CheckCircleTwoTone, ClusterOutlined, DashboardOutlined, DeleteOutlined, DownOutlined, EditOutlined, ExportOutlined, FacebookOutlined, FileOutlined, FolderOutlined, GoogleOutlined, HomeOutlined, Html5Outlined, Html5TwoTone, ImportOutlined, GlobalOutlined, LeftOutlined, LockOutlined, LogoutOutlined, PlusOutlined, ProjectOutlined, QuestionCircleOutlined, SearchOutlined, SelectOutlined, SettingOutlined, UserOutlined, WindowsOutlined
+	ArrowDownOutlined, ArrowLeftOutlined, ArrowUpOutlined, BarChartOutlined, CheckOutlined, CheckCircleOutlined, CheckCircleTwoTone, ClusterOutlined, DashboardOutlined, DeleteOutlined, DownOutlined, EditOutlined, ExportOutlined, FacebookOutlined, FileOutlined, FolderOutlined, GoogleOutlined, HomeOutlined, Html5Outlined, Html5TwoTone, ImportOutlined, GlobalOutlined, LeftOutlined, LockOutlined, LogoutOutlined, MinusCircleOutlined, PlusOutlined, ProjectOutlined, QuestionCircleOutlined, SearchOutlined, SelectOutlined, SettingOutlined, UserOutlined, WindowsOutlined
 } from "@ant-design/icons";
 
 export abstract class Icon {
@@ -10,7 +10,9 @@ export abstract class Icon {
 		return Icon.Map[key];
 	}
 
+	static ArrowDown = Icon.Map["arrow-down"] = <ArrowDownOutlined />;
 	static ArrowLeft = Icon.Map["arrow-left"] = <ArrowLeftOutlined />;
+	static ArrowUp = Icon.Map["arrow-up"] = <ArrowUpOutlined />;
 	static BarChart = Icon.Map["bar-chart"] = <BarChartOutlined />;
 	static Check = Icon.Map["check"] = <CheckOutlined />;
 	static CheckCircle = Icon.Map["check-circle"] = <CheckCircleOutlined />;
@@ -33,6 +35,7 @@ export abstract class Icon {
 	static Left = Icon.Map["left"] = <LeftOutlined />;
 	static Lock = Icon.Map["lock"] = <LockOutlined />;
 	static Logout = Icon.Map["login"] = <LogoutOutlined />;
+	static MinusCircle = Icon.Map["minus-circle"] = <MinusCircleOutlined />;
 	static Plus = Icon.Map["plus"] = <PlusOutlined />;
 	static Project = Icon.Map["project"] = <ProjectOutlined />;
 	static QuestionCircle = Icon.Map["question-circle"] = <QuestionCircleOutlined />;

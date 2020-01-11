@@ -158,6 +158,7 @@ namespace Montr.Metadata.Models
 		}
 	}
 
+	// todo: add options for select single/multiple, dropdown/radio/checkboxes
 	public class SelectField : FieldMetadata<SelectField.Properties>
 	{
 		public static readonly string TypeCode = "select";
@@ -175,6 +176,13 @@ namespace Montr.Metadata.Models
 		public string Value { get; set; }
 
 		public string Name { get; set; }
+	}
+
+	public class DesignSelectOptionsField : FieldMetadata
+	{
+		public static readonly string TypeCode = "select-options";
+
+		public override string Type => TypeCode;
 	}
 
 	public class ClassifierField : FieldMetadata<ClassifierField.Properties>

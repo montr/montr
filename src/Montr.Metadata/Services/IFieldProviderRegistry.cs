@@ -5,6 +5,7 @@ namespace Montr.Metadata.Services
 {
 	public interface IFieldProviderRegistry
 	{
+		// todo: add field type and parse other from FieldTypeAttribute
 		void AddFieldType(string fieldType, IFieldProvider fieldProvider);
 
 		IFieldProvider GetFieldTypeProvider(string fieldType);

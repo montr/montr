@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Montr.Core;
@@ -33,6 +32,7 @@ namespace Montr.Metadata.Impl
 				options.Registry.AddFieldType(DateField.TypeCode, new DateFieldProvider());
 				options.Registry.AddFieldType(TimeField.TypeCode, new TimeFieldProvider());
 				options.Registry.AddFieldType(SelectField.TypeCode, new DefaultFieldProvider<SelectField, string>());
+				options.Registry.AddFieldType(DesignSelectOptionsField.TypeCode, new DefaultFieldProvider<DesignSelectOptionsField, SelectFieldOption>());
 				// todo: move classifier fields to MasterData
 				options.Registry.AddFieldType(ClassifierField.Code, new DefaultFieldProvider<ClassifierField, string>());
 				options.Registry.AddFieldType(ClassifierGroupField.Code, new DefaultFieldProvider<ClassifierGroupField, string>());

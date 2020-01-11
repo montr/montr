@@ -49,6 +49,7 @@ namespace Montr.Metadata.Services
 
 				result.Fields = new List<FieldMetadata>
 				{
+					// todo: add system type SelectFieldType to select type with icons, common/advanced selection
 					new SelectField { Key = "type", Name = "Тип", Required = true, Props = { Options = options } },
 					new NumberField { Key = "displayOrder", Name = "#", Required = true, Props = { Min = 0, Max = 256 } },
 					new TextField { Key = "key", Name = "Код", Required = true },
@@ -99,7 +100,7 @@ namespace Montr.Metadata.Services
 				{
 					result.Fields = new List<FieldMetadata>
 					{
-						new TextAreaField { Key = PropsPrefix + ".options", Name = "Options", Required = true }
+						new DesignSelectOptionsField { Key = PropsPrefix + ".options", Name = "Options", Required = true }
 					};
 				}
 				else if (code == ClassifierField.Code)
