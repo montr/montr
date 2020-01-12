@@ -82,7 +82,7 @@ class SelectFieldFactory extends DataFieldFactory<ISelectField> {
 			allowClear
 			showSearch
 			placeholder={field.placeholder}
-			style={{ minWidth: 160, width: "auto" }}>
+			style={{ minWidth: 200, width: "auto" }}>
 			{props?.options.map(x => {
 				return <Select.Option key={x.value} value={x.value}>{x.name || x.value}</Select.Option>;
 			})}

@@ -33,10 +33,11 @@ namespace Montr.Metadata.Impl
 				options.Registry.AddFieldType(TimeField.TypeCode, new TimeFieldProvider());
 				options.Registry.AddFieldType(SelectField.TypeCode, new DefaultFieldProvider<SelectField, string>());
 				options.Registry.AddFieldType(DesignSelectOptionsField.TypeCode, new DefaultFieldProvider<DesignSelectOptionsField, SelectFieldOption>());
+				options.Registry.AddFieldType(FileField.TypeCode, new DefaultFieldProvider<FileField, string>());
 				// todo: move classifier fields to MasterData
 				options.Registry.AddFieldType(ClassifierField.Code, new DefaultFieldProvider<ClassifierField, string>());
 				options.Registry.AddFieldType(ClassifierGroupField.Code, new DefaultFieldProvider<ClassifierGroupField, string>());
-				options.Registry.AddFieldType(FileField.TypeCode, new DefaultFieldProvider<FileField, string>());
+				options.Registry.AddFieldType(SelectClassifierTypeField.TypeCode, new DefaultFieldProvider<SelectClassifierTypeField, string>());
 			});
 		}
 	}

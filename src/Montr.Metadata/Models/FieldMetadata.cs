@@ -211,6 +211,13 @@ namespace Montr.Metadata.Models
 		}
 	}
 
+	public class SelectClassifierTypeField : FieldMetadata
+	{
+		public static readonly string TypeCode = "select-classifier-type";
+
+		public override string Type => TypeCode;
+	}
+
 	public class FileField : FieldMetadata
 	{
 		public static readonly string TypeCode = "file";

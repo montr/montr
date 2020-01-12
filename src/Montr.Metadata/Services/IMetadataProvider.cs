@@ -100,22 +100,22 @@ namespace Montr.Metadata.Services
 				{
 					result.Fields = new List<FieldMetadata>
 					{
-						new DesignSelectOptionsField { Key = PropsPrefix + ".options", Name = "Options", Required = true }
+						new DesignSelectOptionsField { Key = PropsPrefix + ".options", Required = true, Name = "Options" }
 					};
 				}
 				else if (code == ClassifierField.Code)
 				{
 					result.Fields = new List<FieldMetadata>
 					{
-						new TextField { Key = PropsPrefix + ".typeCode", Name = "TypeCode" }
+						new SelectClassifierTypeField { Key = PropsPrefix + ".typeCode", Required = true, Name = "Type" }
 					};
 				}
 				else if (code == ClassifierGroupField.Code)
 				{
 					result.Fields = new List<FieldMetadata>
 					{
-						new TextField { Key = PropsPrefix + ".typeCode", Name = "TypeCode" },
-						new TextField { Key = PropsPrefix + ".treeCode", Name = "TreeCode" }
+						new SelectClassifierTypeField { Key = PropsPrefix + ".typeCode", Required = true, Name = "Type" },
+						new TextField { Key = PropsPrefix + ".treeCode", Required = true, Name = "Tree" }
 					};
 				}
 			}

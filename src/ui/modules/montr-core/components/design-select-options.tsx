@@ -57,10 +57,7 @@ export class DesignSelectOptions extends React.Component<IProps, IState> {
 	addOption = () => {
 		const { options } = this.state;
 
-		const num = (options?.length ?? 0) + 1,
-			newOption = { name: "Option " + num, value: "value" + num };
-
-		this.handleChange([...options ?? [], newOption]);
+		this.handleChange([...options ?? [], { name: "", value: "" }]);
 	};
 
 	removeOption = (index: number) => {
@@ -111,9 +108,14 @@ export class DesignSelectOptions extends React.Component<IProps, IState> {
 					</Col>
 					<Col span={8}>
 						{count > 1 && <>
-							<Button type="link" icon={Icon.MinusCircle} onClick={() => this.removeOption(index)} />
-							<Button type="link" icon={Icon.ArrowUp} disabled={index == 0} onClick={() => this.swapOptions(index, index - 1)} />
-							<Button type="link" icon={Icon.ArrowDown} disabled={index == count - 1} onClick={() => this.swapOptions(index, index + 1)} />
+							<Button type="link" icon={Icon.MinusCircle}
+								onClick={() => this.removeOption(index)} />
+							<Button type="link" icon={Icon.ArrowUp}
+								disabled={index == 0}
+								onClick={() => this.swapOptions(index, index - 1)} />
+							<Button type="link" icon={Icon.ArrowDown}
+								disabled={index == count - 1}
+								onClick={() => this.swapOptions(index, index + 1)} />
 						</>}
 					</Col>
 				</Row>)}

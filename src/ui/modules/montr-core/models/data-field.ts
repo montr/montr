@@ -99,5 +99,8 @@ interface IClassifierGroupFieldProps {
 	treeUid?: Guid;
 }
 
+export interface ISelectClassifierTypeField extends IDataField {
+}
+
 export interface IFileField extends IDataField {
 }
