@@ -18,7 +18,7 @@ interface IState {
 
 export class TabEditClassifierTypeHierarchy extends React.Component<IProps, IState> {
 
-	_classifierTreeService = new ClassifierTreeService();
+	private _classifierTreeService = new ClassifierTreeService();
 
 	constructor(props: IProps) {
 		super(props);

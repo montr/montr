@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 import { ClassifierTypeService } from "../services";
 import { NotificationService } from "@montr-core/services";
 import { IMenu } from "@montr-core/models";
-import { IClassifierGroup } from "@montr-master-data/models";
+import { IClassifierGroup } from "../models";
 import { RouteBuilder } from "../module";
 
 interface IProps extends CompanyContextProps {

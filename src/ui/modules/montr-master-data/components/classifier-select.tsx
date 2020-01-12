@@ -1,8 +1,8 @@
 import * as React from "react";
 import { Spin, Select, Divider, Button } from "antd";
-import { IClassifierField, Guid } from "@montr-core/models";
+import { Guid } from "@montr-core/models";
 import { ClassifierService } from "../services";
-import { IClassifierGroup, IClassifierTree, IClassifierType, IClassifier } from "../models";
+import { IClassifierField, IClassifierGroup, IClassifierTree, IClassifierType, IClassifier } from "../models";
 import { RouteBuilder } from "../module";
 import { Link } from "react-router-dom";
 import { Icon } from "@montr-core/components";

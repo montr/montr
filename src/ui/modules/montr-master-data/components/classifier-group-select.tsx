@@ -1,9 +1,9 @@
 import * as React from "react";
 import { TreeSelect, Spin, Select } from "antd";
 import { DataNode } from "rc-tree-select/lib/interface";
-import { Guid, IClassifierGroupField } from "@montr-core/models";
+import { Guid } from "@montr-core/models";
 import { ClassifierGroupService, ClassifierTreeService, ClassifierTypeService } from "../services";
-import { IClassifierGroup, IClassifierTree, IClassifierType } from "../models";
+import { IClassifierGroup, IClassifierTree, IClassifierType, IClassifierGroupField } from "../models";
 import { Icon } from "@montr-core/components";
 
 interface IProps {

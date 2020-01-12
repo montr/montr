@@ -1,8 +1,8 @@
 import * as React from "react";
 import { Modal, Spin } from "antd";
-import { Guid, IDataField, IApiResult, IClassifierGroupField } from "@montr-core/models";
+import { Guid, IDataField, IApiResult } from "@montr-core/models";
 import { ClassifierGroupService } from "../services";
-import { IClassifierGroup } from "@montr-master-data/models";
+import { IClassifierGroup, IClassifierGroupField } from "../models";
 import { NotificationService, MetadataService } from "@montr-core/services";
 import { DataForm } from "@montr-core/components";
 import { FormInstance } from "antd/lib/form";

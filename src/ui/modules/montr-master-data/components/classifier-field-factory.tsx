@@ -1,8 +1,8 @@
 import * as React from "react";
 import { DataFieldFactory } from "@montr-core/components";
-import { IIndexer, IClassifierField, IClassifierGroupField, ISelectClassifierTypeField } from "@montr-core/models";
-import { ClassifierGroupSelect, ClassifierSelect } from ".";
-import { SelectClassifierType } from "./select-classifier-type";
+import { IIndexer } from "@montr-core/models";
+import { ClassifierGroupSelect, ClassifierSelect, SelectClassifierType } from ".";
+import { ISelectClassifierTypeField, IClassifierField, IClassifierGroupField } from "../models";
 
 export class ClassifierFieldFactory extends DataFieldFactory<IClassifierField> {
 	createNode(field: IClassifierField, data: IIndexer): React.ReactElement {

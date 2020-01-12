@@ -1,3 +1,4 @@
+export * from "./classifier-field";
 export * from "./classifier-group";
 export * from "./classifier-link";
 export * from "./classifier-tree";

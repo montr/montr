@@ -1,4 +1,4 @@
-import { Guid, IIndexer } from ".";
+import { Guid } from ".";
 
 export interface IFieldType {
 	code?: string;
@@ -6,7 +6,7 @@ export interface IFieldType {
 	icon?: string;
 }
 
-export interface IDataField /* extends IIndexer */ {
+export interface IDataField {
 	uid?: Guid;
 	type: string;
 	key?: string;
@@ -81,25 +81,6 @@ export interface IOption {
 }
 
 export interface IDesignSelectOptionsField extends IDataField {
-}
-
-export interface IClassifierField extends IDataFieldWithProps<IClassifierFieldProps> {
-}
-
-interface IClassifierFieldProps {
-	typeCode?: string;
-}
-
-export interface IClassifierGroupField extends IDataFieldWithProps<IClassifierGroupFieldProps> {
-}
-
-interface IClassifierGroupFieldProps {
-	typeCode?: string;
-	treeCode?: string;
-	treeUid?: Guid;
-}
-
-export interface ISelectClassifierTypeField extends IDataField {
 }
 
 export interface IFileField extends IDataField {
