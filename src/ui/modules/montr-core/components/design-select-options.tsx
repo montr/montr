@@ -1,7 +1,7 @@
 import React, { ChangeEvent } from "react";
 import { Input, Row, Col, Typography, Button } from "antd";
 import { Gutter } from "antd/lib/grid/row";
-import { IOption, Guid, IIndexer } from "../models";
+import { IOption, IIndexer } from "../models";
 import { ButtonAdd } from ".";
 import { Icon } from "./icon";
 
@@ -12,15 +12,12 @@ interface IProps {
 
 interface IState {
 	options?: IOption[];
-	items: IItem[];
 }
 
-interface IItem extends IIndexer {
-	key: Guid;
-	value: string;
-	name: string;
-}
-
+// todo: consider using Dynamic Form Item (Form.List component)
+// https://next.ant.design/components/form/#components-form-demo-dynamic-form-item
+// or using table with inline editing
+// https://next.ant.design/components/table/#components-table-demo-edit-cell
 export class DesignSelectOptions extends React.Component<IProps, IState> {
 
 	/* static getDerivedStateFromProps(nextProps: IProps, prevState: IState) {
@@ -34,65 +31,69 @@ export class DesignSelectOptions extends React.Component<IProps, IState> {
 	constructor(props: IProps) {
 		super(props);
 
-		const items: IItem[] = (props.value ?? []).map(x => {
-			return { name: x.name, value: x.value, key: Guid.newGuid() };
-		});
-
 		this.state = {
-			options: props.value,
-			items: items
+			options: props.value
 		};
 	}
+
+	componentDidUpdate = async (prevProps: IProps) => {
+		if (this.props.value !== prevProps.value) {
+			this.setState({ options: this.props.value });
+		}
+	};
 
 	/* shouldComponentUpdate(nextProps: IProps, nextState: IState, nextContext: any): boolean {
 		return this.props.value !== nextProps.value;
 	} */
 
-	handleChange = (items: IItem[]) => {
+	handleChange = (items: IOption[]) => {
 		const { onChange } = this.props;
 
 		if (onChange) {
-			const options = items.map(x => {
-				return { name: x.name, value: x.value };
-			});
-
-			onChange(options);
+			onChange(items);
 		}
 	};
 
 	addOption = () => {
-		const { items } = this.state;
+		const { options } = this.state;
 
-		const num = items.length + 1,
-			newItem = { name: "Option " + num, value: "value" + num, key: Guid.newGuid() };
+		const num = (options?.length ?? 0) + 1,
+			newOption = { name: "Option " + num, value: "value" + num };
 
-		this.handleChange([...items, newItem]);
+		this.handleChange([...options ?? [], newOption]);
 	};
 
-	removeOption = (key: Guid) => {
-		const items = this.state.items.filter(x => {
-			return x.key != key;
-		});
+	removeOption = (index: number) => {
+		const { options } = this.state;
 
-		this.handleChange(items);
+		options.splice(index, 1);
+
+		this.handleChange(options);
 	};
 
-	changeItemProp = (item: IItem, e: ChangeEvent<HTMLInputElement>) => {
-		const { items } = this.state;
+	swapOptions = (index1: number, index2: number) => {
+		const { options } = this.state;
+
+		[options[index2], options[index1]] = [options[index1], options[index2]];
+
+		this.handleChange(options);
+	};
+
+	changeItemProp = (option: IOption, e: ChangeEvent<HTMLInputElement>) => {
+		const item = option as IIndexer;
 
 		if (item[e.target.name] != e.target.value) {
 			item[e.target.name] = e.target.value;
 
-			this.handleChange(items);
+			this.handleChange(this.state.options);
 		}
 	};
 
 	render = () => {
-		const { items } = this.state;
+		const { options } = this.state,
+			count = options?.length;
 
 		const gutter: [Gutter, Gutter] = [{ xs: 4, sm: 8, md: 12, lg: 16 }, 4];
-
-		console.log("render");
 
 		return (<>
 			<div>
@@ -101,22 +102,24 @@ export class DesignSelectOptions extends React.Component<IProps, IState> {
 					<Col span={8}><Typography.Text>Value</Typography.Text></Col>
 				</Row>
 
-				{items.map(x => <Row gutter={gutter} key={x.key.toString()}>
+				{options?.map((item, index) => <Row gutter={gutter} key={index}>
 					<Col span={8}>
-						<Input name="name" value={x.name} onChange={(e) => this.changeItemProp(x, e)} />
+						<Input name="name" value={item.name} onChange={(e) => this.changeItemProp(item, e)} />
 					</Col>
 					<Col span={8}>
-						<Input name="value" value={x.value} onChange={(e) => this.changeItemProp(x, e)} />
+						<Input name="value" value={item.value} onChange={(e) => this.changeItemProp(item, e)} />
 					</Col>
 					<Col span={8}>
-						<Button type="link" icon={Icon.MinusCircle} onClick={() => this.removeOption(x.key)} />
-						<Button type="link" icon={Icon.ArrowUp} />
-						<Button type="link" icon={Icon.ArrowDown} />
+						{count > 1 && <>
+							<Button type="link" icon={Icon.MinusCircle} onClick={() => this.removeOption(index)} />
+							<Button type="link" icon={Icon.ArrowUp} disabled={index == 0} onClick={() => this.swapOptions(index, index - 1)} />
+							<Button type="link" icon={Icon.ArrowDown} disabled={index == count - 1} onClick={() => this.swapOptions(index, index + 1)} />
+						</>}
 					</Col>
 				</Row>)}
 			</div>
 
-			<ButtonAdd onClick={this.addOption} />
+			<ButtonAdd type="dashed" onClick={this.addOption} />
 		</>);
 	};
 }
