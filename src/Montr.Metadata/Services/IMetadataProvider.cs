@@ -45,7 +45,12 @@ namespace Montr.Metadata.Services
 
 			if (viewId == "Metadata/Edit")
 			{
-				var options = _fieldProviderRegistry.GetFieldTypes().Select(x => new SelectFieldOption { Value = x.Code, Name = x.Name }).ToArray();
+				var options = _fieldProviderRegistry
+					.GetFieldTypes()
+					.Where(x => x.IsSystem == false)
+					.OrderBy(x => x.Code)
+					.Select(x => new SelectFieldOption { Value = x.Code, Name = x.Name })
+					.ToArray();
 
 				result.Fields = new List<FieldMetadata>
 				{

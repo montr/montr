@@ -1,12 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Montr.Metadata.Models;
 
 namespace Montr.Metadata.Services
 {
 	public interface IFieldProviderRegistry
 	{
-		// todo: add field type and parse other from FieldTypeAttribute
-		void AddFieldType(string fieldType, IFieldProvider fieldProvider);
+		void AddFieldType(Type fieldType);
 
 		IFieldProvider GetFieldTypeProvider(string fieldType);
 

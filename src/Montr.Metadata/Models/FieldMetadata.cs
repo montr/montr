@@ -1,4 +1,5 @@
 ﻿using System;
+using Montr.Metadata.Services;
 
 namespace Montr.Metadata.Models
 {
@@ -70,24 +71,27 @@ namespace Montr.Metadata.Models
 		}
 	}
 
+	[FieldType(TypeCode, typeof(DefaultFieldProvider<BooleanField, bool>))]
 	public class BooleanField : FieldMetadata
 	{
-		public static readonly string TypeCode = "boolean";
+		public const string TypeCode = "boolean";
 
 		public override string Type => TypeCode;
 	}
 
+	[FieldType(TypeCode, typeof(DefaultFieldProvider<TextField, string>))]
 	public class TextField : FieldMetadata
 	{
-		public static readonly string TypeCode = "text";
+		public const string TypeCode = "text";
 
 		public override string Type => TypeCode;
 	}
 
 	// todo join with TextField?
+	[FieldType(TypeCode, typeof(DefaultFieldProvider<TextAreaField, string>))]
 	public class TextAreaField : FieldMetadata<TextAreaField.Properties>
 	{
-		public static readonly string TypeCode = "textarea";
+		public const string TypeCode = "textarea";
 
 		public override string Type => TypeCode;
 
@@ -97,16 +101,18 @@ namespace Montr.Metadata.Models
 		}
 	}
 
+	[FieldType(TypeCode, typeof(DefaultFieldProvider<PasswordField, string>))]
 	public class PasswordField : FieldMetadata
 	{
-		public static readonly string TypeCode = "password";
+		public const string TypeCode = "password";
 
 		public override string Type => TypeCode;
 	}
 
+	[FieldType(TypeCode, typeof(DefaultFieldProvider<NumberField, long>))]
 	public class NumberField : FieldMetadata<NumberField.Properties>
 	{
-		public static readonly string TypeCode = "number";
+		public const string TypeCode = "number";
 
 		public override string Type => TypeCode;
 
@@ -119,9 +125,10 @@ namespace Montr.Metadata.Models
 	}
 
 	// todo: merge with number?
+	[FieldType(TypeCode, typeof(DefaultFieldProvider<DecimalField, decimal>))]
 	public class DecimalField : FieldMetadata<DecimalField.Properties>
 	{
-		public static readonly string TypeCode = "decimal";
+		public const string TypeCode = "decimal";
 
 		public override string Type => TypeCode;
 
@@ -135,9 +142,10 @@ namespace Montr.Metadata.Models
 		}
 	}
 
+	[FieldType(TypeCode, typeof(DateFieldProvider))]
 	public class DateField : FieldMetadata<DateField.Properties>
 	{
-		public static readonly string TypeCode = "date";
+		public const string TypeCode = "date";
 
 		public override string Type => TypeCode;
 
@@ -147,9 +155,10 @@ namespace Montr.Metadata.Models
 		}
 	}
 
+	[FieldType(TypeCode, typeof(TimeFieldProvider))]
 	public class TimeField : FieldMetadata<TimeField.Properties>
 	{
-		public static readonly string TypeCode = "time";
+		public const string TypeCode = "time";
 
 		public override string Type => TypeCode;
 
@@ -159,9 +168,10 @@ namespace Montr.Metadata.Models
 	}
 
 	// todo: add options for select single/multiple, dropdown/radio/checkboxes
+	[FieldType(TypeCode, typeof(DefaultFieldProvider<SelectField, string>))]
 	public class SelectField : FieldMetadata<SelectField.Properties>
 	{
-		public static readonly string TypeCode = "select";
+		public const string TypeCode = "select";
 
 		public override string Type => TypeCode;
 
@@ -178,49 +188,18 @@ namespace Montr.Metadata.Models
 		public string Name { get; set; }
 	}
 
+	[FieldType(TypeCode, typeof(DefaultFieldProvider<DesignSelectOptionsField, SelectFieldOption>), IsSystem = true)]
 	public class DesignSelectOptionsField : FieldMetadata
 	{
-		public static readonly string TypeCode = "select-options";
+		public const string TypeCode = "select-options";
 
 		public override string Type => TypeCode;
 	}
 
-	public class ClassifierField : FieldMetadata<ClassifierField.Properties>
-	{
-		public static readonly string Code = "classifier";
-
-		public override string Type => Code;
-
-		public class Properties
-		{
-			public string TypeCode { get; set; }
-		}
-	}
-
-	public class ClassifierGroupField : FieldMetadata<ClassifierGroupField.Properties>
-	{
-		public static readonly string Code = "classifier-group";
-
-		public override string Type => Code;
-
-		public class Properties
-		{
-			public string TypeCode { get; set; }
-
-			public string TreeCode { get; set; }
-		}
-	}
-
-	public class SelectClassifierTypeField : FieldMetadata
-	{
-		public static readonly string TypeCode = "select-classifier-type";
-
-		public override string Type => TypeCode;
-	}
-
+	[FieldType(TypeCode, typeof(DefaultFieldProvider<FileField, string>))]
 	public class FileField : FieldMetadata
 	{
-		public static readonly string TypeCode = "file";
+		public const string TypeCode = "file";
 
 		public override string Type => TypeCode;
 	}

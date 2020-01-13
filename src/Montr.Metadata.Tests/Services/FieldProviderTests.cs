@@ -2,6 +2,7 @@
 using System.Globalization;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Montr.Metadata.Impl.Services;
+using Montr.Metadata.Services;
 
 namespace Montr.Metadata.Tests.Services
 {

@@ -23,21 +23,17 @@ namespace Montr.Metadata.Impl
 		{
 			app.ConfigureMetadata(options =>
 			{
-				options.Registry.AddFieldType(BooleanField.TypeCode, new DefaultFieldProvider<BooleanField, bool>());
-				options.Registry.AddFieldType(TextField.TypeCode, new DefaultFieldProvider<TextField, string>());
-				options.Registry.AddFieldType(TextAreaField.TypeCode, new DefaultFieldProvider<TextAreaField, string>());
-				options.Registry.AddFieldType(PasswordField.TypeCode, new DefaultFieldProvider<PasswordField, string>());
-				options.Registry.AddFieldType(NumberField.TypeCode, new DefaultFieldProvider<NumberField, long>());
-				options.Registry.AddFieldType(DecimalField.TypeCode, new DefaultFieldProvider<DecimalField, decimal>());
-				options.Registry.AddFieldType(DateField.TypeCode, new DateFieldProvider());
-				options.Registry.AddFieldType(TimeField.TypeCode, new TimeFieldProvider());
-				options.Registry.AddFieldType(SelectField.TypeCode, new DefaultFieldProvider<SelectField, string>());
-				options.Registry.AddFieldType(DesignSelectOptionsField.TypeCode, new DefaultFieldProvider<DesignSelectOptionsField, SelectFieldOption>());
-				options.Registry.AddFieldType(FileField.TypeCode, new DefaultFieldProvider<FileField, string>());
-				// todo: move classifier fields to MasterData
-				options.Registry.AddFieldType(ClassifierField.Code, new DefaultFieldProvider<ClassifierField, string>());
-				options.Registry.AddFieldType(ClassifierGroupField.Code, new DefaultFieldProvider<ClassifierGroupField, string>());
-				options.Registry.AddFieldType(SelectClassifierTypeField.TypeCode, new DefaultFieldProvider<SelectClassifierTypeField, string>());
+				options.Registry.AddFieldType(typeof(BooleanField));
+				options.Registry.AddFieldType(typeof(TextField));
+				options.Registry.AddFieldType(typeof(TextAreaField));
+				options.Registry.AddFieldType(typeof(PasswordField));
+				options.Registry.AddFieldType(typeof(NumberField));
+				options.Registry.AddFieldType(typeof(DecimalField));
+				options.Registry.AddFieldType(typeof(DateField));
+				options.Registry.AddFieldType(typeof(TimeField));
+				options.Registry.AddFieldType(typeof(SelectField));
+				options.Registry.AddFieldType(typeof(DesignSelectOptionsField));
+				options.Registry.AddFieldType(typeof(FileField));
 			});
 		}
 	}

@@ -1,8 +1,7 @@
 ﻿using System;
 using Montr.Metadata.Models;
-using Montr.Metadata.Services;
 
-namespace Montr.Metadata.Impl.Services
+namespace Montr.Metadata.Services
 {
 	// todo: rewrite all this sh*t
 	public class DefaultFieldProvider<TFieldType, TClrType> : IFieldProvider
