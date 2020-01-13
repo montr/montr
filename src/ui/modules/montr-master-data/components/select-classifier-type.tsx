@@ -34,8 +34,7 @@ export class SelectClassifierType extends React.Component<IProps, IState> {
 	};
 
 	fetchData = async () => {
-		// todo: remove paging
-		const types = await this._classifierTypeService.list();
+		const types = await this._classifierTypeService.list({ skipPaging: true });
 
 		this.setState({ loading: false, types: types.rows });
 	};

@@ -2,6 +2,7 @@ import { Fetcher } from "@montr-core/services";
 import { Constants } from "@montr-core/.";
 import { Guid, IDataResult, IApiResult } from "@montr-core/models";
 import { IClassifierType } from "../models";
+import { ISearchRequest } from "@montr-core/models";
 
 interface IGetClassifierType {
 	typeCode?: string;
@@ -9,8 +10,8 @@ interface IGetClassifierType {
 }
 
 export class ClassifierTypeService extends Fetcher {
-	list = async (): Promise<IDataResult<IClassifierType>> => {
-		return this.post(`${Constants.apiURL}/classifierType/list`, {});
+	list = async (request?: ISearchRequest): Promise<IDataResult<IClassifierType>> => {
+		return this.post(`${Constants.apiURL}/classifierType/list`, request);
 	};
 
 	get = async (request: IGetClassifierType): Promise<IClassifierType> => {

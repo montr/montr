@@ -22,25 +22,26 @@ namespace Montr.MasterData.Impl.Services
 
 		public async Task<SearchResult<ClassifierType>> Search(SearchRequest searchRequest, CancellationToken cancellationToken)
 		{
-			var request = (ClassifierTypeSearchRequest)searchRequest;
+			var request = (ClassifierTypeSearchRequest)searchRequest ?? throw new ArgumentNullException(nameof(searchRequest));
 
 			using (var db = _dbContextFactory.Create())
 			{
-				var query = db.GetTable<DbClassifierType>()
+				var all = db.GetTable<DbClassifierType>()
 					.Where(x => x.CompanyUid == request.CompanyUid);
 
 				if (request.Code != null)
 				{
-					query = query.Where(x => x.Code == request.Code);
+					all = all.Where(x => x.Code == request.Code);
 				}
 
 				if (request.Uid != null)
 				{
-					query = query.Where(x => x.Uid == request.Uid);
+					all = all.Where(x => x.Uid == request.Uid);
 				}
 
-				var data = await query
-					.Apply(request, x => x.Code)
+				var paged = request.SkipPaging ? all.OrderBy(x => x.Code) : all.Apply(request, x => x.Code);
+
+				var data = await paged
 					.Select(x => new ClassifierType
 					{
 						Uid = x.Uid,
@@ -55,7 +56,7 @@ namespace Montr.MasterData.Impl.Services
 
 				return new SearchResult<ClassifierType>
 				{
-					TotalCount = query.Count(),
+					TotalCount = request.SkipPaging ? (int?)null : all.Count(),
 					Rows = data
 				};
 			}

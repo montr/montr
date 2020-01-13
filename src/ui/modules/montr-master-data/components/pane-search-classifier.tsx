@@ -90,7 +90,7 @@ class _PaneSearchClassifier extends React.Component<IProps, IState> {
 	};
 
 	loadClassifierTypes = async () => {
-		const types = (await this._classifierTypeService.list()).rows;
+		const types = (await this._classifierTypeService.list({ skipPaging: true })).rows;
 
 		this.setState({ types });
 

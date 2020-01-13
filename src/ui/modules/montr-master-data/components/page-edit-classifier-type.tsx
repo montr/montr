@@ -50,7 +50,7 @@ export default class EditClassifierType extends React.Component<IProps, IState> 
 	fetchData = async () => {
 		const { uid } = this.props.match.params;
 
-		const types = await this._classifierTypeService.list();
+		const types = await this._classifierTypeService.list({ skipPaging: true });
 
 		const data: IClassifierType = (uid)
 			? await this._classifierTypeService.get({ uid })
@@ -87,7 +87,7 @@ export default class EditClassifierType extends React.Component<IProps, IState> 
 		else {
 			title = <>
 				{(uid)
-					? <ClassifierBreadcrumb /* types={types} */ type={data} item={{ name: "Настройка" }} />
+					? <ClassifierBreadcrumb types={types} type={data} item={{ name: "Настройка" }} />
 					: <ClassifierBreadcrumb item={{ name: "Добавление" }} />
 				}
 				<PageHeader>{data.name}</PageHeader>

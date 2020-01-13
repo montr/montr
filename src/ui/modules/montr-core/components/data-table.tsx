@@ -96,10 +96,16 @@ export class DataTable<TModel extends IIndexer> extends React.Component<IProps<T
 			pagination: pager,
 		});
 
+		// todo: check other field types
+		// todo: add support of multiple sort columns
+		let sortColumn: string;
+		if (sorter.field instanceof Array) sortColumn = sorter.field[0] as string;
+		if (sorter.field instanceof String) sortColumn = sorter.field as string;
+
 		await this.fetchData({
 			pageSize: pagination.pageSize,
 			pageNo: pagination.current,
-			sortColumn: sorter.field as string, // todo: check other field types
+			sortColumn: sortColumn,
 			sortOrder: sorter.order == "ascend"
 				? "ascending" : sorter.order == "descend" ? "descending" : null,
 			// ...filters,
