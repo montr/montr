@@ -10,8 +10,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Montr.Dokumento\Montr.Dokumento.csproj" />
     <ProjectReference Include="..\Montr.Data.Linq2Db\Montr.Data.Linq2Db.csproj" />
+    <ProjectReference Include="..\Montr.Docs\Montr.Docs.csproj" />
   </ItemGroup>
 
 </Project>

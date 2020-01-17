@@ -32,8 +32,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Montr.Dokumento.Impl\Montr.Dokumento.Impl.csproj" />
-    <ProjectReference Include="..\Montr.Dokumento\Montr.Dokumento.csproj" />
+    <ProjectReference Include="..\Montr.Docs.Impl\Montr.Docs.Impl.csproj" />
+    <ProjectReference Include="..\Montr.Docs\Montr.Docs.csproj" />
     <ProjectReference Include="..\Montr.Idx.Impl\Montr.Idx.Impl.csproj" />
     <ProjectReference Include="..\Montr.Idx\Montr.Idx.csproj" />
     <ProjectReference Include="..\Montr.Kompany.Impl\Montr.Kompany.Impl.csproj" />

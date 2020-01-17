@@ -15,9 +15,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Montr.Kompany.Impl", "Montr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Montr.Kompany.Tests", "Montr.Kompany.Tests\Montr.Kompany.Tests.csproj", "{71875110-B4AD-499E-829C-E3243F000BE5}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Montr.Dokumento", "Montr.Dokumento\Montr.Dokumento.csproj", "{3E554A67-A136-4E19-866E-EF200690CF64}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Montr.Docs", "Montr.Docs\Montr.Docs.csproj", "{3E554A67-A136-4E19-866E-EF200690CF64}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Montr.Dokumento.Impl", "Montr.Dokumento.Impl\Montr.Dokumento.Impl.csproj", "{C49077CD-D40F-4062-99AA-C5E651DD5CF0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Montr.Docs.Impl", "Montr.Docs.Impl\Montr.Docs.Impl.csproj", "{C49077CD-D40F-4062-99AA-C5E651DD5CF0}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Montr.Core", "Montr.Core\Montr.Core.csproj", "{4E860925-DDA8-4EC9-868F-6CF729E4F3A0}"
 EndProject
@@ -57,11 +57,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Montr.Idx.Impl", "Montr.Idx
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Montr.Idx.Tests", "Montr.Idx.Tests\Montr.Idx.Tests.csproj", "{5671EABD-D0F7-4856-A409-EE9DB93FFF8F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Montr.Metadata", "Montr.Metadata\Montr.Metadata.csproj", "{8059C7A6-CAFB-4EC5-816C-93C6D91C4EC1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Montr.Metadata", "Montr.Metadata\Montr.Metadata.csproj", "{8059C7A6-CAFB-4EC5-816C-93C6D91C4EC1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Montr.Metadata.Impl", "Montr.Metadata.Impl\Montr.Metadata.Impl.csproj", "{22BECA8F-D6B9-42C9-9D0A-A0F581C7C224}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Montr.Metadata.Impl", "Montr.Metadata.Impl\Montr.Metadata.Impl.csproj", "{22BECA8F-D6B9-42C9-9D0A-A0F581C7C224}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Montr.Metadata.Tests", "Montr.Metadata.Tests\Montr.Metadata.Tests.csproj", "{1FAC2AA6-FC56-4D05-9148-F35231C5270C}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Montr.Metadata.Tests", "Montr.Metadata.Tests\Montr.Metadata.Tests.csproj", "{1FAC2AA6-FC56-4D05-9148-F35231C5270C}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

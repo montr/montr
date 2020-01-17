@@ -5,7 +5,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Montr.Core.Impl.Services;
 using Montr.Core.Services;
 using Montr.Data.Linq2Db;
-using Montr.Dokumento.Impl.Services;
+using Montr.Docs.Impl.Services;
 using Montr.Kompany.Commands;
 using Montr.Kompany.Impl.CommandHandlers;
 using Montr.Kompany.Models;
