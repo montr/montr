@@ -2,9 +2,16 @@ import { Fetcher } from "./fetcher";
 import { Constants } from "..";
 import { IDataView, IPaneProps, IDataField, IApiResult, Guid, IFieldType } from "../models";
 
-interface IInsertDataFieldRequest {
+interface IManageFieldDataRequest {
 	entityTypeCode: string;
+	entityUid: Guid | string;
 	item: IDataField;
+}
+
+interface IDeleteFieldDataRequest {
+	entityTypeCode: string;
+	entityUid: Guid | string;
+	uids: string[] | number[];
 }
 
 export class MetadataService extends Fetcher {
@@ -29,19 +36,19 @@ export class MetadataService extends Fetcher {
 		return this.post(`${Constants.apiURL}/metadata/fieldTypes`, { entityTypeCode });
 	};
 
-	get = async (entityTypeCode: string, uid: Guid): Promise<IDataField> => {
-		return this.post(`${Constants.apiURL}/metadata/get`, { entityTypeCode, uid });
+	get = async (entityTypeCode: string, entityUid: Guid | string, uid: Guid): Promise<IDataField> => {
+		return this.post(`${Constants.apiURL}/metadata/get`, { entityTypeCode, entityUid, uid });
 	};
 
-	insert = async (request: IInsertDataFieldRequest): Promise<IApiResult> => {
+	insert = async (request: IManageFieldDataRequest): Promise<IApiResult> => {
 		return this.post(`${Constants.apiURL}/metadata/insert`, request);
 	};
 
-	update = async (entityTypeCode: string, item: IDataField): Promise<IApiResult> => {
-		return this.post(`${Constants.apiURL}/metadata/update`, { entityTypeCode, item });
+	update = async (request: IManageFieldDataRequest): Promise<IApiResult> => {
+		return this.post(`${Constants.apiURL}/metadata/update`, request);
 	};
 
-	delete = async (entityTypeCode: string, uids: string[] | number[]): Promise<IApiResult> => {
-		return this.post(`${Constants.apiURL}/metadata/delete`, { entityTypeCode, uids });
+	delete = async (request: IDeleteFieldDataRequest): Promise<IApiResult> => {
+		return this.post(`${Constants.apiURL}/metadata/delete`, request);
 	};
 };

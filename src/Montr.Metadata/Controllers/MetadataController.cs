@@ -18,7 +18,8 @@ namespace Montr.Metadata.Controllers
 		private readonly IMetadataProvider _metadataProvider;
 		private readonly ICurrentUserProvider _currentUserProvider;
 
-		public MetadataController(IMediator mediator, IMetadataProvider metadataProvider, ICurrentUserProvider currentUserProvider)
+		public MetadataController(IMediator mediator, IMetadataProvider metadataProvider,
+			ICurrentUserProvider currentUserProvider)
 		{
 			_mediator = mediator;
 			_metadataProvider = metadataProvider;

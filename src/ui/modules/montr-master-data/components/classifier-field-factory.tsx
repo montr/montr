@@ -21,7 +21,3 @@ export class SelectClassifierTypeFieldFactory extends DataFieldFactory<ISelectCl
 		return <SelectClassifierType />;
 	}
 }
-
-DataFieldFactory.register("classifier-group", new ClassifierGroupFieldFactory());
-DataFieldFactory.register("classifier", new ClassifierFieldFactory());
-DataFieldFactory.register("select-classifier-type", new SelectClassifierTypeFieldFactory());

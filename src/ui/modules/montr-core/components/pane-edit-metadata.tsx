@@ -9,6 +9,7 @@ import { FormInstance } from "antd/lib/form";
 
 interface IProps {
 	entityTypeCode: string;
+	entityUid: Guid | string;
 	uid?: Guid;
 	onSuccess?: () => void;
 }
@@ -50,12 +51,15 @@ export class PaneEditMetadata extends React.Component<IProps, IState> {
 	};
 
 	fetchData = async () => {
-		const { entityTypeCode, uid } = this.props;
+		const { entityTypeCode, entityUid, uid } = this.props;
 
-		const { type, ...values } = (uid) ? await this._metadataService.get(entityTypeCode, uid) : { type: DefaultFieldType };
+		const { type, ...values } = (uid)
+			? await this._metadataService.get(entityTypeCode, entityUid, uid)
+			: { type: DefaultFieldType };
 
 		const commonView = await this._metadataService.load("Metadata/Edit");
 
+		// todo: find type field by code
 		const typeFields = commonView.fields.slice(0, 1),
 			commonFields = commonView.fields.slice(1);
 
@@ -121,7 +125,7 @@ export class PaneEditMetadata extends React.Component<IProps, IState> {
 	};
 
 	handleSubmit = async (values: IDataField): Promise<IApiResult> => {
-		const { entityTypeCode, uid, onSuccess } = this.props,
+		const { entityTypeCode, entityUid, uid, onSuccess } = this.props,
 			{ typeData } = this.state;
 
 		const item = { type: typeData.type, ...values };
@@ -129,10 +133,10 @@ export class PaneEditMetadata extends React.Component<IProps, IState> {
 		let result;
 
 		if (uid) {
-			result = await this._metadataService.update(entityTypeCode, { uid, ...item });
+			result = await this._metadataService.update({ entityTypeCode, entityUid, item: { uid, ...item } });
 		}
 		else {
-			result = await this._metadataService.insert({ entityTypeCode, item });
+			result = await this._metadataService.insert({ entityTypeCode, entityUid, item });
 		}
 
 		if (result.success && onSuccess) {

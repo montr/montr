@@ -12,11 +12,14 @@ namespace Montr.Metadata.Impl.Entities
 		[Column(Name = "entity_type_code", Length = 32), DataType(DataType.VarChar), NotNull]
 		public string EntityTypeCode { get; set; }
 
-		[Column(Name = "key", Length = 32), DataType(DataType.VarChar), NotNull]
+		[Column(Name = "entity_uid"), DataType(DataType.Guid), NotNull]
+		public System.Guid EntityUid { get; set; }
+
+		[Column(Name = "key", Length = 32), DataType(DataType.VarChar) /*, NotNull*/]
 		public string Key { get; set; }
 
 		[Column(Name = "type_code", Length = 32), DataType(DataType.VarChar), NotNull]
-		public string TypeCode { get; set; }
+		public string Type { get; set; }
 
 		[Column(Name = "is_active"), DataType(DataType.Boolean), NotNull]
 		public bool IsActive { get; set; }

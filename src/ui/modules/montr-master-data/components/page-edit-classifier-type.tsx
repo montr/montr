@@ -107,7 +107,7 @@ export default class EditClassifierType extends React.Component<IProps, IState> 
 							<TabEditClassifierTypeHierarchy type={data} />
 						</Tabs.TabPane>
 						<Tabs.TabPane key="fields" tab="Поля" disabled={otherTabsDisabled}>
-							{data?.code && <PaneSearchMetadata entityTypeCode={`Classifier.${data.code}`} />}
+							{data?.code && <PaneSearchMetadata entityTypeCode={`ClassifierType`} entityUid={data.uid} />}
 						</Tabs.TabPane>
 						<Tabs.TabPane key="history" tab="История изменений" disabled={otherTabsDisabled}></Tabs.TabPane>
 					</Tabs>}

@@ -45,7 +45,7 @@ export default class EditClassifierType extends React.Component<IProps, IState> 
 				<Spin spinning={loading}>
 					<Tabs size="small" defaultActiveKey={tabKey} onChange={this.handleTabChange}>
 						<Tabs.TabPane key="fields" tab="Поля">
-							<PaneSearchMetadata entityTypeCode={`Process.registration`} />
+							<PaneSearchMetadata entityTypeCode={`Process`} entityUid={uid} />
 						</Tabs.TabPane>
 					</Tabs>
 				</Spin>

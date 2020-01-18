@@ -6,6 +6,8 @@ namespace Montr.Metadata.Models
 	{
 		public string EntityTypeCode { get; set; }
 
+		public Guid EntityUid { get; set; }
+
 		public Guid[] EntityUids { get; set; }
 	}
 }

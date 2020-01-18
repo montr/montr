@@ -40,8 +40,10 @@ namespace Montr.Metadata.Impl.CommandHandlers
 				using (var db = _dbContextFactory.Create())
 				{
 					affected = await db.GetTable<DbFieldMetadata>()
-						.Where(x => x.Uid == item.Uid)
-						.Set(x => x.TypeCode, item.Type)
+						.Where(x => x.EntityTypeCode == request.EntityTypeCode &&
+									x.EntityUid == request.EntityUid &&
+									x.Uid == item.Uid)
+						.Set(x => x.Type, item.Type)
 						.Set(x => x.Key, item.Key)
 						.Set(x => x.Name, item.Name)
 						.Set(x => x.Description, item.Description)

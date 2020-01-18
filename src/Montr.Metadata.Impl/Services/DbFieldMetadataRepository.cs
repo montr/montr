@@ -63,7 +63,7 @@ namespace Montr.Metadata.Impl.Services
 
 				foreach (var dbField in data)
 				{
-					var fieldTypeProvider = _fieldProviderRegistry.GetFieldTypeProvider(dbField.TypeCode);
+					var fieldTypeProvider = _fieldProviderRegistry.GetFieldTypeProvider(dbField.Type);
 					// todo: use factory (?) move to provider (?)
 					var field = (FieldMetadata)Activator.CreateInstance(fieldTypeProvider.FieldType);
 

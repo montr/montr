@@ -9,6 +9,7 @@ import { Translation } from "react-i18next";
 
 interface IProps {
 	entityTypeCode: string;
+	entityUid: Guid | string;
 }
 
 interface IState {
@@ -81,11 +82,11 @@ export class PaneSearchMetadata extends React.Component<IProps, IState> {
 			title: "Вы действительно хотите удалить выбранные записи?",
 			content: "Наверняка что-то случится ...",
 			onOk: async () => {
-				const { entityTypeCode } = this.props,
+				const { entityTypeCode, entityUid } = this.props,
 					{ selectedRowKeys } = this.state;
 
 				const result = await this._operation.execute(() =>
-					this._metadataService.delete(entityTypeCode, selectedRowKeys));
+					this._metadataService.delete({ entityTypeCode, entityUid, uids: selectedRowKeys }));
 
 				if (result.success) {
 					this.refreshTable(true);
@@ -95,7 +96,7 @@ export class PaneSearchMetadata extends React.Component<IProps, IState> {
 	};
 
 	render = () => {
-		const { entityTypeCode } = this.props,
+		const { entityTypeCode, entityUid } = this.props,
 			{ showDrawer, editUid, selectedRowKeys, updateTableToken } = this.state;
 
 		return (<Translation>{(t) => <>
@@ -125,7 +126,9 @@ export class PaneSearchMetadata extends React.Component<IProps, IState> {
 					width={720}
 					bodyStyle={{ paddingBottom: "80px" }}>
 					<PaneEditMetadata
-						entityTypeCode={entityTypeCode} uid={editUid}
+						entityTypeCode={entityTypeCode}
+						entityUid={entityUid}
+						uid={editUid}
 						onSuccess={this.handleSuccess}
 					/>
 				</Drawer>}

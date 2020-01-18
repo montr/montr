@@ -21,6 +21,7 @@ namespace Montr.Metadata.Impl
 
 		public void Configure(IApplicationBuilder app)
 		{
+			// todo: add phone, email, address
 			app.ConfigureMetadata(options =>
 			{
 				options.Registry.AddFieldType(typeof(BooleanField));

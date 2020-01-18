@@ -123,7 +123,10 @@ export class WrappedDataForm extends React.Component<IProps, IState> {
 		const fieldFactory = DataFieldFactory.get(field.type);
 
 		// todo: display default placeholder for not found field type
-		if (!fieldFactory) return null;
+		if (!fieldFactory) {
+			console.error(`Field type ${field.type} is not found.`);
+			return null;
+		}
 
 		const required: Rule = {
 			required: field.required,

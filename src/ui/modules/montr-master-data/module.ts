@@ -2,6 +2,8 @@ import React from "react";
 import { generatePath } from "react-router";
 import { Guid } from "@montr-core/models";
 import { AppRouteRegistry } from "@montr-core/services/";
+import { DataFieldFactory } from "@montr-core/components";
+import { ClassifierGroupFieldFactory, ClassifierFieldFactory, SelectClassifierTypeFieldFactory } from "./components";
 
 export const Patterns = {
 	searchClassifierType: "/classifiers/",
@@ -32,3 +34,7 @@ AppRouteRegistry.add([
 	{ path: Patterns.addClassifier, exact: true, component: React.lazy(() => import("./components/page-edit-classifier")) },
 	{ path: Patterns.editClassifier, exact: true, component: React.lazy(() => import("./components/page-edit-classifier")) }
 ]);
+
+DataFieldFactory.register("classifier-group", new ClassifierGroupFieldFactory());
+DataFieldFactory.register("classifier", new ClassifierFieldFactory());
+DataFieldFactory.register("select-classifier-type", new SelectClassifierTypeFieldFactory());
