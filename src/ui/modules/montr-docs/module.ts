@@ -16,4 +16,5 @@ export const RouteBuilder = {
 
 AppRouteRegistry.add([
 	{ path: Patterns.searchProcess, exact: true, component: React.lazy(() => import("./components/page-search-process")) },
+	{ path: Patterns.editProcess, exact: true, component: React.lazy(() => import("./components/page-edit-process")) },
 ]);

@@ -96,8 +96,8 @@ export default class EditClassifier extends React.Component<IProps, IState> {
 	};
 
 	render = () => {
-		const { tabKey } = this.props.match.params;
-		const { loading, type, data } = this.state;
+		const { tabKey } = this.props.match.params,
+			{ loading, type, data } = this.state;
 
 		const otherTabsDisabled = !data?.uid;
 
