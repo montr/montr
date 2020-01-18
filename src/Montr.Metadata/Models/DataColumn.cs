@@ -13,6 +13,7 @@ namespace Montr.Metadata.Models
 
 		public string Name { get; set; }
 
+		// todo: convert to bool to show link, generate link on client (?)
 		public string UrlProperty { get; set; }
 
 		public DataColumnAlign Align { get; set; }

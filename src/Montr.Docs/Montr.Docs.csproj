@@ -1,7 +1,19 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>netcoreapp3.1</TargetFramework>
+	</PropertyGroup>
 
+	<ItemGroup>
+		<PackageReference Include="MediatR" Version="8.0.0" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectReference Include="..\Montr.Kompany\Montr.Kompany.csproj" />
+		<ProjectReference Include="..\Montr.Metadata\Montr.Metadata.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Folder Include="Commands\" />
+	</ItemGroup>
 </Project>

@@ -50,6 +50,7 @@ namespace Montr.Core.Services
 					Icon = "setting",
 					Items = new List<Menu>
 					{
+						new Menu { Id = "processes", Name = "Процессы", Route = "/processes" },
 						new Menu { Id = "users", Name = "Пользователи", Route = "/users" },
 						// new Menu { Id = "m.3.0", Name = "Интеграции", Route = "/integrations" },
 						new Menu { Id = "m.3.1", Name = "Справочники", Route = "/classifiers" },

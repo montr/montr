@@ -14,4 +14,8 @@
     <ProjectReference Include="..\Montr.Docs\Montr.Docs.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="CommandHandlers\" />
+  </ItemGroup>
+
 </Project>

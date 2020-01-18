@@ -1,10 +1,13 @@
+import React from "react";
 import { generatePath } from "react-router";
 import { Guid } from "@montr-core/models";
 import { AppRouteRegistry } from "@montr-core/services/";
-import React from "react";
 
 export const Patterns = {
+	searchClassifierType: "/classifiers/",
+	addClassifierType: "/classifiers/add/",
 	editClassifierType: "/classifiers/edit/:uid/:tabKey?",
+	searchClassifier: "/classifiers/:typeCode/",
 	addClassifier: "/classifiers/:typeCode/add/:parentUid?",
 	editClassifier: "/classifiers/:typeCode/edit/:uid/:tabKey?",
 };
@@ -22,10 +25,10 @@ export const RouteBuilder = {
 };
 
 AppRouteRegistry.add([
-	{ path: "/classifiers/", exact: true, component: React.lazy(() => import("./components/page-search-classifier-type")) },
-	{ path: "/classifiers/add/", exact: true, component: React.lazy(() => import("./components/page-edit-classifier-type")) },
+	{ path: Patterns.searchClassifierType, exact: true, component: React.lazy(() => import("./components/page-search-classifier-type")) },
+	{ path: Patterns.addClassifierType, exact: true, component: React.lazy(() => import("./components/page-edit-classifier-type")) },
 	{ path: Patterns.editClassifierType, exact: true, component: React.lazy(() => import("./components/page-edit-classifier-type")) },
-	{ path: "/classifiers/:typeCode/", exact: true, component: React.lazy(() => import("./components/page-search-classifier")) },
+	{ path: Patterns.searchClassifier, exact: true, component: React.lazy(() => import("./components/page-search-classifier")) },
 	{ path: Patterns.addClassifier, exact: true, component: React.lazy(() => import("./components/page-edit-classifier")) },
 	{ path: Patterns.editClassifier, exact: true, component: React.lazy(() => import("./components/page-edit-classifier")) }
 ]);

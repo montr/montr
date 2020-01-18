@@ -137,19 +137,6 @@ namespace Montr.Metadata.Services
 				};
 			}
 
-			if (viewId == "PrivateEventSearch/Grid")
-			{
-				result.Columns = new List<DataColumn>
-				{
-					new DataColumn { Key = "id", Name = "Номер", Sortable = true, Width = 10,
-						UrlProperty = "url", DefaultSortOrder = SortOrder.Descending },
-					new DataColumn { Key = "configCode", Name = "Тип", Width = 25 },
-					new DataColumn { Key = "statusCode", Name = "Статус", Width = 25 /*, Align = DataColumnAlign.Center */ },
-					new DataColumn { Key = "name", Name = "Наименование", Sortable = true, Width = 400, UrlProperty = "url" },
-					// new DataColumn { Key = "description", Name = "Описание", Width = 300 },
-				};
-			}
-
 			if (viewId.StartsWith("Classifier/"))
 			{
 				if (viewId.EndsWith("/okv"))
@@ -379,7 +366,30 @@ namespace Montr.Metadata.Services
 				};
 			}
 
+			// Documents & Processes
+			if (viewId == "Process/List")
+			{
+				result.Columns = new List<DataColumn>
+				{
+					new DataColumn { Key = "code", Name = "Code", Sortable = true, UrlProperty = "url", Width = 100 },
+					new DataColumn { Key = "name", Name = "Name", Sortable = true, UrlProperty = "url", Width = 400 }
+				};
+			}
+
 			// Events
+			if (viewId == "PrivateEventSearch/Grid")
+			{
+				result.Columns = new List<DataColumn>
+				{
+					new DataColumn { Key = "id", Name = "Номер", Sortable = true, Width = 10,
+						UrlProperty = "url", DefaultSortOrder = SortOrder.Descending },
+					new DataColumn { Key = "configCode", Name = "Тип", Width = 25 },
+					new DataColumn { Key = "statusCode", Name = "Статус", Width = 25 /*, Align = DataColumnAlign.Center */ },
+					new DataColumn { Key = "name", Name = "Наименование", Sortable = true, Width = 400, UrlProperty = "url" },
+					// new DataColumn { Key = "description", Name = "Описание", Width = 300 },
+				};
+			}
+
 			if (viewId == "PrivateEvent/Edit")
 			{
 				result.Panes = new List<DataPane>
