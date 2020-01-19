@@ -7,9 +7,12 @@ export default class Dashboard extends React.Component {
 
 	render() {
 		const data: IMenu[] = [];
-		for (var i = 0; i < 6; i++) {
-			data.push({ name: `Card Title ${i}` });
-		}
+
+		data.push({ name: `Common Actions (Create/Manage)` });
+		data.push({ name: `Recently Viewed` });
+		data.push({ name: `Calendar with To-Do items` });
+		data.push({ name: `My Documents` });
+		data.push({ name: `Events stats (year/month/select period)` });
 
 		return (
 			<Page title="Панель управления">
