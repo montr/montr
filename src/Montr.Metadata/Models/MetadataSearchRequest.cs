@@ -7,6 +7,8 @@ namespace Montr.Metadata.Models
 	{
 		public string EntityTypeCode { get; set; }
 
+		public Guid EntityUid { get; set; }
+
 		public Guid? Uid { get; set; }
 
 		public bool? IsSystem { get; set; }

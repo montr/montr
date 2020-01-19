@@ -3,7 +3,7 @@ import { Form, Spin } from "antd";
 import { FormInstance } from "antd/lib/form";
 import { getFieldId } from "antd/lib/form/util";
 import { FieldData, Store, Rule } from "rc-field-form/lib/interface";
-import { IDataField, IApiResult } from "../models";
+import { IDataField, IApiResult, IIndexer } from "../models";
 import { NotificationService } from "../services/notification-service";
 import { OperationService, DataHelper } from "../services";
 import { FormDefaults, DataFieldFactory, ButtonSave, Toolbar } from ".";
@@ -21,7 +21,7 @@ interface IProps extends WithTranslation {
 	successMessage?: string;
 	errorMessage?: string;
 	hideLabels?: boolean;
-	onChange?: (values: any /* IIndexer */, changedValues: any /* IIndexer */) => void;
+	onChange?: (values: IIndexer, changedValues: IIndexer) => void;
 	onSubmit?: (values: any /* IIndexer */) => Promise<IApiResult>;
 	formRef?: React.RefObject<FormInstance>;
 }

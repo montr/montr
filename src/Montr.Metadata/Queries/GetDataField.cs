@@ -12,6 +12,8 @@ namespace Montr.Metadata.Queries
 
 		public string EntityTypeCode { get; set; }
 
+		public Guid EntityUid { get; set; }
+
 		public Guid Uid { get; set; }
 	}
 }

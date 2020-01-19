@@ -1,4 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using Montr.Core.Services;
 using Montr.Metadata.Models;
 
 namespace Montr.Metadata.Services
@@ -6,7 +9,28 @@ namespace Montr.Metadata.Services
 	// todo: rewrite all this sh*t
 	public class DefaultFieldProvider<TFieldType, TClrType> : IFieldProvider
 	{
+		// ReSharper disable once StaticMemberInGenericType
+		protected static readonly string PropsPrefix = ExpressionHelper.GetMemberName<TextAreaField>(x => x.Props).ToLowerInvariant();
+
+		public virtual FieldPurpose FieldPurpose => FieldPurpose.Content;
+
 		public Type FieldType => typeof(TFieldType);
+
+		public virtual IList<FieldMetadata> GetMetadata()
+		{
+			return new List<FieldMetadata>
+			{
+				new NumberField { Key = "displayOrder", Name = "#", Required = true, Props = { Min = 0, Max = 256 } },
+				new TextField { Key = "key", Name = "Код", Required = true },
+				new TextField { Key = "name", Name = "Наименование", Required = true },
+				new TextAreaField { Key = "description", Name = "Описание", Props = new TextAreaField.Properties { Rows = 2 } },
+
+				new TextField { Key = "placeholder", Name = "Placeholder" },
+				new TextField { Key = "icon", Name = "Icon" },
+				// new BooleanField { Key = "readonly", Name = "Readonly" },
+				new BooleanField { Key = "required", Name = "Required" }
+			};
+		}
 
 		public virtual bool Validate(object value, out object parsed, out string[] errors)
 		{
@@ -63,9 +87,85 @@ namespace Montr.Metadata.Services
 		}
 	}
 
+	public class SectionFieldProvider : DefaultFieldProvider<SectionField, string>
+	{
+		public override FieldPurpose FieldPurpose => FieldPurpose.Information;
+
+		public override IList<FieldMetadata> GetMetadata()
+		{
+			return new List<FieldMetadata>
+			{
+				new NumberField { Key = "displayOrder", Name = "#", Required = true, Props = { Min = 0, Max = 256 } },
+				new TextField { Key = "key", Name = "Код", Required = true },
+				new TextField { Key = "name", Name = "Наименование", Required = true },
+				new TextAreaField { Key = "description", Name = "Описание", Props = new TextAreaField.Properties { Rows = 2 } }
+			};
+		}
+	}
+
+	public class TextAreaFieldProvider : DefaultFieldProvider<TextAreaField, string>
+	{
+		public override IList<FieldMetadata> GetMetadata()
+		{
+			var baseFields = base.GetMetadata();
+
+			var additionalFields = new List<FieldMetadata>
+			{
+				new NumberField { Key = PropsPrefix + ".rows", Name = "Количество строк", Props = { Min = 1, Max = byte.MaxValue } }
+			};
+
+			return baseFields.Union(additionalFields).ToList();
+		}
+	}
+
+	public class NumberFieldProvider : DefaultFieldProvider<NumberField, long>
+	{
+		public override IList<FieldMetadata> GetMetadata()
+		{
+			var baseFields = base.GetMetadata();
+
+			var additionalFields = new List<FieldMetadata>
+			{
+				new NumberField { Key = PropsPrefix + ".min", Name = "Минимум", Props = { Min = long.MinValue, Max = long.MaxValue } },
+				new NumberField { Key = PropsPrefix + ".max", Name = "Максимум", Props = { Min = long.MinValue, Max = long.MaxValue } }
+			};
+
+			return baseFields.Union(additionalFields).ToList();
+		}
+	}
+
+	public class DecimalFieldProvider : DefaultFieldProvider<DecimalField, decimal>
+	{
+		public override IList<FieldMetadata> GetMetadata()
+		{
+			var baseFields = base.GetMetadata();
+
+			var additionalFields = new List<FieldMetadata>
+			{
+				new NumberField { Key = PropsPrefix + ".min", Name = "Минимум", Props = { Min = decimal.MinValue, Max = decimal.MaxValue } },
+				new NumberField { Key = PropsPrefix + ".max", Name = "Максимум", Props = { Min = decimal.MinValue, Max = decimal.MaxValue } },
+				new NumberField { Key = PropsPrefix + ".precision", Name = "Точность", Description = "Количество знаков после запятой", Props = { Min = 0, Max = 5 } }
+			};
+
+			return baseFields.Union(additionalFields).ToList();
+		}
+	}
+
 	// todo: add support of utc and localization
 	public class DateFieldProvider : DefaultFieldProvider<DateField, DateTime>
 	{
+		public override IList<FieldMetadata> GetMetadata()
+		{
+			var baseFields = base.GetMetadata();
+
+			var additionalFields = new List<FieldMetadata>
+			{
+				new BooleanField { Key = PropsPrefix + ".includeTime", Name = "Include Time" }
+			};
+
+			return baseFields.Union(additionalFields).ToList();
+		}
+
 		public override string WriteInternal(DateTime value)
 		{
 			return value.ToString("o");
@@ -93,6 +193,52 @@ namespace Montr.Metadata.Services
 			}
 
 			return base.ReadInternal(value);
+		}
+	}
+
+	public class SelectFieldProvider : DefaultFieldProvider<SelectField, string>
+	{
+		public override IList<FieldMetadata> GetMetadata()
+		{
+			var baseFields = base.GetMetadata();
+
+			var additionalFields = new List<FieldMetadata>
+			{
+				new DesignSelectOptionsField { Key = PropsPrefix + ".options", Required = true, Name = "Options" }
+			};
+
+			return baseFields.Union(additionalFields).ToList();
+		}
+	}
+
+	public class ClassifierFieldProvider : DefaultFieldProvider<ClassifierField, string>
+	{
+		public override IList<FieldMetadata> GetMetadata()
+		{
+			var baseFields = base.GetMetadata();
+
+			var additionalFields = new List<FieldMetadata>
+			{
+				new SelectClassifierTypeField { Key = PropsPrefix + ".typeCode", Required = true, Name = "Type" }
+			};
+
+			return baseFields.Union(additionalFields).ToList();
+		}
+	}
+
+	public class ClassifierGroupFieldProvider : DefaultFieldProvider<ClassifierGroupField, string>
+	{
+		public override IList<FieldMetadata> GetMetadata()
+		{
+			var baseFields = base.GetMetadata();
+
+			var additionalFields = new List<FieldMetadata>
+			{
+				new SelectClassifierTypeField { Key = PropsPrefix + ".typeCode", Required = true, Name = "Type" },
+				new TextField { Key = PropsPrefix + ".treeCode", Required = true, Name = "Tree" }
+			};
+
+			return baseFields.Union(additionalFields).ToList();
 		}
 	}
 }

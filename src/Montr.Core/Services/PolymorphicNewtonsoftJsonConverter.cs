@@ -25,7 +25,9 @@ namespace Montr.Core.Services
 		{
 			var jObject = JObject.Load(reader);
 
-			var type = _typeMap[(string)jObject[_typeProp]];
+			var typeCode = (string)jObject[_typeProp];
+
+			var type = _typeMap[typeCode];
 
 			return jObject.ToObject(type, serializer);
 		}

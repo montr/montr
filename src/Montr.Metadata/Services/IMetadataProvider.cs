@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Montr.Core.Models;
-using Montr.Core.Services;
 using Montr.Metadata.Models;
 
 namespace Montr.Metadata.Services
@@ -15,8 +14,6 @@ namespace Montr.Metadata.Services
 	// todo: move to db?
 	public class DefaultMetadataProvider : IMetadataProvider
 	{
-		private static readonly string PropsPrefix = ExpressionHelper.GetMemberName<TextAreaField>(x => x.Props).ToLowerInvariant();
-
 		private readonly IFieldProviderRegistry _fieldProviderRegistry;
 
 		public DefaultMetadataProvider(IFieldProviderRegistry fieldProviderRegistry)
@@ -56,73 +53,16 @@ namespace Montr.Metadata.Services
 				{
 					// todo: add system type SelectFieldType to select type with icons, common/advanced selection
 					new SelectField { Key = "type", Name = "Тип", Required = true, Props = { Options = options } },
-					new NumberField { Key = "displayOrder", Name = "#", Required = true, Props = { Min = 0, Max = 256 } },
-					new TextField { Key = "key", Name = "Код", Required = true },
-					new TextField { Key = "name", Name = "Наименование", Required = true },
-					new TextAreaField { Key = "description", Name = "Описание", Props = new TextAreaField.Properties { Rows = 2 } },
-					new TextField { Key = "placeholder", Name = "Placeholder" },
-					new TextField { Key = "icon", Name = "Icon" },
-					// new BooleanField { Key = "readonly", Name = "Readonly" },
-					new BooleanField { Key = "required", Name = "Required" }
 				};
 			}
-			else if (viewId.StartsWith("Metadata/Edit/"))
+
+			if (viewId.StartsWith("Metadata/Edit/"))
 			{
 				var code = viewId.Substring("Metadata/Edit/".Length);
 
-				if (code == TextAreaField.TypeCode)
-				{
-					result.Fields = new List<FieldMetadata>
-					{
-						new NumberField { Key = PropsPrefix + ".rows", Name = "Количество строк", Props = { Min = 1, Max = byte.MaxValue } }
-					};
-				}
-				else if (code == NumberField.TypeCode)
-				{
-					result.Fields = new List<FieldMetadata>
-					{
-						new NumberField { Key = PropsPrefix + ".min", Name = "Минимум", Props = { Min = long.MinValue, Max = long.MaxValue } },
-						new NumberField { Key = PropsPrefix + ".max", Name = "Максимум", Props = { Min = long.MinValue, Max = long.MaxValue } }
-					};
-				}
-				else if (code == DecimalField.TypeCode)
-				{
-					result.Fields = new List<FieldMetadata>
-					{
-						new NumberField { Key = PropsPrefix + ".min", Name = "Минимум", Props = { Min = decimal.MinValue, Max = decimal.MaxValue } },
-						new NumberField { Key = PropsPrefix + ".max", Name = "Максимум", Props = { Min = decimal.MinValue, Max = decimal.MaxValue } },
-						new NumberField { Key = PropsPrefix + ".precision", Name = "Точность", Description = "Количество знаков после запятой", Props = { Min = 0, Max = 5 } }
-					};
-				}
-				else if (code == DateField.TypeCode)
-				{
-					result.Fields = new List<FieldMetadata>
-					{
-						new BooleanField { Key = PropsPrefix + ".includeTime", Name = "Include Time" }
-					};
-				}
-				else if (code == SelectField.TypeCode)
-				{
-					result.Fields = new List<FieldMetadata>
-					{
-						new DesignSelectOptionsField { Key = PropsPrefix + ".options", Required = true, Name = "Options" }
-					};
-				}
-				else if (code == ClassifierField.Code)
-				{
-					result.Fields = new List<FieldMetadata>
-					{
-						new SelectClassifierTypeField { Key = PropsPrefix + ".typeCode", Required = true, Name = "Type" }
-					};
-				}
-				else if (code == ClassifierGroupField.Code)
-				{
-					result.Fields = new List<FieldMetadata>
-					{
-						new SelectClassifierTypeField { Key = PropsPrefix + ".typeCode", Required = true, Name = "Type" },
-						new TextField { Key = PropsPrefix + ".treeCode", Required = true, Name = "Tree" }
-					};
-				}
+				var fieldProvider = _fieldProviderRegistry.GetFieldTypeProvider(code);
+
+				result.Fields = fieldProvider.GetMetadata();
 			}
 
 			if (viewId == "UserSearch/Grid")

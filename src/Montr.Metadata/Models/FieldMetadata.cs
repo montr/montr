@@ -71,6 +71,14 @@ namespace Montr.Metadata.Models
 		}
 	}
 
+	[FieldType(TypeCode, typeof(SectionFieldProvider))]
+	public class SectionField : FieldMetadata
+	{
+		public const string TypeCode = "section";
+
+		public override string Type => TypeCode;
+	}
+
 	[FieldType(TypeCode, typeof(DefaultFieldProvider<BooleanField, bool>))]
 	public class BooleanField : FieldMetadata
 	{
@@ -88,7 +96,7 @@ namespace Montr.Metadata.Models
 	}
 
 	// todo join with TextField?
-	[FieldType(TypeCode, typeof(DefaultFieldProvider<TextAreaField, string>))]
+	[FieldType(TypeCode, typeof(TextAreaFieldProvider))]
 	public class TextAreaField : FieldMetadata<TextAreaField.Properties>
 	{
 		public const string TypeCode = "textarea";
@@ -109,7 +117,7 @@ namespace Montr.Metadata.Models
 		public override string Type => TypeCode;
 	}
 
-	[FieldType(TypeCode, typeof(DefaultFieldProvider<NumberField, long>))]
+	[FieldType(TypeCode, typeof(NumberFieldProvider))]
 	public class NumberField : FieldMetadata<NumberField.Properties>
 	{
 		public const string TypeCode = "number";
@@ -125,7 +133,7 @@ namespace Montr.Metadata.Models
 	}
 
 	// todo: merge with number?
-	[FieldType(TypeCode, typeof(DefaultFieldProvider<DecimalField, decimal>))]
+	[FieldType(TypeCode, typeof(DecimalFieldProvider))]
 	public class DecimalField : FieldMetadata<DecimalField.Properties>
 	{
 		public const string TypeCode = "decimal";
@@ -168,7 +176,7 @@ namespace Montr.Metadata.Models
 	}
 
 	// todo: add options for select single/multiple, dropdown/radio/checkboxes
-	[FieldType(TypeCode, typeof(DefaultFieldProvider<SelectField, string>))]
+	[FieldType(TypeCode, typeof(SelectFieldProvider))]
 	public class SelectField : FieldMetadata<SelectField.Properties>
 	{
 		public const string TypeCode = "select";

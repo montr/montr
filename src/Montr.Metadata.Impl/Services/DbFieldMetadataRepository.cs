@@ -34,7 +34,8 @@ namespace Montr.Metadata.Impl.Services
 			{
 				var query = db
 					.GetTable<DbFieldMetadata>()
-					.Where(x => x.EntityTypeCode == request.EntityTypeCode);
+					.Where(x => x.EntityTypeCode == request.EntityTypeCode &&
+								x.EntityUid == request.EntityUid);
 
 				if (request.Uid != null)
 				{

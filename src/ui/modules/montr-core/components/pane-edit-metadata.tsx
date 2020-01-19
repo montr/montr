@@ -20,7 +20,6 @@ interface IState {
 	typeData?: IDataField;
 	data?: IDataField;
 	typeFields?: IDataField[];
-	commonFields?: IDataField[];
 	optionalFields?: IDataField[];
 	visibleFields?: IDataField[];
 }
@@ -57,59 +56,56 @@ export class PaneEditMetadata extends React.Component<IProps, IState> {
 			? await this._metadataService.get(entityTypeCode, entityUid, uid)
 			: { type: DefaultFieldType };
 
-		const commonView = await this._metadataService.load("Metadata/Edit");
-
-		// todo: find type field by code
-		const typeFields = commonView.fields.slice(0, 1),
-			commonFields = commonView.fields.slice(1);
-
-		const optionalFields = this.getOptionalFields(commonFields, values as IDataField);
+		const dataView = await this._metadataService.load("Metadata/Edit");
 
 		this.setState({
 			loading: false,
 			typeData: { type: type },
 			data: values as IDataField,
-			typeFields,
-			commonFields,
-			optionalFields
-		}, () => this.setVisibleFields());
+			typeFields: dataView?.fields || [],
+			optionalFields: []
+		}, () => this.setVisibleFields(true));
 	};
 
-	getOptionalFields = (fields: IDataField[], data: IDataField): IDataField[] => {
+	rebuildOptionalFields = (fields: IDataField[], currentOptionalFields: IDataField[], data: IDataField): IDataField[] => {
+		// todo: read optional field types from server
 		return fields
-			// todo: read optional field types from server
 			.filter(x => !x.required && (x.type == "text" || x.type == "textarea"))
 			.map(x => {
+				const current = currentOptionalFields.find(op => op.key == x.key);
 				const value = DataHelper.indexer(data, x.key, undefined);
+
 				// in optional fields using active as flag of visible field
-				return { type: x.type, key: x.key, name: x.name, active: !!value };
+				return { type: x.type, key: x.key, name: x.name, active: current?.active || !!value };
 			});
 	};
 
-	setVisibleFields = async () => {
-		const { typeData, typeFieldMap, commonFields, optionalFields } = this.state;
+	setVisibleFields = async (rebuildOptionalFields: boolean) => {
+		const { typeData, data, typeFieldMap, optionalFields: currentOptionalFields } = this.state;
 
 		let specificFields = typeFieldMap[typeData.type];
 
 		if (!specificFields) {
-			const typeView = await this._metadataService.load("Metadata/Edit/" + typeData.type);
+			const dataView = await this._metadataService.load("Metadata/Edit/" + typeData.type);
 
-			specificFields = typeFieldMap[typeData.type] = typeView.fields || [];
+			specificFields = typeFieldMap[typeData.type] = dataView?.fields || [];
 		}
 
-		const visibleCommonFields = commonFields?.filter(field => {
+		const optionalFields = (rebuildOptionalFields)
+			? this.rebuildOptionalFields(specificFields, currentOptionalFields, data)
+			: currentOptionalFields;
+
+		const visibleFields = specificFields.filter(field => {
 			const optional = optionalFields.find(optional => field.key == optional.key);
 			return !optional || optional.active;
 		}) || [];
 
-		const visibleFields = [...visibleCommonFields, ...specificFields];
-
-		this.setState({ typeFieldMap, visibleFields });
+		this.setState({ typeFieldMap, optionalFields, visibleFields });
 	};
 
 	handleTypeChange = async (values: IDataField) => {
 		// todo: save/restore data between switching fields
-		this.setState({ typeData: { type: values.type } }, () => this.setVisibleFields());
+		this.setState({ typeData: { type: values.type } }, () => this.setVisibleFields(true));
 	};
 
 	handleCheckOptionalField = (key: string, checked: boolean) => {
@@ -120,7 +116,7 @@ export class PaneEditMetadata extends React.Component<IProps, IState> {
 		if (field) {
 			field.active = checked;
 
-			this.setState({ optionalFields }, () => this.setVisibleFields());
+			this.setState({ optionalFields }, () => this.setVisibleFields(false));
 		}
 	};
 

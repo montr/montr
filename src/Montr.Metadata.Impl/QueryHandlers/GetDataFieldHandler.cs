@@ -23,6 +23,7 @@ namespace Montr.Metadata.Impl.QueryHandlers
 			var result = await _repository.Search(new MetadataSearchRequest
 			{
 				EntityTypeCode = request.EntityTypeCode,
+				EntityUid = request.EntityUid,
 				Uid = request.Uid
 			}, cancellationToken);
 

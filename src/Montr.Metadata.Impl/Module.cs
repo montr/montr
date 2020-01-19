@@ -21,13 +21,12 @@ namespace Montr.Metadata.Impl
 
 		public void Configure(IApplicationBuilder app)
 		{
-			// todo: add phone, email, address
+			// todo: add phone, email, address, inn, bank info
 			app.ConfigureMetadata(options =>
 			{
-				options.Registry.AddFieldType(typeof(BooleanField));
+				options.Registry.AddFieldType(typeof(SectionField));
 				options.Registry.AddFieldType(typeof(TextField));
 				options.Registry.AddFieldType(typeof(TextAreaField));
-				options.Registry.AddFieldType(typeof(PasswordField));
 				options.Registry.AddFieldType(typeof(NumberField));
 				options.Registry.AddFieldType(typeof(DecimalField));
 				options.Registry.AddFieldType(typeof(DateField));
@@ -35,6 +34,8 @@ namespace Montr.Metadata.Impl
 				options.Registry.AddFieldType(typeof(SelectField));
 				options.Registry.AddFieldType(typeof(DesignSelectOptionsField));
 				options.Registry.AddFieldType(typeof(FileField));
+				options.Registry.AddFieldType(typeof(BooleanField));
+				options.Registry.AddFieldType(typeof(PasswordField));
 			});
 		}
 	}

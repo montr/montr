@@ -59,7 +59,8 @@ namespace Montr.MasterData.Impl.QueryHandlers
 
 			var metadata = await _repository.Search(new MetadataSearchRequest
 			{
-				EntityTypeCode = Classifier.EntityTypeCode + "." + type.Code,
+				EntityTypeCode = ClassifierType.EntityTypeCode,
+				EntityUid = type.Uid,
 				IsActive = true
 			}, cancellationToken);
 

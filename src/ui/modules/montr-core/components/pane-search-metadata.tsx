@@ -39,9 +39,9 @@ export class PaneSearchMetadata extends React.Component<IProps, IState> {
 	};
 
 	onLoadTableData = async (loadUrl: string, postParams: any): Promise<IDataResult<{}>> => {
-		const { entityTypeCode } = this.props;
+		const { entityTypeCode, entityUid } = this.props;
 
-		const params = { entityTypeCode, ...postParams };
+		const params = { entityTypeCode, entityUid, ...postParams };
 
 		return await this._metadataService.post(loadUrl, params);
 	};

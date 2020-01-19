@@ -3,7 +3,7 @@
 namespace Montr.Metadata.Models
 {
 	// todo: move to MasterData
-	[FieldType(Code, typeof(DefaultFieldProvider<ClassifierField, string>))]
+	[FieldType(Code, typeof(ClassifierFieldProvider))]
 	public class ClassifierField : FieldMetadata<ClassifierField.Properties>
 	{
 		public const string Code = "classifier";
@@ -16,7 +16,7 @@ namespace Montr.Metadata.Models
 		}
 	}
 
-	[FieldType(Code, typeof(DefaultFieldProvider<ClassifierGroupField, string>), IsSystem = true)]
+	[FieldType(Code, typeof(ClassifierGroupFieldProvider), IsSystem = true)]
 	public class ClassifierGroupField : FieldMetadata<ClassifierGroupField.Properties>
 	{
 		public const string Code = "classifier-group";
