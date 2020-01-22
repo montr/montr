@@ -49,7 +49,7 @@ namespace Montr.Core.Services
 				var request = new LocaleStringSearchRequest
 				{
 					Locale = lang,
-					PageSize = 0 // disable paging
+					SkipPaging = true
 				};
 
 				var result = await _repository.Search(request, cancellationToken);

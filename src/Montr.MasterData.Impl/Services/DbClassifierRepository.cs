@@ -169,7 +169,7 @@ namespace Montr.MasterData.Impl.Services
 
 				return new SearchResult<Classifier>
 				{
-					TotalCount = query.Count(),
+					TotalCount = query.GetTotalCount(request),
 					Rows = data
 				};
 			}

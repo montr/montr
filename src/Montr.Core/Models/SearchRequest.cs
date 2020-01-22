@@ -3,7 +3,5 @@
 	// todo: add common property to calculate total count
 	public abstract class SearchRequest : Paging
 	{
-		// todo: implement everywhere
-		public bool SkipPaging { get; set; }
 	}
 }

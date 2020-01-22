@@ -27,7 +27,7 @@ namespace Montr.Idx.Impl.Services
 
 			using (var db = _dbContextFactory.Create())
 			{
-				IQueryable<DbUser> query =
+				var query =
 					from user in db.GetTable<DbUser>()
 					select user;
 
@@ -36,7 +36,7 @@ namespace Montr.Idx.Impl.Services
 
 				return new SearchResult<User>
 				{
-					TotalCount = query.Count(),
+					TotalCount = query.GetTotalCount(request),
 					Rows = data
 				};
 			}

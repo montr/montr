@@ -29,9 +29,7 @@ namespace Montr.Core.Impl.Services
 					.Where(x => (request.Locale == null || x.Locale == request.Locale)
 					            && (request.Module == null || x.Module == request.Module));
 
-				var withPaging = request.PageSize > 0;
-
-				var paged = withPaging ? all.Apply(request, x => x.Key) : all;
+				var paged = all.Apply(request, x => x.Key);
 
 				var data = await paged
 					.Select(x => new LocaleString
@@ -45,7 +43,7 @@ namespace Montr.Core.Impl.Services
 
 				return new SearchResult<LocaleString>
 				{
-					TotalCount = withPaging ? all.Count() : (int?)null,
+					TotalCount = all.GetTotalCount(request),
 					Rows = data
 				};
 			}

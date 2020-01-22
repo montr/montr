@@ -13,6 +13,8 @@
 		public string SortColumn { get; set; }
 
 		public SortOrder? SortOrder { get; set; }
+
+		public bool SkipPaging { get; set; }
 	}
 
 	public enum SortOrder

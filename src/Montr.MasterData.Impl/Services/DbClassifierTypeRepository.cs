@@ -39,7 +39,7 @@ namespace Montr.MasterData.Impl.Services
 					all = all.Where(x => x.Uid == request.Uid);
 				}
 
-				var paged = request.SkipPaging ? all.OrderBy(x => x.Code) : all.Apply(request, x => x.Code);
+				var paged = all.Apply(request, x => x.Code);
 
 				var data = await paged
 					.Select(x => new ClassifierType
@@ -56,7 +56,7 @@ namespace Montr.MasterData.Impl.Services
 
 				return new SearchResult<ClassifierType>
 				{
-					TotalCount = request.SkipPaging ? (int?)null : all.Count(),
+					TotalCount = all.GetTotalCount(request),
 					Rows = data
 				};
 			}

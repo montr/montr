@@ -52,9 +52,7 @@ namespace Montr.Metadata.Impl.Services
 					query = query.Where(x => x.IsActive == request.IsActive);
 				}
 
-				var withPaging = request.PageSize > 0;
-
-				var paged = withPaging ? query.Apply(request, x => x.DisplayOrder) : query.OrderBy(x => x.DisplayOrder);
+				var paged = query.Apply(request, x => x.DisplayOrder);
 
 				var data = await paged
 					.Select(x => x)
@@ -94,7 +92,7 @@ namespace Montr.Metadata.Impl.Services
 
 				return new SearchResult<FieldMetadata>
 				{
-					TotalCount = withPaging ? query.Count() : (int?)null,
+					TotalCount = query.GetTotalCount(request),
 					Rows = result
 				};
 			}

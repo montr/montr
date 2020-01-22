@@ -86,7 +86,7 @@ namespace Montr.MasterData.Impl.QueryHandlers
 
 				return new SearchResult<ClassifierLink>
 				{
-					TotalCount = query.Count(),
+					TotalCount = query.GetTotalCount(request),
 					Rows = data
 				};
 			}

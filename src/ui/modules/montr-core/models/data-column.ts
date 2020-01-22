@@ -17,4 +17,5 @@ export interface IPaging {
 	pageSize?: number;
 	sortColumn?: string;
 	sortOrder?: ISortOrder;
+	skipPaging?: boolean;
 }

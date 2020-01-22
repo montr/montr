@@ -48,7 +48,7 @@ namespace Montr.Tendr.Impl.QueryHandlers
 
 				var result = new SearchResult<Event>
 				{
-					TotalCount = all.Count(),
+					TotalCount = all.GetTotalCount(request),
 					Rows = data
 				};
 

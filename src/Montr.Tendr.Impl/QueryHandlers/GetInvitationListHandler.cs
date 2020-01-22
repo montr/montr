@@ -53,7 +53,7 @@ namespace Montr.Tendr.Impl.QueryHandlers
 
 				return new SearchResult<InvitationListItem>
 				{
-					TotalCount = all.Count(),
+					TotalCount = all.GetTotalCount(request),
 					Rows = data
 				};
 			}

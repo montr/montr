@@ -54,7 +54,7 @@ namespace Montr.MasterData.Impl.Services
 
 				return new SearchResult<ClassifierTree>
 				{
-					TotalCount = query.Count(),
+					TotalCount = query.GetTotalCount(request),
 					Rows = data
 				};
 			}

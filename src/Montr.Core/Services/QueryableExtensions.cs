@@ -8,23 +8,13 @@ namespace Montr.Core.Services
 {
 	public static class QueryableExtensions
 	{
-		// todo: pass viewId instead of defaultSortColumn
+		// todo: pass viewId instead of defaultSortColumn (?)
 		public static IQueryable<T> Apply<T>(this IQueryable<T> source, Paging paging,
 			Expression<Func<T, object>> defaultSortColumn, SortOrder defaultSortOrder = SortOrder.Ascending)
 		{
 			if (paging == null)
 			{
 				paging = new Paging();
-			}
-
-			if (paging.PageNo <= 0)
-			{
-				paging.PageNo = 1;
-			}
-
-			if (paging.PageSize <= 0 || paging.PageSize > Paging.MaxPageSize)
-			{
-				paging.PageSize = Paging.DefaultPageSize;
 			}
 
 			if (paging.SortColumn == null)
@@ -40,6 +30,22 @@ namespace Montr.Core.Services
 			var ordered = paging.SortOrder == SortOrder.Ascending
 				? source.OrderBy(paging.SortColumn)
 				: source.OrderByDescending(paging.SortColumn);
+
+			if (paging.SkipPaging)
+			{
+				// todo: always should be set limit
+				return ordered;
+			}
+
+			if (paging.PageNo <= 0)
+			{
+				paging.PageNo = 1;
+			}
+
+			if (paging.PageSize <= 0 || paging.PageSize > Paging.MaxPageSize)
+			{
+				paging.PageSize = Paging.DefaultPageSize;
+			}
 
 			var paged = ordered
 				.Skip((paging.PageNo - 1) * paging.PageSize)
@@ -99,6 +105,16 @@ namespace Montr.Core.Services
 				.Invoke(null, new object[] { source, lambda });
 
 			return (IOrderedQueryable<T>)result;
+		}
+
+		public static long? GetTotalCount<T>(this IQueryable<T> source, Paging paging)
+		{
+			if (source == null || paging == null || paging.SkipPaging)
+			{
+				return null;
+			}
+
+			return source.LongCount();
 		}
 	}
 }

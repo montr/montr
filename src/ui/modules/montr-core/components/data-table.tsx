@@ -2,7 +2,7 @@ import * as React from "react";
 import { Link } from "react-router-dom";
 import { Table, Tag, Divider } from "antd";
 import { PaginationConfig } from "antd/lib/pagination";
-import { SorterResult, SortOrder, ColumnType } from "antd/lib/table/interface";
+import { SorterResult, SortOrder, ColumnType, TablePaginationConfig } from "antd/lib/table/interface";
 import { Fetcher, NotificationService, MetadataService } from "../services";
 import { IIndexer, IDataColumn, IDataResult, IMenu, IPaging } from "../models";
 import { Constants } from "..";
@@ -16,6 +16,7 @@ interface IProps<TModel> {
 	// todo: add type for post params
 	onLoadData?: (loadUrl: string, postParams: any) => Promise<IDataResult<TModel>>;
 	onSelectionChange?: (selectedRowKeys: string[] | number[], selectedRows: TModel[]) => void;
+	skipPaging?: boolean;
 	updateToken?: DataTableUpdateToken;
 }
 
@@ -26,11 +27,12 @@ interface IState<TModel> {
 	columns: any[];
 	data: TModel[];
 	totalCount: number;
-	pagination: PaginationConfig;
+	paging: IPaging;
 }
 
 export class DataTableUpdateToken {
 	date: Date;
+	resetCurrentPage?: boolean;
 	resetSelectedRows?: boolean;
 }
 
@@ -49,11 +51,10 @@ export class DataTable<TModel extends IIndexer> extends React.Component<IProps<T
 			columns: [],
 			data: [],
 			totalCount: 0,
-			pagination: {
-				position: "bottom",
+			paging: {
+				pageNo: 1,
 				pageSize: Constants.defaultPageSize,
-				pageSizeOptions: ["10", "50", "100", "500"],
-				showSizeChanger: true,
+				skipPaging: props.skipPaging
 			},
 		};
 	}
@@ -66,16 +67,16 @@ export class DataTable<TModel extends IIndexer> extends React.Component<IProps<T
 		if (this.props.updateToken !== prevProps.updateToken) {
 
 			const { updateToken } = this.props,
-				{ pagination, selectedRowKeys } = this.state;
+				{ paging, selectedRowKeys } = this.state;
 
-			pagination.current = 1;
+			if (updateToken?.resetCurrentPage !== false) {
+				paging.pageNo = 1;
+			}
 
 			this.setState({
-				pagination,
+				paging,
 				selectedRowKeys: updateToken?.resetSelectedRows ? [] : selectedRowKeys
-			});
-
-			await this.fetchData();
+			}, () => this.fetchData());
 		}
 	};
 
@@ -87,14 +88,10 @@ export class DataTable<TModel extends IIndexer> extends React.Component<IProps<T
 	handleTableChange = async (pagination: PaginationConfig,
 		filters: Record<keyof TModel, string[]>, sorter: SorterResult<TModel>) => {
 
-		const pager: PaginationConfig = { ...this.state.pagination };
+		const { paging } = this.state;
 
-		pager.current = pagination.current;
-		pager.pageSize = pagination.pageSize;
-
-		this.setState({
-			pagination: pager,
-		});
+		paging.pageNo = pagination.current;
+		paging.pageSize = pagination.pageSize;
 
 		// todo: check other field types
 		// todo: add support of multiple sort columns
@@ -102,18 +99,18 @@ export class DataTable<TModel extends IIndexer> extends React.Component<IProps<T
 		if (sorter.field instanceof Array) sortColumn = sorter.field[0] as string;
 		if (sorter.field instanceof String) sortColumn = sorter.field as string;
 
-		await this.fetchData({
-			pageSize: pagination.pageSize,
-			pageNo: pagination.current,
-			sortColumn: sortColumn,
-			sortOrder: sorter.order == "ascend"
-				? "ascending" : sorter.order == "descend" ? "descending" : null,
-			// ...filters,
-		});
+		paging.sortColumn = sortColumn;
+		paging.sortOrder =
+			sorter.order == "ascend" ? "ascending"
+				: sorter.order == "descend" ? "descending"
+					: null;
+
+		this.setState({ paging }, () => this.fetchData());
 	};
 
 	fetchMetadata = async () => {
-		const { viewId, rowActions } = this.props;
+		const { viewId, rowActions } = this.props,
+			{ paging } = this.state;
 
 		const dataView = await this._metadataService.load(viewId);
 
@@ -193,47 +190,41 @@ export class DataTable<TModel extends IIndexer> extends React.Component<IProps<T
 			});
 		}
 
-		this.setState({ columns });
-
 		const defaultSortColumn =
 			dataView.columns.filter((col: IDataColumn) => col.defaultSortOrder)[0];
 
-		await this.fetchData({
-			sortColumn: defaultSortColumn?.key,
-			sortOrder: defaultSortColumn?.defaultSortOrder,
-		});
+		paging.sortColumn = defaultSortColumn?.key;
+		paging.sortOrder = defaultSortColumn?.defaultSortOrder;
+
+		this.setState({ columns, paging }, () => this.fetchData());
 	};
 
-	fetchData = async (params: IPaging = {}) => {
+	fetchData = async () => {
 
 		this.setState({ loading: true });
 
+		const { loadUrl, onLoadData } = this.props,
+			{ paging } = this.state;
+
 		try {
-			let postParams: any = {
-				// pageSize: Constants.defaultPageSize,
-				...params,
-			};
-
-			if (!postParams.pageSize) {
-				postParams.pageSize = Constants.defaultPageSize;
-			}
-
-			const { loadUrl, onLoadData } = this.props;
+			let postParams: any = { ...paging };
 
 			const data: IDataResult<TModel> = onLoadData
 				? await onLoadData(loadUrl, postParams)
 				: await this._fetcher.post(loadUrl, postParams);
 
 			if (data) {
-				const pagination = { ...this.state.pagination };
-
-				pagination.total = data.totalCount;
-
 				this.setState({
 					loading: false,
-					pagination,
+					paging,
+					// todo: save all data in state?
 					totalCount: data.totalCount,
 					data: data.rows
+				});
+			}
+			else {
+				this.setState({
+					loading: false
 				});
 			}
 
@@ -254,7 +245,8 @@ export class DataTable<TModel extends IIndexer> extends React.Component<IProps<T
 	};
 
 	render() {
-		const { selectedRowKeys } = this.state;
+		const { skipPaging } = this.props,
+			{ selectedRowKeys, paging, totalCount } = this.state;
 
 		const rowSelection = {
 			columnWidth: 1,
@@ -263,14 +255,18 @@ export class DataTable<TModel extends IIndexer> extends React.Component<IProps<T
 		};
 
 		// todo: localize
-		const pagination = {
+		const pagination: TablePaginationConfig = {
 			showTotal: (total: number, range: [number, number]) => {
 				return (<>
 					{selectedRowKeys.length > 0 && (<span style={{ marginRight: "1em" }}>Выбрано: <strong>{selectedRowKeys.length}</strong></span>)}
 					{(total != 0) && (<span>Записи <strong>{range[0]}</strong> &mdash; <strong>{range[1]}</strong> из <strong>{total}</strong></span>)}
 				</>);
 			},
-			...this.state.pagination
+			current: paging.pageNo,
+			pageSize: paging.pageSize,
+			pageSizeOptions: ["10", "50", "100", "500"],
+			showSizeChanger: true,
+			total: totalCount
 		};
 
 		return (
@@ -278,7 +274,7 @@ export class DataTable<TModel extends IIndexer> extends React.Component<IProps<T
 				rowKey={this.props.rowKey || "id"}
 				columns={this.state.columns}
 				dataSource={this.state.data}
-				pagination={pagination}
+				pagination={skipPaging ? false : pagination}
 				loading={this.state.loading}
 				onChange={this.handleTableChange}
 				rowSelection={rowSelection}

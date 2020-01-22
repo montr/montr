@@ -51,11 +51,11 @@ export class PaneSearchMetadata extends React.Component<IProps, IState> {
 	};
 
 	// todo: do not copy this method from class to class - move to DataTable somehow?
-	refreshTable = async (resetSelectedRows?: boolean) => {
+	refreshTable = async (resetCurrentPage?: boolean, resetSelectedRows?: boolean) => {
 		const { selectedRowKeys } = this.state;
 
 		this.setState({
-			updateTableToken: { date: new Date(), resetSelectedRows },
+			updateTableToken: { date: new Date(), resetCurrentPage, resetSelectedRows },
 			selectedRowKeys: resetSelectedRows ? [] : selectedRowKeys
 		});
 	};
@@ -74,7 +74,7 @@ export class PaneSearchMetadata extends React.Component<IProps, IState> {
 
 	handleSuccess = () => {
 		this.setState({ showDrawer: false });
-		this.refreshTable();
+		this.refreshTable(false);
 	};
 
 	showDeleteConfirm = () => {
@@ -89,7 +89,7 @@ export class PaneSearchMetadata extends React.Component<IProps, IState> {
 					this._metadataService.delete({ entityTypeCode, entityUid, uids: selectedRowKeys }));
 
 				if (result.success) {
-					this.refreshTable(true);
+					this.refreshTable(false, true);
 				}
 			}
 		});
@@ -114,6 +114,7 @@ export class PaneSearchMetadata extends React.Component<IProps, IState> {
 				onLoadData={this.onLoadTableData}
 				onSelectionChange={this.onSelectionChange}
 				updateToken={updateTableToken}
+				skipPaging={true}
 			/>
 
 			{showDrawer &&
