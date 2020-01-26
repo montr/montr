@@ -3,32 +3,41 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
-using System.Reflection;
+using System.Security.Cryptography;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using LinqToDB;
 using LinqToDB.Data;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
+using Montr.Core.Impl.Entities;
+using Montr.Core.Services;
 using Montr.Data.Linq2Db;
-using Montr.Tools.DbMigrator.Entities;
 
-namespace Montr.Tools.DbMigrator.Services
+namespace Montr.Core.Impl.Services
 {
-	public class MigrationRunner
+	public class DbMigrationRunner : IMigrationRunner
 	{
-		private readonly ILogger<MigrationRunner> _logger;
-		private readonly DefaultDbContextFactory _dbContextFactory;
-		private readonly IHashProvider _hashProvider;
+		private readonly ILogger<DbMigrationRunner> _logger;
+		private readonly IOptionsMonitor<MigrationOptions> _optionsAccessor;
+		private readonly IDbContextFactory _dbContextFactory;
+		private readonly HashProvider _hashProvider;
 
-		public MigrationRunner(ILogger<MigrationRunner> logger, IHashProvider hashProvider, DefaultDbContextFactory dbContextFactory)
+		public DbMigrationRunner(ILogger<DbMigrationRunner> logger,
+			IOptionsMonitor<MigrationOptions> optionsAccessor, IDbContextFactory dbContextFactory)
 		{
 			_logger = logger;
+			_optionsAccessor = optionsAccessor;
 			_dbContextFactory = dbContextFactory;
-			_hashProvider = hashProvider;
+
+			_hashProvider = new HashProvider();
 		}
 
-		public async Task Run(Options options, CancellationToken cancellationToken)
+		public async Task Run(CancellationToken cancellationToken)
 		{
+			var options = _optionsAccessor.CurrentValue;
+
 			_logger.LogInformation("Running migrations from {MigrationPath}", options.MigrationPath);
 
 			var watch = new Stopwatch();
@@ -54,7 +63,7 @@ namespace Montr.Tools.DbMigrator.Services
 			_logger.LogInformation("Migrations completed in {Elapsed}", watch.Elapsed);
 		}
 
-		private async Task Run(DbContext db, Migration migration, Options options, CancellationToken cancellationToken)
+		private async Task Run(DbContext db, Migration migration, MigrationOptions options, CancellationToken cancellationToken)
 		{
 			var migrationByHash = await db.GetTable<DbMigration>().SingleOrDefaultAsync(x => x.Hash == migration.Hash, cancellationToken);
 
@@ -134,7 +143,7 @@ namespace Montr.Tools.DbMigrator.Services
 			}
 		}
 
-		private IList<Migration> GetMigrations(Options options)
+		private IList<Migration> GetMigrations(MigrationOptions options)
 		{
 			var migrationPath = options?.MigrationPath ?? Environment.CurrentDirectory;
 
@@ -154,18 +163,33 @@ namespace Montr.Tools.DbMigrator.Services
 
 		private static async Task Bootstrap(DbContext db, CancellationToken cancellationToken)
 		{
-			var sql = await LoadEmbeddedResource(typeof(Options), "Resources.bootstrap.sql");
+			var sql = await LoadEmbeddedResource(typeof(Module), "Resources.bootstrap.sql");
 
 			await db.ExecuteAsync(sql, cancellationToken);
 		}
 
 		private static async Task<string> LoadEmbeddedResource(Type type, string name)
 		{
-			using (var stream = Assembly.GetExecutingAssembly().GetManifestResourceStream(type, name))
+			using (var stream = type.Assembly.GetManifestResourceStream(type, name))
 			{
 				using (var reader = new StreamReader(stream ?? throw new ApplicationException($"Resource \"{name}\" is not found.")))
 				{
 					return await reader.ReadToEndAsync();
+				}
+			}
+		}
+
+		private class HashProvider
+		{
+			private readonly MD5CryptoServiceProvider _md5Provider = new MD5CryptoServiceProvider();
+
+			public string GetHash(string value)
+			{
+				lock (_md5Provider)
+				{
+					var hash = _md5Provider.ComputeHash(Encoding.Unicode.GetBytes(value));
+
+					return new Guid(hash).ToString();
 				}
 			}
 		}

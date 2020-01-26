@@ -3,29 +3,30 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Console;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Montr.Core.Impl.Services;
 using Montr.Data.Linq2Db;
-using Montr.Tools.DbMigrator.Services;
 
-namespace Montr.Tools.DbMigrator.Tests.Services
+namespace Montr.Core.Tests.Services
 {
 	[TestClass]
-	public class MigrationRunnerTests
+	public class DbMigrationRunnerTests
 	{
 		[TestMethod]
 		public async Task Run_DefaultConfig_ShouldBootstrapDatabase()
 		{
 			// arrange
-			var loggerFactory = LoggerFactory.Create(builder => builder.AddConsole(options => options.Format = ConsoleLoggerFormat.Systemd));
-			var hashProvider = new DefaultHashProvider();
-			var dbContextFactory = new DefaultDbContextFactory();
-			var migrator = new MigrationRunner(loggerFactory.CreateLogger<MigrationRunner>(), hashProvider, dbContextFactory);
 			var cancellationToken = new CancellationToken();
-
-			// act
-			await migrator.Run(new Options
+			var loggerFactory = LoggerFactory.Create(builder => builder.AddConsole(options => options.Format = ConsoleLoggerFormat.Systemd));
+			var dbContextFactory = new DefaultDbContextFactory();
+			var migrator = new DbMigrationRunner(loggerFactory.CreateLogger<DbMigrationRunner>(), null, dbContextFactory);
+			var migrationOptions = new MigrationOptions
 			{
 				MigrationPath = "../../../../../sql/"
-			}, cancellationToken);
+			};
+
+			// act
+
+			await migrator.Run(cancellationToken);
 
 			// assert
 		}

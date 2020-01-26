@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Serilog;
 using Serilog.Events;
@@ -7,7 +8,7 @@ namespace Host
 {
 	public class Program
 	{
-		public static void Main(string[] args)
+		public static async Task Main(string[] args)
 		{
 			var hostBuilder = WebHost
 				.CreateDefaultBuilder(args)
@@ -38,7 +39,7 @@ namespace Host
 
 			var host = hostBuilder.Build();
 
-			host.Run();
+			await host.RunAsync();
 		}
 	}
 }

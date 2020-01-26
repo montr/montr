@@ -20,6 +20,8 @@ namespace Montr.Core
 
 		public void ConfigureServices(IConfiguration configuration, IServiceCollection services)
 		{
+			services.AddHostedService<MigrationHostedService>();
+
 			services.AddHttpContextAccessor();
 
 			services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
@@ -32,6 +34,7 @@ namespace Montr.Core
 			});
 
 			services.Configure<AppOptions>(configuration.GetSection(typeof(AppOptions).FullName));
+			services.Configure<MigrationOptions>(configuration.GetSection(typeof(MigrationOptions).FullName));
 
 			services.Configure<RequestLocalizationOptions>(options =>
 			{

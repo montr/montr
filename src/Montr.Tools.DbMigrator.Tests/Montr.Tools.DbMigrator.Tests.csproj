@@ -12,13 +12,10 @@
 
 	<ItemGroup>
 	  <ProjectReference Include="..\Montr.Data.Linq2Db\Montr.Data.Linq2Db.csproj" />
-	  <ProjectReference Include="..\Montr.Tools.DbMigrator\Montr.Tools.DbMigrator.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <None Update="appsettings.json">
-	    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-	  </None>
+	  <Folder Include="Services\" />
 	</ItemGroup>
 
 </Project>

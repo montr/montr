@@ -1,6 +1,6 @@
-﻿namespace Montr.Tools.DbMigrator
+﻿namespace Montr.Core
 {
-	public class Options
+	public class MigrationOptions
 	{
 		/// <summary>
 		/// Path where .sql migration files to be run are located.

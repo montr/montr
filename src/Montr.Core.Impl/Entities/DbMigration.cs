@@ -2,7 +2,7 @@
 using LinqToDB;
 using LinqToDB.Mapping;
 
-namespace Montr.Tools.DbMigrator.Entities
+namespace Montr.Core.Impl.Entities
 {
 	[Table(Schema = "montr", Name = "migration")]
 	public class DbMigration
