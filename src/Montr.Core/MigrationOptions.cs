@@ -8,7 +8,12 @@
 		public string MigrationPath { get; set; }
 
 		/// <summary>
-		/// Forces migration of all sql files that were previously migrated
+		/// Name of migration connection string.
+		/// </summary>
+		public string ConnectionName { get; set; }
+
+		/// <summary>
+		/// Forces migration of all sql files that were previously migrated.
 		/// </summary>
 		public bool Force { get; set; }
 	}

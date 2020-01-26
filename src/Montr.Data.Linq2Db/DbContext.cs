@@ -6,7 +6,7 @@
 		{
 		}
 
-		public DbContext(string configurationString) : base(configurationString)
+		public DbContext(string connectionName) : base(connectionName)
 		{
 		}
 	}

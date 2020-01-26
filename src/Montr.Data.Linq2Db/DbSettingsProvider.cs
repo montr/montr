@@ -24,12 +24,20 @@ namespace Montr.Data.Linq2Db
 		{
 			get
 			{
-				yield return new ConnectionStringSettings
+				var connectionStrings = _configuration?.GetSection("ConnectionStrings")?.GetChildren();
+
+				if (connectionStrings != null)
 				{
-					Name = DefaultConfiguration,
-					ProviderName = DefaultDataProvider,
-					ConnectionString = _configuration.GetConnectionString("Default")
-				};
+					foreach (var connectionString in connectionStrings)
+					{
+						yield return new ConnectionStringSettings
+						{
+							Name = connectionString.Key,
+							ProviderName = DefaultDataProvider,
+							ConnectionString = _configuration.GetConnectionString(connectionString.Key)
+						};
+					}
+				}
 			}
 		}
 

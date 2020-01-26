@@ -2,14 +2,14 @@
 {
 	public interface IDbContextFactory
 	{
-		DbContext Create(string configurationString = null);
+		DbContext Create(string connectionName = null);
 	}
 
 	public class DefaultDbContextFactory : IDbContextFactory
 	{
-		public DbContext Create(string configurationString = null)
+		public DbContext Create(string connectionName = null)
 		{
-			return new DbContext(configurationString);
+			return new DbContext(connectionName);
 		}
 	}
 }

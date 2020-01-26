@@ -48,7 +48,7 @@ namespace Montr.Core.Impl.Services
 
 			_logger.LogInformation("Found {Count} migrations", migrations.Count);
 
-			using (var db = _dbContextFactory.Create())
+			using (var db = _dbContextFactory.Create(options.ConnectionName))
 			{
 				await Bootstrap(db, cancellationToken);
 
@@ -172,7 +172,7 @@ namespace Montr.Core.Impl.Services
 		{
 			using (var stream = type.Assembly.GetManifestResourceStream(type, name))
 			{
-				using (var reader = new StreamReader(stream ?? throw new ApplicationException($"Resource \"{name}\" is not found.")))
+				using (var reader = new StreamReader(stream ?? throw new ApplicationException($"Resource \"{name}\" is not found in {type.Assembly}.")))
 				{
 					return await reader.ReadToEndAsync();
 				}
