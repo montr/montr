@@ -24,7 +24,7 @@ CREATE TABLE public.field_metadata
     icon character varying(32) COLLATE pg_catalog."default",
     props text COLLATE pg_catalog."default",
     CONSTRAINT field_meta_pkey PRIMARY KEY (uid)
-)
+);
 
 ALTER TABLE public.field_metadata
     OWNER to postgres;
@@ -56,9 +56,7 @@ CREATE TABLE public.field_data
     CONSTRAINT field_data_pkey PRIMARY KEY (uid),
     CONSTRAINT ux_field_data_entity_type_code_entity_uid_key UNIQUE (entity_type_code, entity_uid, key)
 
-)
-
-TABLESPACE pg_default;
+);
 
 ALTER TABLE public.field_data
     OWNER to postgres;
