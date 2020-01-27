@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { Button, Tree, Select, Radio, Layout, Modal, Spin } from "antd";
 import { AntTreeNode, AntTreeNodeSelectedEvent, AntTreeNodeExpandedEvent } from "antd/lib/tree";
 import { TreeNodeNormal } from "antd/lib/tree/Tree";
+import { EventDataNode } from "rc-tree/lib/interface";
 import { RadioChangeEvent } from "antd/lib/radio";
 import { Constants } from "@montr-core/.";
 import { Guid, IDataResult } from "@montr-core/models";
@@ -34,8 +35,22 @@ interface IState {
 	updateTableToken: DataTableUpdateToken;
 }
 
-interface ITreeNode extends AntTreeNode {
+interface ITreeNode extends EventDataNode /* AntTreeNode */ {
 	dataRef: IClassifierGroup;
+}
+
+interface ITreeNodeSelectEvent {
+	// event: 'select';
+	selected: boolean;
+	node: EventDataNode;
+	// selectedNodes: DataNode[];
+	nativeEvent: MouseEvent;
+}
+
+interface ITreeNodeExpandEvent {
+	node: EventDataNode;
+	expanded: boolean;
+	nativeEvent: MouseEvent;
 }
 
 class _PaneSearchClassifier extends React.Component<IProps, IState> {
@@ -225,14 +240,14 @@ class _PaneSearchClassifier extends React.Component<IProps, IState> {
 		});
 	};
 
-	onTreeNodeSelect = async (selectedKeys: string[], e: AntTreeNodeSelectedEvent) => {
+	onTreeNodeSelect = async (selectedKeys: string[], e: ITreeNodeSelectEvent /* AntTreeNodeSelectedEvent */) => {
 		const node = e.node as ITreeNode;
 		this.setState({
 			selectedGroup: (e.selected) ? node?.dataRef : null
 		}, async () => await this.refreshTable());
 	};
 
-	onTreeExpand = (expandedKeys: string[], e: AntTreeNodeExpandedEvent) => {
+	onTreeExpand = (expandedKeys: string[], e: ITreeNodeExpandEvent /* AntTreeNodeExpandedEvent */) => {
 		this.setState({ expandedKeys });
 	};
 
