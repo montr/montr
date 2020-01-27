@@ -20,8 +20,6 @@ namespace Montr.Core
 
 		public void ConfigureServices(IConfiguration configuration, IServiceCollection services)
 		{
-			services.AddHostedService<MigrationHostedService>();
-
 			services.AddHttpContextAccessor();
 
 			services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();

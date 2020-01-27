@@ -1,6 +1,9 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.DependencyInjection;
+using Montr.Core.Services;
 using Serilog;
 using Serilog.Events;
 
@@ -38,6 +41,15 @@ namespace Host
 				});
 
 			var host = hostBuilder.Build();
+
+			using (var scope = host.Services.CreateScope())
+			{
+				var serviceProvider = scope.ServiceProvider;
+
+				var cancellationToken = CancellationToken.None;
+
+				await serviceProvider.GetService<IMigrationRunner>().Run(cancellationToken);
+			}
 
 			await host.RunAsync();
 		}
