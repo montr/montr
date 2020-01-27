@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Breadcrumb, Dropdown, Menu } from "antd";
-import { IMenu } from "@montr-core/models";
+import { IMenu } from "../models";
 import { Link } from "react-router-dom";
 import { Icon } from ".";
 

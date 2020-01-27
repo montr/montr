@@ -2,7 +2,7 @@ import React from "react";
 import { Modal, Spin } from "antd";
 import { Translation } from "react-i18next";
 import { IDataField, IApiResult } from "@montr-core/models";
-import { DataForm, WrappedDataForm } from "@montr-core/components";
+import { DataForm } from "@montr-core/components";
 import { MetadataService } from "@montr-core/services";
 import { ProfileService } from "../services";
 import { IProfileModel, IChangePasswordModel } from "../models";

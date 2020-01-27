@@ -30,7 +30,7 @@ interface IState {
 	loading: boolean;
 }
 
-export class WrappedDataForm extends React.Component<IProps, IState> {
+class WrappedDataForm extends React.Component<IProps, IState> {
 
 	private _operation = new OperationService();
 	private _notificationService = new NotificationService();

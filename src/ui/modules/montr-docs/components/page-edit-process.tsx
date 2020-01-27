@@ -2,7 +2,7 @@ import React from "react";
 import { RouteComponentProps } from "react-router";
 import { Page, PaneSearchMetadata } from "@montr-core/components";
 import { Spin, Tabs } from "antd";
-import { RouteBuilder } from "@montr-docs/module";
+import { RouteBuilder } from "../module";
 
 interface IRouteProps {
 	uid?: string;

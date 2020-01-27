@@ -2,7 +2,6 @@ import * as React from "react";
 import { Page, PageHeader, Toolbar, DataTable, DataTableUpdateToken, ButtonAdd, ButtonDelete, ButtonExport, Icon } from "@montr-core/components";
 import { Link } from "react-router-dom";
 import { Button, Tree, Select, Radio, Layout, Modal, Spin } from "antd";
-import { AntTreeNode, AntTreeNodeSelectedEvent, AntTreeNodeExpandedEvent } from "antd/lib/tree";
 import { TreeNodeNormal } from "antd/lib/tree/Tree";
 import { EventDataNode } from "rc-tree/lib/interface";
 import { RadioChangeEvent } from "antd/lib/radio";

@@ -5,7 +5,7 @@ import { Translation } from "react-i18next";
 import { Page } from "@montr-core/components";
 import { OperationService } from "@montr-core/services";
 import { ProfileService } from "../services";
-import { Patterns } from "@montr-idx/module";
+import { Patterns } from "../module";
 
 interface IProps extends RouteComponentProps {
 }

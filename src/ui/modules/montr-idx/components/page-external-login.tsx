@@ -6,7 +6,7 @@ import { AccountService } from "../services/account-service";
 import { IExternalRegisterModel } from "../models";
 import { MetadataService, NavigationService, OperationService } from "@montr-core/services";
 import { RouteComponentProps } from "react-router";
-import { Patterns, Views } from "@montr-idx/module";
+import { Patterns, Views } from "../module";
 import { IDataField, IApiResult } from "@montr-core/models";
 import { Constants } from "@montr-core/constants";
 import { Link } from "react-router-dom";
