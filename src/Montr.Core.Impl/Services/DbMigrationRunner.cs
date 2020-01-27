@@ -38,6 +38,13 @@ namespace Montr.Core.Impl.Services
 		{
 			var options = _optionsAccessor.CurrentValue;
 
+			if (options.MigrationPath == null)
+			{
+				_logger.LogInformation("Migrations path not specified, skipping migrations");
+
+				return;
+			}
+
 			_logger.LogInformation("Running migrations from {MigrationPath}", options.MigrationPath);
 
 			var watch = new Stopwatch();
@@ -69,7 +76,7 @@ namespace Montr.Core.Impl.Services
 
 			if (migrationByHash != null)
 			{
-				_logger.LogInformation("Skipping migration {FileName}", migration.FileName);
+				_logger.LogDebug("Skipping migration {FileName}", migration.FileName);
 
 				if (migrationByHash.FileName != migration.FileName)
 				{
@@ -112,30 +119,30 @@ namespace Montr.Core.Impl.Services
 				{
 					await db.ExecuteAsync(migration.Sql, cancellationToken);
 
+					if (exists)
+					{
+						await db.GetTable<DbMigration>()
+							.Where(x => x.FileName == migration.FileName)
+							.Set(x => x.FileName, migration.FileName)
+							.Set(x => x.Hash, migration.Hash)
+							.Set(x => x.ExecutedAtUtc, DateTime.UtcNow)
+							.Set(x => x.DurationMs, watch.ElapsedMilliseconds)
+							.UpdateAsync(cancellationToken);
+					}
+					else
+					{
+						await db.GetTable<DbMigration>()
+							.Value(x => x.FileName, migration.FileName)
+							.Value(x => x.Hash, migration.Hash)
+							.Value(x => x.ExecutedAtUtc, DateTime.UtcNow)
+							.Value(x => x.DurationMs, watch.ElapsedMilliseconds)
+							.InsertAsync(cancellationToken);
+					}
+
 					await transaction.CommitAsync(cancellationToken);
 				}
 
 				watch.Stop();
-
-				if (exists)
-				{
-					await db.GetTable<DbMigration>()
-						.Where(x => x.FileName == migration.FileName)
-						.Set(x => x.FileName, migration.FileName)
-						.Set(x => x.Hash, migration.Hash)
-						.Set(x => x.ExecutedAtUtc, DateTime.UtcNow)
-						.Set(x => x.DurationMs, watch.ElapsedMilliseconds)
-						.UpdateAsync(cancellationToken);
-				}
-				else
-				{
-					await db.GetTable<DbMigration>()
-						.Value(x => x.FileName, migration.FileName)
-						.Value(x => x.Hash, migration.Hash)
-						.Value(x => x.ExecutedAtUtc, DateTime.UtcNow)
-						.Value(x => x.DurationMs, watch.ElapsedMilliseconds)
-						.InsertAsync(cancellationToken);
-				}
 			}
 			catch (Exception ex)
 			{
@@ -145,19 +152,17 @@ namespace Montr.Core.Impl.Services
 
 		private IList<Migration> GetMigrations(MigrationOptions options)
 		{
-			var migrationPath = options?.MigrationPath ?? Environment.CurrentDirectory;
-
-			var files = Directory.EnumerateFiles(migrationPath, "*.sql", SearchOption.AllDirectories);
+			var files = Directory.EnumerateFiles(options.MigrationPath, "*.sql", SearchOption.AllDirectories);
 
 			return files
 				.Select(file => new FileInfo(file))
-				.OrderBy(fileInfo => fileInfo.Name)
-				.Select(fileInfo =>
+				.OrderBy(file => file.Name)
+				.Select(file =>
 				{
-					var sql = File.ReadAllText(fileInfo.FullName);
+					var sql = File.ReadAllText(file.FullName);
 					var hash = _hashProvider.GetHash(sql);
 
-					return new Migration { FileName = fileInfo.Name, Sql = sql, Hash = hash};
+					return new Migration { FileName = file.Name, Sql = sql, Hash = hash};
 				}).ToList();
 		}
 
