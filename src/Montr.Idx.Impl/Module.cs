@@ -28,6 +28,9 @@ namespace Montr.Idx.Impl
 
 		public void ConfigureServices(IConfiguration configuration, IServiceCollection services)
 		{
+			services.Configure<IdxOptions>(configuration.GetSection(typeof(IdxOptions).FullName));
+
+			services.AddTransient<IStartupTask, CreateAdministratorStartupTask>();
 			services.AddTransient<EmailConfirmationService, EmailConfirmationService>();
 			services.AddTransient<IRepository<User>, DbUserRepository>();
 
@@ -35,7 +38,7 @@ namespace Montr.Idx.Impl
 			services.Configure<IdentityOptions>(options =>
 			{
 				options.SignIn.RequireConfirmedAccount = false;
-				options.SignIn.RequireConfirmedEmail = true;
+				options.SignIn.RequireConfirmedEmail = false;
 				options.SignIn.RequireConfirmedPhoneNumber = false;
 
 				options.User.RequireUniqueEmail = false;

@@ -49,6 +49,11 @@ namespace Host
 				var cancellationToken = CancellationToken.None;
 
 				await serviceProvider.GetService<IMigrationRunner>().Run(cancellationToken);
+
+				foreach (var startupTask in serviceProvider.GetServices<IStartupTask>())
+				{
+					await startupTask.Run(cancellationToken);
+				}
 			}
 
 			await host.RunAsync();
