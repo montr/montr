@@ -6,10 +6,12 @@
 
   <ItemGroup>
     <None Remove="Resources\bootstrap.sql" />
+    <None Remove="Resources\locale-strings.json" />
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Include="Resources\bootstrap.sql" />
+    <EmbeddedResource Include="Resources\locale-strings.json" />
   </ItemGroup>
 
   <ItemGroup>

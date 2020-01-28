@@ -44,15 +44,9 @@ namespace Host
 
 			using (var scope = host.Services.CreateScope())
 			{
-				var serviceProvider = scope.ServiceProvider;
-
-				var cancellationToken = CancellationToken.None;
-
-				await serviceProvider.GetService<IMigrationRunner>().Run(cancellationToken);
-
-				foreach (var startupTask in serviceProvider.GetServices<IStartupTask>())
+				foreach (var startupTask in scope.ServiceProvider.GetServices<IStartupTask>())
 				{
-					await startupTask.Run(cancellationToken);
+					await startupTask.Run(CancellationToken.None);
 				}
 			}
 

@@ -18,14 +18,19 @@ namespace Montr.Core.Tests.Services
 		{
 			// arrange
 			var cancellationToken = new CancellationToken();
-			var loggerFactory = LoggerFactory.Create(builder => builder.AddConsole(options => options.Format = ConsoleLoggerFormat.Systemd));
+			var loggerFactory = LoggerFactory.Create(
+				builder => builder.AddConsole(options => options.Format = ConsoleLoggerFormat.Systemd));
 			var optionsMonitorMock = new Mock<IOptionsMonitor<MigrationOptions>>();
 			optionsMonitorMock.Setup(x => x.CurrentValue).Returns(() => new MigrationOptions
 			{
 				MigrationPath = "../../../../../sql/"
 			});
 			var dbContextFactory = new DefaultDbContextFactory();
-			var migrator = new DbMigrationRunner(loggerFactory.CreateLogger<DbMigrationRunner>(), optionsMonitorMock.Object, dbContextFactory);
+			var resourceProvider = new EmbeddedResourceProvider();
+			var migrator = new DbMigrationRunner(
+				loggerFactory.CreateLogger<DbMigrationRunner>(),
+				optionsMonitorMock.Object,
+				dbContextFactory, resourceProvider);
 
 			// act
 

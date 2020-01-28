@@ -22,14 +22,17 @@ namespace Montr.Core.Impl.Services
 		private readonly ILogger<DbMigrationRunner> _logger;
 		private readonly IOptionsMonitor<MigrationOptions> _optionsAccessor;
 		private readonly IDbContextFactory _dbContextFactory;
+		private readonly EmbeddedResourceProvider _resourceProvider;
 		private readonly HashProvider _hashProvider;
 
 		public DbMigrationRunner(ILogger<DbMigrationRunner> logger,
-			IOptionsMonitor<MigrationOptions> optionsAccessor, IDbContextFactory dbContextFactory)
+			IOptionsMonitor<MigrationOptions> optionsAccessor, IDbContextFactory dbContextFactory,
+			EmbeddedResourceProvider resourceProvider)
 		{
 			_logger = logger;
 			_optionsAccessor = optionsAccessor;
 			_dbContextFactory = dbContextFactory;
+			_resourceProvider = resourceProvider;
 
 			_hashProvider = new HashProvider();
 		}
@@ -166,22 +169,11 @@ namespace Montr.Core.Impl.Services
 				}).ToList();
 		}
 
-		private static async Task Bootstrap(DbContext db, CancellationToken cancellationToken)
+		private async Task Bootstrap(DbContext db, CancellationToken cancellationToken)
 		{
-			var sql = await LoadEmbeddedResource(typeof(Module), "Resources.bootstrap.sql");
+			var sql = await _resourceProvider.LoadEmbeddedResource(typeof(Module), "Resources.bootstrap.sql");
 
 			await db.ExecuteAsync(sql, cancellationToken);
-		}
-
-		private static async Task<string> LoadEmbeddedResource(Type type, string name)
-		{
-			using (var stream = type.Assembly.GetManifestResourceStream(type, name))
-			{
-				using (var reader = new StreamReader(stream ?? throw new ApplicationException($"Resource \"{name}\" is not found in {type.Assembly}.")))
-				{
-					return await reader.ReadToEndAsync();
-				}
-			}
 		}
 
 		private class HashProvider

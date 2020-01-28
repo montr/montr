@@ -30,7 +30,7 @@ namespace Montr.Idx.Impl
 		{
 			services.Configure<IdxOptions>(configuration.GetSection(typeof(IdxOptions).FullName));
 
-			services.AddTransient<IStartupTask, CreateAdministratorStartupTask>();
+			services.AddTransient<IStartupTask, CreateDefaultAdminStartupTask>();
 			services.AddTransient<EmailConfirmationService, EmailConfirmationService>();
 			services.AddTransient<IRepository<User>, DbUserRepository>();
 
