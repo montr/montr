@@ -2,7 +2,7 @@
 {
 	public class IdxOptions
 	{
-		public string DefaultAdminEmail{ get; set; }
+		public string DefaultAdminEmail { get; set; }
 
 		public string DefaultAdminPassword { get; set; }
 	}
