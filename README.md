@@ -19,9 +19,11 @@ These instructions will get you a copy of the project up and running on your loc
 ### Installation
 
 1. Clone repository from `git@github.com:montr/montr.git`
-2. Create database `montr-dev` (or choose your database name) in PostgreSQL. Restore sample database backup from `todo`.
-3. Copy sample `secrets.json` from `todo` to `Microsoft/UserSecrets/1f5f8818-a536-4818-b963-2d3ef5dcef03` directory. Specify choosen database name and other connection string parameters in `Default` connection of `ConnectionStrings` section in `secrets.json`.
-4. Run dotnet to watch backend sources changes in `./src/Host`
+2. Create database `montr` (or choose your database name) in PostgreSQL.
+3. Copy sample `secrets.json` from `templates/secrets.json` to `Microsoft/UserSecrets/1f5f8818-a536-4818-b963-2d3ef5dcef03` directory.
+   * Specify choosen database name and other connection string parameters in `Default` and `Migration` connections of `ConnectionStrings` section in `secrets.json`.
+   * Specify default administrator email and password in `Montr.Idx.IdxOptions` section.
+4. Run dotnet to watch backend sources changes in `./src/Host`. During first startup database structure (tables etc.) and default data (users etc.) will be created.
 ```bash
 dotnet watch run
 ```
@@ -29,7 +31,7 @@ dotnet watch run
 ```bash
 npm install
 ```
-6. Run webpack to watch frontend sources changes in `./src/ui`. Transpiled assets will be copied to `./src/Host/wwwroot/assets` and served from these location.
+6. Run webpack to watch frontend sources changes in `./src/ui`. Compiled assets will be copied to `./src/Host/wwwroot/assets` and served from these location.
 ```bash
 npm start
 ```
