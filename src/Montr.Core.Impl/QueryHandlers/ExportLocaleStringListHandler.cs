@@ -26,7 +26,7 @@ namespace Montr.Core.Impl.QueryHandlers
 		{
 			if (request == null) throw new ArgumentNullException(nameof(request));
 
-			request.PageSize = 0; // disable paging
+			request.PageSize = Paging.MaxPageSize; // disable paging
 
 			var searchResult = await _repository.Search(request, cancellationToken);
 

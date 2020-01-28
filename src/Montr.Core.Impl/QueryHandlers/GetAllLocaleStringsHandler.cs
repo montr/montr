@@ -19,7 +19,7 @@ namespace Montr.Core.Impl.QueryHandlers
 			_repository = repository;
 		}
 
-		// todo: add caching
+		// todo: add caching or use ILocalizer
 		public async Task<IDictionary<string, string>> Handle(GetAllLocaleStrings request, CancellationToken cancellationToken)
 		{
 			if (request == null) throw new ArgumentNullException(nameof(request));
@@ -28,6 +28,7 @@ namespace Montr.Core.Impl.QueryHandlers
 			{
 				Locale = request.Locale,
 				Module = request.Module,
+				SkipPaging = true
 			};
 
 			var searchResult = await _repository.Search(searchRequest, cancellationToken);
