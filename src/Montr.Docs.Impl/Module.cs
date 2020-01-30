@@ -6,6 +6,7 @@ using Montr.Docs.Services;
 
 namespace Montr.Docs.Impl
 {
+	// ReSharper disable once UnusedMember.Global
 	public class Module : IModule
 	{
 		public void ConfigureServices(IConfiguration configuration, IServiceCollection services)

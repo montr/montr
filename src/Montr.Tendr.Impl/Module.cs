@@ -4,6 +4,7 @@ using Montr.Core;
 
 namespace Montr.Tendr.Impl
 {
+	// ReSharper disable once UnusedMember.Global
 	public class Module : IModule
 	{
 		public void ConfigureServices(IConfiguration configuration, IServiceCollection services)

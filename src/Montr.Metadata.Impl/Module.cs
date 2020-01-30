@@ -9,6 +9,7 @@ using Montr.Metadata.Services;
 
 namespace Montr.Metadata.Impl
 {
+	// ReSharper disable once UnusedMember.Global
 	public class Module : IWebModule
 	{
 		public void ConfigureServices(IConfiguration configuration, IServiceCollection services)
