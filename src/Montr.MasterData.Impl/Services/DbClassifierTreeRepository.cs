@@ -28,7 +28,7 @@ namespace Montr.MasterData.Impl.Services
 				var query = from trees in db.GetTable<DbClassifierTree>()
 							join types in db.GetTable<DbClassifierType>()
 								on trees.TypeUid equals types.Uid
-							where types.CompanyUid == request.CompanyUid &&
+							where // types.CompanyUid == request.CompanyUid &&
 								  types.Code == request.TypeCode
 							select trees;
 

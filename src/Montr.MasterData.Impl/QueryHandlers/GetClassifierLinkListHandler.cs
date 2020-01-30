@@ -29,7 +29,7 @@ namespace Montr.MasterData.Impl.QueryHandlers
 		{
 			if (request == null) throw new ArgumentNullException(nameof(request));
 
-			var type = await _classifierTypeService.GetClassifierType(request.CompanyUid, request.TypeCode, cancellationToken);
+			var type = await _classifierTypeService.GetClassifierType(request.TypeCode, cancellationToken);
 
 			if (type.HierarchyType != HierarchyType.Groups)
 			{

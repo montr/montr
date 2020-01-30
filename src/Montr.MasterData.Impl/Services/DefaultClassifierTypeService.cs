@@ -17,15 +17,14 @@ namespace Montr.MasterData.Impl.Services
 			_classifierTypeRepository = classifierTypeRepository;
 		}
 
-		public async Task<ClassifierType> GetClassifierType(Guid companyUid, string typeCode, CancellationToken cancellationToken)
+		public async Task<ClassifierType> GetClassifierType(string typeCode, CancellationToken cancellationToken)
 		{
 			var types = await _classifierTypeRepository.Search(
 				new ClassifierTypeSearchRequest
 				{
-					CompanyUid = companyUid,
 					Code = typeCode ?? throw new ArgumentNullException(nameof(typeCode)),
 					PageNo = 0,
-					PageSize = 2,
+					PageSize = 2
 				}, cancellationToken);
 
 			if (types.Rows.Count != 1)

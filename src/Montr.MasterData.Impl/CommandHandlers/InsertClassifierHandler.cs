@@ -41,14 +41,12 @@ namespace Montr.MasterData.Impl.CommandHandlers
 		public async Task<ApiResult> Handle(InsertClassifier request, CancellationToken cancellationToken)
 		{
 			if (request.UserUid == Guid.Empty) throw new InvalidOperationException("User is required.");
-			if (request.CompanyUid == Guid.Empty) throw new InvalidOperationException("Company is required.");
 
 			var item = request.Item ?? throw new ArgumentNullException(nameof(request.Item));
 
 			var now = _dateTimeProvider.GetUtcNow();
 
-			// todo: check company belongs to user
-			var type = await _classifierTypeService.GetClassifierType(request.CompanyUid, request.TypeCode, cancellationToken);
+			var type = await _classifierTypeService.GetClassifierType(request.TypeCode, cancellationToken);
 
 			var itemUid = Guid.NewGuid();
 
@@ -92,7 +90,6 @@ namespace Montr.MasterData.Impl.CommandHandlers
 					// insert classifier
 					await db.GetTable<DbClassifier>()
 						.Value(x => x.Uid, itemUid)
-						// .Value(x => x.CompanyUid, request.CompanyUid)
 						.Value(x => x.TypeUid, type.Uid)
 						.Value(x => x.StatusCode, ClassifierStatusCode.Active)
 						.Value(x => x.Code, item.Code)

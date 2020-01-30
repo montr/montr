@@ -4,25 +4,15 @@
 CREATE TABLE IF NOT EXISTS public.classifier_type
 (
 	uid uuid NOT NULL, 
-	company_uid uuid NOT NULL,
 	code character varying(64) NOT NULL COLLATE pg_catalog."default",
     name character varying(2048) NOT NULL COLLATE pg_catalog."default",
     description character varying(4096) COLLATE pg_catalog."default",
 	hierarchy_type character varying(6) NOT NULL COLLATE pg_catalog."default",
 	CONSTRAINT classifier_type_pk PRIMARY KEY (uid),
-	UNIQUE (company_uid, code)
-)
-WITH (
-	OIDS = FALSE
+	UNIQUE (code)
 );
 
 GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE public.classifier_type TO web;
-
-ALTER TABLE public.classifier_type
-    ADD CONSTRAINT fk_classifier_type_company_uid FOREIGN KEY (company_uid)
-    REFERENCES public.company (uid) MATCH SIMPLE
-    ON UPDATE NO ACTION
-    ON DELETE NO ACTION;
 
 /*
 -- select uuid_generate_v1()

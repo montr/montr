@@ -31,7 +31,7 @@ namespace Montr.MasterData.Impl.QueryHandlers
 		{
 			var typeCode = request.TypeCode ?? throw new ArgumentNullException(nameof(request.TypeCode));
 
-			var type = await _classifierTypeService.GetClassifierType(request.CompanyUid, typeCode, cancellationToken);
+			var type = await _classifierTypeService.GetClassifierType(typeCode, cancellationToken);
 
 			ICollection<FieldMetadata> commonFields = null;
 

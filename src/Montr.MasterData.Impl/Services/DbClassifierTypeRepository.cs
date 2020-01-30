@@ -26,8 +26,8 @@ namespace Montr.MasterData.Impl.Services
 
 			using (var db = _dbContextFactory.Create())
 			{
-				var all = db.GetTable<DbClassifierType>()
-					.Where(x => x.CompanyUid == request.CompanyUid);
+				var all = db.GetTable<DbClassifierType>().AsQueryable();
+					/*.Where(x => x.CompanyUid == request.CompanyUid);*/
 
 				if (request.Code != null)
 				{

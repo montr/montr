@@ -26,9 +26,6 @@ namespace Montr.MasterData.Impl.CommandHandlers
 		public async Task<ApiResult> Handle(DeleteClassifierType request, CancellationToken cancellationToken)
 		{
 			if (request.UserUid == Guid.Empty) throw new InvalidOperationException("User is required.");
-			if (request.CompanyUid == Guid.Empty) throw new InvalidOperationException("Company is required.");
-
-			// todo: check company belongs to user
 
 			using (var scope = _unitOfWorkFactory.Create())
 			{
@@ -41,7 +38,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 						from @group in db.GetTable<DbClassifierGroup>()
 						join tree in db.GetTable<DbClassifierTree>() on @group.TreeUid equals tree.Uid
 						join type in db.GetTable<DbClassifierType>() on tree.TypeUid equals type.Uid
-						where type.CompanyUid == request.CompanyUid && request.Uids.Contains(type.Uid)
+						where request.Uids.Contains(type.Uid)
 						select @group
 					).DeleteAsync(cancellationToken);
 
@@ -49,7 +46,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 					await (
 						from tree in db.GetTable<DbClassifierTree>()
 						join type in db.GetTable<DbClassifierType>() on tree.TypeUid equals type.Uid
-						where type.CompanyUid == request.CompanyUid && request.Uids.Contains(type.Uid)
+						where request.Uids.Contains(type.Uid)
 						select tree
 					).DeleteAsync(cancellationToken);
 
@@ -57,7 +54,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 
 					// delete type
 					affected = await db.GetTable<DbClassifierType>()
-						.Where(x => x.CompanyUid == request.CompanyUid && request.Uids.Contains(x.Uid))
+						.Where(x => request.Uids.Contains(x.Uid))
 						.DeleteAsync(cancellationToken);
 				}
 

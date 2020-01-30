@@ -27,11 +27,8 @@ namespace Montr.MasterData.Impl.CommandHandlers
 		public async Task<ApiResult> Handle(UpdateClassifierType request, CancellationToken cancellationToken)
 		{
 			if (request.UserUid == Guid.Empty) throw new InvalidOperationException("User is required.");
-			if (request.CompanyUid == Guid.Empty) throw new InvalidOperationException("Company is required.");
 
 			var item = request.Item ?? throw new ArgumentNullException(nameof(request.Item));
-
-			// todo: check type belongs to company
 
 			using (var scope = _unitOfWorkFactory.Create())
 			{
@@ -45,7 +42,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 					}
 
 					await db.GetTable<DbClassifierType>()
-						.Where(x => x.Uid == item.Uid && x.CompanyUid == request.CompanyUid)
+						.Where(x => x.Uid == item.Uid)
 						.Set(x => x.Code, item.Code)
 						.Set(x => x.Name, item.Name)
 						.Set(x => x.Description, item.Description)

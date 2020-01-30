@@ -29,7 +29,7 @@ namespace Montr.MasterData.Controllers
 		[HttpPost]
 		public async Task<SearchResult<ClassifierType>> List(GetClassifierTypeList request)
 		{
-			request.CompanyUid = await _currentCompanyProvider.GetCompanyUid();
+			// request.CompanyUid = await _currentCompanyProvider.GetCompanyUid();
 			request.UserUid = _currentUserProvider.GetUserUid();
 
 			return await _mediator.Send(request);

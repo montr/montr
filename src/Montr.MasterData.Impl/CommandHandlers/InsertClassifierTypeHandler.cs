@@ -50,7 +50,6 @@ namespace Montr.MasterData.Impl.CommandHandlers
 
 					await db.GetTable<DbClassifierType>()
 						.Value(x => x.Uid, itemUid)
-						.Value(x => x.CompanyUid, request.CompanyUid)
 						.Value(x => x.Code, item.Code)
 						.Value(x => x.Name, item.Name)
 						.Value(x => x.Description, item.Description)

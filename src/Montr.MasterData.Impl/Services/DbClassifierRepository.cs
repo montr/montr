@@ -35,7 +35,7 @@ namespace Montr.MasterData.Impl.Services
 		{
 			var request = (ClassifierSearchRequest)searchRequest ?? throw new ArgumentNullException(nameof(searchRequest));
 
-			var type = await _classifierTypeService.GetClassifierType(request.CompanyUid, request.TypeCode, cancellationToken);
+			var type = await _classifierTypeService.GetClassifierType(request.TypeCode, cancellationToken);
 
 			using (var db = _dbContextFactory.Create())
 			{
@@ -56,7 +56,7 @@ namespace Montr.MasterData.Impl.Services
 								join children_groups in db.GetTable<DbClassifierGroup>() on trees.Uid equals children_groups.TreeUid
 								join links in db.GetTable<DbClassifierLink>() on children_groups.Uid equals links.GroupUid
 								join c in db.GetTable<DbClassifier>() on links.ItemUid equals c.Uid
-								where types.CompanyUid == request.CompanyUid &&
+								where // types.CompanyUid == request.CompanyUid &&
 								      types.Code == request.TypeCode &&
 								      trees.Uid == request.TreeUid &&
 								      children_groups.Uid == request.GroupUid
@@ -71,7 +71,7 @@ namespace Montr.MasterData.Impl.Services
 								join children_groups in db.GetTable<DbClassifierGroup>() on closures.ChildUid equals children_groups.Uid
 								join links in db.GetTable<DbClassifierLink>() on children_groups.Uid equals links.GroupUid
 								join c in db.GetTable<DbClassifier>() on links.ItemUid equals c.Uid
-								where types.CompanyUid == request.CompanyUid &&
+								where // types.CompanyUid == request.CompanyUid &&
 								      types.Code == request.TypeCode &&
 								      trees.Uid == request.TreeUid &&
 								      parent_groups.Uid == request.GroupUid
@@ -106,7 +106,7 @@ namespace Montr.MasterData.Impl.Services
 					// todo: remove joins with DbClassifierType here and above
 					query = from types in db.GetTable<DbClassifierType>()
 							join c in db.GetTable<DbClassifier>() on types.Uid equals c.TypeUid
-							where types.CompanyUid == request.CompanyUid &&
+							where // types.CompanyUid == request.CompanyUid &&
 								types.Code == request.TypeCode
 							select c;
 				}

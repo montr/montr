@@ -31,13 +31,11 @@ namespace Montr.MasterData.Impl.CommandHandlers
 		public async Task<ApiResult> Handle(UpdateClassifierGroup request, CancellationToken cancellationToken)
 		{
 			if (request.UserUid == Guid.Empty) throw new InvalidOperationException("User is required.");
-			if (request.CompanyUid == Guid.Empty) throw new InvalidOperationException("Company is required.");
 
 			var item = request.Item ?? throw new ArgumentNullException(nameof(request.Item));
 
-			// todo: check group belongs to company
 			// todo: validate required fields
-			var type = await _classifierTypeService.GetClassifierType(request.CompanyUid, request.TypeCode, cancellationToken);
+			var type = await _classifierTypeService.GetClassifierType(request.TypeCode, cancellationToken);
 
 			using (var scope = _unitOfWorkFactory.Create())
 			{

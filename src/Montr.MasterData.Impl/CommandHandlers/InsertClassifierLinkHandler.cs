@@ -31,10 +31,8 @@ namespace Montr.MasterData.Impl.CommandHandlers
 		public async Task<ApiResult> Handle(InsertClassifierLink request, CancellationToken cancellationToken)
 		{
 			if (request.UserUid == Guid.Empty) throw new InvalidOperationException("User is required.");
-			if (request.CompanyUid == Guid.Empty) throw new InvalidOperationException("Company is required.");
 
-			// todo: check company belongs to user
-			var type = await _classifierTypeService.GetClassifierType(request.CompanyUid, request.TypeCode, cancellationToken);
+			var type = await _classifierTypeService.GetClassifierType(request.TypeCode, cancellationToken);
 
 			using (var scope = _unitOfWorkFactory.Create())
 			{
