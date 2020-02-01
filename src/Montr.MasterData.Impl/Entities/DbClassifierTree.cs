@@ -4,7 +4,7 @@ using LinqToDB.Mapping;
 
 namespace Montr.MasterData.Impl.Entities
 {
-	[Table(Name = "classifier_tree")]
+	[Table(Schema = "montr", Name = "classifier_tree")]
 	public class DbClassifierTree
 	{
 		[Column(Name = "uid"), DataType(DataType.Guid), PrimaryKey]

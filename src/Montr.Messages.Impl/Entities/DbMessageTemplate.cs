@@ -3,7 +3,7 @@ using LinqToDB.Mapping;
 
 namespace Montr.Messages.Impl.Entities
 {
-	[Table(Name = "message_template")]
+	[Table(Schema = "montr", Name = "message_template")]
 	public class DbMessageTemplate
 	{
 		[Column(Name = "uid"), DataType(DataType.Guid), PrimaryKey, Identity]

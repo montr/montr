@@ -1,20 +1,14 @@
--- Table: public.message_template
+-- Table: montr.message_template
 
--- DROP TABLE public.message_template;
+-- DROP TABLE montr.message_template;
 
-CREATE TABLE public.message_template
+CREATE TABLE montr.message_template
 (
     uid uuid NOT NULL,
-    subject character varying(2048) COLLATE pg_catalog."default",
-    body text COLLATE pg_catalog."default",
+    subject character varying(2048),
+    body text,
     CONSTRAINT message_template_pk PRIMARY KEY (uid)
-)
-WITH (
-    OIDS = FALSE
-)
-TABLESPACE pg_default;
-
-GRANT INSERT, SELECT, UPDATE, DELETE ON TABLE public.message_template TO web;
+);
 
 /*
 insert into message_template(uid, subject, body)

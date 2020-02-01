@@ -4,7 +4,7 @@ using LinqToDB.Mapping;
 
 namespace Montr.Tendr.Impl.Entities
 {
-	[Table(Name = "invitation")]
+	[Table(Schema = "montr", Name = "invitation")]
 	public class DbInvitation
 	{
 		[Column(Name = "uid"), DataType(DataType.Guid), PrimaryKey /*, Identity*/]

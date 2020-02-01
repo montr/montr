@@ -3,7 +3,7 @@ using LinqToDB.Mapping;
 
 namespace Montr.Docs.Impl.Entities
 {
-	[Table(Name = "document")]
+	[Table(Schema = "montr", Name = "document")]
 	public class DbDocument
 	{
 		[Column(Name = "uid"), DataType(DataType.Guid), NotNull, PrimaryKey, Identity]

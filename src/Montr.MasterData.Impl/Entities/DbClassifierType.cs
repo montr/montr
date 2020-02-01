@@ -4,14 +4,11 @@ using LinqToDB.Mapping;
 
 namespace Montr.MasterData.Impl.Entities
 {
-	[Table(Name = "classifier_type")]
+	[Table(Schema = "montr", Name = "classifier_type")]
 	public class DbClassifierType
 	{
 		[Column(Name = "uid"), DataType(DataType.Guid), PrimaryKey, Identity]
 		public Guid Uid { get; set; }
-
-		/*[Column(Name = "company_uid"), DataType(DataType.Guid), NotNull]
-		public Guid CompanyUid { get; set; }*/
 
 		[Column(Name = "code"), DataType(DataType.VarChar), NotNull]
 		public string Code { get; set; }

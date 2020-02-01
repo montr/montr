@@ -3,7 +3,7 @@ using LinqToDB.Mapping;
 
 namespace Montr.Core.Impl.Entities
 {
-	[Table(Name = "locale_string")]
+	[Table(Schema = "montr", Name = "locale_string")]
 	public class DbLocaleString
 	{
 		[Column(Name = "locale"), DataType(DataType.VarChar), NotNull, PrimaryKey(0)]

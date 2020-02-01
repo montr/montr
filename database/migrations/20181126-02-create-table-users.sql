@@ -1,8 +1,8 @@
--- Table: public.users
+-- Table: montr.users
 
--- DROP TABLE public.users;
+-- DROP TABLE montr.users;
 
-CREATE TABLE public.users
+CREATE TABLE montr.users
 (
   id uuid NOT NULL, -- DEFAULT uuid_generate_v1(),
   user_name character varying(128),
@@ -26,25 +26,16 @@ CREATE TABLE public.users
   --modified_at timestamp without time zone,
   --modified_by character varying(128),
   CONSTRAINT pk_user_id PRIMARY KEY (id)
-)
-WITH (
-  OIDS=FALSE
 );
 
--- Index: public.ix_users_email
+-- Index: montr.ix_users_email
 
--- DROP INDEX public.ix_users_email;
+-- DROP INDEX montr.ix_users_email;
 
-CREATE INDEX ix_users_email
-  ON public.users
-  USING btree
-  (normalized_email COLLATE pg_catalog."default");
+CREATE INDEX ix_users_email ON montr.users USING btree (normalized_email);
 
--- Index: public.ix_users_user_name
+-- Index: montr.ix_users_user_name
 
--- DROP INDEX public.ix_users_user_name;
+-- DROP INDEX montr.ix_users_user_name;
 
-CREATE INDEX ix_users_user_name
-  ON public.users
-  USING btree
-  (normalized_user_name COLLATE pg_catalog."default");
+CREATE INDEX ix_users_user_name ON montr.users USING btree (normalized_user_name);

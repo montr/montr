@@ -5,7 +5,7 @@ using LinqToDB.Mapping;
 
 namespace Montr.MasterData.Impl.Entities
 {
-	[Table(Name = "classifier")]
+	[Table(Schema = "montr", Name = "classifier")]
 	[DebuggerDisplay("{" + nameof(DebuggerDisplay) + ",nq}")]
 	public class DbClassifier
 	{

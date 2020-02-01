@@ -4,7 +4,7 @@ using LinqToDB.Mapping;
 
 namespace Montr.Idx.Impl.Entities
 {
-	[Table(Schema = "public", Name = "roles")]
+	[Table(Schema = "montr", Name = "roles")]
 	public class DbRole : IdentityRole<Guid>
 	{
 		[Column("id"), PrimaryKey, /*Identity,*/ NotNull]

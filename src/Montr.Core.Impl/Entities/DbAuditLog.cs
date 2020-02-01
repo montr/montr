@@ -3,7 +3,7 @@ using LinqToDB.Mapping;
 
 namespace Montr.Core.Impl.Entities
 {
-	[Table(Name = "audit_log")]
+	[Table(Schema = "montr", Name = "audit_log")]
 	public class DbAuditLog
 	{
 		[Column(Name = "uid"), DataType(DataType.Guid), NotNull, PrimaryKey, Identity]

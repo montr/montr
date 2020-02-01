@@ -4,7 +4,7 @@ using LinqToDB.Mapping;
 
 namespace Montr.MasterData.Impl.Entities
 {
-	[Table(Name = "classifier_link")]
+	[Table(Schema = "montr", Name = "classifier_link")]
 	public class DbClassifierLink
 	{
 		[Column(Name = "group_uid"), DataType(DataType.Guid), NotNull, PrimaryKey(0)]

@@ -7,7 +7,7 @@ namespace Montr.MasterData.Impl.Entities
 	/// <summary>
 	/// Closure table for group/group or item/item relation
 	/// </summary>
-	[Table(Name = "classifier_closure")]
+	[Table(Schema = "montr", Name = "classifier_closure")]
 	public class DbClassifierClosure
 	{
 		[Column(Name = "parent_uid"), DataType(DataType.Guid), NotNull, PrimaryKey(0)]

@@ -3,7 +3,7 @@ using LinqToDB.Mapping;
 
 namespace Montr.Metadata.Impl.Entities
 {
-	[Table(Schema = "public", Name = "field_metadata")]
+	[Table(Schema = "montr", Name = "field_metadata")]
 	public class DbFieldMetadata
 	{
 		[Column(Name = "uid"), DataType(DataType.Guid), NotNull, PrimaryKey, Identity]

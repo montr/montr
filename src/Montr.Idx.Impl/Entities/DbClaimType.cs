@@ -3,7 +3,7 @@ using LinqToDB.Mapping;
 
 namespace Montr.Idx.Impl.Entities
 {
-	[Table(Schema = "public", Name = "claim_type")]
+	[Table(Schema = "montr", Name = "claim_type")]
 	public class DbClaimType
 	{
 		[Column("id"), PrimaryKey(Order = 0)]
