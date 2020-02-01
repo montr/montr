@@ -32,7 +32,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 		{
 			if (request.UserUid == Guid.Empty) throw new InvalidOperationException("User is required.");
 
-			var type = await _classifierTypeService.GetClassifierType(request.TypeCode, cancellationToken);
+			var type = await _classifierTypeService.Get(request.TypeCode, cancellationToken);
 
 			using (var scope = _unitOfWorkFactory.Create())
 			{

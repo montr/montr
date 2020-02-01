@@ -12,13 +12,13 @@ using Montr.Metadata.Models;
 
 namespace Montr.MasterData.Plugin.GovRu.Services
 {
-	public class RegisterGovRuClassifierListStartupTask : IStartupTask
+	public class RegisterClassifiersStartupTask : IStartupTask
 	{
-		private readonly ILogger<RegisterGovRuClassifierListStartupTask> _logger;
+		private readonly ILogger<RegisterClassifiersStartupTask> _logger;
 		private readonly IMediator _mediator;
 
-		public RegisterGovRuClassifierListStartupTask(
-			ILogger<RegisterGovRuClassifierListStartupTask> logger,
+		public RegisterClassifiersStartupTask(
+			ILogger<RegisterClassifiersStartupTask> logger,
 			IMediator mediator)
 		{
 			_logger = logger;

@@ -28,7 +28,7 @@ namespace Montr.MasterData.Impl.QueryHandlers
 
 			var typeCode = request.TypeCode ?? throw new ArgumentNullException(nameof(request.TypeCode));
 
-			var type = await _classifierTypeService.GetClassifierType(typeCode, cancellationToken);
+			var type = await _classifierTypeService.Get(typeCode, cancellationToken);
 
 			using (var db = _dbContextFactory.Create())
 			{

@@ -35,7 +35,7 @@ namespace Montr.MasterData.Impl.Services
 		{
 			var request = (ClassifierSearchRequest)searchRequest ?? throw new ArgumentNullException(nameof(searchRequest));
 
-			var type = await _classifierTypeService.GetClassifierType(request.TypeCode, cancellationToken);
+			var type = await _classifierTypeService.Get(request.TypeCode, cancellationToken);
 
 			using (var db = _dbContextFactory.Create())
 			{

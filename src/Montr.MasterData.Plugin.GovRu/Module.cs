@@ -11,7 +11,7 @@ namespace Montr.MasterData.Plugin.GovRu
 	{
 		public void ConfigureServices(IConfiguration configuration, IServiceCollection services)
 		{
-			services.AddTransient<IStartupTask, RegisterGovRuClassifierListStartupTask>();
+			services.AddTransient<IStartupTask, RegisterClassifiersStartupTask>();
 		}
 	}
 }

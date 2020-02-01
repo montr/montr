@@ -40,7 +40,7 @@ namespace Montr.MasterData.Impl.Services
 			return types.Rows.SingleOrDefault();
 		}
 
-		public async Task<ClassifierType> GetClassifierType(string typeCode, CancellationToken cancellationToken)
+		public async Task<ClassifierType> Get(string typeCode, CancellationToken cancellationToken)
 		{
 			var result = await TryGet(typeCode, cancellationToken);
 

@@ -32,7 +32,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 
 			var item = request.Item ?? throw new ArgumentNullException(nameof(request.Item));
 
-			var type = await _classifierTypeService.GetClassifierType(request.TypeCode, cancellationToken);
+			var type = await _classifierTypeService.Get(request.TypeCode, cancellationToken);
 
 			using (var scope = _unitOfWorkFactory.Create())
 			{

@@ -69,7 +69,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 		/// </summary>
 		private async Task Preload(ImportClassifierList request, CancellationToken cancellationToken)
 		{
-			_type = await _classifierTypeService.GetClassifierType(request.TypeCode, cancellationToken);
+			_type = await _classifierTypeService.Get(request.TypeCode, cancellationToken);
 
 			using (var db = _dbContextFactory.Create())
 			{

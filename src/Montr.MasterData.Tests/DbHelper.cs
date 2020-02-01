@@ -64,7 +64,6 @@ namespace Montr.MasterData.Tests
 		{
 			var result = await _insertClassifierTypeHandler.Handle(new InsertClassifierType
 			{
-				CompanyUid = CompanyUid,
 				UserUid = UserUid,
 				Item = new ClassifierType
 				{

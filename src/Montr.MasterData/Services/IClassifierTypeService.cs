@@ -10,7 +10,7 @@ namespace Montr.MasterData.Services
 	{
 		Task<ClassifierType> TryGet(string typeCode, CancellationToken cancellationToken);
 
-		Task<ClassifierType> GetClassifierType(string typeCode, CancellationToken cancellationToken);
+		Task<ClassifierType> Get(string typeCode, CancellationToken cancellationToken);
 
 		Task<ApiResult> Insert(ClassifierType item, CancellationToken cancellationToken);
 	}
