@@ -1,0 +1,162 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using MediatR;
+using Microsoft.Extensions.Logging;
+using Montr.Core.Services;
+using Montr.MasterData.Commands;
+using Montr.MasterData.Models;
+using Montr.Metadata.Models;
+
+namespace Montr.MasterData.Plugin.GovRu.Services
+{
+	public class RegisterGovRuClassifierListStartupTask : IStartupTask
+	{
+		private readonly ILogger<RegisterGovRuClassifierListStartupTask> _logger;
+		private readonly IMediator _mediator;
+
+		public RegisterGovRuClassifierListStartupTask(
+			ILogger<RegisterGovRuClassifierListStartupTask> logger,
+			IMediator mediator)
+		{
+			_logger = logger;
+			_mediator = mediator;
+		}
+
+		public async Task Run(CancellationToken cancellationToken)
+		{
+			foreach (var command in GetCommands())
+			{
+				var result = await _mediator.Send(command, cancellationToken);
+
+				if (result.Success)
+				{
+					if (result.AffectedRows == 1)
+					{
+						_logger.LogInformation("Classifier type {type} successfully registered.", command.Item.Code);
+					}
+					else
+					{
+						_logger.LogDebug("Classifier type {type} already registered.", command.Item.Code);
+					}
+				}
+				else
+				{
+					// todo: get detailed errors from result
+					throw new ApplicationException(
+						$"Failed to register classifier type \"{command.Item.Code}\" - " +
+						string.Join(", ", result.Errors.SelectMany(x => x.Messages)) );
+				}
+			}
+		}
+
+		private static IEnumerable<RegisterClassifierType> GetCommands()
+		{
+			yield return new RegisterClassifierType
+			{
+				Item = new ClassifierType
+				{
+					Code = "okei",
+					Name = "ОКЕИ",
+					Description = "Общероссийский классификатор единиц измерения",
+					HierarchyType = HierarchyType.Groups,
+					IsSystem = true
+				},
+				Fields = new List<FieldMetadata>
+				{
+					new TextField { Key = "code", Name = "Код", Required = true, Active = true, DisplayOrder = 10, System = true },
+					new TextAreaField { Key = "name", Name = "Name", Required = true, Active = true, DisplayOrder = 20, System = true, Props = new TextAreaField.Properties { Rows = 10 } },
+				}
+			};
+
+			yield return new RegisterClassifierType
+			{
+				Item = new ClassifierType
+				{
+					Code = "okved2",
+					Name = "ОКВЭД 2",
+					Description = "Общероссийский классификатор видов экономической деятельности",
+					HierarchyType = HierarchyType.Items,
+					IsSystem = true
+				},
+				Fields = new List<FieldMetadata>
+				{
+					new TextField { Key = "code", Name = "Код", Required = true, Active = true, DisplayOrder = 10, System = true },
+					new TextAreaField { Key = "name", Name = "Name", Required = true, Active = true, DisplayOrder = 20, System = true, Props = new TextAreaField.Properties { Rows = 10 } },
+				}
+			};
+
+			yield return new RegisterClassifierType
+			{
+				Item = new ClassifierType
+				{
+					Code = "okpd2",
+					Name = "ОКПД 2",
+					Description = "Общероссийский классификатор продукции по видам экономической деятельности",
+					HierarchyType = HierarchyType.Items,
+					IsSystem = true
+				},
+				Fields = new List<FieldMetadata>
+				{
+					new TextField { Key = "code", Name = "Код", Required = true, Active = true, DisplayOrder = 10, System = true },
+					new TextAreaField { Key = "name", Name = "Name", Required = true, Active = true, DisplayOrder = 20, System = true, Props = new TextAreaField.Properties { Rows = 10 } },
+				}
+			};
+
+			yield return new RegisterClassifierType
+			{
+				Item = new ClassifierType
+				{
+					Code = "oktmo",
+					Name = "ОКТМО",
+					Description = "Общероссийский классификатор территорий муниципальных образований",
+					HierarchyType = HierarchyType.Items,
+					IsSystem = true
+				},
+				Fields = new List<FieldMetadata>
+				{
+					new TextField { Key = "code", Name = "Код", Required = true, Active = true, DisplayOrder = 10, System = true },
+					new TextAreaField { Key = "name", Name = "Name", Required = true, Active = true, DisplayOrder = 20, System = true, Props = new TextAreaField.Properties { Rows = 10 } },
+				}
+			};
+
+			yield return new RegisterClassifierType
+			{
+				Item = new ClassifierType
+				{
+					Code = "okopf",
+					Name = "ОКОПФ",
+					Description = "Общероссийский классификатор организационно-правовых форм",
+					HierarchyType = HierarchyType.Items,
+					IsSystem = true
+				},
+				Fields = new List<FieldMetadata>
+				{
+					new TextField { Key = "code", Name = "Код", Required = true, Active = true, DisplayOrder = 10, System = true },
+					new TextAreaField { Key = "name", Name = "Name", Required = true, Active = true, DisplayOrder = 20, System = true, Props = new TextAreaField.Properties { Rows = 10 } },
+				}
+			};
+
+			yield return new RegisterClassifierType
+			{
+				Item = new ClassifierType
+				{
+					Code = "okv",
+					Name = "ОКВ",
+					Description = "Общероссийский классификатор валют",
+					HierarchyType = HierarchyType.Groups,
+					IsSystem = true
+				},
+				Fields = new List<FieldMetadata>
+				{
+					new TextField { Key = "code", Name = "Код", Required = true, Active = true, DisplayOrder = 10, System = true },
+					new TextAreaField { Key = "name", Name = "Name", Required = true, Active = true, DisplayOrder = 20, System = true, Props = new TextAreaField.Properties { Rows = 10 } },
+					new TextField { Key = "digitalCode", Name = "Цифровой код", Required = true, Active = true, DisplayOrder = 30, System = true },
+					new TextField { Key = "shortName", Name = "Краткое наименование", Required = true, Active = true, DisplayOrder = 40, System = true },
+				}
+			};
+		}
+	}
+}

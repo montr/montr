@@ -16,6 +16,7 @@ namespace Montr.Metadata.Impl
 		{
 			services.AddSingleton<IFieldProviderRegistry, DefaultFieldProviderRegistry>();
 			services.AddSingleton<IRepository<FieldMetadata>, DbFieldMetadataRepository>();
+			services.AddSingleton<IFieldMetadataService, DbFieldMetadataService>();
 			services.AddSingleton<IFieldDataRepository, DbFieldDataRepository>();
 			services.AddSingleton<IMetadataProvider, DefaultMetadataProvider>();
 		}

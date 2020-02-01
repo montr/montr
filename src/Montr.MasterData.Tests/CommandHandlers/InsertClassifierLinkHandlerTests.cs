@@ -22,7 +22,7 @@ namespace Montr.MasterData.Tests.CommandHandlers
 			var unitOfWorkFactory = new TransactionScopeUnitOfWorkFactory();
 			var dbContextFactory = new DefaultDbContextFactory();
 			var classifierTypeRepository = new DbClassifierTypeRepository(dbContextFactory);
-			var classifierTypeService = new DefaultClassifierTypeService(classifierTypeRepository);
+			var classifierTypeService = new DefaultClassifierTypeService(dbContextFactory, classifierTypeRepository);
 			var dbHelper = new DbHelper(unitOfWorkFactory, dbContextFactory);
 			var handler = new InsertClassifierLinkHandler(unitOfWorkFactory, dbContextFactory, classifierTypeService);
 
@@ -74,7 +74,7 @@ namespace Montr.MasterData.Tests.CommandHandlers
 			var unitOfWorkFactory = new TransactionScopeUnitOfWorkFactory();
 			var dbContextFactory = new DefaultDbContextFactory();
 			var classifierTypeRepository = new DbClassifierTypeRepository(dbContextFactory);
-			var classifierTypeService = new DefaultClassifierTypeService(classifierTypeRepository);
+			var classifierTypeService = new DefaultClassifierTypeService(dbContextFactory, classifierTypeRepository);
 			var dbHelper = new DbHelper(unitOfWorkFactory, dbContextFactory);
 			var handler = new InsertClassifierLinkHandler(unitOfWorkFactory, dbContextFactory, classifierTypeService);
 

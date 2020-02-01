@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Montr.Metadata.Services;
 
 namespace Montr.Metadata.Models
 {

@@ -8,6 +8,7 @@ CREATE TABLE IF NOT EXISTS public.classifier_type
     name character varying(2048) NOT NULL COLLATE pg_catalog."default",
     description character varying(4096) COLLATE pg_catalog."default",
 	hierarchy_type character varying(6) NOT NULL COLLATE pg_catalog."default",
+	is_system boolean NOT NULL,
 	CONSTRAINT classifier_type_pk PRIMARY KEY (uid),
 	UNIQUE (code)
 );

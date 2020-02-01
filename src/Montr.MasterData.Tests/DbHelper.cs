@@ -39,13 +39,13 @@ namespace Montr.MasterData.Tests
 			var dateTimeProvider = new DefaultDateTimeProvider();
 			var classifierTreeRepository = new DbClassifierTreeRepository(dbContextFactory);
 			var classifierTypeRepository = new DbClassifierTypeRepository(dbContextFactory);
-			var classifierTypeService = new DefaultClassifierTypeService(classifierTypeRepository);
+			var classifierTypeService = new DefaultClassifierTypeService(dbContextFactory, classifierTypeRepository);
 			var dbFieldMetadataRepository = new DbFieldMetadataRepository(dbContextFactory, null, new NewtonsoftJsonSerializer());
 			var dbFieldDataRepository = new DbFieldDataRepository(dbContextFactory, null);
 
 			_getClassifierTreeListHandler = new GetClassifierTreeListHandler(classifierTreeRepository);
 			_insertClassifierTreeTypeHandler = new InsertClassifierTreeHandler(unitOfWorkFactory, dbContextFactory, classifierTypeService);
-			_insertClassifierTypeHandler = new InsertClassifierTypeHandler(unitOfWorkFactory, dbContextFactory);
+			_insertClassifierTypeHandler = new InsertClassifierTypeHandler(unitOfWorkFactory, classifierTypeService);
 			_insertClassifierGroupHandler = new InsertClassifierGroupHandler(unitOfWorkFactory, dbContextFactory, classifierTypeService);
 			_insertClassifierHandler = new InsertClassifierHandler(unitOfWorkFactory, dbContextFactory, dateTimeProvider, classifierTypeService, dbFieldMetadataRepository, dbFieldDataRepository);
 			_updateClassifierGroupHandler = new UpdateClassifierGroupHandler(unitOfWorkFactory, dbContextFactory, classifierTypeService);

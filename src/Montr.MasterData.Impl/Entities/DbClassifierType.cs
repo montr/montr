@@ -25,8 +25,8 @@ namespace Montr.MasterData.Impl.Entities
 		[Column(Name = "hierarchy_type"), DataType(DataType.VarChar), NotNull]
 		public string HierarchyType { get; set; }
 
-		/*[Column(Name = "is_system"), DataType(DataType.Boolean), NotNull]
-		public bool IsSystem { get; set; }*/
+		[Column(Name = "is_system"), DataType(DataType.Boolean), NotNull]
+		public bool IsSystem { get; set; }
 
 		/*[Column(Name = "table_name"), DataType(DataType.VarChar), Nullable]
 		public string TableName { get; set; }*/
