@@ -1,0 +1,16 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.Google" Version="3.1.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Montr.Core\Montr.Core.csproj" />
+    <ProjectReference Include="..\Montr.Idx.Impl\Montr.Idx.Impl.csproj" />
+  </ItemGroup>
+
+</Project>

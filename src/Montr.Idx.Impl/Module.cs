@@ -126,7 +126,7 @@ namespace Montr.Idx.Impl
 
 			// services.AddOpenIdAuthentication(configuration.GetSection("OpenId").Get<OpenIdOptions>());
 
-			var authenticationBuilder = services.AddAuthentication(/*options =>
+			services.AddAuthentication( /*options =>
 				{
 					// x.DefaultAuthenticateScheme = IdentityServerConstants.DefaultCookieAuthenticationScheme;
 					x.DefaultAuthenticateScheme = IdentityConstants.ApplicationScheme;
@@ -139,36 +139,6 @@ namespace Montr.Idx.Impl
 				}*/);
 			// .AddIdentityServerAuthentication()
 			// .AddJwtBearer()
-
-			if (configuration["Authentication:Google:ClientId"] != null)
-			{
-				authenticationBuilder.AddGoogle("Google", options =>
-				{
-					// options.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
-					// options.SignInScheme = IdentityConstants.ExternalScheme;
-
-					options.ClientId = configuration["Authentication:Google:ClientId"];
-					options.ClientSecret = configuration["Authentication:Google:ClientSecret"];
-				});
-			}
-
-			if (configuration["Authentication:Facebook:AppId"] != null)
-			{
-				authenticationBuilder.AddFacebook("Facebook", options =>
-				{
-					options.AppId = configuration["Authentication:Facebook:AppId"];
-					options.AppSecret = configuration["Authentication:Facebook:AppSecret"];
-				});
-			}
-
-			if (configuration["Authentication:Microsoft:ClientId"] != null)
-			{
-				authenticationBuilder.AddMicrosoftAccount("Microsoft", options =>
-				{
-					options.ClientId = configuration["Authentication:Microsoft:ClientId"];
-					options.ClientSecret = configuration["Authentication:Microsoft:ClientSecret"];
-				});
-			}
 
 			if (_environment.IsDevelopment())
 			{
