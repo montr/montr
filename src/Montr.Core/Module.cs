@@ -31,8 +31,8 @@ namespace Montr.Core
 				return factory.GetUrlHelper(actionContext);
 			});
 
-			services.Configure<AppOptions>(configuration.GetSection(typeof(AppOptions).FullName));
-			services.Configure<MigrationOptions>(configuration.GetSection(typeof(MigrationOptions).FullName));
+			services.BindOptions<AppOptions>(configuration);
+			services.BindOptions<MigrationOptions>(configuration);
 
 			services.Configure<RequestLocalizationOptions>(options =>
 			{

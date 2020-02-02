@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Montr.Core.Models;
 using Montr.Idx.Services;
 using Montr.Kompany.Commands;
 using Montr.Kompany.Models;
@@ -35,7 +36,7 @@ namespace Montr.Kompany.Controllers
 		}
 
 		[Authorize, HttpPost]
-		public async Task<ActionResult<Guid>> Create(Company item)
+		public async Task<ActionResult<ApiResult>> Create(Company item)
 		{
 			return await _mediator.Send(new CreateCompany
 			{

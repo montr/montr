@@ -31,23 +31,15 @@ namespace Montr.MasterData.Plugin.GovRu.Services
 			{
 				var result = await _mediator.Send(command, cancellationToken);
 
-				if (result.Success)
+				result.AssertSuccess(() => $"Failed to register classifier type \"{command.Item.Code}\"");
+
+				if (result.AffectedRows == 1)
 				{
-					if (result.AffectedRows == 1)
-					{
-						_logger.LogInformation("Classifier type {type} successfully registered.", command.Item.Code);
-					}
-					else
-					{
-						_logger.LogDebug("Classifier type {type} already registered.", command.Item.Code);
-					}
+					_logger.LogInformation("Classifier type {type} successfully registered.", command.Item.Code);
 				}
 				else
 				{
-					// todo: get detailed errors from result
-					throw new ApplicationException(
-						$"Failed to register classifier type \"{command.Item.Code}\" - " +
-						string.Join(", ", result.Errors.SelectMany(x => x.Messages)) );
+					_logger.LogDebug("Classifier type {type} already registered.", command.Item.Code);
 				}
 			}
 		}

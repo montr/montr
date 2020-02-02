@@ -1,6 +1,6 @@
 ﻿namespace Montr.Idx
 {
-	public class IdxOptions
+	public class Options
 	{
 		public string DefaultAdminEmail { get; set; }
 

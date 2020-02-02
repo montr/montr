@@ -10,9 +10,9 @@ namespace Montr.Messages.Impl.Services
 {
 	public class MailKitEmailSender : IEmailSender
 	{
-		private readonly IOptionsMonitor<EmailSenderOptions> _options;
+		private readonly IOptionsMonitor<Options> _options;
 
-		public MailKitEmailSender(IOptionsMonitor<EmailSenderOptions> options)
+		public MailKitEmailSender(IOptionsMonitor<Options> options)
 		{
 			_options = options;
 		}

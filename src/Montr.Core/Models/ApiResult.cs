@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Montr.Core.Models
 {
@@ -25,6 +26,21 @@ namespace Montr.Core.Models
 		public string RedirectUrl { get; set; }
 
 		public IList<ApiResultError> Errors { get; set; }
+
+		// todo: add tests
+		public void AssertSuccess(Func<string> getMessage)
+		{
+			if (Success == false)
+			{
+				var message = getMessage();
+
+				// todo: get detailed errors from result
+				var errors = string.Join(", ", Errors.SelectMany(x => x.Messages));
+
+				// todo: use ApiException ?
+				throw new ApplicationException($"{message} - {errors}");
+			}
+		}
 	}
 
 	public class ApiResult<TData> : ApiResult

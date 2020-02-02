@@ -37,19 +37,21 @@ class _RegistrationForm extends React.Component<IProps, IState> {
 	handleSubmit = async (values: any) => {
 		const { manageCompany, switchCompany } = this.props;
 
-		const companyUid = await this._companyService.create(values);
+		const result = await this._companyService.create(values);
 
-		await switchCompany(companyUid);
+		if (result.success) {
+			await switchCompany(result.uid);
 
-		message.info(`Организация успешно зарегистрирована.`);
+			message.info(`Организация успешно зарегистрирована.`);
 
-		const returnUrl = this._navigation.getUrlParameter(Constants.returnUrlParam);
+			const returnUrl = this._navigation.getUrlParameter(Constants.returnUrlParam);
 
-		if (returnUrl) {
-			this._navigation.navigate(returnUrl);
-		}
-		else {
-			manageCompany();
+			if (returnUrl) {
+				this._navigation.navigate(returnUrl);
+			}
+			else {
+				manageCompany();
+			}
 		}
 	};
 

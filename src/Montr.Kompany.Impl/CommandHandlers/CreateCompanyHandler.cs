@@ -14,7 +14,7 @@ using Montr.Kompany.Models;
 
 namespace Montr.Kompany.Impl.CommandHandlers
 {
-	public class CreateCompanyHandler : IRequestHandler<CreateCompany, Guid>
+	public class CreateCompanyHandler : IRequestHandler<CreateCompany, ApiResult>
 	{
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IDbContextFactory _dbContextFactory;
@@ -32,10 +32,9 @@ namespace Montr.Kompany.Impl.CommandHandlers
 			_auditLogService = auditLogService;
 		}
 
-		public async Task<Guid> Handle(CreateCompany request, CancellationToken cancellationToken)
+		public async Task<ApiResult> Handle(CreateCompany request, CancellationToken cancellationToken)
 		{
-			if (request.UserUid == Guid.Empty)
-				throw new InvalidOperationException("UserUid can't be empty guid.");
+			if (request.UserUid == Guid.Empty) throw new InvalidOperationException("UserUid can't be empty guid.");
 
 			var now = _dateTimeProvider.GetUtcNow();
 
@@ -89,7 +88,7 @@ namespace Montr.Kompany.Impl.CommandHandlers
 
 				scope.Commit();
 
-				return company.Uid;
+				return new ApiResult { Uid = company.Uid };
 			}
 		}
 	}

@@ -28,7 +28,7 @@ namespace Montr.Idx.Impl
 
 		public void ConfigureServices(IConfiguration configuration, IServiceCollection services)
 		{
-			services.Configure<IdxOptions>(configuration.GetSection(typeof(IdxOptions).FullName));
+			services.BindOptions<Options>(configuration);
 
 			services.AddTransient<IStartupTask, CreateDefaultAdminStartupTask>();
 

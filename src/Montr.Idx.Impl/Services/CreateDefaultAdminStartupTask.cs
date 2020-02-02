@@ -14,13 +14,13 @@ namespace Montr.Idx.Impl.Services
 	public class CreateDefaultAdminStartupTask : IStartupTask
 	{
 		private readonly ILogger<CreateDefaultAdminStartupTask> _logger;
-		private readonly IOptionsMonitor<IdxOptions> _optionsAccessor;
+		private readonly IOptionsMonitor<Options> _optionsAccessor;
 		private readonly IDbContextFactory _dbContextFactory;
 		private readonly UserManager<DbUser> _userManager;
 
 		public CreateDefaultAdminStartupTask(
 			ILogger<CreateDefaultAdminStartupTask> logger,
-			IOptionsMonitor<IdxOptions> optionsAccessor,
+			IOptionsMonitor<Options> optionsAccessor,
 			IDbContextFactory dbContextFactory,
 			UserManager<DbUser> userManager)
 		{
