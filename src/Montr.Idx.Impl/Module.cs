@@ -126,8 +126,7 @@ namespace Montr.Idx.Impl
 
 			// services.AddOpenIdAuthentication(configuration.GetSection("OpenId").Get<OpenIdOptions>());
 
-			services
-				.AddAuthentication(/*options =>
+			var authenticationBuilder = services.AddAuthentication(/*options =>
 				{
 					// x.DefaultAuthenticateScheme = IdentityServerConstants.DefaultCookieAuthenticationScheme;
 					x.DefaultAuthenticateScheme = IdentityConstants.ApplicationScheme;
@@ -137,27 +136,39 @@ namespace Montr.Idx.Impl
 					options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
 					options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
 					options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-				}*/)
-				// .AddIdentityServerAuthentication()
-				// .AddJwtBearer()
-				.AddGoogle("Google", options =>
+				}*/);
+			// .AddIdentityServerAuthentication()
+			// .AddJwtBearer()
+
+			if (configuration["Authentication:Google:ClientId"] != null)
+			{
+				authenticationBuilder.AddGoogle("Google", options =>
 				{
 					// options.SignInScheme = IdentityServerConstants.ExternalCookieAuthenticationScheme;
 					// options.SignInScheme = IdentityConstants.ExternalScheme;
 
 					options.ClientId = configuration["Authentication:Google:ClientId"];
 					options.ClientSecret = configuration["Authentication:Google:ClientSecret"];
-				})
-				.AddFacebook("Facebook", options =>
+				});
+			}
+
+			if (configuration["Authentication:Facebook:AppId"] != null)
+			{
+				authenticationBuilder.AddFacebook("Facebook", options =>
 				{
 					options.AppId = configuration["Authentication:Facebook:AppId"];
 					options.AppSecret = configuration["Authentication:Facebook:AppSecret"];
-				})
-				.AddMicrosoftAccount("Microsoft", options =>
+				});
+			}
+
+			if (configuration["Authentication:Microsoft:ClientId"] != null)
+			{
+				authenticationBuilder.AddMicrosoftAccount("Microsoft", options =>
 				{
 					options.ClientId = configuration["Authentication:Microsoft:ClientId"];
 					options.ClientSecret = configuration["Authentication:Microsoft:ClientSecret"];
 				});
+			}
 
 			if (_environment.IsDevelopment())
 			{
