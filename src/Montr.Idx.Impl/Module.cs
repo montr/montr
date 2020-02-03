@@ -31,6 +31,7 @@ namespace Montr.Idx.Impl
 			services.BindOptions<Options>(configuration);
 
 			services.AddTransient<IStartupTask, CreateDefaultAdminStartupTask>();
+			services.AddTransient<IStartupTask, RegisterMessageTemplateStartupTask>();
 
 			services.AddTransient<EmailConfirmationService, EmailConfirmationService>();
 			services.AddTransient<IRepository<User>, DbUserRepository>();

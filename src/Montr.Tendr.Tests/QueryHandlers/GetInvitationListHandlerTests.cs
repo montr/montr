@@ -19,7 +19,7 @@ namespace Montr.Tendr.Tests.QueryHandlers
 			var cancellationToken = CancellationToken.None;
 			var dbContextFactory = new DefaultDbContextFactory();
 			var classifierTypeRepository = new DbClassifierTypeRepository(dbContextFactory);
-			var classifierTypeService = new DefaultClassifierTypeService(dbContextFactory, classifierTypeRepository);
+			var classifierTypeService = new DbClassifierTypeService(dbContextFactory, classifierTypeRepository);
 			var classifierRepository = new DbClassifierRepository(dbContextFactory, classifierTypeService, null, null);
 			var handler = new GetInvitationListHandler(dbContextFactory, classifierRepository);
 

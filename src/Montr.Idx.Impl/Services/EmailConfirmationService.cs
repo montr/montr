@@ -13,6 +13,8 @@ namespace Montr.Idx.Impl.Services
 {
 	public class EmailConfirmationService
 	{
+		public static readonly Guid TemplateUid = Guid.Parse("CEEF2983-C083-448F-88B1-2DA6E6CB41A4");
+
 		private readonly UserManager<DbUser> _userManager;
 		private readonly IAppUrlBuilder _appUrlBuilder;
 		private readonly IEmailSender _emailSender;
@@ -41,9 +43,7 @@ namespace Montr.Idx.Impl.Services
 				CallbackUrl = _appUrlBuilder.Build($"{ClientRoutes.ConfirmEmail}/{user.Id}/{code}")
 			};
 
-			var templateUid = Guid.Parse("CEEF2983-C083-448F-88B1-2DA6E6CB41A4");
-
-			var message = await _templateRenderer.Render(templateUid, messageModel, cancellationToken);
+			var message = await _templateRenderer.Render(TemplateUid, messageModel, cancellationToken);
 
 			await _emailSender.Send(user.Email, message.Subject, message.Body);
 		}
@@ -59,9 +59,7 @@ namespace Montr.Idx.Impl.Services
 				CallbackUrl = _appUrlBuilder.Build($"{ClientRoutes.ConfirmEmailChange}/{user.Id}/{newEmail}/{code}")
 			};
 
-			var templateUid = Guid.Parse("CEEF2983-C083-448F-88B1-2DA6E6CB41A4");
-
-			var message = await _templateRenderer.Render(templateUid, messageModel, cancellationToken);
+			var message = await _templateRenderer.Render(TemplateUid, messageModel, cancellationToken);
 
 			await _emailSender.Send(newEmail, message.Subject, message.Body);
 		}

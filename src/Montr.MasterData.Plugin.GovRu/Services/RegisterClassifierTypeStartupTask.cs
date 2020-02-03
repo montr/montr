@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
@@ -12,13 +10,14 @@ using Montr.Metadata.Models;
 
 namespace Montr.MasterData.Plugin.GovRu.Services
 {
-	public class RegisterClassifiersStartupTask : IStartupTask
+	// todo: split to abstract startup task and gov.ru service
+	public class RegisterClassifierTypeStartupTask : IStartupTask
 	{
-		private readonly ILogger<RegisterClassifiersStartupTask> _logger;
+		private readonly ILogger<RegisterClassifierTypeStartupTask> _logger;
 		private readonly IMediator _mediator;
 
-		public RegisterClassifiersStartupTask(
-			ILogger<RegisterClassifiersStartupTask> logger,
+		public RegisterClassifierTypeStartupTask(
+			ILogger<RegisterClassifierTypeStartupTask> logger,
 			IMediator mediator)
 		{
 			_logger = logger;
@@ -35,16 +34,16 @@ namespace Montr.MasterData.Plugin.GovRu.Services
 
 				if (result.AffectedRows == 1)
 				{
-					_logger.LogInformation("Classifier type {type} successfully registered.", command.Item.Code);
+					_logger.LogInformation("Classifier type {code} successfully registered.", command.Item.Code);
 				}
 				else
 				{
-					_logger.LogDebug("Classifier type {type} already registered.", command.Item.Code);
+					_logger.LogDebug("Classifier type {code} already registered.", command.Item.Code);
 				}
 			}
 		}
 
-		private static IEnumerable<RegisterClassifierType> GetCommands()
+		protected IEnumerable<RegisterClassifierType> GetCommands()
 		{
 			yield return new RegisterClassifierType
 			{

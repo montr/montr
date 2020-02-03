@@ -13,31 +13,28 @@ using Montr.MasterData.Services;
 
 namespace Montr.MasterData.Impl.Services
 {
-	public class DefaultClassifierTypeService: IClassifierTypeService
+	public class DbClassifierTypeService: IClassifierTypeService
 	{
 		private readonly IDbContextFactory _dbContextFactory;
-		private readonly IRepository<ClassifierType> _classifierTypeRepository;
+		private readonly IRepository<ClassifierType> _repository;
 
-		public DefaultClassifierTypeService(
-			IDbContextFactory dbContextFactory,
-			IRepository<ClassifierType> classifierTypeRepository)
+		public DbClassifierTypeService(IDbContextFactory dbContextFactory, IRepository<ClassifierType> repository)
 		{
 			_dbContextFactory = dbContextFactory;
-			_classifierTypeRepository = classifierTypeRepository;
+			_repository = repository;
 		}
 
 		public async Task<ClassifierType> TryGet(string typeCode, CancellationToken cancellationToken)
 		{
-			var types = await _classifierTypeRepository.Search(
-				new ClassifierTypeSearchRequest
-				{
-					Code = typeCode ?? throw new ArgumentNullException(nameof(typeCode)),
-					PageNo = 0,
-					PageSize = 1,
-					SkipPaging = true
-				}, cancellationToken);
+			var result = await _repository.Search(new ClassifierTypeSearchRequest
+			{
+				Code = typeCode ?? throw new ArgumentNullException(nameof(typeCode)),
+				PageNo = 0,
+				PageSize = 1,
+				SkipPaging = true
+			}, cancellationToken);
 
-			return types.Rows.SingleOrDefault();
+			return result.Rows.SingleOrDefault();
 		}
 
 		public async Task<ClassifierType> Get(string typeCode, CancellationToken cancellationToken)

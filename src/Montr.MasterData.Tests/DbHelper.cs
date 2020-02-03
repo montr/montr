@@ -39,7 +39,7 @@ namespace Montr.MasterData.Tests
 			var dateTimeProvider = new DefaultDateTimeProvider();
 			var classifierTreeRepository = new DbClassifierTreeRepository(dbContextFactory);
 			var classifierTypeRepository = new DbClassifierTypeRepository(dbContextFactory);
-			var classifierTypeService = new DefaultClassifierTypeService(dbContextFactory, classifierTypeRepository);
+			var classifierTypeService = new DbClassifierTypeService(dbContextFactory, classifierTypeRepository);
 			var dbFieldMetadataRepository = new DbFieldMetadataRepository(dbContextFactory, null, new NewtonsoftJsonSerializer());
 			var dbFieldDataRepository = new DbFieldDataRepository(dbContextFactory, null);
 

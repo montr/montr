@@ -26,7 +26,7 @@ namespace Montr.MasterData.Tests.QueryHandlers
 			var dbContextFactory = new DefaultDbContextFactory();
 			var classifierTypeRepository = new DbClassifierTypeRepository(dbContextFactory);
 			var classifierTreeRepository = new DbClassifierTreeRepository(dbContextFactory);
-			var classifierTypeService = new DefaultClassifierTypeService(dbContextFactory, classifierTypeRepository);
+			var classifierTypeService = new DbClassifierTypeService(dbContextFactory, classifierTypeRepository);
 			var classifierTreeService = new DefaultClassifierTreeService(classifierTreeRepository);
 			var generator = new DbHelper(unitOfWorkFactory, dbContextFactory) { TypeCode = "okei" }; // todo: use test type
 			var handler = new GetClassifierGroupListHandler(dbContextFactory, classifierTypeService, classifierTreeService);
@@ -59,7 +59,7 @@ namespace Montr.MasterData.Tests.QueryHandlers
 			var dbContextFactory = new DefaultDbContextFactory();
 			var classifierTypeRepository = new DbClassifierTypeRepository(dbContextFactory);
 			var classifierTreeRepository = new DbClassifierTreeRepository(dbContextFactory);
-			var classifierTypeService = new DefaultClassifierTypeService(dbContextFactory, classifierTypeRepository);
+			var classifierTypeService = new DbClassifierTypeService(dbContextFactory, classifierTypeRepository);
 			var classifierTreeService = new DefaultClassifierTreeService(classifierTreeRepository);
 			var generator = new DbHelper(unitOfWorkFactory, dbContextFactory) { TypeCode = "okei" }; // todo: use test type
 			var handler = new GetClassifierGroupListHandler(dbContextFactory, classifierTypeService, classifierTreeService);
@@ -97,7 +97,7 @@ namespace Montr.MasterData.Tests.QueryHandlers
 			var dbContextFactory = new DefaultDbContextFactory();
 			var classifierTypeRepository = new DbClassifierTypeRepository(dbContextFactory);
 			var classifierTreeRepository = new DbClassifierTreeRepository(dbContextFactory);
-			var classifierTypeService = new DefaultClassifierTypeService(dbContextFactory, classifierTypeRepository);
+			var classifierTypeService = new DbClassifierTypeService(dbContextFactory, classifierTypeRepository);
 			var classifierTreeService = new DefaultClassifierTreeService(classifierTreeRepository);
 			var handler = new GetClassifierGroupListHandler(dbContextFactory, classifierTypeService, classifierTreeService);
 
@@ -124,7 +124,7 @@ namespace Montr.MasterData.Tests.QueryHandlers
 			var dbContextFactory = new DefaultDbContextFactory();
 			var classifierTypeRepository = new DbClassifierTypeRepository(dbContextFactory);
 			var classifierTreeRepository = new DbClassifierTreeRepository(dbContextFactory);
-			var classifierTypeService = new DefaultClassifierTypeService(dbContextFactory, classifierTypeRepository);
+			var classifierTypeService = new DbClassifierTypeService(dbContextFactory, classifierTypeRepository);
 			var classifierTreeService = new DefaultClassifierTreeService(classifierTreeRepository);
 			var handler = new GetClassifierGroupListHandler(dbContextFactory, classifierTypeService, classifierTreeService);
 
@@ -170,7 +170,7 @@ namespace Montr.MasterData.Tests.QueryHandlers
 			var dbContextFactory = new DefaultDbContextFactory();
 			var classifierTypeRepository = new DbClassifierTypeRepository(dbContextFactory);
 			var classifierTreeRepository = new DbClassifierTreeRepository(dbContextFactory);
-			var classifierTypeService = new DefaultClassifierTypeService(dbContextFactory, classifierTypeRepository);
+			var classifierTypeService = new DbClassifierTypeService(dbContextFactory, classifierTypeRepository);
 			var classifierTreeService = new DefaultClassifierTreeService(classifierTreeRepository);
 			var handler = new GetClassifierGroupListHandler(dbContextFactory, classifierTypeService, classifierTreeService);
 
@@ -198,7 +198,7 @@ namespace Montr.MasterData.Tests.QueryHandlers
 			var dbContextFactory = new DefaultDbContextFactory();
 			var classifierTypeRepository = new DbClassifierTypeRepository(dbContextFactory);
 			var classifierTreeRepository = new DbClassifierTreeRepository(dbContextFactory);
-			var classifierTypeService = new DefaultClassifierTypeService(dbContextFactory, classifierTypeRepository);
+			var classifierTypeService = new DbClassifierTypeService(dbContextFactory, classifierTypeRepository);
 			var classifierTreeService = new DefaultClassifierTreeService(classifierTreeRepository);
 			var generator = new DbHelper(unitOfWorkFactory, dbContextFactory) { TypeCode = "okei" }; // todo: use test type
 			var handler = new GetClassifierGroupListHandler(dbContextFactory, classifierTypeService, classifierTreeService);

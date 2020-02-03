@@ -2,10 +2,8 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using LinqToDB;
 using Markdig;
-using Montr.Data.Linq2Db;
-using Montr.Messages.Impl.Entities;
+using Montr.Core.Services;
 using Montr.Messages.Models;
 using Montr.Messages.Services;
 using Stubble.Core.Builders;
@@ -14,16 +12,17 @@ namespace Montr.Messages.Impl.Services
 {
 	public class MustacheTemplateRenderer : ITemplateRenderer
 	{
-		private readonly IDbContextFactory _dbContextFactory;
+		private readonly IRepository<MessageTemplate> _repository;
 
-		public MustacheTemplateRenderer(IDbContextFactory dbContextFactory)
+		public MustacheTemplateRenderer(IRepository<MessageTemplate> repository)
 		{
-			_dbContextFactory = dbContextFactory;
+			_repository = repository;
 		}
 
 		public async Task<Message> Render<TModel>(Guid templateUid, TModel data, CancellationToken cancellationToken)
 		{
-			var template = await GetTemplate(templateUid, cancellationToken);
+			var template = (await _repository
+				.Search(new MessageTemplateSearchRequest { Uid = templateUid }, cancellationToken)).Rows.Single();
 
 			var stubble = new StubbleBuilder().Build();
 
@@ -35,23 +34,6 @@ namespace Montr.Messages.Impl.Services
 				Subject = subject,
 				Body = Markdown.ToHtml(body) 
 			};
-		}
-
-		private async Task< MessageTemplate> GetTemplate(Guid templateUid, CancellationToken cancellationToken)
-		{
-			using (var db = _dbContextFactory.Create())
-			{
-				return await db
-					.GetTable<DbMessageTemplate>()
-					.Where(x => x.Uid == templateUid)
-					.Select(x => new MessageTemplate
-					{
-						Uid = x.Uid,
-						Subject = x.Subject,
-						Body = x.Body
-					})
-					.SingleAsync(cancellationToken);
-			}
 		}
 	}
 }

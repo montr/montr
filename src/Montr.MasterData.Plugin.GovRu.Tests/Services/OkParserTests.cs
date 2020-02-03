@@ -167,7 +167,7 @@ namespace Montr.MasterData.Plugin.GovRu.Tests.Services
 			var unitOfWorkFactory = new TransactionScopeUnitOfWorkFactory();
 			var dbContextFactory = new DefaultDbContextFactory();
 			var classifierTypeRepository = new DbClassifierTypeRepository(dbContextFactory);
-			var classifierTypeService = new DefaultClassifierTypeService(dbContextFactory, classifierTypeRepository);
+			var classifierTypeService = new DbClassifierTypeService(dbContextFactory, classifierTypeRepository);
 
 			var handler = new ImportClassifierListHandler(unitOfWorkFactory, dbContextFactory, classifierTypeService);
 

@@ -20,7 +20,7 @@ namespace Montr.MasterData.Tests.QueryHandlers
 			// arrange
 			var dbContextFactory = new DefaultDbContextFactory();
 			var classifierTypeRepository = new DbClassifierTypeRepository(dbContextFactory);
-			var classifierTypeService = new DefaultClassifierTypeService(dbContextFactory, classifierTypeRepository);
+			var classifierTypeService = new DbClassifierTypeService(dbContextFactory, classifierTypeRepository);
 			var classifierRepository = new DbClassifierRepository(dbContextFactory, classifierTypeService, null, null);
 
 			var handler = new ExportClassifierListHandler(classifierRepository);

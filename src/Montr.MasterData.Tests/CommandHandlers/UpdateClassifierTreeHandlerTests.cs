@@ -21,7 +21,7 @@ namespace Montr.MasterData.Tests.CommandHandlers
 			var unitOfWorkFactory = new TransactionScopeUnitOfWorkFactory();
 			var dbContextFactory = new DefaultDbContextFactory();
 			var classifierTypeRepository = new DbClassifierTypeRepository(dbContextFactory);
-			var classifierTypeService = new DefaultClassifierTypeService(dbContextFactory, classifierTypeRepository);
+			var classifierTypeService = new DbClassifierTypeService(dbContextFactory, classifierTypeRepository);
 			var generator = new DbHelper(unitOfWorkFactory, dbContextFactory);
 			var handler = new UpdateClassifierTreeHandler(unitOfWorkFactory, dbContextFactory, classifierTypeService);
 
