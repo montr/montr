@@ -1,8 +1,10 @@
-﻿using System.Threading;
+﻿using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Montr.Core.Services;
 using Serilog;
 using Serilog.Events;
@@ -44,9 +46,15 @@ namespace Host
 
 			using (var scope = host.Services.CreateScope())
 			{
-				foreach (var startupTask in scope.ServiceProvider.GetServices<IStartupTask>())
+				var logger = scope.ServiceProvider.GetService<ILogger<Program>>();
+
+				var tasks = scope.ServiceProvider.GetServices<IStartupTask>().ToArray();
+
+				foreach (var task in tasks)
 				{
-					await startupTask.Run(CancellationToken.None);
+					logger.LogInformation("Running {task} startup task", task);
+
+					await task.Run(CancellationToken.None);
 				}
 			}
 

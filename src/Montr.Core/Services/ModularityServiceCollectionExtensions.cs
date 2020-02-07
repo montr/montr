@@ -67,7 +67,7 @@ namespace Montr.Core.Services
 
 			var assemblyModules = modules.ToLookup(x => x.Type.Assembly.GetName().Name);
 
-			// if manual dependencies not specified - resolve dependencies dynamically from referenced assemplies
+			// if manual dependencies not specified - resolve dependencies dynamically from referenced assemblies
 			foreach (var module in modules)
 			{
 				if (module.Dependencies == null)
