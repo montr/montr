@@ -23,7 +23,7 @@ namespace Montr.Core.Tests.Services
 			var optionsMonitorMock = new Mock<IOptionsMonitor<MigrationOptions>>();
 			optionsMonitorMock.Setup(x => x.CurrentValue).Returns(() => new MigrationOptions
 			{
-				MigrationPath = "../../../../../sql/"
+				MigrationPath = "../../../../../database/migrations/"
 			});
 			var dbContextFactory = new DefaultDbContextFactory();
 			var resourceProvider = new EmbeddedResourceProvider();

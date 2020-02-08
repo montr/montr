@@ -18,6 +18,15 @@ namespace Montr.Core
 	[AttributeUsage(AttributeTargets.Class)]
 	public class ModuleAttribute : Attribute
 	{
+		public Type ImplementationOf { get; set; }
+
 		public Type[] Dependencies { get; set; }
+	}
+
+	public enum ModuleType : byte
+	{
+		Interface = 0,
+		Implementation = 1,
+		Plugin = 2
 	}
 }

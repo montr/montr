@@ -3,52 +3,23 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Montr.Core.Services;
 
-namespace Montr.Core.Services
+namespace Montr.Core.Impl.Services
 {
-	public static class ModularityServiceCollectionExtensions
+	public class ModuleLoader
 	{
-		public static ICollection<IModule> AddModules(this IServiceCollection services, IConfiguration configuration, ILogger logger)
+		private readonly ILogger _logger;
+
+		public ModuleLoader(ILogger logger)
 		{
-			var modules = GetSortedModules(logger);
-
-			// register module types to create modules later with dependencies
-			foreach (var type in modules)
-			{
-				// modules instances will be created twice (with temp and real service providers) 
-				// todo: create modules using ActivatorUtilities?
-				services.AddTransient(type);
-			}
-
-			// temp service provider to create modules
-			IServiceProvider serviceProvider = services.BuildServiceProvider();
-
-			var result = new List<IModule>();
-
-			foreach (var type in modules)
-			{
-				var module = (IModule)serviceProvider.GetService(type);
-
-				if (logger.IsEnabled(LogLevel.Information))
-				{
-					logger.LogInformation("Initializing module {module}", module);
-				}
-
-				// todo: configure module services later (?)
-				module.ConfigureServices(configuration, services);
-
-				result.Add(module);
-			}
-
-			return result.AsReadOnly();
+			_logger = logger;
 		}
 
-		private static IList<Type> GetSortedModules(ILogger logger)
+		public IList<Type> GetSortedModules(string baseDirectory)
 		{
-			PreloadAssemblies(logger);
+			PreloadAssemblies(baseDirectory);
 
 			var modules = new List<ModuleInfo>();
 
@@ -57,10 +28,12 @@ namespace Montr.Core.Services
 				foreach (var type in assembly.GetTypes()
 					.Where(x => x.IsClass && x.IsAbstract == false && typeof(IModule).IsAssignableFrom(x)))
 				{
+					var moduleAttribute = type.GetCustomAttribute<ModuleAttribute>();
+
 					modules.Add(new ModuleInfo
 					{
 						Type = type,
-						Dependencies = type.GetCustomAttribute<ModuleAttribute>()?.Dependencies
+						Dependencies = moduleAttribute?.Dependencies
 					});
 				}
 			}
@@ -88,19 +61,19 @@ namespace Montr.Core.Services
 
 			var sortedModules = DirectedAcyclicGraphVerifier.TopologicalSort(modules, node => node.Type, node => node.Dependencies);
 
-			if (logger.IsEnabled(LogLevel.Debug))
+			if (_logger.IsEnabled(LogLevel.Information))
 			{
-				logger.LogDebug("Modules initialization order:");
+				_logger.LogInformation("Modules initialization order:");
 
 				foreach (var module in sortedModules)
 				{
 					if (module.Dependencies.Length == 0)
 					{
-						logger.LogDebug("· {module}", module.Type);
+						_logger.LogInformation("· {module}", module.Type);
 					}
 					else
 					{
-						logger.LogDebug("· {module} (depends on: {deps})", module.Type, module.Dependencies);
+						_logger.LogInformation("· {module} (depends on: {deps})", module.Type, module.Dependencies);
 					}
 				}
 			}
@@ -108,17 +81,15 @@ namespace Montr.Core.Services
 			return sortedModules.Select(x => x.Type).ToArray();
 		}
 
-		private static void PreloadAssemblies(ILogger logger)
+		public void PreloadAssemblies(string baseDirectory)
 		{
 			var allAssemblies = AppDomain.CurrentDomain.GetAssemblies()
 				.Where(x => x.IsDynamic == false) // exclude dynamic assemblies without location
 				.ToArray();
 
-			var baseDirectory = AppDomain.CurrentDomain.BaseDirectory;
-
-			if (logger.IsEnabled(LogLevel.Information))
+			if (_logger.IsEnabled(LogLevel.Information))
 			{
-				logger.LogInformation("Preloading assemblies from {directory}", baseDirectory);
+				_logger.LogInformation("Preloading assemblies from {directory}", baseDirectory);
 			}
 
 			foreach (var file in Directory.EnumerateFiles(baseDirectory, "*.dll"))
@@ -126,9 +97,9 @@ namespace Montr.Core.Services
 				if (allAssemblies.FirstOrDefault(
 						x => string.Equals(x.Location, file, StringComparison.OrdinalIgnoreCase)) == null)
 				{
-					if (logger.IsEnabled(LogLevel.Debug))
+					if (_logger.IsEnabled(LogLevel.Debug))
 					{
-						logger.LogDebug("· {file}", file.Replace(baseDirectory, "./"));
+						_logger.LogDebug("· {file}", file.Replace(baseDirectory, "./"));
 					}
 
 					Assembly.LoadFrom(file);

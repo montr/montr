@@ -12,6 +12,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Montr.Core;
+using Montr.Core.Impl.Services;
 using Montr.Core.Services;
 using Montr.Idx;
 using Montr.Metadata.Models;

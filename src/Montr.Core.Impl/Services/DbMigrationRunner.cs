@@ -17,6 +17,7 @@ using Montr.Data.Linq2Db;
 
 namespace Montr.Core.Impl.Services
 {
+	// todo: backup db before migration - always or when not applied migrations exists
 	public class DbMigrationRunner : IMigrationRunner
 	{
 		private readonly ILogger<DbMigrationRunner> _logger;
@@ -54,6 +55,7 @@ namespace Montr.Core.Impl.Services
 
 			watch.Start();
 
+			// todo: calc migrations that will be run
 			var migrations = GetMigrations(options);
 
 			_logger.LogInformation("Found {Count} migrations", migrations.Count);
