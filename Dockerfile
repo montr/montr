@@ -16,6 +16,6 @@ RUN dotnet publish "Host.csproj" --configuration Release --output /app
 FROM mcr.microsoft.com/dotnet/core/aspnet:3.1-alpine AS runtime
 WORKDIR /app
 COPY --from=publish /app .
-COPY --from=build /database /database
+COPY --from=build /database ./database
 COPY --from=node /Host/wwwroot/assets ./wwwroot/assets
 ENTRYPOINT ["dotnet", "Host.dll"]
