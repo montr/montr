@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
@@ -34,29 +33,32 @@ namespace Montr.Idx.Impl.Services
 		{
 			var options = _optionsAccessor.CurrentValue;
 
-			if (options?.DefaultAdminEmail != null && options.DefaultAdminPassword != null)
+			if (options?.DefaultAdminEmail == null || options.DefaultAdminPassword == null)
 			{
-				if (await _dbContextFactory.HasData<DbUser>(cancellationToken) == false)
-				{
-					_logger.LogInformation("Creating default administrator");
+				_logger.LogDebug("Default administrator credentials is not specified in startup options");
 
-					var user = new DbUser
-					{
-						Id = Guid.NewGuid(),
-						UserName = options.DefaultAdminEmail,
-						Email = options.DefaultAdminEmail
-					};
-
-					var identityResult = await _userManager.CreateAsync(user, options.DefaultAdminPassword);
-
-					if (identityResult.Succeeded == false)
-					{
-						var errors = string.Join(", ", identityResult.Errors.Select(x => x.Description));
-
-						throw new ApplicationException($"Failed to create default administrator: {errors}");
-					}
-				}
+				return;
 			}
+
+			if (await _dbContextFactory.HasData<DbUser>(cancellationToken))
+			{
+				_logger.LogWarning("Database already contains users, consider to remove default administrator credentials from startup options");
+
+				return;
+			}
+
+			_logger.LogInformation("Creating default administrator {adminEmail}", options.DefaultAdminEmail);
+
+			var user = new DbUser
+			{
+				Id = Guid.NewGuid(),
+				UserName = options.DefaultAdminEmail,
+				Email = options.DefaultAdminEmail
+			};
+
+			var identityResult = await _userManager.CreateAsync(user, options.DefaultAdminPassword);
+
+			identityResult.ToApiResult().AssertSuccess(() => "Failed to create default administrator");
 		}
 	}
 }

@@ -39,36 +39,48 @@ namespace Montr.Kompany.Impl.Services
 			var options = _optionsAccessor.CurrentValue;
 
 			// if default company name specified...
-			if (options?.DefaultCompanyName != null)
+			if (options?.DefaultCompanyName == null)
 			{
-				// ... and no companies in db yet...
-				if (await _dbContextFactory.HasData<DbCompany>(cancellationToken) == false)
-				{
-					var users = await _userRepository
-						.Search(new UserSearchRequest { PageSize = 2, SkipPaging = true }, cancellationToken);
+				_logger.LogDebug("Default company name is not specified in startup options");
 
-					// ... and only one user exists in db (default administrator)
-					if (users.Rows.Count == 1)
-					{
-						var user = users.Rows[0];
-
-						_logger.LogInformation("Creating default company {name}", options.DefaultCompanyName);
-
-						var result = await _mediator.Send(new CreateCompany
-						{
-							// ReSharper disable once PossibleInvalidOperationException
-							UserUid = user.Uid.Value,
-							Company = new Company
-							{
-								Name = options.DefaultCompanyName,
-								ConfigCode = "company" // todo: register and use allowed company types
-							}
-						}, cancellationToken);
-
-						result.AssertSuccess(() => $"Failed to create default company");
-					}
-				}
+				return;
 			}
+
+			// ... and no companies in db yet...
+			if (await _dbContextFactory.HasData<DbCompany>(cancellationToken))
+			{
+				_logger.LogWarning("Database already contains companies, consider to remove default company name from startup options");
+
+				return;
+			}
+
+			var users = await _userRepository
+				.Search(new UserSearchRequest { PageSize = 2, SkipPaging = true }, cancellationToken);
+
+			// ... and only one user exists in db (default administrator)
+			if (users.Rows.Count != 1)
+			{
+				_logger.LogDebug("Database already contains more than one user, skipping creating default company");
+
+				return;
+			}
+
+			var user = users.Rows[0];
+
+			_logger.LogInformation("Creating default company {companyName} for {userName}", options.DefaultCompanyName, user.UserName);
+
+			var result = await _mediator.Send(new CreateCompany
+			{
+				// ReSharper disable once PossibleInvalidOperationException
+				UserUid = user.Uid.Value,
+				Company = new Company
+				{
+					Name = options.DefaultCompanyName,
+					ConfigCode = "company" // todo: register and use allowed company types
+				}
+			}, cancellationToken);
+
+			result.AssertSuccess(() => "Failed to create default company");
 		}
 	}
 }
