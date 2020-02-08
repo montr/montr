@@ -21,7 +21,7 @@ namespace Montr.Worker.Hangfire
 			services.AddHangfire(config =>
 			{
 				config.UsePostgreSqlStorage(
-					configuration.GetConnectionString("Default"),
+					configuration.GetConnectionString(Data.Constants.DefaultConnectionStringName),
 					new PostgreSqlStorageOptions { PrepareSchemaIfNecessary = false });
 
 				config.UseSerializerSettings(

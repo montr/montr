@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Linq;
 using System.Security.Cryptography;
 using LinqToDB.Mapping;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -73,7 +75,7 @@ namespace Montr.Idx.Impl
 				.AddDefaultTokenProviders();
 
 			// todo: use IOptions
-			var idxServerOptions = configuration.GetSection("IdxServer").Get<IdxServerOptions>();
+			var appOptions = configuration.GetOptions<AppOptions>();
 
 			/*services.ConfigureApplicationCookie(options =>
 			{
@@ -105,10 +107,11 @@ namespace Montr.Idx.Impl
 				};
 			});*/
 
+			// todo: move to Montr.Idx.Plugin.IdentityServer
 			var builder = services
 				.AddIdentityServer(options =>
 				{
-					options.PublicOrigin = idxServerOptions.PublicOrigin;
+					options.PublicOrigin = appOptions.AppUrl;
 					// options.Authentication.CookieAuthenticationScheme = IdentityConstants.ApplicationScheme;
 
 					options.Cors.CorsPolicyName = AppConstants.CorsPolicyName;
@@ -122,7 +125,7 @@ namespace Montr.Idx.Impl
 				.AddInMemoryPersistedGrants()
 				.AddInMemoryIdentityResources(Config.GetIdentityResources())
 				.AddInMemoryApiResources(Config.GetApiResources())
-				.AddInMemoryClients(Config.GetClients(idxServerOptions.ClientUrls))
+				.AddInMemoryClients(Config.GetClients(appOptions.ClientUrls))
 				.AddAspNetIdentity<DbUser>();
 
 			// services.AddOpenIdAuthentication(configuration.GetSection("OpenId").Get<OpenIdOptions>());

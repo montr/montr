@@ -14,6 +14,7 @@ class AuthConstants {
 	public static PostLogoutRedirectUri = "/signout-callback-oidc";
 }
 
+// todo: move to idx?
 export class AuthService {
 	private static instance: AuthService;
 

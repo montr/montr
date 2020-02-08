@@ -36,7 +36,7 @@ npm install
 npm start
 ```
 
-Open http://127.0.0.1:5010 or https://127.0.0.1:5001 in browser.
+Open http://127.0.0.1:5000 or https://127.0.0.1:5001 in browser.
 
 ### License
 

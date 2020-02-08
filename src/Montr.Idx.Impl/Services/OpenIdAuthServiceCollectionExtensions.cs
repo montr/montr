@@ -9,15 +9,6 @@ using Microsoft.Extensions.DependencyInjection;
 
 namespace Montr.Idx.Impl.Services
 {
-	public class OpenIdOptions
-	{
-		public string Authority { get; set; }
-
-		public string ClientId { get; set; }
-
-		public string ClientSecret { get; set; }
-	}
-
 	public static class OpenIdAuthServiceCollectionExtensions
 	{
 		public static AuthenticationBuilder AddOpenIdApiAuthentication(this IServiceCollection services, OpenIdOptions openIdOptions)

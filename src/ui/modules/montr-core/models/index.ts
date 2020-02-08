@@ -1,4 +1,5 @@
 export * from "./api-result";
+export * from "./app-options";
 export * from "./data-column";
 export * from "./data-field";
 export * from "./data-result";

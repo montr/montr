@@ -11,7 +11,7 @@ namespace Montr.Data.Linq2Db
 
 		public IEnumerable<IDataProviderSettings> DataProviders => Enumerable.Empty<IDataProviderSettings>();
 
-		public string DefaultConfiguration => "Default";
+		public string DefaultConfiguration => Constants.DefaultConnectionStringName;
 
 		public string DefaultDataProvider => "PostgreSQL"; // "SqlServer";
 

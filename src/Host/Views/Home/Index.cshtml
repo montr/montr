@@ -1,4 +1,10 @@
-﻿<!DOCTYPE html>
+﻿@using System.Text.Json
+@using Microsoft.Extensions.Options
+@using Montr.Core
+
+@inject IOptions<AppOptions> Options
+
+<!DOCTYPE html>
 
 <html>
 <head>
@@ -7,11 +13,10 @@
 </head>
 <body>
 	<div id="root"></div>
-	<script>
-		var COOKIE_DOMAIN = "@Environment.GetEnvironmentVariable("COOKIE_DOMAIN")";
-		var AUTHORITY_APP_URL = "@Environment.GetEnvironmentVariable("AUTHORITY_APP_URL")";
-		var APP_URL = "@Environment.GetEnvironmentVariable("APP_URL")";
-	</script>
+<script>
+	var APP_OPTIONS = @Html.Raw(JsonSerializer.Serialize(new { Options.Value.AppUrl },
+		new JsonSerializerOptions { IgnoreNullValues = true, PropertyNamingPolicy = JsonNamingPolicy.CamelCase }));
+</script>
 	<script src="/assets/app.bundle.js"></script>
 </body>
 </html>

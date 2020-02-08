@@ -14,7 +14,6 @@ using Microsoft.Extensions.Logging;
 using Montr.Core;
 using Montr.Core.Impl.Services;
 using Montr.Core.Services;
-using Montr.Idx;
 using Montr.Metadata.Models;
 using Montr.Metadata.Services;
 using Newtonsoft.Json.Converters;
@@ -50,16 +49,14 @@ namespace Host
 			});
 
 			// todo: move to idx?
-			var idxServerOptions = Configuration.GetSection("IdxServer").Get<IdxServerOptions>();
+			var appOptions = Configuration.GetOptions<AppOptions>();
 
 			services.AddCors(options =>
 			{
 				options.AddPolicy(AppConstants.CorsPolicyName, policy =>
 				{
 					policy
-						.WithOrigins(idxServerOptions.ClientUrls)
-						/*.WithOrigins(
-							System.Environment.GetEnvironmentVariable("APP_URL"))*/
+						.WithOrigins(appOptions.ClientUrls)
 						.WithExposedHeaders("content-disposition") // to export work (fetcher.openFile) 
 						.AllowCredentials()
 						.AllowAnyHeader()

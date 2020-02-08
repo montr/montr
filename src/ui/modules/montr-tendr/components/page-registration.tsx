@@ -2,13 +2,14 @@ import * as React from "react";
 import { Steps } from "antd";
 import { Constants } from "@montr-core/.";
 import { Page } from "@montr-core/components";
-import { UserContextProps, withUserContext } from "@montr-core/components/"
+import { UserContextProps, withUserContext } from "@montr-core/components/";
 import { CompanyContextProps, withCompanyContext } from "@montr-kompany/components";
 import { Link } from "react-router-dom";
 
 class RegistrationConstants {
-	public static UserRegisterUri = Constants.authorityURL + "/Identity/Account/Register";
-	public static UserManageUri = Constants.authorityURL + "/Identity/Account/Manage";
+	// todo: use routing constants
+	public static UserRegisterUri = Constants.authorityURL + "/account/register";
+	public static UserManageUri = Constants.authorityURL + "/profile";
 }
 
 const RegisterUser = (props: UserContextProps) => {
@@ -29,7 +30,7 @@ const RegisterUser = (props: UserContextProps) => {
 			Если вы уже зарегистрированы, войдите в систему пройдя по <a onClick={login}> ссылке</a >.
 		</p >
 	);
-}
+};
 
 const RegisterCompany = (props: UserContextProps & CompanyContextProps) => {
 	const { user, currentCompany: company, registerCompany } = props;
@@ -56,7 +57,7 @@ const RegisterCompany = (props: UserContextProps & CompanyContextProps) => {
 			После регистрации пользователя будет доступна регистрация организации.
 		</p>
 	);
-}
+};
 
 const StartWork = (props: UserContextProps & CompanyContextProps) => {
 	const { user, currentCompany: company } = props;
@@ -75,7 +76,7 @@ const StartWork = (props: UserContextProps & CompanyContextProps) => {
 			запросы информации, предложений и цен.
 		</p>
 	);
-}
+};
 
 class _Registration extends React.Component<UserContextProps & CompanyContextProps> {
 	render() {
