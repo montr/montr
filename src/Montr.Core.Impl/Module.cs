@@ -1,6 +1,5 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Montr.Core.Impl.CommandHandlers;
 using Montr.Core.Impl.Services;
 using Montr.Core.Models;
 using Montr.Core.Services;
@@ -12,7 +11,6 @@ namespace Montr.Core.Impl
 	{
 		public void ConfigureServices(IConfiguration configuration, IServiceCollection services)
 		{
-			services.AddTransient<IStartupTask, MigrateDatabaseStartupTask>();
 			services.AddTransient<IStartupTask, ImportDefaultLocaleStringListStartupTask>();
 
 			services.AddSingleton<IMigrationRunner, DbMigrationRunner>();

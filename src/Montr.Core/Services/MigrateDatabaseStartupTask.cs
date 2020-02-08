@@ -1,8 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using Montr.Core.Services;
 
-namespace Montr.Core.Impl.Services
+namespace Montr.Core.Services
 {
 	public class MigrateDatabaseStartupTask : IStartupTask
 	{

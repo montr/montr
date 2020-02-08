@@ -24,7 +24,8 @@ namespace Montr.Core
 
 			services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
 
-			services.AddScoped<IUrlHelper>(x => {
+			services.AddScoped<IUrlHelper>(x =>
+			{
 				var actionContext = x.GetRequiredService<IActionContextAccessor>().ActionContext;
 				var factory = x.GetRequiredService<IUrlHelperFactory>();
 
@@ -33,6 +34,8 @@ namespace Montr.Core
 
 			services.BindOptions<AppOptions>(configuration);
 			services.BindOptions<MigrationOptions>(configuration);
+
+			services.AddTransient<IStartupTask, MigrateDatabaseStartupTask>();
 
 			services.Configure<RequestLocalizationOptions>(options =>
 			{
