@@ -1,0 +1,32 @@
+version: '3'
+services:
+  host:
+    container_name: montr_host
+    image: montr/host
+    restart: always
+    ports:
+    - "5010:5010"
+    environment:
+    - ASPNETCORE_ENVIRONMENT=Development
+    - ASPNETCORE_URLS=http://+:5010
+    - COOKIE_DOMAIN=.montr.io
+    - AUTHORITY_APP_URL=http://app.montr.io:5010
+    - APP_URL=http://app.montr.io:5010
+    - OpenId:Authority=http://app.montr.io:5010
+    - ConnectionString:Name=Default
+    - ConnectionString:ProviderName=PostgreSQL
+    - ConnectionStrings:Default=Server=db;Port=5432;Database=host;User Id=postgres;
+    depends_on:
+    - db
+  db:
+    container_name: montr_db
+    image: postgres:12
+    restart: always
+    environment:
+      POSTGRES_DB: host
+    ports:
+    - "5435:5432"
+    volumes:
+      - montr_db_dev:/var/lib/postgresql/data
+volumes:
+  montr_db_dev:
