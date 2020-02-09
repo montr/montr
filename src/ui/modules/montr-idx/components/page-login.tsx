@@ -53,6 +53,8 @@ export default function Login() {
 
 	const { loading, fields } = state;
 
+	const data: ILoginModel = { email, rememberMe: true };
+
 	return (
 		<Page title={t("page.login.title")}>
 
@@ -63,7 +65,7 @@ export default function Login() {
 					layout="vertical"
 					hideLabels
 					fields={fields}
-					data={{ email }}
+					data={data}
 					onChange={handleChange}
 					onSubmit={handleSubmit}
 					submitButton={t("button.login")}
