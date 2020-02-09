@@ -17,5 +17,5 @@ FROM mcr.microsoft.com/dotnet/core/aspnet:3.1-alpine AS runtime
 WORKDIR /app
 COPY --from=publish /app .
 COPY --from=build /database ./database
-COPY --from=node /Host/wwwroot/assets ./wwwroot/assets
+COPY --from=node /ui/assets ./wwwroot/assets
 ENTRYPOINT ["dotnet", "Host.dll"]
