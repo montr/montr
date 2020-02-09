@@ -10,7 +10,7 @@ namespace Montr.Idx.Impl.Services
 		{
 			return new ApiResult
 			{
-				Success = false,
+				Success = identityResult.Succeeded,
 				Errors = identityResult.Errors
 					.Select(x => new ApiResultError
 					{
