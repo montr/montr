@@ -2,6 +2,7 @@
 using System.Threading;
 using Hangfire;
 using Hangfire.Common;
+using Hangfire.Dashboard;
 using Hangfire.PostgreSql;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
@@ -38,6 +39,7 @@ namespace Montr.Worker.Hangfire
 			app.UseHangfireDashboard(options: new DashboardOptions
 			{
 				AppPath = "/dashboard",
+				Authorization = new [] { new DashboardAuthorizationFilter() },
 				DisplayNameFunc = (context, job) => FormatJobName(job)
 			});
 		}
@@ -56,6 +58,18 @@ namespace Montr.Worker.Hangfire
 			}
 
 			return result.ToString();
+		}
+
+		// todo: replace with real auth
+		public class DashboardAuthorizationFilter : IDashboardAuthorizationFilter
+		{
+			public bool Authorize(DashboardContext context)
+			{
+				var httpContext = context.GetHttpContext();
+
+				// Allow all authenticated users to see the Dashboard (potentially dangerous).
+				return httpContext.User.Identity.IsAuthenticated;
+			}
 		}
 	}
 }
