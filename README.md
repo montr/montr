@@ -6,6 +6,10 @@ R&D sample of B2B applications
 * MDM
 * more to come...
 
+## Table of contents
+
+- 🚀[Getting Started](#getting-started)
+
 ## Getting Started
 
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes.
