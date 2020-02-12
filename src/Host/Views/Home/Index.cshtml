@@ -14,7 +14,7 @@
 <body>
 	<div id="root"></div>
 <script>
-	var APP_OPTIONS = @Html.Raw(JsonSerializer.Serialize(new { Options.Value.AppUrl },
+	var APP_OPTIONS = @Html.Raw(JsonSerializer.Serialize(new { Options.Value.AppUrl, Options.Value.CookieDomain },
 		new JsonSerializerOptions { IgnoreNullValues = true, PropertyNamingPolicy = JsonNamingPolicy.CamelCase }));
 </script>
 	<script src="/assets/app.bundle.js"></script>
