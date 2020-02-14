@@ -13,8 +13,8 @@ jobs:
       postgres:
         image: postgres:12
         env:
-          #POSTGRES_USER: postgres
-          #POSTGRES_PASSWORD: postgres
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
           POSTGRES_DB: host
         ports:
         - 5432:5432
