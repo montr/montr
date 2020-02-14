@@ -39,8 +39,7 @@ npm install
 ```bash
 npm start
 ```
-
-Open http://127.0.0.1:5000 or https://127.0.0.1:5001 in browser.
+7. Open http://127.0.0.1:5000 or https://127.0.0.1:5001 in browser.
 
 ### License
 
