@@ -1,5 +1,6 @@
 name: build
 env:
+  ConnectionStrings:Default=Server=db;Port=5432;Database=host;User Id=postgres;
   DOTNET_CLI_TELEMETRY_OPTOUT: 1
 
 on: [push]
@@ -14,7 +15,7 @@ jobs:
         image: postgres:12
         env:
           POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: postgres
+          # POSTGRES_PASSWORD: secret
           POSTGRES_DB: host
         ports:
         - 5432:5432
@@ -29,6 +30,8 @@ jobs:
           dotnet-version: '3.1.100'
 
       - run: dotnet build ./src/Montr.sln
+
+      - run: dotnet test ./src/Montr.Core.Tests
 
       - uses: actions/setup-node@v1
         with:
