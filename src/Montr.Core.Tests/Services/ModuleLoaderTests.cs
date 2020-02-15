@@ -17,7 +17,7 @@ namespace Montr.Core.Tests.Services
 			var loader = new ModuleLoader(loggerFactory.CreateLogger<ModuleLoader>());
 
 			// act
-			var modules = loader.GetSortedModules("../../../../Host/bin/Debug/netcoreapp3.1");
+			var modules = loader.GetSortedModules("../../../../Host/bin/Debug/netcoreapp3.1/");
 
 			// assert
 			Assert.IsTrue(modules.Count > 20);
