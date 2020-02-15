@@ -96,7 +96,9 @@ namespace Montr.Core.Impl.Services
 			{
 				if (_logger.IsEnabled(LogLevel.Information))
 				{
-					_logger.LogInformation("--- {file} {fullPath}", file.Replace(baseDirectory, "./"), file);
+					var fileInfo = new FileInfo(file);
+					_logger.LogInformation("--- {file} {fullPath} --- Attributes {attrs} Exists: {Exists} Length: {Length}", file.Replace(baseDirectory, string.Empty), file,
+						File.GetAttributes(file), fileInfo.Exists, fileInfo.Length);
 				}
 			}
 
@@ -107,7 +109,7 @@ namespace Montr.Core.Impl.Services
 				{
 					if (_logger.IsEnabled(LogLevel.Information))
 					{
-						_logger.LogInformation("· {file}", file.Replace(baseDirectory, "./"));
+						_logger.LogInformation("· {file}", file.Replace(baseDirectory, string.Empty));
 					}
 
 					Assembly.LoadFrom(file);
