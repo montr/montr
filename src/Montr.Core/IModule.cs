@@ -20,7 +20,7 @@ namespace Montr.Core
 	{
 		public Type ImplementationOf { get; set; }
 
-		public Type[] Dependencies { get; set; }
+		public Type[] DependsOn { get; set; }
 	}
 
 	public enum ModuleType : byte

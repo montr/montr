@@ -7,7 +7,7 @@ using Montr.Core.Services;
 
 namespace Montr.Idx.Plugin.Facebook
 {
-	[Module(Dependencies = new [] { typeof(Montr.Idx.Impl.Module) })]
+	[Module(DependsOn = new [] { typeof(Idx.Module) })]
 	public class Module : IModule
 	{
 		private readonly ILogger<Module> _logger;

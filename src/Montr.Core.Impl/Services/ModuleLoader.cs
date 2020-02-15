@@ -33,7 +33,7 @@ namespace Montr.Core.Impl.Services
 					modules.Add(new ModuleInfo
 					{
 						Type = type,
-						Dependencies = moduleAttribute?.Dependencies
+						DependsOn = moduleAttribute?.DependsOn
 					});
 				}
 			}
@@ -43,7 +43,7 @@ namespace Montr.Core.Impl.Services
 			// if manual dependencies not specified - resolve dependencies dynamically from referenced assemblies
 			foreach (var module in modules)
 			{
-				if (module.Dependencies == null)
+				if (module.DependsOn == null)
 				{
 					var dependencies = new List<Type>();
 
@@ -55,11 +55,11 @@ namespace Montr.Core.Impl.Services
 						}
 					}
 
-					module.Dependencies = dependencies.ToArray();
+					module.DependsOn = dependencies.ToArray();
 				}
 			}
 
-			var sortedModules = DirectedAcyclicGraphVerifier.TopologicalSort(modules, node => node.Type, node => node.Dependencies);
+			var sortedModules = DirectedAcyclicGraphVerifier.TopologicalSort(modules, node => node.Type, node => node.DependsOn);
 
 			if (_logger.IsEnabled(LogLevel.Information))
 			{
@@ -67,13 +67,13 @@ namespace Montr.Core.Impl.Services
 
 				foreach (var module in sortedModules)
 				{
-					if (module.Dependencies.Length == 0)
+					if (module.DependsOn.Length == 0)
 					{
 						_logger.LogInformation("· {module}", module.Type);
 					}
 					else
 					{
-						_logger.LogInformation("· {module} (depends on: {deps})", module.Type, module.Dependencies);
+						_logger.LogInformation("· {module} (depends on: {deps})", module.Type, module.DependsOn);
 					}
 				}
 			}
@@ -111,7 +111,7 @@ namespace Montr.Core.Impl.Services
 		{
 			public Type Type { get; set; }
 
-			public Type[] Dependencies { get; set; }
+			public Type[] DependsOn { get; set; }
 		}
 	}
 }

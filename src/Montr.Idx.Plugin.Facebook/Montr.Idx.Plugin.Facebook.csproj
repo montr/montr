@@ -10,7 +10,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Montr.Core\Montr.Core.csproj" />
-    <ProjectReference Include="..\Montr.Idx.Impl\Montr.Idx.Impl.csproj" />
+    <ProjectReference Include="..\Montr.Idx\Montr.Idx.csproj" />
   </ItemGroup>
 
 </Project>

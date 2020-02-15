@@ -14,7 +14,7 @@ using Newtonsoft.Json;
 
 namespace Montr.Worker.Hangfire
 {
-	[Module( Dependencies = new [] { typeof(Idx.Module) })]
+	[Module( DependsOn = new [] { typeof(Idx.Module) })]
 	public class Module : IWebModule
 	{
 		public void ConfigureServices(IConfiguration configuration, IServiceCollection services)
