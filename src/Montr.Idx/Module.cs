@@ -11,6 +11,10 @@ namespace Montr.Idx
 		public void ConfigureServices(IConfiguration configuration, IServiceCollection services)
 		{
 			services.AddSingleton<ICurrentUserProvider, DefaultCurrentUserProvider>();
+
+			services
+				.AddAuthentication()
+				.AddCookie(); // hangfire will not work without cookie
 		}
 	}
 }

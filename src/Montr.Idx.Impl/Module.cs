@@ -1,9 +1,7 @@
 ﻿using System;
-using System.Linq;
 using System.Security.Cryptography;
 using LinqToDB.Mapping;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -38,7 +36,7 @@ namespace Montr.Idx.Impl
 			services.AddTransient<EmailConfirmationService, EmailConfirmationService>();
 			services.AddTransient<IRepository<User>, DbUserRepository>();
 
-			// todo: move from impl?
+			// todo: move from impl to idx?
 			services.Configure<IdentityOptions>(options =>
 			{
 				options.SignIn.RequireConfirmedAccount = false;
@@ -74,9 +72,6 @@ namespace Montr.Idx.Impl
 					typeof(LinqToDB.Identity.IdentityRoleClaim<Guid>))
 				.AddDefaultTokenProviders();
 
-			// todo: use IOptions
-			var appOptions = configuration.GetOptions<AppOptions>();
-
 			/*services.ConfigureApplicationCookie(options =>
 			{
 				options.LoginPath = PathString.Empty;
@@ -107,6 +102,26 @@ namespace Montr.Idx.Impl
 				};
 			});*/
 
+			// services.AddOpenIdAuthentication(configuration.GetSection("OpenId").Get<OpenIdOptions>());
+
+			/* services.AddAuthentication(options =>
+				{
+					// x.DefaultAuthenticateScheme = IdentityServerConstants.DefaultCookieAuthenticationScheme;
+					x.DefaultAuthenticateScheme = IdentityConstants.ApplicationScheme;
+					x.DefaultSignInScheme = IdentityConstants.ApplicationScheme;
+					x.DefaultSignOutScheme = IdentityConstants.ApplicationScheme;
+
+					options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+					options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+					options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+				}) */
+
+			// .AddIdentityServerAuthentication()
+			// .AddJwtBearer()
+
+			// todo: use IOptions
+			var appOptions = configuration.GetOptions<AppOptions>();
+
 			// todo: move to Montr.Idx.Plugin.IdentityServer
 			var builder = services
 				.AddIdentityServer(options =>
@@ -127,22 +142,6 @@ namespace Montr.Idx.Impl
 				.AddInMemoryApiResources(Config.GetApiResources())
 				.AddInMemoryClients(Config.GetClients(appOptions.ClientUrls))
 				.AddAspNetIdentity<DbUser>();
-
-			// services.AddOpenIdAuthentication(configuration.GetSection("OpenId").Get<OpenIdOptions>());
-
-			services.AddAuthentication( /*options =>
-				{
-					// x.DefaultAuthenticateScheme = IdentityServerConstants.DefaultCookieAuthenticationScheme;
-					x.DefaultAuthenticateScheme = IdentityConstants.ApplicationScheme;
-					x.DefaultSignInScheme = IdentityConstants.ApplicationScheme;
-					x.DefaultSignOutScheme = IdentityConstants.ApplicationScheme;
-
-					options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-					options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-					options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-				}*/);
-			// .AddIdentityServerAuthentication()
-			// .AddJwtBearer()
 
 			if (_environment.IsDevelopment())
 			{

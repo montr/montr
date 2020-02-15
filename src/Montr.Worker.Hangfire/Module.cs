@@ -14,7 +14,7 @@ using Newtonsoft.Json;
 
 namespace Montr.Worker.Hangfire
 {
-	// ReSharper disable once UnusedMember.Global
+	[Module( Dependencies = new [] { typeof(Idx.Module) })]
 	public class Module : IWebModule
 	{
 		public void ConfigureServices(IConfiguration configuration, IServiceCollection services)
@@ -40,6 +40,7 @@ namespace Montr.Worker.Hangfire
 			{
 				AppPath = "/dashboard",
 				Authorization = new [] { new DashboardAuthorizationFilter() },
+				// IsReadOnlyFunc = (context) => true,
 				DisplayNameFunc = (context, job) => FormatJobName(job)
 			});
 		}
