@@ -1,6 +1,6 @@
 name: build
 env:
-  ConnectionStrings:Default: Server=db;Port=5432;Database=host;User Id=postgres;Password=secret;
+  ConnectionStrings:Default: Server=localhost;Port=5432;Database=host;User Id=postgres;Password=secret;
   DOTNET_CLI_TELEMETRY_OPTOUT: 1
 
 on: [push]
