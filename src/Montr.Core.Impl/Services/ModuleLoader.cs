@@ -94,12 +94,20 @@ namespace Montr.Core.Impl.Services
 
 			foreach (var file in Directory.EnumerateFiles(baseDirectory, "*.dll"))
 			{
+				if (_logger.IsEnabled(LogLevel.Information))
+				{
+					_logger.LogInformation("--- {file} {fullPath}", file.Replace(baseDirectory, "./"), file);
+				}
+			}
+
+			foreach (var file in Directory.EnumerateFiles(baseDirectory, "*.dll"))
+			{
 				if (allAssemblies.FirstOrDefault(
 						x => string.Equals(x.Location, file, StringComparison.OrdinalIgnoreCase)) == null)
 				{
-					if (_logger.IsEnabled(LogLevel.Debug))
+					if (_logger.IsEnabled(LogLevel.Information))
 					{
-						_logger.LogDebug("· {file}", file.Replace(baseDirectory, "./"));
+						_logger.LogInformation("· {file}", file.Replace(baseDirectory, "./"));
 					}
 
 					Assembly.LoadFrom(file);
