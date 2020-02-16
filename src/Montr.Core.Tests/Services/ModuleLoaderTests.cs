@@ -17,7 +17,7 @@ namespace Montr.Core.Tests.Services
 			var loader = new ModuleLoader(loggerFactory.CreateLogger<ModuleLoader>());
 
 			// act
-			var modules = loader.GetSortedModules("../../../../Host/bin/Debug/netcoreapp3.1/");
+			var modules = loader.GetSortedModules("../../../../Host/bin/Debug/netcoreapp3.1/", false);
 
 			// assert
 			// Assert.IsTrue(loader.Errors.Count == 0); // todo: fix errors in github actions tests

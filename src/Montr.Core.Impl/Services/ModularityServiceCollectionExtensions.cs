@@ -12,7 +12,7 @@ namespace Montr.Core.Impl.Services
 		{
 			var loader = new ModuleLoader(logger);
 
-			var modules = loader.GetSortedModules(AppDomain.CurrentDomain.BaseDirectory);
+			var modules = loader.GetSortedModules(AppDomain.CurrentDomain.BaseDirectory, true);
 
 			// register module types to create modules later with dependencies
 			foreach (var type in modules)

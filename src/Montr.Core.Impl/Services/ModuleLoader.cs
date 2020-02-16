@@ -22,7 +22,7 @@ namespace Montr.Core.Impl.Services
 			_logger = logger;
 		}
 
-		public IList<Type> GetSortedModules(string baseDirectory)
+		public IList<Type> GetSortedModules(string baseDirectory, bool throwOnErrors)
 		{
 			Errors.Clear();
 
@@ -48,10 +48,15 @@ namespace Montr.Core.Impl.Services
 				}
 				catch (Exception ex)
 				{
-					_logger.LogError(ex, "Failed to read modules from {assembly} - {ex}", assembly);
+					_logger.LogError(ex, "Failed to read modules from {assembly}", assembly);
 
 					Errors.Add(ex);
 				}
+			}
+
+			if (throwOnErrors && Errors.Count > 0)
+			{
+				throw new ApplicationException($"One or more errors ({Errors.Count}) occured while loading modules, see logs for details.");
 			}
 
 			var assemblyModules = modules.ToLookup(x => x.Type.Assembly.GetName().Name);
@@ -123,7 +128,7 @@ namespace Montr.Core.Impl.Services
 					}
 					catch (Exception ex)
 					{
-						_logger.LogError(ex, "x Failed to preload assembly from {file} - {ex}", file);
+						_logger.LogError(ex, "x Failed to preload assembly from {file}", file);
 
 						Errors.Add(ex);
 					}
