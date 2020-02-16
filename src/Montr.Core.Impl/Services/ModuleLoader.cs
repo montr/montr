@@ -15,6 +15,8 @@ namespace Montr.Core.Impl.Services
 
 		private readonly Regex _excludePattern = new Regex(@".*(Microsoft\.|System\.).*");
 
+		public IList<Exception> Errors { get; } = new List<Exception>();
+
 		public ModuleLoader(ILogger logger)
 		{
 			_logger = logger;
@@ -22,6 +24,8 @@ namespace Montr.Core.Impl.Services
 
 		public IList<Type> GetSortedModules(string baseDirectory)
 		{
+			Errors.Clear();
+
 			PreloadAssemblies(baseDirectory);
 
 			var modules = new List<ModuleInfo>();
@@ -44,7 +48,9 @@ namespace Montr.Core.Impl.Services
 				}
 				catch (Exception ex)
 				{
-					_logger.LogError("Failed to read modules from {assembly} - {ex}", assembly, ex);
+					_logger.LogError(ex, "Failed to read modules from {assembly} - {ex}", assembly);
+
+					Errors.Add(ex);
 				}
 			}
 
@@ -117,7 +123,9 @@ namespace Montr.Core.Impl.Services
 					}
 					catch (Exception ex)
 					{
-						_logger.LogError("x Failed to preload assembly from {file} - {ex}", file, ex);
+						_logger.LogError(ex, "x Failed to preload assembly from {file} - {ex}", file);
+
+						Errors.Add(ex);
 					}
 				}
 			}

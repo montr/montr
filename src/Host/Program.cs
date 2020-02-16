@@ -27,7 +27,7 @@ namespace Host
 					config.AddEnvironmentVariables();
 				})*/
 				.UseStartup<Startup>()
-				// .UseSentry()
+				.UseSentry()
 				.UseSerilog((context, configuration) =>
 				{
 					configuration
