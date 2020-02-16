@@ -83,36 +83,32 @@ namespace Montr.Core.Impl.Services
 
 		public void PreloadAssemblies(string baseDirectory)
 		{
-			var allAssemblies = AppDomain.CurrentDomain.GetAssemblies()
-				.Where(x => x.IsDynamic == false) // exclude dynamic assemblies without location
-				.ToArray();
-
 			if (_logger.IsEnabled(LogLevel.Information))
 			{
 				_logger.LogInformation("Preloading assemblies from {directory}", baseDirectory);
 			}
 
-			foreach (var file in Directory.EnumerateFiles(baseDirectory, "*.dll"))
-			{
-				if (_logger.IsEnabled(LogLevel.Information))
-				{
-					var fileInfo = new FileInfo(file);
-					_logger.LogInformation("--- {file} {fullPath} --- Attributes {attrs} Exists: {Exists} Length: {Length}", file.Replace(baseDirectory, string.Empty), file,
-						File.GetAttributes(file), fileInfo.Exists, fileInfo.Length);
-				}
-			}
+			var allAssemblies = AppDomain.CurrentDomain.GetAssemblies()
+				.Where(x => x.IsDynamic == false) // exclude dynamic assemblies without location
+				.ToDictionary(x => x.Location);
 
 			foreach (var file in Directory.EnumerateFiles(baseDirectory, "*.dll"))
 			{
-				if (allAssemblies.FirstOrDefault(
-						x => string.Equals(x.Location, file, StringComparison.OrdinalIgnoreCase)) == null)
+				if (allAssemblies.TryGetValue(file, out _) == false)
 				{
 					if (_logger.IsEnabled(LogLevel.Information))
 					{
-						_logger.LogInformation("· {file}", file.Replace(baseDirectory, string.Empty));
+						_logger.LogInformation("• {file}", file.Replace(baseDirectory, string.Empty));
 					}
 
-					Assembly.LoadFrom(file);
+					try
+					{
+						Assembly.LoadFrom(file);
+					}
+					catch (Exception ex)
+					{
+						_logger.LogError("x Failed to load assembly from {file} - {ex}", file, ex);
+					}
 				}
 			}
 		}
