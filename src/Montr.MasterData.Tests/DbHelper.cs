@@ -225,7 +225,7 @@ namespace Montr.MasterData.Tests
 			return result;
 		}
 
-		public async Task<ApiResult> InsertItem(string itemCode, CancellationToken cancellationToken)
+		public async Task<ApiResult> InsertItem(string itemCode, Guid? parentUid, CancellationToken cancellationToken)
 		{
 			var result = await _insertClassifierHandler.Handle(new InsertClassifier
 			{
@@ -235,7 +235,8 @@ namespace Montr.MasterData.Tests
 				Item = new Classifier
 				{
 					Code = itemCode,
-					Name = itemCode + " - Test Classifier"
+					Name = itemCode + " - Test Classifier",
+					ParentUid = parentUid
 				}
 			}, cancellationToken);
 

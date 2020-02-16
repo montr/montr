@@ -33,7 +33,7 @@ namespace Montr.Core.Impl.Services
 
 				if (logger.IsEnabled(LogLevel.Information))
 				{
-					logger.LogInformation("Initializing module {module}", module);
+					logger.LogInformation("Initializing {module}", module);
 				}
 
 				// todo: configure module services later (?)

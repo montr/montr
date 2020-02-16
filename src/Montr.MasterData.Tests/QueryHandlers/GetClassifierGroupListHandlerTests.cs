@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using LinqToDB;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Montr.Core.Services;
 using Montr.Data.Linq2Db;
-using Montr.MasterData.Impl.Entities;
 using Montr.MasterData.Impl.QueryHandlers;
 using Montr.MasterData.Impl.Services;
 using Montr.MasterData.Models;
@@ -28,26 +25,40 @@ namespace Montr.MasterData.Tests.QueryHandlers
 			var classifierTreeRepository = new DbClassifierTreeRepository(dbContextFactory);
 			var classifierTypeService = new DbClassifierTypeService(dbContextFactory, classifierTypeRepository);
 			var classifierTreeService = new DefaultClassifierTreeService(classifierTreeRepository);
-			var generator = new DbHelper(unitOfWorkFactory, dbContextFactory) { TypeCode = "okei" }; // todo: use test type
+			var dbHelper = new DbHelper(unitOfWorkFactory, dbContextFactory);
 			var handler = new GetClassifierGroupListHandler(dbContextFactory, classifierTypeService, classifierTreeService);
 
-			var tree = await generator.FindTree(ClassifierTree.DefaultCode, cancellationToken);
-
-			// act
-			var command = new GetClassifierGroupList
+			using (var _ = unitOfWorkFactory.Create())
 			{
-				CompanyUid = Constants.OperatorCompanyUid,
-				TypeCode = "okei",
-				TreeUid = tree.Uid,
-				ParentUid = null // yeah, we test this
-			};
+				// arrange
+				await dbHelper.InsertType(HierarchyType.Groups, cancellationToken);
+				var tree = await dbHelper.FindTree(ClassifierTree.DefaultCode, cancellationToken);
 
-			var result = await handler.Handle(command, cancellationToken);
+				var group1 = await dbHelper.InsertGroup(tree.Uid, "001", null, cancellationToken);
+				await dbHelper.InsertGroup(tree.Uid, "001.001", group1.Uid, cancellationToken);
 
-			// assert
-			Assert.IsNotNull(result);
-			Assert.AreEqual(4, result.Rows.Count);
-			// Assert.AreEqual(ClassifierTree.DefaultCode, result.Rows[0].Code);
+				var group2 = await dbHelper.InsertGroup(tree.Uid, "002", null, cancellationToken);
+				var group3 = await dbHelper.InsertGroup(tree.Uid, "003", null, cancellationToken);
+				var group4 = await dbHelper.InsertGroup(tree.Uid, "004", null, cancellationToken);
+
+				// act
+				var command = new GetClassifierGroupList
+				{
+					TypeCode = dbHelper.TypeCode,
+					TreeUid = tree.Uid,
+					ParentUid = null // yeah, we test this
+				};
+
+				var result = await handler.Handle(command, cancellationToken);
+
+				// assert
+				Assert.IsNotNull(result);
+				Assert.AreEqual(4, result.Rows.Count);
+				Assert.AreEqual(group1.Uid, result.Rows[0].Uid);
+				Assert.AreEqual(group2.Uid, result.Rows[1].Uid);
+				Assert.AreEqual(group3.Uid, result.Rows[2].Uid);
+				Assert.AreEqual(group4.Uid, result.Rows[3].Uid);
+			}
 		}
 
 		[TestMethod]
@@ -61,26 +72,38 @@ namespace Montr.MasterData.Tests.QueryHandlers
 			var classifierTreeRepository = new DbClassifierTreeRepository(dbContextFactory);
 			var classifierTypeService = new DbClassifierTypeService(dbContextFactory, classifierTypeRepository);
 			var classifierTreeService = new DefaultClassifierTreeService(classifierTreeRepository);
-			var generator = new DbHelper(unitOfWorkFactory, dbContextFactory) { TypeCode = "okei" }; // todo: use test type
+			var dbHelper = new DbHelper(unitOfWorkFactory, dbContextFactory);
 			var handler = new GetClassifierGroupListHandler(dbContextFactory, classifierTypeService, classifierTreeService);
 
-			var tree = await generator.FindTree(ClassifierTree.DefaultCode, cancellationToken);
-			var parentGroup = await generator.FindGroup(ClassifierTree.DefaultCode, "1", cancellationToken);
-
-			// act
-			var command = new GetClassifierGroupList
+			using (var _ = unitOfWorkFactory.Create())
 			{
-				CompanyUid = Constants.OperatorCompanyUid,
-				TypeCode = "okei",
-				TreeUid = tree.Uid,
-				ParentUid = parentGroup.Uid,
-			};
+				// arrange
+				await dbHelper.InsertType(HierarchyType.Groups, cancellationToken);
+				var tree = await dbHelper.FindTree(ClassifierTree.DefaultCode, cancellationToken);
 
-			var result = await handler.Handle(command, cancellationToken);
+				var parentGroup = await dbHelper.InsertGroup(tree.Uid, "001", null, cancellationToken);
+				await dbHelper.InsertGroup(tree.Uid, "001.001", parentGroup.Uid, cancellationToken);
+				await dbHelper.InsertGroup(tree.Uid, "001.002", parentGroup.Uid, cancellationToken);
+				await dbHelper.InsertGroup(tree.Uid, "001.003", parentGroup.Uid, cancellationToken);
+				await dbHelper.InsertGroup(tree.Uid, "001.004", parentGroup.Uid, cancellationToken);
+				await dbHelper.InsertGroup(tree.Uid, "001.005", parentGroup.Uid, cancellationToken);
+				await dbHelper.InsertGroup(tree.Uid, "001.006", parentGroup.Uid, cancellationToken);
+				await dbHelper.InsertGroup(tree.Uid, "001.007", parentGroup.Uid, cancellationToken);
 
-			// assert
-			Assert.IsNotNull(result);
-			Assert.AreEqual(7, result.Rows.Count);
+				// act
+				var command = new GetClassifierGroupList
+				{
+					TypeCode = dbHelper.TypeCode,
+					TreeUid = tree.Uid,
+					ParentUid = parentGroup.Uid,
+				};
+
+				var result = await handler.Handle(command, cancellationToken);
+
+				// assert
+				Assert.IsNotNull(result);
+				Assert.AreEqual(7, result.Rows.Count);
+			}
 		}
 
 		[TestMethod, Ignore]
@@ -94,26 +117,37 @@ namespace Montr.MasterData.Tests.QueryHandlers
 		{
 			// arrange
 			var cancellationToken = CancellationToken.None;
+			var unitOfWorkFactory = new TransactionScopeUnitOfWorkFactory();
 			var dbContextFactory = new DefaultDbContextFactory();
 			var classifierTypeRepository = new DbClassifierTypeRepository(dbContextFactory);
 			var classifierTreeRepository = new DbClassifierTreeRepository(dbContextFactory);
 			var classifierTypeService = new DbClassifierTypeService(dbContextFactory, classifierTypeRepository);
 			var classifierTreeService = new DefaultClassifierTreeService(classifierTreeRepository);
+			var dbHelper = new DbHelper(unitOfWorkFactory, dbContextFactory);
 			var handler = new GetClassifierGroupListHandler(dbContextFactory, classifierTypeService, classifierTreeService);
 
-			// act
-			var command = new GetClassifierGroupList
+			using (var _ = unitOfWorkFactory.Create())
 			{
-				CompanyUid = Constants.OperatorCompanyUid,
-				TypeCode = "okved2",
-				PageSize = 100
-			};
+				// arrange
+				await dbHelper.InsertType(HierarchyType.Items, cancellationToken);
+				for (var i = 0; i < 21; i++)
+				{
+					await dbHelper.InsertItem($"{i:D4}", null, cancellationToken);
+				}
 
-			var result = await handler.Handle(command, cancellationToken);
+				// act
+				var command = new GetClassifierGroupList
+				{
+					TypeCode = dbHelper.TypeCode,
+					PageSize = 100
+				};
 
-			// assert
-			Assert.IsNotNull(result);
-			Assert.AreEqual(21, result.Rows.Count);
+				var result = await handler.Handle(command, cancellationToken);
+
+				// assert
+				Assert.IsNotNull(result);
+				Assert.AreEqual(21, result.Rows.Count);
+			}
 		}
 
 		[TestMethod]
@@ -121,39 +155,39 @@ namespace Montr.MasterData.Tests.QueryHandlers
 		{
 			// arrange
 			var cancellationToken = CancellationToken.None;
+			var unitOfWorkFactory = new TransactionScopeUnitOfWorkFactory();
 			var dbContextFactory = new DefaultDbContextFactory();
 			var classifierTypeRepository = new DbClassifierTypeRepository(dbContextFactory);
 			var classifierTreeRepository = new DbClassifierTreeRepository(dbContextFactory);
 			var classifierTypeService = new DbClassifierTypeService(dbContextFactory, classifierTypeRepository);
 			var classifierTreeService = new DefaultClassifierTreeService(classifierTreeRepository);
+			var dbHelper = new DbHelper(unitOfWorkFactory, dbContextFactory);
 			var handler = new GetClassifierGroupListHandler(dbContextFactory, classifierTypeService, classifierTreeService);
 
-			DbClassifier parentItem;
-			using (var db = dbContextFactory.Create())
+			using (var _ = unitOfWorkFactory.Create())
 			{
-				parentItem = await (
-						from type in db.GetTable<DbClassifierType>()
-							.Where(x => x.Code == "okved2")
-						join item in db.GetTable<DbClassifier>()
-								.Where(x => x.Code == "F")
-							on type.Uid equals item.TypeUid
-						select item)
-					.SingleAsync(cancellationToken);
+				// arrange
+				await dbHelper.InsertType(HierarchyType.Items, cancellationToken);
+				var parentItem = await dbHelper.InsertItem("001", null, cancellationToken);
+				for (var i = 0; i < 3; i++)
+				{
+					await dbHelper.InsertItem($"{i:D4}", parentItem.Uid, cancellationToken);
+				}
+
+				// act
+				var command = new GetClassifierGroupList
+				{
+					CompanyUid = Constants.OperatorCompanyUid,
+					TypeCode = dbHelper.TypeCode,
+					ParentUid = parentItem.Uid
+				};
+
+				var result = await handler.Handle(command, cancellationToken);
+
+				// assert
+				Assert.IsNotNull(result);
+				Assert.AreEqual(3, result.Rows.Count);
 			}
-
-			// act
-			var command = new GetClassifierGroupList
-			{
-				CompanyUid = Constants.OperatorCompanyUid,
-				TypeCode = "okved2",
-				ParentUid = parentItem.Uid // Guid.NewGuid() // ParentCode = "F"
-			};
-
-			var result = await handler.Handle(command, cancellationToken);
-
-			// assert
-			Assert.IsNotNull(result);
-			Assert.AreEqual(3, result.Rows.Count);
 		}
 
 		[TestMethod, Ignore]
@@ -162,33 +196,43 @@ namespace Montr.MasterData.Tests.QueryHandlers
 			await Task.FromException<NotImplementedException>(new NotImplementedException());
 		}
 
-		[TestMethod]
+		// todo: check this - what shold be for a lot of groups
+		[TestMethod, Ignore]
 		public async Task GetItems_ForBigGroups_ReturnNoMoreThan1000Items()
 		{
 			// arrange
 			var cancellationToken = CancellationToken.None;
+			var unitOfWorkFactory = new TransactionScopeUnitOfWorkFactory();
 			var dbContextFactory = new DefaultDbContextFactory();
 			var classifierTypeRepository = new DbClassifierTypeRepository(dbContextFactory);
 			var classifierTreeRepository = new DbClassifierTreeRepository(dbContextFactory);
 			var classifierTypeService = new DbClassifierTypeService(dbContextFactory, classifierTypeRepository);
 			var classifierTreeService = new DefaultClassifierTreeService(classifierTreeRepository);
+			var dbHelper = new DbHelper(unitOfWorkFactory, dbContextFactory);
 			var handler = new GetClassifierGroupListHandler(dbContextFactory, classifierTypeService, classifierTreeService);
 
-			// act
-			var command = new GetClassifierGroupList
+			using (var _ = unitOfWorkFactory.Create())
 			{
-				CompanyUid = Constants.OperatorCompanyUid,
-				TypeCode = "oktmo"
-			};
+				// arrange
+				await dbHelper.InsertType(HierarchyType.Groups, cancellationToken);
+				var tree = await dbHelper.FindTree(ClassifierTree.DefaultCode, cancellationToken);
+				// todo: generate a lot of groups
 
-			var result = await handler.Handle(command, cancellationToken);
+				// act
+				var command = new GetClassifierGroupList
+				{
+					TypeCode = dbHelper.TypeCode,
+					TreeUid = tree.Uid
+				};
 
-			// assert
-			Assert.IsNotNull(result);
-			Assert.IsTrue(result.Rows.Count <= 1000);
+				var result = await handler.Handle(command, cancellationToken);
+
+				// assert
+				Assert.IsNotNull(result);
+				Assert.IsTrue(result.Rows.Count <= 1000);
+			}
 		}
 
-		// todo: generate deep tree
 		[TestMethod]
 		public async Task GetGroups_WithFocusUid_ReturnChildrenOfEachParentGroups()
 		{
@@ -200,56 +244,94 @@ namespace Montr.MasterData.Tests.QueryHandlers
 			var classifierTreeRepository = new DbClassifierTreeRepository(dbContextFactory);
 			var classifierTypeService = new DbClassifierTypeService(dbContextFactory, classifierTypeRepository);
 			var classifierTreeService = new DefaultClassifierTreeService(classifierTreeRepository);
-			var generator = new DbHelper(unitOfWorkFactory, dbContextFactory) { TypeCode = "okei" }; // todo: use test type
+			var dbHelper = new DbHelper(unitOfWorkFactory, dbContextFactory);
 			var handler = new GetClassifierGroupListHandler(dbContextFactory, classifierTypeService, classifierTreeService);
 
-			// var rootGroup = await generator.FindGroup(ClassifierTree.DefaultCode, "default", cancellationToken);
-			var tree = await generator.FindTree(ClassifierTree.DefaultCode, cancellationToken);
-			var focusGroup = await generator.FindGroup(ClassifierTree.DefaultCode, "3.7", cancellationToken); // 3.7. Экономические единицы
-
-			// act & assert - focus in root scope
-			var command = new GetClassifierGroupList
+			using (var _ = unitOfWorkFactory.Create())
 			{
-				CompanyUid = Constants.OperatorCompanyUid,
-				TypeCode = "okei",
-				TreeUid = tree.Uid,
-				ParentUid = null,
-				FocusUid = focusGroup.Uid 
-				// PageSize = 100 // todo: common limit for all levels is not ok
-			};
+				// arrange
+				await dbHelper.InsertType(HierarchyType.Groups, cancellationToken);
+				var tree = await dbHelper.FindTree(ClassifierTree.DefaultCode, cancellationToken);
 
-			var result = await handler.Handle(command, cancellationToken);
+				// 2 roots without parent
+				for (var i = 0; i < 2; i++)
+				{
+					await dbHelper.InsertGroup(tree.Uid, $"1-{i:D4}", null, cancellationToken);
+				}
 
-			// todo: pretty print and compare by focus.txt
-			Assert.IsNotNull(result);
-			Assert.AreEqual(4, result.Rows.Count);
-			Assert.IsNull(result.Rows[0].Children);
-			Assert.IsNull(result.Rows[1].Children);
-			Assert.IsNull(result.Rows[3].Children);
+				// 1 root with 4 deep children
+				Guid? parentUid = null;
+				for (var i = 0; i <= 5; i++)
+				{
+					var childGroup = await dbHelper.InsertGroup(tree.Uid, $"2-{i:D4}", parentUid, cancellationToken);
+					parentUid = childGroup.Uid;
+				}
 
-			Assert.IsNotNull(result.Rows[2].Children); // 3. ЧЕТЫРЕХЗНАЧНЫЕ НАЦИОНАЛЬНЫЕ ЕДИНИЦЫ ИЗМЕНЕНИЯ, ВКЛЮЧЕННЫЕ В ОКЕИ
-			Assert.AreEqual(result.Rows[2].Children.Count, 3);
+				// 3 roots without parent
+				for (var i = 0; i < 3; i++)
+				{
+					await dbHelper.InsertGroup(tree.Uid, $"3-{i:D4}", null, cancellationToken);
+				}
 
-			// act & assert - focus in scope of selected parent
-			command = new GetClassifierGroupList
-			{
-				CompanyUid = Constants.OperatorCompanyUid,
-				TypeCode = "okei",
-				TreeUid = tree.Uid,
-				FocusUid = focusGroup.Uid 
-			};
+				var focusUid = parentUid;
 
-			result = await handler.Handle(command, cancellationToken);
+				// act & assert - focus in root scope
+				var command = new GetClassifierGroupList
+				{
+					TypeCode = dbHelper.TypeCode,
+					TreeUid = tree.Uid,
+					ParentUid = null,
+					FocusUid = focusUid
+					// PageSize = 100 // todo: common limit for all levels is not ok
+				};
 
-			// todo: pretty print and compare by focus.txt
-			Assert.IsNotNull(result);
-			Assert.AreEqual(4, result.Rows.Count);
-			Assert.IsNull(result.Rows[0].Children);
-			Assert.IsNull(result.Rows[1].Children);
-			Assert.IsNull(result.Rows[3].Children);
+				var result = await handler.Handle(command, cancellationToken);
 
-			Assert.IsNotNull(result.Rows[2].Children); // 3. ЧЕТЫРЕХЗНАЧНЫЕ НАЦИОНАЛЬНЫЕ ЕДИНИЦЫ ИЗМЕНЕНИЯ, ВКЛЮЧЕННЫЕ В ОКЕИ
-			Assert.AreEqual(result.Rows[2].Children.Count, 3);
+				// todo: pretty print and compare by focus.txt
+				Assert.IsNotNull(result);
+				Assert.AreEqual(6, result.Rows.Count);
+				Assert.IsNull(result.Rows[0].Children);
+				Assert.IsNull(result.Rows[1].Children);
+				Assert.IsNull(result.Rows[3].Children);
+				Assert.IsNull(result.Rows[4].Children);
+				Assert.IsNull(result.Rows[5].Children);
+
+				Assert.IsNotNull(result.Rows[2].Children);
+				Assert.AreEqual(result.Rows[2].Children.Count, 1); // 0 lvl
+				Assert.AreEqual(result.Rows[2].Children[0].Children.Count, 1);  // 1 lvl
+				Assert.AreEqual(result.Rows[2].Children[0].Children[0].Children.Count, 1);  // 2 lvl
+				Assert.AreEqual(result.Rows[2].Children[0].Children[0].Children[0].Children.Count, 1);  // 3 lvl
+				Assert.AreEqual(result.Rows[2].Children[0].Children[0].Children[0].Children[0].Children.Count, 1);  // 4 lvl
+				Assert.IsNull(result.Rows[2].Children[0].Children[0].Children[0].Children[0].Children[0].Children);
+
+				// act & assert - focus in scope of selected parent
+				// todo: what is the difference with previous asserts - ParentUid should be set?
+				command = new GetClassifierGroupList
+				{
+					TypeCode = dbHelper.TypeCode,
+					TreeUid = tree.Uid,
+					FocusUid = focusUid
+				};
+
+				result = await handler.Handle(command, cancellationToken);
+
+				// todo: pretty print and compare by focus.txt
+				Assert.IsNotNull(result);
+				Assert.AreEqual(6, result.Rows.Count);
+				Assert.IsNull(result.Rows[0].Children);
+				Assert.IsNull(result.Rows[1].Children);
+				Assert.IsNull(result.Rows[3].Children);
+				Assert.IsNull(result.Rows[4].Children);
+				Assert.IsNull(result.Rows[5].Children);
+
+				Assert.IsNotNull(result.Rows[2].Children);
+				Assert.AreEqual(result.Rows[2].Children.Count, 1); // 0 lvl
+				Assert.AreEqual(result.Rows[2].Children[0].Children.Count, 1);  // 1 lvl
+				Assert.AreEqual(result.Rows[2].Children[0].Children[0].Children.Count, 1);  // 2 lvl
+				Assert.AreEqual(result.Rows[2].Children[0].Children[0].Children[0].Children.Count, 1);  // 3 lvl
+				Assert.AreEqual(result.Rows[2].Children[0].Children[0].Children[0].Children[0].Children.Count, 1);  // 4 lvl
+				Assert.IsNull(result.Rows[2].Children[0].Children[0].Children[0].Children[0].Children[0].Children);
+			}
 		}
 	}
 }

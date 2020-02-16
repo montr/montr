@@ -32,7 +32,7 @@ namespace Montr.MasterData.Tests.CommandHandlers
 				var root = await dbHelper.FindTree(ClassifierTree.DefaultCode, cancellationToken);
 				var group1 = await dbHelper.InsertGroup(root.Uid, "001", null, cancellationToken);
 				var group2 = await dbHelper.InsertGroup(root.Uid, "002", null, cancellationToken);
-				var item1 = await dbHelper.InsertItem("001", cancellationToken);
+				var item1 = await dbHelper.InsertItem("001", null, cancellationToken);
 				await dbHelper.InsertLink(group1.Uid, item1.Uid, cancellationToken);
 
 				// assert - initially new items belongs to default group
@@ -86,7 +86,7 @@ namespace Montr.MasterData.Tests.CommandHandlers
 				var root2 = await dbHelper.InsertTree("root2", cancellationToken);
 				// ReSharper disable once PossibleInvalidOperationException
 				var group2 = await dbHelper.InsertGroup(root2.Uid.Value, "002", null, cancellationToken);
-				var item1 = await dbHelper.InsertItem("001", cancellationToken);
+				var item1 = await dbHelper.InsertItem("001", null, cancellationToken);
 				await dbHelper.InsertLink(group1.Uid, item1.Uid, cancellationToken);
 
 				// assert - initially new items belongs to default group
