@@ -28,16 +28,23 @@ namespace Montr.Core.Impl.Services
 
 			foreach (var assembly in GetAssemblies())
 			{
-				foreach (var type in assembly.GetTypes()
-					.Where(x => x.IsClass && x.IsAbstract == false && typeof(IModule).IsAssignableFrom(x)))
+				try
 				{
-					var moduleAttribute = type.GetCustomAttribute<ModuleAttribute>();
-
-					modules.Add(new ModuleInfo
+					foreach (var type in assembly.GetTypes()
+						.Where(x => x.IsClass && x.IsAbstract == false && typeof(IModule).IsAssignableFrom(x)))
 					{
-						Type = type,
-						DependsOn = moduleAttribute?.DependsOn
-					});
+						var moduleAttribute = type.GetCustomAttribute<ModuleAttribute>();
+
+						modules.Add(new ModuleInfo
+						{
+							Type = type,
+							DependsOn = moduleAttribute?.DependsOn
+						});
+					}
+				}
+				catch (Exception ex)
+				{
+					_logger.LogError("Failed to read modules from {assembly} - {ex}", assembly, ex);
 				}
 			}
 
@@ -66,17 +73,17 @@ namespace Montr.Core.Impl.Services
 
 			if (_logger.IsEnabled(LogLevel.Information))
 			{
-				_logger.LogInformation("Modules initialization order:");
+				_logger.LogInformation("Modules initialization order ({count}):", sortedModules.Count);
 
 				foreach (var module in sortedModules)
 				{
 					if (module.DependsOn.Length == 0)
 					{
-						_logger.LogInformation("· {module}", module.Type);
+						_logger.LogInformation("• {module}", module.Type);
 					}
 					else
 					{
-						_logger.LogInformation("· {module} (depends on: {deps})", module.Type, module.DependsOn);
+						_logger.LogInformation("• {module} (depends on: {deps})", module.Type, module.DependsOn);
 					}
 				}
 			}
@@ -110,7 +117,7 @@ namespace Montr.Core.Impl.Services
 					}
 					catch (Exception ex)
 					{
-						_logger.LogError("x Failed to load assembly from {file} - {ex}", file, ex);
+						_logger.LogError("x Failed to preload assembly from {file} - {ex}", file, ex);
 					}
 				}
 			}
