@@ -2,9 +2,11 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Montr.Core.Services;
 using Montr.Data.Linq2Db;
 using Montr.MasterData.Impl.QueryHandlers;
 using Montr.MasterData.Impl.Services;
+using Montr.MasterData.Models;
 using Montr.MasterData.Queries;
 
 namespace Montr.MasterData.Tests.QueryHandlers
@@ -15,29 +17,39 @@ namespace Montr.MasterData.Tests.QueryHandlers
 		[TestMethod]
 		public async Task GetClassifierList_Should_ReturnList()
 		{
-			// todo: convert to classifier repository tests?
-
 			// arrange
+			var cancellationToken = CancellationToken.None;
 			var dbContextFactory = new DefaultDbContextFactory();
+			var unitOfWorkFactory = new TransactionScopeUnitOfWorkFactory();
 			var classifierTypeRepository = new DbClassifierTypeRepository(dbContextFactory);
 			var classifierTypeService = new DbClassifierTypeService(dbContextFactory, classifierTypeRepository);
 			var classifierRepository = new DbClassifierRepository(dbContextFactory, classifierTypeService, null, null);
-
+			var dbHelper = new DbHelper(unitOfWorkFactory, dbContextFactory);
 			var handler = new GetClassifierListHandler(classifierRepository);
 
-			// act
-			var command = new GetClassifierList
+			using (var _ = unitOfWorkFactory.Create())
 			{
-				CompanyUid = Constants.OperatorCompanyUid,
-				UserUid = Guid.NewGuid(),
-				TypeCode = "okei"
-			};
+				// arrange
+				await dbHelper.InsertType(HierarchyType.None, cancellationToken);
+				for (var i = 0; i < 42; i++)
+				{
+					await dbHelper.InsertItem($"{i:D4}", null, cancellationToken);
+				}
 
-			var result = await handler.Handle(command, CancellationToken.None);
+				// act
+				var command = new GetClassifierList
+				{
+					UserUid = Guid.NewGuid(),
+					TypeCode = dbHelper.TypeCode
+				};
 
-			// assert
-			// todo: switch to db generator and extend asserts
-			Assert.IsNotNull(result);
+				var result = await handler.Handle(command, CancellationToken.None);
+
+				// assert
+				Assert.IsNotNull(result);
+				Assert.AreEqual(10, result.Rows.Count);
+				Assert.AreEqual(42, result.TotalCount);
+			}
 		}
 	}
 }
