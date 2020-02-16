@@ -43,7 +43,7 @@ namespace Montr.Core.Impl.Services
 
 			var assemblyModules = modules.ToLookup(x => x.Type.Assembly.GetName().Name);
 
-			// if manual dependencies not specified - resolve dependencies dynamically from referenced assemblies
+			// if manual dependencies with [Module] attribute is not specified - resolve dependencies dynamically from referenced assemblies
 			foreach (var module in modules)
 			{
 				if (module.DependsOn == null)
@@ -95,6 +95,8 @@ namespace Montr.Core.Impl.Services
 
 			foreach (var file in Directory.EnumerateFiles(baseDirectory, "*.dll"))
 			{
+				if (ExcludeAssembly(file)) continue;
+
 				if (allAssemblies.TryGetValue(file, out _) == false)
 				{
 					if (_logger.IsEnabled(LogLevel.Information))
