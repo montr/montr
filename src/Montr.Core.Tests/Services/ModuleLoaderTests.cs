@@ -22,5 +22,23 @@ namespace Montr.Core.Tests.Services
 			// assert
 			Assert.IsTrue(modules.Count > 20);
 		}
+
+		[TestMethod]
+		[DataRow("Microsoft.Extensions.Http.dll", true)]
+		[DataRow("System.Data.SqlClient.dll", true)]
+		[DataRow("Montr.Core.dll", false)]
+		public void ExcludeAssembly_ForFile_ReturnsExpected(string file, bool expected)
+		{
+			// arrange
+			var loggerFactory = LoggerFactory.Create(
+				builder => builder.AddConsole(options => options.Format = ConsoleLoggerFormat.Systemd));
+			var loader = new ModuleLoader(loggerFactory.CreateLogger<ModuleLoader>());
+
+			// act
+			var result = loader.ExcludeAssembly(file);
+
+			// assert
+			Assert.AreEqual(expected, result);
+		}
 	}
 }

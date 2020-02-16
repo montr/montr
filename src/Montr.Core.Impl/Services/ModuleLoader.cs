@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using Microsoft.Extensions.Logging;
 using Montr.Core.Services;
 
@@ -11,6 +12,8 @@ namespace Montr.Core.Impl.Services
 	public class ModuleLoader
 	{
 		private readonly ILogger _logger;
+
+		private readonly Regex _excludePattern = new Regex(@".*(Microsoft\.|System\.).*");
 
 		public ModuleLoader(ILogger logger)
 		{
@@ -23,7 +26,7 @@ namespace Montr.Core.Impl.Services
 
 			var modules = new List<ModuleInfo>();
 
-			foreach (var assembly in AppDomain.CurrentDomain.GetAssemblies())
+			foreach (var assembly in GetAssemblies())
 			{
 				foreach (var type in assembly.GetTypes()
 					.Where(x => x.IsClass && x.IsAbstract == false && typeof(IModule).IsAssignableFrom(x)))
@@ -88,9 +91,7 @@ namespace Montr.Core.Impl.Services
 				_logger.LogInformation("Preloading assemblies from {directory}", baseDirectory);
 			}
 
-			var allAssemblies = AppDomain.CurrentDomain.GetAssemblies()
-				.Where(x => x.IsDynamic == false) // exclude dynamic assemblies without location
-				.ToDictionary(x => x.Location);
+			var allAssemblies = GetAssemblies().ToDictionary(x => x.Location);
 
 			foreach (var file in Directory.EnumerateFiles(baseDirectory, "*.dll"))
 			{
@@ -111,6 +112,18 @@ namespace Montr.Core.Impl.Services
 					}
 				}
 			}
+		}
+
+		public IEnumerable<Assembly> GetAssemblies()
+		{
+			return AppDomain.CurrentDomain.GetAssemblies()
+				.Where(x => x.IsDynamic == false) // exclude dynamic assemblies without location
+				.Where(x => ExcludeAssembly(x.Location) == false);
+		}
+
+		public bool ExcludeAssembly(string file)
+		{
+			return _excludePattern.Match(file).Success;
 		}
 
 		public class ModuleInfo
