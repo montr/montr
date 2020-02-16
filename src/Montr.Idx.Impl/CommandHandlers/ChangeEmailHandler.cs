@@ -12,11 +12,11 @@ namespace Montr.Idx.Impl.CommandHandlers
 	public class ChangeEmailHandler : IRequestHandler<ChangeEmail, ApiResult>
 	{
 		private readonly UserManager<DbUser> _userManager;
-		private readonly EmailConfirmationService _emailConfirmationService;
+		private readonly IEmailConfirmationService _emailConfirmationService;
 
 		public ChangeEmailHandler(
 			UserManager<DbUser> userManager,
-			EmailConfirmationService emailConfirmationService)
+			IEmailConfirmationService emailConfirmationService)
 		{
 			_userManager = userManager;
 			_emailConfirmationService = emailConfirmationService;

@@ -16,13 +16,13 @@ namespace Montr.Idx.Impl.CommandHandlers
 		private readonly ILogger<ExternalRegisterHandler> _logger;
 		private readonly SignInManager<DbUser> _signInManager;
 		private readonly UserManager<DbUser> _userManager;
-		private readonly EmailConfirmationService _emailConfirmationService;
+		private readonly IEmailConfirmationService _emailConfirmationService;
 
 		public ExternalRegisterHandler(
 			ILogger<ExternalRegisterHandler> logger,
 			SignInManager<DbUser> signInManager,
 			UserManager<DbUser> userManager,
-			EmailConfirmationService emailConfirmationService)
+			IEmailConfirmationService emailConfirmationService)
 		{
 			_logger = logger;
 			_signInManager = signInManager;

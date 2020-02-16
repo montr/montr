@@ -99,13 +99,19 @@ namespace Montr.Idx.Tests.CommandHandlers
 			var signInManager = new SignInManager<DbUser>(userManager, httpContextAccessor, userClaimsPrincipalFactory, identityOptionsAccessor, new NullLogger<SignInManager<DbUser>>(), null, null);
 
 			var appUrlBuilder = new DefaultAppUrlBuilder(appOptionsAccessor);
+
+			// todo: test EmailConfirmationService
+			/*
 			var dbMessageTemplateRepository = new DbMessageTemplateRepository(dbContextFactory);
 			var templateRenderer = new MustacheTemplateRenderer(dbMessageTemplateRepository);
 			var emailConfirmationService = new EmailConfirmationService(userManager, appUrlBuilder, new Mock<IEmailSender>().Object, templateRenderer);
+			*/
+
+			var emailConfirmationServiceMock = new Mock<IEmailConfirmationService>();
 
 			var handler = new RegisterHandler(
 				new Mock<ILogger<RegisterHandler>>().Object,
-				userManager, signInManager, appUrlBuilder, emailConfirmationService);
+				userManager, signInManager, appUrlBuilder, emailConfirmationServiceMock.Object);
 
 			using (var _ = unitOfWorkFactory.Create())
 			{

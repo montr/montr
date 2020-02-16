@@ -21,8 +21,15 @@ namespace Montr.Messages.Impl.Services
 
 		public async Task<Message> Render<TModel>(Guid templateUid, TModel data, CancellationToken cancellationToken)
 		{
-			var template = (await _repository
-				.Search(new MessageTemplateSearchRequest { Uid = templateUid }, cancellationToken)).Rows.Single();
+			var templateSearchResult = await _repository
+				.Search(new MessageTemplateSearchRequest { Uid = templateUid }, cancellationToken);
+
+			var template = templateSearchResult.Rows.SingleOrDefault();
+
+			if (template == null)
+			{
+				throw new InvalidOperationException($"Template {templateUid} not found.");
+			}
 
 			var stubble = new StubbleBuilder().Build();
 

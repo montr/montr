@@ -33,7 +33,7 @@ namespace Montr.Idx.Impl
 			services.AddTransient<IStartupTask, CreateDefaultAdminStartupTask>();
 			services.AddTransient<IStartupTask, RegisterMessageTemplateStartupTask>();
 
-			services.AddTransient<EmailConfirmationService, EmailConfirmationService>();
+			services.AddTransient<IEmailConfirmationService, EmailConfirmationService>();
 			services.AddTransient<IRepository<User>, DbUserRepository>();
 
 			// todo: move from impl to idx?

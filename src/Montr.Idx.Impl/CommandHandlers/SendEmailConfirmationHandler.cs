@@ -14,12 +14,12 @@ namespace Montr.Idx.Impl.CommandHandlers
 	{
 		private readonly ILocalizer _localizer;
 		private readonly UserManager<DbUser> _userManager;
-		private readonly EmailConfirmationService _emailConfirmationService;
+		private readonly IEmailConfirmationService _emailConfirmationService;
 
 		public SendEmailConfirmationHandler(
 			ILocalizer localizer,
 			UserManager<DbUser> userManager,
-			EmailConfirmationService emailConfirmationService)
+			IEmailConfirmationService emailConfirmationService)
 		{
 			_localizer = localizer;
 			_userManager = userManager;

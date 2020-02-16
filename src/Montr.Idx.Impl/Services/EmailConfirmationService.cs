@@ -11,7 +11,15 @@ using Montr.Messages.Services;
 
 namespace Montr.Idx.Impl.Services
 {
-	public class EmailConfirmationService
+	// todo: remove DbUser reference, move interface from impl project
+	public interface IEmailConfirmationService
+	{
+		Task SendConfirmEmailMessage(DbUser user, CancellationToken cancellationToken);
+
+		Task SendConfirmEmailChangeMessage(DbUser user, string newEmail, CancellationToken cancellationToken);
+	}
+
+	public class EmailConfirmationService : IEmailConfirmationService
 	{
 		public static readonly Guid TemplateUid = Guid.Parse("CEEF2983-C083-448F-88B1-2DA6E6CB41A4");
 

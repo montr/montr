@@ -19,14 +19,14 @@ namespace Montr.Idx.Impl.CommandHandlers
 		private readonly UserManager<DbUser> _userManager;
 		private readonly SignInManager<DbUser> _signInManager;
 		private readonly IAppUrlBuilder _appUrlBuilder;
-		private readonly EmailConfirmationService _emailConfirmationService;
+		private readonly IEmailConfirmationService _emailConfirmationService;
 
 		public RegisterHandler(
 			ILogger<RegisterHandler> logger,
 			UserManager<DbUser> userManager,
 			SignInManager<DbUser> signInManager,
 			IAppUrlBuilder appUrlBuilder,
-			EmailConfirmationService emailConfirmationService)
+			IEmailConfirmationService emailConfirmationService)
 		{
 			_logger = logger;
 			_userManager = userManager;
