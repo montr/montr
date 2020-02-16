@@ -34,7 +34,7 @@ jobs:
       - run: dotnet test ./src/Montr.Core.Tests
       - run: dotnet test ./src/Montr.Metadata.Tests
       - run: dotnet test ./src/Montr.Idx.Tests
-      #- run: dotnet test ./src/Montr.MasterData.Tests
+      - run: dotnet test ./src/Montr.MasterData.Tests
       #- run: dotnet test ./src/Montr.MasterData.Plugin.GovRu.Tests
       - run: dotnet test ./src/Montr.Kompany.Tests
       #- run: dotnet test ./src/Montr.Tendr.Tests
