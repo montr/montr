@@ -22,3 +22,4 @@ h1. Данные
 * Реестр наборов открытых данных - https://data.gov.ru/opendata?query=%D0%BA%D0%BB%D0%B0%D1%81%D1%81%D0%B8%D1%84%D0%B8%D0%BA%D0%B0%D1%82%D0%BE%D1%80%D1%8B
 * ftp://fz223free@ftp.zakupki.gov.ru/out/nsi/
 * ftp://free@ftp.zakupki.gov.ru/fcs_nsi/
+* http://old.gks.ru/opendata/dataset/7708234640-oktmo

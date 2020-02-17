@@ -1,0 +1,2145 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<ns2:nsiOkopf xsi:schemaLocation="http://zakupki.gov.ru/223/integration/schema/TFF-9.0.3 http://zakupki.gov.ru/223/integration/schema/TFF-9.0.3/reference.xsd" xmlns="http://zakupki.gov.ru/223fz/types/1" xmlns:ns20="http://zakupki.gov.ru/223fz/notificationIssue/1" xmlns:ns21="http://zakupki.gov.ru/223fz/purchasePlanProject/1" xmlns:ns22="http://zakupki.gov.ru/223fz/typalOrderClauseList/1" xmlns:ns23="http://zakupki.gov.ru/223fz/ecp-packet/1" xmlns:ns24="http://zakupki.gov.ru/223fz/webRequest/1" xmlns:ns2="http://zakupki.gov.ru/223fz/reference/1" xmlns:ns3="http://zakupki.gov.ru/223fz/purchasePlan/1" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:ns4="http://zakupki.gov.ru/223fz/purchasePlanProjectAdditionalPosition/1" xmlns:ns5="http://zakupki.gov.ru/223fz/dishonestSupplier/1" xmlns:ns6="http://zakupki.gov.ru/223fz/contract/1" xmlns:ns7="http://zakupki.gov.ru/223fz/missedNotice/1" xmlns:ns8="http://zakupki.gov.ru/223fz/decisionSuspension/1" xmlns:ns9="http://zakupki.gov.ru/223fz/purchasePlanAdditionalPosition/1" xmlns:ns10="http://zakupki.gov.ru/223fz/stopCommodity/1" xmlns:ns11="http://zakupki.gov.ru/223fz/exclusion/1" xmlns:ns12="http://zakupki.gov.ru/223fz/agencyRelation/1" xmlns:ns13="http://zakupki.gov.ru/223fz/purchase/1" xmlns:ns14="http://zakupki.gov.ru/223fz/machineryListInfo/1" xmlns:ns15="http://zakupki.gov.ru/223fz/revenue/1" xmlns:ns16="http://zakupki.gov.ru/223fz/orderClauseList/1" xmlns:ns17="http://zakupki.gov.ru/223fz/disagreementProtocol/1" xmlns:ns18="http://zakupki.gov.ru/223fz/customerRegistry/1" xmlns:ns19="http://zakupki.gov.ru/223fz/complaint/1">
+    <header>
+        <guid>3566685b-6960-4da4-9f37-6818ed41d259</guid>
+        <createDateTime>2019-03-17T03:37:48.914+03:00</createDateTime>
+    </header>
+    <ns2:body>
+        <ns2:item>
+            <guid>fa89d7e1-296c-41e3-85f8-8fc54c66e52a</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2013-04-05T15:22:27.000+04:00</ns2:changeDateTime>
+                <ns2:businessStatus>866</ns2:businessStatus>
+                <ns2:code>39</ns2:code>
+                <ns2:name>Юридические лица, являющиеся коммерческими организациями</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>29e596f4-dca7-43dd-8b41-be6b21b2bb9a</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2013-04-05T15:22:27.000+04:00</ns2:changeDateTime>
+                <ns2:businessStatus>866</ns2:businessStatus>
+                <ns2:code>40</ns2:code>
+                <ns2:name>Унитарные предприятия</ns2:name>
+                <ns2:parentCode>39</ns2:parentCode>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>182ef6ad-71a3-4836-9016-111449b20440</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2013-04-05T15:22:27.000+04:00</ns2:changeDateTime>
+                <ns2:businessStatus>866</ns2:businessStatus>
+                <ns2:code>41</ns2:code>
+                <ns2:name>Унитарные предприятия, основанные на праве оперативного управления</ns2:name>
+                <ns2:parentCode>40</ns2:parentCode>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>da2cfdb8-17ad-428a-9166-b32a17a19af5</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2013-04-05T15:22:27.000+04:00</ns2:changeDateTime>
+                <ns2:businessStatus>866</ns2:businessStatus>
+                <ns2:code>42</ns2:code>
+                <ns2:name>Унитарные предприятия, основанные на праве хозяйственного ведения</ns2:name>
+                <ns2:parentCode>40</ns2:parentCode>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>91354562-0fe6-462b-8ffa-3f09dda55827</guid>
+            <ns2:nsiOkopfData>
+                <ns2:businessStatus>866</ns2:businessStatus>
+                <ns2:code>68</ns2:code>
+                <ns2:name>Дочерние унитарные предприятия</ns2:name>
+                <ns2:parentCode>40</ns2:parentCode>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>92cb5164-c4b1-47d6-9d1f-61f348ee9cf3</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2013-04-05T15:22:27.000+04:00</ns2:changeDateTime>
+                <ns2:businessStatus>866</ns2:businessStatus>
+                <ns2:code>48</ns2:code>
+                <ns2:name>Хозяйственные товарищества и общества</ns2:name>
+                <ns2:parentCode>39</ns2:parentCode>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>432fa2fe-ccce-4e9c-af4d-81d794168d89</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2013-04-05T15:22:27.000+04:00</ns2:changeDateTime>
+                <ns2:businessStatus>866</ns2:businessStatus>
+                <ns2:code>51</ns2:code>
+                <ns2:name>Полные товарищества</ns2:name>
+                <ns2:parentCode>48</ns2:parentCode>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>466b3783-057f-45ea-8d31-807dcb55e477</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2013-04-05T15:22:27.000+04:00</ns2:changeDateTime>
+                <ns2:businessStatus>866</ns2:businessStatus>
+                <ns2:code>60</ns2:code>
+                <ns2:name>Акционерные общества</ns2:name>
+                <ns2:parentCode>48</ns2:parentCode>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>ee7aec9f-0bb1-4c3a-b4ba-0310470e3138</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2013-04-05T15:22:27.000+04:00</ns2:changeDateTime>
+                <ns2:businessStatus>866</ns2:businessStatus>
+                <ns2:code>47</ns2:code>
+                <ns2:name>Открытые акционерные общества</ns2:name>
+                <ns2:parentCode>60</ns2:parentCode>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>84e2ab2b-d364-4844-aa17-34fbe0b99d01</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2013-04-05T15:22:27.000+04:00</ns2:changeDateTime>
+                <ns2:businessStatus>866</ns2:businessStatus>
+                <ns2:code>67</ns2:code>
+                <ns2:name>Закрытые акционерные общества</ns2:name>
+                <ns2:parentCode>60</ns2:parentCode>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>e288ff7a-f777-4438-9eb6-eda2fd1d7998</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2013-04-05T15:22:27.000+04:00</ns2:changeDateTime>
+                <ns2:businessStatus>866</ns2:businessStatus>
+                <ns2:code>64</ns2:code>
+                <ns2:name>Товарищества на вере</ns2:name>
+                <ns2:parentCode>48</ns2:parentCode>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>84121144-f8bd-4a5f-b849-d96df992655d</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2013-04-05T15:22:27.000+04:00</ns2:changeDateTime>
+                <ns2:businessStatus>866</ns2:businessStatus>
+                <ns2:code>65</ns2:code>
+                <ns2:name>Общества с ограниченной ответственностью</ns2:name>
+                <ns2:parentCode>48</ns2:parentCode>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>9832cd9f-c6a7-4266-a068-29b94e66c01d</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2013-04-05T15:22:27.000+04:00</ns2:changeDateTime>
+                <ns2:businessStatus>866</ns2:businessStatus>
+                <ns2:code>52</ns2:code>
+                <ns2:name>Производственные кооперативы</ns2:name>
+                <ns2:parentCode>39</ns2:parentCode>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>08c3dadc-2da5-4cfa-a910-2154dce0075f</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2013-04-05T15:22:27.000+04:00</ns2:changeDateTime>
+                <ns2:businessStatus>866</ns2:businessStatus>
+                <ns2:code>53</ns2:code>
+                <ns2:name>Крестьянские (фермерские) хозяйства</ns2:name>
+                <ns2:parentCode>39</ns2:parentCode>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>64a8f576-8f4f-4a6e-b60a-a823c898e70d</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2013-04-05T15:22:27.000+04:00</ns2:changeDateTime>
+                <ns2:businessStatus>866</ns2:businessStatus>
+                <ns2:code>70</ns2:code>
+                <ns2:name>Юридические лица, являющиеся некоммерческими организациями</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>8a333ae9-a9e4-4096-8130-1f715b47ad7d</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2013-04-05T15:22:27.000+04:00</ns2:changeDateTime>
+                <ns2:businessStatus>866</ns2:businessStatus>
+                <ns2:code>76</ns2:code>
+                <ns2:name>Садоводческие, огороднические или дачные некоммерческие товарищества</ns2:name>
+                <ns2:parentCode>70</ns2:parentCode>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>2437e8fe-de88-454f-b579-155fd23c3511</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2013-04-05T15:22:27.000+04:00</ns2:changeDateTime>
+                <ns2:businessStatus>866</ns2:businessStatus>
+                <ns2:code>77</ns2:code>
+                <ns2:name>Ассоциации крестьянских (фермерских) хозяйств</ns2:name>
+                <ns2:parentCode>70</ns2:parentCode>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>e7c81861-958d-400e-9500-66679b8ea995</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2013-04-05T15:22:27.000+04:00</ns2:changeDateTime>
+                <ns2:businessStatus>866</ns2:businessStatus>
+                <ns2:code>80</ns2:code>
+                <ns2:name>Территориальные общественные самоуправления</ns2:name>
+                <ns2:parentCode>70</ns2:parentCode>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>7f4b7463-31a2-4b35-a4f6-9f4303070b90</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2013-04-05T15:22:27.000+04:00</ns2:changeDateTime>
+                <ns2:businessStatus>866</ns2:businessStatus>
+                <ns2:code>81</ns2:code>
+                <ns2:name>Учреждения</ns2:name>
+                <ns2:parentCode>70</ns2:parentCode>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>14182050-436e-41a3-ad15-0bbdf57af166</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2013-04-05T15:22:27.000+04:00</ns2:changeDateTime>
+                <ns2:businessStatus>866</ns2:businessStatus>
+                <ns2:code>82</ns2:code>
+                <ns2:name>Государственные корпорации</ns2:name>
+                <ns2:parentCode>70</ns2:parentCode>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>a9f5a1c6-9b31-4209-8764-e729562cde76</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2013-04-05T15:22:27.000+04:00</ns2:changeDateTime>
+                <ns2:businessStatus>866</ns2:businessStatus>
+                <ns2:code>78</ns2:code>
+                <ns2:name>Органы общественной самодеятельности</ns2:name>
+                <ns2:parentCode>70</ns2:parentCode>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>1bb69aa3-8938-41f0-8663-5cb097e1311f</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2013-04-05T15:22:27.000+04:00</ns2:changeDateTime>
+                <ns2:businessStatus>866</ns2:businessStatus>
+                <ns2:code>83</ns2:code>
+                <ns2:name>Общественные и религиозные организации (объединения)</ns2:name>
+                <ns2:parentCode>70</ns2:parentCode>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>9860e674-7d79-4fac-b37a-b8c5b4b1edc7</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2013-04-05T15:22:27.000+04:00</ns2:changeDateTime>
+                <ns2:businessStatus>866</ns2:businessStatus>
+                <ns2:code>84</ns2:code>
+                <ns2:name>Общественные движения</ns2:name>
+                <ns2:parentCode>70</ns2:parentCode>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>0d9b9c48-128e-4ae4-ae1b-68e1981f04b7</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2013-04-05T15:22:27.000+04:00</ns2:changeDateTime>
+                <ns2:businessStatus>866</ns2:businessStatus>
+                <ns2:code>85</ns2:code>
+                <ns2:name>Потребительские кооперативы</ns2:name>
+                <ns2:parentCode>70</ns2:parentCode>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>3bb53a11-0092-4bda-b33b-71341cdd2009</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2013-04-05T15:22:27.000+04:00</ns2:changeDateTime>
+                <ns2:businessStatus>866</ns2:businessStatus>
+                <ns2:code>88</ns2:code>
+                <ns2:name>Фонды</ns2:name>
+                <ns2:parentCode>70</ns2:parentCode>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>57d91581-c8f3-4c3e-b890-2b38a15943d7</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2013-04-05T15:22:27.000+04:00</ns2:changeDateTime>
+                <ns2:businessStatus>866</ns2:businessStatus>
+                <ns2:code>89</ns2:code>
+                <ns2:name>Прочие некоммерческие организации</ns2:name>
+                <ns2:parentCode>70</ns2:parentCode>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>67ffb74d-9560-4e72-b921-115cdbda6353</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2013-04-05T15:22:27.000+04:00</ns2:changeDateTime>
+                <ns2:businessStatus>866</ns2:businessStatus>
+                <ns2:code>93</ns2:code>
+                <ns2:name>Объединения юридических лиц (ассоциации и союзы)</ns2:name>
+                <ns2:parentCode>70</ns2:parentCode>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>ac3c55ff-a77b-4e4c-9948-336eb3efa9d8</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2013-04-05T15:22:27.000+04:00</ns2:changeDateTime>
+                <ns2:businessStatus>866</ns2:businessStatus>
+                <ns2:code>94</ns2:code>
+                <ns2:name>Товарищества собственников жилья</ns2:name>
+                <ns2:parentCode>70</ns2:parentCode>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>c3d93be6-674c-48b6-bf33-5e69d0de4c57</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2013-04-05T15:22:27.000+04:00</ns2:changeDateTime>
+                <ns2:businessStatus>866</ns2:businessStatus>
+                <ns2:code>96</ns2:code>
+                <ns2:name>Некоммерческие партнерства</ns2:name>
+                <ns2:parentCode>70</ns2:parentCode>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>9793dab9-ce5a-49dc-a002-8f7adccbe6a8</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2013-04-05T15:22:27.000+04:00</ns2:changeDateTime>
+                <ns2:businessStatus>866</ns2:businessStatus>
+                <ns2:code>97</ns2:code>
+                <ns2:name>Автономные некоммерческие организации</ns2:name>
+                <ns2:parentCode>70</ns2:parentCode>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>5cf60aef-a378-4345-968e-65d1ae0f845d</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2013-04-05T15:22:27.000+04:00</ns2:changeDateTime>
+                <ns2:businessStatus>866</ns2:businessStatus>
+                <ns2:code>99</ns2:code>
+                <ns2:name>Организации без прав юридического лица</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>11e70c00-6609-4f06-8c59-13dfb944d1de</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2013-04-05T15:22:27.000+04:00</ns2:changeDateTime>
+                <ns2:businessStatus>866</ns2:businessStatus>
+                <ns2:code>79</ns2:code>
+                <ns2:name>Финансово-промышленные группы</ns2:name>
+                <ns2:parentCode>99</ns2:parentCode>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>d12a3bdf-3285-41db-bdf3-c741b362a294</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2013-04-05T15:22:27.000+04:00</ns2:changeDateTime>
+                <ns2:businessStatus>866</ns2:businessStatus>
+                <ns2:code>87</ns2:code>
+                <ns2:name>Простые товарищества</ns2:name>
+                <ns2:parentCode>99</ns2:parentCode>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>f1a1af27-af84-49a4-ad87-a9a5f171f3d0</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2013-04-05T15:22:27.000+04:00</ns2:changeDateTime>
+                <ns2:businessStatus>866</ns2:businessStatus>
+                <ns2:code>90</ns2:code>
+                <ns2:name>Представительства и филиалы</ns2:name>
+                <ns2:parentCode>99</ns2:parentCode>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>2a46e1cd-f6d2-42e0-9b20-0cc0872ba07b</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2013-04-05T15:22:27.000+04:00</ns2:changeDateTime>
+                <ns2:businessStatus>866</ns2:businessStatus>
+                <ns2:code>92</ns2:code>
+                <ns2:name>Паевые инвестиционные фонды</ns2:name>
+                <ns2:parentCode>99</ns2:parentCode>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>e16b14a4-c8ac-4054-84c5-d16dc123de32</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2013-04-05T15:22:27.000+04:00</ns2:changeDateTime>
+                <ns2:businessStatus>866</ns2:businessStatus>
+                <ns2:code>98</ns2:code>
+                <ns2:name>Иные неюридические лица</ns2:name>
+                <ns2:parentCode>99</ns2:parentCode>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>25279fca-ecd9-49d3-a81e-afcdc0510771</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2013-04-05T15:22:27.000+04:00</ns2:changeDateTime>
+                <ns2:businessStatus>866</ns2:businessStatus>
+                <ns2:code>91</ns2:code>
+                <ns2:name>Индивидуальные предприниматели</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>5d5ae65b-2cd3-4703-8e28-0ea78fef15c4</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2013-04-05T15:22:27.000+04:00</ns2:changeDateTime>
+                <ns2:businessStatus>866</ns2:businessStatus>
+                <ns2:code>66</ns2:code>
+                <ns2:name>Общества с дополнительной ответственностью</ns2:name>
+                <ns2:parentCode>48</ns2:parentCode>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>3ecfcdd9-4758-45ee-b8ee-ca5e234bf3e7</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2013-04-05T15:22:27.000+04:00</ns2:changeDateTime>
+                <ns2:businessStatus>866</ns2:businessStatus>
+                <ns2:code>71</ns2:code>
+                <ns2:name>Частные учреждения</ns2:name>
+                <ns2:parentCode>70</ns2:parentCode>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>7ee84f58-a238-420d-84e8-e63a34d7eba7</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2013-04-05T15:22:27.000+04:00</ns2:changeDateTime>
+                <ns2:businessStatus>866</ns2:businessStatus>
+                <ns2:code>72</ns2:code>
+                <ns2:name>Бюджетные учреждения</ns2:name>
+                <ns2:parentCode>70</ns2:parentCode>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>bd756364-4b43-484c-92ae-8c2cbcd8981b</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2013-04-05T15:22:27.000+04:00</ns2:changeDateTime>
+                <ns2:businessStatus>866</ns2:businessStatus>
+                <ns2:code>73</ns2:code>
+                <ns2:name>Автономные учреждения</ns2:name>
+                <ns2:parentCode>70</ns2:parentCode>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>0580de8d-c399-4d80-94eb-282008857424</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2013-04-05T15:22:27.000+04:00</ns2:changeDateTime>
+                <ns2:businessStatus>866</ns2:businessStatus>
+                <ns2:code>95</ns2:code>
+                <ns2:name>Крестьянские (фермерские) хозяйства</ns2:name>
+                <ns2:parentCode>99</ns2:parentCode>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>5b08f93f-8568-48c3-a73a-ae279487a375</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2013-04-05T15:22:27.000+04:00</ns2:changeDateTime>
+                <ns2:businessStatus>866</ns2:businessStatus>
+                <ns2:code>61</ns2:code>
+                <ns2:name>Хозяйственные партнерства</ns2:name>
+                <ns2:parentCode>39</ns2:parentCode>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>fdbc0525-4e4d-4e88-8f65-69d83de25922</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2013-04-05T15:22:27.000+04:00</ns2:changeDateTime>
+                <ns2:businessStatus>866</ns2:businessStatus>
+                <ns2:code>74</ns2:code>
+                <ns2:name>Казенные учреждения</ns2:name>
+                <ns2:parentCode>81</ns2:parentCode>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>00e2cd8e-76ff-4084-87ac-071abbb531bb</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.807+03:00</ns2:changeDateTime>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>10000</ns2:code>
+                <ns2:name>ОРГАНИЗАЦИОННО-ПРАВОВЫЕ ФОРМЫ ЮРИДИЧЕСКИХ ЛИЦ, ЯВЛЯЮЩИХСЯ КОММЕРЧЕСКИМИ КОРПОРАТИВНЫМИ ОРГАНИЗАЦИЯМИ</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>2fa71140-0163-4ccb-9c10-44d2efa4f2ba</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.833+03:00</ns2:changeDateTime>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>11000</ns2:code>
+                <ns2:name>Хозяйственные товарищества</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>d035bad8-c3ba-4036-9178-50c2cfd95f70</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.817+03:00</ns2:changeDateTime>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>11051</ns2:code>
+                <ns2:name>Полные товарищества</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>3e5a0e95-7b93-4aa7-8390-f34e4200fa24</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.818+03:00</ns2:changeDateTime>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>11064</ns2:code>
+                <ns2:name>Товарищества на вере (коммандитные товарищества)</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>15c76829-2a42-468a-abf8-751aa993d4d9</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.833+03:00</ns2:changeDateTime>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>12000</ns2:code>
+                <ns2:name>Хозяйственные общества</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>9c7c0eb2-8b36-4e82-a294-d8bff5c7e816</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2013-04-05T15:22:17.000+04:00</ns2:changeDateTime>
+                <ns2:businessStatus>866</ns2:businessStatus>
+                <ns2:code>12100</ns2:code>
+                <ns2:name>Общества с ограниченной или дополнительной ответственностью</ns2:name>
+                <ns2:parentCode>12000</ns2:parentCode>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>a2cefb6d-2a62-4b5e-84e1-47b0abc59d61</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2013-04-05T15:22:17.000+04:00</ns2:changeDateTime>
+                <ns2:businessStatus>866</ns2:businessStatus>
+                <ns2:code>12165</ns2:code>
+                <ns2:name>Общества с ограниченной ответственностью</ns2:name>
+                <ns2:parentCode>12100</ns2:parentCode>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>f4f401e4-2776-4f70-860f-8aac8bf50182</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2013-04-05T15:22:17.000+04:00</ns2:changeDateTime>
+                <ns2:businessStatus>866</ns2:businessStatus>
+                <ns2:code>12166</ns2:code>
+                <ns2:name>Общества с дополнительной ответственностью</ns2:name>
+                <ns2:parentCode>12100</ns2:parentCode>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>811e871d-1481-4152-abfe-228174014ad2</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.833+03:00</ns2:changeDateTime>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>12200</ns2:code>
+                <ns2:name>Акционерные общества</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>bcf39501-245c-4907-a703-e27aca4bdd0d</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.825+03:00</ns2:changeDateTime>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>12247</ns2:code>
+                <ns2:name>Публичные акционерные общества</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>8c299a06-56c8-40c7-b701-1b02717cfdc0</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.826+03:00</ns2:changeDateTime>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>12267</ns2:code>
+                <ns2:name>Непубличные акционерные общества</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>4b22a748-4d81-405b-b811-4863d3630a5c</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.833+03:00</ns2:changeDateTime>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>13000</ns2:code>
+                <ns2:name>Хозяйственные партнерства</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>ad45df27-a72d-4932-8401-d2bffd29138f</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.833+03:00</ns2:changeDateTime>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>14000</ns2:code>
+                <ns2:name>Производственные кооперативы (артели)</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>5dab7e70-b88f-447b-83ec-6d2db2f9d472</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.833+03:00</ns2:changeDateTime>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>14100</ns2:code>
+                <ns2:name>Сельскохозяйственные производственные кооперативы</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>cb36b5c0-7b1e-4c3f-8ac5-3246fa401e41</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.818+03:00</ns2:changeDateTime>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>14153</ns2:code>
+                <ns2:name>Сельскохозяйственные артели (колхозы)</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>b623084a-42c2-43f6-8ac7-78c1e3e7f758</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.818+03:00</ns2:changeDateTime>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>14154</ns2:code>
+                <ns2:name>Рыболовецкие артели (колхозы)</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>800b1aab-3aae-43ac-8312-dbb7b25fd705</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.818+03:00</ns2:changeDateTime>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>14155</ns2:code>
+                <ns2:name>Кооперативные хозяйства (коопхозы)</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>21632cb6-a8c2-4dbb-8b13-1f6432d7888a</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.833+03:00</ns2:changeDateTime>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>14200</ns2:code>
+                <ns2:name>Производственные кооперативы (кроме сельскохозяйственных производственных кооперативов)</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>a61c3a9a-d89d-45e6-ac0e-29e7b6425a47</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2013-04-05T15:22:17.000+04:00</ns2:changeDateTime>
+                <ns2:businessStatus>866</ns2:businessStatus>
+                <ns2:code>15000</ns2:code>
+                <ns2:name>Унитарные предприятия</ns2:name>
+                <ns2:parentCode>10000</ns2:parentCode>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>01499201-5e3f-4534-9b83-9e390bf70aee</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2013-04-05T15:22:17.000+04:00</ns2:changeDateTime>
+                <ns2:businessStatus>866</ns2:businessStatus>
+                <ns2:code>15100</ns2:code>
+                <ns2:name>Унитарные предприятия, основанные на праве оперативного управления (казенные предприятия)</ns2:name>
+                <ns2:parentCode>15000</ns2:parentCode>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>e36c86d2-1d7b-4eda-87b1-ce8839e25c65</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2013-04-05T15:22:17.000+04:00</ns2:changeDateTime>
+                <ns2:businessStatus>866</ns2:businessStatus>
+                <ns2:code>15141</ns2:code>
+                <ns2:name>Федеральные казенные предприятия</ns2:name>
+                <ns2:parentCode>15100</ns2:parentCode>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>b4bfa126-9392-4228-a27e-f982469674ec</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2013-04-05T15:22:17.000+04:00</ns2:changeDateTime>
+                <ns2:businessStatus>866</ns2:businessStatus>
+                <ns2:code>15142</ns2:code>
+                <ns2:name>Казенные предприятия субъектов Российской Федерации</ns2:name>
+                <ns2:parentCode>15100</ns2:parentCode>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>c2a61e60-7441-4ef7-9d20-947da6cd846b</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2013-04-05T15:22:17.000+04:00</ns2:changeDateTime>
+                <ns2:businessStatus>866</ns2:businessStatus>
+                <ns2:code>15143</ns2:code>
+                <ns2:name>Муниципальные казенные предприятия</ns2:name>
+                <ns2:parentCode>15100</ns2:parentCode>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>15548ed0-47f8-45b5-8cf7-f90735c44018</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2013-04-05T15:22:17.000+04:00</ns2:changeDateTime>
+                <ns2:businessStatus>866</ns2:businessStatus>
+                <ns2:code>15200</ns2:code>
+                <ns2:name>Унитарные предприятия, основанные на праве хозяйственного ведения</ns2:name>
+                <ns2:parentCode>15000</ns2:parentCode>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>af14dc37-bfc5-4ae1-ad4b-4d523b534d16</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2013-04-05T15:22:17.000+04:00</ns2:changeDateTime>
+                <ns2:businessStatus>866</ns2:businessStatus>
+                <ns2:code>15241</ns2:code>
+                <ns2:name>Федеральные государственные унитарные предприятия</ns2:name>
+                <ns2:parentCode>15200</ns2:parentCode>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>c299228e-fd12-454b-944f-988322d4ec08</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2013-04-05T15:22:17.000+04:00</ns2:changeDateTime>
+                <ns2:businessStatus>866</ns2:businessStatus>
+                <ns2:code>15242</ns2:code>
+                <ns2:name>Государственные унитарные предприятия субъектов Российской Федерации</ns2:name>
+                <ns2:parentCode>15200</ns2:parentCode>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>63a646a9-eced-4bc4-a725-b46275539468</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2013-04-05T15:22:17.000+04:00</ns2:changeDateTime>
+                <ns2:businessStatus>866</ns2:businessStatus>
+                <ns2:code>15243</ns2:code>
+                <ns2:name>Муниципальные унитарные предприятия</ns2:name>
+                <ns2:parentCode>15200</ns2:parentCode>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>f666c1c7-06d0-4bc9-8efc-5c539ccbebaa</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.834+03:00</ns2:changeDateTime>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>19000</ns2:code>
+                <ns2:name>Прочие юридические лица, являющиеся коммерческими организациями</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>53fa677b-a35c-42c0-a26e-2f99072726ab</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.808+03:00</ns2:changeDateTime>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>20000</ns2:code>
+                <ns2:name>ОРГАНИЗАЦИОННО-ПРАВОВЫЕ ФОРМЫ ЮРИДИЧЕСКИХ ЛИЦ, ЯВЛЯЮЩИХСЯ НЕКОММЕРЧЕСКИМИ КОРПОРАТИВНЫМИ ОРГАНИЗАЦИЯМИ</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>b631e0f5-3644-442f-ba47-16b19c1b94d9</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.834+03:00</ns2:changeDateTime>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>20100</ns2:code>
+                <ns2:name>Потребительские кооперативы</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>493be752-5240-425e-8d4e-f7325e3f252e</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.819+03:00</ns2:changeDateTime>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>20101</ns2:code>
+                <ns2:name>Гаражные и гаражно-строительные кооперативы</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>c7cafbc8-31dd-44c4-bd68-2d84581fa089</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.826+03:00</ns2:changeDateTime>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>20102</ns2:code>
+                <ns2:name>Жилищные или жилищно-строительные кооперативы</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>c69705ba-de9f-439f-8175-b57bd25d33cb</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.819+03:00</ns2:changeDateTime>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>20103</ns2:code>
+                <ns2:name>Жилищные накопительные кооперативы</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>47048ebe-cb40-42e8-827c-b73c228b7a99</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.819+03:00</ns2:changeDateTime>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>20104</ns2:code>
+                <ns2:name>Кредитные потребительские кооперативы</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>62bb41fe-2dd5-4b94-b775-686a144d3382</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.819+03:00</ns2:changeDateTime>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>20105</ns2:code>
+                <ns2:name>Кредитные потребительские  кооперативы граждан</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>fdac04ef-d27e-46b6-ab9e-eefa31d7f8a8</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.820+03:00</ns2:changeDateTime>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>20106</ns2:code>
+                <ns2:name>Кредитные кооперативы второго уровня</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>878c7a96-7f0a-4530-9c03-c98a9576c275</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.820+03:00</ns2:changeDateTime>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>20107</ns2:code>
+                <ns2:name>Потребительские общества</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>2b6bcd1d-9520-4978-9686-040f7cef4707</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.820+03:00</ns2:changeDateTime>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>20109</ns2:code>
+                <ns2:name>Сельскохозяйственные потребительские перерабатывающие  кооперативы</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>972c9819-da71-47f2-87ff-8173da59f557</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.820+03:00</ns2:changeDateTime>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>20110</ns2:code>
+                <ns2:name>Сельскохозяйственные потребительские сбытовые (торговые) кооперативы</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>368562cf-a31e-4304-b0a1-bbe2e458eec1</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.820+03:00</ns2:changeDateTime>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>20111</ns2:code>
+                <ns2:name>Сельскохозяйственные потребительские обслуживающие кооперативы</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>5544ffde-70ab-4629-9d8a-ccf6b8d5bdc4</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.820+03:00</ns2:changeDateTime>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>20112</ns2:code>
+                <ns2:name>Сельскохозяйственные потребительские снабженческие кооперативы</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>a342c400-9846-4432-979e-2a634a388187</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-13T08:00:39.841+03:00</ns2:changeDateTime>
+                <ns2:endDateActive>2018-12-13+03:00</ns2:endDateActive>
+                <ns2:businessStatus>866</ns2:businessStatus>
+                <ns2:code>20113</ns2:code>
+                <ns2:name>Сельскохозяйственные потребительские садоводческие кооперативы</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>e5472de1-fcec-46e1-91db-d708a1cd1e06</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-13T08:00:39.841+03:00</ns2:changeDateTime>
+                <ns2:endDateActive>2018-12-13+03:00</ns2:endDateActive>
+                <ns2:businessStatus>866</ns2:businessStatus>
+                <ns2:code>20114</ns2:code>
+                <ns2:name>Сельскохозяйственные потребительские огороднические кооперативы</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>19bbc8c7-3aae-4ce6-a4cf-9e6d11c77ff6</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.820+03:00</ns2:changeDateTime>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>20115</ns2:code>
+                <ns2:name>Сельскохозяйственные потребительские животноводческие кооперативы</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>ccb78829-c5f5-4400-bd9d-4f4bdbfb1b07</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.836+03:00</ns2:changeDateTime>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>20200</ns2:code>
+                <ns2:name>Общественные организации</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>30fb5109-d72c-4b69-8f03-e8b4b8ffae42</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.820+03:00</ns2:changeDateTime>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>20201</ns2:code>
+                <ns2:name>Политические партии</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>68448ae4-70ea-4777-9e84-51b94c7378f6</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.821+03:00</ns2:changeDateTime>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>20202</ns2:code>
+                <ns2:name>Профсоюзные организации</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>263338d4-f6e5-4196-9d04-f0804566cd3d</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.821+03:00</ns2:changeDateTime>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>20210</ns2:code>
+                <ns2:name>Общественные движения</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>11a12926-890e-48f7-a7a1-c5aa0eef0378</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.821+03:00</ns2:changeDateTime>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>20211</ns2:code>
+                <ns2:name>Органы общественной самодеятельности</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>565ff207-7f5a-48a9-aaa7-7e38a56087ba</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2013-04-05T15:22:17.000+04:00</ns2:changeDateTime>
+                <ns2:businessStatus>866</ns2:businessStatus>
+                <ns2:code>20300</ns2:code>
+                <ns2:name>Религиозные организации</ns2:name>
+                <ns2:parentCode>20000</ns2:parentCode>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>feb8f8bc-102e-423b-be31-47addf4a6630</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2013-04-05T15:22:17.000+04:00</ns2:changeDateTime>
+                <ns2:businessStatus>866</ns2:businessStatus>
+                <ns2:code>20400</ns2:code>
+                <ns2:name>Фонды</ns2:name>
+                <ns2:parentCode>20000</ns2:parentCode>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>b97d7c6c-ea88-4d0c-bcbe-33590e414264</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2013-04-05T15:22:17.000+04:00</ns2:changeDateTime>
+                <ns2:businessStatus>866</ns2:businessStatus>
+                <ns2:code>20401</ns2:code>
+                <ns2:name>Благотворительные фонды</ns2:name>
+                <ns2:parentCode>20400</ns2:parentCode>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>be1a415d-fedc-4b97-9f9d-2ae6b195cb7d</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2013-04-05T15:22:17.000+04:00</ns2:changeDateTime>
+                <ns2:businessStatus>866</ns2:businessStatus>
+                <ns2:code>20402</ns2:code>
+                <ns2:name>Негосударственные пенсионные фонды</ns2:name>
+                <ns2:parentCode>20400</ns2:parentCode>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>4b9f1d54-4168-4f4d-b823-4b908dfe1720</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2013-04-05T15:22:17.000+04:00</ns2:changeDateTime>
+                <ns2:businessStatus>866</ns2:businessStatus>
+                <ns2:code>20403</ns2:code>
+                <ns2:name>Общественные фонды</ns2:name>
+                <ns2:parentCode>20400</ns2:parentCode>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>db4bd43b-e21e-40be-a04e-5d40f86a9bc7</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2013-04-05T15:22:17.000+04:00</ns2:changeDateTime>
+                <ns2:businessStatus>866</ns2:businessStatus>
+                <ns2:code>20404</ns2:code>
+                <ns2:name>Экологические фонды</ns2:name>
+                <ns2:parentCode>20400</ns2:parentCode>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>b40160b0-cc55-4344-a578-f9273ad3bdbd</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2013-04-05T15:22:17.000+04:00</ns2:changeDateTime>
+                <ns2:businessStatus>866</ns2:businessStatus>
+                <ns2:code>20500</ns2:code>
+                <ns2:name>Некоммерческие партнерства</ns2:name>
+                <ns2:parentCode>20000</ns2:parentCode>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>6dd15fbe-dfc1-4886-a00c-2627f9f9834f</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.834+03:00</ns2:changeDateTime>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>20600</ns2:code>
+                <ns2:name>Ассоциации (союзы)</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>dbcb5f5d-8d92-4bf2-b8c5-5d5ae3b53672</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.821+03:00</ns2:changeDateTime>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>20601</ns2:code>
+                <ns2:name>Ассоциации (союзы) экономического взаимодействия субъектов Российской Федерации</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>2790c3d1-3ae6-440a-a21d-a1ce564a245c</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.822+03:00</ns2:changeDateTime>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>20603</ns2:code>
+                <ns2:name>Советы муниципальных образований субъектов Российской Федерации</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>56b961bb-e7c8-4c30-8dd3-01d5fef313b3</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.822+03:00</ns2:changeDateTime>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>20604</ns2:code>
+                <ns2:name>Союзы (ассоциации) кредитных кооперативов</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>ec8f227a-e54c-4d13-a455-60fe77810692</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.822+03:00</ns2:changeDateTime>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>20605</ns2:code>
+                <ns2:name>Союзы (ассоциации) кооперативов</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>0767eda1-8aeb-4e4f-bf22-9e36bdefeaed</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.822+03:00</ns2:changeDateTime>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>20606</ns2:code>
+                <ns2:name>Союзы (ассоциации) общественных объединений</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>d7486232-7503-431c-b87b-460c56ae1fe9</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.822+03:00</ns2:changeDateTime>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>20607</ns2:code>
+                <ns2:name>Союзы (ассоциации) общин малочисленных народов</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>47d3e33b-80bb-493e-b61f-715630aa561b</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.822+03:00</ns2:changeDateTime>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>20608</ns2:code>
+                <ns2:name>Союзы потребительских обществ</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>5f31236c-2c7f-4fcc-9190-c81805d46610</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2013-04-05T15:22:17.000+04:00</ns2:changeDateTime>
+                <ns2:businessStatus>866</ns2:businessStatus>
+                <ns2:code>20800</ns2:code>
+                <ns2:name>Палаты</ns2:name>
+                <ns2:parentCode>20000</ns2:parentCode>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>773ea88b-e362-4c68-b01f-d37bbe81ccb4</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2013-04-05T15:22:17.000+04:00</ns2:changeDateTime>
+                <ns2:businessStatus>866</ns2:businessStatus>
+                <ns2:code>20801</ns2:code>
+                <ns2:name>Адвокатские палаты</ns2:name>
+                <ns2:parentCode>20800</ns2:parentCode>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>413b35cd-06f3-416f-b39c-75a96a766ef0</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2013-04-05T15:22:17.000+04:00</ns2:changeDateTime>
+                <ns2:businessStatus>866</ns2:businessStatus>
+                <ns2:code>20802</ns2:code>
+                <ns2:name>Нотариальные палаты</ns2:name>
+                <ns2:parentCode>20800</ns2:parentCode>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>9c07f632-4827-4afc-b748-88b9fa5a77bc</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2013-04-05T15:22:17.000+04:00</ns2:changeDateTime>
+                <ns2:businessStatus>866</ns2:businessStatus>
+                <ns2:code>20803</ns2:code>
+                <ns2:name>Торгово-промышленные палаты</ns2:name>
+                <ns2:parentCode>20800</ns2:parentCode>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>22967984-f90b-4845-a414-1e61286f4975</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2013-04-05T15:22:17.000+04:00</ns2:changeDateTime>
+                <ns2:businessStatus>866</ns2:businessStatus>
+                <ns2:code>20900</ns2:code>
+                <ns2:name>Учреждения</ns2:name>
+                <ns2:parentCode>20000</ns2:parentCode>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>0984b968-2fa4-4a87-9207-c80eb1469def</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2013-04-05T15:22:17.000+04:00</ns2:changeDateTime>
+                <ns2:businessStatus>866</ns2:businessStatus>
+                <ns2:code>20901</ns2:code>
+                <ns2:name>Автономные учреждения</ns2:name>
+                <ns2:parentCode>20900</ns2:parentCode>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>3cb00bac-04ea-456c-8e0e-f4e431015acf</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2013-04-05T15:22:17.000+04:00</ns2:changeDateTime>
+                <ns2:businessStatus>866</ns2:businessStatus>
+                <ns2:code>20902</ns2:code>
+                <ns2:name>Благотворительные учреждения</ns2:name>
+                <ns2:parentCode>20900</ns2:parentCode>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>bf1fc86a-c106-4148-b8f8-20068332d3b9</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2013-04-05T15:22:17.000+04:00</ns2:changeDateTime>
+                <ns2:businessStatus>866</ns2:businessStatus>
+                <ns2:code>20903</ns2:code>
+                <ns2:name>Бюджетные учреждения</ns2:name>
+                <ns2:parentCode>20900</ns2:parentCode>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>356071fb-eaf7-4f4a-a2fc-fd727a931e20</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2013-04-05T15:22:17.000+04:00</ns2:changeDateTime>
+                <ns2:businessStatus>866</ns2:businessStatus>
+                <ns2:code>20904</ns2:code>
+                <ns2:name>Казенные учреждения</ns2:name>
+                <ns2:parentCode>20900</ns2:parentCode>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>e31e7eb7-ba2f-4a00-9810-8c1234168eac</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2013-04-05T15:22:17.000+04:00</ns2:changeDateTime>
+                <ns2:businessStatus>866</ns2:businessStatus>
+                <ns2:code>20905</ns2:code>
+                <ns2:name>Общественные учреждения</ns2:name>
+                <ns2:parentCode>20900</ns2:parentCode>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>d863984d-b64f-4b87-a346-562c22d3eedc</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2013-04-05T15:22:17.000+04:00</ns2:changeDateTime>
+                <ns2:businessStatus>866</ns2:businessStatus>
+                <ns2:code>20906</ns2:code>
+                <ns2:name>Частные учреждения</ns2:name>
+                <ns2:parentCode>20900</ns2:parentCode>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>0560fb4f-bfa3-4de7-860c-6532014fe474</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2013-04-05T15:22:17.000+04:00</ns2:changeDateTime>
+                <ns2:businessStatus>866</ns2:businessStatus>
+                <ns2:code>20907</ns2:code>
+                <ns2:name>Учреждения академий наук</ns2:name>
+                <ns2:parentCode>20900</ns2:parentCode>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>c2a14360-c0df-4cfc-9134-b59281f9e085</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2013-04-05T15:22:17.000+04:00</ns2:changeDateTime>
+                <ns2:businessStatus>866</ns2:businessStatus>
+                <ns2:code>20908</ns2:code>
+                <ns2:name>Учреждения религиозных организаций</ns2:name>
+                <ns2:parentCode>20900</ns2:parentCode>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>ab002cfb-1bb8-4693-a077-f065fd74a1c3</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2013-04-05T15:22:17.000+04:00</ns2:changeDateTime>
+                <ns2:businessStatus>866</ns2:businessStatus>
+                <ns2:code>21000</ns2:code>
+                <ns2:name>Садоводческие, огороднические или дачные объединения граждан</ns2:name>
+                <ns2:parentCode>20000</ns2:parentCode>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>3b7286f5-39ea-47d9-acb7-93aa416d1624</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2013-04-05T15:22:17.000+04:00</ns2:changeDateTime>
+                <ns2:businessStatus>866</ns2:businessStatus>
+                <ns2:code>21001</ns2:code>
+                <ns2:name>Садоводческие, огороднические или дачные некоммерческие товарищества</ns2:name>
+                <ns2:parentCode>21000</ns2:parentCode>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>52f389a9-5438-4889-bfd8-3b72e595ce11</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2013-04-05T15:22:17.000+04:00</ns2:changeDateTime>
+                <ns2:businessStatus>866</ns2:businessStatus>
+                <ns2:code>21002</ns2:code>
+                <ns2:name>Садоводческие, огороднические или дачные потребительские кооперативы</ns2:name>
+                <ns2:parentCode>21000</ns2:parentCode>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>25202de6-e10c-4107-b107-6eeb700727c4</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2013-04-05T15:22:17.000+04:00</ns2:changeDateTime>
+                <ns2:businessStatus>866</ns2:businessStatus>
+                <ns2:code>21003</ns2:code>
+                <ns2:name>Садоводческие, огороднические или дачные некоммерческие партнерства</ns2:name>
+                <ns2:parentCode>21000</ns2:parentCode>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>9b18f4c1-8eb6-48a0-8748-01cca0409ba6</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2013-04-05T15:22:17.000+04:00</ns2:changeDateTime>
+                <ns2:businessStatus>866</ns2:businessStatus>
+                <ns2:code>28000</ns2:code>
+                <ns2:name>Юридические лица, являющиеся некоммерческими организациями, не включенные в другие группировки</ns2:name>
+                <ns2:parentCode>20000</ns2:parentCode>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>e9aa6e59-4496-4e9b-869f-d032bbfa26fb</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2013-04-05T15:22:17.000+04:00</ns2:changeDateTime>
+                <ns2:businessStatus>866</ns2:businessStatus>
+                <ns2:code>28001</ns2:code>
+                <ns2:name>Автономные некоммерческие организации</ns2:name>
+                <ns2:parentCode>28000</ns2:parentCode>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>43c5f051-3f56-49cb-bb09-6c85a6cc3976</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2013-04-05T15:22:17.000+04:00</ns2:changeDateTime>
+                <ns2:businessStatus>866</ns2:businessStatus>
+                <ns2:code>28002</ns2:code>
+                <ns2:name>Адвокатские бюро</ns2:name>
+                <ns2:parentCode>28000</ns2:parentCode>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>386b8efc-bccd-48d5-a39b-ba5d83ef3940</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2013-04-05T15:22:17.000+04:00</ns2:changeDateTime>
+                <ns2:businessStatus>866</ns2:businessStatus>
+                <ns2:code>28003</ns2:code>
+                <ns2:name>Государственные академии наук</ns2:name>
+                <ns2:parentCode>28000</ns2:parentCode>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>d299b3c0-73d3-4545-ac23-8a206f12b17a</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2013-04-05T15:22:17.000+04:00</ns2:changeDateTime>
+                <ns2:businessStatus>866</ns2:businessStatus>
+                <ns2:code>28004</ns2:code>
+                <ns2:name>Государственные компании</ns2:name>
+                <ns2:parentCode>28000</ns2:parentCode>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>c2b855e7-1a07-435d-ad2f-21dc4d6946f7</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2013-04-05T15:22:17.000+04:00</ns2:changeDateTime>
+                <ns2:businessStatus>866</ns2:businessStatus>
+                <ns2:code>28005</ns2:code>
+                <ns2:name>Государственные корпорации</ns2:name>
+                <ns2:parentCode>28000</ns2:parentCode>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>4f3bdbe6-4180-4cee-a089-d905957a0e96</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2013-04-05T15:22:17.000+04:00</ns2:changeDateTime>
+                <ns2:businessStatus>866</ns2:businessStatus>
+                <ns2:code>28006</ns2:code>
+                <ns2:name>Казачьи общества</ns2:name>
+                <ns2:parentCode>28000</ns2:parentCode>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>610205d3-c8af-40c4-a0a2-67c7e1555c50</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2013-04-05T15:22:17.000+04:00</ns2:changeDateTime>
+                <ns2:businessStatus>866</ns2:businessStatus>
+                <ns2:code>28007</ns2:code>
+                <ns2:name>Коллегии адвокатов</ns2:name>
+                <ns2:parentCode>28000</ns2:parentCode>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>4b388b1b-2ff7-4d5a-9205-e6c772a89439</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2013-04-05T15:22:17.000+04:00</ns2:changeDateTime>
+                <ns2:businessStatus>866</ns2:businessStatus>
+                <ns2:code>28008</ns2:code>
+                <ns2:name>Общества взаимного страхования</ns2:name>
+                <ns2:parentCode>28000</ns2:parentCode>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>83741502-15b0-4d93-a889-326e326ff4ab</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2013-04-05T15:22:17.000+04:00</ns2:changeDateTime>
+                <ns2:businessStatus>866</ns2:businessStatus>
+                <ns2:code>28010</ns2:code>
+                <ns2:name>Общины коренных малочисленных народов</ns2:name>
+                <ns2:parentCode>28000</ns2:parentCode>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>a293a23f-aaaf-4dde-a02a-e6479af8f21d</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2013-04-05T15:22:17.000+04:00</ns2:changeDateTime>
+                <ns2:businessStatus>866</ns2:businessStatus>
+                <ns2:code>28012</ns2:code>
+                <ns2:name>Объединения работодателей</ns2:name>
+                <ns2:parentCode>28000</ns2:parentCode>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>70e699db-57a7-47e4-ac7c-1eaf56fbf078</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2013-04-05T15:22:17.000+04:00</ns2:changeDateTime>
+                <ns2:businessStatus>866</ns2:businessStatus>
+                <ns2:code>28013</ns2:code>
+                <ns2:name>Объединения (союзы) крестьянских (фермерских) хозяйств</ns2:name>
+                <ns2:parentCode>28000</ns2:parentCode>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>08764907-b9e5-4ca2-be49-479b505c5fa9</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2013-04-05T15:22:17.000+04:00</ns2:changeDateTime>
+                <ns2:businessStatus>866</ns2:businessStatus>
+                <ns2:code>28014</ns2:code>
+                <ns2:name>Отделения иностранных некоммерческих неправительственных организаций</ns2:name>
+                <ns2:parentCode>28000</ns2:parentCode>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>95323a8c-f7c8-4b1d-8181-da916df246ad</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2013-04-05T15:22:17.000+04:00</ns2:changeDateTime>
+                <ns2:businessStatus>866</ns2:businessStatus>
+                <ns2:code>28016</ns2:code>
+                <ns2:name>Товарищества собственников жилья</ns2:name>
+                <ns2:parentCode>28000</ns2:parentCode>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>58be4e55-cbf4-4400-b2c1-9c81c6ea3760</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2013-04-05T15:22:17.000+04:00</ns2:changeDateTime>
+                <ns2:businessStatus>866</ns2:businessStatus>
+                <ns2:code>28017</ns2:code>
+                <ns2:name>Территориальные общественные самоуправления</ns2:name>
+                <ns2:parentCode>28000</ns2:parentCode>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>6fbac9e9-29ea-4c16-a7a5-3ec33daeb4df</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2013-04-05T15:22:17.000+04:00</ns2:changeDateTime>
+                <ns2:businessStatus>866</ns2:businessStatus>
+                <ns2:code>29000</ns2:code>
+                <ns2:name>Иные некоммерческие организации, не включенные в другие группировки</ns2:name>
+                <ns2:parentCode>20000</ns2:parentCode>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>e41ee133-abf7-4a7f-a1e8-e156a88d9bc6</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.809+03:00</ns2:changeDateTime>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>30000</ns2:code>
+                <ns2:name>ОРГАНИЗАЦИОННО-ПРАВОВЫЕ ФОРМЫ ОРГАНИЗАЦИЙ, СОЗДАННЫХ  БЕЗ ПРАВ ЮРИДИЧЕСКОГО ЛИЦА</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>47cec890-594f-4df5-9da6-6557ecbaef7d</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.835+03:00</ns2:changeDateTime>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>30001</ns2:code>
+                <ns2:name>Представительства юридических лиц</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>0a6483fc-3577-4de3-96e7-e43f98605e84</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.835+03:00</ns2:changeDateTime>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>30002</ns2:code>
+                <ns2:name>Филиалы юридических лиц</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>4c48ffd5-e896-4abd-b7c0-630c09978cf8</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.835+03:00</ns2:changeDateTime>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>30003</ns2:code>
+                <ns2:name>Обособленные подразделения юридических лиц</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>f360b872-35f1-4ed4-bb5d-358a276cc4e2</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.835+03:00</ns2:changeDateTime>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>30004</ns2:code>
+                <ns2:name>Структурные подразделения обособленных подразделений юридических лиц</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>15678aa1-d66f-49f7-bfab-e2ba07efa530</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.835+03:00</ns2:changeDateTime>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>30005</ns2:code>
+                <ns2:name>Паевые инвестиционные фонды</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>51921c1d-ab20-4743-87b7-99d73016bb61</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.836+03:00</ns2:changeDateTime>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>30006</ns2:code>
+                <ns2:name>Простые товарищества</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>5f85884f-bb30-4711-af04-834a60254dae</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.810+03:00</ns2:changeDateTime>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>40000</ns2:code>
+                <ns2:name>ОРГАНИЗАЦИОННО-ПРАВОВЫЕ ФОРМЫ МЕЖДУНАРОДНЫХ ОРГАНИЗАЦИЙ, ОСУЩЕСТВЛЯЮЩИХ ДЕЯТЕЛЬНОСТЬ НА ТЕРРИТОРИИ РОССИЙСКОЙ ФЕДЕРАЦИИ</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>e8eb6c2a-6dd2-4616-91b3-5ce939282d77</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.836+03:00</ns2:changeDateTime>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>40001</ns2:code>
+                <ns2:name>Межправительственные международные организации</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>f55c4673-c88e-4d88-9bc6-430764c66338</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.836+03:00</ns2:changeDateTime>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>40002</ns2:code>
+                <ns2:name>Неправительственные международные организации</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>294d0399-ecf1-4268-b901-43ebcb1d254a</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.810+03:00</ns2:changeDateTime>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>50000</ns2:code>
+                <ns2:name>ОРГАНИЗАЦИОННО-ПРАВОВЫЕ ФОРМЫ ДЛЯ ДЕЯТЕЛЬНОСТИ ГРАЖДАН (ФИЗИЧЕСКИХ ЛИЦ)</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>57ea3062-4bd9-4804-bcf4-15f981580ba9</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.836+03:00</ns2:changeDateTime>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>50100</ns2:code>
+                <ns2:name>Организационно-правовые формы для коммерческой деятельности граждан</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>ffa8f0e4-f74b-47eb-baac-ff6134dae2a6</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.825+03:00</ns2:changeDateTime>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>50101</ns2:code>
+                <ns2:name>Главы крестьянских (фермерских) хозяйств</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>6610c648-131e-4af8-b1cd-251956b65fb2</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.825+03:00</ns2:changeDateTime>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>50102</ns2:code>
+                <ns2:name>Индивидуальные предприниматели</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>b8364468-6112-425b-819a-572b1e8eac4d</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.836+03:00</ns2:changeDateTime>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>50200</ns2:code>
+                <ns2:name>Организационно-правовые формы для деятельности граждан, не отнесенной  к предпринимательству</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>f166241e-fca0-419b-af4d-ac85ce4f083e</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.825+03:00</ns2:changeDateTime>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>50201</ns2:code>
+                <ns2:name>Адвокаты, учредившие адвокатский кабинет</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>7e9da16a-65aa-40e6-9956-801e85d4ecfe</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.825+03:00</ns2:changeDateTime>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>50202</ns2:code>
+                <ns2:name>Нотариусы, занимающиеся частной практикой</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>7216b117-640b-47ee-ad0a-70a2f760c109</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.832+03:00</ns2:changeDateTime>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>15300</ns2:code>
+                <ns2:name>Крестьянские (фермерские) хозяйства</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>81c59ac4-091c-4029-8041-bc31528a6fe7</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.832+03:00</ns2:changeDateTime>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>30008</ns2:code>
+                <ns2:name>Районные суды, городские суды, межрайонные суды (районные суды)</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>75c15e82-2581-4f7d-b5eb-88dcf45bc632</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.812+03:00</ns2:changeDateTime>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>60000</ns2:code>
+                <ns2:name>ОРГАНИЗАЦИОННО-ПРАВОВЫЕ ФОРМЫ ЮРИДИЧЕСКИХ ЛИЦ, ЯВЛЯЮЩИХСЯ КОММЕРЧЕСКИМИ УНИТАРНЫМИ ОРГАНИЗАЦИЯМИ</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>74b06ea1-64c2-49f1-9203-d30dcead75c8</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.837+03:00</ns2:changeDateTime>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>65000</ns2:code>
+                <ns2:name>Унитарные предприятия</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>cea5d20b-6680-4d38-9920-2c6c1a795164</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.837+03:00</ns2:changeDateTime>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>65100</ns2:code>
+                <ns2:name>Унитарные предприятия, основанные на праве оперативного управления (казенные предприятия)</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>b9e7965d-fe17-4c43-a6e1-20bd5d24662c</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.828+03:00</ns2:changeDateTime>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>65141</ns2:code>
+                <ns2:name>Федеральные казенные предприятия</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>2d9d0a57-08f7-4663-b499-6c0461fe36bf</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.828+03:00</ns2:changeDateTime>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>65142</ns2:code>
+                <ns2:name>Казенные предприятия субъектов Российской Федерации</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>671f7262-e423-43ad-95a9-21a53c2fb736</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.828+03:00</ns2:changeDateTime>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>65143</ns2:code>
+                <ns2:name>Муниципальные казенные предприятия</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>1ce406cf-0133-4e7e-b3f2-3b26aaf830e0</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.837+03:00</ns2:changeDateTime>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>65200</ns2:code>
+                <ns2:name>Унитарные предприятия, основанные на праве хозяйственного ведения</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>c5b7dc81-8196-4e0a-9345-1684bf1385ee</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.828+03:00</ns2:changeDateTime>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>65241</ns2:code>
+                <ns2:name>Федеральные государственные унитарные предприятия</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>bf26b0bd-19a5-4516-8b64-a5b35706cb20</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.828+03:00</ns2:changeDateTime>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>65242</ns2:code>
+                <ns2:name>Государственные унитарные предприятия субъектов Российской Федерации</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>4c4f7737-a392-4476-a95d-8292ded02457</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.828+03:00</ns2:changeDateTime>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>65243</ns2:code>
+                <ns2:name>Муниципальные унитарные предприятия</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>ec7af10c-bda4-4d58-bd2b-4dc7b91c06bc</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.812+03:00</ns2:changeDateTime>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>70000</ns2:code>
+                <ns2:name>ОРГАНИЗАЦИОННО-ПРАВОВЫЕ ФОРМЫ ЮРИДИЧЕСКИХ ЛИЦ, ЯВЛЯЮЩИХСЯ НЕКОММЕРЧЕСКИМИ УНИТАРНЫМИ ОРГАНИЗАЦИЯМИ</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>00505063-9210-48a7-b142-c442a4b2798b</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.837+03:00</ns2:changeDateTime>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>70400</ns2:code>
+                <ns2:name>Фонды</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>3ef40f13-5ab6-42ff-a633-0f4c2e97c9e8</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.829+03:00</ns2:changeDateTime>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>70401</ns2:code>
+                <ns2:name>Благотворительные фонды</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>6b670bb3-590e-43c3-99b8-7344db9acad6</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.829+03:00</ns2:changeDateTime>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>70402</ns2:code>
+                <ns2:name>Негосударственные пенсионные фонды</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>ab23d2b6-a48f-4799-871b-b428d7b766df</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.829+03:00</ns2:changeDateTime>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>70403</ns2:code>
+                <ns2:name>Общественные фонды</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>c836ad0d-9613-4a3f-9b4f-8af1696a93f6</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.829+03:00</ns2:changeDateTime>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>70404</ns2:code>
+                <ns2:name>Экологические фонды</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>6b1ba066-3dce-4ce7-bdb2-b059aa96557e</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.837+03:00</ns2:changeDateTime>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>71400</ns2:code>
+                <ns2:name>Автономные некоммерческие организации</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>f4b10928-bcca-48cc-a7b3-0e236a291094</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.837+03:00</ns2:changeDateTime>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>71500</ns2:code>
+                <ns2:name>Религиозные организации</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>f188cd47-0ded-4238-bfa2-8eeb81c97a55</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.838+03:00</ns2:changeDateTime>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>71600</ns2:code>
+                <ns2:name>Публично-правовые компании</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>93616be8-36f4-47e9-afa1-0597eac3e3a7</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.829+03:00</ns2:changeDateTime>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>71601</ns2:code>
+                <ns2:name>Государственные корпорации</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>9f12b50d-d6b8-43f6-b49a-4507c297e9b1</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.829+03:00</ns2:changeDateTime>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>71602</ns2:code>
+                <ns2:name>Государственные компании</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>d040c4e5-279c-4c60-85ca-dda17e03230a</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.829+03:00</ns2:changeDateTime>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>71610</ns2:code>
+                <ns2:name>Отделения иностранных некоммерческих неправительственных организаций</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>a465fa52-491c-4aa7-8994-2b443a0bec57</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.838+03:00</ns2:changeDateTime>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>75000</ns2:code>
+                <ns2:name>Учреждения</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>cea65e77-1d08-4591-b966-b2b9c2ff4174</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.838+03:00</ns2:changeDateTime>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>75100</ns2:code>
+                <ns2:name>Учреждения, созданные Российской Федерацией</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>090452c1-0ebb-4f47-9cf0-f9c9bae4ef9c</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.829+03:00</ns2:changeDateTime>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>75101</ns2:code>
+                <ns2:name>Федеральные государственные автономные учреждения</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>9980e999-02fa-482d-9468-2c92d074c048</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.829+03:00</ns2:changeDateTime>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>75103</ns2:code>
+                <ns2:name>Федеральные государственные бюджетные учреждения</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>a85df292-b808-43c1-af71-cc0750a52fb5</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.829+03:00</ns2:changeDateTime>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>75104</ns2:code>
+                <ns2:name>Федеральные государственные казенные учреждения</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>54a4f697-2334-43c6-8adb-1d1b441a2532</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.838+03:00</ns2:changeDateTime>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>75200</ns2:code>
+                <ns2:name>Учреждения, созданные субъектом Российской Федерации</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>c0e415c4-d156-4e1e-80a1-cd89b9f612a6</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.829+03:00</ns2:changeDateTime>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>75201</ns2:code>
+                <ns2:name>Государственные автономные учреждения субъектов Российской Федерации</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>1b9ffaa0-b627-4571-92ca-58f8df0103e5</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.830+03:00</ns2:changeDateTime>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>75203</ns2:code>
+                <ns2:name>Государственные бюджетные учреждения субъектов Российской Федерации</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>563f1db6-9645-4093-9b98-dad1d8757458</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.830+03:00</ns2:changeDateTime>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>75204</ns2:code>
+                <ns2:name>Государственные казенные учреждения субъектов Российской Федерации</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>1bdf0ecc-a29f-4fca-a995-92ef43d922cc</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.838+03:00</ns2:changeDateTime>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>75300</ns2:code>
+                <ns2:name>Государственные академии наук</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>ad788cda-312f-441b-bc59-8f2c64679152</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.838+03:00</ns2:changeDateTime>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>75400</ns2:code>
+                <ns2:name>Учреждения, созданные муниципальным образованием (муниципальные учреждения)</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>8da9e37a-9958-4d71-accf-b3050bf1725e</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.830+03:00</ns2:changeDateTime>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>75401</ns2:code>
+                <ns2:name>Муниципальные автономные учреждения</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>430801ef-e338-4dc9-a080-786c203e0fa6</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.830+03:00</ns2:changeDateTime>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>75403</ns2:code>
+                <ns2:name>Муниципальные бюджетные учреждения</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>99c11ab3-c7a5-4f3f-aa9a-b78936a32baf</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.830+03:00</ns2:changeDateTime>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>75404</ns2:code>
+                <ns2:name>Муниципальные казенные учреждения</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>d6dc43c1-57c5-46af-8fb8-8cc1fb0faa03</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.838+03:00</ns2:changeDateTime>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>75500</ns2:code>
+                <ns2:name>Частные учреждения</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>35fc6976-cf3f-44aa-b4ee-2d896376aff9</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.830+03:00</ns2:changeDateTime>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>75502</ns2:code>
+                <ns2:name>Благотворительные учреждения</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>d827eb44-b15b-429b-a351-33d950ff74ab</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.830+03:00</ns2:changeDateTime>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>75505</ns2:code>
+                <ns2:name>Общественные учреждения</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>20ca3940-af85-4e88-a801-05d85ede07ce</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.836+03:00</ns2:changeDateTime>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>12300</ns2:code>
+                <ns2:name>Общества с ограниченной ответственностью</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>29ce0aa5-5a26-4b22-9ac9-6ba0e5945a30</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.826+03:00</ns2:changeDateTime>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>20108</ns2:code>
+                <ns2:name>Общества взаимного страхования</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>8a873954-85d4-4cf2-be41-411b4fbf75ec</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-13T08:00:39.841+03:00</ns2:changeDateTime>
+                <ns2:endDateActive>2018-12-13+03:00</ns2:endDateActive>
+                <ns2:businessStatus>866</ns2:businessStatus>
+                <ns2:code>20120</ns2:code>
+                <ns2:name>Садоводческие, огороднические или дачные потребительские кооперативы</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>a0091c12-8dd6-4d1e-8604-bc11103704a2</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.826+03:00</ns2:changeDateTime>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>20121</ns2:code>
+                <ns2:name>Фонды проката</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>9fa6464f-936c-45a3-9732-894b4551a583</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.826+03:00</ns2:changeDateTime>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>20217</ns2:code>
+                <ns2:name>Территориальные общественные самоуправления</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>1176bb22-136d-4a56-bc23-54d449098ea8</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.826+03:00</ns2:changeDateTime>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>20609</ns2:code>
+                <ns2:name>Адвокатские палаты</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>3d6be78b-238c-44d0-97d2-a4a37fa094f7</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.826+03:00</ns2:changeDateTime>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>20610</ns2:code>
+                <ns2:name>Нотариальные палаты</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>c89ab626-aa14-4289-be70-07a8b0eb1b8e</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.826+03:00</ns2:changeDateTime>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>20611</ns2:code>
+                <ns2:name>Торгово-промышленные палаты</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>76616410-f486-44f4-97ea-62276ca92c7b</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.827+03:00</ns2:changeDateTime>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>20612</ns2:code>
+                <ns2:name>Объединения работодателей</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>454de7b1-325d-4d2a-bf97-09d154fa296c</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.827+03:00</ns2:changeDateTime>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>20613</ns2:code>
+                <ns2:name>Объединения фермерских хозяйств</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>2b03f67c-d959-4993-8011-856aefd04a1c</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.827+03:00</ns2:changeDateTime>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>20614</ns2:code>
+                <ns2:name>Некоммерческие партнерства</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>97aa8b67-2ba9-4320-856d-7675733f82e6</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.827+03:00</ns2:changeDateTime>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>20615</ns2:code>
+                <ns2:name>Адвокатские бюро</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>44a14114-3383-49f3-b5c2-60ad41c080de</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.827+03:00</ns2:changeDateTime>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>20616</ns2:code>
+                <ns2:name>Коллегии адвокатов</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>badfde21-9bce-4de7-a940-62741510c7f3</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-13T08:00:39.841+03:00</ns2:changeDateTime>
+                <ns2:endDateActive>2018-12-13+03:00</ns2:endDateActive>
+                <ns2:businessStatus>866</ns2:businessStatus>
+                <ns2:code>20617</ns2:code>
+                <ns2:name>Садоводческие, огороднические или дачные некоммерческие партнерства</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>bfe3aa50-17ca-499f-8dec-ed18971a8a38</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-13T08:00:39.841+03:00</ns2:changeDateTime>
+                <ns2:endDateActive>2018-12-13+03:00</ns2:endDateActive>
+                <ns2:businessStatus>866</ns2:businessStatus>
+                <ns2:code>20618</ns2:code>
+                <ns2:name>Ассоциации (союзы) садоводческих, огороднических и дачных некоммерческих объединений</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>f31db658-4e6a-4032-b704-e78e71243054</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.827+03:00</ns2:changeDateTime>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>20619</ns2:code>
+                <ns2:name>Саморегулируемые организации</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>54328d80-daf2-481e-baac-fd856466381c</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.827+03:00</ns2:changeDateTime>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>20620</ns2:code>
+                <ns2:name>Объединения (ассоциации и союзы) благотворительных организаций</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>5de468f5-a9a6-4a0e-987a-9cbc1c76651e</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.836+03:00</ns2:changeDateTime>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>20700</ns2:code>
+                <ns2:name>Товарищества собственников недвижимости</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>744f45be-e035-48bc-8fa2-1010ded7fbcb</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-13T08:00:39.841+03:00</ns2:changeDateTime>
+                <ns2:endDateActive>2018-12-13+03:00</ns2:endDateActive>
+                <ns2:businessStatus>866</ns2:businessStatus>
+                <ns2:code>20701</ns2:code>
+                <ns2:name>Садоводческие, огороднические или дачные некоммерческие товарищества</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>41a5199b-4a9b-4cbf-b9f6-f625cfe80b3c</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.828+03:00</ns2:changeDateTime>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>20716</ns2:code>
+                <ns2:name>Товарищества собственников жилья</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>2cfec76c-4590-4ea3-8f20-30f63007636c</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.836+03:00</ns2:changeDateTime>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>21100</ns2:code>
+                <ns2:name>Казачьи общества, внесенные в государственный реестр казачьих обществ в Российской Федерации</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>c6f2c897-73a8-4441-8955-3cf85250ec83</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.837+03:00</ns2:changeDateTime>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>21200</ns2:code>
+                <ns2:name>Общины коренных малочисленных народов Российской Федерации</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>d02af5e7-9619-413a-a763-8da39fc07f0a</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.823+03:00</ns2:changeDateTime>
+                <ns2:startDateActive>2018-01-19+03:00</ns2:startDateActive>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>20904</ns2:code>
+                <ns2:name>Казенные учреждения</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>5ebdcd8a-25c7-42f5-9d80-f4ad5a572d60</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.835+03:00</ns2:changeDateTime>
+                <ns2:startDateActive>2018-01-22+03:00</ns2:startDateActive>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>20900</ns2:code>
+                <ns2:name>Учреждения</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>babaf4f8-c156-4aca-915b-e72abe136bc4</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.823+03:00</ns2:changeDateTime>
+                <ns2:startDateActive>2018-01-22+03:00</ns2:startDateActive>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>20903</ns2:code>
+                <ns2:name>Бюджетные учреждения</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>4dc0fe5f-2054-439e-9616-aa0c2de91fcb</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.830+03:00</ns2:changeDateTime>
+                <ns2:startDateActive>2018-12-12+03:00</ns2:startDateActive>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>20702</ns2:code>
+                <ns2:name>Садоводческие или огороднические некоммерческие товарищества</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+        <ns2:item>
+            <guid>1746189f-7216-49b0-93af-624b47c5a8f3</guid>
+            <ns2:nsiOkopfData>
+                <ns2:changeDateTime>2018-12-12T17:19:46.830+03:00</ns2:changeDateTime>
+                <ns2:startDateActive>2018-12-12+03:00</ns2:startDateActive>
+                <ns2:businessStatus>801</ns2:businessStatus>
+                <ns2:code>20116</ns2:code>
+                <ns2:name>Сельскохозяйственные потребительские растениеводческие кооперативы</ns2:name>
+            </ns2:nsiOkopfData>
+        </ns2:item>
+    </ns2:body>
+</ns2:nsiOkopf>
