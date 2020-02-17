@@ -32,7 +32,7 @@ namespace Montr.MasterData.Plugin.GovRu.Tests.Services
 		}
 
 		[TestMethod]
-		[DataRow(true)]
+		[DataRow(false)]
 		public async Task Parser_Should_ParseOkeiFile(bool dumpToDb)
 		{
 			// arrange
@@ -51,7 +51,7 @@ namespace Montr.MasterData.Plugin.GovRu.Tests.Services
 		}
 
 		[TestMethod]
-		[DataRow(true)]
+		[DataRow(false)]
 		public async Task Parser_Should_ParseOkved2File(bool dumpToDb)
 		{
 			// arrange
