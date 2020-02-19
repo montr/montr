@@ -45,7 +45,7 @@ namespace Montr.Metadata.Impl.Services
 					.Value(x => x.Placeholder, item.Placeholder)
 					.Value(x => x.Icon, item.Icon)
 					.Value(x => x.IsActive, true)
-					.Value(x => x.IsSystem, false)
+					.Value(x => x.IsSystem, item.System)
 					.Value(x => x.IsReadonly, item.Readonly)
 					.Value(x => x.IsRequired, item.Required)
 					.Value(x => x.DisplayOrder, item.DisplayOrder)

@@ -1,5 +1,4 @@
 ﻿using Montr.Core.Services;
-using Montr.Metadata.Services;
 
 namespace Montr.Metadata.Models
 {

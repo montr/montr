@@ -44,7 +44,7 @@ namespace Montr.MasterData.Tests.CommandHandlers
 					Item = new Classifier
 					{
 						Code = "001",
-						Name = "Test Classifier"
+						Name = "Test Classifier",
 					}
 				};
 

@@ -23,18 +23,18 @@ namespace Montr.MasterData.Impl.CommandHandlers
 		private readonly IDbContextFactory _dbContextFactory;
 		private readonly IClassifierTypeService _classifierTypeService;
 		private readonly IClassifierTreeService _classifierTreeService;
-		private readonly IRepository<FieldMetadata> _fieldMetadataRepository;
+		private readonly IRepository<FieldMetadata> _metadataRepository;
 		private readonly IFieldDataRepository _fieldDataRepository;
 
 		public UpdateClassifierHandler(IUnitOfWorkFactory unitOfWorkFactory, IDbContextFactory dbContextFactory,
 			IClassifierTypeService classifierTypeService, IClassifierTreeService classifierTreeService,
-			IRepository<FieldMetadata> fieldMetadataRepository, IFieldDataRepository fieldDataRepository)
+			IRepository<FieldMetadata> metadataRepository, IFieldDataRepository fieldDataRepository)
 		{
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_dbContextFactory = dbContextFactory;
 			_classifierTypeService = classifierTypeService;
 			_classifierTreeService = classifierTreeService;
-			_fieldMetadataRepository = fieldMetadataRepository;
+			_metadataRepository = metadataRepository;
 			_fieldDataRepository = fieldDataRepository;
 		}
 
@@ -50,8 +50,8 @@ namespace Montr.MasterData.Impl.CommandHandlers
 				? await _classifierTreeService.GetClassifierTree(request.CompanyUid, request.TypeCode, ClassifierTree.DefaultCode, cancellationToken)
 				: null;
 
-			// validate fields
-			var metadata = await _fieldMetadataRepository.Search(new MetadataSearchRequest
+			// todo: validate fields
+			var metadata = await _metadataRepository.Search(new MetadataSearchRequest
 			{
 				EntityTypeCode = Classifier.EntityTypeCode + "." + type.Code,
 				IsActive = true

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations;
 using System.Diagnostics;
 using Montr.Metadata.Models;
 
@@ -15,8 +16,10 @@ namespace Montr.MasterData.Models
 
 		public string StatusCode { get; set; }
 
+		[Required]
 		public string Code { get; set; }
 
+		[Required]
 		public string Name { get; set; }
 
 		public Guid? ParentUid { get; set; }

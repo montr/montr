@@ -9,22 +9,20 @@ using Montr.MasterData.Models;
 using Montr.MasterData.Queries;
 using Montr.MasterData.Services;
 using Montr.Metadata.Models;
-using Montr.Metadata.Services;
 
 namespace Montr.MasterData.Impl.QueryHandlers
 {
 	public class GetClassifierMetadataHandler : IRequestHandler<GetClassifierMetadata, DataView>
 	{
 		private readonly IClassifierTypeService _classifierTypeService;
-		private readonly IMetadataProvider _metadataProvider;
-		private readonly IRepository<FieldMetadata> _repository;
+		private readonly IRepository<FieldMetadata> _metadataRepository;
 
-		public GetClassifierMetadataHandler(IClassifierTypeService classifierTypeService,
-			IMetadataProvider metadataProvider, IRepository<FieldMetadata> repository)
+		public GetClassifierMetadataHandler(
+			IClassifierTypeService classifierTypeService,
+			IRepository<FieldMetadata> metadataRepository)
 		{
 			_classifierTypeService = classifierTypeService;
-			_metadataProvider = metadataProvider;
-			_repository = repository;
+			_metadataRepository = metadataRepository;
 		}
 
 		public async Task<DataView> Handle(GetClassifierMetadata request, CancellationToken cancellationToken)
@@ -35,13 +33,16 @@ namespace Montr.MasterData.Impl.QueryHandlers
 
 			ICollection<FieldMetadata> commonFields = null;
 
+			// todo: should be edited with 
 			if (type.HierarchyType == HierarchyType.Groups)
 			{
 				commonFields = new List<FieldMetadata>
 				{
 					new ClassifierGroupField
 					{
-						Key = "parentUid", Name = "Группа", Required = true,
+						Key = "parentUid",
+						Name = "Группа",
+						Required = true,
 						Props = { TypeCode = typeCode, TreeCode = ClassifierTree.DefaultCode }
 					}
 				};
@@ -52,36 +53,28 @@ namespace Montr.MasterData.Impl.QueryHandlers
 				{
 					new ClassifierGroupField
 					{
-						Key = "parentUid", Name = "Родительский элемент", Props = { TypeCode = typeCode }
+						Key = "parentUid",
+						Name = "Родительский элемент",
+						Props = { TypeCode = typeCode }
 					},
 				};
 			}
 
-			var metadata = await _repository.Search(new MetadataSearchRequest
+			var metadata = await _metadataRepository.Search(new MetadataSearchRequest
 			{
 				EntityTypeCode = ClassifierType.EntityTypeCode,
 				EntityUid = type.Uid,
 				IsActive = true
 			}, cancellationToken);
 
-			DataView result;
+			var result = new DataView { Fields = metadata.Rows };
 
-			if (metadata.Rows.Count > 0)
+			foreach (var field in result.Fields)
 			{
-				result = new DataView { Fields = metadata.Rows };
-
-				foreach (var field in result.Fields)
+				if (field.System == false)
 				{
-					if (field.System == false)
-					{
-						field.Key = FieldKey.FormatFullKey(field.Key);
-					}
+					field.Key = FieldKey.FormatFullKey(field.Key);
 				}
-			}
-			else
-			{
-				// todo: remove
-				result = await _metadataProvider.GetView("Classifier/" + type.Code);
 			}
 
 			if (commonFields != null)
