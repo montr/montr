@@ -47,7 +47,8 @@ namespace Montr.MasterData.Tests
 			_insertClassifierTreeTypeHandler = new InsertClassifierTreeHandler(unitOfWorkFactory, dbContextFactory, classifierTypeService);
 			_insertClassifierTypeHandler = new InsertClassifierTypeHandler(unitOfWorkFactory, classifierTypeService);
 			_insertClassifierGroupHandler = new InsertClassifierGroupHandler(unitOfWorkFactory, dbContextFactory, classifierTypeService);
-			_insertClassifierHandler = new InsertClassifierHandler(unitOfWorkFactory, dbContextFactory, dateTimeProvider, classifierTypeService, dbFieldMetadataRepository, dbFieldDataRepository);
+			var classifierTypeMetadataService = new ClassifierTypeMetadataService(dbFieldMetadataRepository);
+			_insertClassifierHandler = new InsertClassifierHandler(unitOfWorkFactory, dbContextFactory, dateTimeProvider, classifierTypeService, classifierTypeMetadataService, dbFieldDataRepository);
 			_updateClassifierGroupHandler = new UpdateClassifierGroupHandler(unitOfWorkFactory, dbContextFactory, classifierTypeService);
 			_deleteClassifierGroupHandler = new DeleteClassifierGroupHandler(unitOfWorkFactory, dbContextFactory, classifierTypeService);
 			_insertClassifierLinkHandler = new InsertClassifierLinkHandler(unitOfWorkFactory, dbContextFactory, classifierTypeService);

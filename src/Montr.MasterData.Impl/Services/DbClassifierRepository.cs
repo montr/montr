@@ -19,15 +19,17 @@ namespace Montr.MasterData.Impl.Services
 	{
 		private readonly IDbContextFactory _dbContextFactory;
 		private readonly IClassifierTypeService _classifierTypeService;
-		private readonly IRepository<FieldMetadata> _fieldMetadataRepository;
+		private readonly IClassifierTypeMetadataService _metadataService;
 		private readonly IFieldDataRepository _fieldDataRepository;
 
-		public DbClassifierRepository(IDbContextFactory dbContextFactory, IClassifierTypeService classifierTypeService,
-			IRepository<FieldMetadata> fieldMetadataRepository,  IFieldDataRepository fieldDataRepository)
+		public DbClassifierRepository(IDbContextFactory dbContextFactory,
+			IClassifierTypeService classifierTypeService,
+			IClassifierTypeMetadataService metadataService,
+			IFieldDataRepository fieldDataRepository)
 		{
 			_dbContextFactory = dbContextFactory;
 			_classifierTypeService = classifierTypeService;
-			_fieldMetadataRepository = fieldMetadataRepository;
+			_metadataService = metadataService;
 			_fieldDataRepository = fieldDataRepository;
 		}
 
@@ -41,7 +43,7 @@ namespace Montr.MasterData.Impl.Services
 			{
 				IQueryable<DbClassifier> query = null;
 
-				if (type.HierarchyType == HierarchyType.None /* || request.GroupUid == null  || request.GroupCode == "."  wtf? */)
+				if (type.HierarchyType == HierarchyType.None)
 				{
 					// no-op
 				}
@@ -51,30 +53,26 @@ namespace Montr.MasterData.Impl.Services
 					{
 						if (request.Depth == null || request.Depth == "0") // todo: use constant
 						{
-							query = from types in db.GetTable<DbClassifierType>()
-								join trees in db.GetTable<DbClassifierTree>() on types.Uid equals trees.TypeUid
-								join children_groups in db.GetTable<DbClassifierGroup>() on trees.Uid equals children_groups.TreeUid
-								join links in db.GetTable<DbClassifierLink>() on children_groups.Uid equals links.GroupUid
+							query = from trees in db.GetTable<DbClassifierTree>()
+								join childrenGroups in db.GetTable<DbClassifierGroup>() on trees.Uid equals childrenGroups.TreeUid
+								join links in db.GetTable<DbClassifierLink>() on childrenGroups.Uid equals links.GroupUid
 								join c in db.GetTable<DbClassifier>() on links.ItemUid equals c.Uid
-								where // types.CompanyUid == request.CompanyUid &&
-								      types.Code == request.TypeCode &&
-								      trees.Uid == request.TreeUid &&
-								      children_groups.Uid == request.GroupUid
+								where trees.TypeUid == type.Uid &&
+									trees.Uid == request.TreeUid &&
+									childrenGroups.Uid == request.GroupUid
 								select c;
 						}
 						else
 						{
-							query = from types in db.GetTable<DbClassifierType>()
-								join trees in db.GetTable<DbClassifierTree>() on types.Uid equals trees.TypeUid
-								join parent_groups in db.GetTable<DbClassifierGroup>() on trees.Uid equals parent_groups.TreeUid
-								join closures in db.GetTable<DbClassifierClosure>() on parent_groups.Uid equals closures.ParentUid
-								join children_groups in db.GetTable<DbClassifierGroup>() on closures.ChildUid equals children_groups.Uid
-								join links in db.GetTable<DbClassifierLink>() on children_groups.Uid equals links.GroupUid
+							query = from trees in db.GetTable<DbClassifierTree>()
+								join parentGroups in db.GetTable<DbClassifierGroup>() on trees.Uid equals parentGroups.TreeUid
+								join closures in db.GetTable<DbClassifierClosure>() on parentGroups.Uid equals closures.ParentUid
+								join childrenGroups in db.GetTable<DbClassifierGroup>() on closures.ChildUid equals childrenGroups.Uid
+								join links in db.GetTable<DbClassifierLink>() on childrenGroups.Uid equals links.GroupUid
 								join c in db.GetTable<DbClassifier>() on links.ItemUid equals c.Uid
-								where // types.CompanyUid == request.CompanyUid &&
-								      types.Code == request.TypeCode &&
+								where trees.TypeUid == type.Uid &&
 								      trees.Uid == request.TreeUid &&
-								      parent_groups.Uid == request.GroupUid
+								      parentGroups.Uid == request.GroupUid
 								select c;
 						}
 					}
@@ -83,7 +81,7 @@ namespace Montr.MasterData.Impl.Services
 				{
 					if (request.GroupUid != null)
 					{
-						if (request.Depth == null || request.Depth == "0") // todo: use constant
+						if (request.Depth == null || request.Depth == "0") // todo: use enum or constant
 						{
 							query = from parent in db.GetTable<DbClassifier>()
 									join @class in db.GetTable<DbClassifier>() on parent.Uid equals @class.ParentUid
@@ -103,11 +101,8 @@ namespace Montr.MasterData.Impl.Services
 
 				if (query == null)
 				{
-					// todo: remove joins with DbClassifierType here and above
-					query = from types in db.GetTable<DbClassifierType>()
-							join c in db.GetTable<DbClassifier>() on types.Uid equals c.TypeUid
-							where // types.CompanyUid == request.CompanyUid &&
-								types.Code == request.TypeCode
+					query = from c in db.GetTable<DbClassifier>()
+							where c.TypeUid == type.Uid
 							select c;
 				}
 
@@ -145,19 +140,13 @@ namespace Montr.MasterData.Impl.Services
 				// todo: add load fields for multiple items
 				if (request.IncludeFields)
 				{
-					var metadata = await _fieldMetadataRepository.Search(new MetadataSearchRequest
-					{
-						EntityTypeCode = Classifier.EntityTypeCode + "." + type.Code,
-						// todo: check flags
-						IsSystem = false,
-						IsActive = true
-					}, cancellationToken);
-
+					var metadata = await _metadataService.GetMetadata(type, cancellationToken);
+					
 					foreach (var item in data)
 					{
 						var fields = await _fieldDataRepository.Search(new FieldDataSearchRequest
 						{
-							Metadata = metadata.Rows,
+							Metadata = metadata,
 							EntityTypeCode = Classifier.EntityTypeCode,
 							// ReSharper disable once PossibleInvalidOperationException
 							EntityUids = new[] { item.Uid.Value }

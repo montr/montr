@@ -23,18 +23,18 @@ namespace Montr.MasterData.Impl.CommandHandlers
 		private readonly IDbContextFactory _dbContextFactory;
 		private readonly IDateTimeProvider _dateTimeProvider;
 		private readonly IClassifierTypeService _classifierTypeService;
-		private readonly IRepository<FieldMetadata> _metadataRepository;
+		private readonly IClassifierTypeMetadataService _metadataService;
 		private readonly IFieldDataRepository _fieldDataRepository;
 
 		public InsertClassifierHandler(IUnitOfWorkFactory unitOfWorkFactory, IDbContextFactory dbContextFactory,
 			IDateTimeProvider dateTimeProvider, IClassifierTypeService classifierTypeService,
-			IRepository<FieldMetadata> metadataRepository, IFieldDataRepository fieldDataRepository)
+			IClassifierTypeMetadataService metadataService, IFieldDataRepository fieldDataRepository)
 		{
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_dbContextFactory = dbContextFactory;
 			_dateTimeProvider = dateTimeProvider;
 			_classifierTypeService = classifierTypeService;
-			_metadataRepository = metadataRepository;
+			_metadataService = metadataService;
 			_fieldDataRepository = fieldDataRepository;
 		}
 
@@ -51,18 +51,13 @@ namespace Montr.MasterData.Impl.CommandHandlers
 			var itemUid = Guid.NewGuid();
 
 			// todo: validate fields
-			var metadata = await _metadataRepository.Search(new MetadataSearchRequest
-			{
-				EntityTypeCode = Classifier.EntityTypeCode + "." + type.Code,
-				IsSystem = false,
-				IsActive = true
-			}, cancellationToken);
+			var metadata = await _metadataService.GetMetadata(type, cancellationToken);
 
 			var manageFieldDataRequest = new ManageFieldDataRequest
 			{
 				EntityTypeCode = Classifier.EntityTypeCode,
 				EntityUid = itemUid,
-				Metadata = metadata.Rows,
+				Metadata = metadata,
 				Item = item
 			};
 

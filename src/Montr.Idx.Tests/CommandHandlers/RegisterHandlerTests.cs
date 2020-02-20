@@ -19,8 +19,6 @@ using Montr.Idx.Commands;
 using Montr.Idx.Impl.CommandHandlers;
 using Montr.Idx.Impl.Entities;
 using Montr.Idx.Impl.Services;
-using Montr.Messages.Impl.Services;
-using Montr.Messages.Services;
 using Moq;
 
 namespace Montr.Idx.Tests.CommandHandlers
