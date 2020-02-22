@@ -44,6 +44,14 @@ namespace Montr.MasterData.Impl.CommandHandlers
 
 				using (var db = _dbContextFactory.Create())
 				{
+					if (type.HierarchyType == HierarchyType.Groups)
+					{
+						// delete link with group
+						await db.GetTable<DbClassifierLink>()
+							.Where(x => request.Uids.Contains(x.ItemUid))
+							.DeleteAsync(cancellationToken);
+					}
+
 					affected = await db.GetTable<DbClassifier>()
 						.Where(x => x.TypeUid == type.Uid && request.Uids.Contains(x.Uid))
 						.DeleteAsync(cancellationToken);

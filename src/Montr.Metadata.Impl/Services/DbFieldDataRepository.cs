@@ -106,7 +106,8 @@ namespace Montr.Metadata.Impl.Services
 			var insertable = new List<DbFieldData>();
 
 			// todo: validate/insert/update system fields stored in FieldData
-			foreach (var field in metadata.Where(x => x.System == false))
+			// todo: exclude db fiedls
+			foreach (var field in metadata /*.Where(x => x.System == false)*/)
 			{
 				var fieldProvider = _fieldProviderRegistry.GetFieldTypeProvider(field.Type);
 
@@ -126,9 +127,15 @@ namespace Montr.Metadata.Impl.Services
 
 			using (var db = _dbContextFactory.Create())
 			{
-				var bcr = await Task.Run(() => db.GetTable<DbFieldData>().BulkCopy(insertable), cancellationToken);
+				// var bcr = await Task.Run(() => db.GetTable<DbFieldData>().BulkCopy(insertable), cancellationToken);
+				// var bcr = db.GetTable<DbFieldData>().BulkCopy(insertable);
 
-				return new ApiResult { AffectedRows = bcr.RowsCopied };
+				foreach (var dbItem in insertable)
+				{
+					await db.InsertAsync(dbItem, token: cancellationToken);
+				}
+
+				return new ApiResult { AffectedRows = insertable.Count };
 			}
 		}
 
@@ -152,7 +159,8 @@ namespace Montr.Metadata.Impl.Services
 				var updatable = new List<DbFieldData>();
 
 				// todo: validate/insert/update system fields stored in FieldData
-				foreach (var field in metadata.Where(x => x.System == false))
+				// todo: exclude db fiedls
+				foreach (var field in metadata /*.Where(x => x.System == false)*/)
 				{
 					var fieldProvider = _fieldProviderRegistry.GetFieldTypeProvider(field.Type);
 
@@ -206,7 +214,7 @@ namespace Montr.Metadata.Impl.Services
 			using (var db = _dbContextFactory.Create())
 			{
 				var affected = await db.GetTable<DbFieldData>()
-					.Where(x => x.EntityTypeCode == request.EntityTypeCode && request.EntityUids.Contains(x.Uid))
+					.Where(x => x.EntityTypeCode == request.EntityTypeCode && request.EntityUids.Contains(x.EntityUid))
 					.DeleteAsync(cancellationToken);
 
 				return new ApiResult { AffectedRows = affected };

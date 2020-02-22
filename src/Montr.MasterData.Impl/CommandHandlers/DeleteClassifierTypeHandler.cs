@@ -50,6 +50,8 @@ namespace Montr.MasterData.Impl.CommandHandlers
 						select tree
 					).DeleteAsync(cancellationToken);
 
+					// todo: remove fields
+
 					// todo: remove items
 
 					// delete type

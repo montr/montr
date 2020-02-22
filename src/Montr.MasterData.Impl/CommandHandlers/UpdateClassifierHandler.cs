@@ -23,18 +23,18 @@ namespace Montr.MasterData.Impl.CommandHandlers
 		private readonly IDbContextFactory _dbContextFactory;
 		private readonly IClassifierTypeService _classifierTypeService;
 		private readonly IClassifierTreeService _classifierTreeService;
-		private readonly IRepository<FieldMetadata> _metadataRepository;
+		private readonly IClassifierTypeMetadataService _metadataService;
 		private readonly IFieldDataRepository _fieldDataRepository;
 
 		public UpdateClassifierHandler(IUnitOfWorkFactory unitOfWorkFactory, IDbContextFactory dbContextFactory,
 			IClassifierTypeService classifierTypeService, IClassifierTreeService classifierTreeService,
-			IRepository<FieldMetadata> metadataRepository, IFieldDataRepository fieldDataRepository)
+			IClassifierTypeMetadataService metadataService, IFieldDataRepository fieldDataRepository)
 		{
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_dbContextFactory = dbContextFactory;
 			_classifierTypeService = classifierTypeService;
 			_classifierTreeService = classifierTreeService;
-			_metadataRepository = metadataRepository;
+			_metadataService = metadataService;
 			_fieldDataRepository = fieldDataRepository;
 		}
 
@@ -51,18 +51,14 @@ namespace Montr.MasterData.Impl.CommandHandlers
 				: null;
 
 			// todo: validate fields
-			var metadata = await _metadataRepository.Search(new MetadataSearchRequest
-			{
-				EntityTypeCode = Classifier.EntityTypeCode + "." + type.Code,
-				IsActive = true
-			}, cancellationToken);
+			var metadata = await _metadataService.GetMetadata(type, cancellationToken);
 
 			var manageFieldDataRequest = new ManageFieldDataRequest
 			{
 				EntityTypeCode = Classifier.EntityTypeCode,
 				// ReSharper disable once PossibleInvalidOperationException
 				EntityUid = item.Uid.Value,
-				Metadata = metadata.Rows,
+				Metadata = metadata,
 				Item = item
 			};
 

@@ -45,13 +45,15 @@ namespace Montr.MasterData.Impl.CommandHandlers
 				// todo: throw if empty fields
 				if (request.Fields != null)
 				{
+					// ReSharper disable once PossibleInvalidOperationException
+					var entityUid = insertTypeResult.Uid.Value;
+
 					foreach (var metadata in request.Fields)
 					{
 						var insertFieldResult = await _metadataService.Insert(new ManageFieldMetadataRequest
 						{
 							EntityTypeCode = ClassifierType.EntityTypeCode,
-							// ReSharper disable once PossibleInvalidOperationException
-							EntityUid = insertTypeResult.Uid.Value,
+							EntityUid = entityUid,
 							Item = metadata
 						}, cancellationToken);
 

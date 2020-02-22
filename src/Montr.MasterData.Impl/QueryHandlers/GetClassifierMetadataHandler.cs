@@ -67,11 +67,18 @@ namespace Montr.MasterData.Impl.QueryHandlers
 				IsActive = true
 			}, cancellationToken);
 
+			var dbFields = new List<string>
+			{
+				ExpressionHelper.GetMemberName<Classifier>(x => x.Code),
+				ExpressionHelper.GetMemberName<Classifier>(x => x.Name),
+			};
+
 			var result = new DataView { Fields = metadata.Rows };
 
 			foreach (var field in result.Fields)
 			{
-				if (field.System == false)
+				// if (field.System == false)
+				if (dbFields.Contains(field.Key, StringComparer.InvariantCultureIgnoreCase) == false)
 				{
 					field.Key = FieldKey.FormatFullKey(field.Key);
 				}
