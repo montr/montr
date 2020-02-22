@@ -127,15 +127,9 @@ namespace Montr.Metadata.Impl.Services
 
 			using (var db = _dbContextFactory.Create())
 			{
-				// var bcr = await Task.Run(() => db.GetTable<DbFieldData>().BulkCopy(insertable), cancellationToken);
-				// var bcr = db.GetTable<DbFieldData>().BulkCopy(insertable);
+				var bc = await Task.Run(() => db.GetTable<DbFieldData>().BulkCopy(insertable), cancellationToken);
 
-				foreach (var dbItem in insertable)
-				{
-					await db.InsertAsync(dbItem, token: cancellationToken);
-				}
-
-				return new ApiResult { AffectedRows = insertable.Count };
+				return new ApiResult { AffectedRows = bc.RowsCopied };
 			}
 		}
 

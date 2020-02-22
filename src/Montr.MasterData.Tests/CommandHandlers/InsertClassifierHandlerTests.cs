@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using LinqToDB;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Montr.Core.Services;
 using Montr.Data.Linq2Db;
@@ -9,6 +12,7 @@ using Montr.MasterData.Impl.CommandHandlers;
 using Montr.MasterData.Impl.Services;
 using Montr.MasterData.Models;
 using Montr.MasterData.Services;
+using Montr.Metadata.Impl.Entities;
 using Montr.Metadata.Impl.Services;
 using Montr.Metadata.Models;
 using Montr.Metadata.Services;
@@ -80,11 +84,26 @@ namespace Montr.MasterData.Tests.CommandHandlers
 
 				var classifierResult = await classifierRepository
 					.Search(new ClassifierSearchRequest { TypeCode = dbHelper.TypeCode, Uid = result.Uid, IncludeFields = true }, cancellationToken);
-				Assert.AreEqual(1, classifierResult.Rows.Count);
 
+				Assert.AreEqual(1, classifierResult.Rows.Count);
 				var inserted = classifierResult.Rows[0];
+				// todo: figure out why insert.Fields is null
+				Assert.AreEqual(command.Item.Code, inserted.Code);
 				Assert.AreEqual(command.Item.Name, inserted.Name);
-				Assert.AreEqual(command.Item.Fields.Count, inserted.Fields.Count);
+
+				IList<DbFieldData> fieldData;
+
+				using (var db = dbContextFactory.Create())
+				{
+					fieldData = await db.GetTable<DbFieldData>()
+						.Where(x => x.EntityUid == result.Uid)
+						.ToListAsync(cancellationToken);
+				}
+
+				Assert.AreEqual(command.Item.Fields.Count, fieldData.Count);
+				Assert.AreEqual(command.Item.Fields["test1"], fieldData.Single(x => x.Key == "test1").Value);
+				Assert.AreEqual(command.Item.Fields["test2"], fieldData.Single(x => x.Key == "test2").Value);
+				Assert.AreEqual(command.Item.Fields["test3"], fieldData.Single(x => x.Key == "test3").Value);
 			}
 		}
 

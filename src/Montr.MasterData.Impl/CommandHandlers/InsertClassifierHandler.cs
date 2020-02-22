@@ -93,7 +93,6 @@ namespace Montr.MasterData.Impl.CommandHandlers
 						.Value(x => x.ParentUid, type.HierarchyType == HierarchyType.Items ? item.ParentUid : null)
 						.InsertAsync(cancellationToken);
 
-
 					if (type.HierarchyType == HierarchyType.Groups)
 					{
 						// todo: validate group belongs to the same classifier
