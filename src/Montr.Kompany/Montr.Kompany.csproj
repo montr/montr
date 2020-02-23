@@ -10,6 +10,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Montr.Idx\Montr.Idx.csproj" />
+    <ProjectReference Include="..\Montr.Metadata\Montr.Metadata.csproj" />
   </ItemGroup>
 
 </Project>

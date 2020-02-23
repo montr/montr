@@ -36,12 +36,11 @@ namespace Montr.Kompany.Impl.CommandHandlers
 		{
 			if (request.UserUid == Guid.Empty) throw new InvalidOperationException("UserUid can't be empty guid.");
 
+			var company = request.Company ?? throw new ArgumentNullException(nameof(request.Company));
+
 			var now = _dateTimeProvider.GetUtcNow();
 
-			var company = request.Company;
-
-			company.Uid = Guid.NewGuid();
-			company.StatusCode = CompanyStatusCode.Draft;
+			var companyUid = Guid.NewGuid();
 
 			using (var scope = _unitOfWorkFactory.Create())
 			{
@@ -51,25 +50,25 @@ namespace Montr.Kompany.Impl.CommandHandlers
 
 					// компания + todo: дата изменения
 					await db.GetTable<DbCompany>()
-						.Value(x => x.Uid, company.Uid)
-						.Value(x => x.ConfigCode, company.ConfigCode)
-						.Value(x => x.StatusCode, company.StatusCode)
+						.Value(x => x.Uid, companyUid)
+						.Value(x => x.ConfigCode, company.ConfigCode ?? CompanyConfigCode.Company)
+						.Value(x => x.StatusCode, CompanyStatusCode.Draft)
 						.Value(x => x.Name, company.Name)
 						.InsertAsync(cancellationToken);
 
 					// пользователь в компании
 					await db.GetTable<DbCompanyUser>()
-						.Value(x => x.CompanyUid, company.Uid)
+						.Value(x => x.CompanyUid, companyUid)
 						.Value(x => x.UserUid, request.UserUid)
 						.InsertAsync(cancellationToken);
 				}
 
-				// todo: роли пользователя
+				// todo: user roles 
 
 				// заявка на регистрацию + todo: дата изменения
 				await _documentRepository.Create(new Document
 				{
-					CompanyUid = company.Uid,
+					CompanyUid = companyUid,
 					ConfigCode = CompanyRequestConfigCode.RegistrationRequest
 				});
 
@@ -77,8 +76,8 @@ namespace Montr.Kompany.Impl.CommandHandlers
 				await _auditLogService.Save(new AuditEvent
 				{
 					EntityTypeCode = "company",
-					EntityUid = company.Uid,
-					CompanyUid = company.Uid,
+					EntityUid = companyUid,
+					CompanyUid = companyUid,
 					UserUid = request.UserUid,
 					CreatedAtUtc = now,
 					MessageCode = "Company.Created"
@@ -88,7 +87,7 @@ namespace Montr.Kompany.Impl.CommandHandlers
 
 				scope.Commit();
 
-				return new ApiResult { Uid = company.Uid };
+				return new ApiResult { Uid = companyUid };
 			}
 		}
 	}

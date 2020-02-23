@@ -76,7 +76,7 @@ namespace Montr.Kompany.Impl.Services
 				Company = new Company
 				{
 					Name = options.DefaultCompanyName,
-					ConfigCode = "company" // todo: register and use allowed company types
+					ConfigCode = CompanyConfigCode.Company // todo: register and use allowed company types
 				}
 			}, cancellationToken);
 

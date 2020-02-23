@@ -1,8 +1,15 @@
-﻿namespace Montr.Kompany.Models
+﻿using System.Diagnostics;
+
+namespace Montr.Kompany.Models
 {
+	[DebuggerDisplay("{" + nameof(DebuggerDisplay) + ",nq}")]
 	public class Company
 	{
-		public System.Guid Uid { get; set; }
+		private string DebuggerDisplay => $"{ConfigCode}, {Name}";
+
+		public static readonly string EntityTypeCode = typeof(Company).Name;
+
+		public System.Guid? Uid { get; set; }
 
 		// public long Id { get; set; }
 

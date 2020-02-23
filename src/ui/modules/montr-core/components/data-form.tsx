@@ -13,7 +13,7 @@ declare const FormLayouts: ["horizontal", "inline", "vertical"];
 
 interface IProps extends WithTranslation {
 	layout?: (typeof FormLayouts)[number];
-	fields: IDataField[];
+	fields: IDataField[]; // todo: provide url to load fields or create wrapped component
 	data: any; // IIndexer;
 	showControls?: boolean;
 	submitButton?: string;

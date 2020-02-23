@@ -34,21 +34,21 @@ export class CompanyContextProvider extends React.Component<any, State> {
 		if (user) {
 			await this.switchCompany();
 		}
-	}
+	};
 
 	componentWillUnmount = async () => {
 		await this._companyService.abort();
-	}
+	};
 
 	registerCompany = (): void => {
 		const returnUrl = encodeURI(this._navigation.getUrl());
 		this._navigation.navigate(
 			`${Constants.publicURL}/register/company/?${Constants.returnUrlParam}=${returnUrl}`);
-	}
+	};
 
 	manageCompany = (): void => {
 		this._navigation.navigate(`${Constants.publicURL}/manage/`);
-	}
+	};
 
 	switchCompany = async (companyUid?: Guid) => {
 
@@ -71,7 +71,7 @@ export class CompanyContextProvider extends React.Component<any, State> {
 
 			this.setState({ currentCompany: company });
 		}
-	}
+	};
 
 	private _loadCompanyList = async () => {
 		try {
@@ -79,7 +79,7 @@ export class CompanyContextProvider extends React.Component<any, State> {
 		} catch (error) {
 			this._notification.error(`Ошибка при загрузке списка организаций`, error.message);
 		}
-	}
+	};
 
 	private _getCookieCompanyUid = (): Guid => {
 		var storageValue = this._cookies.get(Constants.cookieName);
@@ -89,13 +89,13 @@ export class CompanyContextProvider extends React.Component<any, State> {
 		}
 
 		return null;
-	}
+	};
 
 	private _setCookieCompanyUid = (companyUid: Guid): void => {
 		this._cookies.set(Constants.cookieName, companyUid.toString(), {
 			domain: Constants.cookieDomain, path: "/"
 		});
-	}
+	};
 
 	render = () => {
 		const { currentCompany, companyList } = this.state;
@@ -113,5 +113,5 @@ export class CompanyContextProvider extends React.Component<any, State> {
 				{this.props.children}
 			</CompanyContext.Provider>
 		);
-	}
+	};
 }

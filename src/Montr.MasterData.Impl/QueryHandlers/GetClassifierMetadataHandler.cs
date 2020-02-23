@@ -70,7 +70,7 @@ namespace Montr.MasterData.Impl.QueryHandlers
 			var dbFields = new List<string>
 			{
 				ExpressionHelper.GetMemberName<Classifier>(x => x.Code),
-				ExpressionHelper.GetMemberName<Classifier>(x => x.Name),
+				ExpressionHelper.GetMemberName<Classifier>(x => x.Name)
 			};
 
 			var result = new DataView { Fields = metadata.Rows };

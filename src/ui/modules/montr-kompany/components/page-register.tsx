@@ -1,11 +1,15 @@
 import * as React from "react";
-import { Form, Input, Checkbox, Button, Radio, Modal, message } from "antd";
-import { CompanyService } from "../services";
+import { Form, Input, Checkbox, Button, Radio, Modal, message, Spin } from "antd";
+import { CompanyService, CompanyMetadataService } from "../services";
+import { ICompany } from "../models";
 import { RadioChangeEvent } from "antd/lib/radio/interface";
 import { NavigationService } from "@montr-core/services";
 import { Constants } from "@montr-core/.";
 import { withCompanyContext, CompanyContextProps } from ".";
 import { FormInstance } from "antd/lib/form";
+import { DataForm } from "@montr-core/components";
+import { IDataField, IApiResult } from "@montr-core/models";
+
 
 interface IProps extends CompanyContextProps {
 }
@@ -159,13 +163,81 @@ class _RegistrationForm extends React.Component<IProps, IState> {
 
 const RegistrationForm = withCompanyContext(_RegistrationForm);
 
-export default class Registration extends React.Component {
+interface IRProps extends CompanyContextProps {
+}
+
+interface IRState {
+	loading: boolean;
+	fields?: IDataField[];
+	data: any;
+}
+
+class _PageCompanyRegistration extends React.Component<IRProps, IRState> {
+
+	private _navigation = new NavigationService();
+	private _companyService = new CompanyService();
+	private _metadataService = new CompanyMetadataService();
+
+	constructor(props: IRProps) {
+		super(props);
+
+		this.state = {
+			loading: true,
+			data: {}
+		};
+	}
+
+	componentDidMount = async () => {
+		await this.fetchData();
+	};
+
+	componentWillUnmount = async () => {
+		await this._companyService.abort();
+		await this._metadataService.abort();
+	};
+
+	fetchData = async () => {
+		const dataView = await this._metadataService.load();
+
+		this.setState({ loading: false, data: {}, fields: dataView.fields });
+	};
+
+	handleSubmit = async (values: ICompany): Promise<IApiResult> => {
+		const { manageCompany, switchCompany } = this.props;
+
+		const result = await this._companyService.create(values);
+
+		if (result?.success) {
+			await switchCompany(result.uid);
+
+			if (!result.redirectUrl) {
+				result.redirectUrl = this._navigation.getUrlParameter(Constants.returnUrlParam);
+			}
+		}
+
+		return result;
+	};
+
 	render() {
+		const { loading, fields, data } = this.state;
+
 		return (
 			<div>
-				<h1>Регистрация</h1>
+				<h2>Регистрация</h2>
+
 				<RegistrationForm />
+
+				<Spin spinning={loading} >
+					<DataForm
+						fields={fields}
+						data={data}
+						onSubmit={this.handleSubmit}
+					/>
+				</Spin>
+
 			</div>
 		);
 	}
 }
+
+export default withCompanyContext(_PageCompanyRegistration);
