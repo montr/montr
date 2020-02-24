@@ -1,1 +1,1 @@
-cloc --vcs=git --exclude-lang="JSON,MSBuild script" .
+cloc --vcs=git --exclude-lang="XML,JSON,MSBuild script" .
