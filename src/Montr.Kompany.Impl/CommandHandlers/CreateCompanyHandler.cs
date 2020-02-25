@@ -11,6 +11,8 @@ using Montr.Docs.Services;
 using Montr.Kompany.Commands;
 using Montr.Kompany.Impl.Entities;
 using Montr.Kompany.Models;
+using Montr.Metadata.Models;
+using Montr.Metadata.Services;
 
 namespace Montr.Kompany.Impl.CommandHandlers
 {
@@ -19,15 +21,20 @@ namespace Montr.Kompany.Impl.CommandHandlers
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IDbContextFactory _dbContextFactory;
 		private readonly IDateTimeProvider _dateTimeProvider;
+		private readonly IRepository<FieldMetadata> _fieldMetadataRepository;
+		private readonly IFieldDataRepository _fieldDataRepository;
 		private readonly IDocumentRepository _documentRepository;
 		private readonly IAuditLogService _auditLogService;
 
 		public CreateCompanyHandler(IUnitOfWorkFactory unitOfWorkFactory, IDbContextFactory dbContextFactory,
-			IDateTimeProvider dateTimeProvider, IDocumentRepository documentRepository, IAuditLogService auditLogService)
+			IDateTimeProvider dateTimeProvider, IRepository<FieldMetadata> fieldMetadataRepository, IFieldDataRepository fieldDataRepository,
+			IDocumentRepository documentRepository, IAuditLogService auditLogService)
 		{
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_dbContextFactory = dbContextFactory;
 			_dateTimeProvider = dateTimeProvider;
+			_fieldMetadataRepository = fieldMetadataRepository;
+			_fieldDataRepository = fieldDataRepository;
 			_documentRepository = documentRepository;
 			_auditLogService = auditLogService;
 		}
@@ -41,6 +48,30 @@ namespace Montr.Kompany.Impl.CommandHandlers
 			var now = _dateTimeProvider.GetUtcNow();
 
 			var companyUid = Guid.NewGuid();
+
+			// todo: validate fields
+			var metadata = await _fieldMetadataRepository.Search(new MetadataSearchRequest
+			{
+				EntityTypeCode = Process.EntityTypeCode,
+				EntityUid = Process.Registration,
+				// todo: check flags
+				// IsSystem = false,
+				IsActive = true,
+				SkipPaging = true
+			}, cancellationToken);
+
+			var manageFieldDataRequest = new ManageFieldDataRequest
+			{
+				EntityTypeCode = Company.EntityTypeCode,
+				EntityUid = companyUid,
+				Metadata = metadata.Rows,
+				Item = company
+			};
+
+			// todo: move to ClassifierValidator (?)
+			var result = await _fieldDataRepository.Validate(manageFieldDataRequest, cancellationToken);
+
+			if (result.Success == false) return result;
 
 			using (var scope = _unitOfWorkFactory.Create())
 			{
@@ -62,6 +93,10 @@ namespace Montr.Kompany.Impl.CommandHandlers
 						.Value(x => x.UserUid, request.UserUid)
 						.InsertAsync(cancellationToken);
 				}
+
+				// insert fields
+				// todo: exclude db fields and sections
+				await _fieldDataRepository.Insert(manageFieldDataRequest, cancellationToken);
 
 				// todo: user roles 
 

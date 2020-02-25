@@ -64,10 +64,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 			// todo: move to ClassifierValidator (?)
 			var result = await _fieldDataRepository.Validate(manageFieldDataRequest, cancellationToken);
 
-			if (result.Success == false)
-			{
-				return result;
-			}
+			if (result.Success == false) return result;
 
 			using (var scope = _unitOfWorkFactory.Create())
 			{
@@ -133,6 +130,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 				}
 
 				// insert fields
+				// todo: exclude db fields and sections
 				await _fieldDataRepository.Insert(manageFieldDataRequest, cancellationToken);
 
 				// todo: events

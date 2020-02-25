@@ -91,12 +91,12 @@ namespace Montr.MasterData.Tests.CommandHandlers
 				Assert.AreEqual(command.Item.Code, inserted.Code);
 				Assert.AreEqual(command.Item.Name, inserted.Name);
 
+				// assert field data inserted
 				IList<DbFieldData> fieldData;
-
 				using (var db = dbContextFactory.Create())
 				{
 					fieldData = await db.GetTable<DbFieldData>()
-						.Where(x => x.EntityUid == result.Uid)
+						.Where(x => x.EntityTypeCode == Classifier.EntityTypeCode && x.EntityUid == result.Uid)
 						.ToListAsync(cancellationToken);
 				}
 

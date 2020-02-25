@@ -1,9 +1,10 @@
 ﻿using System.Diagnostics;
+using Montr.Metadata.Models;
 
 namespace Montr.Kompany.Models
 {
 	[DebuggerDisplay("{" + nameof(DebuggerDisplay) + ",nq}")]
-	public class Company
+	public class Company : IFieldDataContainer
 	{
 		private string DebuggerDisplay => $"{ConfigCode}, {Name}";
 
@@ -22,5 +23,7 @@ namespace Montr.Kompany.Models
 		// public string Description { get; set; }
 
 		// public string Url { get; set; }
+
+		public FieldData Fields { get; set; }
 	}
 }
