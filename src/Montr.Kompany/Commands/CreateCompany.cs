@@ -7,7 +7,12 @@ namespace Montr.Kompany.Commands
 {
 	public class CreateCompany : IRequest<ApiResult>
 	{
-		public Guid UserUid { get; set; }
+		public abstract class Resources
+		{
+			public abstract string CompanyCreated { get; }
+		}
+
+		public Guid? UserUid { get; set; }
 
 		public Company Company { get; set; }
 	}

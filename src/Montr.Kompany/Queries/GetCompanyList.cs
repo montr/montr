@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using MediatR;
+﻿using MediatR;
+using Montr.Core.Models;
 using Montr.Kompany.Models;
 
 namespace Montr.Kompany.Queries
 {
-	public class GetCompanyList : IRequest<IList<Company>>
+	public class GetCompanyList : CompanySearchRequest, IRequest<SearchResult<Company>>
 	{
-		public Guid UserUid { get; set; }
 	}
 }

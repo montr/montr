@@ -75,7 +75,9 @@ export class CompanyContextProvider extends React.Component<any, State> {
 
 	private _loadCompanyList = async () => {
 		try {
-			this.setState({ companyList: await this._companyService.list() });
+			const result = await this._companyService.list();
+
+			this.setState({ companyList: result.rows });
 		} catch (error) {
 			this._notification.error(`Ошибка при загрузке списка организаций`, error.message);
 		}

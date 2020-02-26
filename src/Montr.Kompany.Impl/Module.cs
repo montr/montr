@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Montr.Core;
 using Montr.Core.Services;
 using Montr.Kompany.Impl.Services;
+using Montr.Kompany.Models;
 using Montr.Kompany.Services;
 
 namespace Montr.Kompany.Impl
@@ -15,6 +16,7 @@ namespace Montr.Kompany.Impl
 			services.BindOptions<Options>(configuration);
 
 			services.AddTransient<IStartupTask, CreateDefaultCompanyStartupTask>();
+			services.AddTransient<IRepository<Company>, DbCompanyRepository>();
 
 			services.AddSingleton<ICurrentCompanyProvider, DefaultCurrentCompanyProvider>();
 		}

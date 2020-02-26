@@ -43,7 +43,9 @@ export const Views = {
 	formForgotPassword: "ForgotPassword/Form",
 	formResetPassword: "ResetPassword/Form",
 	formChangePassword: "ChangePassword/Form",
-	formSetPassword: "SetPassword/Form"
+	formSetPassword: "SetPassword/Form",
+
+	gridSearchUsers: "UserSearch/Grid",
 };
 
 AppRouteRegistry.add([

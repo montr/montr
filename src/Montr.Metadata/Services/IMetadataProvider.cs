@@ -77,6 +77,16 @@ namespace Montr.Metadata.Services
 				};
 			}
 
+			if (viewId == "CompanySearch/Grid")
+			{
+				result.Columns = new List<DataColumn>
+				{
+					new DataColumn { Key = "name", Name = "Наименование", Sortable = true, Width = 400, UrlProperty = "url" },
+					new DataColumn { Key = "configCode", Name = "ConfigCode", Sortable = true, Width = 200 },
+					new DataColumn { Key = "statusCode", Name = "StatusCode", Sortable = true, Width = 200 }
+				};
+			}
+
 			if (viewId.StartsWith("Classifier/"))
 			{
 				if (viewId.EndsWith("/okv"))

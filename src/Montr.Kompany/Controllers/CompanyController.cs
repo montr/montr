@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -24,14 +23,11 @@ namespace Montr.Kompany.Controllers
 		}
 
 		[HttpPost]
-		public async Task<ActionResult<IList<Company>>> List()
+		public async Task<SearchResult<Company>> List(GetCompanyList request)
 		{
-			var result = await _mediator.Send(new GetCompanyList
-			{
-				UserUid = _currentUserProvider.GetUserUid()
-			});
+			request.UserUid = _currentUserProvider.GetUserUid();
 
-			return Ok(result);
+			return await _mediator.Send(request);
 		}
 
 		[Authorize, HttpPost]

@@ -9,22 +9,22 @@ interface IProps {
 interface IState {
 }
 
-export default class PageSearchUsers extends React.Component<IProps, IState> {
+export default class PageSearchCompanies extends React.Component<IProps, IState> {
 	render = () => {
 		return (
 			<Page title={<>
 				<Toolbar float="right">
-					<Link to="/users/new"><ButtonAdd /></Link>
+					<Link to="/companies/new"><ButtonAdd /></Link>
 				</Toolbar>
 
 				<DataBreadcrumb items={[]} />
-				<PageHeader>Пользователи</PageHeader>
+				<PageHeader>Компании</PageHeader>
 			</>}>
 
 				<DataTable
 					rowKey="uid"
-					viewId={Views.gridSearchUsers}
-					loadUrl={Api.userList} />
+					viewId={Views.gridSearchCompanies}
+					loadUrl={Api.companyList} />
 			</Page>
 		);
 	};

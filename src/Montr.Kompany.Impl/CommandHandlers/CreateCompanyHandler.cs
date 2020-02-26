@@ -41,8 +41,7 @@ namespace Montr.Kompany.Impl.CommandHandlers
 
 		public async Task<ApiResult> Handle(CreateCompany request, CancellationToken cancellationToken)
 		{
-			if (request.UserUid == Guid.Empty) throw new InvalidOperationException("UserUid can't be empty guid.");
-
+			var userUid = request.UserUid ?? throw new ArgumentNullException(nameof(request.UserUid));
 			var company = request.Company ?? throw new ArgumentNullException(nameof(request.Company));
 
 			var now = _dateTimeProvider.GetUtcNow();
@@ -90,7 +89,7 @@ namespace Montr.Kompany.Impl.CommandHandlers
 					// пользователь в компании
 					await db.GetTable<DbCompanyUser>()
 						.Value(x => x.CompanyUid, companyUid)
-						.Value(x => x.UserUid, request.UserUid)
+						.Value(x => x.UserUid, userUid)
 						.InsertAsync(cancellationToken);
 				}
 
@@ -100,22 +99,22 @@ namespace Montr.Kompany.Impl.CommandHandlers
 
 				// todo: user roles 
 
-				// заявка на регистрацию + todo: дата изменения
+				// company registration request + todo: дата изменения
 				await _documentRepository.Create(new Document
 				{
 					CompanyUid = companyUid,
 					ConfigCode = CompanyRequestConfigCode.RegistrationRequest
 				});
 
-				// todo: история изменений всего
+				// todo: audit log
 				await _auditLogService.Save(new AuditEvent
 				{
-					EntityTypeCode = "company",
+					EntityTypeCode = Company.EntityTypeCode,
 					EntityUid = companyUid,
 					CompanyUid = companyUid,
-					UserUid = request.UserUid,
+					UserUid = userUid,
 					CreatedAtUtc = now,
-					MessageCode = "Company.Created"
+					MessageCode = ExpressionHelper.GetFullName<CreateCompany.Resources>(x => x.CompanyCreated)
 				});
 
 				// todo: (через события в фоне) авто-допуск заявки, оповещения для оператора и компании

@@ -1,6 +1,6 @@
 import * as React from "react";
 import {
-	ArrowDownOutlined, ArrowLeftOutlined, ArrowUpOutlined, BarChartOutlined, CheckOutlined, CheckCircleOutlined, CheckCircleTwoTone, ClusterOutlined, DashboardOutlined, DeleteOutlined, DownOutlined, EditOutlined, ExportOutlined, FacebookOutlined, FileOutlined, FolderOutlined, GoogleOutlined, HomeOutlined, Html5Outlined, Html5TwoTone, ImportOutlined, GlobalOutlined, LeftOutlined, LockOutlined, LogoutOutlined, MinusCircleOutlined, PlusOutlined, ProjectOutlined, QuestionCircleOutlined, SearchOutlined, SelectOutlined, SettingOutlined, UserOutlined, WindowsOutlined
+	ArrowDownOutlined, ArrowLeftOutlined, ArrowUpOutlined, BarChartOutlined, CheckOutlined, CheckCircleOutlined, CheckCircleTwoTone, ClusterOutlined, ContainerOutlined, DashboardOutlined, DeleteOutlined, DownOutlined, EditOutlined, ExportOutlined, FacebookOutlined, FileOutlined, FolderOutlined, GoogleOutlined, HomeOutlined, Html5Outlined, Html5TwoTone, ImportOutlined, GlobalOutlined, LeftOutlined, LockOutlined, LogoutOutlined, MinusCircleOutlined, PlusOutlined, ProjectOutlined, QuestionCircleOutlined, SearchOutlined, SelectOutlined, SettingOutlined, UserOutlined, WindowsOutlined
 } from "@ant-design/icons";
 
 export abstract class Icon {
@@ -18,6 +18,7 @@ export abstract class Icon {
 	static CheckCircle = Icon.Map["check-circle"] = <CheckCircleOutlined />;
 	static CheckCircleTwoTone = Icon.Map["check-circle-2t"] = <CheckCircleTwoTone twoToneColor="#52c41a" />;
 	static Cluster = Icon.Map["cluster"] = <ClusterOutlined />;
+	static Container = Icon.Map["container"] = <ContainerOutlined />;
 	static Dashboard = Icon.Map["dashboard"] = <DashboardOutlined />;
 	static Delete = Icon.Map["delete"] = <DeleteOutlined />;
 	static Down = Icon.Map["down"] = <DownOutlined />;
