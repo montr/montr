@@ -1,6 +1,6 @@
 import React from "react";
 import { Page, PageHeader, DataTable } from "@montr-core/components";
-import { Constants } from "@montr-core/.";
+import { Views, Api } from "../module";
 
 interface IProps {
 }
@@ -8,18 +8,18 @@ interface IProps {
 interface IState {
 }
 
-export default class PageSearchProcess extends React.Component<IProps, IState> {
+export default class PageSearchDocuments extends React.Component<IProps, IState> {
 	render = () => {
 		return (
 			<Page
 				title={<>
-					<PageHeader>Processes</PageHeader>
+					<PageHeader>Documents</PageHeader>
 				</>}>
 
 				<DataTable
 					rowKey="uid"
-					viewId={`Process/List`}
-					loadUrl={`${Constants.apiURL}/process/list/`}
+					viewId={Views.documentList}
+					loadUrl={Api.documentList}
 				/>
 
 			</Page>

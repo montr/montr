@@ -104,7 +104,7 @@ namespace Montr.Kompany.Impl.CommandHandlers
 				{
 					CompanyUid = companyUid,
 					ConfigCode = CompanyRequestConfigCode.RegistrationRequest
-				});
+				}, cancellationToken);
 
 				// todo: audit log
 				await _auditLogService.Save(new AuditEvent

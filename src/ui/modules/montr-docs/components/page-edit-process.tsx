@@ -16,7 +16,7 @@ interface IState {
 	loading: boolean;
 }
 
-export default class EditClassifierType extends React.Component<IProps, IState> {
+export default class PageEditProcess extends React.Component<IProps, IState> {
 
 	constructor(props: IProps) {
 		super(props);

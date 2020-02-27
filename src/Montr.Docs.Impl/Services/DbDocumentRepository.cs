@@ -1,6 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using LinqToDB;
+using Montr.Core.Models;
+using Montr.Core.Services;
 using Montr.Data.Linq2Db;
 using Montr.Docs.Impl.Entities;
 using Montr.Docs.Models;
@@ -8,7 +13,8 @@ using Montr.Docs.Services;
 
 namespace Montr.Docs.Impl.Services
 {
-	public class DbDocumentRepository: IDocumentRepository
+	// todo: merge with IRepository<Document>?
+	public class DbDocumentRepository : IDocumentRepository
 	{
 		private readonly IDbContextFactory _dbContextFactory;
 
@@ -17,7 +23,7 @@ namespace Montr.Docs.Impl.Services
 			_dbContextFactory = dbContextFactory;
 		}
 
-		public async Task Create(Document document)
+		public async Task Create(Document document, CancellationToken cancellationToken)
 		{
 			if (document.Uid == Guid.Empty)
 				document.Uid = Guid.NewGuid();
@@ -32,8 +38,38 @@ namespace Montr.Docs.Impl.Services
 					.Value(x => x.CompanyUid, document.CompanyUid)
 					.Value(x => x.ConfigCode, document.ConfigCode)
 					.Value(x => x.StatusCode, document.StatusCode)
-					.InsertAsync();
+					.InsertAsync(cancellationToken);
 			}
+		}
+
+		public async Task<SearchResult<Document>> Search(SearchRequest searchRequest, CancellationToken cancellationToken)
+		{
+			var request = (DocumentSearchRequest)searchRequest ?? throw new ArgumentNullException(nameof(searchRequest));
+
+			using (var db = _dbContextFactory.Create())
+			{
+				var query = from c in db.GetTable<DbDocument>()
+					select c;
+
+				var data = await Materialize(
+					query.Apply(request, x => x.ConfigCode), cancellationToken);
+
+				return new SearchResult<Document>
+				{
+					TotalCount = query.GetTotalCount(request),
+					Rows = data
+				};
+			}
+		}
+
+		private static async Task<List<Document>> Materialize(IQueryable<DbDocument> query, CancellationToken cancellationToken)
+		{
+			return await query.Select(x => new Document
+			{
+				Uid = x.Uid,
+				ConfigCode = x.ConfigCode,
+				StatusCode = x.StatusCode,
+			}).ToListAsync(cancellationToken);
 		}
 	}
 }

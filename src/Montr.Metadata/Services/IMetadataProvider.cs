@@ -317,6 +317,16 @@ namespace Montr.Metadata.Services
 			}
 
 			// Documents & Processes
+
+			if (viewId == "Document/List")
+			{
+				result.Columns = new List<DataColumn>
+				{
+					new DataColumn { Key = "configCode", Name = "ConfigCode", Sortable = true, Width = 200 },
+					new DataColumn { Key = "statusCode", Name = "StatusCode", Sortable = true, Width = 200 }
+				};
+			}
+
 			if (viewId == "Process/List")
 			{
 				result.Columns = new List<DataColumn>
