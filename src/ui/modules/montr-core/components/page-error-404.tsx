@@ -1,5 +1,6 @@
 import * as React from "react";
 import { Result, Button } from "antd";
+import { IconMap } from "antd/lib/result";
 
 export default class Error404 extends React.Component {
 	render() {
