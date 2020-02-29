@@ -5,7 +5,7 @@
 
 CREATE TABLE IF NOT EXISTS montr.document
 (
-	uid uuid NOT NULL DEFAULT uuid_generate_v1(),
+	uid uuid NOT NULL DEFAULT public.uuid_generate_v1(),
 	company_uid uuid NOT NULL,
 	config_code character varying(64) NOT NULL,
 	status_code character varying(16) NOT NULL,
