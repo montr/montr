@@ -38,6 +38,10 @@ namespace Montr.Docs.Impl.Services
 					.Value(x => x.CompanyUid, document.CompanyUid)
 					.Value(x => x.ConfigCode, document.ConfigCode)
 					.Value(x => x.StatusCode, document.StatusCode)
+					.Value(x => x.Direction, document.Direction.ToString())
+					.Value(x => x.DocumentNumber, document.DocumentNumber)
+					.Value(x => x.DocumentDate, document.DocumentDate)
+					.Value(x => x.Name, document.Name)
 					.InsertAsync(cancellationToken);
 			}
 		}
@@ -67,8 +71,18 @@ namespace Montr.Docs.Impl.Services
 			return await query.Select(x => new Document
 			{
 				Uid = x.Uid,
+				CompanyUid = x.CompanyUid,
 				ConfigCode = x.ConfigCode,
 				StatusCode = x.StatusCode,
+				Direction = Enum.Parse<DocumentDirection>(x.Direction),
+				DocumentNumber = x.DocumentNumber,
+				DocumentDate = x.DocumentDate,
+				Name = x.Name,
+				CreatedAtUtc = x.CreatedAtUtc,
+				CreatedBy = x.CreatedBy,
+				ModifiedAtUtc = x.ModifiedAtUtc,
+				ModifiedBy = x.ModifiedBy,
+				Url = "/documents/view/" + x.Uid
 			}).ToListAsync(cancellationToken);
 		}
 	}

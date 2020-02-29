@@ -103,10 +103,13 @@ namespace Montr.Kompany.Impl.CommandHandlers
 				await _documentRepository.Create(new Document
 				{
 					CompanyUid = companyUid,
-					ConfigCode = CompanyRequestConfigCode.RegistrationRequest
+					ConfigCode = CompanyRequestConfigCode.RegistrationRequest,
+					Direction = DocumentDirection.Outgoing,
+					DocumentNumber = companyUid.ToString(), // todo: generate number
+					DocumentDate = now
 				}, cancellationToken);
 
-				// todo: audit log
+				// todo: audit log for comapny and for document
 				await _auditLogService.Save(new AuditEvent
 				{
 					EntityTypeCode = Company.EntityTypeCode,

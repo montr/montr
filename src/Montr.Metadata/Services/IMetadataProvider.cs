@@ -322,8 +322,12 @@ namespace Montr.Metadata.Services
 			{
 				result.Columns = new List<DataColumn>
 				{
-					new DataColumn { Key = "configCode", Name = "ConfigCode", Sortable = true, Width = 200 },
-					new DataColumn { Key = "statusCode", Name = "StatusCode", Sortable = true, Width = 200 }
+					new DataColumn { Key = "direction", Name = "Направление", Width = 50 },
+					new DataColumn { Key = "documentNumber", Name = "Номер", UrlProperty = "url", Width = 50 },
+					new DataColumn { Key = "documentDate", Name = "Дата", UrlProperty = "url", Width = 50 },
+					new DataColumn { Key = "name", Name = "Наименование", Width = 150 },
+					new DataColumn { Key = "configCode", Name = "Тип", Sortable = true, Width = 100 },
+					new DataColumn { Key = "statusCode", Name = "Статус", Sortable = true, Width = 100 },
 				};
 			}
 

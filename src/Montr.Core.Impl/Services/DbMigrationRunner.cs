@@ -110,7 +110,8 @@ namespace Montr.Core.Impl.Services
 				if (options.Force == false)
 				{
 					throw new ApplicationException(
-						$"Failed to migrate: {migration.FileName} - the file was already migrated in the past and changed after migration. To force migration use the --force command");
+						$"Failed to migrate: {migration.FileName} - the file was already migrated in the past and changed after migration. "
+						+ "To force migration use the \"force\" option.");
 				}
 			}
 
