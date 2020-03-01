@@ -73,7 +73,6 @@ namespace Host
 			services
 				.AddControllers(options =>
 				{
-					options.EnableEndpointRouting = false; // todo: remove legacy routing support
 				})
 				.AddRazorPagesOptions(options =>
 				{
@@ -96,7 +95,7 @@ namespace Host
 
 		private void AddJsonOptions(IMvcBuilder mvcBuilder)
 		{
-			if (Montr.Core.Module.UseSystemJson)
+			if (Module.UseSystemJson)
 			{
 				mvcBuilder.AddJsonOptions(options =>
 				{
@@ -142,29 +141,22 @@ namespace Host
 				module.Configure(app);
 			}
 
+			app.UseEndpoints(endpoints =>
+			{
+				endpoints.MapControllers();
+				endpoints.MapRazorPages();
+				endpoints.MapFallbackToController("Index", "Home");
+				// endpoints.MapHub<MyChatHub>()
+				// endpoints.MapGrpcService<MyCalculatorService>()
+				endpoints.MapDefaultControllerRoute();
+			});
+
 			// todo: try to remove hack to fill field type map
 			var fieldProviderRegistry = app.ApplicationServices.GetRequiredService<IFieldProviderRegistry>();
 			foreach (var fieldType in fieldProviderRegistry.GetFieldTypes())
 			{
 				_fieldTypeMap[fieldType.Code] = fieldProviderRegistry.GetFieldTypeProvider(fieldType.Code).FieldType;
 			}
-
-			app.UseEndpoints(endpoints =>
-			{
-				endpoints.MapControllers();
-				endpoints.MapRazorPages();
-				// endpoints.MapHub<MyChatHub>()
-				// endpoints.MapGrpcService<MyCalculatorService>()
-				endpoints.MapDefaultControllerRoute();
-			});
-
-			app.UseMvc(routes =>
-			{
-				routes.MapRoute(
-					name: "greedy",
-					template: "{**greedy}",
-					defaults: new { controller = "Home", action = "Index" });
-			});
 		}
 	}
 }
