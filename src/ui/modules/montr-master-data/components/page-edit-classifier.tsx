@@ -24,6 +24,7 @@ interface IState {
 }
 
 export default class EditClassifier extends React.Component<IProps, IState> {
+
 	private _classifierTypeService = new ClassifierTypeService();
 	private _classifierService = new ClassifierService();
 	private _classifierLinkService = new ClassifierLinkService();

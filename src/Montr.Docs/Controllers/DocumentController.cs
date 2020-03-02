@@ -23,5 +23,11 @@ namespace Montr.Docs.Controllers
 		{
 			return await _mediator.Send(request);
 		}
+
+		[HttpPost]
+		public async Task<Document> Get(GetDocument request)
+		{
+			return await _mediator.Send(request);
+		}
 	}
 }
