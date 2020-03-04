@@ -5,7 +5,6 @@ import { Button, Tree, Select, Radio, Layout, Modal, Spin } from "antd";
 import { TreeNodeNormal } from "antd/lib/tree/Tree";
 import { EventDataNode } from "rc-tree/lib/interface";
 import { RadioChangeEvent } from "antd/lib/radio";
-import { Constants } from "@montr-core/.";
 import { Guid, IDataResult } from "@montr-core/models";
 import { NotificationService } from "@montr-core/services";
 import { withCompanyContext, CompanyContextProps } from "@montr-kompany/components";
