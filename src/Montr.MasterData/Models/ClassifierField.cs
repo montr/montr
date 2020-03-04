@@ -1,8 +1,9 @@
-﻿using Montr.Metadata.Services;
+﻿using Montr.MasterData.Services;
+using Montr.Metadata.Models;
+using Montr.Metadata.Services;
 
-namespace Montr.Metadata.Models
+namespace Montr.MasterData.Models
 {
-	// todo: move to MasterData
 	[FieldType(Code, typeof(ClassifierFieldProvider))]
 	public class ClassifierField : FieldMetadata<ClassifierField.Properties>
 	{

@@ -15,14 +15,21 @@ namespace Montr.Metadata.Services
 	public class DefaultMetadataProvider : IMetadataProvider
 	{
 		private readonly IFieldProviderRegistry _fieldProviderRegistry;
+		private readonly IMetadataRegistrator _registrator;
 
-		public DefaultMetadataProvider(IFieldProviderRegistry fieldProviderRegistry)
+		public DefaultMetadataProvider(IFieldProviderRegistry fieldProviderRegistry, IMetadataRegistrator registrator)
 		{
 			_fieldProviderRegistry = fieldProviderRegistry;
+			_registrator = registrator;
 		}
 
 		public async Task<DataView> GetView(string viewId)
 		{
+			if (_registrator.TryGet(viewId, out var dataView))
+			{
+				return dataView;
+			}
+
 			var result = new DataView { Id = viewId };
 
 			if (viewId == "Metadata/Grid")
@@ -84,126 +91,6 @@ namespace Montr.Metadata.Services
 					new DataColumn { Key = "name", Name = "Наименование", Sortable = true, Width = 400, UrlProperty = "url" },
 					new DataColumn { Key = "configCode", Name = "ConfigCode", Sortable = true, Width = 200 },
 					new DataColumn { Key = "statusCode", Name = "StatusCode", Sortable = true, Width = 200 }
-				};
-			}
-
-			if (viewId.StartsWith("Classifier/"))
-			{
-				if (viewId.EndsWith("/okv"))
-				{
-					result.Fields = new List<FieldMetadata>
-					{
-						new TextField { Key = "code", Name = "Код", Required = true },
-						new TextAreaField { Key = "name", Name = "Наименование", Required = true, Props = new TextAreaField.Properties { Rows = 10 } },
-						new TextField { Key = "digitalCode", Name = "Цифровой код", Required = true },
-						new TextField { Key = "shortName", Name = "Краткое наименование" }
-					};
-
-					// todo: remove, only to test long form
-					for (var i = 0; i < 100; i++)
-					{
-						result.Fields.Add(new TextField { Key = "test" + i, Name = "Тестовое поле №" + i});
-					}
-				}
-				else
-				{
-					result.Fields = new List<FieldMetadata>
-					{
-						// new TextField { Key = "statusCode", Name = "Статус", Readonly = true },
-						new TextField { Key = "code", Name = "Код", Required = true },
-						new TextAreaField { Key = "name", Name = "Наименование", Required = true, Props = new TextAreaField.Properties { Rows = 10 } }
-					};
-				}
-			}
-
-			if (viewId == "ClassifierTree/Form")
-			{
-				result.Fields = new List<FieldMetadata>
-				{
-					new TextField { Key = "code", Name = "Код", Required = true },
-					new TextField { Key = "name", Name = "Наименование", Required = true },
-				};
-			}
-
-			if (viewId == "ClassifierGroup/Form")
-			{
-				result.Fields = new List<FieldMetadata>
-				{
-					new TextField { Key = "code", Name = "Код", Required = true },
-					new TextField { Key = "name", Name = "Наименование", Required = true },
-					new ClassifierGroupField { Key = "parentUid", Name = "Родительская группа" },
-				};
-			}
-
-			if (viewId == "ClassifierLink/Form")
-			{
-				result.Fields = new List<FieldMetadata>
-				{
-					new ClassifierGroupField { Key = "group.uid", Name = "Группа", Required = true },
-				};
-			}
-
-			if (viewId == "ClassifierType")
-			{
-				result.Fields = new List<FieldMetadata>
-				{
-					new TextField { Key = "code", Name = "Код", Required = true },
-					new TextAreaField { Key = "name", Name = "Наименование", Required = true, Props = new TextAreaField.Properties { Rows = 2 } },
-					new TextAreaField { Key = "description", Name = "Описание" },
-					new SelectField
-					{
-						Key = "hierarchyType", Name = "Иерархия",
-						Description = "Справочник может быть без иерархии, с иерархией групп (например, контрагентов можно распределить по группам по их регионам, размеру или отношению к нашей организации) или иерархией элементов (например, одни виды деятельности уточняются другими видами деятельности)",
-						Props =
-						{
-							Options = new []
-							{
-								new SelectFieldOption { Value = "None", Name = "Нет" },
-								new SelectFieldOption { Value = "Groups", Name = "Группы" },
-								new SelectFieldOption { Value = "Items", Name = "Элементы" }
-							}
-						}
-					}
-				};
-			}
-
-			if (viewId.StartsWith("ClassifierType/Grid/Hierarchy"))
-			{
-				result.Columns = new List<DataColumn>
-				{
-					new DataColumn { Key = "name", Name = "Наименование", Sortable = true, Width = 400 },
-					// new DataColumn { Key = "default", Name = "По умолчанию", Width = 10 },
-					new DataColumn { Key = "code", Name = "Код", Sortable = true, Width = 10 },
-				};
-			}
-			else if (viewId.StartsWith("ClassifierType/Grid"))
-			{
-				result.Columns = new List<DataColumn>
-				{
-					new DataColumn { Key = "name", Name = "Наименование", Sortable = true, Width = 100, UrlProperty = "url" },
-					new DataColumn { Key = "description", Name = "Описание", Width = 200 },
-					// new DataColumn { Key = "hierarchyType", Name = "Иерархия", Width = 10 }
-					new DataColumn { Key = "code", Name = "Код", Sortable = true, Width = 60, UrlProperty = "url" },
-				};
-			}
-
-			if (viewId.StartsWith("Classifier/Grid"))
-			{
-				result.Columns = new List<DataColumn>
-				{
-					new DataColumn { Key = "code", Name = "Код", Sortable = true, Width = 10, UrlProperty = "url" },
-					new DataColumn { Key = "name", Name = "Наименование", Sortable = true, Width = 400 },
-					new DataColumn { Key = "statusCode", Name = "Статус", Sortable = true, Width = 30 },
-				};
-			}
-
-			if (viewId.StartsWith("ClassifierLink/Grid"))
-			{
-				result.Columns = new List<DataColumn>
-				{
-					new DataColumn { Key = "hierarchy", Name = "Иерархия", Width = 300, Path = "tree.name" },
-					new DataColumn { Key = "groupCode", Name = "Код группы", Width = 10, Path = "group.code" },
-					new DataColumn { Key = "groupName", Name = "Группа", Width = 400, Path = "group.name" }
 				};
 			}
 
@@ -387,7 +274,7 @@ namespace Montr.Metadata.Services
 				};
 			}
 
-			if (viewId == "Event/Invitation/Form")
+			/*if (viewId == "Event/Invitation/Form")
 			{
 				result.Fields = new List<FieldMetadata>
 				{
@@ -396,7 +283,7 @@ namespace Montr.Metadata.Services
 					new TextField { Key = "email", Name = "Email", Required = true },
 					new TextField { Key = "phone", Name = "Телефон" },
 				};
-			}
+			}*/
 
 			return await Task.FromResult(result);
 		}

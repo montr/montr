@@ -4,6 +4,15 @@ import { Guid } from "@montr-core/models";
 import { AppRouteRegistry } from "@montr-core/services/";
 import { DataFieldFactory } from "@montr-core/components";
 import { ClassifierGroupFieldFactory, ClassifierFieldFactory, SelectClassifierTypeFieldFactory } from "./components";
+import { Constants } from "@montr-core/.";
+
+export const Api = {
+	classifierList: `${Constants.apiURL}/classifier/list`,
+};
+
+export const Views = {
+	classifierList: "Classifier/Grid",
+};
 
 export const Patterns = {
 	searchClassifierType: "/classifiers/",

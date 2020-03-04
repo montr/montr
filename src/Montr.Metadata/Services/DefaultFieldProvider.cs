@@ -210,35 +210,4 @@ namespace Montr.Metadata.Services
 			return baseFields.Union(additionalFields).ToList();
 		}
 	}
-
-	public class ClassifierFieldProvider : DefaultFieldProvider<ClassifierField, string>
-	{
-		public override IList<FieldMetadata> GetMetadata()
-		{
-			var baseFields = base.GetMetadata();
-
-			var additionalFields = new List<FieldMetadata>
-			{
-				new SelectClassifierTypeField { Key = PropsPrefix + ".typeCode", Required = true, Name = "Type" }
-			};
-
-			return baseFields.Union(additionalFields).ToList();
-		}
-	}
-
-	public class ClassifierGroupFieldProvider : DefaultFieldProvider<ClassifierGroupField, string>
-	{
-		public override IList<FieldMetadata> GetMetadata()
-		{
-			var baseFields = base.GetMetadata();
-
-			var additionalFields = new List<FieldMetadata>
-			{
-				new SelectClassifierTypeField { Key = PropsPrefix + ".typeCode", Required = true, Name = "Type" },
-				new TextField { Key = PropsPrefix + ".treeCode", Required = true, Name = "Tree" }
-			};
-
-			return baseFields.Union(additionalFields).ToList();
-		}
-	}
 }

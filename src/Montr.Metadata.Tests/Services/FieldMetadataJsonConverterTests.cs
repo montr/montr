@@ -241,7 +241,7 @@ namespace Montr.Metadata.Tests.Services
 					}
 				},
 
-				new ClassifierGroupField
+				/*new ClassifierGroupField
 				{
 					Uid = Guid.NewGuid(),
 					Key = "Key 5",
@@ -274,7 +274,7 @@ namespace Montr.Metadata.Tests.Services
 					{
 						TypeCode = "TypeCode 2"
 					}
-				},
+				},*/
 
 				new FileField
 				{

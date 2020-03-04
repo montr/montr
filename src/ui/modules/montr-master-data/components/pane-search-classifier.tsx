@@ -12,7 +12,7 @@ import { withCompanyContext, CompanyContextProps } from "@montr-kompany/componen
 import { ClassifierService, ClassifierTypeService, ClassifierGroupService, ClassifierTreeService } from "../services";
 import { IClassifierType, IClassifierGroup, IClassifierTree } from "../models";
 import { ClassifierBreadcrumb, ModalEditClassifierGroup } from "../components";
-import { RouteBuilder } from "../module";
+import { RouteBuilder, Api, Views } from "../module";
 
 interface IProps extends CompanyContextProps {
 	typeCode: string;
@@ -423,8 +423,8 @@ class _PaneSearchClassifier extends React.Component<IProps, IState> {
 		const table = (
 			<DataTable
 				rowKey="uid"
-				viewId={`Classifier/Grid/${type.code}`}
-				loadUrl={`${Constants.apiURL}/classifier/list/`}
+				viewId={Views.classifierList}
+				loadUrl={Api.classifierList}
 				onLoadData={this.onTableLoadData}
 				onSelectionChange={this.onTableSelectionChange}
 				updateToken={updateTableToken}
@@ -451,7 +451,7 @@ class _PaneSearchClassifier extends React.Component<IProps, IState> {
 						</Link>
 						<ButtonDelete onClick={this.delete} />
 						<ButtonExport onClick={this.export} />
-						<Link to={`/classifiers/edit/${type.uid}`}>
+						<Link to={RouteBuilder.editClassifierType(type.uid)}>
 							<Button icon={Icon.Setting}> Настройка</Button>
 						</Link>
 					</Toolbar>

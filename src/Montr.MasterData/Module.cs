@@ -1,6 +1,8 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Montr.Core;
+using Montr.Core.Services;
+using Montr.MasterData.Services;
 
 namespace Montr.MasterData
 {
@@ -9,7 +11,7 @@ namespace Montr.MasterData
 	{
 		public void ConfigureServices(IConfiguration configuration, IServiceCollection services)
 		{
-			// no-op, to load assembly in domain
+			services.AddTransient<IStartupTask, RegisterClassifierMetadataStartupTask>();
 		}
 	}
 }
