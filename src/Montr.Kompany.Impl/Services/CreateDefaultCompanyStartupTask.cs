@@ -73,7 +73,7 @@ namespace Montr.Kompany.Impl.Services
 			{
 				// ReSharper disable once PossibleInvalidOperationException
 				UserUid = user.Uid.Value,
-				Company = new Company
+				Item = new Company
 				{
 					Name = options.DefaultCompanyName,
 					ConfigCode = CompanyConfigCode.Company // todo: register and use allowed company types

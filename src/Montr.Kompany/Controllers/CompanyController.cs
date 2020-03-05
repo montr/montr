@@ -31,13 +31,11 @@ namespace Montr.Kompany.Controllers
 		}
 
 		[Authorize, HttpPost]
-		public async Task<ActionResult<ApiResult>> Create(Company item)
+		public async Task<ActionResult<ApiResult>> Create(CreateCompany request)
 		{
-			return await _mediator.Send(new CreateCompany
-			{
-				UserUid = _currentUserProvider.GetUserUid(),
-				Company = item
-			});
+			request.UserUid = _currentUserProvider.GetUserUid();
+
+			return await _mediator.Send(request);
 		}
 	}
 }

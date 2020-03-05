@@ -42,11 +42,12 @@ namespace Montr.Kompany.Impl.CommandHandlers
 		public async Task<ApiResult> Handle(CreateCompany request, CancellationToken cancellationToken)
 		{
 			var userUid = request.UserUid ?? throw new ArgumentNullException(nameof(request.UserUid));
-			var company = request.Company ?? throw new ArgumentNullException(nameof(request.Company));
+			var company = request.Item ?? throw new ArgumentNullException(nameof(request.Item));
 
 			var now = _dateTimeProvider.GetUtcNow();
 
 			var companyUid = Guid.NewGuid();
+			var documentUid = Guid.NewGuid();
 
 			// todo: validate fields
 			var metadata = await _fieldMetadataRepository.Search(new MetadataSearchRequest
@@ -61,13 +62,13 @@ namespace Montr.Kompany.Impl.CommandHandlers
 
 			var manageFieldDataRequest = new ManageFieldDataRequest
 			{
-				EntityTypeCode = Company.EntityTypeCode,
-				EntityUid = companyUid,
+				EntityTypeCode = Document.EntityTypeCode,
+				EntityUid = documentUid,
 				Metadata = metadata.Rows,
 				Item = company
 			};
 
-			// todo: move to ClassifierValidator (?)
+			// todo: move to Validator (?)
 			var result = await _fieldDataRepository.Validate(manageFieldDataRequest, cancellationToken);
 
 			if (result.Success == false) return result;
@@ -102,6 +103,7 @@ namespace Montr.Kompany.Impl.CommandHandlers
 				// company registration request + todo: дата изменения
 				await _documentRepository.Create(new Document
 				{
+					Uid = documentUid,
 					CompanyUid = companyUid,
 					ConfigCode = CompanyRequestConfigCode.RegistrationRequest,
 					Direction = DocumentDirection.Outgoing,
@@ -109,7 +111,7 @@ namespace Montr.Kompany.Impl.CommandHandlers
 					DocumentDate = now
 				}, cancellationToken);
 
-				// todo: audit log for comapny and for document
+				// todo: audit log for company and for document
 				await _auditLogService.Save(new AuditEvent
 				{
 					EntityTypeCode = Company.EntityTypeCode,

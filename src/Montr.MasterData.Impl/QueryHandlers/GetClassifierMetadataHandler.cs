@@ -31,35 +31,6 @@ namespace Montr.MasterData.Impl.QueryHandlers
 
 			var type = await _classifierTypeService.Get(typeCode, cancellationToken);
 
-			ICollection<FieldMetadata> commonFields = null;
-
-			// todo: should be edited with 
-			if (type.HierarchyType == HierarchyType.Groups)
-			{
-				commonFields = new List<FieldMetadata>
-				{
-					new ClassifierGroupField
-					{
-						Key = "parentUid",
-						Name = "Группа",
-						Required = true,
-						Props = { TypeCode = typeCode, TreeCode = ClassifierTree.DefaultCode }
-					}
-				};
-			}
-			else if (type.HierarchyType == HierarchyType.Items)
-			{
-				commonFields = new List<FieldMetadata>
-				{
-					new ClassifierGroupField
-					{
-						Key = "parentUid",
-						Name = "Родительский элемент",
-						Props = { TypeCode = typeCode }
-					},
-				};
-			}
-
 			var metadata = await _metadataRepository.Search(new MetadataSearchRequest
 			{
 				EntityTypeCode = ClassifierType.EntityTypeCode,
@@ -69,8 +40,8 @@ namespace Montr.MasterData.Impl.QueryHandlers
 
 			var dbFields = new List<string>
 			{
-				ExpressionHelper.GetMemberName<Classifier>(x => x.Code),
-				ExpressionHelper.GetMemberName<Classifier>(x => x.Name)
+				nameof(Classifier.Code),
+				nameof(Classifier.Name)
 			};
 
 			var result = new DataView { Fields = metadata.Rows };
@@ -84,12 +55,46 @@ namespace Montr.MasterData.Impl.QueryHandlers
 				}
 			}
 
+			var commonFields = GetCommonFields(type);
 			if (commonFields != null)
 			{
 				result.Fields = commonFields.Union(result.Fields).ToArray();
 			}
 
 			return result;
+		}
+
+		// todo: should be edited outside classifier fields
+		private static ICollection<FieldMetadata> GetCommonFields(ClassifierType type)
+		{
+			if (type.HierarchyType == HierarchyType.Groups)
+			{
+				return new List<FieldMetadata>
+				{
+					new ClassifierGroupField
+					{
+						Key = "parentUid",
+						Name = "Группа",
+						Required = true,
+						Props = { TypeCode = type.Code, TreeCode = ClassifierTree.DefaultCode }
+					}
+				};
+			}
+
+			if (type.HierarchyType == HierarchyType.Items)
+			{
+				return new List<FieldMetadata>
+				{
+					new ClassifierGroupField
+					{
+						Key = "parentUid",
+						Name = "Родительский элемент",
+						Props = { TypeCode = type.Code }
+					},
+				};
+			}
+
+			return null;
 		}
 	}
 }

@@ -9,7 +9,9 @@ using Montr.Core.Impl.Services;
 using Montr.Core.Models;
 using Montr.Core.Services;
 using Montr.Data.Linq2Db;
+using Montr.Docs.Impl.Entities;
 using Montr.Docs.Impl.Services;
+using Montr.Docs.Models;
 using Montr.Kompany.Commands;
 using Montr.Kompany.Impl.CommandHandlers;
 using Montr.Kompany.Models;
@@ -59,20 +61,22 @@ namespace Montr.Kompany.Tests.CommandHandlers
 			using (var _ = unitOfWorkFactory.Create())
 			{
 				// act
+				var company = new Company
+				{
+					ConfigCode = "company",
+					Name = "Montr Inc.",
+					Fields = new FieldData
+					{
+						{ "test1", "value1" },
+						{ "test2", "value2" },
+						{ "test3", "value3" }
+					}
+				};
+
 				var command = new CreateCompany
 				{
 					UserUid = Guid.NewGuid(),
-					Company = new Company
-					{
-						ConfigCode = "company",
-						Name = "Montr Inc.",
-						Fields = new FieldData
-						{
-							{ "test1", "value1" },
-							{ "test2", "value2" },
-							{ "test3", "value3" }
-						}
-					}
+					Item = company
 				};
 
 				var result = await handler.Handle(command, cancellationToken);
@@ -83,19 +87,30 @@ namespace Montr.Kompany.Tests.CommandHandlers
 				Assert.IsNotNull(result.Uid);
 				Assert.AreNotEqual(Guid.Empty, result.Uid);
 
-				// assert field data inserted
+				// assert registration request inserted
+				DbDocument dbDocument;
+				using (var db = dbContextFactory.Create())
+				{
+					dbDocument = await db.GetTable<DbDocument>()
+						.Where(x => x.CompanyUid == result.Uid)
+						.SingleAsync(cancellationToken);
+				}
+
+				Assert.IsNotNull(dbDocument);
+
+				// assert registration request field data inserted
 				IList<DbFieldData> fieldData;
 				using (var db = dbContextFactory.Create())
 				{
 					fieldData = await db.GetTable<DbFieldData>()
-						.Where(x => x.EntityTypeCode == Company.EntityTypeCode && x.EntityUid == result.Uid)
+						.Where(x => x.EntityTypeCode == Document.EntityTypeCode && x.EntityUid == dbDocument.Uid)
 						.ToListAsync(cancellationToken);
 				}
 
-				Assert.AreEqual(command.Company.Fields.Count, fieldData.Count);
-				Assert.AreEqual(command.Company.Fields["test1"], fieldData.Single(x => x.Key == "test1").Value);
-				Assert.AreEqual(command.Company.Fields["test2"], fieldData.Single(x => x.Key == "test2").Value);
-				Assert.AreEqual(command.Company.Fields["test3"], fieldData.Single(x => x.Key == "test3").Value);
+				Assert.AreEqual(company.Fields.Count, fieldData.Count);
+				Assert.AreEqual(company.Fields["test1"], fieldData.Single(x => x.Key == "test1").Value);
+				Assert.AreEqual(company.Fields["test2"], fieldData.Single(x => x.Key == "test2").Value);
+				Assert.AreEqual(company.Fields["test3"], fieldData.Single(x => x.Key == "test3").Value);
 			}
 		}
 	}

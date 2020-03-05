@@ -1,9 +1,15 @@
 ﻿using System;
+using System.Diagnostics;
 
 namespace Montr.Docs.Models
 {
+	[DebuggerDisplay("{" + nameof(DebuggerDisplay) + ",nq}")]
 	public class Document
 	{
+		private string DebuggerDisplay => $"{ConfigCode}, {Name}";
+
+		public static readonly string EntityTypeCode = typeof(Document).Name;
+
 		public Guid Uid { get; set; }
 
 		public Guid CompanyUid { get; set; }
