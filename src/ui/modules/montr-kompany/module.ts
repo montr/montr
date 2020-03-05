@@ -4,6 +4,7 @@ import { AppRouteRegistry } from "@montr-core/services";
 
 export const Api = {
 	companyList: `${Constants.apiURL}/company/list`,
+	companyCreate: `${Constants.apiURL}/company/create`,
 };
 
 export const Patterns = {

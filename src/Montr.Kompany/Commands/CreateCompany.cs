@@ -14,6 +14,6 @@ namespace Montr.Kompany.Commands
 
 		public Guid? UserUid { get; set; }
 
-		public Company Company { get; set; }
+		public Company Item { get; set; }
 	}
 }

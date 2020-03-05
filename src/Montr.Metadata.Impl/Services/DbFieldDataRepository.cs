@@ -73,7 +73,7 @@ namespace Montr.Metadata.Impl.Services
 			var errors = new List<ApiResultError>();
 
 			// todo: validate/insert/update system fields stored in FieldData
-			foreach (var field in metadata.Where(x => x.System == false))
+			foreach (var field in metadata /*.Where(x => x.System == false)*/)
 			{
 				data.TryGetValue(field.Key, out var value);
 

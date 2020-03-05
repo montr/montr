@@ -38,10 +38,10 @@ class _RegistrationForm extends React.Component<IProps, IState> {
 		await this._companyService.abort();
 	};
 
-	handleSubmit = async (values: any) => {
+	handleSubmit = async (values: ICompany) => {
 		const { manageCompany, switchCompany } = this.props;
 
-		const result = await this._companyService.create(values);
+		const result = await this._companyService.create({ item: values });
 
 		if (result.success) {
 			await switchCompany(result.uid);
@@ -205,7 +205,7 @@ class _PageCompanyRegistration extends React.Component<IRProps, IRState> {
 	handleSubmit = async (values: ICompany): Promise<IApiResult> => {
 		const { manageCompany, switchCompany } = this.props;
 
-		const result = await this._companyService.create(values);
+		const result = await this._companyService.create({ item: values });
 
 		if (result?.success) {
 			await switchCompany(result.uid);
