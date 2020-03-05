@@ -1,10 +1,15 @@
 import React from "react";
 import { generatePath } from "react-router";
-import { Guid } from "@montr-core/models";
-import { AppRouteRegistry } from "@montr-core/services/";
-import { DataFieldFactory } from "@montr-core/components";
-import { ClassifierGroupFieldFactory, ClassifierFieldFactory, SelectClassifierTypeFieldFactory } from "./components";
+import { Guid } from "@montr-core/models/guid";
+import { AppRouteRegistry } from "@montr-core/services/app-route-registry";
+import { DataFieldFactory } from "@montr-core/components/data-field-factory";
 import { Constants } from "@montr-core/.";
+
+import("./components").then(x => {
+	DataFieldFactory.register("classifier-group", new x.ClassifierGroupFieldFactory());
+	DataFieldFactory.register("classifier", new x.ClassifierFieldFactory());
+	DataFieldFactory.register("select-classifier-type", new x.SelectClassifierTypeFieldFactory());
+});
 
 export const Api = {
 	classifierList: `${Constants.apiURL}/classifier/list`,
@@ -43,7 +48,3 @@ AppRouteRegistry.add([
 	{ path: Patterns.addClassifier, exact: true, component: React.lazy(() => import("./components/page-edit-classifier")) },
 	{ path: Patterns.editClassifier, exact: true, component: React.lazy(() => import("./components/page-edit-classifier")) }
 ]);
-
-DataFieldFactory.register("classifier-group", new ClassifierGroupFieldFactory());
-DataFieldFactory.register("classifier", new ClassifierFieldFactory());
-DataFieldFactory.register("select-classifier-type", new SelectClassifierTypeFieldFactory());
