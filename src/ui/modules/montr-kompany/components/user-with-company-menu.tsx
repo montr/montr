@@ -17,7 +17,7 @@ class _UserWithCompanyMenu extends React.Component<MenuProps & CompanyContextPro
 					<CompanyMenu />
 				} />
 		);
-	}
+	};
 }
 
 export const UserWithCompanyMenu = withCompanyContext(_UserWithCompanyMenu);

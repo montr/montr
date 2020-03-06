@@ -37,7 +37,7 @@ class _CompanyMenu extends React.Component<MenuProps & CompanyContextProps> {
 				</Menu.SubMenu>
 
 				<Menu.Divider {...props} />
-			</>
+			</>;
 		}
 
 		return null;
