@@ -20,7 +20,7 @@ namespace Montr.Core.Tests.Services
 			var modules = loader.GetSortedModules("../../../../Host/bin/Debug/netcoreapp3.1/", false);
 
 			// assert
-			// Assert.IsTrue(loader.Errors.Count == 0); // todo: fix errors in github actions tests
+			// Assert.AreEqual(0, loader.Errors.Count); // todo: fix errors in github actions tests
 			Assert.IsTrue(modules.Count > 0);
 		}
 
