@@ -53,7 +53,7 @@ namespace Montr.Kompany.Impl.CommandHandlers
 			var metadata = await _fieldMetadataRepository.Search(new MetadataSearchRequest
 			{
 				EntityTypeCode = Process.EntityTypeCode,
-				EntityUid = Process.Registration,
+				EntityUid = Process.CompanyRegistrationRequest,
 				// todo: check flags
 				// IsSystem = false,
 				IsActive = true,
