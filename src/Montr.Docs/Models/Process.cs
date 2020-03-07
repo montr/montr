@@ -6,7 +6,7 @@ namespace Montr.Docs.Models
 	[DebuggerDisplay("{" + nameof(DebuggerDisplay) + ",nq}")]
 	public class Process
 	{
-		public static readonly Guid Registration = Guid.Parse("8C41EBDC-E176-424E-9048-249E9862DBB2");
+		public static readonly Guid CompanyRegistrationRequest = Guid.Parse("8C41EBDC-E176-424E-9048-249E9862DBB2");
 
 		private string DebuggerDisplay => $"{Code}, {Name}";
 

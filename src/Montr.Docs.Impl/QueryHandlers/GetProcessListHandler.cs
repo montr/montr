@@ -17,10 +17,10 @@ namespace Montr.Docs.Impl.QueryHandlers
 				{
 					new Process
 					{
-						Uid = Process.Registration,
-						Code = "Registration",
+						Uid = Process.CompanyRegistrationRequest,
+						Code = nameof(Process.CompanyRegistrationRequest),
 						Name = "Процесс регистрации (по умолчанию)",
-						Url = $"/processes/edit/{Process.Registration}"
+						Url = $"/processes/edit/{Process.CompanyRegistrationRequest}"
 					}
 				}
 			});

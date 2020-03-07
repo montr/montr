@@ -27,8 +27,9 @@ namespace Montr.Kompany.Impl.QueryHandlers
 			var metadata = await _metadataRepository.Search(new MetadataSearchRequest
 			{
 				EntityTypeCode = Process.EntityTypeCode,
-				EntityUid = Process.Registration,
-				IsActive = true
+				EntityUid = Process.CompanyRegistrationRequest,
+				IsActive = true,
+				SkipPaging = true
 			}, cancellationToken);
 
 			var dbFields = new List<string>

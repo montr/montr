@@ -77,7 +77,7 @@ namespace Montr.Docs.Impl.Services
 					var metadata = await _fieldMetadataRepository.Search(new MetadataSearchRequest
 					{
 						EntityTypeCode = Process.EntityTypeCode,
-						EntityUid = Process.Registration,
+						EntityUid = Process.CompanyRegistrationRequest,
 						IsActive = true,
 						SkipPaging = true
 					}, cancellationToken);
