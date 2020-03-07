@@ -137,7 +137,7 @@ namespace Montr.MasterData.Impl.Services
 					data.InsertRange(0, focused);
 				}
 
-				// todo: add load fields for multiple items
+				// todo: preload fields for multiple items
 				if (request.IncludeFields)
 				{
 					var metadata = await _metadataService.GetMetadata(type, cancellationToken);
