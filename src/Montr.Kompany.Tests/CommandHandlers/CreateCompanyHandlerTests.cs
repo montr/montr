@@ -34,7 +34,13 @@ namespace Montr.Kompany.Tests.CommandHandlers
 			var unitOfWorkFactory = new TransactionScopeUnitOfWorkFactory();
 			var dbContextFactory = new DefaultDbContextFactory();
 			var dateTimeProvider = new DefaultDateTimeProvider();
-			var documentRepository = new DbDocumentRepository(dbContextFactory);
+
+			var fieldProviderRegistry = new DefaultFieldProviderRegistry();
+			fieldProviderRegistry.AddFieldType(typeof(TextField));
+
+			var dbFieldMetadataRepository = new DbFieldMetadataRepository(dbContextFactory, fieldProviderRegistry, new NewtonsoftJsonSerializer());
+			var dbFieldDataRepository = new DbFieldDataRepository(dbContextFactory, fieldProviderRegistry);
+			var documentRepository = new DbDocumentRepository(dbContextFactory, dbFieldMetadataRepository, new DbFieldDataRepository(dbContextFactory, fieldProviderRegistry));
 			var jsonSerializer = new DefaultJsonSerializer();
 			var auditLogService = new DbAuditLogService(dbContextFactory, jsonSerializer);
 
@@ -51,9 +57,6 @@ namespace Montr.Kompany.Tests.CommandHandlers
 					}
 				});
 
-			var fieldProviderRegistry = new DefaultFieldProviderRegistry();
-			fieldProviderRegistry.AddFieldType(typeof(TextField));
-			var dbFieldDataRepository = new DbFieldDataRepository(dbContextFactory, fieldProviderRegistry);
 
 			var handler = new CreateCompanyHandler(unitOfWorkFactory,
 				dbContextFactory, dateTimeProvider, metadataRepositoryMock.Object, dbFieldDataRepository, documentRepository, auditLogService);

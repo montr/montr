@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Diagnostics;
+using Montr.Metadata.Models;
 
 namespace Montr.Docs.Models
 {
@@ -10,7 +11,7 @@ namespace Montr.Docs.Models
 
 		public static readonly string EntityTypeCode = typeof(Document).Name;
 
-		public Guid Uid { get; set; }
+		public Guid? Uid { get; set; }
 
 		public Guid CompanyUid { get; set; }
 
@@ -35,6 +36,8 @@ namespace Montr.Docs.Models
 		public string ModifiedBy { get; set; }
 
 		public string Url { get; set; }
+
+		public FieldData Fields { get; set; }
 	}
 
 	public enum DocumentDirection

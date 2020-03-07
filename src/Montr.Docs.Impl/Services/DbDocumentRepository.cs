@@ -10,6 +10,8 @@ using Montr.Data.Linq2Db;
 using Montr.Docs.Impl.Entities;
 using Montr.Docs.Models;
 using Montr.Docs.Services;
+using Montr.Metadata.Models;
+using Montr.Metadata.Services;
 
 namespace Montr.Docs.Impl.Services
 {
@@ -17,10 +19,16 @@ namespace Montr.Docs.Impl.Services
 	public class DbDocumentRepository : IDocumentRepository
 	{
 		private readonly IDbContextFactory _dbContextFactory;
+		private readonly IRepository<FieldMetadata> _fieldMetadataRepository;
+		private readonly IFieldDataRepository _fieldDataRepository;
 
-		public DbDocumentRepository(IDbContextFactory dbContextFactory)
+		public DbDocumentRepository(IDbContextFactory dbContextFactory,
+			IRepository<FieldMetadata> fieldMetadataRepository,
+			IFieldDataRepository fieldDataRepository)
 		{
 			_dbContextFactory = dbContextFactory;
+			_fieldMetadataRepository = fieldMetadataRepository;
+			_fieldDataRepository = fieldDataRepository;
 		}
 
 		public async Task Create(Document document, CancellationToken cancellationToken)
@@ -55,8 +63,38 @@ namespace Montr.Docs.Impl.Services
 				var query = from c in db.GetTable<DbDocument>()
 					select c;
 
+				if (request.Uid != null)
+				{
+					query = query.Where(x => x.Uid == request.Uid);
+				}
+
 				var data = await Materialize(
 					query.Apply(request, x => x.ConfigCode), cancellationToken);
+
+				// todo: preload fields for multiple items
+				if (request.IncludeFields)
+				{
+					var metadata = await _fieldMetadataRepository.Search(new MetadataSearchRequest
+					{
+						EntityTypeCode = Process.EntityTypeCode,
+						EntityUid = Process.Registration,
+						IsActive = true,
+						SkipPaging = true
+					}, cancellationToken);
+
+					foreach (var item in data)
+					{
+						var fields = await _fieldDataRepository.Search(new FieldDataSearchRequest
+						{
+							Metadata = metadata.Rows,
+							EntityTypeCode = Document.EntityTypeCode,
+							// ReSharper disable once PossibleInvalidOperationException
+							EntityUids = new[] { item.Uid.Value }
+						}, cancellationToken);
+
+						item.Fields = fields.Rows.SingleOrDefault();
+					}
+				}
 
 				return new SearchResult<Document>
 				{
