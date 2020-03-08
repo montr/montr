@@ -6,7 +6,6 @@ using Montr.Core.Services;
 using Montr.MasterData.Impl.Services;
 using Montr.MasterData.Models;
 using Montr.MasterData.Services;
-using Montr.Metadata.Models;
 using Montr.Metadata.Services;
 
 namespace Montr.MasterData.Impl
@@ -23,6 +22,8 @@ namespace Montr.MasterData.Impl
 			services.AddTransient<IClassifierTypeService, DbClassifierTypeService>();
 			services.AddTransient<IClassifierTypeMetadataService, ClassifierTypeMetadataService>();
 			services.AddTransient<IClassifierTreeService, DefaultClassifierTreeService>();
+
+			services.AddTransient<INumberingService, DbNumberingService>();
 		}
 
 		public void Configure(IApplicationBuilder app)
