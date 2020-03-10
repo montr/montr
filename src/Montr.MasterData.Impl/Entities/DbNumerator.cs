@@ -30,6 +30,11 @@ namespace Montr.MasterData.Impl.Entities
 		public bool IsSystem { get; set; }
 	}
 
+	[Table(Schema = "montr", Name = "numerator_entity")]
+	public class DbNumeratorEntity
+	{
+	}
+
 	[Table(Schema = "montr", Name = "numerator_counter")]
 	public class DbNumeratorCounter
 	{
@@ -41,5 +46,10 @@ namespace Montr.MasterData.Impl.Entities
 
 		[Column(Name = "value"), DataType(DataType.Long), NotNull]
 		public string Value { get; set; }
+	}
+
+	[Table(Schema = "montr", Name = "numerator_counter_param")]
+	public class DbNumeratorCounterParam
+	{
 	}
 }
