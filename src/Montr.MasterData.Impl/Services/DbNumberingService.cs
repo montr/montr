@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using LinqToDB;
 using Montr.Data.Linq2Db;
@@ -17,19 +18,19 @@ namespace Montr.MasterData.Impl.Services
 			_dbContextFactory = dbContextFactory;
 		}
 
-		public async Task<string> GenerateNumber(Guid numeratorUid)
+		public async Task<string> GenerateNumber(Guid numeratorUid, string entityTypeCode, Guid enityUid, CancellationToken cancellationToken)
 		{
 			using (var db = _dbContextFactory.Create())
 			{
 				var dbNumerator = await db
 					.GetTable<DbNumerator>()
 					.Where(x => x.Uid == numeratorUid)
-					.FirstAsync();
+					.FirstAsync(cancellationToken);
 
 				var dbNumeratorCounters = await db
 					.GetTable<DbNumeratorCounter>()
 					.Where(x => x.NumeratorUid == numeratorUid)
-					.ToListAsync();
+					.ToListAsync(cancellationToken);
 
 			}
 

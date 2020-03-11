@@ -15,12 +15,11 @@ namespace Montr.MasterData.Tests.Services
 		public async Task InsertGroup_Should_BuildClosureTable()
 		{
 			// arrange
+			var cancellationToken = new CancellationToken();
 			var unitOfWorkFactory = new TransactionScopeUnitOfWorkFactory();
 			var dbContextFactory = new DefaultDbContextFactory();
 
 			var generator = new DbHelper(unitOfWorkFactory, dbContextFactory);
-
-			var cancellationToken = new CancellationToken();
 
 			using (var _ = unitOfWorkFactory.Create())
 			{
