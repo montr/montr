@@ -44,12 +44,18 @@ namespace Montr.MasterData.Impl.Entities
 		[Column(Name = "numerator_uid"), DataType(DataType.Guid), NotNull]
 		public Guid NumeratorUid { get; set; }
 
+		[Column(Name = "key"), DataType(DataType.VarChar), NotNull]
+		public string Key { get; set; }
+
 		[Column(Name = "value"), DataType(DataType.Long), NotNull]
-		public string Value { get; set; }
+		public long Value { get; set; }
 	}
 
 	[Table(Schema = "montr", Name = "numerator_counter_param")]
 	public class DbNumeratorCounterParam
 	{
+		public string Key { get; set; }
+
+		public string Value { get; set; }
 	}
 }
