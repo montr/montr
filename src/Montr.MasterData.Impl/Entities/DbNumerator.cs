@@ -38,8 +38,8 @@ namespace Montr.MasterData.Impl.Entities
 	[Table(Schema = "montr", Name = "numerator_counter")]
 	public class DbNumeratorCounter
 	{
-		[Column(Name = "uid"), DataType(DataType.Guid), NotNull, PrimaryKey]
-		public Guid Uid { get; set; }
+		// [Column(Name = "uid"), DataType(DataType.Guid), NotNull, PrimaryKey]
+		// public Guid Uid { get; set; }
 
 		[Column(Name = "numerator_uid"), DataType(DataType.Guid), NotNull]
 		public Guid NumeratorUid { get; set; }

@@ -303,5 +303,24 @@ namespace Montr.MasterData.Tests
 				return sb.ToString();
 			}
 		}
+
+		public async Task<ApiResult> InsertNumerator(Numerator numerator, CancellationToken cancellationToken)
+		{
+			var uid = Guid.NewGuid();
+
+			using (var db = _dbContextFactory.Create())
+			{
+				var affected = await db.GetTable<DbNumerator>()
+					.Value(x => x.Uid, uid)
+					.Value(x => x.Name, numerator.Name ?? "Test numerator")
+					.Value(x => x.Pattern, numerator.Pattern ?? "{Number}")
+					.Value(x => x.Periodicity, numerator.Periodicity.ToString())
+					.Value(x => x.IsActive, true)
+					.Value(x => x.IsSystem, false)
+					.InsertAsync(cancellationToken);
+
+				return new ApiResult { Uid = uid,  AffectedRows = affected };
+			}
+		}
 	}
 }

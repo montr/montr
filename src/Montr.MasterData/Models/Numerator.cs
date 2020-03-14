@@ -13,14 +13,14 @@ namespace Montr.MasterData.Models
 
 		public string Pattern { get; set; }
 
-		public Periodicity Periodicity { get; set; }
+		public NumeratorPeriodicity Periodicity { get; set; }
 
 		public bool IsActive { get; set; }
 
 		public bool IsSystem { get; set; }
 	}
 
-	public enum Periodicity
+	public enum NumeratorPeriodicity
 	{
 		None = 0,
 		Day = 1,
