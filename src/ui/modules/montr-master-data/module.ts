@@ -13,6 +13,12 @@ import("./components").then(x => {
 
 export const Api = {
 	classifierList: `${Constants.apiURL}/classifier/list`,
+	classifierExport: `${Constants.apiURL}/classifier/export`,
+	classifierCreate: `${Constants.apiURL}/classifier/create`,
+	classifierGet: `${Constants.apiURL}/classifier/get`,
+	classifierInsert: `${Constants.apiURL}/classifier/insert`,
+	classifierUpdate: `${Constants.apiURL}/classifier/update`,
+	classifierDelete: `${Constants.apiURL}/classifier/delete`,
 };
 
 export const Views = {

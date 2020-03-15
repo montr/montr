@@ -61,8 +61,7 @@ export default class EditClassifier extends React.Component<IProps, IState> {
 
 		const data = (uid)
 			? await this._classifierService.get(typeCode, uid)
-			// todo: load defaults from server
-			: { parentUid };
+			: await this._classifierService.create(typeCode, parentUid);
 
 		if (uid && type.hierarchyType == "Groups") {
 			const links = await this._classifierLinkService.list({ typeCode: type.code, itemUid: uid });

@@ -14,14 +14,17 @@ namespace Montr.MasterData.Impl.Entities
 		[Column(Name = "uid"), DataType(DataType.Guid), NotNull, PrimaryKey]
 		public Guid Uid { get; set; }
 
-		[Column(Name = "name"), DataType(DataType.VarChar), NotNull]
-		public string Name { get; set; }
+		[Column(Name = "entity_type_code", Length = 32), DataType(DataType.VarChar), NotNull]
+		public string EntityTypeCode { get; set; }
 
 		[Column(Name = "pattern"), DataType(DataType.VarChar), NotNull]
 		public string Pattern { get; set; }
 
 		[Column(Name = "periodicity"), DataType(DataType.VarChar), NotNull]
 		public string Periodicity { get; set; }
+
+		[Column(Name = "name"), DataType(DataType.VarChar), NotNull]
+		public string Name { get; set; }
 
 		[Column(Name = "is_active"), DataType(DataType.Boolean), NotNull]
 		public bool IsActive { get; set; }
@@ -30,32 +33,34 @@ namespace Montr.MasterData.Impl.Entities
 		public bool IsSystem { get; set; }
 	}
 
-	[Table(Schema = "montr", Name = "numerator_entity")]
-	public class DbNumeratorEntity
-	{
-	}
-
 	[Table(Schema = "montr", Name = "numerator_counter")]
 	public class DbNumeratorCounter
 	{
-		// [Column(Name = "uid"), DataType(DataType.Guid), NotNull, PrimaryKey]
-		// public Guid Uid { get; set; }
-
-		[Column(Name = "numerator_uid"), DataType(DataType.Guid), NotNull]
+		[Column(Name = "numerator_uid"), DataType(DataType.Guid), NotNull, PrimaryKey(0)]
 		public Guid NumeratorUid { get; set; }
 
-		[Column(Name = "key"), DataType(DataType.VarChar), NotNull]
+		[Column(Name = "key"), DataType(DataType.VarChar), NotNull, PrimaryKey(1)]
 		public string Key { get; set; }
 
 		[Column(Name = "value"), DataType(DataType.Long), NotNull]
 		public long Value { get; set; }
 	}
 
-	[Table(Schema = "montr", Name = "numerator_counter_param")]
+	[Table(Schema = "montr", Name = "numerator_entity")]
+	public class DbNumeratorEntity
+	{
+		[Column(Name = "entity_uid"), DataType(DataType.Guid), NotNull, PrimaryKey]
+		public System.Guid EntityUid { get; set; }
+
+		[Column(Name = "numerator_uid"), DataType(DataType.Guid), NotNull]
+		public Guid NumeratorUid { get; set; }
+	}
+
+	/*[Table(Schema = "montr", Name = "numerator_counter_param")]
 	public class DbNumeratorCounterParam
 	{
 		public string Key { get; set; }
 
 		public string Value { get; set; }
-	}
+	}*/
 }

@@ -6,6 +6,6 @@ namespace Montr.MasterData.Services
 {
 	public interface INumberingService
 	{
-		Task<string> GenerateNumber(Guid numeratorUid, string entityTypeCode, Guid enityUid, CancellationToken cancellationToken);
+		Task<string> GenerateNumber(string entityTypeCode, Guid enityUid, CancellationToken cancellationToken);
 	}
 }

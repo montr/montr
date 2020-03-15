@@ -20,29 +20,34 @@ namespace Montr.MasterData.Impl.Services
 			_patternParser = patternParser;
 		}
 
-		public async Task<string> GenerateNumber(Guid numeratorUid, string entityTypeCode, Guid enityUid, CancellationToken cancellationToken)
+		public async Task<string> GenerateNumber(string entityTypeCode, Guid enityUid, CancellationToken cancellationToken)
 		{
 			// todo: add distributed lock
-
 			using (var db = _dbContextFactory.Create())
 			{
+				var dbNumeratorEntity = await db.GetTable<DbNumeratorEntity>()
+					.Where(x => x.EntityUid == enityUid)
+					.FirstOrDefaultAsync(cancellationToken);
+
+				if (dbNumeratorEntity == null) return null;
+
+				var numeratorUid = dbNumeratorEntity.NumeratorUid;
+
 				var dbNumerator = await db
 					.GetTable<DbNumerator>()
 					.Where(x => x.Uid == numeratorUid)
 					.FirstAsync(cancellationToken);
 
-				var dbNumeratorCounters = await db
-					.GetTable<DbNumeratorCounter>()
-					.Where(x => x.NumeratorUid == numeratorUid)
-					.ToListAsync(cancellationToken);
-
+				// todo: generate key
+				_patternParser.Parse(dbNumerator.Pattern);
 				var key = string.Empty;
 
-				_patternParser.Parse(dbNumerator.Pattern);
+				var dbNumeratorCounter = await db
+					.GetTable<DbNumeratorCounter>()
+					.Where(x => x.NumeratorUid == numeratorUid && x.Key == key)
+					.FirstOrDefaultAsync(cancellationToken);
 
 				long value;
-
-				var dbNumeratorCounter = dbNumeratorCounters.Find(x => x.Key == key);
 
 				if (dbNumeratorCounter == null)
 				{

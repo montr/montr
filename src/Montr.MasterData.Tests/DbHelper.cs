@@ -304,22 +304,28 @@ namespace Montr.MasterData.Tests
 			}
 		}
 
-		public async Task<ApiResult> InsertNumerator(Numerator numerator, CancellationToken cancellationToken)
+		public async Task<ApiResult> InsertNumerator(Numerator numerator, string entityTypeCode, Guid entityUid, CancellationToken cancellationToken)
 		{
-			var uid = Guid.NewGuid();
+			var numeratorUid = Guid.NewGuid();
 
 			using (var db = _dbContextFactory.Create())
 			{
-				var affected = await db.GetTable<DbNumerator>()
-					.Value(x => x.Uid, uid)
-					.Value(x => x.Name, numerator.Name ?? "Test numerator")
-					.Value(x => x.Pattern, numerator.Pattern ?? "{Number}")
+				await db.GetTable<DbNumerator>()
+					.Value(x => x.Uid, numeratorUid)
+					.Value(x => x.EntityTypeCode, entityTypeCode)
+					.Value(x => x.Pattern, numerator.Pattern ?? Numerator.DefaultPattern)
 					.Value(x => x.Periodicity, numerator.Periodicity.ToString())
+					.Value(x => x.Name, numerator.Name ?? "Test numerator")
 					.Value(x => x.IsActive, true)
 					.Value(x => x.IsSystem, false)
 					.InsertAsync(cancellationToken);
 
-				return new ApiResult { Uid = uid,  AffectedRows = affected };
+				await db.GetTable<DbNumeratorEntity>()
+					.Value(x => x.NumeratorUid, numeratorUid)
+					.Value(x => x.EntityUid, entityUid)
+					.InsertAsync(cancellationToken);
+
+				return new ApiResult { Uid = numeratorUid };
 			}
 		}
 	}

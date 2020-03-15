@@ -24,20 +24,17 @@ namespace Montr.MasterData.Tests.Services
 
 			using (var _ = unitOfWorkFactory.Create())
 			{
-				var entityTypeCode = Classifier.EntityTypeCode;
+				var entityTypeCode = ClassifierType.EntityTypeCode;
 				var enityUid = Guid.NewGuid();
 
-				var numerator = await dbHelper.InsertNumerator(new Numerator
+				await dbHelper.InsertNumerator(new Numerator
 				{
 					Pattern = "C-{Number}"
-				}, cancellationToken);
-
-				// ReSharper disable once PossibleInvalidOperationException
-				var numeratorUid = numerator.Uid.Value;
+				}, entityTypeCode, enityUid, cancellationToken);
 
 				// act
-				var number1 = await service.GenerateNumber(numeratorUid, entityTypeCode, enityUid, cancellationToken);
-				var number2 = await service.GenerateNumber(numeratorUid, entityTypeCode, enityUid, cancellationToken);
+				var number1 = await service.GenerateNumber(entityTypeCode, enityUid, cancellationToken);
+				var number2 = await service.GenerateNumber(entityTypeCode, enityUid, cancellationToken);
 
 				// assert
 				Assert.AreEqual("C-00001", number1);

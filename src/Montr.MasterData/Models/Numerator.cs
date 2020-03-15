@@ -7,6 +7,9 @@ namespace Montr.MasterData.Models
 	public class Numerator
 	{
 		private string DebuggerDisplay => $"{Name} - {Pattern}";
+
+		public static readonly string DefaultPattern = "{Number}";
+
 		public Guid Uid { get; set; }
 
 		public string Name { get; set; }
