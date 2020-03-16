@@ -8,4 +8,11 @@ namespace Montr.MasterData.Services
 	{
 		Task<string> GenerateNumber(string entityTypeCode, Guid enityUid, CancellationToken cancellationToken);
 	}
+
+	public interface INumeratorTagProvider
+	{
+		string[] GetAvailableTags();
+
+		void ResolveValues(string entityTypeCode, Guid enityUid, string[] tags, CancellationToken cancellationToken);
+	}
 }

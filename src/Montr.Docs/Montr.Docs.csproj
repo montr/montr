@@ -10,6 +10,7 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\Montr.Kompany\Montr.Kompany.csproj" />
+		<ProjectReference Include="..\Montr.MasterData\Montr.MasterData.csproj" />
 		<ProjectReference Include="..\Montr.Metadata\Montr.Metadata.csproj" />
 	</ItemGroup>
 

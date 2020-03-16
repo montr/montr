@@ -18,6 +18,8 @@ namespace Montr.MasterData.Impl
 			services.AddSingleton<INumberingService, DbNumberingService>();
 			services.AddSingleton<NumeratorPatternParser, NumeratorPatternParser>();
 
+			services.AddNamedTransient<INumeratorTagProvider, ClassifierNumeratorTagProvider>(ClassifierType.EntityTypeCode);
+
 			services.AddTransient<IRepository<ClassifierType>, DbClassifierTypeRepository>();
 			services.AddTransient<IRepository<ClassifierTree>, DbClassifierTreeRepository>();
 			services.AddTransient<IRepository<Classifier>, DbClassifierRepository>();
