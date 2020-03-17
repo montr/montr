@@ -1,10 +1,11 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using System.Linq;
+using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Montr.MasterData.Impl.Services;
 
 namespace Montr.MasterData.Tests.Services
 {
 	[TestClass]
-	public class NumeratorPatternParserTests
+	public class NumberPatternParserTests
 	{
 		[TestMethod]
 		[DataRow("P-{Number}", "{Number}")]
@@ -14,15 +15,14 @@ namespace Montr.MasterData.Tests.Services
 		public void Parse_ValidPatterns_ReturnTags(string pattern, string tags)
 		{
 			// arrange
-			var parser = new NumeratorPatternParser();
+			var parser = new NumberPatternParser();
 			var expected = tags.Split(",");
 
 			// act
 			var result = parser.Parse(pattern);
 
 			// assert
-			Assert.IsTrue(result.Success);
-			CollectionAssert.AreEqual(expected, result.Tags);
+			CollectionAssert.AreEqual(expected, result.ToArray());
 		}
 	}
 }
