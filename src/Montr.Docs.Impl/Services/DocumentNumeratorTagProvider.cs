@@ -27,7 +27,7 @@ namespace Montr.Docs.Impl.Services
 			return false;
 		}
 
-		public Task Resolve(string entityTypeCode, Guid enityUid,
+		public Task Resolve(string entityTypeCode, Guid enityUid, out DateTime? date,
 			IEnumerable<string> tags, IDictionary<string, string> values, CancellationToken cancellationToken)
 		{
 			throw new NotImplementedException();

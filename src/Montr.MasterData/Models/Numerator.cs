@@ -27,7 +27,7 @@ namespace Montr.MasterData.Models
 	{
 		None = 0,
 		Day = 1,
-		Week = 2,
+		// Week = 2, // requires settings for start of week - Monday or Sunday
 		Month = 3,
 		Quarter = 4,
 		Year = 5

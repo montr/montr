@@ -7,6 +7,7 @@ using System.Threading.Tasks;
 using LinqToDB;
 using Montr.Data.Linq2Db;
 using Montr.MasterData.Impl.Entities;
+using Montr.MasterData.Models;
 using Montr.MasterData.Services;
 
 namespace Montr.MasterData.Impl.Services
@@ -28,6 +29,7 @@ namespace Montr.MasterData.Impl.Services
 		public async Task<string> GenerateNumber(string entityTypeCode, Guid enityUid, CancellationToken cancellationToken)
 		{
 			// todo: add distributed lock
+			// todo: split db usage & get numerator from cache
 			using (var db = _dbContextFactory.Create())
 			{
 				// todo: join two queries
@@ -44,6 +46,7 @@ namespace Montr.MasterData.Impl.Services
 					.Where(x => x.Uid == numeratorUid)
 					.FirstAsync(cancellationToken);
 
+				var periodicity = Enum.Parse<NumeratorPeriodicity>(dbNumerator.Periodicity); 
 
 				var tagComparer = StringComparer.OrdinalIgnoreCase;
 				var tagComparison = StringComparison.OrdinalIgnoreCase;
@@ -51,6 +54,8 @@ namespace Montr.MasterData.Impl.Services
 				var numberTag = "{Number}";
 
 				var tags = _patternParser.Parse(dbNumerator.Pattern);
+
+				DateTime? date = null;
 				var values = tags.ToDictionary(x => x, x => "00", tagComparer);
 
 				foreach (var tagProvider in _tagProviders)
@@ -59,12 +64,23 @@ namespace Montr.MasterData.Impl.Services
 					{
 						var tagsToResolve = tags.Intersect(supportedTags, tagComparer);
 
-						await tagProvider.Resolve(entityTypeCode, enityUid, tagsToResolve, values, cancellationToken);
+						await tagProvider.Resolve(entityTypeCode, enityUid, out var providerDate, tagsToResolve, values, cancellationToken);
+
+						date = providerDate;
 					}
 				}
 
-				// todo: check periodicity && include in key only tags unique in periodicity
+				// todo: include in key only tags unique in periodicity
 				var keyBuilder = new StringBuilder();
+
+				if (periodicity != NumeratorPeriodicity.None && date.HasValue)
+				{
+					var periodStart = GetPeriodStart(date.Value, periodicity);
+
+					values["{Year4}"] = periodStart.Year.ToString();
+
+					keyBuilder.Append("Period").Append("/").Append(periodStart.ToString("yyyy-MM-dd"));
+				}
 
 				foreach (var tag in tags
 					.Where(x => string.Equals(x, numberTag, tagComparison) == false)
@@ -118,6 +134,27 @@ namespace Montr.MasterData.Impl.Services
 				}
 
 				return pattern;
+			}
+		}
+
+		private static DateTime GetPeriodStart(DateTime date, NumeratorPeriodicity periodicity)
+		{
+			switch (periodicity)
+			{
+				case NumeratorPeriodicity.Year:
+					return new DateTime(date.Year, 1, 1);
+
+				case NumeratorPeriodicity.Quarter:
+					return new DateTime(date.Year, (date.Month - 1) / 3 * 3 + 1, 1);
+
+				case NumeratorPeriodicity.Month:
+					return new DateTime(date.Year, date.Month, 1);
+
+				case NumeratorPeriodicity.Day:
+					return date;
+
+				default:
+					throw new ArgumentException($"Periodicity {periodicity} is not supported", nameof(periodicity));
 			}
 		}
 	}

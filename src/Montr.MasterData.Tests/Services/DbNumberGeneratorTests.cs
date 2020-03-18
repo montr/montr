@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -15,15 +16,20 @@ namespace Montr.MasterData.Tests.Services
 	public class DbNumberGeneratorTests
 	{
 		[TestMethod]
-		public async Task GenerateNumber()
+		public async Task GenerateNumber_SimpleNumerator_ShouldGenerate()
 		{
 			// arrange
 			var cancellationToken = new CancellationToken();
 			var unitOfWorkFactory = new TransactionScopeUnitOfWorkFactory();
 			var dbContextFactory = new DefaultDbContextFactory();
 			var dbHelper = new DbHelper(unitOfWorkFactory, dbContextFactory);
-			var numeratorTagProviders = new INumberTagProvider[ ] { new TestNumberTagProvider() };
-			var service = new DbNumberGenerator(dbContextFactory, new NumberPatternParser(), numeratorTagProviders);
+			var numberPatternParser = new NumberPatternParser();
+			var numeratorTagProvider = new TestNumberTagProvider
+			{
+				EntityTypeCode = ClassifierType.EntityTypeCode,
+				Values = new Dictionary<string, string> { { "{Company}", "MT" }, { "{Year}", "2020" } }
+			};
+			var service = new DbNumberGenerator(dbContextFactory, numberPatternParser, new INumberTagProvider[] { numeratorTagProvider });
 
 			using (var _ = unitOfWorkFactory.Create())
 			{
@@ -45,13 +51,75 @@ namespace Montr.MasterData.Tests.Services
 			}
 		}
 
+		[TestMethod]
+		public async Task GenerateNumber_YearPeriodicity_ShouldGenerate()
+		{
+			// arrange
+			var cancellationToken = new CancellationToken();
+			var unitOfWorkFactory = new TransactionScopeUnitOfWorkFactory();
+			var dbContextFactory = new DefaultDbContextFactory();
+			var dbHelper = new DbHelper(unitOfWorkFactory, dbContextFactory);
+			var numberPatternParser = new NumberPatternParser();
+			var numeratorTagProvider = new TestNumberTagProvider
+			{
+				EntityTypeCode = ClassifierType.EntityTypeCode,
+				Values = new Dictionary<string, string>()
+			};
+			var service = new DbNumberGenerator(dbContextFactory, numberPatternParser, new INumberTagProvider[] { numeratorTagProvider });
+
+			using (var _ = unitOfWorkFactory.Create())
+			{
+				var entityTypeCode = ClassifierType.EntityTypeCode;
+				var enityUid = Guid.NewGuid();
+
+				await dbHelper.InsertNumerator(new Numerator
+				{
+					Periodicity = NumeratorPeriodicity.Year,
+					Pattern = "{Number}/{Year4}"
+				}, entityTypeCode, enityUid, cancellationToken);
+
+				// act - year 2020 - first time
+				numeratorTagProvider.Date = new DateTime(2020, 05, 31);
+				var number1Of2020 = await service.GenerateNumber(entityTypeCode, enityUid, cancellationToken);
+				var number2Of2020 = await service.GenerateNumber(entityTypeCode, enityUid, cancellationToken);
+
+				// assert - year 2020 - first time
+				Assert.AreEqual("00001/2020", number1Of2020);
+				Assert.AreEqual("00002/2020", number2Of2020);
+
+				// act - year 2023
+				numeratorTagProvider.Date = new DateTime(2023, 03, 13);
+				var number1Of2023 = await service.GenerateNumber(entityTypeCode, enityUid, cancellationToken);
+				var number2Of2023 = await service.GenerateNumber(entityTypeCode, enityUid, cancellationToken);
+
+				// assert - year 2023
+				Assert.AreEqual("00001/2023", number1Of2023);
+				Assert.AreEqual("00002/2023", number2Of2023);
+
+				// act - year 2020 - second time
+				numeratorTagProvider.Date = new DateTime(2020, 10, 30);
+				var number3Of2020 = await service.GenerateNumber(entityTypeCode, enityUid, cancellationToken);
+				var number4Of2020 = await service.GenerateNumber(entityTypeCode, enityUid, cancellationToken);
+
+				// assert - year 2020 - second time
+				Assert.AreEqual("00003/2020", number3Of2020);
+				Assert.AreEqual("00004/2020", number4Of2020);
+			}
+		}
+
 		private class TestNumberTagProvider : INumberTagProvider
 		{
+			public string EntityTypeCode { get; set; }
+
+			public IDictionary<string, string> Values { get; set; }
+
+			public DateTime? Date { get; set; }
+
 			public bool Supports(string entityTypeCode, out string[] supportedTags)
 			{
-				if (entityTypeCode == ClassifierType.EntityTypeCode)
+				if (entityTypeCode == EntityTypeCode)
 				{
-					supportedTags = new[] { "{Company}", "{Year}" };
+					supportedTags = Values.Keys.ToArray();
 					return true;
 				}
 
@@ -59,20 +127,16 @@ namespace Montr.MasterData.Tests.Services
 				return false;
 			}
 
-			public Task Resolve(string entityTypeCode, Guid enityUid,
+			public Task Resolve(string entityTypeCode, Guid enityUid, out DateTime? date,
 				IEnumerable<string> tags, IDictionary<string, string> values, CancellationToken cancellationToken)
 			{
+				date = Date;
+
 				foreach (var tag in tags)
 				{
-					switch (tag)
+					if (Values.TryGetValue(tag, out var value))
 					{
-						case "{Company}":
-							values["{Company}"] = "MT";
-							break;
-
-						case "{Year}":
-							values["{Year}"] = "2020";
-							break;
+						values[tag] = value;
 					}
 				}
 

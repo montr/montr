@@ -9,7 +9,7 @@ namespace Montr.MasterData.Services
 	{
 		bool Supports(string entityTypeCode, out string[] supportedTags);
 
-		Task Resolve(string entityTypeCode, Guid enityUid,
+		Task Resolve(string entityTypeCode, Guid enityUid, out DateTime? date,
 			IEnumerable<string> tags, IDictionary<string, string> values, CancellationToken cancellationToken);
 	}
 }
