@@ -107,6 +107,10 @@ namespace Montr.MasterData.Tests.Services
 			}
 		}
 
+		// todo: test uniquie tags in key
+		// todo: test numbers digits parse
+		// todo: test overflow of digits in number
+
 		private class TestNumberTagProvider : INumberTagProvider
 		{
 			public string EntityTypeCode { get; set; }

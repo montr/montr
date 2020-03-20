@@ -79,7 +79,7 @@ namespace Montr.MasterData.Impl.Services
 
 					values["{Year4}"] = periodStart.Year.ToString();
 
-					keyBuilder.Append("Period").Append("/").Append(periodStart.ToString("yyyy-MM-dd"));
+					keyBuilder.Append("{Period}").Append("/").Append(periodStart.ToString("yyyy-MM-dd"));
 				}
 
 				foreach (var tag in tags
@@ -126,6 +126,7 @@ namespace Montr.MasterData.Impl.Services
 
 				var pattern = dbNumerator.Pattern;
 
+				// todo: parse number digits count
 				pattern = pattern.Replace(numberTag, counter.ToString("D5"), tagComparison);
 
 				foreach (var tag in tags)
