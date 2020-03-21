@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using LinqToDB;
+using Montr.Core.Services;
 using Montr.Data.Linq2Db;
 using Montr.MasterData.Impl.Entities;
 using Montr.MasterData.Models;
@@ -14,14 +15,21 @@ namespace Montr.MasterData.Impl.Services
 {
 	public class DbNumberGenerator : INumberGenerator
 	{
+		public static readonly string NumberTag = "{Number}";
+		public static readonly string IndiTagsSeparator = ",";
+
+		public static readonly StringComparer TagComparer = StringComparer.OrdinalIgnoreCase;
+
 		private readonly IDbContextFactory _dbContextFactory;
+		private readonly IDateTimeProvider _dateTimeProvider;
 		private readonly NumberPatternParser _patternParser;
 		private readonly IEnumerable<INumberTagProvider> _tagProviders;
 
-		public DbNumberGenerator(IDbContextFactory dbContextFactory,
+		public DbNumberGenerator(IDbContextFactory dbContextFactory, IDateTimeProvider dateTimeProvider,
 			NumberPatternParser patternParser, IEnumerable<INumberTagProvider> tagProviders)
 		{
 			_dbContextFactory = dbContextFactory;
+			_dateTimeProvider = dateTimeProvider;
 			_patternParser = patternParser;
 			_tagProviders = tagProviders;
 		}
@@ -29,7 +37,72 @@ namespace Montr.MasterData.Impl.Services
 		public async Task<string> GenerateNumber(string entityTypeCode, Guid enityUid, CancellationToken cancellationToken)
 		{
 			// todo: add distributed lock
-			// todo: split db usage & get numerator from cache
+			{
+				var numerator = await GetNumerator(entityTypeCode, enityUid, cancellationToken);
+
+				if (numerator == null) return null;
+
+				var tags = _patternParser.Parse(numerator.Pattern);
+
+				DateTime? date = null;
+				var values = tags.ToDictionary(x => x, x => "00", TagComparer);
+
+				foreach (var tagProvider in _tagProviders)
+				{
+					if (tagProvider.Supports(entityTypeCode, out var supportedTags))
+					{
+						var tagsToResolve = tags.Intersect(supportedTags, TagComparer);
+
+						await tagProvider.Resolve(entityTypeCode, enityUid, out var providerDate, tagsToResolve, values, cancellationToken);
+
+						date = providerDate;
+					}
+				}
+
+				var keyBuilder = new StringBuilder();
+
+				if (numerator.Periodicity != NumeratorPeriodicity.None && date.HasValue)
+				{
+					var periodStart = GetPeriodStart(date.Value, numerator.Periodicity);
+
+					values["{Year4}"] = periodStart.Year.ToString();
+
+					keyBuilder.Append("{Period}").Append("/").Append(periodStart.ToString("yyyy-MM-dd"));
+				}
+
+				// include in key only tags selected for independent numbers
+				if (numerator.KeyTags != null)
+				{
+					foreach (var tag in tags.Where(x =>
+						numerator.KeyTags.Contains(x, TagComparer)).OrderBy(x => x, TagComparer))
+					{
+						if (keyBuilder.Length > 0) keyBuilder.Append("_");
+
+						keyBuilder.Append(tag).Append("/").Append(values[tag]);
+					}
+				}
+
+				var key = keyBuilder.ToString().ToLowerInvariant();
+
+				var counter = await IncrementCounter(numerator, key, cancellationToken);
+
+				var result = numerator.Pattern;
+
+				// todo: parse number digits count
+				result = result.Replace(NumberTag, counter.ToString("D5"), StringComparison.OrdinalIgnoreCase);
+
+				foreach (var tag in tags)
+				{
+					result = result.Replace(tag, values[tag], StringComparison.OrdinalIgnoreCase);
+				}
+
+				return result;
+			}
+		}
+
+		// todo: get numerator from cache
+		private async Task<Numerator> GetNumerator(string entityTypeCode, Guid enityUid, CancellationToken cancellationToken)
+		{
 			using (var db = _dbContextFactory.Create())
 			{
 				// todo: join two queries
@@ -46,58 +119,28 @@ namespace Montr.MasterData.Impl.Services
 					.Where(x => x.Uid == numeratorUid)
 					.FirstAsync(cancellationToken);
 
-				var periodicity = Enum.Parse<NumeratorPeriodicity>(dbNumerator.Periodicity); 
-
-				var tagComparer = StringComparer.OrdinalIgnoreCase;
-				var tagComparison = StringComparison.OrdinalIgnoreCase;
-
-				var numberTag = "{Number}";
-
-				var tags = _patternParser.Parse(dbNumerator.Pattern);
-
-				DateTime? date = null;
-				var values = tags.ToDictionary(x => x, x => "00", tagComparer);
-
-				foreach (var tagProvider in _tagProviders)
+				var numerator = new Numerator
 				{
-					if (tagProvider.Supports(entityTypeCode, out var supportedTags))
-					{
-						var tagsToResolve = tags.Intersect(supportedTags, tagComparer);
+					Uid = dbNumerator.Uid,
+					Name = dbNumerator.Name,
+					Periodicity = Enum.Parse<NumeratorPeriodicity>(dbNumerator.Periodicity),
+					Pattern = dbNumerator.Pattern,
+					KeyTags = dbNumerator.KeyTags?.Split(IndiTagsSeparator, StringSplitOptions.RemoveEmptyEntries),
+					IsActive = dbNumerator.IsActive,
+					IsSystem = dbNumerator.IsSystem
+				};
 
-						await tagProvider.Resolve(entityTypeCode, enityUid, out var providerDate, tagsToResolve, values, cancellationToken);
+				return numerator;
+			}
+		}
 
-						date = providerDate;
-					}
-				}
-
-				// todo: include in key only tags unique in periodicity
-				var keyBuilder = new StringBuilder();
-
-				if (periodicity != NumeratorPeriodicity.None && date.HasValue)
-				{
-					var periodStart = GetPeriodStart(date.Value, periodicity);
-
-					values["{Year4}"] = periodStart.Year.ToString();
-
-					keyBuilder.Append("{Period}").Append("/").Append(periodStart.ToString("yyyy-MM-dd"));
-				}
-
-				foreach (var tag in tags
-					.Where(x => string.Equals(x, numberTag, tagComparison) == false)
-					.OrderBy(x => x, tagComparer))
-				{
-					var value = values[tag];
-
-					if (keyBuilder.Length > 0) keyBuilder.Append("_");
-
-					keyBuilder.Append(tag).Append("/").Append(value);
-				}
-
-				var key = keyBuilder.ToString().ToLowerInvariant();
-
+		private async Task<long> IncrementCounter(Numerator numerator, string key, CancellationToken cancellationToken)
+		{
+			using (var db = _dbContextFactory.Create())
+			{
 				var dbNumeratorCounter = await db
 					.GetTable<DbNumeratorCounter>()
-					.Where(x => x.NumeratorUid == numeratorUid && x.Key == key)
+					.Where(x => x.NumeratorUid == numerator.Uid && x.Key == key)
 					.FirstOrDefaultAsync(cancellationToken);
 
 				long counter;
@@ -108,9 +151,10 @@ namespace Montr.MasterData.Impl.Services
 
 					await db
 						.GetTable<DbNumeratorCounter>()
-						.Value(x => x.NumeratorUid, numeratorUid)
+						.Value(x => x.NumeratorUid, numerator.Uid)
 						.Value(x => x.Key, key)
 						.Value(x => x.Value, counter)
+						.Value(x => x.GeneratedAtUtc, _dateTimeProvider.GetUtcNow())
 						.InsertAsync(cancellationToken);
 				}
 				else
@@ -119,22 +163,13 @@ namespace Montr.MasterData.Impl.Services
 
 					await db
 						.GetTable<DbNumeratorCounter>()
-						.Where(x => x.NumeratorUid == numeratorUid && x.Key == key)
+						.Where(x => x.NumeratorUid == numerator.Uid && x.Key == key)
 						.Set(x => x.Value, counter)
+						.Set(x => x.GeneratedAtUtc, _dateTimeProvider.GetUtcNow())
 						.UpdateAsync(cancellationToken);
 				}
 
-				var pattern = dbNumerator.Pattern;
-
-				// todo: parse number digits count
-				pattern = pattern.Replace(numberTag, counter.ToString("D5"), tagComparison);
-
-				foreach (var tag in tags)
-				{
-					pattern = pattern.Replace(tag, values[tag], tagComparison);
-				}
-
-				return pattern;
+				return counter;
 			}
 		}
 

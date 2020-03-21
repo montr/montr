@@ -16,6 +16,8 @@ namespace Montr.MasterData.Models
 
 		public string Pattern { get; set; }
 
+		public string[] KeyTags { get; set; }
+
 		public NumeratorPeriodicity Periodicity { get; set; }
 
 		public bool IsActive { get; set; }
