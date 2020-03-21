@@ -15,6 +15,8 @@ namespace Montr.MasterData.Tests.Services
 	[TestClass]
 	public class DbNumberGeneratorTests
 	{
+		private static readonly string NumerableEntityTypeCode = "Numerable";
+
 		[TestMethod]
 		public async Task GenerateNumber_SimpleNumerator_ShouldGenerate()
 		{
@@ -24,13 +26,12 @@ namespace Montr.MasterData.Tests.Services
 			var dbContextFactory = new DefaultDbContextFactory();
 			var dateTimeProvider = new DefaultDateTimeProvider();
 			var dbHelper = new DbHelper(unitOfWorkFactory, dbContextFactory);
-			var numberPatternParser = new NumberPatternParser();
-			var numeratorTagProvider = new TestNumberTagProvider { EntityTypeCode = ClassifierType.EntityTypeCode };
-			var service = new DbNumberGenerator(dbContextFactory, dateTimeProvider,  numberPatternParser, new INumberTagProvider[] { numeratorTagProvider });
+			var numeratorTagProvider = new TestNumberTagProvider { EntityTypeCode = NumerableEntityTypeCode };
+			var service = new DbNumberGenerator(dbContextFactory, dateTimeProvider, new INumberTagProvider[] { numeratorTagProvider });
 
 			using (var _ = unitOfWorkFactory.Create())
 			{
-				var entityTypeCode = ClassifierType.EntityTypeCode;
+				var entityTypeCode = NumerableEntityTypeCode;
 				var enityUid = Guid.NewGuid();
 
 				await dbHelper.InsertNumerator(new Numerator
@@ -52,6 +53,42 @@ namespace Montr.MasterData.Tests.Services
 		}
 
 		[TestMethod]
+		public async Task GenerateNumber_WithPeriodTags_ShouldGenerate()
+		{
+			// arrange
+			var cancellationToken = new CancellationToken();
+			var unitOfWorkFactory = new TransactionScopeUnitOfWorkFactory();
+			var dbContextFactory = new DefaultDbContextFactory();
+			var dateTimeProvider = new DefaultDateTimeProvider();
+			var dbHelper = new DbHelper(unitOfWorkFactory, dbContextFactory);
+			var numeratorTagProvider = new TestNumberTagProvider { EntityTypeCode = NumerableEntityTypeCode };
+			var service = new DbNumberGenerator(dbContextFactory, dateTimeProvider, new INumberTagProvider[] { numeratorTagProvider });
+
+			using (var _ = unitOfWorkFactory.Create())
+			{
+				var entityTypeCode = NumerableEntityTypeCode;
+				var enityUid = Guid.NewGuid();
+
+				await dbHelper.InsertNumerator(new Numerator
+				{
+					Periodicity = NumeratorPeriodicity.Year,
+					Pattern = "{Company}-{Number}-{Day}-{Month}-{Quarter}-{Year2}-{Year4}"
+				}, entityTypeCode, enityUid, cancellationToken);
+
+				// act
+				numeratorTagProvider.Values = new Dictionary<string, string> { { "{Company}", "MT" } };
+				numeratorTagProvider.Date = new DateTime(2003, 2, 5);
+				var number1 = await service.GenerateNumber(entityTypeCode, enityUid, cancellationToken);
+				numeratorTagProvider.Date = new DateTime(1999, 10, 30);
+				var number2 = await service.GenerateNumber(entityTypeCode, enityUid, cancellationToken);
+
+				// assert
+				Assert.AreEqual("MT-00001-05-02-1-03-2003", number1);
+				Assert.AreEqual("MT-00001-30-10-4-99-1999", number2);
+			}
+		}
+
+		[TestMethod]
 		public async Task GenerateNumber_IndependentNumerator_ShouldGenerate()
 		{
 			// arrange
@@ -60,13 +97,12 @@ namespace Montr.MasterData.Tests.Services
 			var dbContextFactory = new DefaultDbContextFactory();
 			var dateTimeProvider = new DefaultDateTimeProvider();
 			var dbHelper = new DbHelper(unitOfWorkFactory, dbContextFactory);
-			var numberPatternParser = new NumberPatternParser();
-			var numeratorTagProvider = new TestNumberTagProvider { EntityTypeCode = ClassifierType.EntityTypeCode };
-			var service = new DbNumberGenerator(dbContextFactory, dateTimeProvider,  numberPatternParser, new INumberTagProvider[] { numeratorTagProvider });
+			var numeratorTagProvider = new TestNumberTagProvider { EntityTypeCode = NumerableEntityTypeCode };
+			var service = new DbNumberGenerator(dbContextFactory, dateTimeProvider, new INumberTagProvider[] { numeratorTagProvider });
 
 			using (var _ = unitOfWorkFactory.Create())
 			{
-				var entityTypeCode = ClassifierType.EntityTypeCode;
+				var entityTypeCode = NumerableEntityTypeCode;
 				var enityUid = Guid.NewGuid();
 
 				await dbHelper.InsertNumerator(new Numerator
@@ -101,17 +137,16 @@ namespace Montr.MasterData.Tests.Services
 			var dbContextFactory = new DefaultDbContextFactory();
 			var dateTimeProvider = new DefaultDateTimeProvider();
 			var dbHelper = new DbHelper(unitOfWorkFactory, dbContextFactory);
-			var numberPatternParser = new NumberPatternParser();
 			var numeratorTagProvider = new TestNumberTagProvider
 			{
-				EntityTypeCode = ClassifierType.EntityTypeCode,
+				EntityTypeCode = NumerableEntityTypeCode,
 				Values = new Dictionary<string, string>()
 			};
-			var service = new DbNumberGenerator(dbContextFactory, dateTimeProvider, numberPatternParser, new INumberTagProvider[] { numeratorTagProvider });
+			var service = new DbNumberGenerator(dbContextFactory, dateTimeProvider, new INumberTagProvider[] { numeratorTagProvider });
 
 			using (var _ = unitOfWorkFactory.Create())
 			{
-				var entityTypeCode = ClassifierType.EntityTypeCode;
+				var entityTypeCode = NumerableEntityTypeCode;
 				var enityUid = Guid.NewGuid();
 
 				await dbHelper.InsertNumerator(new Numerator
@@ -160,17 +195,16 @@ namespace Montr.MasterData.Tests.Services
 			var dbContextFactory = new DefaultDbContextFactory();
 			var dateTimeProvider = new DefaultDateTimeProvider();
 			var dbHelper = new DbHelper(unitOfWorkFactory, dbContextFactory);
-			var numberPatternParser = new NumberPatternParser();
 			var numeratorTagProvider = new TestNumberTagProvider
 			{
-				EntityTypeCode = ClassifierType.EntityTypeCode,
+				EntityTypeCode = NumerableEntityTypeCode,
 				Values = new Dictionary<string, string>()
 			};
-			var service = new DbNumberGenerator(dbContextFactory, dateTimeProvider, numberPatternParser, new INumberTagProvider[] { numeratorTagProvider });
+			var service = new DbNumberGenerator(dbContextFactory, dateTimeProvider, new INumberTagProvider[] { numeratorTagProvider });
 
 			using (var _ = unitOfWorkFactory.Create())
 			{
-				var entityTypeCode = ClassifierType.EntityTypeCode;
+				var entityTypeCode = NumerableEntityTypeCode;
 				var enityUid = Guid.NewGuid();
 
 				await dbHelper.InsertNumerator(new Numerator
@@ -208,6 +242,24 @@ namespace Montr.MasterData.Tests.Services
 				Assert.AreEqual("MT-00003/2020", number3OfQ1);
 				Assert.AreEqual("MT-00004/2020", number4OfQ1);
 			}
+		}
+
+		[TestMethod]
+		[DataRow("P-{Number}", "{Number}")]
+		[DataRow("P-{Number}-{Year2}", "{Number},{Year2}")]
+		[DataRow("P-{Number}/{Year4}", "{Number},{Year4}")]
+		[DataRow("{Company}-{Number}/{Year4}", "{Company},{Number},{Year4}")]
+		public void PatternParser_SimpleParse_ReturnTags(string pattern, string tags)
+		{
+			// arrange
+			var parser = new DbNumberGenerator.PatternParser();
+			var expected = tags.Split(",");
+
+			// act
+			var result = parser.Parse(pattern);
+
+			// assert
+			CollectionAssert.AreEqual(expected, result.ToArray());
 		}
 
 		// todo: test numbers digits parse

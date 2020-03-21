@@ -11,6 +11,8 @@ namespace Montr.MasterData.Impl.Entities
 	{
 		private string DebuggerDisplay => $"{Name} - {Pattern}";
 
+		public static readonly string KeyTagsSeparator = ",";
+
 		[Column(Name = "uid"), DataType(DataType.Guid), NotNull, PrimaryKey]
 		public Guid Uid { get; set; }
 

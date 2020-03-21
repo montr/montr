@@ -15,8 +15,6 @@ namespace Montr.MasterData.Impl
 	{
 		public void ConfigureServices(IConfiguration configuration, IServiceCollection services)
 		{
-			services.AddSingleton<NumberPatternParser, NumberPatternParser>();
-
 			services.AddTransient<INumberGenerator, DbNumberGenerator>();
 
 			services.AddTransient<IRepository<ClassifierType>, DbClassifierTypeRepository>();

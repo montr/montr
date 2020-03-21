@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using LinqToDB;
@@ -15,22 +16,20 @@ namespace Montr.MasterData.Impl.Services
 {
 	public class DbNumberGenerator : INumberGenerator
 	{
-		public static readonly string NumberTag = "{Number}";
-		public static readonly string IndiTagsSeparator = ",";
-
 		public static readonly StringComparer TagComparer = StringComparer.OrdinalIgnoreCase;
 
 		private readonly IDbContextFactory _dbContextFactory;
 		private readonly IDateTimeProvider _dateTimeProvider;
-		private readonly NumberPatternParser _patternParser;
+		private readonly PatternParser _patternParser = new PatternParser();
 		private readonly IEnumerable<INumberTagProvider> _tagProviders;
 
-		public DbNumberGenerator(IDbContextFactory dbContextFactory, IDateTimeProvider dateTimeProvider,
-			NumberPatternParser patternParser, IEnumerable<INumberTagProvider> tagProviders)
+		public DbNumberGenerator(
+			IDbContextFactory dbContextFactory,
+			IDateTimeProvider dateTimeProvider,
+			IEnumerable<INumberTagProvider> tagProviders)
 		{
 			_dbContextFactory = dbContextFactory;
 			_dateTimeProvider = dateTimeProvider;
-			_patternParser = patternParser;
 			_tagProviders = tagProviders;
 		}
 
@@ -59,15 +58,13 @@ namespace Montr.MasterData.Impl.Services
 					}
 				}
 
-				var keyBuilder = new StringBuilder();
+				var keyBuilder = new KeyBuilder();
 
 				if (numerator.Periodicity != NumeratorPeriodicity.None && date.HasValue)
 				{
 					var periodStart = GetPeriodStart(date.Value, numerator.Periodicity);
 
-					values["{Year4}"] = periodStart.Year.ToString();
-
-					keyBuilder.Append("{Period}").Append("/").Append(periodStart.ToString("yyyy-MM-dd"));
+					keyBuilder.Append("Period", periodStart.ToString("yyyy-MM-dd"));
 				}
 
 				// include in key only tags selected for independent numbers
@@ -76,20 +73,17 @@ namespace Montr.MasterData.Impl.Services
 					foreach (var tag in tags.Where(x =>
 						numerator.KeyTags.Contains(x, TagComparer)).OrderBy(x => x, TagComparer))
 					{
-						if (keyBuilder.Length > 0) keyBuilder.Append("_");
-
-						keyBuilder.Append(tag).Append("/").Append(values[tag]);
+						keyBuilder.Append(tag, values[tag]);
 					}
 				}
 
-				var key = keyBuilder.ToString().ToLowerInvariant();
+				var key = keyBuilder.Build();
 
 				var counter = await IncrementCounter(numerator, key, cancellationToken);
 
-				var result = numerator.Pattern;
+				AddKnownTags(values, counter, date);
 
-				// todo: parse number digits count
-				result = result.Replace(NumberTag, counter.ToString("D5"), StringComparison.OrdinalIgnoreCase);
+				var result = numerator.Pattern;
 
 				foreach (var tag in tags)
 				{
@@ -112,25 +106,21 @@ namespace Montr.MasterData.Impl.Services
 
 				if (dbNumeratorEntity == null) return null;
 
-				var numeratorUid = dbNumeratorEntity.NumeratorUid;
-
 				var dbNumerator = await db
 					.GetTable<DbNumerator>()
-					.Where(x => x.Uid == numeratorUid)
+					.Where(x => x.EntityTypeCode == entityTypeCode && x.Uid == dbNumeratorEntity.NumeratorUid)
 					.FirstAsync(cancellationToken);
 
-				var numerator = new Numerator
+				return new Numerator
 				{
 					Uid = dbNumerator.Uid,
 					Name = dbNumerator.Name,
 					Periodicity = Enum.Parse<NumeratorPeriodicity>(dbNumerator.Periodicity),
 					Pattern = dbNumerator.Pattern,
-					KeyTags = dbNumerator.KeyTags?.Split(IndiTagsSeparator, StringSplitOptions.RemoveEmptyEntries),
+					KeyTags = dbNumerator.KeyTags?.Split(DbNumerator.KeyTagsSeparator, StringSplitOptions.RemoveEmptyEntries),
 					IsActive = dbNumerator.IsActive,
 					IsSystem = dbNumerator.IsSystem
 				};
-
-				return numerator;
 			}
 		}
 
@@ -191,6 +181,64 @@ namespace Montr.MasterData.Impl.Services
 
 				default:
 					throw new ArgumentException($"Periodicity {periodicity} is not supported", nameof(periodicity));
+			}
+		}
+
+		private static void AddKnownTags(IDictionary<string, string> values, long counter, DateTime? date)
+		{
+			// todo: parse number digits count
+			values[NumeratorKnownTags.Number] = counter.ToString("D5");
+
+			if (date.HasValue)
+			{
+				var quarter = (date.Value.Month - 1) / 3 + 1;
+				var year2 = date.Value.Year - (int)Math.Floor(date.Value.Year / 100M) * 100;
+				
+				values[NumeratorKnownTags.Day] = date.Value.Day.ToString("D2");
+				values[NumeratorKnownTags.Month] = date.Value.Month.ToString("D2");
+				values[NumeratorKnownTags.Quarter] = quarter.ToString();
+				values[NumeratorKnownTags.Year2] = year2.ToString("D2");
+				values[NumeratorKnownTags.Year4] = date.Value.Year.ToString();
+			}
+		}
+
+		public class PatternParser
+		{
+			private static readonly Regex NumberPatternRegex = new Regex(@"\{(.*?)\}", RegexOptions.Compiled);
+
+			public ISet<string> Parse(string pattern)
+			{
+				if (pattern == null) throw new ArgumentNullException(nameof(pattern));
+
+				var matches = NumberPatternRegex.Matches(pattern);
+
+				return matches.Select(x => x.Value).ToHashSet();
+			}
+		}
+
+		public class Tag
+		{
+			public string Original { get; set; }
+
+			public string Name { get; set; }
+
+			public string Args { get; set; }
+		}
+
+		private class KeyBuilder
+		{
+			private readonly StringBuilder _builder = new StringBuilder();
+
+			public void Append(string tag, string value)
+			{
+				if (_builder.Length > 0) _builder.Append("/");
+
+				_builder.Append("[").Append(tag).Append(":").Append(value).Append("]");
+			}
+
+			public string Build()
+			{
+				return _builder.ToString().ToLowerInvariant();
 			}
 		}
 	}

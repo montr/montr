@@ -316,7 +316,7 @@ namespace Montr.MasterData.Tests
 					.Value(x => x.Pattern, numerator.Pattern ?? Numerator.DefaultPattern)
 					.Value(x => x.Periodicity, numerator.Periodicity.ToString())
 					.Value(x => x.Name, numerator.Name ?? "Test numerator")
-					.Value(x => x.KeyTags, numerator.KeyTags != null ? string.Join(DbNumberGenerator.IndiTagsSeparator, numerator.KeyTags) : null)
+					.Value(x => x.KeyTags, numerator.KeyTags != null ? string.Join(DbNumerator.KeyTagsSeparator, numerator.KeyTags) : null)
 					.Value(x => x.IsActive, true)
 					.Value(x => x.IsSystem, false)
 					.InsertAsync(cancellationToken);
