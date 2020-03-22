@@ -40,10 +40,10 @@ namespace Montr.MasterData.Tests.Services
 				}, entityTypeCode, enityUid, cancellationToken);
 
 				// act
-				numeratorTagProvider.Values = new Dictionary<string, string> { { "{Company}", "MT" }, { "{Year}", "2010" } };
+				numeratorTagProvider.Values = new Dictionary<string, string> { { "Company", "MT" }, { "Year", "2010" } };
 				var number1 = await service.GenerateNumber(entityTypeCode, enityUid, cancellationToken);
 
-				numeratorTagProvider.Values = new Dictionary<string, string> { { "{Company}", "GT" }, { "{Year}", "2020" } };
+				numeratorTagProvider.Values = new Dictionary<string, string> { { "Company", "GT" }, { "Year", "2020" } };
 				var number2 = await service.GenerateNumber(entityTypeCode, enityUid, cancellationToken);
 
 				// assert
@@ -76,7 +76,7 @@ namespace Montr.MasterData.Tests.Services
 				}, entityTypeCode, enityUid, cancellationToken);
 
 				// act
-				numeratorTagProvider.Values = new Dictionary<string, string> { { "{Company}", "MT" } };
+				numeratorTagProvider.Values = new Dictionary<string, string> { { "Company", "MT" } };
 				numeratorTagProvider.Date = new DateTime(2003, 2, 5);
 				var number1 = await service.GenerateNumber(entityTypeCode, enityUid, cancellationToken);
 				numeratorTagProvider.Date = new DateTime(1999, 10, 30);
@@ -108,15 +108,15 @@ namespace Montr.MasterData.Tests.Services
 				await dbHelper.InsertNumerator(new Numerator
 				{
 					Pattern = "{Company}-{Number}",
-					KeyTags = new[] { "{Company}" }
+					KeyTags = new[] { "Company" }
 				}, entityTypeCode, enityUid, cancellationToken);
 
 				// act
-				numeratorTagProvider.Values = new Dictionary<string, string> { { "{Company}", "MT" } };
+				numeratorTagProvider.Values = new Dictionary<string, string> { { "Company", "MT" } };
 				var number1 = await service.GenerateNumber(entityTypeCode, enityUid, cancellationToken);
 				var number2 = await service.GenerateNumber(entityTypeCode, enityUid, cancellationToken);
 
-				numeratorTagProvider.Values = new Dictionary<string, string> { { "{Company}", "GT" } };
+				numeratorTagProvider.Values = new Dictionary<string, string> { { "Company", "GT" } };
 				var number3 = await service.GenerateNumber(entityTypeCode, enityUid, cancellationToken);
 				var number4 = await service.GenerateNumber(entityTypeCode, enityUid, cancellationToken);
 
@@ -155,7 +155,7 @@ namespace Montr.MasterData.Tests.Services
 					Pattern = "{Company}-{Number}/{Year4}"
 				}, entityTypeCode, enityUid, cancellationToken);
 
-				numeratorTagProvider.Values = new Dictionary<string, string> { { "{Company}", "MT" } };
+				numeratorTagProvider.Values = new Dictionary<string, string> { { "Company", "MT" } };
 
 				// act - year 2020 - first time
 				numeratorTagProvider.Date = new DateTime(2020, 05, 31);
@@ -213,7 +213,7 @@ namespace Montr.MasterData.Tests.Services
 					Pattern = "{Company}-{Number}/{Year4}"
 				}, entityTypeCode, enityUid, cancellationToken);
 
-				numeratorTagProvider.Values = new Dictionary<string, string> { { "{Company}", "MT" } };
+				numeratorTagProvider.Values = new Dictionary<string, string> { { "Company", "MT" } };
 
 				// act - Q1.2020 - first time
 				numeratorTagProvider.Date = new DateTime(2020, 01, 31);
@@ -244,24 +244,7 @@ namespace Montr.MasterData.Tests.Services
 			}
 		}
 
-		[TestMethod]
-		[DataRow("P-{Number}", "{Number}")]
-		[DataRow("P-{Number}-{Year2}", "{Number},{Year2}")]
-		[DataRow("P-{Number}/{Year4}", "{Number},{Year4}")]
-		[DataRow("{Company}-{Number}/{Year4}", "{Company},{Number},{Year4}")]
-		public void PatternParser_SimpleParse_ReturnTags(string pattern, string tags)
-		{
-			// arrange
-			var parser = new DbNumberGenerator.PatternParser();
-			var expected = tags.Split(",");
-
-			// act
-			var result = parser.Parse(pattern);
-
-			// assert
-			CollectionAssert.AreEqual(expected, result.ToArray());
-		}
-
+		// todo: test case insensitive
 		// todo: test numbers digits parse
 		// todo: test overflow of digits in number
 

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
 using System.Threading;
 using System.Threading.Tasks;
 using LinqToDB;
@@ -16,11 +15,9 @@ namespace Montr.MasterData.Impl.Services
 {
 	public class DbNumberGenerator : INumberGenerator
 	{
-		public static readonly StringComparer TagComparer = StringComparer.OrdinalIgnoreCase;
-
 		private readonly IDbContextFactory _dbContextFactory;
 		private readonly IDateTimeProvider _dateTimeProvider;
-		private readonly PatternParser _patternParser = new PatternParser();
+		private readonly NumberPatternParser _patternParser = new NumberPatternParser();
 		private readonly IEnumerable<INumberTagProvider> _tagProviders;
 
 		public DbNumberGenerator(
@@ -41,16 +38,18 @@ namespace Montr.MasterData.Impl.Services
 
 				if (numerator == null) return null;
 
-				var tags = _patternParser.Parse(numerator.Pattern);
+				var pattern = _patternParser.Parse(numerator.Pattern);
+
+				var tags = pattern.Tokens.OfType<TagToken>().Select(x => x.Name).ToList();
 
 				DateTime? date = null;
-				var values = tags.ToDictionary(x => x, x => "00", TagComparer);
+				var values = tags.ToDictionary(x => x, x => "00", Numerator.TagComparer);
 
 				foreach (var tagProvider in _tagProviders)
 				{
 					if (tagProvider.Supports(entityTypeCode, out var supportedTags))
 					{
-						var tagsToResolve = tags.Intersect(supportedTags, TagComparer);
+						var tagsToResolve = tags.Intersect(supportedTags, Numerator.TagComparer);
 
 						await tagProvider.Resolve(entityTypeCode, enityUid, out var providerDate, tagsToResolve, values, cancellationToken);
 
@@ -64,14 +63,13 @@ namespace Montr.MasterData.Impl.Services
 				{
 					var periodStart = GetPeriodStart(date.Value, numerator.Periodicity);
 
-					keyBuilder.Append("Period", periodStart.ToString("yyyy-MM-dd"));
+					keyBuilder.Append(NumeratorKnownTags.Period, periodStart.ToString("yyyy-MM-dd"));
 				}
 
-				// include in key only tags selected for independent numbers
 				if (numerator.KeyTags != null)
 				{
 					foreach (var tag in tags.Where(x =>
-						numerator.KeyTags.Contains(x, TagComparer)).OrderBy(x => x, TagComparer))
+						numerator.KeyTags.Contains(x, Numerator.TagComparer)).OrderBy(x => x, Numerator.TagComparer))
 					{
 						keyBuilder.Append(tag, values[tag]);
 					}
@@ -83,14 +81,7 @@ namespace Montr.MasterData.Impl.Services
 
 				AddKnownTags(values, counter, date);
 
-				var result = numerator.Pattern;
-
-				foreach (var tag in tags)
-				{
-					result = result.Replace(tag, values[tag], StringComparison.OrdinalIgnoreCase);
-				}
-
-				return result;
+				return pattern.Format(values);
 			}
 		}
 
@@ -200,29 +191,6 @@ namespace Montr.MasterData.Impl.Services
 				values[NumeratorKnownTags.Year2] = year2.ToString("D2");
 				values[NumeratorKnownTags.Year4] = date.Value.Year.ToString();
 			}
-		}
-
-		public class PatternParser
-		{
-			private static readonly Regex NumberPatternRegex = new Regex(@"\{(.*?)\}", RegexOptions.Compiled);
-
-			public ISet<string> Parse(string pattern)
-			{
-				if (pattern == null) throw new ArgumentNullException(nameof(pattern));
-
-				var matches = NumberPatternRegex.Matches(pattern);
-
-				return matches.Select(x => x.Value).ToHashSet();
-			}
-		}
-
-		public class Tag
-		{
-			public string Original { get; set; }
-
-			public string Name { get; set; }
-
-			public string Args { get; set; }
 		}
 
 		private class KeyBuilder
