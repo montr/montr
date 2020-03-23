@@ -5,6 +5,6 @@
 	{
 		// private string DebuggerDisplay => $"{ConfigCode}, {Name}";
 
-		public static readonly string EntityTypeCode = typeof(DocumentType).Name;
+		public static readonly string EntityTypeCode = nameof(DocumentType);
 	}
 }

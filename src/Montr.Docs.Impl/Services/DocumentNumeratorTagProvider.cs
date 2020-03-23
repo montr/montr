@@ -15,9 +15,9 @@ namespace Montr.Docs.Impl.Services
 			{
 				supportedTags = new []
 				{
-					"{Company}",
-					"{Year2}",
-					"{Year4}" 
+					"Company",
+					// "{Year2}",
+					// "{Year4}" 
 				};
 
 				return true;
@@ -30,7 +30,9 @@ namespace Montr.Docs.Impl.Services
 		public Task Resolve(string entityTypeCode, Guid enityUid, out DateTime? date,
 			IEnumerable<string> tags, IDictionary<string, string> values, CancellationToken cancellationToken)
 		{
-			throw new NotImplementedException();
+			// todo: load document properties
+			date = DateTime.Today;
+			return Task.CompletedTask;
 		}
 	}
 }

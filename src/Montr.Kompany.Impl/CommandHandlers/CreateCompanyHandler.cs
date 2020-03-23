@@ -79,7 +79,7 @@ namespace Montr.Kompany.Impl.CommandHandlers
 				{
 					// todo: валидация и ограничения
 
-					// компания + todo: дата изменения
+					// company + todo: creation date
 					await db.GetTable<DbCompany>()
 						.Value(x => x.Uid, companyUid)
 						.Value(x => x.ConfigCode, company.ConfigCode ?? CompanyConfigCode.Company)
@@ -87,7 +87,7 @@ namespace Montr.Kompany.Impl.CommandHandlers
 						.Value(x => x.Name, company.Name)
 						.InsertAsync(cancellationToken);
 
-					// пользователь в компании
+					// user in company
 					await db.GetTable<DbCompanyUser>()
 						.Value(x => x.CompanyUid, companyUid)
 						.Value(x => x.UserUid, userUid)
@@ -100,14 +100,17 @@ namespace Montr.Kompany.Impl.CommandHandlers
 
 				// todo: user roles 
 
-				// company registration request + todo: дата изменения
+				// company registration request + todo: creation date
 				await _documentRepository.Create(new Document
 				{
 					Uid = documentUid,
 					CompanyUid = companyUid,
 					ConfigCode = CompanyRequestConfigCode.RegistrationRequest,
+					StatusCode = DocumentStatusCode.Published,
 					Direction = DocumentDirection.Outgoing,
-					DocumentNumber = companyUid.ToString(), // todo: generate number
+					// todo: generate number
+					// todo: make DocumentNumber nullable
+					DocumentNumber = companyUid.ToString(),
 					DocumentDate = now
 				}, cancellationToken);
 

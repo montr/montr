@@ -15,6 +15,8 @@ using Montr.Docs.Models;
 using Montr.Kompany.Commands;
 using Montr.Kompany.Impl.CommandHandlers;
 using Montr.Kompany.Models;
+using Montr.MasterData.Impl.Services;
+using Montr.MasterData.Services;
 using Montr.Metadata.Impl.Entities;
 using Montr.Metadata.Impl.Services;
 using Montr.Metadata.Models;
@@ -40,7 +42,8 @@ namespace Montr.Kompany.Tests.CommandHandlers
 
 			var dbFieldMetadataRepository = new DbFieldMetadataRepository(dbContextFactory, fieldProviderRegistry, new NewtonsoftJsonSerializer());
 			var dbFieldDataRepository = new DbFieldDataRepository(dbContextFactory, fieldProviderRegistry);
-			var documentRepository = new DbDocumentRepository(dbContextFactory, dbFieldMetadataRepository, new DbFieldDataRepository(dbContextFactory, fieldProviderRegistry));
+			var dbNumberGenerator = new DbNumberGenerator(dbContextFactory, dateTimeProvider, new INumberTagProvider[0]);
+			var documentRepository = new DbDocumentRepository(dbContextFactory, dbFieldMetadataRepository, dbFieldDataRepository, dbNumberGenerator);
 			var jsonSerializer = new DefaultJsonSerializer();
 			var auditLogService = new DbAuditLogService(dbContextFactory, jsonSerializer);
 
@@ -56,7 +59,6 @@ namespace Montr.Kompany.Tests.CommandHandlers
 						new TextField { Key = "test3", Active = true, System = false }
 					}
 				});
-
 
 			var handler = new CreateCompanyHandler(unitOfWorkFactory,
 				dbContextFactory, dateTimeProvider, metadataRepositoryMock.Object, dbFieldDataRepository, documentRepository, auditLogService);

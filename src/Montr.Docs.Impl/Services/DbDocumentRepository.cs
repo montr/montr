@@ -10,6 +10,7 @@ using Montr.Data.Linq2Db;
 using Montr.Docs.Impl.Entities;
 using Montr.Docs.Models;
 using Montr.Docs.Services;
+using Montr.MasterData.Services;
 using Montr.Metadata.Models;
 using Montr.Metadata.Services;
 
@@ -21,14 +22,17 @@ namespace Montr.Docs.Impl.Services
 		private readonly IDbContextFactory _dbContextFactory;
 		private readonly IRepository<FieldMetadata> _fieldMetadataRepository;
 		private readonly IFieldDataRepository _fieldDataRepository;
+		private readonly INumberGenerator _numberGenerator;
 
 		public DbDocumentRepository(IDbContextFactory dbContextFactory,
 			IRepository<FieldMetadata> fieldMetadataRepository,
-			IFieldDataRepository fieldDataRepository)
+			IFieldDataRepository fieldDataRepository,
+			INumberGenerator numberGenerator)
 		{
 			_dbContextFactory = dbContextFactory;
 			_fieldMetadataRepository = fieldMetadataRepository;
 			_fieldDataRepository = fieldDataRepository;
+			_numberGenerator = numberGenerator;
 		}
 
 		public async Task Create(Document document, CancellationToken cancellationToken)
@@ -51,6 +55,20 @@ namespace Montr.Docs.Impl.Services
 					.Value(x => x.DocumentDate, document.DocumentDate)
 					.Value(x => x.Name, document.Name)
 					.InsertAsync(cancellationToken);
+			}
+
+			if (document.StatusCode == DocumentStatusCode.Published)
+			{
+				var documentNumber = await _numberGenerator
+					.GenerateNumber(DocumentType.EntityTypeCode, Process.CompanyRegistrationRequest, cancellationToken);
+
+				using (var db = _dbContextFactory.Create())
+				{
+					await db.GetTable<DbDocument>()
+						.Where(x => x.Uid == document.Uid)
+						.Set(x => x.DocumentNumber, documentNumber)
+						.UpdateAsync(cancellationToken);
+				}
 			}
 		}
 
