@@ -24,7 +24,11 @@ namespace Montr.MasterData.Impl.CommandHandlers
 		{
 			var type = await _classifierTypeService.Get(request.TypeCode, cancellationToken);
 
-			var number = await _numerator.GenerateNumber(ClassifierType.EntityTypeCode, type.Uid, cancellationToken);
+			var number = await _numerator.GenerateNumber(new GenerateNumberRequest
+			{
+				EntityTypeCode = Classifier.EntityTypeCode,
+				EntityTypeUid = type.Uid
+			}, cancellationToken);
 
 			return new Classifier
 			{

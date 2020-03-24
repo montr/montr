@@ -3,21 +3,21 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Montr.Docs.Models;
+using Montr.MasterData.Models;
 using Montr.MasterData.Services;
 
 namespace Montr.Docs.Impl.Services
 {
-	public class DocumentNumberTagProvider : INumberTagProvider
+	public class DocumentNumberTagResolver : INumberTagResolver
 	{
-		public bool Supports(string entityTypeCode, out string[] supportedTags)
+		public bool Supports(GenerateNumberRequest request, out string[] supportedTags)
 		{
-			if (entityTypeCode == DocumentType.EntityTypeCode)
+			if (request.EntityTypeCode == DocumentType.EntityTypeCode)
 			{
 				supportedTags = new []
 				{
-					"Company",
-					// "{Year2}",
-					// "{Year4}" 
+					"DocumentType",
+					"Company"
 				};
 
 				return true;
@@ -27,7 +27,7 @@ namespace Montr.Docs.Impl.Services
 			return false;
 		}
 
-		public Task Resolve(string entityTypeCode, Guid enityUid, out DateTime? date,
+		public Task Resolve(GenerateNumberRequest request, out DateTime? date,
 			IEnumerable<string> tags, IDictionary<string, string> values, CancellationToken cancellationToken)
 		{
 			// todo: load document properties

@@ -108,9 +108,6 @@ namespace Montr.Kompany.Impl.CommandHandlers
 					ConfigCode = CompanyRequestConfigCode.RegistrationRequest,
 					StatusCode = DocumentStatusCode.Published,
 					Direction = DocumentDirection.Outgoing,
-					// todo: generate number
-					// todo: make DocumentNumber nullable
-					DocumentNumber = companyUid.ToString(),
 					DocumentDate = now
 				}, cancellationToken);
 

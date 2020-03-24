@@ -42,7 +42,7 @@ namespace Montr.Kompany.Tests.CommandHandlers
 
 			var dbFieldMetadataRepository = new DbFieldMetadataRepository(dbContextFactory, fieldProviderRegistry, new NewtonsoftJsonSerializer());
 			var dbFieldDataRepository = new DbFieldDataRepository(dbContextFactory, fieldProviderRegistry);
-			var dbNumberGenerator = new DbNumberGenerator(dbContextFactory, dateTimeProvider, new INumberTagProvider[0]);
+			var dbNumberGenerator = new DbNumberGenerator(dbContextFactory, dateTimeProvider, new INumberTagResolver[0]);
 			var documentRepository = new DbDocumentRepository(dbContextFactory, dbFieldMetadataRepository, dbFieldDataRepository, dbNumberGenerator);
 			var jsonSerializer = new DefaultJsonSerializer();
 			var auditLogService = new DbAuditLogService(dbContextFactory, jsonSerializer);

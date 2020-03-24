@@ -2,14 +2,15 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Montr.MasterData.Models;
 
 namespace Montr.MasterData.Services
 {
-	public interface INumberTagProvider
+	public interface INumberTagResolver
 	{
-		bool Supports(string entityTypeCode, out string[] supportedTags);
+		bool Supports(GenerateNumberRequest request, out string[] supportedTags);
 
-		Task Resolve(string entityTypeCode, Guid enityUid, out DateTime? date,
+		Task Resolve(GenerateNumberRequest request, out DateTime? date,
 			IEnumerable<string> tags, IDictionary<string, string> values, CancellationToken cancellationToken);
 	}
 }

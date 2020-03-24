@@ -14,7 +14,7 @@ namespace Montr.Docs.Impl
 		{
 			services.AddSingleton<IDocumentRepository, DbDocumentRepository>();
 
-			services.AddTransient<INumberTagProvider, DocumentNumberTagProvider>();
+			services.AddTransient<INumberTagResolver, DocumentNumberTagResolver>();
 		}
 	}
 }

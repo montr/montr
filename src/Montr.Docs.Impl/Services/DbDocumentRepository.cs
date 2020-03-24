@@ -10,6 +10,7 @@ using Montr.Data.Linq2Db;
 using Montr.Docs.Impl.Entities;
 using Montr.Docs.Models;
 using Montr.Docs.Services;
+using Montr.MasterData.Models;
 using Montr.MasterData.Services;
 using Montr.Metadata.Models;
 using Montr.Metadata.Services;
@@ -57,10 +58,15 @@ namespace Montr.Docs.Impl.Services
 					.InsertAsync(cancellationToken);
 			}
 
+			// todo: generate number, on publish(?)
 			if (document.StatusCode == DocumentStatusCode.Published)
 			{
 				var documentNumber = await _numberGenerator
-					.GenerateNumber(DocumentType.EntityTypeCode, Process.CompanyRegistrationRequest, cancellationToken);
+					.GenerateNumber(new GenerateNumberRequest
+					{
+						EntityTypeCode = Document.EntityTypeCode,
+						EntityTypeUid = Process.CompanyRegistrationRequest
+					}, cancellationToken);
 
 				using (var db = _dbContextFactory.Create())
 				{
@@ -87,7 +93,7 @@ namespace Montr.Docs.Impl.Services
 				}
 
 				var data = await Materialize(
-					query.Apply(request, x => x.ConfigCode), cancellationToken);
+					query.Apply(request, x => x.DocumentDate, SortOrder.Descending), cancellationToken);
 
 				// todo: preload fields for multiple items
 				if (request.IncludeFields)

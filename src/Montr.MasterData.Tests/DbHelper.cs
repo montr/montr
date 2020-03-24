@@ -304,7 +304,7 @@ namespace Montr.MasterData.Tests
 			}
 		}
 
-		public async Task<ApiResult> InsertNumerator(Numerator numerator, string entityTypeCode, Guid entityUid, CancellationToken cancellationToken)
+		public async Task<ApiResult> InsertNumerator(Numerator numerator, GenerateNumberRequest request, CancellationToken cancellationToken)
 		{
 			var numeratorUid = Guid.NewGuid();
 
@@ -312,7 +312,7 @@ namespace Montr.MasterData.Tests
 			{
 				await db.GetTable<DbNumerator>()
 					.Value(x => x.Uid, numeratorUid)
-					.Value(x => x.EntityTypeCode, entityTypeCode)
+					.Value(x => x.EntityTypeCode, request.EntityTypeCode)
 					.Value(x => x.Pattern, numerator.Pattern ?? Numerator.DefaultPattern)
 					.Value(x => x.Periodicity, numerator.Periodicity.ToString())
 					.Value(x => x.Name, numerator.Name ?? "Test numerator")
@@ -323,7 +323,7 @@ namespace Montr.MasterData.Tests
 
 				await db.GetTable<DbNumeratorEntity>()
 					.Value(x => x.NumeratorUid, numeratorUid)
-					.Value(x => x.EntityUid, entityUid)
+					.Value(x => x.EntityUid, request.EntityTypeUid)
 					.InsertAsync(cancellationToken);
 
 				return new ApiResult { Uid = numeratorUid };

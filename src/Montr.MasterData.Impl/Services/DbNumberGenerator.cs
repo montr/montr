@@ -18,23 +18,23 @@ namespace Montr.MasterData.Impl.Services
 		private readonly IDbContextFactory _dbContextFactory;
 		private readonly IDateTimeProvider _dateTimeProvider;
 		private readonly NumberPatternParser _patternParser = new NumberPatternParser();
-		private readonly IEnumerable<INumberTagProvider> _tagProviders;
+		private readonly IEnumerable<INumberTagResolver> _resolvers;
 
 		public DbNumberGenerator(
 			IDbContextFactory dbContextFactory,
 			IDateTimeProvider dateTimeProvider,
-			IEnumerable<INumberTagProvider> tagProviders)
+			IEnumerable<INumberTagResolver> resolvers)
 		{
 			_dbContextFactory = dbContextFactory;
 			_dateTimeProvider = dateTimeProvider;
-			_tagProviders = tagProviders;
+			_resolvers = resolvers;
 		}
 
-		public async Task<string> GenerateNumber(string entityTypeCode, Guid enityUid, CancellationToken cancellationToken)
+		public async Task<string> GenerateNumber(GenerateNumberRequest request, CancellationToken cancellationToken)
 		{
 			// todo: add distributed lock
 			{
-				var numerator = await GetNumerator(entityTypeCode, enityUid, cancellationToken);
+				var numerator = await GetNumerator(request, cancellationToken);
 
 				if (numerator == null) return null;
 
@@ -45,13 +45,13 @@ namespace Montr.MasterData.Impl.Services
 				DateTime? date = null;
 				var values = tags.ToDictionary(x => x, x => "00", Numerator.TagComparer);
 
-				foreach (var tagProvider in _tagProviders)
+				foreach (var tagProvider in _resolvers)
 				{
-					if (tagProvider.Supports(entityTypeCode, out var supportedTags))
+					if (tagProvider.Supports(request, out var supportedTags))
 					{
 						var tagsToResolve = tags.Intersect(supportedTags, Numerator.TagComparer);
 
-						await tagProvider.Resolve(entityTypeCode, enityUid, out var providerDate, tagsToResolve, values, cancellationToken);
+						await tagProvider.Resolve(request, out var providerDate, tagsToResolve, values, cancellationToken);
 
 						date = providerDate;
 					}
@@ -86,20 +86,20 @@ namespace Montr.MasterData.Impl.Services
 		}
 
 		// todo: get numerator from cache
-		private async Task<Numerator> GetNumerator(string entityTypeCode, Guid enityUid, CancellationToken cancellationToken)
+		private async Task<Numerator> GetNumerator(GenerateNumberRequest request, CancellationToken cancellationToken)
 		{
 			using (var db = _dbContextFactory.Create())
 			{
 				// todo: join two queries
 				var dbNumeratorEntity = await db.GetTable<DbNumeratorEntity>()
-					.Where(x => x.EntityUid == enityUid)
+					.Where(x => x.EntityUid == request.EntityTypeUid)
 					.FirstOrDefaultAsync(cancellationToken);
 
 				if (dbNumeratorEntity == null) return null;
 
 				var dbNumerator = await db
 					.GetTable<DbNumerator>()
-					.Where(x => x.EntityTypeCode == entityTypeCode && x.Uid == dbNumeratorEntity.NumeratorUid)
+					.Where(x => x.EntityTypeCode == request.EntityTypeCode && x.Uid == dbNumeratorEntity.NumeratorUid)
 					.FirstAsync(cancellationToken);
 
 				return new Numerator
