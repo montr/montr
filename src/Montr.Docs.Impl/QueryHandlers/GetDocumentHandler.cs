@@ -2,17 +2,17 @@
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
+using Montr.Core.Services;
 using Montr.Docs.Models;
 using Montr.Docs.Queries;
-using Montr.Docs.Services;
 
 namespace Montr.Docs.Impl.QueryHandlers
 {
 	public class GetDocumentHandler : IRequestHandler<GetDocument, Document>
 	{
-		private readonly IDocumentRepository _repository;
+		private readonly IRepository<Document> _repository;
 
-		public GetDocumentHandler(IDocumentRepository repository)
+		public GetDocumentHandler(IRepository<Document> repository)
 		{
 			_repository = repository;
 		}

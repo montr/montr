@@ -23,12 +23,12 @@ namespace Montr.Kompany.Impl.CommandHandlers
 		private readonly IDateTimeProvider _dateTimeProvider;
 		private readonly IRepository<FieldMetadata> _fieldMetadataRepository;
 		private readonly IFieldDataRepository _fieldDataRepository;
-		private readonly IDocumentRepository _documentRepository;
+		private readonly IDocumentService _documentRepository;
 		private readonly IAuditLogService _auditLogService;
 
 		public CreateCompanyHandler(IUnitOfWorkFactory unitOfWorkFactory, IDbContextFactory dbContextFactory,
 			IDateTimeProvider dateTimeProvider, IRepository<FieldMetadata> fieldMetadataRepository, IFieldDataRepository fieldDataRepository,
-			IDocumentRepository documentRepository, IAuditLogService auditLogService)
+			IDocumentService documentRepository, IAuditLogService auditLogService)
 		{
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_dbContextFactory = dbContextFactory;

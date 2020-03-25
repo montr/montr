@@ -9,73 +9,24 @@ using Montr.Core.Services;
 using Montr.Data.Linq2Db;
 using Montr.Docs.Impl.Entities;
 using Montr.Docs.Models;
-using Montr.Docs.Services;
-using Montr.MasterData.Models;
-using Montr.MasterData.Services;
 using Montr.Metadata.Models;
 using Montr.Metadata.Services;
 
 namespace Montr.Docs.Impl.Services
 {
-	// todo: merge with IRepository<Document>?
-	public class DbDocumentRepository : IDocumentRepository
+	public class DbDocumentRepository : IRepository<Document>
 	{
 		private readonly IDbContextFactory _dbContextFactory;
 		private readonly IRepository<FieldMetadata> _fieldMetadataRepository;
 		private readonly IFieldDataRepository _fieldDataRepository;
-		private readonly INumberGenerator _numberGenerator;
 
 		public DbDocumentRepository(IDbContextFactory dbContextFactory,
 			IRepository<FieldMetadata> fieldMetadataRepository,
-			IFieldDataRepository fieldDataRepository,
-			INumberGenerator numberGenerator)
+			IFieldDataRepository fieldDataRepository)
 		{
 			_dbContextFactory = dbContextFactory;
 			_fieldMetadataRepository = fieldMetadataRepository;
 			_fieldDataRepository = fieldDataRepository;
-			_numberGenerator = numberGenerator;
-		}
-
-		public async Task Create(Document document, CancellationToken cancellationToken)
-		{
-			if (document.Uid == Guid.Empty)
-				document.Uid = Guid.NewGuid();
-
-			if (document.StatusCode == null)
-				document.StatusCode = DocumentStatusCode.Draft;
-
-			using (var db = _dbContextFactory.Create())
-			{
-				await db.GetTable<DbDocument>()
-					.Value(x => x.Uid, document.Uid)
-					.Value(x => x.CompanyUid, document.CompanyUid)
-					.Value(x => x.ConfigCode, document.ConfigCode)
-					.Value(x => x.StatusCode, document.StatusCode)
-					.Value(x => x.Direction, document.Direction.ToString())
-					.Value(x => x.DocumentNumber, document.DocumentNumber)
-					.Value(x => x.DocumentDate, document.DocumentDate)
-					.Value(x => x.Name, document.Name)
-					.InsertAsync(cancellationToken);
-			}
-
-			// todo: generate number, on publish(?)
-			if (document.StatusCode == DocumentStatusCode.Published)
-			{
-				var documentNumber = await _numberGenerator
-					.GenerateNumber(new GenerateNumberRequest
-					{
-						EntityTypeCode = Document.EntityTypeCode,
-						EntityTypeUid = Process.CompanyRegistrationRequest
-					}, cancellationToken);
-
-				using (var db = _dbContextFactory.Create())
-				{
-					await db.GetTable<DbDocument>()
-						.Where(x => x.Uid == document.Uid)
-						.Set(x => x.DocumentNumber, documentNumber)
-						.UpdateAsync(cancellationToken);
-				}
-			}
 		}
 
 		public async Task<SearchResult<Document>> Search(SearchRequest searchRequest, CancellationToken cancellationToken)

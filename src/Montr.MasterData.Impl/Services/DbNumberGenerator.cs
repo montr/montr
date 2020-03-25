@@ -51,9 +51,20 @@ namespace Montr.MasterData.Impl.Services
 					{
 						var tagsToResolve = tags.Intersect(supportedTags, Numerator.TagComparer);
 
-						await tagProvider.Resolve(request, out var providerDate, tagsToResolve, values, cancellationToken);
+						var resolveResult = await tagProvider.Resolve(request, tagsToResolve, cancellationToken);
 
-						date = providerDate;
+						if (resolveResult != null)
+						{
+							if (resolveResult.Date != null) date = resolveResult.Date;
+
+							if (resolveResult.Values != null)
+							{
+								foreach (var pair in resolveResult.Values)
+								{
+									values[pair.Key] = pair.Value;
+								}
+							}
+						}
 					}
 				}
 
@@ -154,6 +165,7 @@ namespace Montr.MasterData.Impl.Services
 			}
 		}
 
+		// todo: should date be converted from UTC here and in AddKnownTags method
 		private static DateTime GetPeriodStart(DateTime date, NumeratorPeriodicity periodicity)
 		{
 			switch (periodicity)

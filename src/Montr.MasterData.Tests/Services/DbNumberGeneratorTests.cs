@@ -283,20 +283,15 @@ namespace Montr.MasterData.Tests.Services
 				return false;
 			}
 
-			public Task Resolve(GenerateNumberRequest request, out DateTime? date,
-				IEnumerable<string> tags, IDictionary<string, string> values, CancellationToken cancellationToken)
+			public Task<NumberTagResolveResult> Resolve(GenerateNumberRequest request, IEnumerable<string> tags, CancellationToken cancellationToken)
 			{
-				date = Date;
-
-				foreach (var tag in tags)
+				var result = new NumberTagResolveResult
 				{
-					if (Values.TryGetValue(tag, out var value))
-					{
-						values[tag] = value;
-					}
-				}
+					Date = Date,
+					Values = Values.Where(x => tags.Contains(x.Key)).ToDictionary(x => x.Key, x => x.Value, Numerator.TagComparer)
+				};
 
-				return Task.CompletedTask;
+				return Task.FromResult(result);
 			}
 		}
 	}
