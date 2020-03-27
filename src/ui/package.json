@@ -15,7 +15,7 @@
 	"dependencies": {
 		"antd": "^4.0.4",
 		"axios": "^0.19.2",
-		"i18next": "^19.3.3",
+		"i18next": "^19.3.4",
 		"i18next-browser-languagedetector": "^4.0.2",
 		"i18next-xhr-backend": "^3.2.2",
 		"oidc-client": "^1.10.1",
@@ -36,7 +36,7 @@
 		"@babel/preset-react": "^7.9.4",
 		"@babel/preset-typescript": "^7.9.0",
 		"@types/lodash": "^4.14.149",
-		"@types/react": "^16.9.25",
+		"@types/react": "^16.9.26",
 		"@types/react-dom": "^16.9.4",
 		"@types/react-router": "^5.1.4",
 		"@types/react-router-dom": "^5.1.3",
