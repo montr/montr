@@ -12,6 +12,33 @@ using Montr.MasterData.Queries;
 namespace Montr.MasterData.Tests.QueryHandlers
 {
 	[TestClass]
+	public class GetNumeratorListHandlerTests
+	{
+		[TestMethod]
+		public async Task GetNumeratorList_Should_ReturnList()
+		{
+			// arrange
+			var cancellationToken = CancellationToken.None;
+			var dbContextFactory = new DefaultDbContextFactory();
+			var unitOfWorkFactory = new TransactionScopeUnitOfWorkFactory();
+			var dbNumeratorRepository = new DbNumeratorRepository(dbContextFactory);
+			var handler = new GetNumeratorListHandler(dbNumeratorRepository);
+
+			using (var _ = unitOfWorkFactory.Create())
+			{
+				// act
+				var command = new GetNumeratorList();
+
+				var result = await handler.Handle(command, cancellationToken);
+
+				// assert
+				Assert.IsNotNull(result);
+				Assert.IsTrue(result.Rows.Count > 0);
+			}
+		}
+	}
+
+	[TestClass]
 	public class GetClassifierListHandlerTests
 	{
 		[TestMethod]
@@ -43,7 +70,7 @@ namespace Montr.MasterData.Tests.QueryHandlers
 					TypeCode = dbHelper.TypeCode
 				};
 
-				var result = await handler.Handle(command, CancellationToken.None);
+				var result = await handler.Handle(command, cancellationToken);
 
 				// assert
 				Assert.IsNotNull(result);

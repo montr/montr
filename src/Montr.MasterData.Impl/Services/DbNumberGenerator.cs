@@ -16,16 +16,19 @@ namespace Montr.MasterData.Impl.Services
 	public class DbNumberGenerator : INumberGenerator
 	{
 		private readonly IDbContextFactory _dbContextFactory;
+		private readonly IRepository<Numerator> _repository;
 		private readonly IDateTimeProvider _dateTimeProvider;
 		private readonly NumberPatternParser _patternParser = new NumberPatternParser();
 		private readonly IEnumerable<INumberTagResolver> _resolvers;
 
 		public DbNumberGenerator(
 			IDbContextFactory dbContextFactory,
+			IRepository<Numerator> repository,
 			IDateTimeProvider dateTimeProvider,
 			IEnumerable<INumberTagResolver> resolvers)
 		{
 			_dbContextFactory = dbContextFactory;
+			_repository = repository;
 			_dateTimeProvider = dateTimeProvider;
 			_resolvers = resolvers;
 		}
@@ -99,7 +102,15 @@ namespace Montr.MasterData.Impl.Services
 		// todo: get numerator from cache
 		private async Task<Numerator> GetNumerator(GenerateNumberRequest request, CancellationToken cancellationToken)
 		{
-			using (var db = _dbContextFactory.Create())
+			var result = await _repository.Search(new NumeratorSearchRequest
+			{
+				EntityTypeCode = request.EntityTypeCode,
+				EntityTypeUid = request.EntityTypeUid
+			}, cancellationToken);
+
+			return result.Rows.FirstOrDefault();
+
+			/*using (var db = _dbContextFactory.Create())
 			{
 				// todo: join two queries
 				var dbNumeratorEntity = await db.GetTable<DbNumeratorEntity>()
@@ -123,7 +134,7 @@ namespace Montr.MasterData.Impl.Services
 					IsActive = dbNumerator.IsActive,
 					IsSystem = dbNumerator.IsSystem
 				};
-			}
+			}*/
 		}
 
 		private async Task<long> IncrementCounter(Numerator numerator, string key, CancellationToken cancellationToken)

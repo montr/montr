@@ -14,6 +14,8 @@ namespace Montr.MasterData.Models
 
 		public Guid Uid { get; set; }
 
+		public string EntityTypeCode { get; set; }
+
 		public string Name { get; set; }
 
 		public string Pattern { get; set; }
@@ -25,6 +27,8 @@ namespace Montr.MasterData.Models
 		public bool IsActive { get; set; }
 
 		public bool IsSystem { get; set; }
+
+		public string Url { get; set; }
 	}
 
 	public enum NumeratorPeriodicity : byte

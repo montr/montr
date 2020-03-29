@@ -140,6 +140,19 @@ namespace Montr.MasterData.Services
 				}
 			});
 
+			_registrator.Register("Numerator/Grid", viewId => new DataView
+			{
+				Columns = new List<DataColumn>
+				{
+					new DataColumn { Key = "name", Name = "Наименование", Sortable = true, Width = 200 },
+					new DataColumn { Key = "pattern", Name = "Формат номера", Width = 150 },
+					new DataColumn { Key = "entityTypeCode", Name = "Применимость", Sortable = true, Width = 30 },
+					new DataColumn { Key = "periodicity", Name = "Периодичность", Sortable = true, Width = 30 },
+					new DataColumn { Key = "isActive", Name = "Active", Width = 10, Type = BooleanField.TypeCode },
+					new DataColumn { Key = "isSystem", Name = "System", Width = 10, Type = BooleanField.TypeCode },
+				}
+			});
+
 			return Task.CompletedTask;
 		}
 	}

@@ -24,10 +24,11 @@ namespace Montr.MasterData.Tests.Services
 			var cancellationToken = new CancellationToken();
 			var unitOfWorkFactory = new TransactionScopeUnitOfWorkFactory();
 			var dbContextFactory = new DefaultDbContextFactory();
+			var dbNumeratorRepository = new DbNumeratorRepository(dbContextFactory);
 			var dateTimeProvider = new DefaultDateTimeProvider();
 			var dbHelper = new DbHelper(unitOfWorkFactory, dbContextFactory);
 			var numeratorTagProvider = new TestNumberTagResolver { EntityTypeCode = NumerableEntityTypeCode };
-			var service = new DbNumberGenerator(dbContextFactory, dateTimeProvider, new INumberTagResolver[] { numeratorTagProvider });
+			var service = new DbNumberGenerator(dbContextFactory, dbNumeratorRepository, dateTimeProvider, new INumberTagResolver[] { numeratorTagProvider });
 
 			using (var _ = unitOfWorkFactory.Create())
 			{
@@ -62,10 +63,11 @@ namespace Montr.MasterData.Tests.Services
 			var cancellationToken = new CancellationToken();
 			var unitOfWorkFactory = new TransactionScopeUnitOfWorkFactory();
 			var dbContextFactory = new DefaultDbContextFactory();
+			var dbNumeratorRepository = new DbNumeratorRepository(dbContextFactory);
 			var dateTimeProvider = new DefaultDateTimeProvider();
 			var dbHelper = new DbHelper(unitOfWorkFactory, dbContextFactory);
 			var numeratorTagProvider = new TestNumberTagResolver { EntityTypeCode = NumerableEntityTypeCode };
-			var service = new DbNumberGenerator(dbContextFactory, dateTimeProvider, new INumberTagResolver[] { numeratorTagProvider });
+			var service = new DbNumberGenerator(dbContextFactory, dbNumeratorRepository, dateTimeProvider, new INumberTagResolver[] { numeratorTagProvider });
 
 			using (var _ = unitOfWorkFactory.Create())
 			{
@@ -101,10 +103,11 @@ namespace Montr.MasterData.Tests.Services
 			var cancellationToken = new CancellationToken();
 			var unitOfWorkFactory = new TransactionScopeUnitOfWorkFactory();
 			var dbContextFactory = new DefaultDbContextFactory();
+			var dbNumeratorRepository = new DbNumeratorRepository(dbContextFactory);
 			var dateTimeProvider = new DefaultDateTimeProvider();
 			var dbHelper = new DbHelper(unitOfWorkFactory, dbContextFactory);
 			var numeratorTagProvider = new TestNumberTagResolver { EntityTypeCode = NumerableEntityTypeCode };
-			var service = new DbNumberGenerator(dbContextFactory, dateTimeProvider, new INumberTagResolver[] { numeratorTagProvider });
+			var service = new DbNumberGenerator(dbContextFactory, dbNumeratorRepository, dateTimeProvider, new INumberTagResolver[] { numeratorTagProvider });
 
 			using (var _ = unitOfWorkFactory.Create())
 			{
@@ -144,6 +147,7 @@ namespace Montr.MasterData.Tests.Services
 			var cancellationToken = new CancellationToken();
 			var unitOfWorkFactory = new TransactionScopeUnitOfWorkFactory();
 			var dbContextFactory = new DefaultDbContextFactory();
+			var dbNumeratorRepository = new DbNumeratorRepository(dbContextFactory);
 			var dateTimeProvider = new DefaultDateTimeProvider();
 			var dbHelper = new DbHelper(unitOfWorkFactory, dbContextFactory);
 			var numeratorTagProvider = new TestNumberTagResolver
@@ -151,7 +155,7 @@ namespace Montr.MasterData.Tests.Services
 				EntityTypeCode = NumerableEntityTypeCode,
 				Values = new Dictionary<string, string>()
 			};
-			var service = new DbNumberGenerator(dbContextFactory, dateTimeProvider, new INumberTagResolver[] { numeratorTagProvider });
+			var service = new DbNumberGenerator(dbContextFactory, dbNumeratorRepository, dateTimeProvider, new INumberTagResolver[] { numeratorTagProvider });
 
 			using (var _ = unitOfWorkFactory.Create())
 			{
@@ -205,6 +209,7 @@ namespace Montr.MasterData.Tests.Services
 			var cancellationToken = new CancellationToken();
 			var unitOfWorkFactory = new TransactionScopeUnitOfWorkFactory();
 			var dbContextFactory = new DefaultDbContextFactory();
+			var dbNumeratorRepository = new DbNumeratorRepository(dbContextFactory);
 			var dateTimeProvider = new DefaultDateTimeProvider();
 			var dbHelper = new DbHelper(unitOfWorkFactory, dbContextFactory);
 			var numeratorTagProvider = new TestNumberTagResolver
@@ -212,7 +217,7 @@ namespace Montr.MasterData.Tests.Services
 				EntityTypeCode = NumerableEntityTypeCode,
 				Values = new Dictionary<string, string>()
 			};
-			var service = new DbNumberGenerator(dbContextFactory, dateTimeProvider, new INumberTagResolver[] { numeratorTagProvider });
+			var service = new DbNumberGenerator(dbContextFactory, dbNumeratorRepository, dateTimeProvider, new INumberTagResolver[] { numeratorTagProvider });
 
 			using (var _ = unitOfWorkFactory.Create())
 			{
