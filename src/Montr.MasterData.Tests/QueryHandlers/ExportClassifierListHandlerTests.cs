@@ -59,7 +59,7 @@ namespace Montr.MasterData.Tests.QueryHandlers
 				// temp
 				using (var fs = new FileStream(result.FileName, FileMode.OpenOrCreate))
 				{
-					result.Stream.CopyTo(fs);
+					await result.Stream.CopyToAsync(fs, cancellationToken);
 				}
 			}
 		}
