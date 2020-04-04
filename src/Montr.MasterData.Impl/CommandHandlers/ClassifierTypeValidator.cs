@@ -48,7 +48,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 					Key = "code",
 					Messages = new[]
 					{
-						$"Код «{duplicate.Code}» уже используется в справочнике «{duplicate.Name}»."
+						$"Код «{duplicate.Code}» уже используется в классификаторе «{duplicate.Name}»."
 					}
 				});
 			}

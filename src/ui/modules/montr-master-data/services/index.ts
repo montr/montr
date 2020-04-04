@@ -4,3 +4,4 @@ export * from "./classifier-metadata-service";
 export * from "./classifier-service";
 export * from "./classifier-tree-service";
 export * from "./classifier-type-service";
+export * from "./numerator-service";

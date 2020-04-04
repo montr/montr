@@ -23,7 +23,7 @@ interface IState {
 	data?: IClassifier;
 }
 
-export default class EditClassifier extends React.Component<IProps, IState> {
+export default class PageEditClassifier extends React.Component<IProps, IState> {
 
 	private _classifierTypeService = new ClassifierTypeService();
 	private _classifierService = new ClassifierService();

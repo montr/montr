@@ -19,7 +19,10 @@ export const Api = {
 	classifierInsert: `${Constants.apiURL}/classifier/insert`,
 	classifierUpdate: `${Constants.apiURL}/classifier/update`,
 	classifierDelete: `${Constants.apiURL}/classifier/delete`,
+
 	numeratorList: `${Constants.apiURL}/numerator/list`,
+	numeratorCreate: `${Constants.apiURL}/numerator/create`,
+	numeratorGet: `${Constants.apiURL}/numerator/get`,
 };
 
 export const Views = {
@@ -35,6 +38,8 @@ export const Patterns = {
 	addClassifier: "/classifiers/:typeCode/add/:parentUid?",
 	editClassifier: "/classifiers/:typeCode/edit/:uid/:tabKey?",
 	searchNumerator: "/numerators/",
+
+	editNumerator: "/numerators/:uid/:tabKey?",
 };
 
 export const RouteBuilder = {
@@ -47,6 +52,9 @@ export const RouteBuilder = {
 	editClassifier: (typeCode: string, uid: Guid | string, tabKey?: string) => {
 		return generatePath(Patterns.editClassifier, { typeCode, uid: uid.toString(), tabKey });
 	},
+	editNumerator: (uid: Guid | string, tabKey?: string) => {
+		return generatePath(Patterns.editNumerator, { uid: uid.toString(), tabKey });
+	},
 };
 
 AppRouteRegistry.add([
@@ -56,5 +64,7 @@ AppRouteRegistry.add([
 	{ path: Patterns.searchClassifier, exact: true, component: React.lazy(() => import("./components/page-search-classifier")) },
 	{ path: Patterns.addClassifier, exact: true, component: React.lazy(() => import("./components/page-edit-classifier")) },
 	{ path: Patterns.editClassifier, exact: true, component: React.lazy(() => import("./components/page-edit-classifier")) },
-	{ path: Patterns.searchNumerator, exact: true, component: React.lazy(() => import("./components/page-search-numerator")) }
+	{ path: Patterns.searchNumerator, exact: true, component: React.lazy(() => import("./components/page-search-numerator")) },
+
+	{ path: Patterns.editNumerator, exact: true, component: React.lazy(() => import("./components/page-edit-numerator")) }
 ]);

@@ -37,6 +37,11 @@ namespace Montr.MasterData.Impl.Services
 						select n;
 				}
 
+				if (request.Uid != null)
+				{
+					query = query.Where(x => x.Uid == request.Uid);
+				}
+
 				var paged = query.Apply(request, x => x.Name);
 
 				var data = await Materialize(paged, cancellationToken); 

@@ -78,6 +78,7 @@
       "page.setPassword.title": "Set password"
     },
     "master-data": {
+      "page.searchClassifierTypes.title": "Classifiers",
       "page.searchNumerators.title": "Numerators"
     },
     "tendr": {
@@ -169,6 +170,7 @@
       "page.setPassword.title": "Установить пароль"
     },
     "master-data": {
+      "page.searchClassifierTypes.title": "Классификаторы",
       "page.searchNumerators.title": "Нумераторы"
     },
     "tendr": {

@@ -85,7 +85,7 @@ namespace Montr.MasterData.Services
 					new SelectField
 					{
 						Key = "hierarchyType", Name = "Иерархия",
-						Description = "Справочник может быть без иерархии, с иерархией групп (например, контрагентов можно распределить по группам по их регионам, размеру или отношению к нашей организации) или иерархией элементов (например, одни виды деятельности уточняются другими видами деятельности)",
+						Description = "Классификатор может быть без иерархии, с иерархией групп (например, контрагентов можно распределить по группам по их регионам, размеру или отношению к нашей организации) или иерархией элементов (например, одни виды деятельности уточняются другими видами деятельности)",
 						Props =
 						{
 							Options = new []
@@ -144,8 +144,8 @@ namespace Montr.MasterData.Services
 			{
 				Columns = new List<DataColumn>
 				{
-					new DataColumn { Key = "name", Name = "Наименование", Sortable = true, Width = 200 },
-					new DataColumn { Key = "pattern", Name = "Формат номера", Width = 150 },
+					new DataColumn { Key = "name", Name = "Наименование", Sortable = true, UrlProperty = "url", Width = 200 },
+					new DataColumn { Key = "pattern", Name = "Формат номера", UrlProperty = "url", Width = 150 },
 					new DataColumn { Key = "entityTypeCode", Name = "Применимость", Sortable = true, Width = 30 },
 					new DataColumn { Key = "periodicity", Name = "Периодичность", Sortable = true, Width = 30 },
 					new DataColumn { Key = "isActive", Name = "Active", Width = 10, Type = BooleanField.TypeCode },

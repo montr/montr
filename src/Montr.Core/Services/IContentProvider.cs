@@ -55,7 +55,7 @@ namespace Montr.Core.Services
 						new Menu { Id = "companies", Name = "Компании", Route = "/companies" },
 						new Menu { Id = "users", Name = "Пользователи", Route = "/users" },
 						// new Menu { Id = "integrations", Name = "Интеграции", Route = "/integrations" },
-						new Menu { Id = "classifiers", Name = "Справочники", Route = "/classifiers" },
+						new Menu { Id = "classifiers", Name = "Классификаторы", Route = "/classifiers" },
 						new Menu { Id = "numerators", Name = "Нумераторы", Route = "/numerators" },
 						new Menu { Id = "settings", Name = "Настройки", Route = "/settings" },
 						new Menu { Id = "locales", Name = "Локализация", Route = "/locales" },

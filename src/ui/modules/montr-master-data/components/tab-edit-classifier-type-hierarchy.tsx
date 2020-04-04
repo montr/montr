@@ -71,7 +71,7 @@ export class TabEditClassifierTypeHierarchy extends React.Component<IProps, ISta
 	showDeleteConfirm = (data: IClassifierTree) => {
 		Modal.confirm({
 			title: "Вы действительно хотите удалить выбранную иерархию?",
-			content: "Наверняка что-то случится с группами и элементами справочника...",
+			content: "Наверняка что-то случится с группами и элементами классификатора...",
 			onOk: async () => {
 				const { type } = this.props;
 
@@ -103,7 +103,7 @@ export class TabEditClassifierTypeHierarchy extends React.Component<IProps, ISta
 
 		return (<>
 			<Alert type={type.hierarchyType == "Groups" ? "info" : "warning"}
-				message="Настройка иерархий групп доступна для справочников, у которых на вкладке «Информация» выбран тип иерархии «Группы»." />
+				message="Настройка иерархий групп доступна для классификторов, у которых на вкладке «Информация» выбран тип иерархии «Группы»." />
 
 			{type.hierarchyType == "Groups" && (<>
 				<Toolbar clear>
