@@ -153,6 +153,42 @@ namespace Montr.MasterData.Services
 				}
 			});
 
+			_registrator.Register("Numerator/Form", viewId => new DataView
+			{
+				Fields = new List<FieldMetadata>
+				{
+					new SelectField
+					{
+						Key = "entityTypeCode", Name = "EntityTypeCode", Required = true,
+						Props =
+						{
+							Options = new []
+							{
+								new SelectFieldOption { Value = "DocumentType", Name = "DocumentType" },
+								new SelectFieldOption { Value = "ClassifierType", Name = "ClassifierType" },
+							}
+						}
+					},
+					new TextField { Key = "name", Name = "Наименование", Required = true },
+					new SelectField
+					{
+						Key = "periodicity", Name = "Periodicity", Required = true,
+						Props =
+						{
+							Options = new []
+							{
+								new SelectFieldOption { Value = "None", Name = "None" },
+								new SelectFieldOption { Value = "Day", Name = "Day" },
+								new SelectFieldOption { Value = "Month", Name = "Month" },
+								new SelectFieldOption { Value = "Quarter", Name = "Quarter" },
+								new SelectFieldOption { Value = "Year", Name = "Year" },
+							}
+						}
+					},
+					new TextAreaField { Key = "pattern", Name = "Pattern", Required = true, Props = new TextAreaField.Properties { Rows = 4 } },
+				}
+			});
+
 			return Task.CompletedTask;
 		}
 	}

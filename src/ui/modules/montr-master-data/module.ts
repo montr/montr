@@ -23,11 +23,16 @@ export const Api = {
 	numeratorList: `${Constants.apiURL}/numerator/list`,
 	numeratorCreate: `${Constants.apiURL}/numerator/create`,
 	numeratorGet: `${Constants.apiURL}/numerator/get`,
+	numeratorInsert: `${Constants.apiURL}/numerator/insert`,
+	numeratorUpdate: `${Constants.apiURL}/numerator/update`,
+	numeratorDelete: `${Constants.apiURL}/numerator/delete`,
 };
 
 export const Views = {
 	classifierList: "Classifier/Grid",
 	numeratorList: "Numerator/Grid",
+
+	formEditNumerator: "Numerator/Form",
 };
 
 export const Patterns = {

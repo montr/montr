@@ -11,3 +11,4 @@ export * from "./tab-edit-classifier-hierarchy";
 export * from "./tab-edit-classifier-type-hierarchy";
 export * from "./tab-edit-classifier-type";
 export * from "./tab-edit-classifier";
+export * from "./tab-edit-numerator";

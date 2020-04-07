@@ -5,6 +5,7 @@ import { PageHeader, Page } from "@montr-core/components";
 import { INumerator } from "../models";
 import { NumeratorService } from "../services";
 import { RouteBuilder } from "../module";
+import { TabEditNumerator } from "./";
 
 interface IRouteProps {
 	uid?: string;
@@ -35,6 +36,16 @@ export default class PageEditNumerator extends React.Component<IProps, IState> {
 		await this.fetchData();
 	};
 
+	componentDidUpdate = async (prevProps: IProps) => {
+		if (this.props.match.params.uid !== prevProps.match.params.uid) {
+			await this.fetchData();
+		}
+	};
+
+	componentWillUnmount = async () => {
+		await this._numeratorService.abort();
+	};
+
 	fetchData = async () => {
 		const { uid } = this.props.match.params;
 
@@ -43,6 +54,19 @@ export default class PageEditNumerator extends React.Component<IProps, IState> {
 			: await this._numeratorService.create();
 
 		this.setState({ loading: false, data });
+	};
+
+	handleDataChange = (data: INumerator) => {
+		const { uid } = this.props.match.params;
+
+		if (uid) {
+			this.setState({ data });
+		}
+		else {
+			const path = RouteBuilder.editNumerator(data.uid);
+
+			this.props.history.push(path);
+		}
 	};
 
 	// todo: use common component for all tabbed pages
@@ -67,7 +91,7 @@ export default class PageEditNumerator extends React.Component<IProps, IState> {
 				<Spin spinning={loading}>
 					<Tabs size="small" defaultActiveKey={tabKey} onChange={this.handleTabChange}>
 						<Tabs.TabPane key="info" tab="Информация">
-							{/* <TabEditClassifier type={type} data={data} onDataChange={this.handleDataChange} /> */}
+							<TabEditNumerator data={data} onDataChange={this.handleDataChange} />
 						</Tabs.TabPane>
 						<Tabs.TabPane key="entities" tab="Использование" disabled={otherTabsDisabled}>
 						</Tabs.TabPane>
