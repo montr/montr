@@ -1,6 +1,6 @@
 # [Montr](https://montr.net/) &middot; [![GitHub Actions status](https://github.com/montr/montr/workflows/build/badge.svg)](https://github.com/montr/montr) [![GitHub license](https://img.shields.io/badge/license-GPL3.0-blue.svg)](https://github.com/montr/montr/blob/master/LICENSE)
 
-R&D sample of B2B applications
+R&D of B2B applications
 
 * SSO
 * MDM
