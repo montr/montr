@@ -169,7 +169,6 @@ namespace Montr.MasterData.Services
 							}
 						}
 					},
-					new TextField { Key = "name", Name = "Наименование", Required = true },
 					new SelectField
 					{
 						Key = "periodicity", Name = "Periodicity", Required = true,
@@ -185,6 +184,7 @@ namespace Montr.MasterData.Services
 							}
 						}
 					},
+					new TextField { Key = "name", Name = "Наименование", Required = true },
 					new TextAreaField { Key = "pattern", Name = "Pattern", Required = true, Props = new TextAreaField.Properties { Rows = 4 } },
 				}
 			});

@@ -36,5 +36,23 @@ namespace Montr.MasterData.Controllers
 		{
 			return await _mediator.Send(request);
 		}
+
+		[HttpPost]
+		public async Task<ApiResult> Insert(InsertNumerator request)
+		{
+			return await _mediator.Send(request);
+		}
+
+		[HttpPost]
+		public async Task<ApiResult> Update(UpdateNumerator request)
+		{
+			return await _mediator.Send(request);
+		}
+
+		[HttpPost]
+		public async Task<ApiResult> Delete(DeleteNumerator request)
+		{
+			return await _mediator.Send(request);
+		}
 	}
 }

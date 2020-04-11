@@ -1,7 +1,8 @@
 import React from "react";
-import { PageHeader, Page, DataTable } from "@montr-core/components";
-import { Views, Api } from "../module";
+import { PageHeader, Page, DataTable, Toolbar, ButtonAdd } from "@montr-core/components";
+import { Views, Api, RouteBuilder } from "../module";
 import { Translation } from "react-i18next";
+import { Link } from "react-router-dom";
 
 interface IProps {
 }
@@ -15,6 +16,13 @@ export default class PageSearchNumerator extends React.Component<IProps, IState>
 			<Translation ns="master-data">
 				{(t) => <Page
 					title={<>
+
+						<Toolbar float="right">
+							<Link to={RouteBuilder.addNumerator()}>
+								<ButtonAdd type="primary" />
+							</Link>
+						</Toolbar>
+
 						<PageHeader>{t("page.searchNumerators.title")}</PageHeader>
 					</>}>
 

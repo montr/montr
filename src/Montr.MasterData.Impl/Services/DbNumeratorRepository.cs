@@ -69,7 +69,7 @@ namespace Montr.MasterData.Impl.Services
 						: null,
 					IsActive = x.IsActive,
 					IsSystem = x.IsSystem,
-					Url = $"/numerators/{x.Uid}/"
+					Url = $"/numerators/edit/{x.Uid}/"
 				})
 				.ToListAsync(cancellationToken);
 		}
