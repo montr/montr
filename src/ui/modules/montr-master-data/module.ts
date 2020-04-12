@@ -43,8 +43,8 @@ export const Patterns = {
 	searchClassifier: "/classifiers/:typeCode/",
 	addClassifier: "/classifiers/:typeCode/add/:parentUid?",
 	editClassifier: "/classifiers/:typeCode/edit/:uid/:tabKey?",
-	searchNumerator: "/numerators/",
 
+	searchNumerator: "/numerators/",
 	addNumerator: "/numerators/add/",
 	editNumerator: "/numerators/edit/:uid/:tabKey?",
 };

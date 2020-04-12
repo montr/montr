@@ -18,6 +18,7 @@
       "dataForm.rule.required": "The field «{{name}}» is required",
       "dataForm.submit.error": "An error occurred while submit data.",
       "dataForm.submit.success": "Data successfully submitted.",
+      "operation.confirmTitle": "Are you sure you want to perform the operation?",
       "operation.error": "An error occurred while performing the operation.",
       "operation.executing": "Please wait until the operation is completed...",
       "operation.success": "The operation completed successfully."
@@ -104,6 +105,7 @@
       "dataForm.rule.required": "Поле «{{name}}» обязательно для заполнения",
       "dataForm.submit.error": "Ошибка при сохранении данных.",
       "dataForm.submit.success": "Данные успешно сохранены.",
+      "operation.confirmTitle": "Вы действительно хотите выполнить операцию?",
       "operation.error": "Произошла ошибка при выполнении операции.",
       "operation.executing": "Пожалуйста подождите, операция выполняется...",
       "operation.success": "Операция выполнена успешно."

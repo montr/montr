@@ -115,7 +115,8 @@ export class TabEditInvitations extends React.Component<IProps, IState> {
 				const { selectedRowKeys } = this.state;
 
 				const result = await this._operation.execute(() =>
-					this._invitationService.delete(selectedRowKeys));
+					this._invitationService.delete(selectedRowKeys)
+				);
 
 				if (result.success) {
 					this.refreshTable(true);

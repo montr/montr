@@ -25,7 +25,7 @@ export class NumeratorService extends Fetcher {
 		return this.post(Api.numeratorUpdate, { item });
 	};
 
-	delete = async (uids: string[] | number[]): Promise<number> => {
+	delete = async (uids: string[] | number[]): Promise<IApiResult> => {
 		return this.post(Api.numeratorDelete, { uids });
 	};
 }

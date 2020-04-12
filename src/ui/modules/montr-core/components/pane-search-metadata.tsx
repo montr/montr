@@ -77,22 +77,26 @@ export class PaneSearchMetadata extends React.Component<IProps, IState> {
 		this.refreshTable(false);
 	};
 
-	showDeleteConfirm = () => {
-		Modal.confirm({
+	showDeleteConfirm = async () => {
+		/* Modal.confirm({
 			title: "Вы действительно хотите удалить выбранные записи?",
 			content: "Наверняка что-то случится ...",
-			onOk: async () => {
-				const { entityTypeCode, entityUid } = this.props,
-					{ selectedRowKeys } = this.state;
+			onOk: async () => { */
+		const { entityTypeCode, entityUid } = this.props,
+			{ selectedRowKeys } = this.state;
 
-				const result = await this._operation.execute(() =>
-					this._metadataService.delete({ entityTypeCode, entityUid, uids: selectedRowKeys }));
+		const result = await this._operation.execute(() =>
+			this._metadataService.delete({ entityTypeCode, entityUid, uids: selectedRowKeys }),
+			{
+				// showConfirm: true,
+				confirmTitle: "Вы действительно хотите удалить выбранные записи?"
+			});
 
-				if (result.success) {
-					this.refreshTable(false, true);
-				}
-			}
-		});
+		if (result.success) {
+			this.refreshTable(false, true);
+		}
+		/* }
+	}); */
 	};
 
 	render = () => {

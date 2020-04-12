@@ -6,6 +6,9 @@ interface IOperationExecuteOptions {
 	successMessage?: string;
 	errorMessage?: string;
 	showFieldErrors?: (result: IApiResult) => void;
+	showConfirm?: boolean;
+	confirmTitle?: string;
+	confirmContent?: string;
 }
 
 export class OperationService {
@@ -13,6 +16,7 @@ export class OperationService {
 	private _navigation = new NavigationService();
 	private _notification = new NotificationService();
 
+	// todo: remove async (?)
 	execute = async (operation: () => Promise<IApiResult>, options?: IOperationExecuteOptions): Promise<IApiResult> => {
 
 		const t = (key: string) => i18next.t(key);
@@ -34,7 +38,20 @@ export class OperationService {
 		};
 
 		try {
-			const result = await operation();
+			let result: IApiResult;
+
+			if (options?.showConfirm) {
+				await this._notification.confirm(
+					options.confirmTitle ?? t("operation.confirmTitle"),
+					options.confirmContent,
+					async () => {
+						result = await operation();
+					}
+				);
+			}
+			else {
+				result = await operation();
+			}
 
 			if (result && result.success) {
 				this._notification.success(result.message ?? options?.successMessage ?? t("operation.success"));
