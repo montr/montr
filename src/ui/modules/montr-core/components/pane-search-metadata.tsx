@@ -78,19 +78,23 @@ class WrappedPaneSearchMetadata extends React.Component<IProps, IState> {
 	};
 
 	showDeleteConfirm = async () => {
-		const { t, entityTypeCode, entityUid } = this.props,
-			{ selectedRowKeys } = this.state;
+		const { t } = this.props;
 
-		const result = await this._operation.execute(() =>
-			this._metadataService.delete({ entityTypeCode, entityUid, uids: selectedRowKeys }),
-			{
-				showConfirm: true,
-				confirmTitle: t("operation.confirm.delete.title"),
-			});
+		await this._operation.execute(async () => {
+			const { entityTypeCode, entityUid } = this.props,
+				{ selectedRowKeys } = this.state;
 
-		if (result.success) {
-			this.refreshTable(false, true);
-		}
+			const result = await this._metadataService.delete({ entityTypeCode, entityUid, uids: selectedRowKeys });
+
+			if (result.success) {
+				this.refreshTable(false, true);
+			}
+
+			return result;
+		}, {
+			showConfirm: true,
+			confirmTitle: t("operation.confirm.delete.title"),
+		});
 	};
 
 	render = () => {

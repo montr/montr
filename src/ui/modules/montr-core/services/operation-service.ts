@@ -16,12 +16,10 @@ export class OperationService {
 	private _navigation = new NavigationService();
 	private _notification = new NotificationService();
 
-	// todo: remove async (?)
+	// todo: remove return value
 	execute = async (operation: () => Promise<IApiResult>, options?: IOperationExecuteOptions): Promise<IApiResult> => {
 
 		const t = (key: string) => i18next.t(key);
-
-		const hide = this._notification.loading(t("operation.executing"));
 
 		const showFieldErrors = (result: IApiResult) => {
 			// todo: show detailed field errors as notification.error?
@@ -37,49 +35,54 @@ export class OperationService {
 			}
 		};
 
-		try {
-			let result: IApiResult;
+		const executeInternal = async (): Promise<IApiResult> => {
 
-			if (options?.showConfirm) {
-				await this._notification.confirm(
-					options.confirmTitle ?? t("operation.confirm.title"),
-					options.confirmContent,
-					async () => {
-						result = await operation();
-					}
-				);
-			}
-			else {
-				result = await operation();
-			}
+			const hide = this._notification.loading(t("operation.executing"));
 
-			if (result && result.success) {
-				this._notification.success(result.message ?? options?.successMessage ?? t("operation.success"));
-			}
-			else {
-				// todo: do not show common error if options.showFieldErrors passed
-				this._notification.error(result?.message ?? options?.errorMessage ?? t("operation.error"));
+			try {
+				const result = await operation();
 
-				showFieldErrors(result);
-			}
+				if (result && result.success) {
+					this._notification.success(result.message ?? options?.successMessage ?? t("operation.success"));
+				}
+				else {
+					// todo: do not show common error if options.showFieldErrors passed
+					this._notification.error(result?.message ?? options?.errorMessage ?? t("operation.error"));
 
-			if (result && result.redirectUrl) {
-				this._navigation.navigate(result.redirectUrl);
-			}
+					showFieldErrors(result);
+				}
 
-			return result;
+				if (result && result.redirectUrl) {
+					this._navigation.navigate(result.redirectUrl);
+				}
+
+				return result;
+			}
+			catch (error) {
+				this._notification.error(options?.errorMessage ?? t("operation.error"), error.message);
+
+				if (error.response?.status == 400) {
+					const result = this.convertToApiResult(<IValidationProblemDetails>error.response.data);
+
+					showFieldErrors(result);
+				}
+			}
+			finally {
+				hide();
+			}
+		};
+
+		if (options?.showConfirm) {
+			this._notification.confirm(
+				options.confirmTitle ?? t("operation.confirm.title"),
+				options.confirmContent,
+				async () => {
+					return await executeInternal();
+				}
+			);
 		}
-		catch (error) {
-			this._notification.error(options?.errorMessage ?? t("operation.error"), error.message);
-
-			if (error.response?.status == 400) {
-				const result = this.convertToApiResult(<IValidationProblemDetails>error.response.data);
-
-				showFieldErrors(result);
-			}
-		}
-		finally {
-			hide();
+		else {
+			return await executeInternal();
 		}
 	};
 
