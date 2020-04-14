@@ -1,13 +1,13 @@
 import * as React from "react";
-import { Drawer, Modal } from "antd";
+import { Drawer } from "antd";
 import { Toolbar } from "./toolbar";
 import { IDataField, IDataResult, Guid } from "../models";
 import { MetadataService, OperationService } from "../services";
 import { DataTable, DataTableUpdateToken, ButtonAdd, PaneEditMetadata, ButtonDelete } from ".";
 import { Constants } from "..";
-import { Translation } from "react-i18next";
+import { Translation, WithTranslation, withTranslation } from "react-i18next";
 
-interface IProps {
+interface IProps extends WithTranslation {
 	entityTypeCode: string;
 	entityUid: Guid | string;
 }
@@ -19,7 +19,7 @@ interface IState {
 	updateTableToken?: DataTableUpdateToken;
 }
 
-export class PaneSearchMetadata extends React.Component<IProps, IState> {
+class WrappedPaneSearchMetadata extends React.Component<IProps, IState> {
 
 	private _operation = new OperationService();
 	private _metadataService = new MetadataService();
@@ -78,25 +78,19 @@ export class PaneSearchMetadata extends React.Component<IProps, IState> {
 	};
 
 	showDeleteConfirm = async () => {
-		/* Modal.confirm({
-			title: "Вы действительно хотите удалить выбранные записи?",
-			content: "Наверняка что-то случится ...",
-			onOk: async () => { */
-		const { entityTypeCode, entityUid } = this.props,
+		const { t, entityTypeCode, entityUid } = this.props,
 			{ selectedRowKeys } = this.state;
 
 		const result = await this._operation.execute(() =>
 			this._metadataService.delete({ entityTypeCode, entityUid, uids: selectedRowKeys }),
 			{
-				// showConfirm: true,
-				confirmTitle: "Вы действительно хотите удалить выбранные записи?"
+				showConfirm: true,
+				confirmTitle: t("operation.confirm.delete.title"),
 			});
 
 		if (result.success) {
 			this.refreshTable(false, true);
 		}
-		/* }
-	}); */
 	};
 
 	render = () => {
@@ -141,3 +135,5 @@ export class PaneSearchMetadata extends React.Component<IProps, IState> {
 		</>}</Translation>);
 	};
 }
+
+export const PaneSearchMetadata = withTranslation()(WrappedPaneSearchMetadata);

@@ -42,7 +42,7 @@ export class OperationService {
 
 			if (options?.showConfirm) {
 				await this._notification.confirm(
-					options.confirmTitle ?? t("operation.confirmTitle"),
+					options.confirmTitle ?? t("operation.confirm.title"),
 					options.confirmContent,
 					async () => {
 						result = await operation();
