@@ -9,7 +9,7 @@ import { ClassifierTypeService } from "../services";
 import { NotificationService } from "@montr-core/services";
 import { IMenu } from "@montr-core/models";
 import { IClassifierGroup } from "../models";
-import { RouteBuilder } from "../module";
+import { RouteBuilder, Locale } from "../module";
 
 interface IProps extends CompanyContextProps {
 }
@@ -76,7 +76,7 @@ class _SearchClassifierType extends React.Component<IProps, IState> {
 		];
 
 		return (
-			<Translation ns="master-data">
+			<Translation ns={Locale.Namespace}>
 				{(t) => <Page
 					title={<>
 						<Toolbar float="right">

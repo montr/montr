@@ -93,7 +93,7 @@ class WrappedPaneSearchMetadata extends React.Component<IProps, IState> {
 			return result;
 		}, {
 			showConfirm: true,
-			confirmTitle: t("operation.confirm.delete.title"),
+			confirmTitle: t("operation.confirm.delete.title")
 		});
 	};
 
@@ -120,7 +120,7 @@ class WrappedPaneSearchMetadata extends React.Component<IProps, IState> {
 			/>
 
 			{showDrawer &&
-				// todo: move drawer to pane-edit-metadata
+				// todo: move drawer to pane-edit-metadata (?)
 				<Drawer
 					title="Metadata"
 					closable={true}

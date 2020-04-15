@@ -1,12 +1,12 @@
 import React from "react";
+import { Link } from "react-router-dom";
+import { Translation, WithTranslation, withTranslation } from "react-i18next";
 import { PageHeader, Page, DataTable, Toolbar, ButtonAdd, ButtonDelete, DataTableUpdateToken, DataBreadcrumb } from "@montr-core/components";
-import { Views, Api, RouteBuilder, Patterns } from "../module";
-import { Translation } from "react-i18next";
-import { Link, Route } from "react-router-dom";
-import { NumeratorService } from "../services";
 import { OperationService } from "@montr-core/services";
+import { Views, Api, RouteBuilder, Patterns, Locale } from "../module";
+import { NumeratorService } from "../services";
 
-interface IProps {
+interface IProps extends WithTranslation {
 }
 
 interface IState {
@@ -14,7 +14,7 @@ interface IState {
 	updateTableToken: DataTableUpdateToken;
 }
 
-export default class PageSearchNumerator extends React.Component<IProps, IState> {
+class WrappedPageSearchNumerator extends React.Component<IProps, IState> {
 
 	private _operation = new OperationService();
 	private _numeratorService = new NumeratorService();
@@ -36,18 +36,21 @@ export default class PageSearchNumerator extends React.Component<IProps, IState>
 		this.setState({ selectedRowKeys });
 	};
 
-	// todo: show confirm
 	delete = async () => {
+		const { t } = this.props;
 
-		const { selectedRowKeys } = this.state;
+		await this._operation.execute(async () => {
+			const { selectedRowKeys } = this.state;
 
-		const result = await this._operation.execute(() =>
-			this._numeratorService.delete(selectedRowKeys)
-		);
-
-		if (result.success) {
-			this.refreshTable(true);
-		}
+			const result = await this._numeratorService.delete(selectedRowKeys);
+			if (result.success) {
+				this.refreshTable(true);
+			}
+			return result;
+		}, {
+			showConfirm: true,
+			confirmTitle: t("operation.confirm.delete.title")
+		});
 	};
 
 	refreshTable = async (resetSelectedRows?: boolean) => {
@@ -63,7 +66,7 @@ export default class PageSearchNumerator extends React.Component<IProps, IState>
 		const { selectedRowKeys, updateTableToken } = this.state;
 
 		return (
-			<Translation ns="master-data">
+			<Translation ns={Locale.Namespace}>
 				{(t) => <Page
 					title={<>
 
@@ -94,3 +97,7 @@ export default class PageSearchNumerator extends React.Component<IProps, IState>
 		);
 	};
 }
+
+const PageSearchNumerator = withTranslation(Locale.Namespace)(WrappedPageSearchNumerator);
+
+export default PageSearchNumerator;

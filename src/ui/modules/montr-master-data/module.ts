@@ -11,6 +11,10 @@ import("./components").then(x => {
 	DataFieldFactory.register("select-classifier-type", new x.SelectClassifierTypeFieldFactory());
 });
 
+export const Locale = {
+	Namespace: "master-data"
+};
+
 export const Api = {
 	classifierList: `${Constants.apiURL}/classifier/list`,
 	classifierExport: `${Constants.apiURL}/classifier/export`,

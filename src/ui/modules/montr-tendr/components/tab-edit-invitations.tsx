@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Button, Drawer, Alert, Modal } from "antd";
+import { Button, Drawer, Alert } from "antd";
 import { IPaneProps, Guid, IDataResult, IMenu } from "@montr-core/models";
 import { DataTable, Toolbar, DataTableUpdateToken, ButtonAdd, ButtonDelete, Icon } from "@montr-core/components";
 import { PaneSearchClassifier } from "@montr-master-data/components";
@@ -107,21 +107,17 @@ export class TabEditInvitations extends React.Component<IProps, IState> {
 		this.setState({ editData: null });
 	};
 
-	delete = () => {
-		Modal.confirm({
-			title: "Вы действительно хотите удалить выбранные приглашения?",
-			content: "При удалении будут ... и ...",
-			onOk: async () => {
-				const { selectedRowKeys } = this.state;
-
-				const result = await this._operation.execute(() =>
-					this._invitationService.delete(selectedRowKeys)
-				);
-
-				if (result.success) {
-					this.refreshTable(true);
-				}
+	delete = async () => {
+		await this._operation.execute(async () => {
+			const { selectedRowKeys } = this.state;
+			const result = await this._invitationService.delete(selectedRowKeys);
+			if (result.success) {
+				this.refreshTable(true);
 			}
+			return result;
+		}, {
+			showConfirm: true,
+			confirmTitle: "Вы действительно хотите удалить выбранные приглашения?"
 		});
 	};
 

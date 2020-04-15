@@ -53,13 +53,13 @@ export default class PaneExternalLogins extends React.Component<IProps, IState> 
 	};
 
 	handleRemoveLogin = async (info: IUserLoginInfo) => {
-
-		const result = await this._operation.execute(
-			() => this._profileService.removeLogin(info));
-
-		if (result.success) {
-			await this.fetchData();
-		}
+		await this._operation.execute(async () => {
+			const result = await this._profileService.removeLogin(info);
+			if (result.success) {
+				await this.fetchData();
+			}
+			return result;
+		});
 	};
 
 	render = () => {

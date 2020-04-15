@@ -57,8 +57,6 @@ class WrappedDataForm extends React.Component<IProps, IState> {
 	handleValuesChange = async (changedValues: Store, values: Store) => {
 		const { onChange } = this.props;
 
-		// console.log("Form.onChange", changedValues, values);
-
 		if (onChange) {
 			onChange(values, changedValues);
 		}
@@ -68,14 +66,14 @@ class WrappedDataForm extends React.Component<IProps, IState> {
 
 		const { t, onSubmit, successMessage, errorMessage } = this.props;
 
-		// console.log("Form.onFinish", this.getFormRef().current.getFieldsValue());
-
 		if (this._isMounted) this.setState({ loading: true });
 
-		await this._operation.execute(() => onSubmit(values), {
+		await this._operation.execute(async () => {
+			return await onSubmit(values);
+		}, {
 			successMessage: successMessage || t("dataForm.submit.success"),
 			errorMessage: errorMessage || t("dataForm.submit.error"),
-			showFieldErrors: async (result) => {
+			showFieldErrors: async (result: IApiResult) => {
 				await this.setFieldErrors(result, values);
 			}
 		});

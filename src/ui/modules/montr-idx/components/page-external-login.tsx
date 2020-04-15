@@ -45,22 +45,25 @@ export default class ExternalLogin extends React.Component<IProps, IState> {
 	};
 
 	fetchData = async () => {
+		await this._operation.execute(async () => {
+			const result = await this._accountService.externalLoginCallback({
+				returnUrl: this._navigation.getUrlParameter(Constants.returnUrlParamLower),
+				remoteError: this._navigation.getUrlParameter("remoteError")
+			});
 
-		const result = await this._operation.execute(() => this._accountService.externalLoginCallback({
-			returnUrl: this._navigation.getUrlParameter(Constants.returnUrlParamLower),
-			remoteError: this._navigation.getUrlParameter("remoteError")
-		}));
+			// this.setState({ loading: false });
 
-		// this.setState({ loading: false });
+			if (result.success && result.data) {
+				const dataView = await this._metadataService.load(Views.formExternalRegister);
 
-		if (result.success && result.data) {
-			const dataView = await this._metadataService.load(Views.formExternalRegister);
+				this.setState({ loading: false, data: result.data, fields: dataView.fields });
+			}
+			else {
+				this.props.history.push(Patterns.login);
+			}
 
-			this.setState({ loading: false, data: result.data, fields: dataView.fields });
-		}
-		else {
-			this.props.history.push(Patterns.login);
-		}
+			return result;
+		});
 	};
 
 	handleSubmit = async (values: IExternalRegisterModel): Promise<IApiResult> => {

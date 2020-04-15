@@ -16,8 +16,7 @@ export class OperationService {
 	private _navigation = new NavigationService();
 	private _notification = new NotificationService();
 
-	// todo: remove return value
-	execute = async (operation: () => Promise<IApiResult>, options?: IOperationExecuteOptions): Promise<IApiResult> => {
+	execute = async (operation: () => Promise<IApiResult>, options?: IOperationExecuteOptions): Promise<void> => {
 
 		const t = (key: string) => i18next.t(key);
 
@@ -77,12 +76,12 @@ export class OperationService {
 				options.confirmTitle ?? t("operation.confirm.title"),
 				options.confirmContent,
 				async () => {
-					return await executeInternal();
+					await executeInternal();
 				}
 			);
 		}
 		else {
-			return await executeInternal();
+			await executeInternal();
 		}
 	};
 
