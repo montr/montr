@@ -189,6 +189,14 @@ namespace Montr.MasterData.Services
 				}
 			});
 
+			_registrator.Register("NumeratorEntity/Grid", viewId => new DataView
+			{
+				Columns = new List<DataColumn>
+				{
+					new DataColumn { Key = "entityName", Name = "Тип" }
+				}
+			});
+
 			return Task.CompletedTask;
 		}
 	}

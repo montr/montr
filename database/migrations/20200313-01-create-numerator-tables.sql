@@ -29,8 +29,8 @@ CREATE TABLE montr.numerator_counter
 
 CREATE TABLE montr.numerator_entity
 (
-    entity_uid uuid NOT NULL,
     numerator_uid uuid NOT NULL,
+    entity_uid uuid NOT NULL,
     PRIMARY KEY (entity_uid),
     CONSTRAINT fk_numerator_entity_numerator_uid FOREIGN KEY (numerator_uid)
         REFERENCES montr.numerator (uid) MATCH SIMPLE

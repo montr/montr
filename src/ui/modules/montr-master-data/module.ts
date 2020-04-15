@@ -30,13 +30,15 @@ export const Api = {
 	numeratorInsert: `${Constants.apiURL}/numerator/insert`,
 	numeratorUpdate: `${Constants.apiURL}/numerator/update`,
 	numeratorDelete: `${Constants.apiURL}/numerator/delete`,
+	numeratorEntityList: `${Constants.apiURL}/numeratorEntity/list`,
 };
 
 export const Views = {
 	classifierList: "Classifier/Grid",
-	numeratorList: "Numerator/Grid",
 
+	numeratorList: "Numerator/Grid",
 	formEditNumerator: "Numerator/Form",
+	numeratorEntityList: "NumeratorEntity/Grid",
 };
 
 export const Patterns = {

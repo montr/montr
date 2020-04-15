@@ -5,7 +5,7 @@ import { PageHeader, Page } from "@montr-core/components";
 import { INumerator } from "../models";
 import { NumeratorService } from "../services";
 import { RouteBuilder } from "../module";
-import { TabEditNumerator } from "./";
+import { TabEditNumerator, TabEditNumeratorEntities } from "./";
 
 interface IRouteProps {
 	uid?: string;
@@ -94,6 +94,7 @@ export default class PageEditNumerator extends React.Component<IProps, IState> {
 							<TabEditNumerator data={data} onDataChange={this.handleDataChange} />
 						</Tabs.TabPane>
 						<Tabs.TabPane key="entities" tab="Использование" disabled={otherTabsDisabled}>
+							<TabEditNumeratorEntities />
 						</Tabs.TabPane>
 						<Tabs.TabPane key="history" tab="История изменений" disabled={otherTabsDisabled}></Tabs.TabPane>
 					</Tabs>
