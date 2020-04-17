@@ -94,7 +94,7 @@ export default class PageEditNumerator extends React.Component<IProps, IState> {
 							<TabEditNumerator data={data} onDataChange={this.handleDataChange} />
 						</Tabs.TabPane>
 						<Tabs.TabPane key="entities" tab="Использование" disabled={otherTabsDisabled}>
-							<TabEditNumeratorEntities />
+							{data && <TabEditNumeratorEntities data={data} />}
 						</Tabs.TabPane>
 						<Tabs.TabPane key="history" tab="История изменений" disabled={otherTabsDisabled}></Tabs.TabPane>
 					</Tabs>

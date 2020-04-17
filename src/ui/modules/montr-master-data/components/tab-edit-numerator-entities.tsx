@@ -2,8 +2,12 @@ import React from "react";
 import { OperationService } from "@montr-core/services";
 import { DataTableUpdateToken, DataTable } from "@montr-core/components";
 import { Views, Api } from "../module";
+import { IDataResult } from "@montr-core/models";
+import { INumerator } from "@montr-master-data/models";
+import { NumeratorService } from "@montr-master-data/services";
 
 interface IProps {
+	data: INumerator;
 }
 
 interface IState {
@@ -14,6 +18,7 @@ interface IState {
 export class TabEditNumeratorEntities extends React.Component<IProps, IState> {
 
 	private _operation = new OperationService();
+	private _numeratorService = new NumeratorService();
 
 	constructor(props: IProps) {
 		super(props);
@@ -23,6 +28,18 @@ export class TabEditNumeratorEntities extends React.Component<IProps, IState> {
 			updateTableToken: { date: new Date() }
 		};
 	}
+
+	componentWillUnmount = async () => {
+		await this._numeratorService.abort();
+	};
+
+	onLoadTableData = async (loadUrl: string, postParams: any): Promise<IDataResult<{}>> => {
+		const { data } = this.props;
+
+		const params = { numeratorUid: data.uid, ...postParams };
+
+		return await this._numeratorService.post(loadUrl, params);
+	};
 
 	refreshTable = async (resetSelectedRows?: boolean) => {
 		const { selectedRowKeys } = this.state;
@@ -41,6 +58,7 @@ export class TabEditNumeratorEntities extends React.Component<IProps, IState> {
 				rowKey="uid"
 				viewId={Views.numeratorEntityList}
 				loadUrl={Api.numeratorEntityList}
+				onLoadData={this.onLoadTableData}
 				updateToken={updateTableToken}
 			/>
 		);

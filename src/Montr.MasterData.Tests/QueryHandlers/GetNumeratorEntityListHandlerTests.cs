@@ -6,25 +6,23 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Montr.Core.Services;
 using Montr.Data.Linq2Db;
 using Montr.MasterData.Impl.QueryHandlers;
-using Montr.MasterData.Impl.Services;
 using Montr.MasterData.Models;
 using Montr.MasterData.Queries;
 
 namespace Montr.MasterData.Tests.QueryHandlers
 {
 	[TestClass]
-	public class GetNumeratorListHandlerTests
+	public class GetNumeratorEntityListHandlerTests
 	{
 		[TestMethod]
-		public async Task GetNumeratorList_Should_ReturnList()
+		public async Task GetNumeratorEntityList_Should_ReturnList()
 		{
 			// arrange
 			var cancellationToken = CancellationToken.None;
 			var dbContextFactory = new DefaultDbContextFactory();
 			var unitOfWorkFactory = new TransactionScopeUnitOfWorkFactory();
-			var dbNumeratorRepository = new DbNumeratorRepository(dbContextFactory);
 			var dbHelper = new DbHelper(unitOfWorkFactory, dbContextFactory);
-			var handler = new GetNumeratorListHandler(dbNumeratorRepository);
+			var handler = new GetNumeratorEntityListHandler(dbContextFactory);
 
 			using (var _ = unitOfWorkFactory.Create())
 			{
@@ -38,11 +36,13 @@ namespace Montr.MasterData.Tests.QueryHandlers
 					}, cancellationToken);
 
 				// act
-				var command = new GetNumeratorList();
+				// ReSharper disable once PossibleInvalidOperationException
+				var command = new GetNumeratorEntityList { NumeratorUid = numerator.Uid.Value };
 				var result = await handler.Handle(command, cancellationToken);
 
 				// assert
 				Assert.IsNotNull(result);
+				Assert.IsNull(result.TotalCount);
 				Assert.IsTrue(result.Rows.Count > 0);
 				Assert.IsTrue(result.Rows.Count(x => x.EntityTypeCode == "NumeratorTypeCode") == 1);
 			}

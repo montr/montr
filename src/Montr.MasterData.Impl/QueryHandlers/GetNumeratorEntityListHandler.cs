@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using LinqToDB;
 using MediatR;
 using Montr.Core.Models;
-using Montr.Core.Services;
 using Montr.Data.Linq2Db;
 using Montr.MasterData.Impl.Entities;
 using Montr.MasterData.Models;
@@ -28,19 +27,20 @@ namespace Montr.MasterData.Impl.QueryHandlers
 
 			using (var db = _dbContextFactory.Create())
 			{
-				var query = db.GetTable<DbNumeratorEntity>().Where(x => x.NumeratorUid == request.NumeratorUid);
-
-				var paged = query.Apply(request, x => x.EntityUid);
-
-				var data = await paged.Select(x => new NumeratorEntity
-					{
-						EntityName = x.EntityUid.ToString(),
-					})
+				var data = await (
+						from n in db.GetTable<DbNumerator>().Where(x => x.Uid == request.NumeratorUid)
+						join ne in db.GetTable<DbNumeratorEntity>() on n.Uid equals ne.NumeratorUid
+						select new NumeratorEntity
+						{
+							NumeratorUid = n.Uid,
+							EntityTypeCode = n.EntityTypeCode,
+							EntityUid = ne.EntityUid,
+							EntityName = ne.EntityUid.ToString() // todo: resolve names
+						})
 					.ToListAsync(cancellationToken);
 
 				return new SearchResult<NumeratorEntity>
 				{
-					TotalCount = query.GetTotalCount(request),
 					Rows = data
 				};
 			}
