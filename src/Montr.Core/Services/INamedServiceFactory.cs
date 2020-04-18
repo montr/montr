@@ -59,6 +59,8 @@ namespace Montr.Core.Services
 
 			factoryRegistrations.Add(name, typeof(TImplementation));
 
+			services.AddTransient<TService, TImplementation>();
+
 			return services;
 		}
 	}

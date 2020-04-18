@@ -8,6 +8,7 @@ using Montr.Data.Linq2Db;
 using Montr.MasterData.Impl.QueryHandlers;
 using Montr.MasterData.Models;
 using Montr.MasterData.Queries;
+using Moq;
 
 namespace Montr.MasterData.Tests.QueryHandlers
 {
@@ -22,7 +23,16 @@ namespace Montr.MasterData.Tests.QueryHandlers
 			var dbContextFactory = new DefaultDbContextFactory();
 			var unitOfWorkFactory = new TransactionScopeUnitOfWorkFactory();
 			var dbHelper = new DbHelper(unitOfWorkFactory, dbContextFactory);
-			var handler = new GetNumeratorEntityListHandler(dbContextFactory);
+
+			var entityTypeResolverMock = new Mock<IEntityNameResolver>();
+			entityTypeResolverMock.Setup(x => x.Resolve(It.IsAny<string>(), It.IsAny<Guid>()))
+				.Returns(() => "Numerator Entity Name");
+
+			var entityTypeResolverFactory = new Mock<INamedServiceFactory<IEntityNameResolver>>();
+			entityTypeResolverFactory.Setup(x => x.Resolve(It.IsAny<string>()))
+				.Returns(() => entityTypeResolverMock.Object);
+
+			var handler = new GetNumeratorEntityListHandler(dbContextFactory, entityTypeResolverFactory.Object);
 
 			using (var _ = unitOfWorkFactory.Create())
 			{

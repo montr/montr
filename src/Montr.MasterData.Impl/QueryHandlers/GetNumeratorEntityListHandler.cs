@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using LinqToDB;
 using MediatR;
 using Montr.Core.Models;
+using Montr.Core.Services;
 using Montr.Data.Linq2Db;
 using Montr.MasterData.Impl.Entities;
 using Montr.MasterData.Models;
@@ -15,10 +16,12 @@ namespace Montr.MasterData.Impl.QueryHandlers
 	public class GetNumeratorEntityListHandler : IRequestHandler<GetNumeratorEntityList, SearchResult<NumeratorEntity>>
 	{
 		private readonly IDbContextFactory _dbContextFactory;
+		private readonly INamedServiceFactory<IEntityNameResolver> _entityNameResolverFactory;
 
-		public GetNumeratorEntityListHandler(IDbContextFactory dbContextFactory)
+		public GetNumeratorEntityListHandler(IDbContextFactory dbContextFactory, INamedServiceFactory<IEntityNameResolver> entityNameResolverFactory)
 		{
 			_dbContextFactory = dbContextFactory;
+			_entityNameResolverFactory = entityNameResolverFactory;
 		}
 
 		public async Task<SearchResult<NumeratorEntity>> Handle(GetNumeratorEntityList searchRequest, CancellationToken cancellationToken)
@@ -38,6 +41,13 @@ namespace Montr.MasterData.Impl.QueryHandlers
 							EntityName = ne.EntityUid.ToString() // todo: resolve names
 						})
 					.ToListAsync(cancellationToken);
+
+				foreach (var entity in data)
+				{
+					var entityNameResolver = _entityNameResolverFactory.Resolve(entity.EntityTypeCode);
+
+					entity.EntityName = entityNameResolver.Resolve(entity.EntityTypeCode, entity.EntityUid);
+				}
 
 				return new SearchResult<NumeratorEntity>
 				{
