@@ -109,32 +109,6 @@ namespace Montr.MasterData.Impl.Services
 			}, cancellationToken);
 
 			return result.Rows.FirstOrDefault();
-
-			/*using (var db = _dbContextFactory.Create())
-			{
-				// todo: join two queries
-				var dbNumeratorEntity = await db.GetTable<DbNumeratorEntity>()
-					.Where(x => x.EntityUid == request.EntityTypeUid)
-					.FirstOrDefaultAsync(cancellationToken);
-
-				if (dbNumeratorEntity == null) return null;
-
-				var dbNumerator = await db
-					.GetTable<DbNumerator>()
-					.Where(x => x.EntityTypeCode == request.EntityTypeCode && x.Uid == dbNumeratorEntity.NumeratorUid)
-					.FirstAsync(cancellationToken);
-
-				return new Numerator
-				{
-					Uid = dbNumerator.Uid,
-					Name = dbNumerator.Name,
-					Periodicity = Enum.Parse<NumeratorPeriodicity>(dbNumerator.Periodicity),
-					Pattern = dbNumerator.Pattern,
-					KeyTags = dbNumerator.KeyTags?.Split(DbNumerator.KeyTagsSeparator, StringSplitOptions.RemoveEmptyEntries),
-					IsActive = dbNumerator.IsActive,
-					IsSystem = dbNumerator.IsSystem
-				};
-			}*/
 		}
 
 		private async Task<long> IncrementCounter(Numerator numerator, string key, CancellationToken cancellationToken)

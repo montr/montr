@@ -25,7 +25,7 @@ namespace Montr.Core.Services
 		{
 			if (_registrations.TryGetValue(name, out var serviceType))
 			{
-				return (TService)_serviceProvider.GetService(serviceType);
+				return (TService)_serviceProvider.GetRequiredService(serviceType);
 			}
 
 			throw new ArgumentException($"Service with name {name} is not registered.");
@@ -59,7 +59,7 @@ namespace Montr.Core.Services
 
 			factoryRegistrations.Add(name, typeof(TImplementation));
 
-			services.AddTransient<TService, TImplementation>();
+			services.AddTransient<TImplementation>();
 
 			return services;
 		}
