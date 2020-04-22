@@ -1,5 +1,6 @@
 ﻿using System;
 using Montr.Core.Services;
+using Montr.Docs.Models;
 
 namespace Montr.Docs.Services
 {
@@ -7,7 +8,7 @@ namespace Montr.Docs.Services
 	{
 		public string Resolve(string entityTypeCode, Guid entityUid)
 		{
-			if (entityUid == Guid.Parse("8c41ebdc-e176-424e-9048-249e9862dbb2"))
+			if (entityUid == Process.CompanyRegistrationRequest)
 			{
 				return "Процесс регистрации (по умолчанию)";
 			}
