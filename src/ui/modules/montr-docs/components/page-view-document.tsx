@@ -71,7 +71,7 @@ export default class PageViewDocument extends React.Component<IProps, IState> {
 					onBack={() => window.history.back()}
 					title={data.documentNumber}
 					subTitle={data.configCode}
-					tags={<Tag color="green">{data.statusCode}</Tag>}
+					// tags={<Tag color="green">{data.statusCode}</Tag>}
 					extra={[
 						<Button key="2">Отклонить</Button>,
 						<Button key="1" type="primary">Допустить</Button>,
