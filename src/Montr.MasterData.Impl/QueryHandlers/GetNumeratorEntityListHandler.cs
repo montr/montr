@@ -37,8 +37,7 @@ namespace Montr.MasterData.Impl.QueryHandlers
 						{
 							NumeratorUid = n.Uid,
 							EntityTypeCode = n.EntityTypeCode,
-							EntityUid = ne.EntityUid,
-							EntityName = ne.EntityUid.ToString() // todo: resolve names
+							EntityUid = ne.EntityUid
 						})
 					.ToListAsync(cancellationToken);
 
@@ -46,7 +45,16 @@ namespace Montr.MasterData.Impl.QueryHandlers
 				{
 					var entityNameResolver = _entityNameResolverFactory.Resolve(entity.EntityTypeCode);
 
-					entity.EntityName = entityNameResolver.Resolve(entity.EntityTypeCode, entity.EntityUid);
+					var entityName = await entityNameResolver.Resolve(entity.EntityTypeCode, entity.EntityUid, cancellationToken);
+
+					if (entityName != null)
+					{
+						entity.EntityName = entityName;
+					}
+					else
+					{
+						entity.EntityName = entity.EntityTypeCode + "@" + entity.EntityUid;
+					}
 				}
 
 				return new SearchResult<NumeratorEntity>

@@ -14,6 +14,7 @@ namespace Montr.Docs.Impl
 	{
 		public void ConfigureServices(IConfiguration configuration, IServiceCollection services)
 		{
+			services.AddSingleton<IRepository<DocumentType>, DbDocumentTypeRepository>();
 			services.AddSingleton<IRepository<Document>, DbDocumentRepository>();
 			services.AddSingleton<IDocumentService, DbDocumentService>();
 

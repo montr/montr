@@ -25,8 +25,8 @@ namespace Montr.MasterData.Tests.QueryHandlers
 			var dbHelper = new DbHelper(unitOfWorkFactory, dbContextFactory);
 
 			var entityTypeResolverMock = new Mock<IEntityNameResolver>();
-			entityTypeResolverMock.Setup(x => x.Resolve(It.IsAny<string>(), It.IsAny<Guid>()))
-				.Returns(() => "Numerator Entity Name");
+			entityTypeResolverMock.Setup(x => x.Resolve(It.IsAny<string>(), It.IsAny<Guid>(), It.IsAny<CancellationToken>()))
+				.ReturnsAsync(() => "Numerator Entity Name");
 
 			var entityTypeResolverFactory = new Mock<INamedServiceFactory<IEntityNameResolver>>();
 			entityTypeResolverFactory.Setup(x => x.Resolve(It.IsAny<string>()))

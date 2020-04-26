@@ -35,8 +35,7 @@ namespace Montr.Docs.Impl.Services
 
 			using (var db = _dbContextFactory.Create())
 			{
-				var query = from c in db.GetTable<DbDocument>()
-					select c;
+				var query = db.GetTable<DbDocument>().AsQueryable();
 
 				if (request.Uid != null)
 				{
@@ -49,6 +48,7 @@ namespace Montr.Docs.Impl.Services
 				// todo: preload fields for multiple items
 				if (request.IncludeFields)
 				{
+					// todo: change to document type
 					var metadata = await _fieldMetadataRepository.Search(new MetadataSearchRequest
 					{
 						EntityTypeCode = Process.EntityTypeCode,
