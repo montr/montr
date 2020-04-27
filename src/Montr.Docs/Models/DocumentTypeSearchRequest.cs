@@ -6,6 +6,5 @@ namespace Montr.Docs.Models
 	public class DocumentTypeSearchRequest : SearchRequest
 	{
 		public Guid? Uid { get; set; }
-		
 	}
 }

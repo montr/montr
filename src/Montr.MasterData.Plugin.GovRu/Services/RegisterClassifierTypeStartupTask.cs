@@ -1,49 +1,20 @@
 ﻿using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
 using MediatR;
 using Microsoft.Extensions.Logging;
-using Montr.Core.Services;
 using Montr.MasterData.Commands;
 using Montr.MasterData.Models;
+using Montr.MasterData.Services;
 using Montr.Metadata.Models;
 
 namespace Montr.MasterData.Plugin.GovRu.Services
 {
-	// todo: split to abstract startup task and gov.ru service
-	public class RegisterClassifierTypeStartupTask : IStartupTask
+	public class RegisterClassifierTypeStartupTask : AbstractRegisterClassifierTypeStartupTask
 	{
-		private readonly ILogger<RegisterClassifierTypeStartupTask> _logger;
-		private readonly IMediator _mediator;
-
-		public RegisterClassifierTypeStartupTask(
-			ILogger<RegisterClassifierTypeStartupTask> logger,
-			IMediator mediator)
+		public RegisterClassifierTypeStartupTask(ILogger<RegisterClassifierTypeStartupTask> logger, IMediator mediator) : base(logger, mediator)
 		{
-			_logger = logger;
-			_mediator = mediator;
 		}
 
-		public async Task Run(CancellationToken cancellationToken)
-		{
-			foreach (var command in GetCommands())
-			{
-				var result = await _mediator.Send(command, cancellationToken);
-
-				result.AssertSuccess(() => $"Failed to register classifier type \"{command.Item.Code}\"");
-
-				if (result.AffectedRows == 1)
-				{
-					_logger.LogInformation("Classifier type {code} successfully registered.", command.Item.Code);
-				}
-				else
-				{
-					_logger.LogDebug("Classifier type {code} already registered.", command.Item.Code);
-				}
-			}
-		}
-
-		protected IEnumerable<RegisterClassifierType> GetCommands()
+		protected override IEnumerable<RegisterClassifierType> GetCommands()
 		{
 			yield return new RegisterClassifierType
 			{
