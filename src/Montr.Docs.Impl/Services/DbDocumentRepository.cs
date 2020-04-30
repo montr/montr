@@ -48,7 +48,7 @@ namespace Montr.Docs.Impl.Services
 				// todo: preload fields for multiple items
 				if (request.IncludeFields)
 				{
-					// todo: change to document type
+					// todo: change to document type and document type uid
 					var metadata = await _fieldMetadataRepository.Search(new MetadataSearchRequest
 					{
 						EntityTypeCode = Process.EntityTypeCode,
