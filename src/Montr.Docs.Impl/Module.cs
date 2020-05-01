@@ -1,8 +1,11 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Montr.Core;
+using Montr.Core.Services;
 using Montr.Docs.Impl.Services;
+using Montr.Docs.Models;
 using Montr.Docs.Services;
+using Montr.MasterData.Services;
 
 namespace Montr.Docs.Impl
 {
@@ -11,7 +14,12 @@ namespace Montr.Docs.Impl
 	{
 		public void ConfigureServices(IConfiguration configuration, IServiceCollection services)
 		{
-			services.AddSingleton<IDocumentRepository, DbDocumentRepository>();
+			services.AddSingleton<IRepository<DocumentType>, DbDocumentTypeRepository>();
+			services.AddSingleton<IRepository<Document>, DbDocumentRepository>();
+			services.AddTransient<IDocumentTypeService, DbDocumentTypeService>();
+			services.AddSingleton<IDocumentService, DbDocumentService>();
+
+			services.AddTransient<INumberTagResolver, DocumentNumberTagResolver>();
 		}
 	}
 }

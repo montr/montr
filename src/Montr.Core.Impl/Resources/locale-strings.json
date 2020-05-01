@@ -18,6 +18,8 @@
       "dataForm.rule.required": "The field «{{name}}» is required",
       "dataForm.submit.error": "An error occurred while submit data.",
       "dataForm.submit.success": "Data successfully submitted.",
+      "operation.confirm.delete.title": "Are you sure you want to delete the selected entries?",
+      "operation.confirm.title": "Are you sure you want to perform the operation?",
       "operation.error": "An error occurred while performing the operation.",
       "operation.executing": "Please wait until the operation is completed...",
       "operation.success": "The operation completed successfully."
@@ -77,6 +79,10 @@
       "page.setPassword.info": "You do not have a local username/password for this site. Add a local account so you can log in without an external login.",
       "page.setPassword.title": "Set password"
     },
+    "master-data": {
+      "page.searchClassifierTypes.title": "Classifiers",
+      "page.searchNumerators.title": "Numerators"
+    },
     "tendr": {
       "cancel.confirm.content": "Are you sure you want to cancel the event?",
       "publish.confirm.content": "Are you sure you want to publish the event?"
@@ -100,6 +106,8 @@
       "dataForm.rule.required": "Поле «{{name}}» обязательно для заполнения",
       "dataForm.submit.error": "Ошибка при сохранении данных.",
       "dataForm.submit.success": "Данные успешно сохранены.",
+      "operation.confirm.delete.title": "Вы действительно хотите удалить выбранные записи?",
+      "operation.confirm.title": "Вы действительно хотите выполнить операцию?",
       "operation.error": "Произошла ошибка при выполнении операции.",
       "operation.executing": "Пожалуйста подождите, операция выполняется...",
       "operation.success": "Операция выполнена успешно."
@@ -164,6 +172,10 @@
       "page.sendEmailConfirmation.title": "Подтверждение электронной почты",
       "page.setPassword.info": "У вас нет локального имени пользователя / пароля для этого сайта. Добавьте локальную учетную запись, чтобы вы могли войти без внешнего сервиса.",
       "page.setPassword.title": "Установить пароль"
+    },
+    "master-data": {
+      "page.searchClassifierTypes.title": "Классификаторы",
+      "page.searchNumerators.title": "Нумераторы"
     },
     "tendr": {
       "cancel.confirm.content": "Вы действительно хотите отменить событие?",

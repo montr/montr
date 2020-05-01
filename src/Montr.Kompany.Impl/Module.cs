@@ -16,6 +16,8 @@ namespace Montr.Kompany.Impl
 			services.BindOptions<Options>(configuration);
 
 			services.AddTransient<IStartupTask, CreateDefaultCompanyStartupTask>();
+			services.AddTransient<IStartupTask, RegisterDocumentTypeStartupTask>();
+
 			services.AddTransient<IRepository<Company>, DbCompanyRepository>();
 
 			services.AddSingleton<ICurrentCompanyProvider, DefaultCurrentCompanyProvider>();

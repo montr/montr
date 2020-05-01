@@ -1,4 +1,4 @@
-﻿using System.IO;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -15,12 +15,11 @@ namespace Montr.MasterData.Tests.Services
 		public async Task InsertGroup_Should_BuildClosureTable()
 		{
 			// arrange
+			var cancellationToken = new CancellationToken();
 			var unitOfWorkFactory = new TransactionScopeUnitOfWorkFactory();
 			var dbContextFactory = new DefaultDbContextFactory();
 
 			var generator = new DbHelper(unitOfWorkFactory, dbContextFactory);
-
-			var cancellationToken = new CancellationToken();
 
 			using (var _ = unitOfWorkFactory.Create())
 			{

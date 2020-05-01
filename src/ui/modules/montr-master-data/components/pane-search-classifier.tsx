@@ -451,7 +451,7 @@ class _PaneSearchClassifier extends React.Component<IProps, IState> {
 						<ButtonDelete onClick={this.delete} />
 						<ButtonExport onClick={this.export} />
 						<Link to={RouteBuilder.editClassifierType(type.uid)}>
-							<Button icon={Icon.Setting}> Настройка</Button>
+							<Button icon={Icon.Setting}> Настроить</Button>
 						</Link>
 					</Toolbar>
 

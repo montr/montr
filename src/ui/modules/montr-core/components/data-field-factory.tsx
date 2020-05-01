@@ -79,7 +79,7 @@ class SelectFieldFactory extends DataFieldFactory<ISelectField> {
 		const props = field?.props;
 
 		return <Select
-			allowClear
+			// allowClear
 			showSearch
 			placeholder={field.placeholder}
 			style={{ minWidth: 200, width: "auto" }}>

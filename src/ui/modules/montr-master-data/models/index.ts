@@ -4,3 +4,4 @@ export * from "./classifier-link";
 export * from "./classifier-tree";
 export * from "./classifier-type";
 export * from "./classifier";
+export * from "./numerator";

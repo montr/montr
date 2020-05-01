@@ -43,7 +43,7 @@ namespace Montr.MasterData.Tests.QueryHandlers
 					TypeCode = dbHelper.TypeCode
 				};
 
-				var result = await handler.Handle(command, CancellationToken.None);
+				var result = await handler.Handle(command, cancellationToken);
 
 				// assert
 				Assert.IsNotNull(result);

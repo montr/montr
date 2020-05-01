@@ -7,15 +7,17 @@ namespace Montr.Docs.Models
 	[DebuggerDisplay("{" + nameof(DebuggerDisplay) + ",nq}")]
 	public class Document
 	{
-		private string DebuggerDisplay => $"{ConfigCode}, {Name}";
+		private string DebuggerDisplay => $"{StatusCode}, {Name}";
 
-		public static readonly string EntityTypeCode = typeof(Document).Name;
+		public static readonly string EntityTypeCode = nameof(Document);
 
 		public Guid? Uid { get; set; }
 
 		public Guid CompanyUid { get; set; }
 
-		public string ConfigCode { get; set; }
+		public Guid DocumentTypeUid { get; set; }
+
+		/*public string ConfigCode { get; set; }*/
 
 		public string StatusCode { get; set; }
 

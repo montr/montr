@@ -37,8 +37,9 @@ export default class PaneExternalLoginLink extends React.Component<IProps, IStat
 
 	fetchData = async () => {
 
-		await this._operation.execute(
-			() => this._profileService.linkLoginCallback());
+		await this._operation.execute(() => {
+			return this._profileService.linkLoginCallback();
+		});
 
 		this.setState({ loading: false });
 

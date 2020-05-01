@@ -54,10 +54,11 @@ namespace Montr.Core.Services
 						new Menu { Id = "processes", Name = "Процессы", Route = "/processes" },
 						new Menu { Id = "companies", Name = "Компании", Route = "/companies" },
 						new Menu { Id = "users", Name = "Пользователи", Route = "/users" },
-						// new Menu { Id = "m.3.0", Name = "Интеграции", Route = "/integrations" },
-						new Menu { Id = "m.3.1", Name = "Справочники", Route = "/classifiers" },
-						new Menu { Id = "m.3.2", Name = "Настройки", Route = "/settings" },
-						new Menu { Id = "m.3.3", Name = "Локализация", Route = "/locales" },
+						// new Menu { Id = "integrations", Name = "Интеграции", Route = "/integrations" },
+						new Menu { Id = "classifiers", Name = "Классификаторы", Route = "/classifiers" },
+						new Menu { Id = "numerators", Name = "Нумераторы", Route = "/numerators" },
+						new Menu { Id = "settings", Name = "Настройки", Route = "/settings" },
+						new Menu { Id = "locales", Name = "Локализация", Route = "/locales" },
 						new Menu { Id = "hangfire", Name = "Hangfire Dashboard", Url = "/hangfire" }
 					}
 				});

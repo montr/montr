@@ -1,4 +1,4 @@
-import { message, notification } from "antd";
+import { message, notification, Modal } from "antd";
 import { MessageType } from "antd/lib/message";
 
 declare type Content = React.ReactNode | string;
@@ -31,6 +31,10 @@ export class NotificationService {
 
 	public loading = (content: Content, duration?: Duration, onClose?: OnClose): MessageType => {
 		return message.loading(content, duration, onClose);
+	};
+
+	public confirm = (title: Content, content: Content, onOk?: (...args: any[]) => any, onCancel?: (...args: any[]) => any) => {
+		Modal.confirm({ title, content, onOk, onCancel });
 	};
 }
 

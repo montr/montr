@@ -28,6 +28,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 			_metadataService = metadataService;
 		}
 
+		// todo: register numerator
 		public async Task<ApiResult> Handle(RegisterClassifierType request, CancellationToken cancellationToken)
 		{
 			var item = request.Item ?? throw new ArgumentNullException(nameof(request.Item));

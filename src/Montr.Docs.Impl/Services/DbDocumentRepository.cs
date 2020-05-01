@@ -9,14 +9,12 @@ using Montr.Core.Services;
 using Montr.Data.Linq2Db;
 using Montr.Docs.Impl.Entities;
 using Montr.Docs.Models;
-using Montr.Docs.Services;
 using Montr.Metadata.Models;
 using Montr.Metadata.Services;
 
 namespace Montr.Docs.Impl.Services
 {
-	// todo: merge with IRepository<Document>?
-	public class DbDocumentRepository : IDocumentRepository
+	public class DbDocumentRepository : IRepository<Document>
 	{
 		private readonly IDbContextFactory _dbContextFactory;
 		private readonly IRepository<FieldMetadata> _fieldMetadataRepository;
@@ -31,37 +29,13 @@ namespace Montr.Docs.Impl.Services
 			_fieldDataRepository = fieldDataRepository;
 		}
 
-		public async Task Create(Document document, CancellationToken cancellationToken)
-		{
-			if (document.Uid == Guid.Empty)
-				document.Uid = Guid.NewGuid();
-
-			if (document.StatusCode == null)
-				document.StatusCode = DocumentStatusCode.Draft;
-
-			using (var db = _dbContextFactory.Create())
-			{
-				await db.GetTable<DbDocument>()
-					.Value(x => x.Uid, document.Uid)
-					.Value(x => x.CompanyUid, document.CompanyUid)
-					.Value(x => x.ConfigCode, document.ConfigCode)
-					.Value(x => x.StatusCode, document.StatusCode)
-					.Value(x => x.Direction, document.Direction.ToString())
-					.Value(x => x.DocumentNumber, document.DocumentNumber)
-					.Value(x => x.DocumentDate, document.DocumentDate)
-					.Value(x => x.Name, document.Name)
-					.InsertAsync(cancellationToken);
-			}
-		}
-
 		public async Task<SearchResult<Document>> Search(SearchRequest searchRequest, CancellationToken cancellationToken)
 		{
 			var request = (DocumentSearchRequest)searchRequest ?? throw new ArgumentNullException(nameof(searchRequest));
 
 			using (var db = _dbContextFactory.Create())
 			{
-				var query = from c in db.GetTable<DbDocument>()
-					select c;
+				var query = db.GetTable<DbDocument>().AsQueryable();
 
 				if (request.Uid != null)
 				{
@@ -69,15 +43,15 @@ namespace Montr.Docs.Impl.Services
 				}
 
 				var data = await Materialize(
-					query.Apply(request, x => x.ConfigCode), cancellationToken);
+					query.Apply(request, x => x.DocumentDate, SortOrder.Descending), cancellationToken);
 
 				// todo: preload fields for multiple items
 				if (request.IncludeFields)
 				{
 					var metadata = await _fieldMetadataRepository.Search(new MetadataSearchRequest
 					{
-						EntityTypeCode = Process.EntityTypeCode,
-						EntityUid = Process.CompanyRegistrationRequest,
+						EntityTypeCode = DocumentType.EntityTypeCode,
+						EntityUid = DocumentType.CompanyRegistrationRequest,
 						IsActive = true,
 						SkipPaging = true
 					}, cancellationToken);
@@ -110,7 +84,7 @@ namespace Montr.Docs.Impl.Services
 			{
 				Uid = x.Uid,
 				CompanyUid = x.CompanyUid,
-				ConfigCode = x.ConfigCode,
+				DocumentTypeUid = x.DocumentTypeUid,
 				StatusCode = x.StatusCode,
 				Direction = Enum.Parse<DocumentDirection>(x.Direction),
 				DocumentNumber = x.DocumentNumber,

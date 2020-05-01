@@ -1,7 +1,6 @@
 import React from "react";
 import { RouteComponentProps } from "react-router";
 import { Spin, Tabs, PageHeader, Button, Tag, Descriptions } from "antd";
-import { Page } from "@montr-core/components";
 import { IDocument } from "../models";
 import { DocumentService } from "../services";
 import { RouteBuilder } from "../module";

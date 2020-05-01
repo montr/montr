@@ -104,7 +104,7 @@ export class TabEditClassifierHierarchy extends React.Component<IProps, IState> 
 
 		return (<>
 			<Alert type={type.hierarchyType == "Groups" ? "info" : "warning"}
-				message="Настройка иерархий групп доступна для типов справочников, у которых на вкладке «Информация» выбран тип иерархии «Группы»." />
+				message="Настройка иерархий групп доступна для типов классификаторов, у которых на вкладке «Информация» выбран тип иерархии «Группы»." />
 
 			{type.hierarchyType == "Groups" && (<>
 				<Toolbar clear>

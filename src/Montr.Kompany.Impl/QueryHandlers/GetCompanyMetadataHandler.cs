@@ -26,8 +26,8 @@ namespace Montr.Kompany.Impl.QueryHandlers
 		{
 			var metadata = await _metadataRepository.Search(new MetadataSearchRequest
 			{
-				EntityTypeCode = Process.EntityTypeCode,
-				EntityUid = Process.CompanyRegistrationRequest,
+				EntityTypeCode = DocumentType.EntityTypeCode,
+				EntityUid = DocumentType.CompanyRegistrationRequest,
 				IsActive = true,
 				SkipPaging = true
 			}, cancellationToken);
@@ -46,7 +46,7 @@ namespace Montr.Kompany.Impl.QueryHandlers
 					field.Key = FieldKey.FormatFullKey(field.Key);
 				}
 			}
-			
+
 			return result;
 		}
 	}

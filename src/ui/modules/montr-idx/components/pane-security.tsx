@@ -66,7 +66,9 @@ export default class PaneSecurity extends React.Component<IProps, IState> {
 	sendEmailConfirmation = async () => {
 		this.setState({ sendEmailConfirmationDisabled: true });
 
-		await this._operation.execute(() => this._accountService.sendEmailConfirmation({}));
+		await this._operation.execute(async () => {
+			return await this._accountService.sendEmailConfirmation({});
+		});
 
 		this.setState({ sendEmailConfirmationDisabled: false });
 	};

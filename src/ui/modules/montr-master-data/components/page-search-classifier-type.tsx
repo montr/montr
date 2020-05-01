@@ -1,4 +1,5 @@
 import * as React from "react";
+import { Translation } from "react-i18next";
 import { Page, PageHeader, Toolbar, DataTable, DataTableUpdateToken, ButtonAdd, ButtonDelete } from "@montr-core/components";
 import { Constants } from "@montr-core/.";
 import { withCompanyContext, CompanyContextProps } from "@montr-kompany/components";
@@ -8,7 +9,7 @@ import { ClassifierTypeService } from "../services";
 import { NotificationService } from "@montr-core/services";
 import { IMenu } from "@montr-core/models";
 import { IClassifierGroup } from "../models";
-import { RouteBuilder } from "../module";
+import { RouteBuilder, Locale } from "../module";
 
 interface IProps extends CompanyContextProps {
 }
@@ -75,30 +76,31 @@ class _SearchClassifierType extends React.Component<IProps, IState> {
 		];
 
 		return (
-			// todo: localize
-			<Page
-				title={<>
-					<Toolbar float="right">
-						<Link to={`/classifiers/add`}>
-							<ButtonAdd type="primary" />
-						</Link>
-						<ButtonDelete onClick={this.delete} />
-					</Toolbar>
+			<Translation ns={Locale.Namespace}>
+				{(t) => <Page
+					title={<>
+						<Toolbar float="right">
+							<Link to={`/classifiers/add`}>
+								<ButtonAdd type="primary" />
+							</Link>
+							<ButtonDelete onClick={this.delete} />
+						</Toolbar>
 
-					<ClassifierBreadcrumb />
-					<PageHeader>Справочники</PageHeader>
-				</>}>
+						<ClassifierBreadcrumb />
+						<PageHeader>{t("page.searchClassifierTypes.title")}</PageHeader>
+					</>}>
 
-				<DataTable
-					rowKey="uid"
-					viewId={`ClassifierType/Grid/`}
-					loadUrl={`${Constants.apiURL}/classifierType/list/`}
-					onSelectionChange={this.onSelectionChange}
-					updateToken={updateTableToken}
-					rowActions={rowActions}
-				/>
+					<DataTable
+						rowKey="uid"
+						viewId={`ClassifierType/Grid/`}
+						loadUrl={`${Constants.apiURL}/classifierType/list/`}
+						onSelectionChange={this.onSelectionChange}
+						updateToken={updateTableToken}
+						rowActions={rowActions}
+					/>
 
-			</Page>
+				</Page>}
+			</Translation>
 		);
 	};
 }

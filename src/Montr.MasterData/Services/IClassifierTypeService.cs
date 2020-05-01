@@ -5,7 +5,6 @@ using Montr.MasterData.Models;
 
 namespace Montr.MasterData.Services
 {
-	// todo: merge with IRepository<ClassifierType>?
 	public interface IClassifierTypeService
 	{
 		Task<ClassifierType> TryGet(string typeCode, CancellationToken cancellationToken);

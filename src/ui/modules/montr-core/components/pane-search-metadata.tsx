@@ -1,13 +1,13 @@
 import * as React from "react";
-import { Drawer, Modal } from "antd";
+import { Drawer } from "antd";
 import { Toolbar } from "./toolbar";
 import { IDataField, IDataResult, Guid } from "../models";
 import { MetadataService, OperationService } from "../services";
 import { DataTable, DataTableUpdateToken, ButtonAdd, PaneEditMetadata, ButtonDelete } from ".";
 import { Constants } from "..";
-import { Translation } from "react-i18next";
+import { Translation, WithTranslation, withTranslation } from "react-i18next";
 
-interface IProps {
+interface IProps extends WithTranslation {
 	entityTypeCode: string;
 	entityUid: Guid | string;
 }
@@ -19,7 +19,7 @@ interface IState {
 	updateTableToken?: DataTableUpdateToken;
 }
 
-export class PaneSearchMetadata extends React.Component<IProps, IState> {
+class WrappedPaneSearchMetadata extends React.Component<IProps, IState> {
 
 	private _operation = new OperationService();
 	private _metadataService = new MetadataService();
@@ -77,21 +77,23 @@ export class PaneSearchMetadata extends React.Component<IProps, IState> {
 		this.refreshTable(false);
 	};
 
-	showDeleteConfirm = () => {
-		Modal.confirm({
-			title: "Вы действительно хотите удалить выбранные записи?",
-			content: "Наверняка что-то случится ...",
-			onOk: async () => {
-				const { entityTypeCode, entityUid } = this.props,
-					{ selectedRowKeys } = this.state;
+	showDeleteConfirm = async () => {
+		const { t } = this.props;
 
-				const result = await this._operation.execute(() =>
-					this._metadataService.delete({ entityTypeCode, entityUid, uids: selectedRowKeys }));
+		await this._operation.execute(async () => {
+			const { entityTypeCode, entityUid } = this.props,
+				{ selectedRowKeys } = this.state;
 
-				if (result.success) {
-					this.refreshTable(false, true);
-				}
+			const result = await this._metadataService.delete({ entityTypeCode, entityUid, uids: selectedRowKeys });
+
+			if (result.success) {
+				this.refreshTable(false, true);
 			}
+
+			return result;
+		}, {
+			showConfirm: true,
+			confirmTitle: t("operation.confirm.delete.title")
 		});
 	};
 
@@ -118,7 +120,7 @@ export class PaneSearchMetadata extends React.Component<IProps, IState> {
 			/>
 
 			{showDrawer &&
-				// todo: move drawer to pane-edit-metadata
+				// todo: move drawer to pane-edit-metadata (?)
 				<Drawer
 					title="Metadata"
 					closable={true}
@@ -137,3 +139,5 @@ export class PaneSearchMetadata extends React.Component<IProps, IState> {
 		</>}</Translation>);
 	};
 }
+
+export const PaneSearchMetadata = withTranslation()(WrappedPaneSearchMetadata);

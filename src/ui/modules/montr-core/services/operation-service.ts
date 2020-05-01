@@ -6,6 +6,9 @@ interface IOperationExecuteOptions {
 	successMessage?: string;
 	errorMessage?: string;
 	showFieldErrors?: (result: IApiResult) => void;
+	showConfirm?: boolean;
+	confirmTitle?: string;
+	confirmContent?: string;
 }
 
 export class OperationService {
@@ -13,11 +16,9 @@ export class OperationService {
 	private _navigation = new NavigationService();
 	private _notification = new NotificationService();
 
-	execute = async (operation: () => Promise<IApiResult>, options?: IOperationExecuteOptions): Promise<IApiResult> => {
+	execute = async (operation: () => Promise<IApiResult>, options?: IOperationExecuteOptions): Promise<void> => {
 
 		const t = (key: string) => i18next.t(key);
-
-		const hide = this._notification.loading(t("operation.executing"));
 
 		const showFieldErrors = (result: IApiResult) => {
 			// todo: show detailed field errors as notification.error?
@@ -33,36 +34,54 @@ export class OperationService {
 			}
 		};
 
-		try {
-			const result = await operation();
+		const executeInternal = async (): Promise<IApiResult> => {
 
-			if (result && result.success) {
-				this._notification.success(result.message ?? options?.successMessage ?? t("operation.success"));
+			const hide = this._notification.loading(t("operation.executing"));
+
+			try {
+				const result = await operation();
+
+				if (result && result.success) {
+					this._notification.success(result.message ?? options?.successMessage ?? t("operation.success"));
+				}
+				else {
+					// todo: do not show common error if options.showFieldErrors passed
+					this._notification.error(result?.message ?? options?.errorMessage ?? t("operation.error"));
+
+					showFieldErrors(result);
+				}
+
+				if (result && result.redirectUrl) {
+					this._navigation.navigate(result.redirectUrl);
+				}
+
+				return result;
 			}
-			else {
-				// todo: do not show common error if options.showFieldErrors passed
-				this._notification.error(result?.message ?? options?.errorMessage ?? t("operation.error"));
+			catch (error) {
+				this._notification.error(options?.errorMessage ?? t("operation.error"), error.message);
 
-				showFieldErrors(result);
+				if (error.response?.status == 400) {
+					const result = this.convertToApiResult(<IValidationProblemDetails>error.response.data);
+
+					showFieldErrors(result);
+				}
 			}
-
-			if (result && result.redirectUrl) {
-				this._navigation.navigate(result.redirectUrl);
+			finally {
+				hide();
 			}
+		};
 
-			return result;
+		if (options?.showConfirm) {
+			this._notification.confirm(
+				options.confirmTitle ?? t("operation.confirm.title"),
+				options.confirmContent,
+				async () => {
+					await executeInternal();
+				}
+			);
 		}
-		catch (error) {
-			this._notification.error(options?.errorMessage ?? t("operation.error"), error.message);
-
-			if (error.response?.status == 400) {
-				const result = this.convertToApiResult(<IValidationProblemDetails>error.response.data);
-
-				showFieldErrors(result);
-			}
-		}
-		finally {
-			hide();
+		else {
+			await executeInternal();
 		}
 	};
 
