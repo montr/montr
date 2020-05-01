@@ -48,11 +48,10 @@ namespace Montr.Docs.Impl.Services
 				// todo: preload fields for multiple items
 				if (request.IncludeFields)
 				{
-					// todo: change to document type and document type uid
 					var metadata = await _fieldMetadataRepository.Search(new MetadataSearchRequest
 					{
-						EntityTypeCode = Process.EntityTypeCode,
-						EntityUid = Process.CompanyRegistrationRequest,
+						EntityTypeCode = DocumentType.EntityTypeCode,
+						EntityUid = DocumentType.CompanyRegistrationRequest,
 						IsActive = true,
 						SkipPaging = true
 					}, cancellationToken);
@@ -85,7 +84,7 @@ namespace Montr.Docs.Impl.Services
 			{
 				Uid = x.Uid,
 				CompanyUid = x.CompanyUid,
-				ConfigCode = x.ConfigCode,
+				DocumentTypeUid = x.DocumentTypeUid,
 				StatusCode = x.StatusCode,
 				Direction = Enum.Parse<DocumentDirection>(x.Direction),
 				DocumentNumber = x.DocumentNumber,

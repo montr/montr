@@ -52,8 +52,8 @@ namespace Montr.Kompany.Impl.CommandHandlers
 			// todo: validate fields
 			var metadata = await _fieldMetadataRepository.Search(new MetadataSearchRequest
 			{
-				EntityTypeCode = Process.EntityTypeCode,
-				EntityUid = Process.CompanyRegistrationRequest,
+				EntityTypeCode = DocumentType.EntityTypeCode,
+				EntityUid = DocumentType.CompanyRegistrationRequest,
 				// todo: check flags
 				// IsSystem = false,
 				IsActive = true,
@@ -98,14 +98,15 @@ namespace Montr.Kompany.Impl.CommandHandlers
 				// todo: exclude db fields and sections
 				await _fieldDataRepository.Insert(manageFieldDataRequest, cancellationToken);
 
-				// todo: user roles 
+				// todo: user roles
 
 				// company registration request + todo: creation date
 				await _documentRepository.Create(new Document
 				{
 					Uid = documentUid,
+					DocumentTypeUid = DocumentType.CompanyRegistrationRequest,
 					CompanyUid = companyUid,
-					ConfigCode = CompanyRequestConfigCode.RegistrationRequest,
+					// ConfigCode = CompanyRequestConfigCode.RegistrationRequest,
 					StatusCode = DocumentStatusCode.Published,
 					Direction = DocumentDirection.Outgoing,
 					DocumentDate = now

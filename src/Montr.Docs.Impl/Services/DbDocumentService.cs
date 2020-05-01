@@ -36,7 +36,7 @@ namespace Montr.Docs.Impl.Services
 				await db.GetTable<DbDocument>()
 					.Value(x => x.Uid, document.Uid)
 					.Value(x => x.CompanyUid, document.CompanyUid)
-					.Value(x => x.ConfigCode, document.ConfigCode)
+					.Value(x => x.DocumentTypeUid, document.DocumentTypeUid)
 					.Value(x => x.StatusCode, document.StatusCode)
 					.Value(x => x.Direction, document.Direction.ToString())
 					.Value(x => x.DocumentNumber, document.DocumentNumber)
@@ -52,7 +52,7 @@ namespace Montr.Docs.Impl.Services
 					.GenerateNumber(new GenerateNumberRequest
 					{
 						EntityTypeCode = DocumentType.EntityTypeCode,
-						EntityTypeUid = Process.CompanyRegistrationRequest,
+						EntityTypeUid = DocumentType.CompanyRegistrationRequest,
 						EntityUid = document.Uid
 					}, cancellationToken);
 

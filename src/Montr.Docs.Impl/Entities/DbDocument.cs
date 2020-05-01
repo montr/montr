@@ -13,8 +13,11 @@ namespace Montr.Docs.Impl.Entities
 		[Column(Name = "company_uid"), DataType(DataType.Guid), NotNull]
 		public Guid CompanyUid { get; set; }
 
-		[Column(Name = "config_code"), DataType(DataType.VarChar), NotNull]
-		public string ConfigCode { get; set; }
+		[Column(Name = "document_type_uid"), DataType(DataType.Guid), NotNull]
+		public Guid DocumentTypeUid { get; set; }
+
+		/*[Column(Name = "config_code"), DataType(DataType.VarChar), NotNull]
+		public string ConfigCode { get; set; }*/
 
 		[Column(Name = "status_code"), DataType(DataType.VarChar), NotNull]
 		public string StatusCode { get; set; }
