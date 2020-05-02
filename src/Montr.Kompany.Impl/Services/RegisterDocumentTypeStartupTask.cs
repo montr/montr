@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using Montr.Docs.Commands;
 using Montr.Docs.Models;
 using Montr.Docs.Services;
+using Montr.Kompany.Models;
 
 namespace Montr.Kompany.Impl.Services
 {
@@ -19,7 +20,7 @@ namespace Montr.Kompany.Impl.Services
 			{
 				Item = new DocumentType
 				{
-					Code = "company_registration_request",
+					Code = DocumentTypes.CompanyRegistrationRequest,
 					Name = "Заявка на регистацию компании",
 					// IsSystem = true
 				}

@@ -225,8 +225,6 @@ class _PageCompanyRegistration extends React.Component<IRProps, IRState> {
 			<div>
 				<h2>Регистрация</h2>
 
-				<RegistrationForm />
-
 				<Spin spinning={loading} >
 					<DataForm
 						fields={fields}
@@ -234,6 +232,8 @@ class _PageCompanyRegistration extends React.Component<IRProps, IRState> {
 						onSubmit={this.handleSubmit}
 					/>
 				</Spin>
+
+				<RegistrationForm />
 
 			</div>
 		);

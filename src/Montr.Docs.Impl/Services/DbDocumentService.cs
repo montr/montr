@@ -52,7 +52,7 @@ namespace Montr.Docs.Impl.Services
 					.GenerateNumber(new GenerateNumberRequest
 					{
 						EntityTypeCode = DocumentType.EntityTypeCode,
-						EntityTypeUid = DocumentType.CompanyRegistrationRequest,
+						EntityTypeUid = document.DocumentTypeUid,
 						EntityUid = document.Uid
 					}, cancellationToken);
 

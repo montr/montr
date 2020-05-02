@@ -17,8 +17,6 @@ namespace Montr.Docs.Models
 
 		public Guid DocumentTypeUid { get; set; }
 
-		/*public string ConfigCode { get; set; }*/
-
 		public string StatusCode { get; set; }
 
 		public DocumentDirection Direction { get; set; }

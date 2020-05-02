@@ -44,6 +44,8 @@ namespace Montr.Kompany.Tests.CommandHandlers
 			var dbFieldDataRepository = new DbFieldDataRepository(dbContextFactory, fieldProviderRegistry);
 			var dbNumeratorRepository = new DbNumeratorRepository(dbContextFactory);
 			var dbNumberGenerator = new DbNumberGenerator(dbContextFactory, dbNumeratorRepository, dateTimeProvider, new INumberTagResolver[0]);
+			var dbDocumentTypeRepository = new DbDocumentTypeRepository(dbContextFactory);
+			var dbDocumentTypeService = new DbDocumentTypeService(dbContextFactory, dbDocumentTypeRepository);
 			var dbDocumentService = new DbDocumentService(dbContextFactory, dbNumberGenerator);
 			var jsonSerializer = new DefaultJsonSerializer();
 			var auditLogService = new DbAuditLogService(dbContextFactory, jsonSerializer);
@@ -62,7 +64,8 @@ namespace Montr.Kompany.Tests.CommandHandlers
 				});
 
 			var handler = new CreateCompanyHandler(unitOfWorkFactory,
-				dbContextFactory, dateTimeProvider, metadataRepositoryMock.Object, dbFieldDataRepository, dbDocumentService, auditLogService);
+				dbContextFactory, dateTimeProvider, metadataRepositoryMock.Object,
+				dbFieldDataRepository, dbDocumentTypeService, dbDocumentService, auditLogService);
 
 			using (var _ = unitOfWorkFactory.Create())
 			{

@@ -23,18 +23,20 @@ namespace Montr.Kompany.Impl.CommandHandlers
 		private readonly IDateTimeProvider _dateTimeProvider;
 		private readonly IRepository<FieldMetadata> _fieldMetadataRepository;
 		private readonly IFieldDataRepository _fieldDataRepository;
+		private readonly IDocumentTypeService _documentTypeRepository;
 		private readonly IDocumentService _documentRepository;
 		private readonly IAuditLogService _auditLogService;
 
 		public CreateCompanyHandler(IUnitOfWorkFactory unitOfWorkFactory, IDbContextFactory dbContextFactory,
 			IDateTimeProvider dateTimeProvider, IRepository<FieldMetadata> fieldMetadataRepository, IFieldDataRepository fieldDataRepository,
-			IDocumentService documentRepository, IAuditLogService auditLogService)
+			IDocumentTypeService documentTypeRepository, IDocumentService documentRepository, IAuditLogService auditLogService)
 		{
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_dbContextFactory = dbContextFactory;
 			_dateTimeProvider = dateTimeProvider;
 			_fieldMetadataRepository = fieldMetadataRepository;
 			_fieldDataRepository = fieldDataRepository;
+			_documentTypeRepository = documentTypeRepository;
 			_documentRepository = documentRepository;
 			_auditLogService = auditLogService;
 		}
@@ -49,11 +51,14 @@ namespace Montr.Kompany.Impl.CommandHandlers
 			var companyUid = Guid.NewGuid();
 			var documentUid = Guid.NewGuid();
 
+			var documentType = await _documentTypeRepository.Get(DocumentTypes.CompanyRegistrationRequest, cancellationToken);
+
 			// todo: validate fields
 			var metadata = await _fieldMetadataRepository.Search(new MetadataSearchRequest
 			{
 				EntityTypeCode = DocumentType.EntityTypeCode,
-				EntityUid = DocumentType.CompanyRegistrationRequest,
+				// ReSharper disable once PossibleInvalidOperationException
+				EntityUid = documentType.Uid.Value,
 				// todo: check flags
 				// IsSystem = false,
 				IsActive = true,
@@ -104,9 +109,8 @@ namespace Montr.Kompany.Impl.CommandHandlers
 				await _documentRepository.Create(new Document
 				{
 					Uid = documentUid,
-					DocumentTypeUid = DocumentType.CompanyRegistrationRequest,
+					DocumentTypeUid = documentType.Uid.Value,
 					CompanyUid = companyUid,
-					// ConfigCode = CompanyRequestConfigCode.RegistrationRequest,
 					StatusCode = DocumentStatusCode.Published,
 					Direction = DocumentDirection.Outgoing,
 					DocumentDate = now

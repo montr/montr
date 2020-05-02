@@ -48,16 +48,17 @@ namespace Montr.Docs.Impl.Services
 				// todo: preload fields for multiple items
 				if (request.IncludeFields)
 				{
-					var metadata = await _fieldMetadataRepository.Search(new MetadataSearchRequest
-					{
-						EntityTypeCode = DocumentType.EntityTypeCode,
-						EntityUid = DocumentType.CompanyRegistrationRequest,
-						IsActive = true,
-						SkipPaging = true
-					}, cancellationToken);
-
 					foreach (var item in data)
 					{
+						// todo: load metadata once for each document type
+						var metadata = await _fieldMetadataRepository.Search(new MetadataSearchRequest
+						{
+							EntityTypeCode = DocumentType.EntityTypeCode,
+							EntityUid = item.DocumentTypeUid,
+							IsActive = true,
+							SkipPaging = true
+						}, cancellationToken);
+
 						var fields = await _fieldDataRepository.Search(new FieldDataSearchRequest
 						{
 							Metadata = metadata.Rows,

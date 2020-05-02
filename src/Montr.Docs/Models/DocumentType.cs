@@ -8,9 +8,6 @@ namespace Montr.Docs.Models
 	{
 		private string DebuggerDisplay => $"{Code}, {Name}";
 
-		// todo: use settings for active
-		public static readonly Guid CompanyRegistrationRequest = Guid.Parse("ab770d9f-f723-4468-8807-5df0f6637cca");
-
 		public static readonly string EntityTypeCode = nameof(DocumentType);
 
 		public Guid? Uid { get; set; }
