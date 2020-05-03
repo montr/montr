@@ -9,6 +9,8 @@ using Montr.Core.Impl.Services;
 using Montr.Core.Models;
 using Montr.Core.Services;
 using Montr.Data.Linq2Db;
+using Montr.Docs.Commands;
+using Montr.Docs.Impl.CommandHandlers;
 using Montr.Docs.Impl.Entities;
 using Montr.Docs.Impl.Services;
 using Montr.Docs.Models;
@@ -49,6 +51,7 @@ namespace Montr.Kompany.Tests.CommandHandlers
 			var dbDocumentService = new DbDocumentService(dbContextFactory, dbNumberGenerator);
 			var jsonSerializer = new DefaultJsonSerializer();
 			var auditLogService = new DbAuditLogService(dbContextFactory, jsonSerializer);
+			var registerDocumentTypeHandler = new RegisterDocumentTypeHandler(unitOfWorkFactory, dbDocumentTypeService);
 
 			var metadataRepositoryMock = new Mock<IRepository<FieldMetadata>>();
 			metadataRepositoryMock
@@ -69,6 +72,15 @@ namespace Montr.Kompany.Tests.CommandHandlers
 
 			using (var _ = unitOfWorkFactory.Create())
 			{
+				await registerDocumentTypeHandler.Handle(new RegisterDocumentType
+				{
+					Item = new DocumentType
+					{
+						Code = DocumentTypes.CompanyRegistrationRequest,
+						Name = "Company Registration Request"
+					}
+				}, cancellationToken);
+
 				// act
 				var company = new Company
 				{
