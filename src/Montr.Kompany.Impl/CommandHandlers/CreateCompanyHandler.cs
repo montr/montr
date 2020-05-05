@@ -57,8 +57,7 @@ namespace Montr.Kompany.Impl.CommandHandlers
 			var metadata = await _fieldMetadataRepository.Search(new MetadataSearchRequest
 			{
 				EntityTypeCode = DocumentType.EntityTypeCode,
-				// ReSharper disable once PossibleInvalidOperationException
-				EntityUid = documentType.Uid.Value,
+				EntityUid = documentType.Uid,
 				// todo: check flags
 				// IsSystem = false,
 				IsActive = true,
@@ -109,7 +108,7 @@ namespace Montr.Kompany.Impl.CommandHandlers
 				await _documentRepository.Create(new Document
 				{
 					Uid = documentUid,
-					DocumentTypeUid = documentType.Uid.Value,
+					DocumentTypeUid = documentType.Uid,
 					CompanyUid = companyUid,
 					StatusCode = DocumentStatusCode.Published,
 					Direction = DocumentDirection.Outgoing,

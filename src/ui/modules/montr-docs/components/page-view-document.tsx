@@ -4,6 +4,7 @@ import { Spin, Tabs, PageHeader, Button, Tag, Descriptions } from "antd";
 import { IDocument } from "../models";
 import { DocumentService } from "../services";
 import { RouteBuilder } from "../module";
+import { TabViewDocumentFields } from "./tab-view-document-fields";
 
 interface IRouteProps {
 	uid?: string;
@@ -80,6 +81,7 @@ export default class PageViewDocument extends React.Component<IProps, IState> {
 							<Tabs.TabPane key="common" tab="Общая информация">
 							</Tabs.TabPane>
 							<Tabs.TabPane key="fields" tab="Анкета">
+								<TabViewDocumentFields data={data} />
 							</Tabs.TabPane>
 						</Tabs>
 					}>

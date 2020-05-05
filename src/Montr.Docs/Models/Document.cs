@@ -5,7 +5,7 @@ using Montr.Metadata.Models;
 namespace Montr.Docs.Models
 {
 	[DebuggerDisplay("{" + nameof(DebuggerDisplay) + ",nq}")]
-	public class Document
+	public class Document : IFieldDataContainer
 	{
 		private string DebuggerDisplay => $"{StatusCode}, {Name}";
 

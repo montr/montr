@@ -6,20 +6,18 @@ using System.Threading.Tasks;
 using MediatR;
 using Montr.Core.Services;
 using Montr.Docs.Models;
+using Montr.Docs.Queries;
 using Montr.Docs.Services;
-using Montr.Kompany.Models;
-using Montr.Kompany.Queries;
 using Montr.Metadata.Models;
 
-namespace Montr.Kompany.Impl.QueryHandlers
+namespace Montr.Docs.Impl.QueryHandlers
 {
-	// todo: why named GetCompanyMetadata, if returns metadata of registration document?
-	public class GetCompanyMetadataHandler : IRequestHandler<GetCompanyMetadata, DataView>
+	public class GetDocumentMetadataHandler : IRequestHandler<GetDocumentMetadata, DataView>
 	{
 		private readonly IDocumentTypeService _documentTypeService;
 		private readonly IRepository<FieldMetadata> _metadataRepository;
 
-		public GetCompanyMetadataHandler(
+		public GetDocumentMetadataHandler(
 			IDocumentTypeService documentTypeService,
 			IRepository<FieldMetadata> metadataRepository)
 		{
@@ -27,21 +25,35 @@ namespace Montr.Kompany.Impl.QueryHandlers
 			_metadataRepository = metadataRepository;
 		}
 
-		public async Task<DataView> Handle(GetCompanyMetadata request, CancellationToken cancellationToken)
+		public async Task<DataView> Handle(GetDocumentMetadata request, CancellationToken cancellationToken)
 		{
-			var documentType = await _documentTypeService.Get(DocumentTypes.CompanyRegistrationRequest, cancellationToken);
+			Guid documentTypeUid;
+
+			if (request.DocumentTypeUid == null)
+			{
+				var typeCode = request.TypeCode ?? throw new ArgumentNullException(nameof(request.TypeCode));
+
+				var type = await _documentTypeService.Get(typeCode, cancellationToken);
+
+				documentTypeUid = type.Uid;
+			}
+			else
+			{
+				documentTypeUid = request.DocumentTypeUid.Value;
+			}
 
 			var metadata = await _metadataRepository.Search(new MetadataSearchRequest
 			{
 				EntityTypeCode = DocumentType.EntityTypeCode,
-				EntityUid = documentType.Uid,
-				IsActive = true,
-				SkipPaging = true
+				EntityUid = documentTypeUid,
+				IsActive = true
 			}, cancellationToken);
 
 			var dbFields = new List<string>
 			{
-				nameof(Company.Name)
+				nameof(Document.DocumentDate),
+				nameof(Document.DocumentNumber),
+				nameof(Document.Name)
 			};
 
 			var result = new DataView { Fields = metadata.Rows };

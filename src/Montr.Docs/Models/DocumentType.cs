@@ -10,7 +10,7 @@ namespace Montr.Docs.Models
 
 		public static readonly string EntityTypeCode = nameof(DocumentType);
 
-		public Guid? Uid { get; set; }
+		public Guid Uid { get; set; }
 
 		public string Code { get; set; }
 
