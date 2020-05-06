@@ -48,7 +48,7 @@ export class TabViewDocumentFields extends React.Component<IProps, IState> {
 
 		return (
 			<Spin spinning={loading}>
-				<DataForm fields={fields} data={data} />
+				<DataForm mode="View" fields={fields} data={data} />
 			</Spin>
 		);
 	};

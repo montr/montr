@@ -20,6 +20,7 @@ interface IProps extends WithTranslation {
 	resetButton?: string;
 	successMessage?: string;
 	errorMessage?: string;
+	mode?: "Edit" | "View";
 	hideLabels?: boolean;
 	onChange?: (values: IIndexer, changedValues: IIndexer) => void;
 	onSubmit?: (values: any /* IIndexer */) => Promise<IApiResult>;
@@ -116,7 +117,7 @@ class WrappedDataForm extends React.Component<IProps, IState> {
 	};
 
 	createItem = (field: IDataField): React.ReactNode => {
-		const { t, layout, data, hideLabels } = this.props;
+		const { t, layout, data, mode, hideLabels } = this.props;
 
 		const fieldFactory = DataFieldFactory.get(field.type);
 
@@ -141,7 +142,9 @@ class WrappedDataForm extends React.Component<IProps, IState> {
 			DataHelper.indexer(data, field.key, formattedValue);
 		}
 
-		const fieldNode = fieldFactory.createNode(field, data);
+		const fieldNode = (mode == "View")
+			? fieldFactory.createViewNode(field, data)
+			: fieldFactory.createEditNode(field, data);
 
 		const itemLayout = (layout == null || layout == "horizontal")
 			? (field.type == "boolean" ? FormDefaults.tailFormItemLayout : FormDefaults.formItemLayout)
@@ -152,9 +155,9 @@ class WrappedDataForm extends React.Component<IProps, IState> {
 		return (
 			<Form.Item
 				key={field.key}
-				name={namePath}
+				name={(mode == "View") ? null : namePath}
 				htmlFor={getFieldId(namePath)} // replace(".", "_")
-				label={hideLabels || field.type == "boolean" ? null : field.name}
+				label={hideLabels || (mode != "View" && field.type == "boolean") ? null : field.name}
 				extra={field.description}
 				valuePropName={fieldFactory.valuePropName}
 				rules={[required]}
@@ -165,7 +168,7 @@ class WrappedDataForm extends React.Component<IProps, IState> {
 	};
 
 	render = () => {
-		const { t, layout, data, fields, showControls, submitButton, resetButton } = this.props,
+		const { t, layout, data, fields, mode, showControls, submitButton, resetButton } = this.props,
 			{ loading } = this.state;
 
 		const itemLayout = (layout == null || layout == "horizontal") ? FormDefaults.tailFormItemLayout : null;
@@ -183,7 +186,7 @@ class WrappedDataForm extends React.Component<IProps, IState> {
 
 					{fields.map(x => this.createItem(x))}
 
-					<Form.Item {...itemLayout} style={{ display: showControls === false ? "none" : "block" }}>
+					<Form.Item {...itemLayout} style={{ display: mode == "View" || showControls === false ? "none" : "block" }}>
 						<Toolbar>
 							<ButtonSave htmlType="submit">{submitButton}</ButtonSave>
 						</Toolbar>

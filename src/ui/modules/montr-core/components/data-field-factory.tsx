@@ -3,6 +3,7 @@ import { Input, InputNumber, Select, Checkbox, DatePicker, TimePicker } from "an
 import { IDataField, IIndexer, ISelectField, ITextAreaField, INumberField, IDateField, IBooleanField, ITextField, IDesignSelectOptionsField, IPasswordField, ITimeField } from "../models";
 import { Icon, DesignSelectOptions } from ".";
 import moment from "moment";
+import { DataHelper } from "@montr-core/services";
 
 // todo: rename after migrate to antd 4.0
 export abstract class DataFieldFactory<TField extends IDataField> {
@@ -24,7 +25,11 @@ export abstract class DataFieldFactory<TField extends IDataField> {
 		return value;
 	}
 
-	abstract createNode(field: TField, data: IIndexer): React.ReactElement;
+	createViewNode(field: TField, data: IIndexer): React.ReactElement {
+		return DataHelper.indexer(data, field.key, undefined);
+	}
+
+	abstract createEditNode(field: TField, data: IIndexer): React.ReactElement;
 }
 
 class BooleanFieldFactory extends DataFieldFactory<IBooleanField> {
@@ -33,13 +38,13 @@ class BooleanFieldFactory extends DataFieldFactory<IBooleanField> {
 		this.valuePropName = "checked";
 	}
 
-	createNode(field: IBooleanField, data: IIndexer): React.ReactElement {
+	createEditNode(field: IBooleanField, data: IIndexer): React.ReactElement {
 		return <Checkbox>{field.name}</Checkbox>;
 	}
 }
 
 class TextFieldFactory extends DataFieldFactory<ITextField> {
-	createNode(field: ITextField, data: IIndexer): React.ReactElement {
+	createEditNode(field: ITextField, data: IIndexer): React.ReactElement {
 		return <Input
 			allowClear
 			disabled={field.readonly}
@@ -50,7 +55,7 @@ class TextFieldFactory extends DataFieldFactory<ITextField> {
 }
 
 class NumberFieldFactory extends DataFieldFactory<INumberField> {
-	createNode(field: INumberField, data: IIndexer): React.ReactElement {
+	createEditNode(field: INumberField, data: IIndexer): React.ReactElement {
 		const props = field?.props;
 
 		return <InputNumber
@@ -63,7 +68,7 @@ class NumberFieldFactory extends DataFieldFactory<INumberField> {
 }
 
 class TextAreaFieldFactory extends DataFieldFactory<ITextAreaField> {
-	createNode(field: ITextAreaField, data: IIndexer): React.ReactElement {
+	createEditNode(field: ITextAreaField, data: IIndexer): React.ReactElement {
 		const props = field?.props;
 
 		return <Input.TextArea
@@ -75,7 +80,7 @@ class TextAreaFieldFactory extends DataFieldFactory<ITextAreaField> {
 }
 
 class SelectFieldFactory extends DataFieldFactory<ISelectField> {
-	createNode(field: ISelectField, data: IIndexer): React.ReactElement {
+	createEditNode(field: ISelectField, data: IIndexer): React.ReactElement {
 		const props = field?.props;
 
 		return <Select
@@ -91,13 +96,13 @@ class SelectFieldFactory extends DataFieldFactory<ISelectField> {
 }
 
 class DesignSelectOptionsFieldFactory extends DataFieldFactory<IDesignSelectOptionsField> {
-	createNode(field: IDesignSelectOptionsField, data: IIndexer): React.ReactElement {
+	createEditNode(field: IDesignSelectOptionsField, data: IIndexer): React.ReactElement {
 		return <DesignSelectOptions />;
 	}
 }
 
 class PasswordFieldFactory extends DataFieldFactory<IPasswordField> {
-	createNode(field: IDataField, data: IIndexer): React.ReactElement {
+	createEditNode(field: IDataField, data: IIndexer): React.ReactElement {
 		return <Input.Password
 			allowClear
 			placeholder={field.placeholder}
@@ -116,7 +121,7 @@ class DateFieldFactory extends DataFieldFactory<IDateField> {
 		return moment.parseZone(value);
 	}
 
-	createNode(field: IDateField, data: IIndexer): React.ReactElement {
+	createEditNode(field: IDateField, data: IIndexer): React.ReactElement {
 		const props = field?.props;
 
 		return <DatePicker
@@ -138,7 +143,7 @@ class TimeFieldFactory extends DataFieldFactory<ITimeField> {
 		return moment.parseZone(value, "HH:mm:ss");
 	}
 
-	createNode(field: ITimeField, data: IIndexer): React.ReactElement {
+	createEditNode(field: ITimeField, data: IIndexer): React.ReactElement {
 		return <TimePicker
 			allowClear
 			disabled={field.readonly}
