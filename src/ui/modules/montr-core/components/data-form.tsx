@@ -173,8 +173,6 @@ class WrappedDataForm extends React.Component<IProps, IState> {
 
 		const itemLayout = (layout == null || layout == "horizontal") ? FormDefaults.tailFormItemLayout : null;
 
-		// console.log("Form.render", data, fields);
-
 		return (
 			<Spin spinning={loading}>
 				{fields && <Form
