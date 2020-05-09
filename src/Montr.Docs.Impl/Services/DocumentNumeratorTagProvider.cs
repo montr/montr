@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Montr.Core.Services;
 using Montr.Docs.Models;
+using Montr.Docs.Services;
 using Montr.MasterData.Models;
 using Montr.MasterData.Services;
 
@@ -11,22 +12,27 @@ namespace Montr.Docs.Impl.Services
 {
 	public class DocumentNumberTagResolver : INumberTagResolver
 	{
-		private readonly IRepository<Document> _repository;
+		public class SupportedTags
+		{
+			public static readonly string DocumentType = "DocumentType";
 
-		public DocumentNumberTagResolver(IRepository<Document> repository)
+			public static readonly string Company = "Company";
+		}
+
+		private readonly IRepository<Document> _repository;
+		private readonly IDocumentTypeService _documentTypeService;
+
+		public DocumentNumberTagResolver(IRepository<Document> repository, IDocumentTypeService documentTypeService)
 		{
 			_repository = repository;
+			_documentTypeService = documentTypeService;
 		}
 
 		public bool Supports(GenerateNumberRequest request, out string[] supportedTags)
 		{
 			if (request.EntityTypeCode == DocumentType.EntityTypeCode)
 			{
-				supportedTags = new []
-				{
-					"DocumentType",
-					"Company"
-				};
+				supportedTags = new [] { SupportedTags.DocumentType, SupportedTags.Company };
 
 				return true;
 			}
@@ -45,6 +51,8 @@ namespace Montr.Docs.Impl.Services
 
 				if (document != null)
 				{
+					DocumentType documentType = null;
+
 					var result = new NumberTagResolveResult
 					{
 						Date = document.DocumentDate,
@@ -53,9 +61,15 @@ namespace Montr.Docs.Impl.Services
 
 					foreach (var tag in tags)
 					{
-						if (tag == "DocumentType")
+						// todo: read document type and company number tags from separate table (service)
+						if (tag == SupportedTags.DocumentType)
 						{
-							result.Values[tag] = "CRR"; // todo: read from document
+							documentType ??= await _documentTypeService.Get(document.DocumentTypeUid, cancellationToken);
+
+							result.Values[tag] = documentType.Code;
+						}
+						else if (tag == SupportedTags.Company)
+						{
 						}
 					}
 

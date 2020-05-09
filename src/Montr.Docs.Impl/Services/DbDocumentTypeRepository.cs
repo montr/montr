@@ -20,7 +20,7 @@ namespace Montr.Docs.Impl.Services
 		{
 			_dbContextFactory = dbContextFactory;
 		}
-		
+
 		public async Task<SearchResult<DocumentType>> Search(SearchRequest searchRequest, CancellationToken cancellationToken)
 		{
 			var request = (DocumentTypeSearchRequest)searchRequest ?? throw new ArgumentNullException(nameof(searchRequest));
@@ -28,15 +28,20 @@ namespace Montr.Docs.Impl.Services
 			using (var db = _dbContextFactory.Create())
 			{
 				var query = db.GetTable<DbDocumentType>().AsQueryable();
-				
+
 				if (request.Uid != null)
 				{
 					query = query.Where(x => x.Uid == request.Uid);
 				}
 
+				if (request.Code != null)
+				{
+					query = query.Where(x => x.Code == request.Code);
+				}
+
 				var data = await Materialize(
 					query.Apply(request, x => x.Code, SortOrder.Descending), cancellationToken);
-				
+
 				return new SearchResult<DocumentType>
 				{
 					TotalCount = query.GetTotalCount(request),
@@ -44,7 +49,7 @@ namespace Montr.Docs.Impl.Services
 				};
 			}
 		}
-		
+
 		private static async Task<List<DocumentType>> Materialize(IQueryable<DbDocumentType> query, CancellationToken cancellationToken)
 		{
 			return await query.Select(x => new DocumentType

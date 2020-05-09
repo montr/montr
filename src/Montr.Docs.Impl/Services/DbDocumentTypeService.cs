@@ -48,6 +48,31 @@ namespace Montr.Docs.Impl.Services
 			return result;
 		}
 
+		public async Task<DocumentType> TryGet(Guid uid, CancellationToken cancellationToken)
+		{
+			var result = await _repository.Search(new DocumentTypeSearchRequest
+			{
+				Uid = uid,
+				PageNo = 0,
+				PageSize = 1,
+				SkipPaging = true
+			}, cancellationToken);
+
+			return result.Rows.SingleOrDefault();
+		}
+
+		public async Task<DocumentType> Get(Guid uid, CancellationToken cancellationToken)
+		{
+			var result = await TryGet(uid, cancellationToken);
+
+			if (result == null)
+			{
+				throw new InvalidOperationException($"Document type \"{uid}\" not found.");
+			}
+
+			return result;
+		}
+
 		public async Task<ApiResult> Insert(DocumentType item, CancellationToken cancellationToken)
 		{
 			var itemUid = Guid.NewGuid();
