@@ -22,7 +22,7 @@
 		"react": "^16.13.1",
 		"react-dom": "^16.13.1",
 		"react-i18next": "^11.4.0",
-		"react-router": "^5.1.2",
+		"react-router": "^5.2.0",
 		"react-router-dom": "^5.1.2",
 		"universal-cookie": "^4.0.3"
 	},
