@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { Table, Tag, Divider } from "antd";
 import { PaginationConfig } from "antd/lib/pagination";
 import { SorterResult, SortOrder, ColumnType, TablePaginationConfig } from "antd/lib/table/interface";
-import { Fetcher, NotificationService, MetadataService } from "../services";
+import { Fetcher, NotificationService, MetadataService, DateHelper } from "../services";
 import { IIndexer, IDataColumn, IDataResult, IMenu, IPaging } from "../models";
 import { Constants } from "..";
 import { Icon } from ".";
@@ -126,21 +126,39 @@ export class DataTable<TModel extends IIndexer> extends React.Component<IProps<T
 			}
 
 			if (item.type == "boolean") {
-				render = (text: any, record: TModel, index: number): React.ReactNode => {
+				render = (text: any): React.ReactNode => {
 					return text ? Icon.get("check") : null;
+				};
+			}
+
+			if (item.type == "date") {
+				render = (text: any): React.ReactNode => {
+					return DateHelper.toLocaleDateString(text);
+				};
+			}
+
+			if (item.type == "time") {
+				render = (text: any): React.ReactNode => {
+					return DateHelper.toLocaleTimeString(text);
+				};
+			}
+
+			if (item.type == "datetime") {
+				render = (text: any): React.ReactNode => {
+					return DateHelper.toLocaleDateTimeString(text);
 				};
 			}
 
 			// todo: remove
 			if (item.key == "configCode") {
-				render = (text: any, record: TModel, index: number): React.ReactNode => {
+				render = (text: any): React.ReactNode => {
 					return <Tag color="blue">{text}</Tag>;
 				};
 			}
 
 			// todo: remove
 			if (item.key == "statusCode") {
-				render = (text: any, record: TModel, index: number): React.ReactNode => {
+				render = (text: any): React.ReactNode => {
 					return <Tag color="green">{text}</Tag>;
 				};
 			}

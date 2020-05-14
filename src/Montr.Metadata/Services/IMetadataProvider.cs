@@ -209,9 +209,9 @@ namespace Montr.Metadata.Services
 			{
 				result.Columns = new List<DataColumn>
 				{
-					new DataColumn { Key = "documentNumber", Name = "Номер", UrlProperty = "url", Width = 50 },
-					new DataColumn { Key = "documentDate", Name = "Дата", UrlProperty = "url", Width = 50 },
-					new DataColumn { Key = "direction", Name = "Направление", Width = 50 },
+					new DataColumn { Key = "documentNumber", Name = "Номер", Sortable = true, UrlProperty = "url", Width = 50 },
+					new DataColumn { Key = "documentDate", Name = "Дата", Type = "datetime", Sortable = true, UrlProperty = "url", Width = 100 },
+					new DataColumn { Key = "direction", Name = "Направление", Width = 30 },
 					new DataColumn { Key = "name", Name = "Наименование", Width = 250 },
 					new DataColumn { Key = "configCode", Name = "Тип", Sortable = true, Width = 100 },
 					new DataColumn { Key = "statusCode", Name = "Статус", Sortable = true, Width = 100 },

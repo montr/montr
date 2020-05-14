@@ -4,6 +4,7 @@ export * from "./app-service";
 export * from "./auth-service";
 export * from "./content-service";
 export * from "./data-helper";
+export * from "./date-helper";
 export * from "./fetcher";
 export * from "./locale-string-service";
 export * from "./metadata-service";

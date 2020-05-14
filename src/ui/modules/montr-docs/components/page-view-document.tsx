@@ -5,6 +5,7 @@ import { IDocument } from "../models";
 import { DocumentService } from "../services";
 import { RouteBuilder } from "../module";
 import { TabViewDocumentFields } from "./tab-view-document-fields";
+import { DateHelper } from "@montr-core/services";
 
 interface IRouteProps {
 	uid?: string;
@@ -86,7 +87,7 @@ export default class PageViewDocument extends React.Component<IProps, IState> {
 						</Tabs>
 					}>
 					<Descriptions size="small" column={1}>
-						<Descriptions.Item label="Date">{data.documentDate}</Descriptions.Item>
+						<Descriptions.Item label="Date">{DateHelper.toLocaleDateTimeString(data.documentDate)}</Descriptions.Item>
 						<Descriptions.Item label="Name">{data.name}</Descriptions.Item>
 					</Descriptions>
 				</PageHeader>
