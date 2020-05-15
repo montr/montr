@@ -5,7 +5,6 @@ import { Icon, DesignSelectOptions } from ".";
 import moment from "moment";
 import { DataHelper } from "@montr-core/services";
 
-// todo: rename after migrate to antd 4.0
 export abstract class DataFieldFactory<TField extends IDataField> {
 	private static Map: { [key: string]: DataFieldFactory<IDataField>; } = {};
 

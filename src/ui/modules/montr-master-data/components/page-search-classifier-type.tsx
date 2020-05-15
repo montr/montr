@@ -1,17 +1,17 @@
 import * as React from "react";
-import { Translation } from "react-i18next";
+import { Translation, withTranslation, WithTranslation } from "react-i18next";
 import { Page, PageHeader, Toolbar, DataTable, DataTableUpdateToken, ButtonAdd, ButtonDelete } from "@montr-core/components";
 import { Constants } from "@montr-core/.";
 import { withCompanyContext, CompanyContextProps } from "@montr-kompany/components";
 import { ClassifierBreadcrumb } from ".";
 import { Link } from "react-router-dom";
 import { ClassifierTypeService } from "../services";
-import { NotificationService } from "@montr-core/services";
+import { OperationService } from "@montr-core/services";
 import { IMenu } from "@montr-core/models";
 import { IClassifierGroup } from "../models";
 import { RouteBuilder, Locale } from "../module";
 
-interface IProps extends CompanyContextProps {
+interface IProps extends CompanyContextProps, WithTranslation {
 }
 
 interface IState {
@@ -19,10 +19,10 @@ interface IState {
 	updateTableToken: DataTableUpdateToken;
 }
 
-class _SearchClassifierType extends React.Component<IProps, IState> {
+class WrappedSearchClassifierType extends React.Component<IProps, IState> {
 
+	private _operation = new OperationService();
 	private _classifierTypeService = new ClassifierTypeService();
-	private _notificationService = new NotificationService();
 
 	constructor(props: IProps) {
 		super(props);
@@ -48,18 +48,21 @@ class _SearchClassifierType extends React.Component<IProps, IState> {
 		this.setState({ selectedRowKeys });
 	};
 
-	// todo: show confirm
-	// todo: localize
 	delete = async () => {
-		try {
-			const rowsAffected = await this._classifierTypeService.delete(this.state.selectedRowKeys);
+		const { t } = this.props;
 
-			this._notificationService.success("Выбранные записи удалены. " + rowsAffected);
+		await this._operation.execute(async () => {
+			const result = await this._classifierTypeService.delete(this.state.selectedRowKeys);
 
-			this.refreshTable(true);
-		} catch (error) {
-			this._notificationService.error("Ошибка при удалении данных", error.message);
-		}
+			if (result.success) {
+				this.refreshTable(true);
+			}
+
+			return result;
+		}, {
+			showConfirm: true,
+			confirmTitle: t("operation.confirm.delete.title")
+		});
 	};
 
 	refreshTable = async (resetSelectedRows?: boolean) => {
@@ -105,6 +108,6 @@ class _SearchClassifierType extends React.Component<IProps, IState> {
 	};
 }
 
-const SearchClassifierType = withCompanyContext(_SearchClassifierType);
+const SearchClassifierType = withTranslation()(withCompanyContext(WrappedSearchClassifierType));
 
 export default SearchClassifierType;

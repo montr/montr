@@ -164,7 +164,6 @@ export class AuthService {
 	}
 
 	public onAuthenticated(callback: (user: User) => void): void {
-		// todo: add PR to rename addUserLoaded -> addAuthenticated
 		return this._userManager.events.addUserLoaded((user: User) => {
 			callback(user);
 		});

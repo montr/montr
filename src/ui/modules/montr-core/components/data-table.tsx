@@ -149,14 +149,14 @@ export class DataTable<TModel extends IIndexer> extends React.Component<IProps<T
 				};
 			}
 
-			// todo: remove
+			// todo: add support of custom renderers
 			if (item.key == "configCode") {
 				render = (text: any): React.ReactNode => {
 					return <Tag color="blue">{text}</Tag>;
 				};
 			}
 
-			// todo: remove
+			// todo: add support of custom renderers
 			if (item.key == "statusCode") {
 				render = (text: any): React.ReactNode => {
 					return <Tag color="green">{text}</Tag>;

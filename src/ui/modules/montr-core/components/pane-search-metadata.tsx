@@ -77,7 +77,7 @@ class WrappedPaneSearchMetadata extends React.Component<IProps, IState> {
 		this.refreshTable(false);
 	};
 
-	showDeleteConfirm = async () => {
+	delete = async () => {
 		const { t } = this.props;
 
 		await this._operation.execute(async () => {
@@ -105,7 +105,7 @@ class WrappedPaneSearchMetadata extends React.Component<IProps, IState> {
 
 			<Toolbar clear>
 				<ButtonAdd type="primary" onClick={this.showAddDrawer} />
-				<ButtonDelete onClick={this.showDeleteConfirm} disabled={!selectedRowKeys?.length} />
+				<ButtonDelete onClick={this.delete} disabled={!selectedRowKeys?.length} />
 			</Toolbar>
 
 			<DataTable
