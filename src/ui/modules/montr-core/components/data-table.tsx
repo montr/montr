@@ -85,7 +85,7 @@ export class DataTable<TModel extends IIndexer> extends React.Component<IProps<T
 		await this._metadataService.abort();
 	};
 
-	handleTableChange = async (pagination: PaginationConfig,
+	handleTableChange = async (pagination: TablePaginationConfig,
 		filters: Record<keyof TModel, string[]>, sorter: SorterResult<TModel>) => {
 
 		const { paging } = this.state;
