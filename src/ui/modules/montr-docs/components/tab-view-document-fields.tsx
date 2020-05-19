@@ -30,6 +30,12 @@ export class TabViewDocumentFields extends React.Component<IProps, IState> {
 		await this.fetchData();
 	};
 
+	componentDidUpdate = async (prevProps: IProps) => {
+		if (this.props.data !== prevProps.data) {
+			await this.fetchData();
+		}
+	};
+
 	componentWillUnmount = async () => {
 		await this._documentMetadataService.abort();
 	};
@@ -37,9 +43,11 @@ export class TabViewDocumentFields extends React.Component<IProps, IState> {
 	fetchData = async () => {
 		const { data } = this.props;
 
-		const dataView = await this._documentMetadataService.load(data.documentTypeUid);
+		if (data.documentTypeUid) {
+			const dataView = await this._documentMetadataService.load(data.documentTypeUid);
 
-		this.setState({ loading: false, fields: dataView.fields });
+			this.setState({ loading: false, fields: dataView.fields });
+		}
 	};
 
 	render = () => {
