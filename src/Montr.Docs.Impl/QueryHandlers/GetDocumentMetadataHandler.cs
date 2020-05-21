@@ -46,7 +46,8 @@ namespace Montr.Docs.Impl.QueryHandlers
 			{
 				EntityTypeCode = DocumentType.EntityTypeCode,
 				EntityUid = documentTypeUid,
-				IsActive = true
+				IsActive = true,
+				SkipPaging = true
 			}, cancellationToken);
 
 			var dbFields = new List<string>

@@ -11,6 +11,8 @@ export const Api = {
 };
 
 export const Patterns = {
+	editDocumentType: "/document-types/edit/:uid/:tabKey?",
+
 	searchDocuments: "/documents/",
 	viewDocument: "/documents/view/:uid/:tabKey?",
 	searchProcess: "/processes/",
@@ -23,6 +25,9 @@ export const Views = {
 };
 
 export const RouteBuilder = {
+	editDocumentType: (uid: Guid | string, tabKey?: string) => {
+		return generatePath(Patterns.editDocumentType, { uid: uid.toString(), tabKey });
+	},
 	viewDocument: (uid: Guid | string, tabKey?: string) => {
 		return generatePath(Patterns.viewDocument, { uid: uid.toString(), tabKey });
 	},
@@ -32,6 +37,7 @@ export const RouteBuilder = {
 };
 
 AppRouteRegistry.add([
+	{ path: Patterns.editDocumentType, exact: true, component: React.lazy(() => import("./components/page-edit-document-type")) },
 	{ path: Patterns.searchDocuments, exact: true, component: React.lazy(() => import("./components/page-search-documents")) },
 	{ path: Patterns.viewDocument, exact: true, component: React.lazy(() => import("./components/page-view-document")) },
 	{ path: Patterns.searchProcess, exact: true, component: React.lazy(() => import("./components/page-search-processes")) },

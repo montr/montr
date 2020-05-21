@@ -150,14 +150,29 @@ class WrappedDataForm extends React.Component<IProps, IState> {
 			? (field.type == "boolean" ? FormDefaults.tailFormItemLayout : FormDefaults.formItemLayout)
 			: {};
 
+
+		if (mode == "View") {
+			return (
+				<Form.Item
+					key={field.key}
+					label={hideLabels ? null : field.name}
+					extra={field.description}
+					valuePropName={fieldFactory.valuePropName}
+					rules={[required]}
+					{...itemLayout}>
+					{fieldNode}
+				</Form.Item>
+			);
+		}
+
 		const namePath = field.key.split(".");
 
 		return (
 			<Form.Item
 				key={field.key}
-				name={(mode == "View") ? null : namePath}
+				name={namePath}
 				htmlFor={getFieldId(namePath)} // replace(".", "_")
-				label={hideLabels || (mode != "View" && field.type == "boolean") ? null : field.name}
+				label={hideLabels || (field.type == "boolean") ? null : field.name}
 				extra={field.description}
 				valuePropName={fieldFactory.valuePropName}
 				rules={[required]}

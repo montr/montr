@@ -6,6 +6,8 @@ import { DocumentService } from "../services";
 import { RouteBuilder } from "../module";
 import { TabViewDocumentFields } from "./tab-view-document-fields";
 import { DateHelper } from "@montr-core/services";
+import { Icon } from "@montr-core/components";
+import { Link } from "react-router-dom";
 
 interface IRouteProps {
 	uid?: string;
@@ -64,6 +66,8 @@ export default class PageViewDocument extends React.Component<IProps, IState> {
 		const { uid, tabKey } = this.props.match.params,
 			{ loading, data } = this.state;
 
+		if (!data || !data.documentTypeUid) return null;
+
 		const otherTabsDisabled = !uid;
 
 		return (
@@ -74,8 +78,11 @@ export default class PageViewDocument extends React.Component<IProps, IState> {
 					subTitle={data.configCode}
 					tags={<Tag color="green">{data.statusCode}</Tag>}
 					extra={[
-						<Button key="2">Отклонить</Button>,
 						<Button key="1" type="primary">Допустить</Button>,
+						<Button key="2">Отклонить</Button>,
+						<Link key="3" to={RouteBuilder.editDocumentType(data.documentTypeUid)}>
+							<Button icon={Icon.Setting}> Настроить</Button>
+						</Link>,
 					]}
 					footer={
 						<Tabs size="small" defaultActiveKey={tabKey} onChange={this.handleTabChange}>
