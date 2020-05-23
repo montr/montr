@@ -8,6 +8,7 @@ export * from "./data-form";
 export * from "./data-menu";
 export * from "./data-table";
 export * from "./design-select-options";
+export * from "./empty-field-view";
 export * from "./error-boundary";
 export * from "./footer";
 export * from "./form-defaults";

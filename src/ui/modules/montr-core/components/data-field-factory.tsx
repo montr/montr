@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Input, InputNumber, Select, Checkbox, DatePicker, TimePicker } from "antd";
 import { IDataField, IIndexer, ISelectField, ITextAreaField, INumberField, IDateField, IBooleanField, ITextField, IDesignSelectOptionsField, IPasswordField, ITimeField } from "../models";
-import { Icon, DesignSelectOptions } from ".";
+import { Icon, DesignSelectOptions, EmptyFieldView } from ".";
 import moment from "moment";
 import { DataHelper } from "@montr-core/services";
 
@@ -25,7 +25,9 @@ export abstract class DataFieldFactory<TField extends IDataField> {
 	}
 
 	createViewNode(field: TField, data: IIndexer): React.ReactElement {
-		return DataHelper.indexer(data, field.key, undefined);
+		const value = DataHelper.indexer(data, field.key, undefined);
+
+		return (value != undefined) ? value : <EmptyFieldView />;
 	}
 
 	abstract createEditNode(field: TField, data: IIndexer): React.ReactElement;

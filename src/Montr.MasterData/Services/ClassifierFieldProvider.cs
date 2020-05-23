@@ -14,7 +14,7 @@ namespace Montr.MasterData.Services
 
 			var additionalFields = new List<FieldMetadata>
 			{
-				new SelectClassifierTypeField { Key = PropsPrefix + ".typeCode", Required = true, Name = "Type" }
+				new ClassifierTypeField { Key = PropsPrefix + ".typeCode", Required = true, Name = "Type" }
 			};
 
 			return baseFields.Union(additionalFields).ToList();
@@ -29,7 +29,7 @@ namespace Montr.MasterData.Services
 
 			var additionalFields = new List<FieldMetadata>
 			{
-				new SelectClassifierTypeField { Key = PropsPrefix + ".typeCode", Required = true, Name = "Type" },
+				new ClassifierTypeField { Key = PropsPrefix + ".typeCode", Required = true, Name = "Type" },
 				new TextField { Key = PropsPrefix + ".treeCode", Required = true, Name = "Tree" }
 			};
 

@@ -35,7 +35,7 @@ namespace Montr.MasterData.Impl
 			{
 				options.Registry.AddFieldType(typeof(ClassifierField));
 				options.Registry.AddFieldType(typeof(ClassifierGroupField));
-				options.Registry.AddFieldType(typeof(SelectClassifierTypeField));
+				options.Registry.AddFieldType(typeof(ClassifierTypeField));
 			});
 		}
 	}

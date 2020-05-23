@@ -32,8 +32,8 @@ namespace Montr.MasterData.Models
 		}
 	}
 
-	[FieldType(TypeCode, typeof(DefaultFieldProvider<SelectClassifierTypeField, string>), IsSystem = true)]
-	public class SelectClassifierTypeField : FieldMetadata
+	[FieldType(TypeCode, typeof(DefaultFieldProvider<ClassifierTypeField, string>), IsSystem = true)]
+	public class ClassifierTypeField : FieldMetadata
 	{
 		public const string TypeCode = "select-classifier-type";
 
