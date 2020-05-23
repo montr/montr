@@ -17,6 +17,8 @@ namespace Montr.Messages.Impl
 			services.AddSingleton<IMessageTemplateService, DbMessageTemplateService>();
 			services.AddSingleton<IEmailSender, MailKitEmailSender>();
 			services.AddSingleton<ITemplateRenderer, MustacheTemplateRenderer>();
+
+			services.AddTransient<IMessageTemplateRegistrator, DefaultMessageTemplateRegistrator>();
 		}
 	}
 }

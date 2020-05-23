@@ -1,47 +1,52 @@
 ﻿using System.Collections.Generic;
-using MediatR;
-using Microsoft.Extensions.Logging;
+using System.Threading;
+using System.Threading.Tasks;
+using Montr.Core.Services;
 using Montr.Idx.Impl.CommandHandlers;
-using Montr.Messages.Commands;
 using Montr.Messages.Models;
 using Montr.Messages.Services;
 
 namespace Montr.Idx.Impl.Services
 {
-	public class RegisterMessageTemplateStartupTask : AbstractRegisterMessageTemplateStartupTask
+	public class RegisterMessageTemplateStartupTask : IStartupTask
 	{
-		public RegisterMessageTemplateStartupTask(ILogger<RegisterMessageTemplateStartupTask> logger, IMediator mediator) : base(logger, mediator)
+		private readonly IMessageTemplateRegistrator _registrator;
+
+		public RegisterMessageTemplateStartupTask(IMessageTemplateRegistrator registrator)
 		{
+			_registrator = registrator;
 		}
 
-		protected override IEnumerable<RegisterMessageTemplate> GetCommands()
+		public async Task Run(CancellationToken cancellationToken)
 		{
-			yield return new RegisterMessageTemplate
+			foreach (var item in GetMessageTemplates())
 			{
-				Item = new MessageTemplate
-				{
-					Uid = EmailConfirmationService.TemplateUid,
-					Subject = "📧 Confirm your email",
-					Body = @"
+				await _registrator.Register(item, cancellationToken);
+			}
+		}
+
+		protected IEnumerable<MessageTemplate> GetMessageTemplates()
+		{
+			yield return new MessageTemplate
+			{
+				Uid = EmailConfirmationService.TemplateUid,
+				Subject = "📧 Confirm your email",
+				Body = @"
 ### Hello!
 
 Please confirm your account by clicking here <{{CallbackUrl}}>.
 "
-				}
 			};
 
-			yield return new RegisterMessageTemplate
+			yield return new MessageTemplate
 			{
-				Item = new MessageTemplate
-				{
-					Uid = ForgotPasswordHandler.TemplateUid,
-					Subject = "❗ Reset Password",
-					Body = @"
+				Uid = ForgotPasswordHandler.TemplateUid,
+				Subject = "❗ Reset Password",
+				Body = @"
 ### Hello!
 
 Please reset your password by clicking here <{{CallbackUrl}}>.
 "
-				}
 			};
 		}
 	}

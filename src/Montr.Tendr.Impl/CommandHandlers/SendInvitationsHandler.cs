@@ -47,6 +47,7 @@ namespace Montr.Tendr.Impl.CommandHandlers
 
 			using (var db = _dbContextFactory.Create())
 			{
+				// todo: remove reference to Montr.MasterData.Impl.Entities
 				invitations = await (
 					from e in db.GetTable<DbEvent>()
 					join k in db.GetTable<DbCompany>() on e.CompanyUid equals k.Uid
