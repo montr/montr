@@ -54,7 +54,7 @@
 		"source-map-loader": "^0.2.4",
 		"style-loader": "^1.2.1",
 		"ts-import-plugin": "^1.6.6",
-		"ts-loader": "^7.0.4",
+		"ts-loader": "^7.0.5",
 		"typescript": "^3.9.3",
 		"webpack": "^4.43.0",
 		"webpack-bundle-analyzer": "^3.8.0",
