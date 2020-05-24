@@ -43,7 +43,7 @@ class WrappedDataForm extends React.Component<IProps, IState> {
 		super(props);
 
 		this.state = {
-			loading: false
+			loading: false,
 		};
 	}
 
@@ -147,7 +147,7 @@ class WrappedDataForm extends React.Component<IProps, IState> {
 			: fieldFactory.createEditNode(field, data);
 
 		const itemLayout = (layout == null || layout == "horizontal")
-			? (field.type == "boolean" ? FormDefaults.tailFormItemLayout : FormDefaults.formItemLayout)
+			? (mode != "View" && field.type == "boolean" ? FormDefaults.tailFormItemLayout : FormDefaults.formItemLayout)
 			: {};
 
 
@@ -192,7 +192,10 @@ class WrappedDataForm extends React.Component<IProps, IState> {
 			<Spin spinning={loading}>
 				{fields && <Form
 					ref={this.getFormRef()}
+					colon={false}
+					className={mode == "View" ? "data-form-mode-view" : null}
 					initialValues={data}
+					scrollToFirstError={true}
 					layout={layout || "horizontal"}
 					onValuesChange={this.handleValuesChange}
 					onFinish={this.handleSubmit}>

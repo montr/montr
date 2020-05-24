@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using LinqToDB;
+using MediatR;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Montr.Core.Impl.Services;
 using Montr.Core.Models;
@@ -39,6 +40,8 @@ namespace Montr.Kompany.Tests.CommandHandlers
 			var dbContextFactory = new DefaultDbContextFactory();
 			var dateTimeProvider = new DefaultDateTimeProvider();
 
+			var mediatorMock = new Mock<IMediator>();
+
 			var fieldProviderRegistry = new DefaultFieldProviderRegistry();
 			fieldProviderRegistry.AddFieldType(typeof(TextField));
 
@@ -48,7 +51,7 @@ namespace Montr.Kompany.Tests.CommandHandlers
 			var dbNumberGenerator = new DbNumberGenerator(dbContextFactory, dbNumeratorRepository, dateTimeProvider, new INumberTagResolver[0]);
 			var dbDocumentTypeRepository = new DbDocumentTypeRepository(dbContextFactory);
 			var dbDocumentTypeService = new DbDocumentTypeService(dbContextFactory, dbDocumentTypeRepository);
-			var dbDocumentService = new DbDocumentService(dbContextFactory, dbNumberGenerator);
+			var dbDocumentService = new DbDocumentService(dbContextFactory, dbNumberGenerator, mediatorMock.Object);
 			var jsonSerializer = new DefaultJsonSerializer();
 			var auditLogService = new DbAuditLogService(dbContextFactory, jsonSerializer);
 			var registerDocumentTypeHandler = new RegisterDocumentTypeHandler(unitOfWorkFactory, dbDocumentTypeService);

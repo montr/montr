@@ -66,7 +66,7 @@ namespace Montr.Docs.Impl.Services
 						{
 							documentType ??= await _documentTypeService.Get(document.DocumentTypeUid, cancellationToken);
 
-							result.Values[tag] = documentType.Code;
+							result.Values[tag] = "CRR"; // documentType.Code;
 						}
 						else if (tag == SupportedTags.Company)
 						{

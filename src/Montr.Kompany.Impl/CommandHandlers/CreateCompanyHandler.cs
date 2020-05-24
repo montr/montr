@@ -113,7 +113,7 @@ namespace Montr.Kompany.Impl.CommandHandlers
 					StatusCode = DocumentStatusCode.Published,
 					Direction = DocumentDirection.Outgoing,
 					DocumentDate = now,
-					Name = $"Company {company.Name} registration request"
+					// Name = $"Company {company.Name} registration request"
 				}, cancellationToken);
 
 				// todo: audit log for company and for document

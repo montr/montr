@@ -56,6 +56,14 @@ h2, .ant-modal-header .ant-modal-title, .ant-drawer-title {
 		/* text-transform: uppercase; */
 	}
 
+	.ant-page-header {
+		padding: 0; // temp, remove ant-layout-content padding
+
+		.ant-page-header-heading-title {
+			font-weight: bold;
+		}
+	}
+
 	.ant-layout-content {
 		overflow: initial;
 		padding: 16px 24px;
@@ -150,6 +158,23 @@ h2, .ant-modal-header .ant-modal-title, .ant-drawer-title {
 	overflow: hidden;
 	white-space: nowrap;
 	text-overflow: ellipsis;
+}
+
+.data-form-mode-view {
+	.ant-form-item {
+		margin-bottom: 16px;
+
+		.ant-form-item-control-input {
+			min-height: auto;
+		}
+	}
+}
+
+.ant-form-item-label {
+	label {
+		height: auto;
+		white-space: normal;
+	}
 }
 
 .empty-field {

@@ -3,6 +3,8 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using LinqToDB;
+using MediatR;
+using Montr.Core.Events;
 using Montr.Data.Linq2Db;
 using Montr.Docs.Impl.Entities;
 using Montr.Docs.Models;
@@ -16,11 +18,13 @@ namespace Montr.Docs.Impl.Services
 	{
 		private readonly IDbContextFactory _dbContextFactory;
 		private readonly INumberGenerator _numberGenerator;
+		private readonly IMediator _mediator;
 
-		public DbDocumentService(IDbContextFactory dbContextFactory, INumberGenerator numberGenerator)
+		public DbDocumentService(IDbContextFactory dbContextFactory, INumberGenerator numberGenerator, IMediator mediator)
 		{
 			_dbContextFactory = dbContextFactory;
 			_numberGenerator = numberGenerator;
+			_mediator = mediator;
 		}
 
 		public async Task Create(Document document, CancellationToken cancellationToken)
@@ -45,6 +49,15 @@ namespace Montr.Docs.Impl.Services
 					.InsertAsync(cancellationToken);
 			}
 
+			if (document.StatusCode != DocumentStatusCode.Draft)
+			{
+				await _mediator.Publish(new EntityStatusChanged<Document>
+				{
+					Entity = document,
+					StatusCode = DocumentStatusCode.Draft
+				}, cancellationToken);
+			}
+
 			// todo: generate number, on publish(?)
 			if (document.StatusCode == DocumentStatusCode.Published)
 			{
@@ -64,6 +77,12 @@ namespace Montr.Docs.Impl.Services
 						.UpdateAsync(cancellationToken);
 				}
 			}
+
+			await _mediator.Publish(new EntityStatusChanged<Document>
+			{
+				Entity = document,
+				StatusCode = document.StatusCode
+			}, cancellationToken);
 		}
 	}
 }

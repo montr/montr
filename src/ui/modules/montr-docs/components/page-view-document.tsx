@@ -70,12 +70,15 @@ export default class PageViewDocument extends React.Component<IProps, IState> {
 
 		const otherTabsDisabled = !uid;
 
+		const documentDate = DateHelper.toLocaleDateTimeString(data.documentDate);
+
 		return (
+			/* todo: load subtitle */
 			<Spin spinning={loading}>
 				<PageHeader
 					onBack={() => window.history.back()}
-					title={data.documentNumber}
-					subTitle={data.configCode}
+					title={`${data.documentNumber} от ${documentDate}`}
+					subTitle="Заявка на регистрацию"
 					tags={<Tag color="green">{data.statusCode}</Tag>}
 					extra={[
 						<Button key="1" type="primary">Допустить</Button>,
@@ -83,21 +86,21 @@ export default class PageViewDocument extends React.Component<IProps, IState> {
 						<Link key="3" to={RouteBuilder.editDocumentType(data.documentTypeUid)}>
 							<Button icon={Icon.Setting}> Настроить</Button>
 						</Link>,
-					]}
-					footer={
-						<Tabs size="small" defaultActiveKey={tabKey} onChange={this.handleTabChange}>
-							<Tabs.TabPane key="common" tab="Общая информация">
-							</Tabs.TabPane>
-							<Tabs.TabPane key="fields" tab="Анкета">
-								<TabViewDocumentFields data={data} />
-							</Tabs.TabPane>
-						</Tabs>
-					}>
+					]}>
 					<Descriptions size="small" column={1}>
-						<Descriptions.Item label="Date">{DateHelper.toLocaleDateTimeString(data.documentDate)}</Descriptions.Item>
 						<Descriptions.Item label="Name">{data.name}</Descriptions.Item>
+						<Descriptions.Item label="Number">{data.documentNumber}</Descriptions.Item>
+						<Descriptions.Item label="Date">{DateHelper.toLocaleDateTimeString(data.documentDate)}</Descriptions.Item>
 					</Descriptions>
 				</PageHeader>
+
+				<Tabs size="small" defaultActiveKey={tabKey} onChange={this.handleTabChange}>
+					<Tabs.TabPane key="common" tab="Информация">
+					</Tabs.TabPane>
+					<Tabs.TabPane key="fields" tab="Анкета">
+						<TabViewDocumentFields data={data} />
+					</Tabs.TabPane>
+				</Tabs>
 			</Spin>
 		);
 	};
