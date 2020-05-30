@@ -10,6 +10,10 @@ namespace Montr.Metadata.Services
 
 		Type FieldType { get; }
 
+		/// <summary>
+		/// Get metadata to edit properties of fields of this type.
+		/// </summary>
+		/// <returns></returns>
 		IList<FieldMetadata> GetMetadata();
 
 		// todo:

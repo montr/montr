@@ -24,7 +24,7 @@ namespace Montr.Metadata.Impl.Entities
 
 		[Column(Name = "is_active"), DataType(DataType.Boolean), NotNull]
 		public bool IsActive { get; set; }
-		
+
 		[Column(Name = "name", Length = 128), DataType(DataType.VarChar)]
 		public string Name { get; set; }
 
