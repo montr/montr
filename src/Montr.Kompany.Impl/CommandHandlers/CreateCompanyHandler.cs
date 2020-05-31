@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using LinqToDB;
 using MediatR;
+using Montr.Automate.Models;
 using Montr.Automate.Services;
 using Montr.Core.Models;
 using Montr.Core.Services;
@@ -134,7 +135,12 @@ namespace Montr.Kompany.Impl.CommandHandlers
 				});
 
 				// todo: (через события в фоне) авто-допуск заявки, оповещения для оператора и компании
-				await _automationService.OnChange(DocumentType.EntityTypeCode, documentType.Uid, document, cancellationToken);
+				await _automationService.OnChange(new AutomationContext
+				{
+					EntityTypeCode = DocumentType.EntityTypeCode,
+					EntityTypeUid = documentType.Uid,
+					Entity = document
+				}, cancellationToken);
 
 				scope.Commit();
 

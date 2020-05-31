@@ -7,7 +7,7 @@ namespace Montr.Automate.Impl.Services
 {
 	public class SetFieldAutomationActionProvider : IAutomationActionProvider
 	{
-		public Task Execute(AutomationAction automationAction, object entity, CancellationToken cancellationToken)
+		public Task Execute(AutomationAction automationAction, AutomationContext context, CancellationToken cancellationToken)
 		{
 			throw new System.NotImplementedException();
 		}

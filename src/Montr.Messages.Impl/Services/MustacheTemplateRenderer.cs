@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Markdig;
 using Montr.Core.Services;
 using Montr.Messages.Models;
 using Montr.Messages.Services;
@@ -31,15 +30,22 @@ namespace Montr.Messages.Impl.Services
 				throw new InvalidOperationException($"Template {templateUid} not found.");
 			}
 
+			return await Render(template.Subject, template.Body, data, cancellationToken);
+		}
+
+		public async Task<Message> Render<TModel>(string subject, string body, TModel data, CancellationToken cancellationToken)
+		{
 			var stubble = new StubbleBuilder().Build();
 
-			var subject = await stubble.RenderAsync(template.Subject, data);
-			var body = await stubble.RenderAsync(template.Body, data);
+			var renderedSubject = await stubble.RenderAsync(subject, data);
+			var renderedBody = await stubble.RenderAsync(body, data);
+
+			var renderedHtmlBody = Markdig.Markdown.ToHtml(renderedBody);
 
 			return new Message
 			{
-				Subject = subject,
-				Body = Markdown.ToHtml(body) 
+				Subject = renderedSubject,
+				Body = renderedHtmlBody
 			};
 		}
 	}

@@ -1,14 +1,13 @@
 ﻿using System;
-using Montr.Core.Models;
 
 namespace Montr.Automate.Models
 {
-	public class AutomationSearchRequest : SearchRequest
+	public class AutomationContext
 	{
 		public string EntityTypeCode { get; set; }
 
 		public Guid EntityTypeUid { get; set; }
 
-		public bool? IsActive { get; set; }
+		public object Entity { get; set; }
 	}
 }

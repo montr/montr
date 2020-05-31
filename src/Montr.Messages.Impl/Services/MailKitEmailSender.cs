@@ -24,7 +24,19 @@ namespace Montr.Messages.Impl.Services
 
 			var message = new MimeMessage();
 
-			var to = options.TestMode ? options.TestAddress : email;
+			string to;
+
+			if (options.TestMode)
+			{
+				to = options.TestAddress;
+
+				message.Headers.Add("X-Montr-TestMode", "true");
+				message.Headers.Add("X-Montr-OriginalTo", email);
+			}
+			else
+			{
+				to = email;
+			}
 
 			message.From.Add(MailboxAddress.Parse(options.From));
 			message.To.Add(MailboxAddress.Parse(to));

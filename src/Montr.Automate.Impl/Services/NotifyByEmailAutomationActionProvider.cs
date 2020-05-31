@@ -9,17 +9,21 @@ namespace Montr.Automate.Impl.Services
 	public class NotifyByEmailAutomationActionProvider : IAutomationActionProvider
 	{
 		private readonly IEmailSender _emailSender;
+		private readonly ITemplateRenderer _templateRenderer;
 
-		public NotifyByEmailAutomationActionProvider(IEmailSender emailSender)
+		public NotifyByEmailAutomationActionProvider(IEmailSender emailSender, ITemplateRenderer templateRenderer)
 		{
 			_emailSender = emailSender;
+			_templateRenderer = templateRenderer;
 		}
 
-		public async Task Execute(AutomationAction automationAction, object entity, CancellationToken cancellationToken)
+		public async Task Execute(AutomationAction automationAction, AutomationContext context, CancellationToken cancellationToken)
 		{
 			var action = (NotifyByEmailAutomationAction)automationAction;
 
-			await _emailSender.Send(action.Recipient, action.Subject, action.Body, cancellationToken);
+			var message = await _templateRenderer.Render(action.Subject, action.Body, context.Entity, cancellationToken);
+
+			await _emailSender.Send(action.Recipient, message.Subject, message.Body, cancellationToken);
 		}
 	}
 }

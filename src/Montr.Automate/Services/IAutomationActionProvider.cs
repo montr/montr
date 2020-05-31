@@ -6,6 +6,6 @@ namespace Montr.Automate.Services
 {
 	public interface IAutomationActionProvider
 	{
-		Task Execute(AutomationAction automationAction, object entity, CancellationToken cancellationToken);
+		Task Execute(AutomationAction automationAction, AutomationContext context, CancellationToken cancellationToken);
 	}
 }

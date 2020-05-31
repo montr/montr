@@ -17,7 +17,7 @@ namespace Montr.Automate.Impl.Services
 			var result = new SearchResult<Automation>();
 
 			if (request.EntityTypeCode == "DocumentType" &&
-				request.EntityUid == Guid.Parse("ab770d9f-f723-4468-8807-5df0f6637cca"))
+				request.EntityTypeUid == Guid.Parse("ab770d9f-f723-4468-8807-5df0f6637cca"))
 			{
 				var automation = new Automation
 				{
@@ -37,13 +37,13 @@ namespace Montr.Automate.Impl.Services
 						new NotifyByEmailAutomationAction
 						{
 							Recipient = "operator",
-							Subject = "New company registration request published",
+							Subject = "New company registration request {{DocumentNumber}} published",
 							Body = "New company registration request {{DocumentNumber}} published, please review."
 						},
 						new NotifyByEmailAutomationAction
 						{
 							Recipient = "requester",
-							Subject = "Your company registration request received",
+							Subject = "Your company registration request {{DocumentNumber}} received",
 							Body = "Your company registration request {{DocumentNumber}} received and will be reviewed."
 						}
 					}

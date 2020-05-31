@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Montr.Automate.Models;
@@ -19,32 +18,32 @@ namespace Montr.Automate.Impl.Services
 			_providerRegistry = providerRegistry;
 		}
 
-		public async Task OnChange(string entityTypeCode, Guid entityUid, object entity, CancellationToken cancellationToken)
+		public async Task OnChange(AutomationContext context, CancellationToken cancellationToken)
 		{
 			var automations = await _repository.Search(new AutomationSearchRequest
 			{
-				EntityTypeCode = entityTypeCode,
-				EntityUid = entityUid,
+				EntityTypeCode = context.EntityTypeCode,
+				EntityTypeUid = context.EntityTypeUid,
 				IsActive = true,
 				PageSize = 100
 			}, cancellationToken);
 
 			foreach (var automation in automations.Rows)
 			{
-				if (await MeetConditions(automation, entity, cancellationToken))
+				if (await MeetConditions(automation, context, cancellationToken))
 				{
-					await ExecuteActions(automation, entity, cancellationToken);
+					await ExecuteActions(automation, context, cancellationToken);
 				}
 			}
 		}
 
-		private async Task<bool> MeetConditions(Automation automation, object entity, CancellationToken cancellationToken)
+		private async Task<bool> MeetConditions(Automation automation, AutomationContext context, CancellationToken cancellationToken)
 		{
 			var meetAllConditions = automation.Conditions.Where(x => x.Meet == AutomationConditionMeet.All).ToList();
 
 			foreach (var condition in meetAllConditions)
 			{
-				if (await MeetCondition(condition, entity, cancellationToken) == false)
+				if (await MeetCondition(condition, context, cancellationToken) == false)
 				{
 					return false;
 				}
@@ -58,7 +57,7 @@ namespace Montr.Automate.Impl.Services
 
 				foreach (var condition in meetAnyConditions)
 				{
-					if (await MeetCondition(condition, entity, cancellationToken) == false)
+					if (await MeetCondition(condition, context, cancellationToken) == false)
 					{
 						meetAny = true;
 						break;
@@ -74,20 +73,20 @@ namespace Montr.Automate.Impl.Services
 			return true;
 		}
 
-		private async Task<bool> MeetCondition(AutomationCondition condition, object entity, CancellationToken cancellationToken)
+		private async Task<bool> MeetCondition(AutomationCondition condition, AutomationContext context, CancellationToken cancellationToken)
 		{
 			var provider = _providerRegistry.GetConditionProvider(condition.Type);
 
-			return await provider.Meet(condition, entity, cancellationToken);
+			return await provider.Meet(condition, context, cancellationToken);
 		}
 
-		private async Task ExecuteActions(Automation automation, object entity, CancellationToken cancellationToken)
+		private async Task ExecuteActions(Automation automation, AutomationContext context, CancellationToken cancellationToken)
 		{
 			foreach (var action in automation.Actions)
 			{
 				var provider = _providerRegistry.GetActionProvider(action.Type);
 
-				await provider.Execute(action, entity, cancellationToken);
+				await provider.Execute(action, context, cancellationToken);
 			}
 		}
 	}

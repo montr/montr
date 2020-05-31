@@ -33,7 +33,9 @@ namespace Montr.Docs.Impl.Services
 				document.Uid = Guid.NewGuid();
 
 			if (document.StatusCode == null)
+			{
 				document.StatusCode = DocumentStatusCode.Draft;
+			}
 
 			using (var db = _dbContextFactory.Create())
 			{
@@ -61,7 +63,7 @@ namespace Montr.Docs.Impl.Services
 			// todo: generate number, on publish(?)
 			if (document.StatusCode == DocumentStatusCode.Published)
 			{
-				var documentNumber = await _numberGenerator
+				document.DocumentNumber = await _numberGenerator
 					.GenerateNumber(new GenerateNumberRequest
 					{
 						EntityTypeCode = DocumentType.EntityTypeCode,
@@ -73,7 +75,7 @@ namespace Montr.Docs.Impl.Services
 				{
 					await db.GetTable<DbDocument>()
 						.Where(x => x.Uid == document.Uid)
-						.Set(x => x.DocumentNumber, documentNumber)
+						.Set(x => x.DocumentNumber, document.DocumentNumber)
 						.UpdateAsync(cancellationToken);
 				}
 			}

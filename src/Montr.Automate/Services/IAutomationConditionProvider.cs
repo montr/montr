@@ -6,6 +6,6 @@ namespace Montr.Automate.Services
 {
 	public interface IAutomationConditionProvider
 	{
-		Task<bool> Meet(AutomationCondition automationCondition, object entity, CancellationToken cancellationToken);
+		Task<bool> Meet(AutomationCondition automationCondition, AutomationContext context, CancellationToken cancellationToken);
 	}
 }

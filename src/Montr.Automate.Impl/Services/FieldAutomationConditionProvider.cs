@@ -8,13 +8,13 @@ namespace Montr.Automate.Impl.Services
 {
 	public class FieldAutomationConditionProvider : IAutomationConditionProvider
 	{
-		public Task<bool> Meet(AutomationCondition automationCondition, object entity, CancellationToken cancellationToken)
+		public Task<bool> Meet(AutomationCondition automationCondition, AutomationContext context, CancellationToken cancellationToken)
 		{
 			var result = false;
 
 			var condition = (FieldAutomationCondition)automationCondition;
 
-			var property = entity.GetType().GetProperty(condition.Field);
+			var property = context.Entity.GetType().GetProperty(condition.Field);
 
 			if (property != null)
 			{
@@ -22,7 +22,7 @@ namespace Montr.Automate.Impl.Services
 
 				if (getMethod != null)
 				{
-					var value = Convert.ToString(getMethod.Invoke(entity, null));
+					var value = Convert.ToString(getMethod.Invoke(context.Entity, null));
 
 					var compareResult = string.Compare(value, condition.Value, StringComparison.OrdinalIgnoreCase);
 
