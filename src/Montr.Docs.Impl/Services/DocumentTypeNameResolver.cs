@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Montr.Core.Services;
 using Montr.Docs.Models;
 
-namespace Montr.Docs.Services
+namespace Montr.Docs.Impl.Services
 {
 	public class DocumentTypeNameResolver : IEntityNameResolver
 	{

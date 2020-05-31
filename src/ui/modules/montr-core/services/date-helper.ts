@@ -5,7 +5,7 @@ export class DateHelper {
 			const utcDate = (typeof value === "string") ? new Date(Date.parse(value)) : value;
 
 			const date = new Date(Date.UTC(
-				utcDate.getFullYear(), utcDate.getMonth(), utcDate.getDay(),
+				utcDate.getFullYear(), utcDate.getMonth(), utcDate.getDate(),
 				utcDate.getHours(), utcDate.getMinutes(), utcDate.getSeconds(), utcDate.getMinutes()));
 			return date;
 		}

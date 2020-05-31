@@ -4,8 +4,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Montr.Metadata.Models;
+using Montr.Metadata.Services;
 
-namespace Montr.Metadata.Services
+namespace Montr.Metadata.Impl.Services
 {
 	public class DefaultFieldProviderRegistry : IFieldProviderRegistry
 	{
@@ -30,6 +31,7 @@ namespace Montr.Metadata.Services
 		{
 			var providerType = _providerMap[fieldType];
 
+			// todo: use service locator?
 			return (IFieldProvider)Activator.CreateInstance(providerType);
 		}
 

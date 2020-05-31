@@ -10,6 +10,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Montr.Automate\Montr.Automate.csproj" />
     <ProjectReference Include="..\Montr.Docs\Montr.Docs.csproj" />
     <ProjectReference Include="..\Montr.Kompany\Montr.Kompany.csproj" />
     <ProjectReference Include="..\Montr.Core\Montr.Core.csproj" />

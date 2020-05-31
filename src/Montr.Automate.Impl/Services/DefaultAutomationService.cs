@@ -11,10 +11,12 @@ namespace Montr.Automate.Impl.Services
 	public class DefaultAutomationService : IAutomationService
 	{
 		private readonly IRepository<Automation> _repository;
+		private readonly IAutomationProviderRegistry _providerRegistry;
 
-		public DefaultAutomationService(IRepository<Automation> repository)
+		public DefaultAutomationService(IRepository<Automation> repository, IAutomationProviderRegistry providerRegistry)
 		{
 			_repository = repository;
+			_providerRegistry = providerRegistry;
 		}
 
 		public async Task OnChange(string entityTypeCode, Guid entityUid, object entity, CancellationToken cancellationToken)
@@ -23,6 +25,7 @@ namespace Montr.Automate.Impl.Services
 			{
 				EntityTypeCode = entityTypeCode,
 				EntityUid = entityUid,
+				IsActive = true,
 				PageSize = 100
 			}, cancellationToken);
 
@@ -51,7 +54,7 @@ namespace Montr.Automate.Impl.Services
 
 			if (meetAnyConditions.Count > 0)
 			{
-				bool meetAny = false;
+				var meetAny = false;
 
 				foreach (var condition in meetAnyConditions)
 				{
@@ -73,16 +76,19 @@ namespace Montr.Automate.Impl.Services
 
 		private async Task<bool> MeetCondition(AutomationCondition condition, object entity, CancellationToken cancellationToken)
 		{
-			return await Task.FromResult(true);
+			var provider = _providerRegistry.GetConditionProvider(condition.Type);
+
+			return await provider.Meet(condition, entity, cancellationToken);
 		}
 
 		private async Task ExecuteActions(Automation automation, object entity, CancellationToken cancellationToken)
 		{
 			foreach (var action in automation.Actions)
 			{
-			}
+				var provider = _providerRegistry.GetActionProvider(action.Type);
 
-			await Task.CompletedTask;
+				await provider.Execute(action, entity, cancellationToken);
+			}
 		}
 	}
 }

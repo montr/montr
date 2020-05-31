@@ -53,7 +53,7 @@ namespace Montr.Idx.Impl.Services
 
 			var message = await _templateRenderer.Render(TemplateUid, messageModel, cancellationToken);
 
-			await _emailSender.Send(user.Email, message.Subject, message.Body);
+			await _emailSender.Send(user.Email, message.Subject, message.Body, cancellationToken);
 		}
 
 		public async Task SendConfirmEmailChangeMessage(DbUser user, string newEmail, CancellationToken cancellationToken)
@@ -69,7 +69,7 @@ namespace Montr.Idx.Impl.Services
 
 			var message = await _templateRenderer.Render(TemplateUid, messageModel, cancellationToken);
 
-			await _emailSender.Send(newEmail, message.Subject, message.Body);
+			await _emailSender.Send(newEmail, message.Subject, message.Body, cancellationToken);
 		}
 	}
 }

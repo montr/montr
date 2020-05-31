@@ -56,7 +56,7 @@ namespace Montr.Idx.Impl.CommandHandlers
 
 				var message = await _templateRenderer.Render(TemplateUid, messageModel, cancellationToken);
 
-				await _emailSender.Send(user.Email, message.Subject, message.Body);
+				await _emailSender.Send(user.Email, message.Subject, message.Body, cancellationToken);
 			}
 
 			return new ApiResult { Message = "Please check your email to reset your password." };

@@ -17,7 +17,7 @@ namespace Montr.Metadata.Impl.Entities
 		public System.Guid EntityUid { get; set; }
 
 		/// <summary>
-		/// trigger | schedule (date-based)
+		/// trigger | monitor | schedule (date-based)
 		/// </summary>
 		[Column(Name = "type_code", Length = 32), DataType(DataType.VarChar), NotNull]
 		public string Type { get; set; }

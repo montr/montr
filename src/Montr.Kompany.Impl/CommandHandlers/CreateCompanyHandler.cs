@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using LinqToDB;
 using MediatR;
+using Montr.Automate.Services;
 using Montr.Core.Models;
 using Montr.Core.Services;
 using Montr.Data.Linq2Db;
@@ -26,10 +27,12 @@ namespace Montr.Kompany.Impl.CommandHandlers
 		private readonly IDocumentTypeService _documentTypeRepository;
 		private readonly IDocumentService _documentRepository;
 		private readonly IAuditLogService _auditLogService;
+		private readonly IAutomationService _automationService;
 
 		public CreateCompanyHandler(IUnitOfWorkFactory unitOfWorkFactory, IDbContextFactory dbContextFactory,
 			IDateTimeProvider dateTimeProvider, IRepository<FieldMetadata> fieldMetadataRepository, IFieldDataRepository fieldDataRepository,
-			IDocumentTypeService documentTypeRepository, IDocumentService documentRepository, IAuditLogService auditLogService)
+			IDocumentTypeService documentTypeRepository, IDocumentService documentRepository, IAuditLogService auditLogService,
+			IAutomationService automationService)
 		{
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_dbContextFactory = dbContextFactory;
@@ -39,6 +42,7 @@ namespace Montr.Kompany.Impl.CommandHandlers
 			_documentTypeRepository = documentTypeRepository;
 			_documentRepository = documentRepository;
 			_auditLogService = auditLogService;
+			_automationService = automationService;
 		}
 
 		public async Task<ApiResult> Handle(CreateCompany request, CancellationToken cancellationToken)
@@ -105,7 +109,7 @@ namespace Montr.Kompany.Impl.CommandHandlers
 				// todo: user roles
 
 				// company registration request + todo: creation date
-				await _documentRepository.Create(new Document
+				var document = new Document
 				{
 					Uid = documentUid,
 					DocumentTypeUid = documentType.Uid,
@@ -114,7 +118,9 @@ namespace Montr.Kompany.Impl.CommandHandlers
 					Direction = DocumentDirection.Outgoing,
 					DocumentDate = now,
 					// Name = $"Company {company.Name} registration request"
-				}, cancellationToken);
+				};
+
+				await _documentRepository.Create(document, cancellationToken);
 
 				// todo: audit log for company and for document
 				await _auditLogService.Save(new AuditEvent
@@ -128,6 +134,7 @@ namespace Montr.Kompany.Impl.CommandHandlers
 				});
 
 				// todo: (через события в фоне) авто-допуск заявки, оповещения для оператора и компании
+				await _automationService.OnChange(DocumentType.EntityTypeCode, documentType.Uid, document, cancellationToken);
 
 				scope.Commit();
 

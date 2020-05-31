@@ -5,6 +5,7 @@ namespace Montr.Core.Services
 {
 	/// <summary>
 	/// Task executed before application start.
+	/// todo: ove all startup tasks to impl, like RegisterMessageTemplateStartupTask
 	/// </summary>
 	public interface IStartupTask
 	{

@@ -1,9 +1,10 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 
 namespace Montr.Messages.Services
 {
 	public interface IEmailSender
 	{
-		Task Send(string email, string subject, string message);
+		Task Send(string email, string subject, string message, CancellationToken cancellationToken);
 	}
 }

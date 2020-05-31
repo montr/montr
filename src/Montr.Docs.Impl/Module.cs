@@ -20,6 +20,8 @@ namespace Montr.Docs.Impl
 			services.AddSingleton<IDocumentService, DbDocumentService>();
 
 			services.AddTransient<INumberTagResolver, DocumentNumberTagResolver>();
+
+			services.AddNamedTransient<IEntityNameResolver, DocumentTypeNameResolver>(DocumentType.EntityTypeCode);
 		}
 	}
 }

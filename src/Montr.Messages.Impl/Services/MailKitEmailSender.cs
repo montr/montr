@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using MailKit.Net.Smtp;
 using MailKit.Security;
 using Microsoft.Extensions.Options;
@@ -17,7 +18,7 @@ namespace Montr.Messages.Impl.Services
 			_options = options;
 		}
 
-		public async Task Send(string email, string subject, string text)
+		public async Task Send(string email, string subject, string text, CancellationToken cancellationToken)
 		{
 			var options = _options.CurrentValue;
 
@@ -36,12 +37,12 @@ namespace Montr.Messages.Impl.Services
 				client.ServerCertificateValidationCallback = (s, c, h, e) => true;
 
 				await client.ConnectAsync(options.Host, options.Port,
-					options.UseSsl ? SecureSocketOptions.StartTls : SecureSocketOptions.Auto);
+					options.UseSsl ? SecureSocketOptions.StartTls : SecureSocketOptions.Auto, cancellationToken);
 
-				await client.AuthenticateAsync(options.UserName, options.Password);
+				await client.AuthenticateAsync(options.UserName, options.Password, cancellationToken);
 
-				await client.SendAsync(message);
-				await client.DisconnectAsync(true);
+				await client.SendAsync(message, cancellationToken);
+				await client.DisconnectAsync(true, cancellationToken);
 			}
 		}
 	}

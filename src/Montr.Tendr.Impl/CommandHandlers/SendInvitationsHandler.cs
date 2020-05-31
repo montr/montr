@@ -73,7 +73,7 @@ namespace Montr.Tendr.Impl.CommandHandlers
 				var message = await _templateRenderer.Render(TemplateUid, invitation, cancellationToken);
 
 				// todo: send as separate task
-				await _emailSender.Send(invitation.Email, message.Subject, message.Body);
+				await _emailSender.Send(invitation.Email, message.Subject, message.Body, cancellationToken);
 			}
 
 			return new ApiResult { AffectedRows = invitations.Count };
