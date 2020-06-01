@@ -15,6 +15,7 @@ namespace Montr.Automate.Impl
 		{
 			services.AddSingleton<IAutomationProviderRegistry, DefaultAutomationProviderRegistry>();
 			services.AddSingleton<IAutomationService, DefaultAutomationService>();
+			services.AddSingleton<IRecipientResolver, DefaultRecipientResolver>();
 
 			services.AddTransient<IRepository<Automation>, DbAutomationRepository>();
 

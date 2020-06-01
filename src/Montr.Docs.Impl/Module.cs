@@ -1,5 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Montr.Automate.Services;
 using Montr.Core;
 using Montr.Core.Services;
 using Montr.Docs.Impl.Services;
@@ -21,6 +22,7 @@ namespace Montr.Docs.Impl
 
 			services.AddTransient<INumberTagResolver, DocumentNumberTagResolver>();
 
+			services.AddNamedTransient<IRecipientResolver, DocumentRecipientResolver>(DocumentType.EntityTypeCode);
 			services.AddNamedTransient<IEntityNameResolver, DocumentTypeNameResolver>(DocumentType.EntityTypeCode);
 		}
 	}

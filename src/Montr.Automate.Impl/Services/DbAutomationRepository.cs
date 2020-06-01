@@ -37,14 +37,14 @@ namespace Montr.Automate.Impl.Services
 						new NotifyByEmailAutomationAction
 						{
 							Recipient = "operator",
-							Subject = "New company registration request {{DocumentNumber}} published",
-							Body = "New company registration request {{DocumentNumber}} published, please review."
+							Subject = "New company registration request {{DocumentNumber}} from {{DocumentDate}} published",
+							Body = "New company registration request {{DocumentNumber}} from {{DocumentDate}} published, please review."
 						},
 						new NotifyByEmailAutomationAction
 						{
 							Recipient = "requester",
-							Subject = "Your company registration request {{DocumentNumber}} received",
-							Body = "Your company registration request {{DocumentNumber}} received and will be reviewed."
+							Subject = "Your company registration request {{DocumentNumber}} from {{DocumentDate}} received",
+							Body = "Your company registration request {{DocumentNumber}} from {{DocumentDate}} received and will be reviewed."
 						}
 					}
 				};

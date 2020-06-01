@@ -31,6 +31,11 @@ namespace Montr.Idx.Impl.Services
 					from user in db.GetTable<DbUser>()
 					select user;
 
+				if (request.UserName != null)
+				{
+					query = query.Where(x => x.UserName == request.UserName);
+				}
+
 				var data = await Materialize(
 					query.Apply(request, x => x.UserName), cancellationToken);
 
