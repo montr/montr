@@ -1,6 +1,6 @@
 import React from "react";
 import { RouteComponentProps } from "react-router";
-import { Page, PaneSearchMetadata } from "@montr-core/components";
+import { Page, PaneSearchMetadata, PaneSearchAutomation } from "@montr-core/components";
 import { Spin, Tabs } from "antd";
 import { RouteBuilder } from "../module";
 
@@ -46,6 +46,9 @@ export default class PageEditDocumentType extends React.Component<IProps, IState
 					<Tabs size="small" defaultActiveKey={tabKey} onChange={this.handleTabChange}>
 						<Tabs.TabPane key="fields" tab="Поля">
 							<PaneSearchMetadata entityTypeCode={`DocumentType`} entityUid={uid} />
+						</Tabs.TabPane>
+						<Tabs.TabPane key="automation" tab="Automation">
+							<PaneSearchAutomation entityTypeCode={`DocumentType`} entityTypeUid={uid} />
 						</Tabs.TabPane>
 					</Tabs>
 				</Spin>

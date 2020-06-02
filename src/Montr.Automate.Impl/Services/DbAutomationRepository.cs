@@ -21,7 +21,8 @@ namespace Montr.Automate.Impl.Services
 			{
 				var automation = new Automation
 				{
-					IsActive = true,
+					Name = "Рассылка уведомлений на публикацию",
+					Active = true,
 					Conditions = new List<AutomationCondition>
 					{
 						new FieldAutomationCondition

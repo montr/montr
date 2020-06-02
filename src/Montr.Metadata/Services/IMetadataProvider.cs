@@ -32,6 +32,18 @@ namespace Montr.Metadata.Services
 
 			var result = new DataView { Id = viewId };
 
+			if (viewId == "Automation/Grid")
+			{
+				result.Columns = new List<DataColumn>
+				{
+					new DataColumn { Key = "displayOrder", Name = "#", Width = 10, Sortable = true },
+					new DataColumn { Key = "name", Name = "Name", Width = 150, Sortable = true },
+					new DataColumn { Key = "description", Name = "Description", Width = 150 },
+					new DataColumn { Key = "active", Name = "Active", Width = 10, Sortable = true, Type = BooleanField.TypeCode },
+					new DataColumn { Key = "system", Name = "System", Width = 10, Sortable = true, Type = BooleanField.TypeCode },
+				};
+			}
+
 			if (viewId == "Metadata/Grid")
 			{
 				result.Columns = new List<DataColumn>

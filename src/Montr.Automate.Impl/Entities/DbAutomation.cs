@@ -2,19 +2,19 @@
 using LinqToDB;
 using LinqToDB.Mapping;
 
-namespace Montr.Metadata.Impl.Entities
+namespace Montr.Automate.Impl.Entities
 {
 	[Table(Schema = "montr", Name = "automation")]
 	public class DbAutomation
 	{
 		[Column(Name = "uid"), DataType(DataType.Guid), NotNull, PrimaryKey, Identity]
-		public System.Guid Uid { get; set; }
+		public Guid Uid { get; set; }
 
 		[Column(Name = "entity_type_code", Length = 32), DataType(DataType.VarChar), NotNull]
 		public string EntityTypeCode { get; set; }
 
 		[Column(Name = "entity_uid"), DataType(DataType.Guid), NotNull]
-		public System.Guid EntityUid { get; set; }
+		public Guid EntityUid { get; set; }
 
 		/// <summary>
 		/// trigger | monitor | schedule (date-based)
@@ -32,16 +32,16 @@ namespace Montr.Metadata.Impl.Entities
 		public string Description { get; set; }
 
 		[Column(Name = "created_by"), DataType(DataType.Guid)]
-		public System.Guid CreatedBy { get; set; }
+		public Guid CreatedBy { get; set; }
 
 		[Column(Name = "created_at_utc"), DataType(DataType.DateTime2)]
-		public System.DateTime CreatedAtUtc { get; set; }
+		public DateTime CreatedAtUtc { get; set; }
 
 		[Column(Name = "modified_by"), DataType(DataType.Guid)]
-		public System.Guid ModifiedBy { get; set; }
+		public Guid ModifiedBy { get; set; }
 
 		[Column(Name = "modified_at_utc"), DataType(DataType.DateTime2)]
-		public System.DateTime ModifiedAtUtc { get; set; }
+		public DateTime ModifiedAtUtc { get; set; }
 	}
 
 	[Table(Schema = "montr", Name = "automation_condition")]

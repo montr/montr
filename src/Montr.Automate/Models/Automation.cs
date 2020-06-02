@@ -1,10 +1,17 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace Montr.Automate.Models
 {
 	public class Automation
 	{
-		public bool IsActive { get; set; }
+		public Guid Uid { get; set; }
+
+		public string Name { get; set; }
+
+		public string Description { get; set; }
+
+		public bool Active { get; set; }
 
 		public IList<AutomationCondition> Conditions { get; set; }
 
