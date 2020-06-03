@@ -150,7 +150,6 @@ class WrappedDataForm extends React.Component<IProps, IState> {
 			? (mode != "View" && field.type == "boolean" ? FormDefaults.tailFormItemLayout : FormDefaults.formItemLayout)
 			: {};
 
-
 		if (mode == "View") {
 			return (
 				<Form.Item

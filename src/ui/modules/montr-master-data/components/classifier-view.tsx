@@ -20,7 +20,6 @@ export class ClassifierView extends React.Component<IProps, IState> {
 
 	static getDerivedStateFromProps(nextProps: any) {
 		// Should be a controlled component.
-		console.log(nextProps);
 		if ("value" in nextProps) {
 			return nextProps.value ?? null;
 		}
@@ -46,7 +45,7 @@ export class ClassifierView extends React.Component<IProps, IState> {
 
 		const value = DataHelper.indexer(data, field.key, undefined);
 
-		const item = await this._classifierService.get(field.props.typeCode, value);
+		const item = value ? await this._classifierService.get(field.props.typeCode, value) : null;
 
 		this.setState({ loading: false, item });
 	};

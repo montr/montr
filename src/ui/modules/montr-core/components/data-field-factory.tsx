@@ -87,12 +87,24 @@ class SelectFieldFactory extends DataFieldFactory<ISelectField> {
 		return <Select
 			// allowClear
 			showSearch
-			placeholder={field.placeholder}
+			placeholder={field?.placeholder}
 			style={{ minWidth: 200, width: "auto" }}>
 			{props?.options.map(x => {
 				return <Select.Option key={x.value} value={x.value}>{x.name || x.value}</Select.Option>;
 			})}
 		</Select>;
+	}
+
+	createViewNode(field: ISelectField, data: IIndexer): React.ReactElement {
+		const value = DataHelper.indexer(data, field.key, undefined);
+
+		const option = field.props.options.find(x => x.value == value);
+
+		if (option) {
+			return <>{option.name}</>;
+		}
+
+		return (value) ? value : <EmptyFieldView />;
 	}
 }
 
@@ -119,7 +131,7 @@ class DateFieldFactory extends DataFieldFactory<IDateField> {
 	}
 
 	formatValue(field: IDateField, data: IIndexer, value: any): any {
-		return moment.parseZone(value);
+		return value ? moment.parseZone(value) : null;
 	}
 
 	createEditNode(field: IDateField, data: IIndexer): React.ReactElement {
@@ -132,16 +144,24 @@ class DateFieldFactory extends DataFieldFactory<IDateField> {
 			placeholder={field.placeholder}
 		/>;
 	}
+
+	createViewNode(field: IDateField, data: IIndexer): React.ReactElement {
+		const value = DataHelper.indexer(data, field.key, undefined);
+
+		return (value != undefined)
+			? value.format(field.props.includeTime ? "LLL" : "L")
+			: <EmptyFieldView />;
+	}
 }
 
-class TimeFieldFactory extends DataFieldFactory<ITimeField> {
+/* class TimeFieldFactory extends DataFieldFactory<ITimeField> {
 	constructor() {
 		super();
 		this.shouldFormatValue = true;
 	}
 
 	formatValue(field: ITimeField, data: IIndexer, value: any): any {
-		return moment.parseZone(value, "HH:mm:ss");
+		return value ? moment.parseZone(value, "HH:mm:ss") : null;
 	}
 
 	createEditNode(field: ITimeField, data: IIndexer): React.ReactElement {
@@ -151,7 +171,15 @@ class TimeFieldFactory extends DataFieldFactory<ITimeField> {
 			placeholder={field.placeholder}
 		/>;
 	}
-}
+
+	createViewNode(field: ITimeField, data: IIndexer): React.ReactElement {
+		const value = DataHelper.indexer(data, field.key, undefined);
+
+		return (value != undefined)
+			? value.format("LTS")
+			: <EmptyFieldView />;
+	}
+} */
 
 DataFieldFactory.register("boolean", new BooleanFieldFactory());
 DataFieldFactory.register("number", new NumberFieldFactory());
@@ -161,4 +189,4 @@ DataFieldFactory.register("select", new SelectFieldFactory());
 DataFieldFactory.register("select-options", new DesignSelectOptionsFieldFactory());
 DataFieldFactory.register("password", new PasswordFieldFactory());
 DataFieldFactory.register("date", new DateFieldFactory());
-DataFieldFactory.register("time", new TimeFieldFactory());
+// DataFieldFactory.register("time", new TimeFieldFactory());
