@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Input, InputNumber, Select, Checkbox, DatePicker, TimePicker } from "antd";
+import { Input, InputNumber, Select, Checkbox, DatePicker } from "antd";
 import { IDataField, IIndexer, ISelectField, ITextAreaField, INumberField, IDateField, IBooleanField, ITextField, IDesignSelectOptionsField, IPasswordField, ITimeField } from "../models";
 import { Icon, DesignSelectOptions, EmptyFieldView } from ".";
 import moment from "moment";

@@ -1,5 +1,4 @@
 import * as React from "react";
-import { Drawer } from "antd";
 import { Toolbar } from "./toolbar";
 import { IDataField, IDataResult, Guid } from "../models";
 import { MetadataService, OperationService } from "../services";
@@ -13,7 +12,7 @@ interface IProps extends WithTranslation {
 }
 
 interface IState {
-	showDrawer?: boolean;
+	showPane?: boolean;
 	editUid?: Guid;
 	selectedRowKeys?: string[] | number[];
 	updateTableToken?: DataTableUpdateToken;
@@ -60,20 +59,20 @@ class WrappedPaneSearchMetadata extends React.Component<IProps, IState> {
 		});
 	};
 
-	showAddDrawer = () => {
-		this.setState({ showDrawer: true, editUid: null });
+	showAddPane = () => {
+		this.setState({ showPane: true, editUid: null });
 	};
 
-	showEditDrawer = (data: IDataField) => {
-		this.setState({ showDrawer: true, editUid: data?.uid });
+	showEditPane = (data: IDataField) => {
+		this.setState({ showPane: true, editUid: data?.uid });
 	};
 
-	closeDrawer = () => {
-		this.setState({ showDrawer: false });
+	closePane = () => {
+		this.setState({ showPane: false });
 	};
 
 	handleSuccess = () => {
-		this.setState({ showDrawer: false });
+		this.setState({ showPane: false });
 		this.refreshTable(false);
 	};
 
@@ -99,18 +98,18 @@ class WrappedPaneSearchMetadata extends React.Component<IProps, IState> {
 
 	render = () => {
 		const { entityTypeCode, entityUid } = this.props,
-			{ showDrawer, editUid, selectedRowKeys, updateTableToken } = this.state;
+			{ showPane, editUid, selectedRowKeys, updateTableToken } = this.state;
 
 		return (<Translation>{(t) => <>
 
 			<Toolbar clear>
-				<ButtonAdd type="primary" onClick={this.showAddDrawer} />
+				<ButtonAdd type="primary" onClick={this.showAddPane} />
 				<ButtonDelete onClick={this.delete} disabled={!selectedRowKeys?.length} />
 			</Toolbar>
 
 			<DataTable
 				rowKey="uid"
-				rowActions={[{ name: t("button.edit"), onClick: this.showEditDrawer }]}
+				rowActions={[{ name: t("button.edit"), onClick: this.showEditPane }]}
 				viewId={`Metadata/Grid`}
 				loadUrl={`${Constants.apiURL}/metadata/list/`}
 				onLoadData={this.onLoadTableData}
@@ -119,22 +118,14 @@ class WrappedPaneSearchMetadata extends React.Component<IProps, IState> {
 				skipPaging={true}
 			/>
 
-			{showDrawer &&
-				// todo: move drawer to pane-edit-metadata (?)
-				<Drawer
-					title="Metadata"
-					closable={true}
-					onClose={this.closeDrawer}
-					visible={true}
-					width={720}
-					bodyStyle={{ paddingBottom: "80px" }}>
-					<PaneEditMetadata
-						entityTypeCode={entityTypeCode}
-						entityUid={entityUid}
-						uid={editUid}
-						onSuccess={this.handleSuccess}
-					/>
-				</Drawer>}
+			{showPane &&
+				<PaneEditMetadata
+					entityTypeCode={entityTypeCode}
+					entityUid={entityUid}
+					uid={editUid}
+					onSuccess={this.handleSuccess}
+					onClose={this.closePane}
+				/>}
 
 		</>}</Translation>);
 	};

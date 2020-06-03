@@ -2,7 +2,7 @@ import React from "react";
 import { DataForm, ButtonSave, Icon } from ".";
 import { MetadataService, DataHelper } from "../services";
 import { IDataField, IApiResult, Guid } from "../models";
-import { Spin, Button, Popover, Switch, List } from "antd";
+import { Spin, Button, Popover, Switch, List, Drawer } from "antd";
 import { Toolbar } from "./toolbar";
 import { ButtonCancel } from "./buttons";
 import { FormInstance } from "antd/lib/form";
@@ -12,6 +12,7 @@ interface IProps {
 	entityUid: Guid | string;
 	uid?: Guid;
 	onSuccess?: () => void;
+	onClose?: () => void;
 }
 
 interface IState {
@@ -166,33 +167,43 @@ export class PaneEditMetadata extends React.Component<IProps, IState> {
 	};
 
 	render = () => {
-		const { loading, typeFields, visibleFields, optionalFields, typeData, data } = this.state;
+		const { onClose } = this.props,
+			{ loading, typeFields, visibleFields, optionalFields, typeData, data } = this.state;
 
 		return (<>
 			<Spin spinning={loading}>
+				<Drawer
+					title="Metadata"
+					closable={true}
+					onClose={onClose}
+					visible={true}
+					width={720}
+					footer={
+						<Toolbar clear size="small" float="right">
+							<Popover content={this.renderPopover(optionalFields)} trigger="click" placement="topLeft">
+								<Button type="link" icon={Icon.Setting} />
+							</Popover>
+							<ButtonCancel onClick={onClose} />
+							<ButtonSave onClick={this.handleSubmitClick} />
+						</Toolbar>}
+				>
 
-				<DataForm
-					showControls={false}
-					fields={typeFields}
-					data={typeData}
-					onChange={this.handleTypeChange} />
+					<DataForm
+						showControls={false}
+						fields={typeFields}
+						data={typeData}
+						onChange={this.handleTypeChange} />
 
-				<DataForm
-					formRef={this._formRef}
-					showControls={false}
-					fields={visibleFields}
-					data={data}
-					onSubmit={this.handleSubmit} />
+					<DataForm
+						formRef={this._formRef}
+						showControls={false}
+						fields={visibleFields}
+						data={data}
+						onSubmit={this.handleSubmit} />
 
+
+				</Drawer>
 			</Spin>
-
-			<Toolbar clear size="small" float="bottom">
-				<Popover content={this.renderPopover(optionalFields)} trigger="click" placement="topLeft">
-					<Button type="link" icon={Icon.Setting} />
-				</Popover>
-				<ButtonSave onClick={this.handleSubmitClick} />
-			</Toolbar>
-
 		</>);
 	};
 }
