@@ -32,8 +32,7 @@ namespace Montr.Metadata.Impl.Services
 
 			using (var db = _dbContextFactory.Create())
 			{
-				var query = db
-					.GetTable<DbFieldMetadata>()
+				var query = db.GetTable<DbFieldMetadata>()
 					.Where(x => x.EntityTypeCode == request.EntityTypeCode &&
 								x.EntityUid == request.EntityUid);
 
@@ -42,14 +41,14 @@ namespace Montr.Metadata.Impl.Services
 					query = query.Where(x => x.Uid == request.Uid);
 				}
 
-				if (request.IsSystem != null)
-				{
-					query = query.Where(x => x.IsSystem == request.IsSystem);
-				}
-
 				if (request.IsActive != null)
 				{
 					query = query.Where(x => x.IsActive == request.IsActive);
+				}
+
+				if (request.IsSystem != null)
+				{
+					query = query.Where(x => x.IsSystem == request.IsSystem);
 				}
 
 				var paged = query.Apply(request, x => x.DisplayOrder);

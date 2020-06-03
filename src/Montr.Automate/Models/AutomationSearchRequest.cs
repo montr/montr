@@ -9,6 +9,10 @@ namespace Montr.Automate.Models
 
 		public Guid EntityTypeUid { get; set; }
 
+		public Guid? Uid { get; set; }
+
 		public bool? IsActive { get; set; }
+
+		public bool? IsSystem { get; set; }
 	}
 }

@@ -13,23 +13,29 @@ namespace Montr.Automate.Impl.Entities
 		[Column(Name = "entity_type_code", Length = 32), DataType(DataType.VarChar), NotNull]
 		public string EntityTypeCode { get; set; }
 
-		[Column(Name = "entity_uid"), DataType(DataType.Guid), NotNull]
-		public Guid EntityUid { get; set; }
+		[Column(Name = "entity_type_uid"), DataType(DataType.Guid), NotNull]
+		public Guid EntityTypeUid { get; set; }
 
 		/// <summary>
 		/// trigger | monitor | schedule (date-based)
 		/// </summary>
 		[Column(Name = "type_code", Length = 32), DataType(DataType.VarChar), NotNull]
-		public string Type { get; set; }
+		public string TypeCode { get; set; }
 
-		[Column(Name = "is_active"), DataType(DataType.Boolean), NotNull]
-		public bool IsActive { get; set; }
+		[Column(Name = "display_order"), DataType(DataType.Int32), NotNull]
+		public int DisplayOrder { get; set; }
 
 		[Column(Name = "name", Length = 128), DataType(DataType.VarChar)]
 		public string Name { get; set; }
 
 		[Column(Name = "description"), DataType(DataType.VarChar)]
 		public string Description { get; set; }
+
+		[Column(Name = "is_active"), DataType(DataType.Boolean), NotNull]
+		public bool IsActive { get; set; }
+
+		[Column(Name = "is_system"), DataType(DataType.Boolean), NotNull]
+		public bool IsSystem { get; set; }
 
 		[Column(Name = "created_by"), DataType(DataType.Guid)]
 		public Guid CreatedBy { get; set; }

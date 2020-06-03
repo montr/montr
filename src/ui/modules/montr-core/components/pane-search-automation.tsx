@@ -1,8 +1,8 @@
 import React from "react";
 import { withTranslation, WithTranslation, Translation } from "react-i18next";
-import { DataTableUpdateToken, Toolbar, ButtonAdd, ButtonDelete, DataTable } from ".";
-import { Guid, IDataResult } from "../models";
-import { OperationService, Fetcher } from "../services";
+import { DataTableUpdateToken, Toolbar, ButtonAdd, ButtonDelete, DataTable, PaneEditAutomation } from ".";
+import { Guid, IDataResult, IAutomation } from "../models";
+import { OperationService, AutomationService } from "../services";
 import { Constants } from "..";
 
 interface IProps extends WithTranslation {
@@ -11,7 +11,7 @@ interface IProps extends WithTranslation {
 }
 
 interface IState {
-	showDrawer?: boolean;
+	showPane?: boolean;
 	editUid?: Guid;
 	selectedRowKeys?: string[] | number[];
 	updateTableToken?: DataTableUpdateToken;
@@ -20,7 +20,7 @@ interface IState {
 class WrappedPaneSearchAutomation extends React.Component<IProps, IState> {
 
 	private _operation = new OperationService();
-	private _fetcher = new Fetcher();
+	private _automationService = new AutomationService();
 
 	constructor(props: IProps) {
 		super(props);
@@ -33,7 +33,7 @@ class WrappedPaneSearchAutomation extends React.Component<IProps, IState> {
 	};
 
 	componentWillUnmount = async () => {
-		await this._fetcher.abort();
+		await this._automationService.abort();
 	};
 
 	onLoadTableData = async (loadUrl: string, postParams: any): Promise<IDataResult<{}>> => {
@@ -41,7 +41,7 @@ class WrappedPaneSearchAutomation extends React.Component<IProps, IState> {
 
 		const params = { entityTypeCode, entityTypeUid, ...postParams };
 
-		return await this._fetcher.post(loadUrl, params);
+		return await this._automationService.post(loadUrl, params);
 	};
 
 	onSelectionChange = async (selectedRowKeys: string[] | number[]) => {
@@ -58,20 +58,57 @@ class WrappedPaneSearchAutomation extends React.Component<IProps, IState> {
 		});
 	};
 
+	showAddPane = () => {
+		this.setState({ showPane: true, editUid: null });
+	};
+
+	showEditPane = (data: IAutomation) => {
+		this.setState({ showPane: true, editUid: data?.uid });
+	};
+
+	closePane = () => {
+		this.setState({ showPane: false });
+	};
+
+	handleSuccess = () => {
+		this.setState({ showPane: false });
+		this.refreshTable(false);
+	};
+
+	delete = async () => {
+		const { t } = this.props;
+
+		await this._operation.execute(async () => {
+			const { entityTypeCode, entityTypeUid } = this.props,
+				{ selectedRowKeys } = this.state;
+
+			const result = await this._automationService.delete({ entityTypeCode, entityTypeUid, uids: selectedRowKeys });
+
+			if (result.success) {
+				this.refreshTable(false, true);
+			}
+
+			return result;
+		}, {
+			showConfirm: true,
+			confirmTitle: t("operation.confirm.delete.title")
+		});
+	};
+
 	render = () => {
 		const { entityTypeCode, entityTypeUid } = this.props,
-			{ showDrawer, editUid, selectedRowKeys, updateTableToken } = this.state;
+			{ showPane, editUid, selectedRowKeys, updateTableToken } = this.state;
 
 		return (<Translation>{(t) => <>
 
 			<Toolbar clear>
-				<ButtonAdd type="primary" /* onClick={this.showAddDrawer} */ />
-				<ButtonDelete /* onClick={this.delete} */ disabled={!selectedRowKeys?.length} />
+				<ButtonAdd type="primary" onClick={this.showAddPane} />
+				<ButtonDelete onClick={this.delete} disabled={!selectedRowKeys?.length} />
 			</Toolbar>
 
 			<DataTable
 				rowKey="uid"
-				rowActions={[{ name: t("button.edit")/* , onClick: this.showEditDrawer */ }]}
+				rowActions={[{ name: t("button.edit"), onClick: this.showEditPane }]}
 				viewId={`Automation/Grid`}
 				loadUrl={`${Constants.apiURL}/automation/list/`}
 				onLoadData={this.onLoadTableData}
@@ -80,22 +117,14 @@ class WrappedPaneSearchAutomation extends React.Component<IProps, IState> {
 				skipPaging={true}
 			/>
 
-			{/* {showDrawer &&
-				// todo: move drawer to pane-edit-metadata (?)
-				<Drawer
-					title="Metadata"
-					closable={true}
-					onClose={this.closeDrawer}
-					visible={true}
-					width={720}
-					bodyStyle={{ paddingBottom: "80px" }}>
-					<PaneEditMetadata
-						entityTypeCode={entityTypeCode}
-						entityUid={entityUid}
-						uid={editUid}
-						onSuccess={this.handleSuccess}
-					/>
-				</Drawer>} */}
+			{showPane &&
+				<PaneEditAutomation
+					entityTypeCode={entityTypeCode}
+					entityTypeUid={entityTypeUid}
+					uid={editUid}
+					onSuccess={this.handleSuccess}
+					onClose={this.closePane}
+				/>}
 
 		</>}</Translation>);
 	};

@@ -121,6 +121,10 @@ export class PaneEditMetadata extends React.Component<IProps, IState> {
 		}
 	};
 
+	handleSubmitClick = async (e: React.MouseEvent<any>) => {
+		await this._formRef.current.submit();
+	};
+
 	handleSubmit = async (values: IDataField): Promise<IApiResult> => {
 		const { entityTypeCode, entityUid, uid, onSuccess } = this.props,
 			{ typeData } = this.state;
@@ -141,10 +145,6 @@ export class PaneEditMetadata extends React.Component<IProps, IState> {
 		}
 
 		return result;
-	};
-
-	handleSubmitClick = async (e: React.MouseEvent<any>) => {
-		await this._formRef.current.submit();
 	};
 
 	renderPopover = (optionalFields: IDataField[]) => {
@@ -185,8 +185,7 @@ export class PaneEditMetadata extends React.Component<IProps, IState> {
 							</Popover>
 							<ButtonCancel onClick={onClose} />
 							<ButtonSave onClick={this.handleSubmitClick} />
-						</Toolbar>}
-				>
+						</Toolbar>}>
 
 					<DataForm
 						showControls={false}
@@ -200,7 +199,6 @@ export class PaneEditMetadata extends React.Component<IProps, IState> {
 						fields={visibleFields}
 						data={data}
 						onSubmit={this.handleSubmit} />
-
 
 				</Drawer>
 			</Spin>
