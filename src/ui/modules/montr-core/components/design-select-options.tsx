@@ -65,7 +65,7 @@ export class DesignSelectOptions extends React.Component<IProps, IState> {
 
 		options.splice(index, 1);
 
-		this.handleChange(options);
+		this.handleChange([...options]);
 	};
 
 	swapOptions = (index1: number, index2: number) => {
@@ -73,16 +73,18 @@ export class DesignSelectOptions extends React.Component<IProps, IState> {
 
 		[options[index2], options[index1]] = [options[index1], options[index2]];
 
-		this.handleChange(options);
+		this.handleChange([...options]);
 	};
 
 	changeItemProp = (option: IOption, e: ChangeEvent<HTMLInputElement>) => {
 		const item = option as IIndexer;
 
 		if (item[e.target.name] != e.target.value) {
+			const { options } = this.state;
+
 			item[e.target.name] = e.target.value;
 
-			this.handleChange(this.state.options);
+			this.handleChange([...options]);
 		}
 	};
 

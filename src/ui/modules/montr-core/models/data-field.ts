@@ -65,8 +65,8 @@ interface IDateFieldProps {
 	includeTime?: boolean;
 }
 
-export interface ITimeField extends IDataField {
-}
+/* export interface ITimeField extends IDataField {
+} */
 
 export interface ISelectField extends IDataFieldWithProps<ISelectFieldProps> {
 }
