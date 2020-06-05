@@ -1,9 +1,10 @@
 import React from "react";
+import { Form, Spin, Drawer, Divider, Button, Space, Select, Typography } from "antd";
 import { FormInstance } from "antd/lib/form";
 import { Guid, IAutomation, IApiResult, IDataField } from "../models";
 import { AutomationService, MetadataService } from "../services";
-import { Spin, Drawer } from "antd";
-import { Toolbar, ButtonCancel, ButtonSave, DataForm } from ".";
+import { Toolbar, ButtonCancel, ButtonSave, DataForm, ButtonAdd, Icon } from ".";
+import { AutomationConditionList } from "./automation-condition-list";
 
 interface IProps {
 	entityTypeCode: string;
@@ -106,6 +107,12 @@ export class PaneEditAutomation extends React.Component<IProps, IState> {
 						fields={fields}
 						data={data}
 						onSubmit={this.handleSubmit} />
+
+					<AutomationConditionList />
+
+					<Divider />
+
+					<ButtonAdd type="dashed">Add action</ButtonAdd>
 
 				</Drawer>
 			</Spin>
