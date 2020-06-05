@@ -1,8 +1,7 @@
 import * as React from "react";
 import { Form, Spin } from "antd";
 import { FormInstance } from "antd/lib/form";
-import { getFieldId } from "antd/lib/form/util";
-import { FieldData, Store, Rule } from "rc-field-form/lib/interface";
+import { FieldData, Store } from "rc-field-form/lib/interface";
 import { IDataField, IApiResult, IIndexer } from "../models";
 import { NotificationService } from "../services/notification-service";
 import { OperationService, DataHelper } from "../services";
@@ -11,8 +10,13 @@ import { withTranslation, WithTranslation } from "react-i18next";
 
 declare const FormLayouts: ["horizontal", "inline", "vertical"];
 
-interface IProps extends WithTranslation {
+export interface IDataFormOptions extends WithTranslation {
 	layout?: (typeof FormLayouts)[number];
+	mode?: "Edit" | "View";
+	hideLabels?: boolean;
+}
+
+interface IProps extends IDataFormOptions {
 	fields: IDataField[]; // todo: provide url to load fields or create wrapped component
 	data: any; // IIndexer;
 	showControls?: boolean;
@@ -20,8 +24,6 @@ interface IProps extends WithTranslation {
 	resetButton?: string;
 	successMessage?: string;
 	errorMessage?: string;
-	mode?: "Edit" | "View";
-	hideLabels?: boolean;
 	onChange?: (values: IIndexer, changedValues: IIndexer) => void;
 	onSubmit?: (values: any /* IIndexer */) => Promise<IApiResult>;
 	formRef?: React.RefObject<FormInstance>;
@@ -116,71 +118,6 @@ class WrappedDataForm extends React.Component<IProps, IState> {
 		}
 	};
 
-	createItem = (field: IDataField): React.ReactNode => {
-		const { t, layout, data, mode, hideLabels } = this.props;
-
-		const fieldFactory = DataFieldFactory.get(field.type);
-
-		// todo: display default placeholder for not found field type
-		if (!fieldFactory) {
-			console.error(`Field type ${field.type} is not found.`);
-			return null;
-		}
-
-		const required: Rule = {
-			required: field.required,
-			message: t("dataForm.rule.required", { name: field.name })
-		};
-
-		if (field.type == "text" || field.type == "textarea" || field.type == "password") {
-			required.whitespace = field.required;
-		}
-
-		if (fieldFactory.shouldFormatValue) {
-			const value = DataHelper.indexer(data, field.key, undefined);
-			const formattedValue = fieldFactory.formatValue(field, data, value);
-			DataHelper.indexer(data, field.key, formattedValue);
-		}
-
-		const fieldNode = (mode == "View")
-			? fieldFactory.createViewNode(field, data)
-			: fieldFactory.createEditNode(field, data);
-
-		const itemLayout = (layout == null || layout == "horizontal")
-			? (mode != "View" && field.type == "boolean" ? FormDefaults.tailFormItemLayout : FormDefaults.formItemLayout)
-			: {};
-
-		if (mode == "View") {
-			return (
-				<Form.Item
-					key={field.key}
-					label={hideLabels ? null : field.name}
-					extra={field.description}
-					valuePropName={fieldFactory.valuePropName}
-					rules={[required]}
-					{...itemLayout}>
-					{fieldNode}
-				</Form.Item>
-			);
-		}
-
-		const namePath = field.key.split(".");
-
-		return (
-			<Form.Item
-				key={field.key}
-				name={namePath}
-				htmlFor={getFieldId(namePath)} // replace(".", "_")
-				label={hideLabels || (field.type == "boolean") ? null : field.name}
-				extra={field.description}
-				valuePropName={fieldFactory.valuePropName}
-				rules={[required]}
-				{...itemLayout}>
-				{fieldNode}
-			</Form.Item>
-		);
-	};
-
 	render = () => {
 		const { t, layout, data, fields, mode, showControls, submitButton, resetButton } = this.props,
 			{ loading } = this.state;
@@ -189,24 +126,35 @@ class WrappedDataForm extends React.Component<IProps, IState> {
 
 		return (
 			<Spin spinning={loading}>
-				{fields && <Form
-					ref={this.getFormRef()}
-					colon={false}
-					className={mode == "View" ? "data-form-mode-view" : null}
-					initialValues={data}
-					scrollToFirstError={true}
-					layout={layout || "horizontal"}
-					onValuesChange={this.handleValuesChange}
-					onFinish={this.handleSubmit}>
+				{fields &&
+					<Form
+						ref={this.getFormRef()}
+						colon={false}
+						className={mode == "View" ? "data-form-mode-view" : null}
+						initialValues={data}
+						scrollToFirstError={true}
+						layout={layout || "horizontal"}
+						onValuesChange={this.handleValuesChange}
+						onFinish={this.handleSubmit}>
 
-					{fields.map(x => this.createItem(x))}
+						{fields.map(field => {
+							const factory = DataFieldFactory.get(field.type);
 
-					<Form.Item {...itemLayout} style={{ display: mode == "View" || showControls === false ? "none" : "block" }}>
-						<Toolbar>
-							<ButtonSave htmlType="submit">{submitButton}</ButtonSave>
-						</Toolbar>
-					</Form.Item>
-				</Form>}
+							if (!factory) {
+								// todo: display default placeholder for not found field type
+								console.error(`Field type ${field.type} is not found.`);
+								return null;
+							}
+
+							return factory.createFormItem(field, data, this.props);
+						})}
+
+						<Form.Item {...itemLayout} style={{ display: mode == "View" || showControls === false ? "none" : "block" }}>
+							<Toolbar>
+								<ButtonSave htmlType="submit">{submitButton}</ButtonSave>
+							</Toolbar>
+						</Form.Item>
+					</Form>}
 			</Spin>
 		);
 	};

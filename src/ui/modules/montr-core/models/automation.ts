@@ -4,6 +4,8 @@ export interface IAutomation {
 	uid?: Guid;
 	name?: string;
 	description?: string;
+	conditions?: IAutomationCondition[];
+	actions?: IAutomationAction[];
 }
 
 export interface IAutomationCondition {

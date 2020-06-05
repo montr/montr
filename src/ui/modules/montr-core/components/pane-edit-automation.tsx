@@ -1,10 +1,9 @@
 import React from "react";
-import { Form, Spin, Drawer, Divider, Button, Space, Select, Typography } from "antd";
+import { Spin, Drawer } from "antd";
 import { FormInstance } from "antd/lib/form";
 import { Guid, IAutomation, IApiResult, IDataField } from "../models";
 import { AutomationService, MetadataService } from "../services";
-import { Toolbar, ButtonCancel, ButtonSave, DataForm, ButtonAdd, Icon } from ".";
-import { AutomationConditionList } from "./automation-condition-list";
+import { Toolbar, ButtonCancel, ButtonSave, DataForm } from ".";
 
 interface IProps {
 	entityTypeCode: string;
@@ -45,9 +44,9 @@ export class PaneEditAutomation extends React.Component<IProps, IState> {
 	fetchData = async () => {
 		const { entityTypeCode, entityTypeUid, uid } = this.props;
 
-		const data = (uid)
+		const data: IAutomation = (uid)
 			? await this._automationService.get(entityTypeCode, entityTypeUid, uid)
-			: {};
+			: { conditions: [{}] }; // todo: load defaults from server
 
 		const dataView = await this._metadataService.load("Automation/Edit");
 
@@ -107,12 +106,6 @@ export class PaneEditAutomation extends React.Component<IProps, IState> {
 						fields={fields}
 						data={data}
 						onSubmit={this.handleSubmit} />
-
-					<AutomationConditionList />
-
-					<Divider />
-
-					<ButtonAdd type="dashed">Add action</ButtonAdd>
 
 				</Drawer>
 			</Spin>

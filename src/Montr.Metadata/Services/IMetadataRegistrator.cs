@@ -4,7 +4,7 @@ using Montr.Metadata.Models;
 
 namespace Montr.Metadata.Services
 {
-	// todo: remove - temp solution
+	// todo: remove - temp solution (?)
 	public interface IMetadataRegistrator
 	{
 		void Register(string viewId, Func<string, DataView> getDataView);

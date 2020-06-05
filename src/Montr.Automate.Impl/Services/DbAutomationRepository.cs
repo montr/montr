@@ -63,7 +63,14 @@ namespace Montr.Automate.Impl.Services
 						Name = dbItem.Name,
 						Description = dbItem.Description,
 						Active = dbItem.IsActive,
-						System = dbItem.IsSystem
+						System = dbItem.IsSystem,
+						Conditions = new List<AutomationCondition>
+						{
+							new FieldAutomationCondition(),
+							new FieldAutomationCondition(),
+							new FieldAutomationCondition(),
+							new FieldAutomationCondition(),
+						}
 					};
 
 					result.Add(item);

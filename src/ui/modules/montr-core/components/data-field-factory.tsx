@@ -1,9 +1,12 @@
 import * as React from "react";
-import { Input, InputNumber, Select, Checkbox, DatePicker } from "antd";
-import { IDataField, IIndexer, ISelectField, ITextAreaField, INumberField, IDateField, IBooleanField, ITextField, IDesignSelectOptionsField, IPasswordField } from "../models";
-import { Icon, DesignSelectOptions, EmptyFieldView } from ".";
+import { Input, InputNumber, Select, Checkbox, DatePicker, Form } from "antd";
+import { getFieldId } from "antd/lib/form/util";
+import { Rule } from "rc-field-form/lib/interface";
+import { IDataField, IIndexer, ISelectField, ITextAreaField, INumberField, IDateField, IBooleanField, ITextField, IDesignSelectOptionsField, IPasswordField, IAutomationConditionListField } from "../models";
+import { Icon, DesignSelectOptions, EmptyFieldView, IDataFormOptions, FormDefaults } from ".";
 import moment from "moment";
 import { DataHelper } from "@montr-core/services";
+import { AutomationConditionList } from "./automation-condition-list";
 
 export abstract class DataFieldFactory<TField extends IDataField> {
 	private static Map: { [key: string]: DataFieldFactory<IDataField>; } = {};
@@ -19,6 +22,63 @@ export abstract class DataFieldFactory<TField extends IDataField> {
 	valuePropName: string = "value";
 
 	shouldFormatValue: boolean = false;
+
+	createFormItem = (field: TField, data: IIndexer, options: IDataFormOptions): React.ReactNode => {
+		const { t, layout, mode, hideLabels } = options;
+
+		const required: Rule = {
+			required: field.required,
+			message: t("dataForm.rule.required", { name: field.name })
+		};
+
+		if (field.type == "text" || field.type == "textarea" || field.type == "password") {
+			required.whitespace = field.required;
+		}
+
+		if (this.shouldFormatValue) {
+			const value = DataHelper.indexer(data, field.key, undefined);
+			const formattedValue = this.formatValue(field, data, value);
+			DataHelper.indexer(data, field.key, formattedValue);
+		}
+
+		const fieldNode = (mode == "View")
+			? this.createViewNode(field, data)
+			: this.createEditNode(field, data);
+
+		const itemLayout = (layout == null || layout == "horizontal")
+			? (mode != "View" && field.type == "boolean" ? FormDefaults.tailFormItemLayout : FormDefaults.formItemLayout)
+			: {};
+
+		if (mode == "View") {
+			return (
+				<Form.Item
+					key={field.key}
+					label={hideLabels ? null : field.name}
+					extra={field.description}
+					valuePropName={this.valuePropName}
+					rules={[required]}
+					{...itemLayout}>
+					{fieldNode}
+				</Form.Item>
+			);
+		}
+
+		const namePath = field.key.split(".");
+
+		return (
+			<Form.Item
+				key={field.key}
+				name={namePath}
+				htmlFor={getFieldId(namePath)} // replace(".", "_")
+				label={hideLabels || (field.type == "boolean") ? null : field.name}
+				extra={field.description}
+				valuePropName={this.valuePropName}
+				rules={[required]}
+				{...itemLayout}>
+				{fieldNode}
+			</Form.Item>
+		);
+	};
 
 	formatValue(field: TField, data: IIndexer, value: any): any {
 		return value;
@@ -181,6 +241,21 @@ class DateFieldFactory extends DataFieldFactory<IDateField> {
 	}
 } */
 
+class AutomationConditionListFieldFactory extends DataFieldFactory<IAutomationConditionListField> {
+
+	createFormItem = (field: IAutomationConditionListField, data: IIndexer, options: IDataFormOptions): React.ReactNode => {
+		return <AutomationConditionList field={field} />;
+	};
+
+	createEditNode(field: IAutomationConditionListField, data: IIndexer): React.ReactElement {
+		return null;
+	}
+
+	createViewNode(field: IAutomationConditionListField, data: IIndexer): React.ReactElement {
+		return null;
+	}
+}
+
 DataFieldFactory.register("boolean", new BooleanFieldFactory());
 DataFieldFactory.register("number", new NumberFieldFactory());
 DataFieldFactory.register("text", new TextFieldFactory());
@@ -190,3 +265,4 @@ DataFieldFactory.register("select-options", new DesignSelectOptionsFieldFactory(
 DataFieldFactory.register("password", new PasswordFieldFactory());
 DataFieldFactory.register("date", new DateFieldFactory());
 // DataFieldFactory.register("time", new TimeFieldFactory());
+DataFieldFactory.register("automation-condition-list", new AutomationConditionListFieldFactory());

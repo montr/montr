@@ -44,7 +44,7 @@ namespace Montr.Metadata.Services
 				};
 			}
 
-			if (viewId == "Automation/Edit")
+			/*if (viewId == "Automation/Edit")
 			{
 				result.Fields = new List<FieldMetadata>
 				{
@@ -52,7 +52,7 @@ namespace Montr.Metadata.Services
 					new TextField { Key = "name", Name = "Наименование", Required = true },
 					new TextAreaField { Key = "description", Name = "Описание", Props = new TextAreaField.Properties { Rows = 1 } },
 				};
-			}
+			}*/
 
 			if (viewId == "Metadata/Grid")
 			{
