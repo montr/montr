@@ -1,16 +1,17 @@
 import React from "react";
-import { Divider, Form, Typography, Space, Select, Button } from "antd";
+import { Divider, Form, Space, Select, Button } from "antd";
 import { Icon, ButtonAdd } from ".";
-import { IAutomationConditionListField } from "@montr-core/models";
+import { IAutomationConditionField } from "../models";
+import { Toolbar } from "./toolbar";
 
 interface IProps {
-	field: IAutomationConditionListField;
+	field: IAutomationConditionField;
 }
 
 interface IState {
 }
 
-export class AutomationConditionList extends React.Component<IProps, IState> {
+export class AutomationCondition extends React.Component<IProps, IState> {
 
 	render = () => {
 		const { field } = this.props;
@@ -29,7 +30,7 @@ export class AutomationConditionList extends React.Component<IProps, IState> {
 									name={[field.name, "type"]}
 									fieldKey={[field.fieldKey, "type"]}
 									rules={[{ required: true }]}>
-									<Select placeholder="Select condition">
+									<Select placeholder="Select condition" style={{ minWidth: 100 }}>
 										<Select.Option value="field">Document Status</Select.Option>
 									</Select>
 								</Form.Item>
@@ -38,13 +39,13 @@ export class AutomationConditionList extends React.Component<IProps, IState> {
 									name={[field.name, "operator"]}
 									fieldKey={[field.fieldKey, "operator"]}
 									rules={[{ required: true }]}>
-									<Select>
-										<Select.Option value="Equal">Equal</Select.Option>
-										<Select.Option value="NotEqual">NotEqual</Select.Option>
-										<Select.Option value="LessThan">LessThan</Select.Option>
-										<Select.Option value="LessThanEqual">LessThanEqual</Select.Option>
-										<Select.Option value="GreaterThan">GreaterThan</Select.Option>
-										<Select.Option value="GreaterThanEqual">GreaterThanEqual</Select.Option>
+									<Select style={{ minWidth: 50 }}>
+										<Select.Option value="Equal">=</Select.Option>
+										<Select.Option value="NotEqual">&lt;&gt;</Select.Option>
+										<Select.Option value="LessThan">&lt;</Select.Option>
+										<Select.Option value="LessThanEqual">&lt;=</Select.Option>
+										<Select.Option value="GreaterThan">&gt;</Select.Option>
+										<Select.Option value="GreaterThanEqual">&gt;=</Select.Option>
 									</Select>
 								</Form.Item>
 								<Form.Item
@@ -52,7 +53,7 @@ export class AutomationConditionList extends React.Component<IProps, IState> {
 									name={[field.name, "value"]}
 									fieldKey={[field.fieldKey, "value"]}
 									rules={[{ required: true }]}>
-									<Select placeholder="Select status">
+									<Select placeholder="Select status" style={{ minWidth: 100 }}>
 										<Select.Option value="draft">Draft</Select.Option>
 										<Select.Option value="published">Published</Select.Option>
 										<Select.Option value="completed">Completed</Select.Option>
@@ -60,19 +61,22 @@ export class AutomationConditionList extends React.Component<IProps, IState> {
 									</Select>
 								</Form.Item>
 
-								<Button type="link" icon={Icon.MinusCircle}
-									onClick={() => remove(field.name)} />
-								<Button type="link" icon={Icon.ArrowUp} disabled={index == 0}
-									onClick={() => move(index, index - 1)} />
-								<Button type="link" icon={Icon.ArrowDown} disabled={index == array.length - 1}
-									onClick={() => move(index, index + 1)} />
+								<div>
+									<Button type="link" icon={Icon.MinusCircle} size="small"
+										onClick={() => remove(field.name)} />
+									<Button type="link" icon={Icon.ArrowUp} size="small" disabled={index == 0}
+										onClick={() => move(index, index - 1)} />
+									<Button type="link" icon={Icon.ArrowDown} size="small" disabled={index == array.length - 1}
+										onClick={() => move(index, index + 1)} />
+								</div>
 
 							</Space>
 						))}
 
-						<Form.Item>
+						<Toolbar>
 							<ButtonAdd type="dashed" onClick={() => add()}>Add condition</ButtonAdd>
-						</Form.Item>
+							<ButtonAdd type="dashed" onClick={() => add()}>Add group</ButtonAdd>
+						</Toolbar>
 					</>);
 				}}
 			</Form.List>

@@ -2,11 +2,15 @@ import * as React from "react";
 import { Input, InputNumber, Select, Checkbox, DatePicker, Form } from "antd";
 import { getFieldId } from "antd/lib/form/util";
 import { Rule } from "rc-field-form/lib/interface";
-import { IDataField, IIndexer, ISelectField, ITextAreaField, INumberField, IDateField, IBooleanField, ITextField, IDesignSelectOptionsField, IPasswordField, IAutomationConditionListField } from "../models";
+import {
+	IDataField, IIndexer, ISelectField, ITextAreaField, INumberField, IDateField, IBooleanField, ITextField,
+	IDesignSelectOptionsField, IPasswordField, IAutomationConditionField, IAutomationActionListField
+} from "../models";
 import { Icon, DesignSelectOptions, EmptyFieldView, IDataFormOptions, FormDefaults } from ".";
 import moment from "moment";
-import { DataHelper } from "@montr-core/services";
-import { AutomationConditionList } from "./automation-condition-list";
+import { DataHelper } from "../services";
+import { AutomationCondition } from "./automation-condition";
+import { AutomationActionList } from "./automation-action-list";
 
 export abstract class DataFieldFactory<TField extends IDataField> {
 	private static Map: { [key: string]: DataFieldFactory<IDataField>; } = {};
@@ -241,17 +245,32 @@ class DateFieldFactory extends DataFieldFactory<IDateField> {
 	}
 } */
 
-class AutomationConditionListFieldFactory extends DataFieldFactory<IAutomationConditionListField> {
+class AutomationConditionFieldFactory extends DataFieldFactory<IAutomationConditionField> {
 
-	createFormItem = (field: IAutomationConditionListField, data: IIndexer, options: IDataFormOptions): React.ReactNode => {
-		return <AutomationConditionList field={field} />;
+	createFormItem = (field: IAutomationConditionField, data: IIndexer, options: IDataFormOptions): React.ReactNode => {
+		return <AutomationCondition field={field} />;
 	};
 
-	createEditNode(field: IAutomationConditionListField, data: IIndexer): React.ReactElement {
+	createEditNode(field: IAutomationConditionField, data: IIndexer): React.ReactElement {
 		return null;
 	}
 
-	createViewNode(field: IAutomationConditionListField, data: IIndexer): React.ReactElement {
+	createViewNode(field: IAutomationConditionField, data: IIndexer): React.ReactElement {
+		return null;
+	}
+}
+
+class AutomationActionListFieldFactory extends DataFieldFactory<IAutomationActionListField> {
+
+	createFormItem = (field: IAutomationActionListField, data: IIndexer, options: IDataFormOptions): React.ReactNode => {
+		return <AutomationActionList field={field} />;
+	};
+
+	createEditNode(field: IAutomationActionListField, data: IIndexer): React.ReactElement {
+		return null;
+	}
+
+	createViewNode(field: IAutomationActionListField, data: IIndexer): React.ReactElement {
 		return null;
 	}
 }
@@ -265,4 +284,5 @@ DataFieldFactory.register("select-options", new DesignSelectOptionsFieldFactory(
 DataFieldFactory.register("password", new PasswordFieldFactory());
 DataFieldFactory.register("date", new DateFieldFactory());
 // DataFieldFactory.register("time", new TimeFieldFactory());
-DataFieldFactory.register("automation-condition-list", new AutomationConditionListFieldFactory());
+DataFieldFactory.register("automation-condition", new AutomationConditionFieldFactory());
+DataFieldFactory.register("automation-action-list", new AutomationActionListFieldFactory());

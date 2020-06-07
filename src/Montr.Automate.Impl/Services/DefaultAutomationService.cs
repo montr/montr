@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using Montr.Automate.Models;
 using Montr.Automate.Services;
@@ -39,45 +38,14 @@ namespace Montr.Automate.Impl.Services
 
 		private async Task<bool> MeetConditions(Automation automation, AutomationContext context, CancellationToken cancellationToken)
 		{
-			var meetAllConditions = automation.Conditions.Where(x => x.Meet == AutomationConditionMeet.All).ToList();
-
-			foreach (var condition in meetAllConditions)
+			if (automation.Condition != null)
 			{
-				if (await MeetCondition(condition, context, cancellationToken) == false)
-				{
-					return false;
-				}
-			}
+				var provider = _providerRegistry.GetConditionProvider(automation.Condition.Type);
 
-			var meetAnyConditions = automation.Conditions.Where(x => x.Meet == AutomationConditionMeet.Any).ToList();
-
-			if (meetAnyConditions.Count > 0)
-			{
-				var meetAny = false;
-
-				foreach (var condition in meetAnyConditions)
-				{
-					if (await MeetCondition(condition, context, cancellationToken) == false)
-					{
-						meetAny = true;
-						break;
-					}
-				}
-
-				if (meetAny == false)
-				{
-					return false;
-				}
+				return await provider.Meet(automation.Condition, context, cancellationToken);
 			}
 
 			return true;
-		}
-
-		private async Task<bool> MeetCondition(AutomationCondition condition, AutomationContext context, CancellationToken cancellationToken)
-		{
-			var provider = _providerRegistry.GetConditionProvider(condition.Type);
-
-			return await provider.Meet(condition, context, cancellationToken);
 		}
 
 		private async Task ExecuteActions(Automation automation, AutomationContext context, CancellationToken cancellationToken)

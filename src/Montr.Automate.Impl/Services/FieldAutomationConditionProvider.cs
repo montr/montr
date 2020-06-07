@@ -10,9 +10,9 @@ namespace Montr.Automate.Impl.Services
 	{
 		public Task<bool> Meet(AutomationCondition automationCondition, AutomationContext context, CancellationToken cancellationToken)
 		{
-			var result = false;
-
 			var condition = (FieldAutomationCondition)automationCondition;
+
+			var result = false;
 
 			var property = context.Entity.GetType().GetProperty(condition.Field);
 

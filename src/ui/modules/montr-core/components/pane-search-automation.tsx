@@ -1,11 +1,12 @@
 import React from "react";
-import { withTranslation, WithTranslation, Translation } from "react-i18next";
+import { Translation } from "react-i18next";
 import { DataTableUpdateToken, Toolbar, ButtonAdd, ButtonDelete, DataTable, PaneEditAutomation } from ".";
 import { Guid, IDataResult, IAutomation } from "../models";
 import { OperationService, AutomationService } from "../services";
 import { Constants } from "..";
+import i18next from "i18next";
 
-interface IProps extends WithTranslation {
+interface IProps {
 	entityTypeCode: string;
 	entityTypeUid: Guid | string;
 }
@@ -17,7 +18,7 @@ interface IState {
 	updateTableToken?: DataTableUpdateToken;
 }
 
-class WrappedPaneSearchAutomation extends React.Component<IProps, IState> {
+export class PaneSearchAutomation extends React.Component<IProps, IState> {
 
 	private _operation = new OperationService();
 	private _automationService = new AutomationService();
@@ -76,7 +77,8 @@ class WrappedPaneSearchAutomation extends React.Component<IProps, IState> {
 	};
 
 	delete = async () => {
-		const { t } = this.props;
+
+		const t = (key: string) => i18next.t(key);
 
 		await this._operation.execute(async () => {
 			const { entityTypeCode, entityTypeUid } = this.props,
@@ -129,5 +131,3 @@ class WrappedPaneSearchAutomation extends React.Component<IProps, IState> {
 		</>}</Translation>);
 	};
 }
-
-export const PaneSearchAutomation = withTranslation()(WrappedPaneSearchAutomation);

@@ -17,7 +17,7 @@ namespace Montr.Automate.Models
 
 		public bool System { get; set; }
 
-		public IList<AutomationCondition> Conditions { get; set; }
+		public AutomationCondition Condition { get; set; }
 
 		public IList<AutomationAction> Actions { get; set; }
 	}
@@ -25,8 +25,6 @@ namespace Montr.Automate.Models
 	public abstract class AutomationCondition
 	{
 		public abstract string Type { get; }
-
-		public AutomationConditionMeet Meet { get; set; }
 	}
 
 	public enum AutomationConditionMeet
@@ -42,7 +40,18 @@ namespace Montr.Automate.Models
 		LessThan,
 		LessThanEqual,
 		GreaterThan,
-		GreaterThanEqual,
+		GreaterThanEqual
+	}
+
+	public class GroupAutomationCondition : AutomationCondition
+	{
+		public const string TypeCode = "group";
+
+		public override string Type => TypeCode;
+
+		public AutomationConditionMeet Meet { get; set; }
+
+		public IList<AutomationCondition> Conditions { get; set; }
 	}
 
 	public class FieldAutomationCondition : AutomationCondition

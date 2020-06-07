@@ -21,6 +21,7 @@ namespace Montr.Automate.Impl
 
 			services.AddTransient<IRepository<Automation>, DbAutomationRepository>();
 
+			services.AddNamedTransient<IAutomationConditionProvider, GroupAutomationConditionProvider>(GroupAutomationCondition.TypeCode);
 			services.AddNamedTransient<IAutomationConditionProvider, FieldAutomationConditionProvider>(FieldAutomationCondition.TypeCode);
 			services.AddNamedTransient<IAutomationActionProvider, SetFieldAutomationActionProvider>(SetFieldAutomationAction.TypeCode);
 			services.AddNamedTransient<IAutomationActionProvider, NotifyByEmailAutomationActionProvider>(NotifyByEmailAutomationAction.TypeCode);
@@ -30,7 +31,7 @@ namespace Montr.Automate.Impl
 		{
 			app.ConfigureMetadata(options =>
 			{
-				options.Registry.AddFieldType(typeof(AutomationConditionList));
+				options.Registry.AddFieldType(typeof(AutomationConditionField));
 			});
 		}
 	}

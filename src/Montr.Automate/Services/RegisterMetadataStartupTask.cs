@@ -26,8 +26,8 @@ namespace Montr.Automate.Services
 					new NumberField { Key = "displayOrder", Name = "#", Required = true, Props = { Min = 0, Max = 256 } },
 					new TextField { Key = "name", Name = "Наименование", Required = true },
 					new TextAreaField { Key = "description", Name = "Описание", Props = new TextAreaField.Properties { Rows = 1 } },
-					new AutomationConditionList { Key = "conditions", Name = "Meet all of the following conditions", Props = new AutomationConditionList.Properties { Meet = AutomationConditionMeet.All } },
-					new AutomationConditionList { Key = "anyConditions", Name = "Meet any of the following conditions", Props = new AutomationConditionList.Properties { Meet = AutomationConditionMeet.Any } },
+					new AutomationConditionField { Key = "condition", Name = "Conditions" },
+					new AutomationActionListField { Key = "actions", Name = "Actions" }
 				}
 			});
 

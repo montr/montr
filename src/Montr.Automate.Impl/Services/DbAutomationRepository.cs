@@ -64,12 +64,9 @@ namespace Montr.Automate.Impl.Services
 						Description = dbItem.Description,
 						Active = dbItem.IsActive,
 						System = dbItem.IsSystem,
-						Conditions = new List<AutomationCondition>
+						Condition = new GroupAutomationCondition
 						{
-							new FieldAutomationCondition(),
-							new FieldAutomationCondition(),
-							new FieldAutomationCondition(),
-							new FieldAutomationCondition(),
+							Meet = AutomationConditionMeet.All
 						}
 					};
 
@@ -99,15 +96,11 @@ namespace Montr.Automate.Impl.Services
 					{
 						Active = true,
 						Name = "Рассылка уведомлений на публикацию",
-						Conditions = new List<AutomationCondition>
+						Condition = new FieldAutomationCondition
 						{
-							new FieldAutomationCondition
-							{
-								Meet = AutomationConditionMeet.All,
-								Field = "StatusCode",
-								Operator = AutomationConditionOperator.Equal,
-								Value = "Published"
-							}
+							Field = "StatusCode",
+							Operator = AutomationConditionOperator.Equal,
+							Value = "Published"
 						},
 						Actions = new List<AutomationAction>
 						{

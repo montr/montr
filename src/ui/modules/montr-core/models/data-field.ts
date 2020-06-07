@@ -68,10 +68,10 @@ interface IDateFieldProps {
 /* export interface ITimeField extends IDataField {
 } */
 
-export interface IAutomationConditionListField extends IDataFieldWithProps<IAutomationConditionListFieldProps> {
+export interface IAutomationConditionField extends IDataField {
 }
 
-interface IAutomationConditionListFieldProps {
+export interface IAutomationActionListField extends IDataField {
 }
 
 export interface ISelectField extends IDataFieldWithProps<ISelectFieldProps> {
