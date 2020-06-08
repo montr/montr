@@ -48,7 +48,7 @@
 		"fork-ts-checker-webpack-plugin": "^4.1.6",
 		"hard-source-webpack-plugin": "^0.13.1",
 		"kind-of": ">=6.0.3",
-		"less": "^3.11.2",
+		"less": "^3.11.3",
 		"less-loader": "^5.0.0",
 		"minimist": ">=0.2.1",
 		"source-map-loader": "^0.2.4",
