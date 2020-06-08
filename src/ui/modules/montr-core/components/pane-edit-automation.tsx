@@ -46,7 +46,8 @@ export class PaneEditAutomation extends React.Component<IProps, IState> {
 
 		const data: IAutomation = (uid)
 			? await this._automationService.get(entityTypeCode, entityTypeUid, uid)
-			: { conditions: [{}] }; // todo: load defaults from server
+			// todo: load defaults from server
+			: { condition: {}, actions: [{ type: "set-field" }, { type: "notify-by-email" }] };
 
 		const dataView = await this._metadataService.load("Automation/Edit");
 

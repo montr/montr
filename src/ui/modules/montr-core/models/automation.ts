@@ -4,7 +4,7 @@ export interface IAutomation {
 	uid?: Guid;
 	name?: string;
 	description?: string;
-	conditions?: IAutomationCondition[];
+	condition?: IAutomationCondition;
 	actions?: IAutomationAction[];
 }
 
@@ -14,4 +14,26 @@ export interface IAutomationCondition {
 
 export interface IAutomationAction {
 	type?: string;
+}
+
+export interface IGroupAutomationCondition extends IAutomationCondition {
+	meet?: string;
+	conditions?: IAutomationCondition[];
+}
+
+export interface IFieldAutomationCondition extends IAutomationCondition {
+	field?: string;
+	operator?: string;
+	value?: string;
+}
+
+export interface ISetFieldAutomationAction extends IAutomationAction {
+	field?: string;
+	value?: string;
+}
+
+export interface INotifyByEmailAutomationAction extends IAutomationAction {
+	recipient?: string;
+	subject?: string;
+	body?: string;
 }

@@ -16,9 +16,13 @@ export class AutomationCondition extends React.Component<IProps, IState> {
 	render = () => {
 		const { field } = this.props;
 
-		return (
+		return <code key={field.key}>AutomationCondition</code>;
+
+		/* return (
 			<Form.List name={field.key}>
 				{(fields, { add, remove, move }) => {
+					console.log("AutomationCondition", fields);
+
 					return (<>
 
 						<Divider orientation="left">{field.name}</Divider>
@@ -81,6 +85,6 @@ export class AutomationCondition extends React.Component<IProps, IState> {
 				}}
 			</Form.List>
 
-		);
+		); */
 	};
 }
