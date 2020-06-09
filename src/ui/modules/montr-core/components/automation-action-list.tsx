@@ -1,18 +1,15 @@
 import React from "react";
-import { Divider, Form, Select, Button } from "antd";
+import { Divider, Form, Select, Button, Space } from "antd";
 import { Icon, ButtonAdd } from ".";
-import { IAutomationActionListField } from "../models";
+import { IAutomationActionListField, IAutomationAction } from "../models";
 import { Toolbar } from "./toolbar";
-import { AutomationAction } from "./automation-action";
+import { AutomationActionFactory, IAutomationActionProps } from "./automation-field-factory";
 
 interface IProps {
 	field: IAutomationActionListField;
 }
 
-interface IState {
-}
-
-export class AutomationActionList extends React.Component<IProps, IState> {
+export class AutomationActionList extends React.Component<IProps> {
 
 	render = () => {
 		const { field } = this.props;
@@ -25,7 +22,7 @@ export class AutomationActionList extends React.Component<IProps, IState> {
 
 						<Divider orientation="left">{field.name}</Divider>
 
-						{items.map((item, index, array) => {
+						{items.map((item, index) => {
 
 							const typeSelector = (
 								<Form.Item
@@ -46,19 +43,23 @@ export class AutomationActionList extends React.Component<IProps, IState> {
 										onClick={() => remove(item.name)} />
 									<Button type="link" icon={Icon.ArrowUp} disabled={index == 0}
 										onClick={() => move(index, index - 1)} />
-									<Button type="link" icon={Icon.ArrowDown} disabled={index == array.length - 1}
+									<Button type="link" icon={Icon.ArrowDown} disabled={index == items.length - 1}
 										onClick={() => move(index, index + 1)} />
 								</Toolbar>
 							);
 
 							return (
-								<div>
+								<div key={item.key}>
 									{itemToolbar}
 
-									<AutomationAction item={item}
-										typeSelector={typeSelector}
-									/>
-
+									<Form.Item
+										{...item}
+										name={[item.name]}
+										fieldKey={[item.fieldKey]}
+										rules={[{ required: true }]}
+										noStyle>
+										<AutomationAction item={item} typeSelector={typeSelector} />
+									</Form.Item>
 								</div>
 							);
 						})}
@@ -73,3 +74,34 @@ export class AutomationActionList extends React.Component<IProps, IState> {
 		);
 	};
 }
+
+interface IActionProps extends IAutomationActionProps {
+	value?: IAutomationAction;
+}
+
+class AutomationAction extends React.Component<IActionProps> {
+
+	render = () => {
+		const { value, typeSelector } = this.props;
+
+		if (value?.type) {
+			const factory = AutomationActionFactory.get(value?.type);
+
+			if (factory) {
+				const control = factory.createFormItem(value, { ...this.props });
+
+				return control;
+			}
+			else {
+				console.error(`Automation action type ${value.type} is not found.`);
+			}
+		}
+
+		return (
+			<Space style={{ display: "flex" }} align="start">
+				{typeSelector}
+			</Space>
+		);
+	};
+}
+

@@ -1,9 +1,12 @@
+import React from "react";
 import {
 	IAutomationCondition, IAutomationAction, IIndexer,
 	IFieldAutomationCondition, IGroupAutomationCondition,
 	ISetFieldAutomationAction, INotifyByEmailAutomationAction
 } from "../models";
-import React from "react";
+import { FieldData } from "../models/field-data";
+import { NotifyByEmailAutomationAction } from "./notify-by-email-automation-action";
+import { SetFieldAutomationAction } from "./set-field-automation-action";
 
 export abstract class AutomationConditionFactory<TCondition extends IAutomationCondition> {
 	private static Map: { [key: string]: AutomationConditionFactory<IAutomationCondition>; } = {};
@@ -19,6 +22,12 @@ export abstract class AutomationConditionFactory<TCondition extends IAutomationC
 	abstract createFormItem(condition: TCondition, data: IIndexer): React.ReactNode;
 }
 
+export class IAutomationActionProps {
+	// data: IIndexer;
+	item: FieldData;
+	typeSelector: React.ReactElement;
+}
+
 export abstract class AutomationActionFactory<TAction extends IAutomationAction> {
 	private static Map: { [key: string]: AutomationActionFactory<IAutomationAction>; } = {};
 
@@ -30,7 +39,7 @@ export abstract class AutomationActionFactory<TAction extends IAutomationAction>
 		return AutomationActionFactory.Map[key];
 	}
 
-	abstract createFormItem(action: TAction, data: IIndexer): React.ReactNode;
+	abstract createFormItem(action: TAction, props: IAutomationActionProps): React.ReactNode;
 }
 
 class GroupAutomationConditionFactory extends AutomationConditionFactory<IGroupAutomationCondition> {
@@ -46,14 +55,14 @@ class FieldAutomationConditionFactory extends AutomationConditionFactory<IFieldA
 }
 
 class SetFieldAutomationActionFactory extends AutomationConditionFactory<ISetFieldAutomationAction> {
-	createFormItem(action: ISetFieldAutomationAction, data: IIndexer): React.ReactElement {
-		return <h1>ISetFieldAutomationAction</h1>;
+	createFormItem(action: ISetFieldAutomationAction, props: IAutomationActionProps): React.ReactElement {
+		return <SetFieldAutomationAction action={action} {...props} />;
 	}
 }
 
 class NotifyByEmailAutomationActionFactory extends AutomationConditionFactory<INotifyByEmailAutomationAction> {
-	createFormItem(action: INotifyByEmailAutomationAction, data: IIndexer): React.ReactElement {
-		return <h1>INotifyByEmailAutomationAction</h1>;
+	createFormItem(action: INotifyByEmailAutomationAction, props: IAutomationActionProps): React.ReactElement {
+		return <NotifyByEmailAutomationAction action={action} {...props} />;
 	}
 }
 
