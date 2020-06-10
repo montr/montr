@@ -24,6 +24,9 @@
 			"@montr-master-data/*": [
 				"modules/montr-master-data/*"
 			],
+			"@montr-automate/*": [
+				"modules/montr-automate/*"
+			],
 			"@montr-docs/*": [
 				"modules/montr-docs/*"
 			],

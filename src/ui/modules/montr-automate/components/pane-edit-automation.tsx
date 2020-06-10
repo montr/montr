@@ -1,9 +1,11 @@
 import React from "react";
 import { Spin, Drawer } from "antd";
 import { FormInstance } from "antd/lib/form";
-import { Guid, IAutomation, IApiResult, IDataField } from "../models";
-import { AutomationService, MetadataService } from "../services";
-import { Toolbar, ButtonCancel, ButtonSave, DataForm } from ".";
+import { Guid, IApiResult, IDataField } from "@montr-core/models";
+import { Toolbar, ButtonCancel, ButtonSave, DataForm } from "@montr-core/components";
+import { IAutomation } from "@montr-automate/models/automation";
+import { MetadataService } from "@montr-core/services";
+import { AutomationService } from "@montr-automate/services/automation-service";
 
 interface IProps {
 	entityTypeCode: string;

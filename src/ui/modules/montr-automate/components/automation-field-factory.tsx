@@ -1,12 +1,46 @@
 import React from "react";
-import {
-	IAutomationCondition, IAutomationAction, IIndexer,
-	IFieldAutomationCondition, IGroupAutomationCondition,
-	ISetFieldAutomationAction, INotifyByEmailAutomationAction
-} from "../models";
-import { FieldData } from "../models/field-data";
+import { IIndexer } from "@montr-core/models";
+import { FieldData } from "@montr-core/models/field-data";
 import { NotifyByEmailAutomationAction } from "./notify-by-email-automation-action";
 import { SetFieldAutomationAction } from "./set-field-automation-action";
+import {
+	IAutomationCondition, IAutomationAction, IGroupAutomationCondition,
+	INotifyByEmailAutomationAction, ISetFieldAutomationAction, IFieldAutomationCondition
+} from "../models/automation";
+import { DataFieldFactory, IDataFormOptions } from "@montr-core/components";
+import { IAutomationConditionField, IAutomationActionListField } from "../models/automation-field";
+import { AutomationCondition } from "./automation-condition";
+import { AutomationActionList } from "./automation-action-list";
+
+export class AutomationConditionFieldFactory extends DataFieldFactory<IAutomationConditionField> {
+
+	createFormItem = (field: IAutomationConditionField, data: IIndexer, options: IDataFormOptions): React.ReactNode => {
+		return <AutomationCondition field={field} />;
+	};
+
+	createEditNode(field: IAutomationConditionField, data: IIndexer): React.ReactElement {
+		return null;
+	}
+
+	createViewNode(field: IAutomationConditionField, data: IIndexer): React.ReactElement {
+		return null;
+	}
+}
+
+export class AutomationActionListFieldFactory extends DataFieldFactory<IAutomationActionListField> {
+
+	createFormItem = (field: IAutomationActionListField, data: IIndexer, options: IDataFormOptions): React.ReactNode => {
+		return <AutomationActionList field={field} />;
+	};
+
+	createEditNode(field: IAutomationActionListField, data: IIndexer): React.ReactElement {
+		return null;
+	}
+
+	createViewNode(field: IAutomationActionListField, data: IIndexer): React.ReactElement {
+		return null;
+	}
+}
 
 export abstract class AutomationConditionFactory<TCondition extends IAutomationCondition> {
 	private static Map: { [key: string]: AutomationConditionFactory<IAutomationCondition>; } = {};

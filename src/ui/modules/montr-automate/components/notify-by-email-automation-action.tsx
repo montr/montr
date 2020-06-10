@@ -1,8 +1,8 @@
 import React from "react";
 import { Space, Input, Form } from "antd";
-import { INotifyByEmailAutomationAction } from "../models";
 import { IAutomationActionProps } from "./automation-field-factory";
 import TextArea from "antd/lib/input/TextArea";
+import { INotifyByEmailAutomationAction } from "../models/automation";
 
 interface IProps extends IAutomationActionProps {
 	action: INotifyByEmailAutomationAction;

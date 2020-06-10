@@ -1,6 +1,7 @@
-import { Fetcher } from "./fetcher";
-import { Guid, IAutomation, IApiResult } from "../models";
-import { Constants } from "..";
+import { Fetcher } from "@montr-core/services/fetcher";
+import { IAutomation } from "../models/automation";
+import { Guid, IApiResult } from "@montr-core/models";
+import { Constants } from "@montr-core/.";
 
 interface IManageAutomationRequest {
 	entityTypeCode: string;

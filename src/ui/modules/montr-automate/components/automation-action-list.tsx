@@ -1,9 +1,9 @@
 import React from "react";
 import { Divider, Form, Select, Button, Space } from "antd";
-import { Icon, ButtonAdd } from ".";
-import { IAutomationActionListField, IAutomationAction } from "../models";
-import { Toolbar } from "./toolbar";
+import { Icon, ButtonAdd, Toolbar } from "@montr-core/components";
 import { AutomationActionFactory, IAutomationActionProps } from "./automation-field-factory";
+import { IAutomationActionListField } from "@montr-automate/models/automation-field";
+import { IAutomationAction } from "@montr-automate/models/automation";
 
 interface IProps {
 	field: IAutomationActionListField;

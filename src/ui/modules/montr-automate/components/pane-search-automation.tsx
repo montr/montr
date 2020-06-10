@@ -1,10 +1,13 @@
 import React from "react";
 import { Translation } from "react-i18next";
-import { DataTableUpdateToken, Toolbar, ButtonAdd, ButtonDelete, DataTable, PaneEditAutomation } from ".";
-import { Guid, IDataResult, IAutomation } from "../models";
-import { OperationService, AutomationService } from "../services";
-import { Constants } from "..";
+import { DataTableUpdateToken, Toolbar, ButtonAdd, ButtonDelete, DataTable } from "@montr-core/components";
+import { Guid, IDataResult } from "@montr-core/models";
+import { OperationService } from "@montr-core/services";
+import { Constants } from "@montr-core/.";
 import i18next from "i18next";
+import { AutomationService } from "../services/automation-service";
+import { IAutomation } from "../models/automation";
+import { PaneEditAutomation } from "./pane-edit-automation";
 
 interface IProps {
 	entityTypeCode: string;

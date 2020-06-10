@@ -1,7 +1,7 @@
 import React from "react";
 import { Space, Input, Form, Select } from "antd";
-import { ISetFieldAutomationAction } from "../models";
 import { IAutomationActionProps } from "./automation-field-factory";
+import { ISetFieldAutomationAction } from "../models/automation";
 
 interface IProps extends IAutomationActionProps {
 	action: ISetFieldAutomationAction;

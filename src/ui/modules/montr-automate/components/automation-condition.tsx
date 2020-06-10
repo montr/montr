@@ -1,8 +1,7 @@
 import React from "react";
 import { Divider, Form, Space, Select, Button } from "antd";
-import { Icon, ButtonAdd } from ".";
-import { IAutomationConditionField } from "../models";
-import { Toolbar } from "./toolbar";
+import { Icon, ButtonAdd, Toolbar } from "@montr-core/components";
+import { IAutomationConditionField } from "@montr-automate/models/automation-field";
 
 interface IProps {
 	field: IAutomationConditionField;

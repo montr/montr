@@ -19,6 +19,7 @@ module.exports = {
 			"@montr-core": path.resolve(__dirname, "modules/montr-core/"),
 			"@montr-idx": path.resolve(__dirname, "modules/montr-idx/"),
 			"@montr-master-data": path.resolve(__dirname, "modules/montr-master-data/"),
+			"@montr-automate": path.resolve(__dirname, "modules/montr-automate/"),
 			"@montr-docs": path.resolve(__dirname, "modules/montr-docs/"),
 			"@montr-kompany": path.resolve(__dirname, "modules/montr-kompany/"),
 			"@montr-tendr": path.resolve(__dirname, "modules/montr-tendr/"),

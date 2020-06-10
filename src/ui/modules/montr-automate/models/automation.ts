@@ -1,4 +1,4 @@
-import { Guid } from ".";
+import { Guid } from "@montr-core/models";
 
 export interface IAutomation {
 	uid?: Guid;
