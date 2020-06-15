@@ -29,11 +29,14 @@ namespace Montr.Automate.Impl.Services
 
 		private async Task<bool> MeetAll(IEnumerable<AutomationCondition> conditions, AutomationContext context, CancellationToken cancellationToken)
 		{
-			foreach (var condition in conditions)
+			if (conditions != null)
 			{
-				if (await MeetCondition(condition, context, cancellationToken) == false)
+				foreach (var condition in conditions)
 				{
-					return false;
+					if (await MeetCondition(condition, context, cancellationToken) == false)
+					{
+						return false;
+					}
 				}
 			}
 
@@ -43,11 +46,14 @@ namespace Montr.Automate.Impl.Services
 
 		private async Task<bool> MeetAny(IEnumerable<AutomationCondition> conditions, AutomationContext context, CancellationToken cancellationToken)
 		{
-			foreach (var condition in conditions)
+			if (conditions != null)
 			{
-				if (await MeetCondition(condition, context, cancellationToken))
+				foreach (var condition in conditions)
 				{
-					return true;
+					if (await MeetCondition(condition, context, cancellationToken))
+					{
+						return true;
+					}
 				}
 			}
 

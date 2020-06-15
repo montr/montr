@@ -3,7 +3,8 @@ using Montr.Metadata.Services;
 
 namespace Montr.Automate.Services
 {
-	public class AutomationConditionFieldProvider : DefaultFieldProvider<AutomationConditionField, AutomationCondition>
+	// todo: remove attribute, move to impl
+	public class AutomationConditionListFieldProvider : DefaultFieldProvider<AutomationConditionListField, AutomationCondition[]>
 	{
 	}
 

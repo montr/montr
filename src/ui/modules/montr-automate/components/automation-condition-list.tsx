@@ -1,14 +1,14 @@
 import React from "react";
 import { Divider, Form, Select } from "antd";
 import { ButtonAdd, Toolbar, FormListItemToolbar } from "@montr-core/components";
-import { IAutomationActionListField } from "@montr-automate/models/automation-field";
-import { AutomationAction } from ".";
+import { IAutomationConditionListField } from "../models/";
+import { AutomationCondition } from ".";
 
 interface IProps {
-	field: IAutomationActionListField;
+	field: IAutomationConditionListField;
 }
 
-export class AutomationActionList extends React.Component<IProps> {
+export class AutomationConditionList extends React.Component<IProps> {
 
 	render = () => {
 		const { field } = this.props;
@@ -29,9 +29,9 @@ export class AutomationActionList extends React.Component<IProps> {
 									name={[item.name, "type"]}
 									fieldKey={[item.fieldKey, "type"]}
 									rules={[{ required: true }]}>
-									<Select placeholder="Select action" style={{ minWidth: 150 }}>
-										<Select.Option value="set-field">Set Field</Select.Option>
-										<Select.Option value="notify-by-email">Notify By Email</Select.Option>
+									<Select placeholder="Select condition" style={{ minWidth: 150 }}>
+										<Select.Option value="group">Group</Select.Option>
+										<Select.Option value="field">Field</Select.Option>
 									</Select>
 								</Form.Item>
 							);
@@ -50,14 +50,14 @@ export class AutomationActionList extends React.Component<IProps> {
 										fieldKey={[item.fieldKey]}
 										rules={[{ required: true }]}
 										noStyle>
-										<AutomationAction item={item} typeSelector={typeSelector} />
+										<AutomationCondition item={item} typeSelector={typeSelector} />
 									</Form.Item>
 								</div>
 							);
 						})}
 
 						<Toolbar>
-							<ButtonAdd type="dashed" onClick={() => add()}>Add action</ButtonAdd>
+							<ButtonAdd type="dashed" onClick={() => add()}>Add condition</ButtonAdd>
 						</Toolbar>
 					</>);
 				}}

@@ -3,10 +3,10 @@ using Montr.Metadata.Models;
 
 namespace Montr.Automate.Models
 {
-	[FieldType(Code, typeof(AutomationConditionFieldProvider))]
-	public class AutomationConditionField : FieldMetadata
+	[FieldType(Code, typeof(AutomationConditionListFieldProvider))]
+	public class AutomationConditionListField : FieldMetadata
 	{
-		public const string Code = "automation-condition";
+		public const string Code = "automation-condition-list";
 
 		public override string Type => Code;
 	}

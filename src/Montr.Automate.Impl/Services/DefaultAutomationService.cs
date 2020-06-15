@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Montr.Automate.Models;
 using Montr.Automate.Services;
@@ -29,32 +30,41 @@ namespace Montr.Automate.Impl.Services
 
 			foreach (var automation in automations.Rows)
 			{
-				if (await MeetConditions(automation, context, cancellationToken))
+				if (await MeetAll(automation.Conditions, context, cancellationToken))
 				{
-					await ExecuteActions(automation, context, cancellationToken);
+					await Execute(automation.Actions, context, cancellationToken);
 				}
 			}
 		}
 
-		private async Task<bool> MeetConditions(Automation automation, AutomationContext context, CancellationToken cancellationToken)
+		private async Task<bool> MeetAll(IEnumerable<AutomationCondition> conditions, AutomationContext context, CancellationToken cancellationToken)
 		{
-			if (automation.Condition != null)
+			if (conditions != null)
 			{
-				var provider = _providerRegistry.GetConditionProvider(automation.Condition.Type);
+				foreach (var condition in conditions)
+				{
+					var provider = _providerRegistry.GetConditionProvider(condition.Type);
 
-				return await provider.Meet(automation.Condition, context, cancellationToken);
+					if (await provider.Meet(condition, context, cancellationToken) == false)
+					{
+						return false;
+					}
+				}
 			}
 
 			return true;
 		}
 
-		private async Task ExecuteActions(Automation automation, AutomationContext context, CancellationToken cancellationToken)
+		private async Task Execute(IEnumerable<AutomationAction> actions, AutomationContext context, CancellationToken cancellationToken)
 		{
-			foreach (var action in automation.Actions)
+			if (actions != null)
 			{
-				var provider = _providerRegistry.GetActionProvider(action.Type);
+				foreach (var action in actions)
+				{
+					var provider = _providerRegistry.GetActionProvider(action.Type);
 
-				await provider.Execute(action, context, cancellationToken);
+					await provider.Execute(action, context, cancellationToken);
+				}
 			}
 		}
 	}

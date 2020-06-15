@@ -12,6 +12,7 @@ export * from "./empty-field-view";
 export * from "./error-boundary";
 export * from "./footer";
 export * from "./form-defaults";
+export * from "./form-list-item-toolbar";
 export * from "./icon";
 export * from "./language-selector";
 export * from "./page";

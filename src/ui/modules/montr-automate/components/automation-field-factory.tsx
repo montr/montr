@@ -1,28 +1,21 @@
 import React from "react";
 import { IIndexer } from "@montr-core/models";
 import { FieldData } from "@montr-core/models/field-data";
-import { NotifyByEmailAutomationAction } from "./notify-by-email-automation-action";
-import { SetFieldAutomationAction } from "./set-field-automation-action";
-import {
-	IAutomationCondition, IAutomationAction, IGroupAutomationCondition,
-	INotifyByEmailAutomationAction, ISetFieldAutomationAction, IFieldAutomationCondition
-} from "../models/automation";
 import { DataFieldFactory, IDataFormOptions } from "@montr-core/components";
-import { IAutomationConditionField, IAutomationActionListField } from "../models/automation-field";
-import { AutomationCondition } from "./automation-condition";
-import { AutomationActionList } from "./automation-action-list";
+import { IAutomationConditionListField, IAutomationActionListField, IAutomationCondition, IAutomationAction, IGroupAutomationCondition, IFieldAutomationCondition, ISetFieldAutomationAction, INotifyByEmailAutomationAction } from "../models/";
+import { AutomationConditionList, AutomationActionList, GroupAutomationCondition, FieldAutomationCondition, SetFieldAutomationAction, NotifyByEmailAutomationAction } from ".";
 
-export class AutomationConditionFieldFactory extends DataFieldFactory<IAutomationConditionField> {
+export class AutomationConditionListFieldFactory extends DataFieldFactory<IAutomationConditionListField> {
 
-	createFormItem = (field: IAutomationConditionField, data: IIndexer, options: IDataFormOptions): React.ReactNode => {
-		return <AutomationCondition field={field} />;
+	createFormItem = (field: IAutomationConditionListField, data: IIndexer, options: IDataFormOptions): React.ReactNode => {
+		return <AutomationConditionList field={field} />;
 	};
 
-	createEditNode(field: IAutomationConditionField, data: IIndexer): React.ReactElement {
+	createEditNode(field: IAutomationConditionListField, data: IIndexer): React.ReactElement {
 		return null;
 	}
 
-	createViewNode(field: IAutomationConditionField, data: IIndexer): React.ReactElement {
+	createViewNode(field: IAutomationConditionListField, data: IIndexer): React.ReactElement {
 		return null;
 	}
 }
@@ -42,6 +35,11 @@ export class AutomationActionListFieldFactory extends DataFieldFactory<IAutomati
 	}
 }
 
+export class IAutomationConditionProps {
+	item: FieldData;
+	typeSelector: React.ReactElement;
+}
+
 export abstract class AutomationConditionFactory<TCondition extends IAutomationCondition> {
 	private static Map: { [key: string]: AutomationConditionFactory<IAutomationCondition>; } = {};
 
@@ -53,11 +51,10 @@ export abstract class AutomationConditionFactory<TCondition extends IAutomationC
 		return AutomationConditionFactory.Map[key];
 	}
 
-	abstract createFormItem(condition: TCondition, data: IIndexer): React.ReactNode;
+	abstract createFormItem(condition: TCondition, props: IAutomationConditionProps): React.ReactNode;
 }
 
 export class IAutomationActionProps {
-	// data: IIndexer;
 	item: FieldData;
 	typeSelector: React.ReactElement;
 }
@@ -77,14 +74,14 @@ export abstract class AutomationActionFactory<TAction extends IAutomationAction>
 }
 
 class GroupAutomationConditionFactory extends AutomationConditionFactory<IGroupAutomationCondition> {
-	createFormItem(condition: IGroupAutomationCondition, data: IIndexer): React.ReactElement {
-		return <h1>IGroupAutomationCondition</h1>;
+	createFormItem(condition: IGroupAutomationCondition, props: IAutomationConditionProps): React.ReactElement {
+		return <GroupAutomationCondition condition={condition} {...props} />;
 	}
 }
 
 class FieldAutomationConditionFactory extends AutomationConditionFactory<IFieldAutomationCondition> {
-	createFormItem(condition: IFieldAutomationCondition, data: IIndexer): React.ReactElement {
-		return <h1>IFieldAutomationCondition</h1>;
+	createFormItem(condition: IFieldAutomationCondition, props: IAutomationConditionProps): React.ReactElement {
+		return <FieldAutomationCondition condition={condition} {...props} />;
 	}
 }
 

@@ -31,7 +31,7 @@ namespace Montr.Automate.Impl
 		{
 			app.ConfigureMetadata(options =>
 			{
-				options.Registry.AddFieldType(typeof(AutomationConditionField));
+				options.Registry.AddFieldType(typeof(AutomationConditionListField));
 			});
 		}
 	}
