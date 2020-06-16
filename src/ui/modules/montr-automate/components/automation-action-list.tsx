@@ -1,17 +1,18 @@
 import React from "react";
 import { Divider, Form, Select } from "antd";
-import { ButtonAdd, Toolbar, FormListItemToolbar } from "@montr-core/components";
-import { IAutomationActionListField } from "@montr-automate/models/automation-field";
+import { ButtonAdd, Toolbar, FormListItemToolbar, IDataFormOptions } from "@montr-core/components";
+import { IAutomationActionListField } from "../models";
 import { AutomationAction } from ".";
 
 interface IProps {
 	field: IAutomationActionListField;
+	options: IDataFormOptions;
 }
 
 export class AutomationActionList extends React.Component<IProps> {
 
 	render = () => {
-		const { field } = this.props;
+		const { field, options } = this.props;
 
 		return (
 			<Form.List name={field.key}>
@@ -19,7 +20,7 @@ export class AutomationActionList extends React.Component<IProps> {
 
 					return (<>
 
-						<Divider orientation="left">{field.name}</Divider>
+						{field.name && <Divider orientation="left">{field.name}</Divider>}
 
 						{items.map((item, index) => {
 
@@ -38,6 +39,7 @@ export class AutomationActionList extends React.Component<IProps> {
 
 							return (
 								<div key={item.key}>
+
 									<FormListItemToolbar
 										item={item}
 										itemIndex={index}
@@ -50,7 +52,7 @@ export class AutomationActionList extends React.Component<IProps> {
 										fieldKey={[item.fieldKey]}
 										rules={[{ required: true }]}
 										noStyle>
-										<AutomationAction item={item} typeSelector={typeSelector} />
+										<AutomationAction item={item} typeSelector={typeSelector} options={options} />
 									</Form.Item>
 								</div>
 							);

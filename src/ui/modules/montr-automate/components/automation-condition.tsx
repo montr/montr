@@ -1,9 +1,9 @@
 import React from "react";
 import { Space } from "antd";
-import { AutomationConditionFactory, IAutomationConditionProps } from ".";
+import { AutomationConditionFactory, IAutomationItemProps } from ".";
 import { IAutomationCondition } from "../models";
 
-interface IProps extends IAutomationConditionProps {
+interface IProps extends IAutomationItemProps {
 	value?: IAutomationCondition;
 }
 

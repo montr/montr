@@ -27,7 +27,7 @@ namespace Montr.Automate.Services
 					new TextField { Key = "name", Name = "Наименование", Required = true },
 					new TextAreaField { Key = "description", Name = "Описание", Props = new TextAreaField.Properties { Rows = 1 } },
 					new AutomationConditionListField { Key = "conditions", Name = "Conditions" },
-					new AutomationActionListField { Key = "actions", Name = "Actions" }
+					new AutomationActionListField { Key = "actions", Name = "Actions" },
 				}
 			});
 

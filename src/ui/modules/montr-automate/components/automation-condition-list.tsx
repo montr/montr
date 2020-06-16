@@ -1,17 +1,18 @@
 import React from "react";
 import { Divider, Form, Select } from "antd";
-import { ButtonAdd, Toolbar, FormListItemToolbar } from "@montr-core/components";
+import { ButtonAdd, Toolbar, FormListItemToolbar, IDataFormOptions } from "@montr-core/components";
 import { IAutomationConditionListField } from "../models/";
 import { AutomationCondition } from ".";
 
 interface IProps {
 	field: IAutomationConditionListField;
+	options: IDataFormOptions;
 }
 
 export class AutomationConditionList extends React.Component<IProps> {
 
 	render = () => {
-		const { field } = this.props;
+		const { field, options } = this.props;
 
 		return (
 			<Form.List name={field.key}>
@@ -19,7 +20,7 @@ export class AutomationConditionList extends React.Component<IProps> {
 
 					return (<>
 
-						<Divider orientation="left">{field.name}</Divider>
+						{field.name && <Divider orientation="left">{field.name}</Divider>}
 
 						{items.map((item, index) => {
 
@@ -38,6 +39,7 @@ export class AutomationConditionList extends React.Component<IProps> {
 
 							return (
 								<div key={item.key}>
+
 									<FormListItemToolbar
 										item={item}
 										itemIndex={index}
@@ -50,19 +52,18 @@ export class AutomationConditionList extends React.Component<IProps> {
 										fieldKey={[item.fieldKey]}
 										rules={[{ required: true }]}
 										noStyle>
-										<AutomationCondition item={item} typeSelector={typeSelector} />
+										<AutomationCondition item={item} typeSelector={typeSelector} options={options} />
 									</Form.Item>
 								</div>
 							);
 						})}
 
 						<Toolbar>
-							<ButtonAdd type="dashed" onClick={() => add()}>Add condition</ButtonAdd>
+							<ButtonAdd type="dashed" onClick={() => add({ conditions: [] })}>Add condition</ButtonAdd>
 						</Toolbar>
 					</>);
 				}}
 			</Form.List>
-
 		);
 	};
 }

@@ -8,7 +8,7 @@ import { AutomationConditionList, AutomationActionList, GroupAutomationCondition
 export class AutomationConditionListFieldFactory extends DataFieldFactory<IAutomationConditionListField> {
 
 	createFormItem = (field: IAutomationConditionListField, data: IIndexer, options: IDataFormOptions): React.ReactNode => {
-		return <AutomationConditionList field={field} />;
+		return <AutomationConditionList key={field.key} field={field} options={options} />;
 	};
 
 	createEditNode(field: IAutomationConditionListField, data: IIndexer): React.ReactElement {
@@ -23,7 +23,7 @@ export class AutomationConditionListFieldFactory extends DataFieldFactory<IAutom
 export class AutomationActionListFieldFactory extends DataFieldFactory<IAutomationActionListField> {
 
 	createFormItem = (field: IAutomationActionListField, data: IIndexer, options: IDataFormOptions): React.ReactNode => {
-		return <AutomationActionList field={field} />;
+		return <AutomationActionList key={field.key} field={field} options={options} />;
 	};
 
 	createEditNode(field: IAutomationActionListField, data: IIndexer): React.ReactElement {
@@ -35,9 +35,10 @@ export class AutomationActionListFieldFactory extends DataFieldFactory<IAutomati
 	}
 }
 
-export class IAutomationConditionProps {
+export class IAutomationItemProps {
 	item: FieldData;
 	typeSelector: React.ReactElement;
+	options: IDataFormOptions;
 }
 
 export abstract class AutomationConditionFactory<TCondition extends IAutomationCondition> {
@@ -51,12 +52,7 @@ export abstract class AutomationConditionFactory<TCondition extends IAutomationC
 		return AutomationConditionFactory.Map[key];
 	}
 
-	abstract createFormItem(condition: TCondition, props: IAutomationConditionProps): React.ReactNode;
-}
-
-export class IAutomationActionProps {
-	item: FieldData;
-	typeSelector: React.ReactElement;
+	abstract createFormItem(condition: TCondition, props: IAutomationItemProps): React.ReactNode;
 }
 
 export abstract class AutomationActionFactory<TAction extends IAutomationAction> {
@@ -70,29 +66,29 @@ export abstract class AutomationActionFactory<TAction extends IAutomationAction>
 		return AutomationActionFactory.Map[key];
 	}
 
-	abstract createFormItem(action: TAction, props: IAutomationActionProps): React.ReactNode;
+	abstract createFormItem(action: TAction, props: IAutomationItemProps): React.ReactNode;
 }
 
 class GroupAutomationConditionFactory extends AutomationConditionFactory<IGroupAutomationCondition> {
-	createFormItem(condition: IGroupAutomationCondition, props: IAutomationConditionProps): React.ReactElement {
+	createFormItem(condition: IGroupAutomationCondition, props: IAutomationItemProps): React.ReactElement {
 		return <GroupAutomationCondition condition={condition} {...props} />;
 	}
 }
 
 class FieldAutomationConditionFactory extends AutomationConditionFactory<IFieldAutomationCondition> {
-	createFormItem(condition: IFieldAutomationCondition, props: IAutomationConditionProps): React.ReactElement {
+	createFormItem(condition: IFieldAutomationCondition, props: IAutomationItemProps): React.ReactElement {
 		return <FieldAutomationCondition condition={condition} {...props} />;
 	}
 }
 
 class SetFieldAutomationActionFactory extends AutomationConditionFactory<ISetFieldAutomationAction> {
-	createFormItem(action: ISetFieldAutomationAction, props: IAutomationActionProps): React.ReactElement {
+	createFormItem(action: ISetFieldAutomationAction, props: IAutomationItemProps): React.ReactElement {
 		return <SetFieldAutomationAction action={action} {...props} />;
 	}
 }
 
 class NotifyByEmailAutomationActionFactory extends AutomationConditionFactory<INotifyByEmailAutomationAction> {
-	createFormItem(action: INotifyByEmailAutomationAction, props: IAutomationActionProps): React.ReactElement {
+	createFormItem(action: INotifyByEmailAutomationAction, props: IAutomationItemProps): React.ReactElement {
 		return <NotifyByEmailAutomationAction action={action} {...props} />;
 	}
 }
