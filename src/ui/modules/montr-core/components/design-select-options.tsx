@@ -1,11 +1,13 @@
 import React, { ChangeEvent } from "react";
 import { Input, Row, Col, Typography, Button } from "antd";
 import { Gutter } from "antd/lib/grid/row";
-import { IOption, IIndexer } from "../models";
+import { IOption, IIndexer, IDesignSelectOptionsField } from "../models";
 import { ButtonAdd } from ".";
 import { Icon } from "./icon";
 
+
 interface IProps {
+	field: IDesignSelectOptionsField;
 	value?: IOption[];
 	onChange?: (value: any) => void;
 }
@@ -103,10 +105,10 @@ export class DesignSelectOptions extends React.Component<IProps, IState> {
 
 				{options?.map((item, index) => <Row gutter={gutter} key={index}>
 					<Col span={8}>
-						<Input name="name" value={item.name} onChange={(e) => this.changeItemProp(item, e)} />
+						<Input name="name" placeholder="Name" value={item.name} onChange={(e) => this.changeItemProp(item, e)} />
 					</Col>
 					<Col span={8}>
-						<Input name="value" value={item.value} onChange={(e) => this.changeItemProp(item, e)} />
+						<Input name="value" placeholder="Value" value={item.value} onChange={(e) => this.changeItemProp(item, e)} />
 					</Col>
 					<Col span={8}>
 						{count > 1 && <>

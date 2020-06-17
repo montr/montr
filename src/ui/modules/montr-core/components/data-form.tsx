@@ -129,6 +129,7 @@ class WrappedDataForm extends React.Component<IProps, IState> {
 				{fields &&
 					<Form
 						ref={this.getFormRef()}
+						autoComplete="off"
 						colon={false}
 						className={mode == "View" ? "data-form-mode-view" : null}
 						initialValues={data}

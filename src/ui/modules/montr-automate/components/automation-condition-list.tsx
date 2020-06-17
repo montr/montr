@@ -1,7 +1,7 @@
 import React from "react";
 import { Divider, Form, Select } from "antd";
 import { ButtonAdd, Toolbar, FormListItemToolbar, IDataFormOptions } from "@montr-core/components";
-import { IAutomationConditionListField } from "../models/";
+import { IAutomationConditionListField, IFieldAutomationCondition } from "../models/";
 import { AutomationCondition } from ".";
 
 interface IProps {
@@ -13,6 +13,8 @@ export class AutomationConditionList extends React.Component<IProps> {
 
 	render = () => {
 		const { field, options } = this.props;
+
+		const defaultCondition: IFieldAutomationCondition = { type: "field", operator: "Equal" };
 
 		return (
 			<Form.List name={field.key}>
@@ -59,7 +61,7 @@ export class AutomationConditionList extends React.Component<IProps> {
 						})}
 
 						<Toolbar>
-							<ButtonAdd type="dashed" onClick={() => add({ conditions: [] })}>Add condition</ButtonAdd>
+							<ButtonAdd type="dashed" onClick={() => add(defaultCondition)}>Add condition</ButtonAdd>
 						</Toolbar>
 					</>);
 				}}

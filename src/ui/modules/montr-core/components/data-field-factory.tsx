@@ -6,7 +6,7 @@ import {
 	IDataField, IIndexer, ISelectField, ITextAreaField, INumberField, IDateField, IBooleanField, ITextField,
 	IDesignSelectOptionsField, IPasswordField
 } from "../models";
-import { Icon, DesignSelectOptions, EmptyFieldView, IDataFormOptions, FormDefaults } from ".";
+import { Icon, DesignSelectOptions, DesignSelectOptionsFI, EmptyFieldView, IDataFormOptions, FormDefaults } from ".";
 import moment from "moment";
 import { DataHelper } from "../services";
 
@@ -171,8 +171,13 @@ class SelectFieldFactory extends DataFieldFactory<ISelectField> {
 }
 
 class DesignSelectOptionsFieldFactory extends DataFieldFactory<IDesignSelectOptionsField> {
+
+	/* createFormItem = (field: IDesignSelectOptionsField, data: IIndexer, options: IDataFormOptions): React.ReactNode => {
+		return <DesignSelectOptions key={field.key} />;
+	}; */
+
 	createEditNode(field: IDesignSelectOptionsField, data: IIndexer): React.ReactElement {
-		return <DesignSelectOptions />;
+		return <DesignSelectOptions field={field} />;
 	}
 }
 
