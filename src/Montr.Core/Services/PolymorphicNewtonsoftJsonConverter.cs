@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq.Expressions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
@@ -13,6 +14,12 @@ namespace Montr.Core.Services
 		public PolymorphicNewtonsoftJsonConverter(string typeProp, IDictionary<string, Type> typeMap)
 		{
 			_typeProp = typeProp;
+			_typeMap = typeMap;
+		}
+
+		public PolymorphicNewtonsoftJsonConverter(Expression<Func<TBaseType, object>> typePropExpr, IDictionary<string, Type> typeMap)
+		{
+			_typeProp = ExpressionHelper.GetMemberName(typePropExpr).ToLowerInvariant();
 			_typeMap = typeMap;
 		}
 

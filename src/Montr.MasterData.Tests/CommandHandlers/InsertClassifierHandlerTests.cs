@@ -15,7 +15,6 @@ using Montr.MasterData.Services;
 using Montr.Metadata.Impl.Entities;
 using Montr.Metadata.Impl.Services;
 using Montr.Metadata.Models;
-using Montr.Metadata.Services;
 using Moq;
 
 namespace Montr.MasterData.Tests.CommandHandlers

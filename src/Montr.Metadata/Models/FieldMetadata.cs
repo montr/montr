@@ -71,6 +71,9 @@ namespace Montr.Metadata.Models
 		}
 	}
 
+	/// <summary>
+	/// todo: move to question type
+	/// </summary>
 	[FieldType(TypeCode, typeof(SectionFieldProvider))]
 	public class SectionField : FieldMetadata
 	{

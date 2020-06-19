@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Montr.Automate.Models;
 using Montr.Core;
 using Montr.Core.Impl.Services;
 using Montr.Core.Services;
@@ -25,6 +26,7 @@ namespace Host
 	{
 		private ICollection<IModule> _modules;
 		private IDictionary<string, Type> _fieldTypeMap;
+		private IDictionary<string, Type> _automateActionTypeMap;
 
 		public Startup(ILoggerFactory loggerFactory, IWebHostEnvironment environment, IConfiguration configuration)
 		{
@@ -57,7 +59,7 @@ namespace Host
 				{
 					policy
 						.WithOrigins(appOptions.ClientUrls)
-						.WithExposedHeaders("content-disposition") // to export work (fetcher.openFile) 
+						.WithExposedHeaders("content-disposition") // to export work (fetcher.openFile)
 						.AllowCredentials()
 						.AllowAnyHeader()
 						.AllowAnyMethod();
@@ -109,19 +111,20 @@ namespace Host
 			else
 			{
 				// todo: use event (?)
-				var propName = ExpressionHelper.GetMemberName<FieldMetadata>(x => x.Type).ToLowerInvariant();
 				_fieldTypeMap = new ConcurrentDictionary<string, Type>();
+				_automateActionTypeMap = new ConcurrentDictionary<string, Type>();
 
 				mvcBuilder.AddNewtonsoftJson(options =>
 				{
 					// options.SerializerSettings.DefaultValueHandling = DefaultValueHandling.Ignore; // do not use - zeros in numbers ignored also
 					options.SerializerSettings.Converters.Add(new StringEnumConverter());
-					options.SerializerSettings.Converters.Add(new PolymorphicNewtonsoftJsonConverter<FieldMetadata>(propName, _fieldTypeMap));
+					options.SerializerSettings.Converters.Add(new PolymorphicNewtonsoftJsonConverter<FieldMetadata>(x => x.Type, _fieldTypeMap));
+					options.SerializerSettings.Converters.Add(new PolymorphicNewtonsoftJsonConverter<AutomationAction>(x => x.Type, _automateActionTypeMap));
 					options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
 				});
 			}
 		}
-		
+
 		public void Configure(IApplicationBuilder app)
 		{
 			app.UseWhen(context => context.Request.Path.StartsWithSegments("/api") == false, x =>
