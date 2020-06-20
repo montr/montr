@@ -8,6 +8,8 @@ namespace Montr.Automate.Impl.Services
 {
 	public class FieldAutomationConditionProvider : IAutomationConditionProvider
 	{
+		public Type ConditionType => typeof(FieldAutomationCondition);
+
 		public Task<bool> Meet(AutomationCondition automationCondition, AutomationContext context, CancellationToken cancellationToken)
 		{
 			var condition = (FieldAutomationCondition)automationCondition;

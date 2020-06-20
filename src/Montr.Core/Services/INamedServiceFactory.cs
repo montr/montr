@@ -8,6 +8,8 @@ namespace Montr.Core.Services
 	public interface INamedServiceFactory<out TService>
 	{
 		TService Resolve(string name);
+
+		IEnumerable<string> GetNames();
 	}
 
 	public class DefaultNamedServiceFactory<TService> : INamedServiceFactory<TService>
@@ -29,6 +31,11 @@ namespace Montr.Core.Services
 			}
 
 			throw new ArgumentException($"Service with name {name} is not registered.");
+		}
+
+		public IEnumerable<string> GetNames()
+		{
+			return _registrations.Keys;
 		}
 	}
 

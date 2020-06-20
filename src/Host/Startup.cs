@@ -12,6 +12,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Montr.Automate.Models;
+using Montr.Automate.Services;
 using Montr.Core;
 using Montr.Core.Impl.Services;
 using Montr.Core.Services;
@@ -26,6 +27,7 @@ namespace Host
 	{
 		private ICollection<IModule> _modules;
 		private IDictionary<string, Type> _fieldTypeMap;
+		private IDictionary<string, Type> _automateConditionTypeMap;
 		private IDictionary<string, Type> _automateActionTypeMap;
 
 		public Startup(ILoggerFactory loggerFactory, IWebHostEnvironment environment, IConfiguration configuration)
@@ -112,6 +114,7 @@ namespace Host
 			{
 				// todo: use event (?)
 				_fieldTypeMap = new ConcurrentDictionary<string, Type>();
+				_automateConditionTypeMap = new ConcurrentDictionary<string, Type>();
 				_automateActionTypeMap = new ConcurrentDictionary<string, Type>();
 
 				mvcBuilder.AddNewtonsoftJson(options =>
@@ -119,6 +122,7 @@ namespace Host
 					// options.SerializerSettings.DefaultValueHandling = DefaultValueHandling.Ignore; // do not use - zeros in numbers ignored also
 					options.SerializerSettings.Converters.Add(new StringEnumConverter());
 					options.SerializerSettings.Converters.Add(new PolymorphicNewtonsoftJsonConverter<FieldMetadata>(x => x.Type, _fieldTypeMap));
+					options.SerializerSettings.Converters.Add(new PolymorphicNewtonsoftJsonConverter<AutomationCondition>(x => x.Type, _automateConditionTypeMap));
 					options.SerializerSettings.Converters.Add(new PolymorphicNewtonsoftJsonConverter<AutomationAction>(x => x.Type, _automateActionTypeMap));
 					options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
 				});
@@ -159,6 +163,18 @@ namespace Host
 			foreach (var fieldType in fieldProviderRegistry.GetFieldTypes())
 			{
 				_fieldTypeMap[fieldType.Code] = fieldProviderRegistry.GetFieldTypeProvider(fieldType.Code).FieldType;
+			}
+
+			var conditionProviderFactory = app.ApplicationServices.GetRequiredService<INamedServiceFactory<IAutomationConditionProvider>>();
+			foreach (var name in conditionProviderFactory.GetNames())
+			{
+				_automateConditionTypeMap[name] = conditionProviderFactory.Resolve(name).ConditionType;
+			}
+
+			var actionProviderFactory = app.ApplicationServices.GetRequiredService<INamedServiceFactory<IAutomationActionProvider>>();
+			foreach (var name in actionProviderFactory.GetNames())
+			{
+				_automateActionTypeMap[name] = actionProviderFactory.Resolve(name).ActionType;
 			}
 		}
 	}
