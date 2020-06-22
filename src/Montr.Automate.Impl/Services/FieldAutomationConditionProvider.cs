@@ -14,9 +14,11 @@ namespace Montr.Automate.Impl.Services
 		{
 			var condition = (FieldAutomationCondition)automationCondition;
 
+			var props = condition.Props;
+
 			var result = false;
 
-			var property = context.Entity.GetType().GetProperty(condition.Field);
+			var property = context.Entity.GetType().GetProperty(props.Field);
 
 			if (property != null)
 			{
@@ -26,9 +28,9 @@ namespace Montr.Automate.Impl.Services
 				{
 					var value = Convert.ToString(getMethod.Invoke(context.Entity, null));
 
-					var compareResult = string.Compare(value, condition.Value, StringComparison.OrdinalIgnoreCase);
+					var compareResult = string.Compare(value, props.Value, StringComparison.OrdinalIgnoreCase);
 
-					switch (condition.Operator)
+					switch (props.Operator)
 					{
 						case AutomationConditionOperator.Equal:
 							result = compareResult == 0;
@@ -49,7 +51,7 @@ namespace Montr.Automate.Impl.Services
 							result = compareResult >= 0;
 							break;
 						default:
-							throw new InvalidOperationException($"Operator {condition.Operator} is not supported.");
+							throw new InvalidOperationException($"Operator {props.Operator} is not supported.");
 					}
 				}
 			}

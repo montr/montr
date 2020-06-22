@@ -20,7 +20,7 @@ export class NotifyByEmailAutomationAction extends React.Component<IProps> {
 
 				<Form.Item
 					{...item}
-					name={[item.name, "recipient"]}
+					name={[item.name, "props", "recipient"]}
 					fieldKey={[item.fieldKey, "recipient"]}
 					rules={[{ required: true }]}>
 					<Input placeholder="Recipient" />
@@ -29,7 +29,7 @@ export class NotifyByEmailAutomationAction extends React.Component<IProps> {
 				<Form.Item
 					{...item}
 					label="Subject"
-					name={[item.name, "subject"]}
+					name={[item.name, "props", "subject"]}
 					fieldKey={[item.fieldKey, "subject"]}
 					rules={[{ required: true }]}>
 					<Input placeholder="Subject" />
@@ -38,7 +38,7 @@ export class NotifyByEmailAutomationAction extends React.Component<IProps> {
 				<Form.Item
 					{...item}
 					label="Body"
-					name={[item.name, "body"]}
+					name={[item.name, "props", "body"]}
 					fieldKey={[item.fieldKey, "body"]}
 					rules={[{ required: true }]}>
 					<TextArea placeholder="Body" />

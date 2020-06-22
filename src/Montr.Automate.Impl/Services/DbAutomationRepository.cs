@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using LinqToDB;
 using Montr.Automate.Impl.Entities;
 using Montr.Automate.Models;
+using Montr.Automate.Services;
 using Montr.Core.Models;
 using Montr.Core.Services;
 using Montr.Data.Linq2Db;
@@ -15,10 +16,17 @@ namespace Montr.Automate.Impl.Services
 	public class DbAutomationRepository : IRepository<Automation>
 	{
 		private readonly IDbContextFactory _dbContextFactory;
+		private readonly INamedServiceFactory<IAutomationActionProvider> _actionProvider;
+		private readonly IJsonSerializer _jsonSerializer;
 
-		public DbAutomationRepository(IDbContextFactory dbContextFactory)
+		public DbAutomationRepository(
+			IDbContextFactory dbContextFactory,
+			INamedServiceFactory<IAutomationActionProvider> actionProvider,
+			IJsonSerializer jsonSerializer)
 		{
 			_dbContextFactory = dbContextFactory;
+			_actionProvider = actionProvider;
+			_jsonSerializer = jsonSerializer;
 		}
 
 		public async Task<SearchResult<Automation>> Search(SearchRequest searchRequest, CancellationToken cancellationToken)
@@ -71,6 +79,36 @@ namespace Montr.Automate.Impl.Services
 					result.Add(item);
 				}
 
+				if (request.Uid != null && result.Count == 1)
+				{
+					var dbActions = await db.GetTable<DbAutomationAction>()
+						.Where(x => x.AutomationUid == request.Uid)
+						.ToListAsync(cancellationToken);
+
+					var actions = new List<AutomationAction>();
+
+					foreach (var dbAction in dbActions)
+					{
+						var actionProvider = _actionProvider.Resolve(dbAction.TypeCode);
+
+						// todo: use factory (?) move to provider (!?)
+						var action = (AutomationAction)Activator.CreateInstance(actionProvider.ActionType);
+
+						if (dbAction.Props != null)
+						{
+							var propertiesType = action.GetPropertiesType();
+
+							var properties = _jsonSerializer.Deserialize(dbAction.Props, propertiesType);
+
+							action.SetProperties(properties);
+						}
+
+						actions.Add(action);
+					}
+
+					result[0].Actions = actions;
+				}
+
 				return new SearchResult<Automation>
 				{
 					TotalCount = query.GetTotalCount(request),
@@ -98,24 +136,33 @@ namespace Montr.Automate.Impl.Services
 						{
 							new FieldAutomationCondition
 							{
-								Field = "StatusCode",
-								Operator = AutomationConditionOperator.Equal,
-								Value = "Published"
+								Props = new FieldAutomationCondition.Properties
+								{
+									Field = "StatusCode",
+									Operator = AutomationConditionOperator.Equal,
+									Value = "Published"
+								}
 							}
 						},
 						Actions = new List<AutomationAction>
 						{
 							new NotifyByEmailAutomationAction
 							{
-								Recipient = "operator",
-								Subject = "New company registration request {{DocumentNumber}} from {{DocumentDate}} published",
-								Body = "New company registration request {{DocumentNumber}} from {{DocumentDate}} published, please review."
+								Props = new NotifyByEmailAutomationAction.Properties
+								{
+									Recipient = "operator",
+									Subject = "New company registration request {{DocumentNumber}} from {{DocumentDate}} published",
+									Body = "New company registration request {{DocumentNumber}} from {{DocumentDate}} published, please review."
+								}
 							},
 							new NotifyByEmailAutomationAction
 							{
-								Recipient = "requester",
-								Subject = "Your company registration request {{DocumentNumber}} from {{DocumentDate}} received",
-								Body = "Your company registration request {{DocumentNumber}} from {{DocumentDate}} received and will be reviewed."
+								Props = new NotifyByEmailAutomationAction.Properties
+								{
+									Recipient = "requester",
+									Subject = "Your company registration request {{DocumentNumber}} from {{DocumentDate}} received",
+									Body = "Your company registration request {{DocumentNumber}} from {{DocumentDate}} received and will be reviewed."
+								}
 							}
 						}
 					}

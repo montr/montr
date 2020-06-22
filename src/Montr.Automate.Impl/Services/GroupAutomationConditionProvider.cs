@@ -20,14 +20,16 @@ namespace Montr.Automate.Impl.Services
 
 		public async Task<bool> Meet(AutomationCondition automationCondition, AutomationContext context, CancellationToken cancellationToken)
 		{
-			var group = (GroupAutomationCondition)automationCondition;
+			var condition = (GroupAutomationCondition)automationCondition;
 
-			if (group.Meet == AutomationConditionMeet.All)
+			var props = condition.Props;
+
+			if (props.Meet == AutomationConditionMeet.All)
 			{
-				return await MeetAll(group.Conditions, context, cancellationToken);
+				return await MeetAll(props.Conditions, context, cancellationToken);
 			}
 
-			return await MeetAny(group.Conditions, context, cancellationToken);
+			return await MeetAny(props.Conditions, context, cancellationToken);
 		}
 
 		private async Task<bool> MeetAll(IEnumerable<AutomationCondition> conditions, AutomationContext context, CancellationToken cancellationToken)

@@ -29,11 +29,13 @@ namespace Montr.Automate.Impl.Services
 		{
 			var action = (NotifyByEmailAutomationAction)automationAction;
 
-			var recipient = await _recipientResolver.Resolve(action.Recipient, context, cancellationToken);
+			var props = action.Props;
+
+			var recipient = await _recipientResolver.Resolve(props.Recipient, context, cancellationToken);
 
 			if (recipient != null)
 			{
-				var message = await _templateRenderer.Render(action.Subject, action.Body, context.Entity, cancellationToken);
+				var message = await _templateRenderer.Render(props.Subject, props.Body, context.Entity, cancellationToken);
 
 				await _emailSender.Send(recipient.Email, message.Subject, message.Body, cancellationToken);
 			}

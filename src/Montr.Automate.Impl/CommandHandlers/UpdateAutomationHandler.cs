@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using LinqToDB;
+using LinqToDB.Data;
 using MediatR;
 using Montr.Automate.Commands;
 using Montr.Automate.Impl.Entities;
@@ -16,16 +18,38 @@ namespace Montr.Automate.Impl.CommandHandlers
 	{
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IDbContextFactory _dbContextFactory;
+		private readonly IJsonSerializer _jsonSerializer;
 
-		public UpdateAutomationHandler(IUnitOfWorkFactory unitOfWorkFactory, IDbContextFactory dbContextFactory)
+		public UpdateAutomationHandler(IUnitOfWorkFactory unitOfWorkFactory, IDbContextFactory dbContextFactory, IJsonSerializer jsonSerializer)
 		{
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_dbContextFactory = dbContextFactory;
+			_jsonSerializer = jsonSerializer;
 		}
 
 		public async  Task<ApiResult> Handle(UpdateAutomation request, CancellationToken cancellationToken)
 		{
 			var item = request.Item ?? throw new ArgumentNullException(nameof(request.Item));
+
+			var actions = new List<DbAutomationAction>();
+
+			var order = 0;
+
+			foreach (var action in item.Actions)
+			{
+				var properties = action.GetProperties();
+
+				if (properties != null)
+				{
+					actions.Add(new DbAutomationAction
+					{
+						AutomationUid = item.Uid,
+						TypeCode = action.Type,
+						DisplayOrder = order++,
+						Props = _jsonSerializer.Serialize(properties)
+					});
+				}
+			}
 
 			using (var scope = _unitOfWorkFactory.Create())
 			{
@@ -41,6 +65,11 @@ namespace Montr.Automate.Impl.CommandHandlers
 						.Set(x => x.Description, item.Description)
 						.Set(x => x.DisplayOrder, item.DisplayOrder)
 						.UpdateAsync(cancellationToken);
+
+					await db.GetTable<DbAutomationAction>()
+						.Where(x => x.AutomationUid == item.Uid).DeleteAsync(cancellationToken);
+
+					db.GetTable<DbAutomationAction>().BulkCopy(actions);
 				}
 
 				scope.Commit();
