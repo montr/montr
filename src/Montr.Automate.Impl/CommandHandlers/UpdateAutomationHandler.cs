@@ -27,7 +27,7 @@ namespace Montr.Automate.Impl.CommandHandlers
 			_jsonSerializer = jsonSerializer;
 		}
 
-		public async  Task<ApiResult> Handle(UpdateAutomation request, CancellationToken cancellationToken)
+		public async Task<ApiResult> Handle(UpdateAutomation request, CancellationToken cancellationToken)
 		{
 			var item = request.Item ?? throw new ArgumentNullException(nameof(request.Item));
 
