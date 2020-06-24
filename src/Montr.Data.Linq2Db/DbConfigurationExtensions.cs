@@ -10,7 +10,7 @@ namespace Montr.Data.Linq2Db
 		{
 			var configuration = new ConfigurationBuilder()
 				.SetBasePath(AppDomain.CurrentDomain.BaseDirectory)
-				.AddJsonFile(jsonPath)
+				.AddJsonFile(jsonPath, true)
 				// .AddUserSecrets(...)
 				.AddEnvironmentVariables()
 				.Build();

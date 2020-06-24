@@ -1,9 +1,12 @@
-﻿using System.Threading;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Montr.Automate.Commands;
 using Montr.Automate.Impl.CommandHandlers;
 using Montr.Automate.Models;
+using Montr.Automate.Tests.Services;
 using Montr.Core.Services;
 using Montr.Data.Linq2Db;
 
@@ -20,18 +23,63 @@ namespace Montr.Automate.Tests.CommandHandlers
 			var unitOfWorkFactory = new TransactionScopeUnitOfWorkFactory();
 			var dbContextFactory = new DefaultDbContextFactory();
 			var jsonSerializer = new NewtonsoftJsonSerializer();
+			var generator = new AutomateDbGenerator(unitOfWorkFactory, dbContextFactory);
+
 			var handler = new UpdateAutomationHandler(unitOfWorkFactory, dbContextFactory, jsonSerializer);
 
 			using (var _ = unitOfWorkFactory.Create())
 			{
 				// arrange
+				var automation = new Automation
+				{
+					Conditions = new List<AutomationCondition>
+					{
+						new FieldAutomationCondition
+						{
+							Props = new FieldAutomationCondition.Properties
+							{
+								Field = "Status",
+								Operator = AutomationConditionOperator.Equal,
+								Value = "Published"
+							}
+						}
+					},
+					Actions = new List<AutomationAction>
+					{
+						new NotifyByEmailAutomationAction
+						{
+
+							Props = new NotifyByEmailAutomationAction.Properties
+							{
+								Recipient = "operator",
+								Subject = "Test message #1",
+								Body = "Hello"
+							}
+						}
+					}
+				};
+
+				var inserted = await generator.InsertAutomation(automation, cancellationToken);
 
 				// act
+
+				// ReSharper disable once PossibleInvalidOperationException
+				automation.Uid = inserted.Uid.Value;
+				automation.Actions.Add(new NotifyByEmailAutomationAction
+				{
+					Props = new NotifyByEmailAutomationAction.Properties
+					{
+						Recipient = "requester",
+						Subject = "Test message #2",
+						Body = "Hello"
+					}
+				});
+
 				var command = new UpdateAutomation
 				{
-					Item = new Automation
-					{
-					}
+					EntityTypeCode = generator.EntityTypeCode,
+					EntityTypeUid = generator.EntityTypeUid,
+					Item = automation
 				};
 
 				var result = await handler.Handle(command, cancellationToken);
@@ -40,6 +88,13 @@ namespace Montr.Automate.Tests.CommandHandlers
 				Assert.IsNotNull(result);
 				Assert.IsTrue(result.Success);
 				Assert.AreEqual(1, result.AffectedRows);
+
+				var updated = await generator.GetAutomation(inserted.Uid.Value, cancellationToken);
+				// Assert.AreEqual(1, updated.Conditions.Count);
+				Assert.AreEqual(2, updated.Actions.Count);
+				var actions = updated.Actions.OfType<NotifyByEmailAutomationAction>().ToList();
+				Assert.IsNotNull(actions.FirstOrDefault(x => x.Props.Subject.Contains("#1")));
+				Assert.IsNotNull(actions.FirstOrDefault(x => x.Props.Subject.Contains("#2")));
 			}
 		}
 	}

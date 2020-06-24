@@ -8,6 +8,7 @@ using LinqToDB.Data;
 using MediatR;
 using Montr.Automate.Commands;
 using Montr.Automate.Impl.Entities;
+using Montr.Automate.Models;
 using Montr.Core.Models;
 using Montr.Core.Services;
 using Montr.Data.Linq2Db;
@@ -33,23 +34,7 @@ namespace Montr.Automate.Impl.CommandHandlers
 
 			var actions = new List<DbAutomationAction>();
 
-			var order = 0;
-
-			foreach (var action in item.Actions)
-			{
-				var properties = action.GetProperties();
-
-				if (properties != null)
-				{
-					actions.Add(new DbAutomationAction
-					{
-						AutomationUid = item.Uid,
-						TypeCode = action.Type,
-						DisplayOrder = order++,
-						Props = _jsonSerializer.Serialize(properties)
-					});
-				}
-			}
+			CollectDbActions(item, item.Actions, actions);
 
 			using (var scope = _unitOfWorkFactory.Create())
 			{
@@ -75,6 +60,30 @@ namespace Montr.Automate.Impl.CommandHandlers
 				scope.Commit();
 
 				return new ApiResult { AffectedRows = affected };
+			}
+		}
+
+		private void CollectDbActions(Automation item, IList<AutomationAction> actions, ICollection<DbAutomationAction> dbActions)
+		{
+			if (actions != null)
+			{
+				var order = 0;
+
+				foreach (var action in actions)
+				{
+					var properties = action.GetProperties();
+
+					if (properties != null)
+					{
+						dbActions.Add(new DbAutomationAction
+						{
+							AutomationUid = item.Uid,
+							TypeCode = action.Type,
+							DisplayOrder = order++,
+							Props = _jsonSerializer.Serialize(properties)
+						});
+					}
+				}
 			}
 		}
 	}
