@@ -32,9 +32,8 @@ namespace Montr.Automate.Impl.CommandHandlers
 		{
 			var item = request.Item ?? throw new ArgumentNullException(nameof(request.Item));
 
-			var actions = new List<DbAutomationAction>();
-
-			CollectDbActions(item, item.Actions, actions);
+			var dbConditions = CollectDbConditions(item, item.Conditions);
+			var dbActions = CollectDbActions(item, item.Actions);
 
 			using (var scope = _unitOfWorkFactory.Create())
 			{
@@ -51,10 +50,15 @@ namespace Montr.Automate.Impl.CommandHandlers
 						.Set(x => x.DisplayOrder, item.DisplayOrder)
 						.UpdateAsync(cancellationToken);
 
+					await db.GetTable<DbAutomationCondition>()
+						.Where(x => x.AutomationUid == item.Uid).DeleteAsync(cancellationToken);
+
+					db.GetTable<DbAutomationCondition>().BulkCopy(dbConditions);
+
 					await db.GetTable<DbAutomationAction>()
 						.Where(x => x.AutomationUid == item.Uid).DeleteAsync(cancellationToken);
 
-					db.GetTable<DbAutomationAction>().BulkCopy(actions);
+					db.GetTable<DbAutomationAction>().BulkCopy(dbActions);
 				}
 
 				scope.Commit();
@@ -63,28 +67,61 @@ namespace Montr.Automate.Impl.CommandHandlers
 			}
 		}
 
-		private void CollectDbActions(Automation item, IList<AutomationAction> actions, ICollection<DbAutomationAction> dbActions)
+		private IList<DbAutomationCondition> CollectDbConditions(Automation automation, IList<AutomationCondition> items)
 		{
-			if (actions != null)
+			var result = new List<DbAutomationCondition>();
+
+			if (items != null)
 			{
 				var order = 0;
 
-				foreach (var action in actions)
+				foreach (var item in items)
 				{
-					var properties = action.GetProperties();
+					var properties = item.GetProperties();
 
 					if (properties != null)
 					{
-						dbActions.Add(new DbAutomationAction
+						result.Add(new DbAutomationCondition
 						{
-							AutomationUid = item.Uid,
-							TypeCode = action.Type,
+							Uid = Guid.NewGuid(),
+							AutomationUid = automation.Uid,
+							TypeCode = item.Type,
 							DisplayOrder = order++,
 							Props = _jsonSerializer.Serialize(properties)
 						});
 					}
 				}
 			}
+
+			return result;
+		}
+
+		private IList<DbAutomationAction> CollectDbActions(Automation automation, IList<AutomationAction> items)
+		{
+			var result = new List<DbAutomationAction>();
+
+			if (items != null)
+			{
+				var order = 0;
+
+				foreach (var item in items)
+				{
+					var properties = item.GetProperties();
+
+					if (properties != null)
+					{
+						result.Add(new DbAutomationAction
+						{
+							AutomationUid = automation.Uid,
+							TypeCode = item.Type,
+							DisplayOrder = order++,
+							Props = _jsonSerializer.Serialize(properties)
+						});
+					}
+				}
+			}
+
+			return result;
 		}
 	}
 }
