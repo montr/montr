@@ -7,6 +7,9 @@ namespace Montr.Automate.Impl.Entities
 	[Table(Schema = "montr", Name = "automation_action")]
 	public class DbAutomationAction
 	{
+		[Column(Name = "uid"), DataType(DataType.Guid), PrimaryKey, NotNull]
+		public Guid Uid { get; set; }
+
 		[Column(Name = "automation_uid"), DataType(DataType.Guid), NotNull]
 		public Guid AutomationUid { get; set; }
 
