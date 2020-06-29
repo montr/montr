@@ -1,7 +1,6 @@
 import React from "react";
 import { Space, Input, Form } from "antd";
 import { IAutomationItemProps } from "./automation-field-factory";
-import TextArea from "antd/lib/input/TextArea";
 import { INotifyByEmailAutomationAction } from "../models/automation";
 
 interface IProps extends IAutomationItemProps {
@@ -41,7 +40,7 @@ export class NotifyByEmailAutomationAction extends React.Component<IProps> {
 					name={[item.name, "props", "body"]}
 					fieldKey={[item.fieldKey, "body"]}
 					rules={[{ required: true }]}>
-					<TextArea placeholder="Body" />
+					<Input.TextArea placeholder="Body" />
 				</Form.Item>
 
 			</Space>
