@@ -3,7 +3,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Montr.Automate.Commands;
-using Montr.Automate.Impl.CommandHandlers;
 using Montr.Automate.Impl.QueryHandlers;
 using Montr.Automate.Impl.Services;
 using Montr.Automate.Models;
@@ -18,13 +17,12 @@ namespace Montr.Automate.Tests.Services
 {
 	public class AutomateDbGenerator
 	{
-		private readonly IDbContextFactory _dbContextFactory;
-		private readonly InsertAutomationHandler _insertAutomationHandler;
+		private readonly IAutomationService _automationService;
 		private readonly GetAutomationHandler _getAutomationHandler;
 
-		public AutomateDbGenerator(IUnitOfWorkFactory unitOfWorkFactory, IDbContextFactory dbContextFactory)
+		public AutomateDbGenerator(IDbContextFactory dbContextFactory)
 		{
-			_dbContextFactory = dbContextFactory;
+			var jsonSerializer = new NewtonsoftJsonSerializer();
 
 			var acpfMock = new Mock<INamedServiceFactory<IAutomationConditionProvider>>();
 			acpfMock.Setup(x => x.Resolve(FieldAutomationCondition.TypeCode))
@@ -34,9 +32,9 @@ namespace Montr.Automate.Tests.Services
 			aapfMock.Setup(x => x.Resolve(NotifyByEmailAutomationAction.TypeCode))
 				.Returns(new NoopAutomationActionProvider { ActionType = typeof(NotifyByEmailAutomationAction) });
 
-			var automationRepository = new DbAutomationRepository(dbContextFactory, acpfMock.Object, aapfMock.Object, new NewtonsoftJsonSerializer());
+			var automationRepository = new DbAutomationRepository(dbContextFactory, acpfMock.Object, aapfMock.Object, jsonSerializer);
+			_automationService = new DefaultAutomationService(dbContextFactory, jsonSerializer);
 
-			_insertAutomationHandler = new InsertAutomationHandler(unitOfWorkFactory, dbContextFactory);
 			_getAutomationHandler = new GetAutomationHandler(automationRepository);
 		}
 
@@ -46,7 +44,7 @@ namespace Montr.Automate.Tests.Services
 
 		public async Task<ApiResult> InsertAutomation(Automation automation, CancellationToken cancellationToken)
 		{
-			var result = await _insertAutomationHandler.Handle(new InsertAutomation
+			var result = await _automationService.Insert(new InsertAutomation
 			{
 				EntityTypeCode = EntityTypeCode,
 				EntityTypeUid = EntityTypeUid,

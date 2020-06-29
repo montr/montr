@@ -70,7 +70,7 @@ namespace Montr.Kompany.Tests.CommandHandlers
 					}
 				});
 
-			var automationServiceMock = new Mock<IAutomationService>();
+			var automationServiceMock = new Mock<IAutomationRunner>();
 
 			var handler = new CreateCompanyHandler(unitOfWorkFactory,
 				dbContextFactory, dateTimeProvider, metadataRepositoryMock.Object,

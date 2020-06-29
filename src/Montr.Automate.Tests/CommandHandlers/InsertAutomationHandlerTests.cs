@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -14,10 +15,10 @@ using Montr.Data.Linq2Db;
 namespace Montr.Automate.Tests.CommandHandlers
 {
 	[TestClass]
-	public class UpdateAutomationHandlerTests
+	public class InsertAutomationHandlerTests
 	{
 		[TestMethod]
-		public async Task Handle_NormalValues_UpdateAutomation()
+		public async Task Handle_NormalValues_InsertAutomation()
 		{
 			// arrange
 			var cancellationToken = new CancellationToken();
@@ -27,7 +28,7 @@ namespace Montr.Automate.Tests.CommandHandlers
 			var automationService = new DefaultAutomationService(dbContextFactory, jsonSerializer);
 			var generator = new AutomateDbGenerator(dbContextFactory);
 
-			var handler = new UpdateAutomationHandler(unitOfWorkFactory, automationService);
+			var handler = new InsertAutomationHandler(unitOfWorkFactory, automationService);
 
 			using (var _ = unitOfWorkFactory.Create())
 			{
@@ -61,23 +62,8 @@ namespace Montr.Automate.Tests.CommandHandlers
 					}
 				};
 
-				var inserted = await generator.InsertAutomation(automation, cancellationToken);
-
 				// act
-
-				// ReSharper disable once PossibleInvalidOperationException
-				automation.Uid = inserted.Uid.Value;
-				automation.Actions.Add(new NotifyByEmailAutomationAction
-				{
-					Props = new NotifyByEmailAutomationAction.Properties
-					{
-						Recipient = "requester",
-						Subject = "Test message #2",
-						Body = "Hello"
-					}
-				});
-
-				var command = new UpdateAutomation
+				var command = new InsertAutomation
 				{
 					EntityTypeCode = generator.EntityTypeCode,
 					EntityTypeUid = generator.EntityTypeUid,
@@ -90,16 +76,18 @@ namespace Montr.Automate.Tests.CommandHandlers
 				Assert.IsNotNull(result);
 				Assert.IsTrue(result.Success);
 				Assert.AreEqual(1, result.AffectedRows);
+				Assert.IsNotNull(result.Uid);
+				Assert.AreNotEqual(Guid.Empty, result.Uid);
 
-				var updated = await generator.GetAutomation(inserted.Uid.Value, cancellationToken);
+				// ReSharper disable once PossibleInvalidOperationException
+				var inserted = await generator.GetAutomation(result.Uid.Value, cancellationToken);
 
-				Assert.AreEqual(2, updated.Actions.Count);
-				var actions = updated.Actions.OfType<NotifyByEmailAutomationAction>().ToList();
+				Assert.AreEqual(1, inserted.Actions.Count);
+				var actions = inserted.Actions.OfType<NotifyByEmailAutomationAction>().ToList();
 				Assert.IsNotNull(actions.FirstOrDefault(x => x.Props.Subject.Contains("#1")));
-				Assert.IsNotNull(actions.FirstOrDefault(x => x.Props.Subject.Contains("#2")));
 
-				Assert.AreEqual(1, updated.Conditions.Count);
-				var conditions = updated.Conditions.OfType<FieldAutomationCondition>().ToList();
+				Assert.AreEqual(1, inserted.Conditions.Count);
+				var conditions = inserted.Conditions.OfType<FieldAutomationCondition>().ToList();
 				Assert.IsNotNull(conditions.FirstOrDefault(x => x.Props.Field.Contains("Status")));
 			}
 		}

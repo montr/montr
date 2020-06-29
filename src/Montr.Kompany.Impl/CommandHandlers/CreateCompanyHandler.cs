@@ -28,12 +28,12 @@ namespace Montr.Kompany.Impl.CommandHandlers
 		private readonly IDocumentTypeService _documentTypeRepository;
 		private readonly IDocumentService _documentRepository;
 		private readonly IAuditLogService _auditLogService;
-		private readonly IAutomationService _automationService;
+		private readonly IAutomationRunner _automationRunner;
 
 		public CreateCompanyHandler(IUnitOfWorkFactory unitOfWorkFactory, IDbContextFactory dbContextFactory,
 			IDateTimeProvider dateTimeProvider, IRepository<FieldMetadata> fieldMetadataRepository, IFieldDataRepository fieldDataRepository,
 			IDocumentTypeService documentTypeRepository, IDocumentService documentRepository, IAuditLogService auditLogService,
-			IAutomationService automationService)
+			IAutomationRunner automationRunner)
 		{
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_dbContextFactory = dbContextFactory;
@@ -43,7 +43,7 @@ namespace Montr.Kompany.Impl.CommandHandlers
 			_documentTypeRepository = documentTypeRepository;
 			_documentRepository = documentRepository;
 			_auditLogService = auditLogService;
-			_automationService = automationService;
+			_automationRunner = automationRunner;
 		}
 
 		public async Task<ApiResult> Handle(CreateCompany request, CancellationToken cancellationToken)
@@ -135,7 +135,7 @@ namespace Montr.Kompany.Impl.CommandHandlers
 				});
 
 				// todo: (через события в фоне) авто-допуск заявки, оповещения для оператора и компании
-				await _automationService.OnChange(new AutomationContext
+				await _automationRunner.Run(new AutomationContext
 				{
 					EntityTypeCode = DocumentType.EntityTypeCode,
 					EntityTypeUid = documentType.Uid,

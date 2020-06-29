@@ -1,47 +1,35 @@
-﻿using System.Linq;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
-using LinqToDB;
 using MediatR;
 using Montr.Automate.Commands;
-using Montr.Automate.Impl.Entities;
+using Montr.Automate.Services;
 using Montr.Core.Models;
 using Montr.Core.Services;
-using Montr.Data.Linq2Db;
 
 namespace Montr.Automate.Impl.CommandHandlers
 {
 	public class DeleteAutomationHandler : IRequestHandler<DeleteAutomation, ApiResult>
 	{
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
-		private readonly IDbContextFactory _dbContextFactory;
+		private readonly IAutomationService _automationService;
 
-		public DeleteAutomationHandler(IUnitOfWorkFactory unitOfWorkFactory, IDbContextFactory dbContextFactory)
+		public DeleteAutomationHandler(IUnitOfWorkFactory unitOfWorkFactory, IAutomationService automationService)
 		{
 			_unitOfWorkFactory = unitOfWorkFactory;
-			_dbContextFactory = dbContextFactory;
+			_automationService = automationService;
 		}
 
 		public async Task<ApiResult> Handle(DeleteAutomation request, CancellationToken cancellationToken)
 		{
 			using (var scope = _unitOfWorkFactory.Create())
 			{
-				int affected;
-
-				using (var db = _dbContextFactory.Create())
-				{
-					affected = await db.GetTable<DbAutomation>()
-						.Where(x => x.EntityTypeCode == request.EntityTypeCode &&
-									x.EntityTypeUid == request.EntityTypeUid &&
-									request.Uids.Contains(x.Uid))
-						.DeleteAsync(cancellationToken);
-				}
+				var result = await _automationService.Delete(request, cancellationToken);
 
 				// todo: (события)
 
 				scope.Commit();
 
-				return new ApiResult { AffectedRows = affected };
+				return result;
 			}
 		}
 	}

@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -14,10 +14,10 @@ using Montr.Data.Linq2Db;
 namespace Montr.Automate.Tests.CommandHandlers
 {
 	[TestClass]
-	public class UpdateAutomationHandlerTests
+	public class DeleteAutomationHandlerTests
 	{
 		[TestMethod]
-		public async Task Handle_NormalValues_UpdateAutomation()
+		public async Task Handle_NormalValues_DeleteAutomation()
 		{
 			// arrange
 			var cancellationToken = new CancellationToken();
@@ -27,7 +27,7 @@ namespace Montr.Automate.Tests.CommandHandlers
 			var automationService = new DefaultAutomationService(dbContextFactory, jsonSerializer);
 			var generator = new AutomateDbGenerator(dbContextFactory);
 
-			var handler = new UpdateAutomationHandler(unitOfWorkFactory, automationService);
+			var handler = new DeleteAutomationHandler(unitOfWorkFactory, automationService);
 
 			using (var _ = unitOfWorkFactory.Create())
 			{
@@ -61,27 +61,14 @@ namespace Montr.Automate.Tests.CommandHandlers
 					}
 				};
 
-				var inserted = await generator.InsertAutomation(automation, cancellationToken);
+				await generator.InsertAutomation(automation, cancellationToken);
 
 				// act
-
-				// ReSharper disable once PossibleInvalidOperationException
-				automation.Uid = inserted.Uid.Value;
-				automation.Actions.Add(new NotifyByEmailAutomationAction
-				{
-					Props = new NotifyByEmailAutomationAction.Properties
-					{
-						Recipient = "requester",
-						Subject = "Test message #2",
-						Body = "Hello"
-					}
-				});
-
-				var command = new UpdateAutomation
+				var command = new DeleteAutomation
 				{
 					EntityTypeCode = generator.EntityTypeCode,
 					EntityTypeUid = generator.EntityTypeUid,
-					Item = automation
+					Uids = new [] { automation.Uid  }
 				};
 
 				var result = await handler.Handle(command, cancellationToken);
@@ -91,16 +78,8 @@ namespace Montr.Automate.Tests.CommandHandlers
 				Assert.IsTrue(result.Success);
 				Assert.AreEqual(1, result.AffectedRows);
 
-				var updated = await generator.GetAutomation(inserted.Uid.Value, cancellationToken);
-
-				Assert.AreEqual(2, updated.Actions.Count);
-				var actions = updated.Actions.OfType<NotifyByEmailAutomationAction>().ToList();
-				Assert.IsNotNull(actions.FirstOrDefault(x => x.Props.Subject.Contains("#1")));
-				Assert.IsNotNull(actions.FirstOrDefault(x => x.Props.Subject.Contains("#2")));
-
-				Assert.AreEqual(1, updated.Conditions.Count);
-				var conditions = updated.Conditions.OfType<FieldAutomationCondition>().ToList();
-				Assert.IsNotNull(conditions.FirstOrDefault(x => x.Props.Field.Contains("Status")));
+				await Assert.ThrowsExceptionAsync<InvalidOperationException>(
+					() => generator.GetAutomation(automation.Uid, cancellationToken));
 			}
 		}
 	}
