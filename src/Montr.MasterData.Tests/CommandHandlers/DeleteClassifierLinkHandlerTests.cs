@@ -8,6 +8,7 @@ using Montr.MasterData.Commands;
 using Montr.MasterData.Impl.CommandHandlers;
 using Montr.MasterData.Impl.Services;
 using Montr.MasterData.Models;
+using Montr.MasterData.Tests.Services;
 
 namespace Montr.MasterData.Tests.CommandHandlers
 {
@@ -23,7 +24,7 @@ namespace Montr.MasterData.Tests.CommandHandlers
 			var dbContextFactory = new DefaultDbContextFactory();
 			var classifierTypeRepository = new DbClassifierTypeRepository(dbContextFactory);
 			var classifierTypeService = new DbClassifierTypeService(dbContextFactory, classifierTypeRepository);
-			var dbHelper = new DbHelper(unitOfWorkFactory, dbContextFactory);
+			var dbHelper = new MasterDataDbGenerator(unitOfWorkFactory, dbContextFactory);
 			var handler = new DeleteClassifierLinkHandler(unitOfWorkFactory, dbContextFactory, classifierTypeService);
 
 			using (var _ = unitOfWorkFactory.Create())
@@ -78,20 +79,20 @@ namespace Montr.MasterData.Tests.CommandHandlers
 			var dbContextFactory = new DefaultDbContextFactory();
 			var classifierTypeRepository = new DbClassifierTypeRepository(dbContextFactory);
 			var classifierTypeService = new DbClassifierTypeService(dbContextFactory, classifierTypeRepository);
-			var dbHelper = new DbHelper(unitOfWorkFactory, dbContextFactory);
+			var generator = new MasterDataDbGenerator(unitOfWorkFactory, dbContextFactory);
 			var handler = new DeleteClassifierLinkHandler(unitOfWorkFactory, dbContextFactory, classifierTypeService);
 
 			using (var _ = unitOfWorkFactory.Create())
 			{
 				// arrange
-				await dbHelper.InsertType(HierarchyType.Groups, cancellationToken);
-				var root = await dbHelper.FindTree(ClassifierTree.DefaultCode, cancellationToken);
-				var group1 = await dbHelper.InsertGroup(root.Uid, "001", null, cancellationToken);
-				var item1 = await dbHelper.InsertItem("001", null, cancellationToken);
-				await dbHelper.InsertLink(group1.Uid, item1.Uid, cancellationToken);
+				await generator.InsertType(HierarchyType.Groups, cancellationToken);
+				var root = await generator.FindTree(ClassifierTree.DefaultCode, cancellationToken);
+				var group1 = await generator.InsertGroup(root.Uid, "001", null, cancellationToken);
+				var item1 = await generator.InsertItem("001", null, cancellationToken);
+				await generator.InsertLink(group1.Uid, item1.Uid, cancellationToken);
 
 				// assert - links in default hierarchy exists
-				var links = await dbHelper.GetLinks(null, item1.Uid, cancellationToken);
+				var links = await generator.GetLinks(null, item1.Uid, cancellationToken);
 
 				Assert.AreEqual(1, links.TotalCount);
 				Assert.AreEqual(group1.Uid, links.Rows[0].Group.Uid);
@@ -100,9 +101,9 @@ namespace Montr.MasterData.Tests.CommandHandlers
 				// act
 				var result = await handler.Handle(new DeleteClassifierLink
 				{
-					UserUid = dbHelper.UserUid,
-					CompanyUid = dbHelper.CompanyUid,
-					TypeCode = dbHelper.TypeCode,
+					UserUid = generator.UserUid,
+					CompanyUid = generator.CompanyUid,
+					TypeCode = generator.TypeCode,
 					// ReSharper disable once PossibleInvalidOperationException
 					GroupUid = group1.Uid.Value,
 					// ReSharper disable once PossibleInvalidOperationException
@@ -114,7 +115,7 @@ namespace Montr.MasterData.Tests.CommandHandlers
 				Assert.AreEqual(1, result.Errors.Count);
 
 				// assert - link to default hierarchy root exists
-				links = await dbHelper.GetLinks(null, item1.Uid, cancellationToken);
+				links = await generator.GetLinks(null, item1.Uid, cancellationToken);
 
 				Assert.AreEqual(1, links.TotalCount);
 				Assert.AreEqual(root.Uid, links.Rows[0].Group.Uid);

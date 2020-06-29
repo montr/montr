@@ -8,6 +8,7 @@ using Montr.MasterData.Impl.QueryHandlers;
 using Montr.MasterData.Impl.Services;
 using Montr.MasterData.Models;
 using Montr.MasterData.Queries;
+using Montr.MasterData.Tests.Services;
 
 namespace Montr.MasterData.Tests.QueryHandlers
 {
@@ -24,23 +25,23 @@ namespace Montr.MasterData.Tests.QueryHandlers
 			var classifierTypeRepository = new DbClassifierTypeRepository(dbContextFactory);
 			var classifierTypeService = new DbClassifierTypeService(dbContextFactory, classifierTypeRepository);
 			var classifierRepository = new DbClassifierRepository(dbContextFactory, classifierTypeService, null, null);
-			var dbHelper = new DbHelper(unitOfWorkFactory, dbContextFactory);
+			var generator = new MasterDataDbGenerator(unitOfWorkFactory, dbContextFactory);
 			var handler = new GetClassifierListHandler(classifierRepository);
 
 			using (var _ = unitOfWorkFactory.Create())
 			{
 				// arrange
-				await dbHelper.InsertType(HierarchyType.None, cancellationToken);
+				await generator.InsertType(HierarchyType.None, cancellationToken);
 				for (var i = 0; i < 42; i++)
 				{
-					await dbHelper.InsertItem($"{i:D4}", null, cancellationToken);
+					await generator.InsertItem($"{i:D4}", null, cancellationToken);
 				}
 
 				// act
 				var command = new GetClassifierList
 				{
 					UserUid = Guid.NewGuid(),
-					TypeCode = dbHelper.TypeCode
+					TypeCode = generator.TypeCode
 				};
 
 				var result = await handler.Handle(command, cancellationToken);

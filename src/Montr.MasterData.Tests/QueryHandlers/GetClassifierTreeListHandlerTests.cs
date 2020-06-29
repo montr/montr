@@ -7,6 +7,7 @@ using Montr.MasterData.Impl.QueryHandlers;
 using Montr.MasterData.Impl.Services;
 using Montr.MasterData.Models;
 using Montr.MasterData.Queries;
+using Montr.MasterData.Tests.Services;
 
 namespace Montr.MasterData.Tests.QueryHandlers
 {
@@ -21,20 +22,20 @@ namespace Montr.MasterData.Tests.QueryHandlers
 			var unitOfWorkFactory = new TransactionScopeUnitOfWorkFactory();
 			var dbContextFactory = new DefaultDbContextFactory();
 			var classifierTreeRepository = new DbClassifierTreeRepository(dbContextFactory);
-			var dbHelper = new DbHelper(unitOfWorkFactory, dbContextFactory);
+			var generator = new MasterDataDbGenerator(unitOfWorkFactory, dbContextFactory);
 			var handler = new GetClassifierTreeListHandler(classifierTreeRepository);
 
 			using (var _ = unitOfWorkFactory.Create())
 			{
 				// default tree will be insered for HierarchyType.Groups
-				await dbHelper.InsertType(HierarchyType.Groups, cancellationToken);
+				await generator.InsertType(HierarchyType.Groups, cancellationToken);
 
 				// act
 				var result = await handler.Handle(new GetClassifierTreeList
 				{
-					CompanyUid = dbHelper.CompanyUid,
-					UserUid = dbHelper.UserUid,
-					TypeCode = dbHelper.TypeCode
+					CompanyUid = generator.CompanyUid,
+					UserUid = generator.UserUid,
+					TypeCode = generator.TypeCode
 				}, cancellationToken);
 
 				// assert

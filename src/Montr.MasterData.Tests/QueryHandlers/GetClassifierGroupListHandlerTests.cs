@@ -8,6 +8,7 @@ using Montr.MasterData.Impl.QueryHandlers;
 using Montr.MasterData.Impl.Services;
 using Montr.MasterData.Models;
 using Montr.MasterData.Queries;
+using Montr.MasterData.Tests.Services;
 
 namespace Montr.MasterData.Tests.QueryHandlers
 {
@@ -25,26 +26,26 @@ namespace Montr.MasterData.Tests.QueryHandlers
 			var classifierTreeRepository = new DbClassifierTreeRepository(dbContextFactory);
 			var classifierTypeService = new DbClassifierTypeService(dbContextFactory, classifierTypeRepository);
 			var classifierTreeService = new DefaultClassifierTreeService(classifierTreeRepository);
-			var dbHelper = new DbHelper(unitOfWorkFactory, dbContextFactory);
+			var generator = new MasterDataDbGenerator(unitOfWorkFactory, dbContextFactory);
 			var handler = new GetClassifierGroupListHandler(dbContextFactory, classifierTypeService, classifierTreeService);
 
 			using (var _ = unitOfWorkFactory.Create())
 			{
 				// arrange
-				await dbHelper.InsertType(HierarchyType.Groups, cancellationToken);
-				var tree = await dbHelper.FindTree(ClassifierTree.DefaultCode, cancellationToken);
+				await generator.InsertType(HierarchyType.Groups, cancellationToken);
+				var tree = await generator.FindTree(ClassifierTree.DefaultCode, cancellationToken);
 
-				var group1 = await dbHelper.InsertGroup(tree.Uid, "001", null, cancellationToken);
-				await dbHelper.InsertGroup(tree.Uid, "001.001", group1.Uid, cancellationToken);
+				var group1 = await generator.InsertGroup(tree.Uid, "001", null, cancellationToken);
+				await generator.InsertGroup(tree.Uid, "001.001", group1.Uid, cancellationToken);
 
-				var group2 = await dbHelper.InsertGroup(tree.Uid, "002", null, cancellationToken);
-				var group3 = await dbHelper.InsertGroup(tree.Uid, "003", null, cancellationToken);
-				var group4 = await dbHelper.InsertGroup(tree.Uid, "004", null, cancellationToken);
+				var group2 = await generator.InsertGroup(tree.Uid, "002", null, cancellationToken);
+				var group3 = await generator.InsertGroup(tree.Uid, "003", null, cancellationToken);
+				var group4 = await generator.InsertGroup(tree.Uid, "004", null, cancellationToken);
 
 				// act
 				var command = new GetClassifierGroupList
 				{
-					TypeCode = dbHelper.TypeCode,
+					TypeCode = generator.TypeCode,
 					TreeUid = tree.Uid,
 					ParentUid = null // yeah, we test this
 				};
@@ -72,28 +73,28 @@ namespace Montr.MasterData.Tests.QueryHandlers
 			var classifierTreeRepository = new DbClassifierTreeRepository(dbContextFactory);
 			var classifierTypeService = new DbClassifierTypeService(dbContextFactory, classifierTypeRepository);
 			var classifierTreeService = new DefaultClassifierTreeService(classifierTreeRepository);
-			var dbHelper = new DbHelper(unitOfWorkFactory, dbContextFactory);
+			var generator = new MasterDataDbGenerator(unitOfWorkFactory, dbContextFactory);
 			var handler = new GetClassifierGroupListHandler(dbContextFactory, classifierTypeService, classifierTreeService);
 
 			using (var _ = unitOfWorkFactory.Create())
 			{
 				// arrange
-				await dbHelper.InsertType(HierarchyType.Groups, cancellationToken);
-				var tree = await dbHelper.FindTree(ClassifierTree.DefaultCode, cancellationToken);
+				await generator.InsertType(HierarchyType.Groups, cancellationToken);
+				var tree = await generator.FindTree(ClassifierTree.DefaultCode, cancellationToken);
 
-				var parentGroup = await dbHelper.InsertGroup(tree.Uid, "001", null, cancellationToken);
-				await dbHelper.InsertGroup(tree.Uid, "001.001", parentGroup.Uid, cancellationToken);
-				await dbHelper.InsertGroup(tree.Uid, "001.002", parentGroup.Uid, cancellationToken);
-				await dbHelper.InsertGroup(tree.Uid, "001.003", parentGroup.Uid, cancellationToken);
-				await dbHelper.InsertGroup(tree.Uid, "001.004", parentGroup.Uid, cancellationToken);
-				await dbHelper.InsertGroup(tree.Uid, "001.005", parentGroup.Uid, cancellationToken);
-				await dbHelper.InsertGroup(tree.Uid, "001.006", parentGroup.Uid, cancellationToken);
-				await dbHelper.InsertGroup(tree.Uid, "001.007", parentGroup.Uid, cancellationToken);
+				var parentGroup = await generator.InsertGroup(tree.Uid, "001", null, cancellationToken);
+				await generator.InsertGroup(tree.Uid, "001.001", parentGroup.Uid, cancellationToken);
+				await generator.InsertGroup(tree.Uid, "001.002", parentGroup.Uid, cancellationToken);
+				await generator.InsertGroup(tree.Uid, "001.003", parentGroup.Uid, cancellationToken);
+				await generator.InsertGroup(tree.Uid, "001.004", parentGroup.Uid, cancellationToken);
+				await generator.InsertGroup(tree.Uid, "001.005", parentGroup.Uid, cancellationToken);
+				await generator.InsertGroup(tree.Uid, "001.006", parentGroup.Uid, cancellationToken);
+				await generator.InsertGroup(tree.Uid, "001.007", parentGroup.Uid, cancellationToken);
 
 				// act
 				var command = new GetClassifierGroupList
 				{
-					TypeCode = dbHelper.TypeCode,
+					TypeCode = generator.TypeCode,
 					TreeUid = tree.Uid,
 					ParentUid = parentGroup.Uid,
 				};
@@ -123,22 +124,22 @@ namespace Montr.MasterData.Tests.QueryHandlers
 			var classifierTreeRepository = new DbClassifierTreeRepository(dbContextFactory);
 			var classifierTypeService = new DbClassifierTypeService(dbContextFactory, classifierTypeRepository);
 			var classifierTreeService = new DefaultClassifierTreeService(classifierTreeRepository);
-			var dbHelper = new DbHelper(unitOfWorkFactory, dbContextFactory);
+			var generator = new MasterDataDbGenerator(unitOfWorkFactory, dbContextFactory);
 			var handler = new GetClassifierGroupListHandler(dbContextFactory, classifierTypeService, classifierTreeService);
 
 			using (var _ = unitOfWorkFactory.Create())
 			{
 				// arrange
-				await dbHelper.InsertType(HierarchyType.Items, cancellationToken);
+				await generator.InsertType(HierarchyType.Items, cancellationToken);
 				for (var i = 0; i < 21; i++)
 				{
-					await dbHelper.InsertItem($"{i:D4}", null, cancellationToken);
+					await generator.InsertItem($"{i:D4}", null, cancellationToken);
 				}
 
 				// act
 				var command = new GetClassifierGroupList
 				{
-					TypeCode = dbHelper.TypeCode,
+					TypeCode = generator.TypeCode,
 					PageSize = 100
 				};
 
@@ -161,24 +162,24 @@ namespace Montr.MasterData.Tests.QueryHandlers
 			var classifierTreeRepository = new DbClassifierTreeRepository(dbContextFactory);
 			var classifierTypeService = new DbClassifierTypeService(dbContextFactory, classifierTypeRepository);
 			var classifierTreeService = new DefaultClassifierTreeService(classifierTreeRepository);
-			var dbHelper = new DbHelper(unitOfWorkFactory, dbContextFactory);
+			var generator = new MasterDataDbGenerator(unitOfWorkFactory, dbContextFactory);
 			var handler = new GetClassifierGroupListHandler(dbContextFactory, classifierTypeService, classifierTreeService);
 
 			using (var _ = unitOfWorkFactory.Create())
 			{
 				// arrange
-				await dbHelper.InsertType(HierarchyType.Items, cancellationToken);
-				var parentItem = await dbHelper.InsertItem("001", null, cancellationToken);
+				await generator.InsertType(HierarchyType.Items, cancellationToken);
+				var parentItem = await generator.InsertItem("001", null, cancellationToken);
 				for (var i = 0; i < 3; i++)
 				{
-					await dbHelper.InsertItem($"{i:D4}", parentItem.Uid, cancellationToken);
+					await generator.InsertItem($"{i:D4}", parentItem.Uid, cancellationToken);
 				}
 
 				// act
 				var command = new GetClassifierGroupList
 				{
 					CompanyUid = Constants.OperatorCompanyUid,
-					TypeCode = dbHelper.TypeCode,
+					TypeCode = generator.TypeCode,
 					ParentUid = parentItem.Uid
 				};
 
@@ -208,20 +209,20 @@ namespace Montr.MasterData.Tests.QueryHandlers
 			var classifierTreeRepository = new DbClassifierTreeRepository(dbContextFactory);
 			var classifierTypeService = new DbClassifierTypeService(dbContextFactory, classifierTypeRepository);
 			var classifierTreeService = new DefaultClassifierTreeService(classifierTreeRepository);
-			var dbHelper = new DbHelper(unitOfWorkFactory, dbContextFactory);
+			var generator = new MasterDataDbGenerator(unitOfWorkFactory, dbContextFactory);
 			var handler = new GetClassifierGroupListHandler(dbContextFactory, classifierTypeService, classifierTreeService);
 
 			using (var _ = unitOfWorkFactory.Create())
 			{
 				// arrange
-				await dbHelper.InsertType(HierarchyType.Groups, cancellationToken);
-				var tree = await dbHelper.FindTree(ClassifierTree.DefaultCode, cancellationToken);
+				await generator.InsertType(HierarchyType.Groups, cancellationToken);
+				var tree = await generator.FindTree(ClassifierTree.DefaultCode, cancellationToken);
 				// todo: generate a lot of groups
 
 				// act
 				var command = new GetClassifierGroupList
 				{
-					TypeCode = dbHelper.TypeCode,
+					TypeCode = generator.TypeCode,
 					TreeUid = tree.Uid
 				};
 
@@ -244,33 +245,33 @@ namespace Montr.MasterData.Tests.QueryHandlers
 			var classifierTreeRepository = new DbClassifierTreeRepository(dbContextFactory);
 			var classifierTypeService = new DbClassifierTypeService(dbContextFactory, classifierTypeRepository);
 			var classifierTreeService = new DefaultClassifierTreeService(classifierTreeRepository);
-			var dbHelper = new DbHelper(unitOfWorkFactory, dbContextFactory);
+			var generator = new MasterDataDbGenerator(unitOfWorkFactory, dbContextFactory);
 			var handler = new GetClassifierGroupListHandler(dbContextFactory, classifierTypeService, classifierTreeService);
 
 			using (var _ = unitOfWorkFactory.Create())
 			{
 				// arrange
-				await dbHelper.InsertType(HierarchyType.Groups, cancellationToken);
-				var tree = await dbHelper.FindTree(ClassifierTree.DefaultCode, cancellationToken);
+				await generator.InsertType(HierarchyType.Groups, cancellationToken);
+				var tree = await generator.FindTree(ClassifierTree.DefaultCode, cancellationToken);
 
 				// 2 roots without parent
 				for (var i = 0; i < 2; i++)
 				{
-					await dbHelper.InsertGroup(tree.Uid, $"1-{i:D4}", null, cancellationToken);
+					await generator.InsertGroup(tree.Uid, $"1-{i:D4}", null, cancellationToken);
 				}
 
 				// 1 root with 4 deep children
 				Guid? parentUid = null;
 				for (var i = 0; i <= 5; i++)
 				{
-					var childGroup = await dbHelper.InsertGroup(tree.Uid, $"2-{i:D4}", parentUid, cancellationToken);
+					var childGroup = await generator.InsertGroup(tree.Uid, $"2-{i:D4}", parentUid, cancellationToken);
 					parentUid = childGroup.Uid;
 				}
 
 				// 3 roots without parent
 				for (var i = 0; i < 3; i++)
 				{
-					await dbHelper.InsertGroup(tree.Uid, $"3-{i:D4}", null, cancellationToken);
+					await generator.InsertGroup(tree.Uid, $"3-{i:D4}", null, cancellationToken);
 				}
 
 				var focusUid = parentUid;
@@ -278,7 +279,7 @@ namespace Montr.MasterData.Tests.QueryHandlers
 				// act & assert - focus in root scope
 				var command = new GetClassifierGroupList
 				{
-					TypeCode = dbHelper.TypeCode,
+					TypeCode = generator.TypeCode,
 					TreeUid = tree.Uid,
 					ParentUid = null,
 					FocusUid = focusUid
@@ -308,7 +309,7 @@ namespace Montr.MasterData.Tests.QueryHandlers
 				// todo: what is the difference with previous asserts - ParentUid should be set?
 				command = new GetClassifierGroupList
 				{
-					TypeCode = dbHelper.TypeCode,
+					TypeCode = generator.TypeCode,
 					TreeUid = tree.Uid,
 					FocusUid = focusUid
 				};

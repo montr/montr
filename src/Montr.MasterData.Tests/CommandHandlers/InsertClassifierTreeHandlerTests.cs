@@ -8,6 +8,7 @@ using Montr.MasterData.Commands;
 using Montr.MasterData.Impl.CommandHandlers;
 using Montr.MasterData.Impl.Services;
 using Montr.MasterData.Models;
+using Montr.MasterData.Tests.Services;
 
 namespace Montr.MasterData.Tests.CommandHandlers
 {
@@ -23,7 +24,7 @@ namespace Montr.MasterData.Tests.CommandHandlers
 			var dbContextFactory = new DefaultDbContextFactory();
 			var classifierTypeRepository = new DbClassifierTypeRepository(dbContextFactory);
 			var classifierTypeService = new DbClassifierTypeService(dbContextFactory, classifierTypeRepository);
-			var generator = new DbHelper(unitOfWorkFactory, dbContextFactory);
+			var generator = new MasterDataDbGenerator(unitOfWorkFactory, dbContextFactory);
 			var handler = new InsertClassifierTreeHandler(unitOfWorkFactory, dbContextFactory, classifierTypeService);
 
 			using (var _ = unitOfWorkFactory.Create())

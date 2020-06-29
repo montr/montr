@@ -26,7 +26,7 @@ namespace Montr.MasterData.Tests.Services
 			var dbContextFactory = new DefaultDbContextFactory();
 			var dbNumeratorRepository = new DbNumeratorRepository(dbContextFactory);
 			var dateTimeProvider = new DefaultDateTimeProvider();
-			var dbHelper = new DbHelper(unitOfWorkFactory, dbContextFactory);
+			var generator = new MasterDataDbGenerator(unitOfWorkFactory, dbContextFactory);
 			var numeratorTagProvider = new TestNumberTagResolver { EntityTypeCode = NumerableEntityTypeCode };
 			var service = new DbNumberGenerator(dbContextFactory, dbNumeratorRepository, dateTimeProvider, new INumberTagResolver[] { numeratorTagProvider });
 
@@ -38,7 +38,7 @@ namespace Montr.MasterData.Tests.Services
 					EntityTypeUid = Guid.NewGuid()
 				};
 
-				await dbHelper.InsertNumerator(new Numerator
+				await generator.InsertNumerator(new Numerator
 				{
 					Pattern = "{Company}-{Number}/{Year}"
 				}, request, cancellationToken);
@@ -65,7 +65,7 @@ namespace Montr.MasterData.Tests.Services
 			var dbContextFactory = new DefaultDbContextFactory();
 			var dbNumeratorRepository = new DbNumeratorRepository(dbContextFactory);
 			var dateTimeProvider = new DefaultDateTimeProvider();
-			var dbHelper = new DbHelper(unitOfWorkFactory, dbContextFactory);
+			var generator = new MasterDataDbGenerator(unitOfWorkFactory, dbContextFactory);
 			var numeratorTagProvider = new TestNumberTagResolver { EntityTypeCode = NumerableEntityTypeCode };
 			var service = new DbNumberGenerator(dbContextFactory, dbNumeratorRepository, dateTimeProvider, new INumberTagResolver[] { numeratorTagProvider });
 
@@ -77,7 +77,7 @@ namespace Montr.MasterData.Tests.Services
 					EntityTypeUid = Guid.NewGuid()
 				};
 
-				await dbHelper.InsertNumerator(new Numerator
+				await generator.InsertNumerator(new Numerator
 				{
 					Periodicity = NumeratorPeriodicity.Year,
 					Pattern = "{Company}-{Number}-{Day}-{Month}-{Quarter}-{Year2}-{Year4}"
@@ -105,7 +105,7 @@ namespace Montr.MasterData.Tests.Services
 			var dbContextFactory = new DefaultDbContextFactory();
 			var dbNumeratorRepository = new DbNumeratorRepository(dbContextFactory);
 			var dateTimeProvider = new DefaultDateTimeProvider();
-			var dbHelper = new DbHelper(unitOfWorkFactory, dbContextFactory);
+			var generator = new MasterDataDbGenerator(unitOfWorkFactory, dbContextFactory);
 			var numeratorTagProvider = new TestNumberTagResolver { EntityTypeCode = NumerableEntityTypeCode };
 			var service = new DbNumberGenerator(dbContextFactory, dbNumeratorRepository, dateTimeProvider, new INumberTagResolver[] { numeratorTagProvider });
 
@@ -117,7 +117,7 @@ namespace Montr.MasterData.Tests.Services
 					EntityTypeUid = Guid.NewGuid()
 				};
 
-				await dbHelper.InsertNumerator(new Numerator
+				await generator.InsertNumerator(new Numerator
 				{
 					Pattern = "{Company}-{Number}",
 					KeyTags = new[] { "Company" }
@@ -149,7 +149,7 @@ namespace Montr.MasterData.Tests.Services
 			var dbContextFactory = new DefaultDbContextFactory();
 			var dbNumeratorRepository = new DbNumeratorRepository(dbContextFactory);
 			var dateTimeProvider = new DefaultDateTimeProvider();
-			var dbHelper = new DbHelper(unitOfWorkFactory, dbContextFactory);
+			var generator = new MasterDataDbGenerator(unitOfWorkFactory, dbContextFactory);
 			var numeratorTagProvider = new TestNumberTagResolver
 			{
 				EntityTypeCode = NumerableEntityTypeCode,
@@ -165,7 +165,7 @@ namespace Montr.MasterData.Tests.Services
 					EntityTypeUid = Guid.NewGuid()
 				};
 
-				await dbHelper.InsertNumerator(new Numerator
+				await generator.InsertNumerator(new Numerator
 				{
 					Periodicity = NumeratorPeriodicity.Year,
 					Pattern = "{Company}-{Number}/{Year4}"
@@ -211,7 +211,7 @@ namespace Montr.MasterData.Tests.Services
 			var dbContextFactory = new DefaultDbContextFactory();
 			var dbNumeratorRepository = new DbNumeratorRepository(dbContextFactory);
 			var dateTimeProvider = new DefaultDateTimeProvider();
-			var dbHelper = new DbHelper(unitOfWorkFactory, dbContextFactory);
+			var generator = new MasterDataDbGenerator(unitOfWorkFactory, dbContextFactory);
 			var numeratorTagProvider = new TestNumberTagResolver
 			{
 				EntityTypeCode = NumerableEntityTypeCode,
@@ -227,7 +227,7 @@ namespace Montr.MasterData.Tests.Services
 					EntityTypeUid = Guid.NewGuid()
 				};
 
-				await dbHelper.InsertNumerator(new Numerator
+				await generator.InsertNumerator(new Numerator
 				{
 					Periodicity = NumeratorPeriodicity.Quarter,
 					Pattern = "{Company}-{Number}/{Year4}"

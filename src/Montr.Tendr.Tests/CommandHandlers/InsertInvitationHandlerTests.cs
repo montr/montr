@@ -6,6 +6,7 @@ using Montr.Core.Services;
 using Montr.Data.Linq2Db;
 using Montr.MasterData.Impl.Services;
 using Montr.MasterData.Tests;
+using Montr.MasterData.Tests.Services;
 using Montr.Metadata.Impl.Services;
 using Montr.Tendr.Commands;
 using Montr.Tendr.Impl.CommandHandlers;
@@ -27,16 +28,16 @@ namespace Montr.Tendr.Tests.CommandHandlers
 			var classifierTypeService = new DbClassifierTypeService(dbContextFactory, classifierTypeRepository);
 			var dbFieldDataRepository = new DbFieldDataRepository(dbContextFactory, null);
 			var classifierRepository = new DbClassifierRepository(dbContextFactory, classifierTypeService, null, dbFieldDataRepository);
+			var generator = new MasterDataDbGenerator(unitOfWorkFactory, dbContextFactory);
 			var handler = new InsertInvitationHandler(unitOfWorkFactory, dbContextFactory, classifierRepository);
-			var helper = new DbHelper(unitOfWorkFactory, dbContextFactory);
 
 			using (var _ = unitOfWorkFactory.Create())
 			{
 				// act
 				var command = new InsertInvitation
 				{
-					UserUid = helper.UserUid,
-					CompanyUid = helper.CompanyUid,
+					UserUid = generator.UserUid,
+					CompanyUid = generator.CompanyUid,
 					EventUid = Guid.Parse("436c290c-37b2-11e9-88fe-00ff279ba9e1"),
 					Items = new []
 					{

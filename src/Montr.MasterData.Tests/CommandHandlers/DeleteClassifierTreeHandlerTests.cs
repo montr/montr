@@ -7,6 +7,7 @@ using Montr.MasterData.Commands;
 using Montr.MasterData.Impl.CommandHandlers;
 using Montr.MasterData.Impl.Services;
 using Montr.MasterData.Models;
+using Montr.MasterData.Tests.Services;
 
 namespace Montr.MasterData.Tests.CommandHandlers
 {
@@ -22,25 +23,25 @@ namespace Montr.MasterData.Tests.CommandHandlers
 			var dbContextFactory = new DefaultDbContextFactory();
 			var classifierTypeRepository = new DbClassifierTypeRepository(dbContextFactory);
 			var classifierTypeService = new DbClassifierTypeService(dbContextFactory, classifierTypeRepository);
-			var dbHelper = new DbHelper(unitOfWorkFactory, dbContextFactory);
+			var generator = new MasterDataDbGenerator(unitOfWorkFactory, dbContextFactory);
 			var handler = new DeleteClassifierTreeHandler(unitOfWorkFactory, dbContextFactory, classifierTypeService);
 
 			using (var _ = unitOfWorkFactory.Create())
 			{
 				// arrange
-				await dbHelper.InsertType(HierarchyType.Groups, cancellationToken);
-				var tree2 = await dbHelper.InsertTree("tree2", cancellationToken);
+				await generator.InsertType(HierarchyType.Groups, cancellationToken);
+				var tree2 = await generator.InsertTree("tree2", cancellationToken);
 
 				// assert - default and second trees exists
-				var trees = await dbHelper.GetTrees(cancellationToken);
+				var trees = await generator.GetTrees(cancellationToken);
 				Assert.AreEqual(2, trees.TotalCount);
 
 				// act
 				var result = await handler.Handle(new DeleteClassifierTree
 				{
-					UserUid = dbHelper.UserUid,
-					CompanyUid = dbHelper.CompanyUid,
-					TypeCode = dbHelper.TypeCode,
+					UserUid = generator.UserUid,
+					CompanyUid = generator.CompanyUid,
+					TypeCode = generator.TypeCode,
 					// ReSharper disable once PossibleInvalidOperationException
 					Uids = new [] { tree2.Uid.Value }
 				}, cancellationToken);
@@ -50,7 +51,7 @@ namespace Montr.MasterData.Tests.CommandHandlers
 				Assert.AreEqual(1, result.AffectedRows);
 
 				// assert - default hierarchy exists
-				trees = await dbHelper.GetTrees(cancellationToken);
+				trees = await generator.GetTrees(cancellationToken);
 				Assert.AreEqual(1, trees.TotalCount);
 				Assert.AreEqual(ClassifierTree.DefaultCode, trees.Rows[0].Code);
 			}

@@ -19,7 +19,7 @@ namespace Montr.MasterData.Tests.Services
 			var unitOfWorkFactory = new TransactionScopeUnitOfWorkFactory();
 			var dbContextFactory = new DefaultDbContextFactory();
 
-			var generator = new DbHelper(unitOfWorkFactory, dbContextFactory);
+			var generator = new MasterDataDbGenerator(unitOfWorkFactory, dbContextFactory);
 
 			using (var _ = unitOfWorkFactory.Create())
 			{
@@ -43,18 +43,18 @@ namespace Montr.MasterData.Tests.Services
 			var cancellationToken = new CancellationToken();
 			var unitOfWorkFactory = new TransactionScopeUnitOfWorkFactory();
 			var dbContextFactory = new DefaultDbContextFactory();
-			var dbHelper = new DbHelper(unitOfWorkFactory, dbContextFactory);
+			var generator = new MasterDataDbGenerator(unitOfWorkFactory, dbContextFactory);
 
 			using (var _ = unitOfWorkFactory.Create())
 			{
 				// act & assert
-				await dbHelper.InsertType(HierarchyType.Groups, cancellationToken);
-				var root = await dbHelper.FindTree(ClassifierTree.DefaultCode, cancellationToken);
-				await dbHelper.InsertGroups(root.Uid, 3, 3, null, null, cancellationToken);
-				Assert.AreEqual(await File.ReadAllTextAsync("../../../Content/closure.3x3.txt", cancellationToken), dbHelper.PrintClosure(root.Code));
+				await generator.InsertType(HierarchyType.Groups, cancellationToken);
+				var root = await generator.FindTree(ClassifierTree.DefaultCode, cancellationToken);
+				await generator.InsertGroups(root.Uid, 3, 3, null, null, cancellationToken);
+				Assert.AreEqual(await File.ReadAllTextAsync("../../../Content/closure.3x3.txt", cancellationToken), generator.PrintClosure(root.Code));
 
 				// act & assert - cyclic dependency
-				var result = await dbHelper.UpdateGroup(root.Code, "1.1", "1.1.1", cancellationToken, false);
+				var result = await generator.UpdateGroup(root.Code, "1.1", "1.1.1", cancellationToken, false);
 				Assert.IsNotNull(result);
 				Assert.IsFalse(result.Success);
 				Assert.IsNotNull(result.Errors);
@@ -70,8 +70,8 @@ namespace Montr.MasterData.Tests.Services
 			var cancellationToken = new CancellationToken();
 			var unitOfWorkFactory = new TransactionScopeUnitOfWorkFactory();
 			var dbContextFactory = new DefaultDbContextFactory();
-			var generator = new DbHelper(unitOfWorkFactory, dbContextFactory);
-			
+			var generator = new MasterDataDbGenerator(unitOfWorkFactory, dbContextFactory);
+
 			using (var _ = unitOfWorkFactory.Create())
 			{
 				// act & assert
@@ -101,27 +101,27 @@ namespace Montr.MasterData.Tests.Services
 			var cancellationToken = new CancellationToken();
 			var unitOfWorkFactory = new TransactionScopeUnitOfWorkFactory();
 			var dbContextFactory = new DefaultDbContextFactory();
-			var dbHelper = new DbHelper(unitOfWorkFactory, dbContextFactory);
+			var generator = new MasterDataDbGenerator(unitOfWorkFactory, dbContextFactory);
 
 			using (var _ = unitOfWorkFactory.Create())
 			{
 				// act & assert
-				await dbHelper.InsertType(HierarchyType.Groups, cancellationToken);
-				var root = await dbHelper.FindTree(ClassifierTree.DefaultCode, cancellationToken);
-				await dbHelper.InsertGroups(root.Uid, 3, 3, null, null, cancellationToken);
-				Assert.AreEqual(await File.ReadAllTextAsync("../../../Content/closure.3x3.txt", cancellationToken), dbHelper.PrintClosure(root.Code));
+				await generator.InsertType(HierarchyType.Groups, cancellationToken);
+				var root = await generator.FindTree(ClassifierTree.DefaultCode, cancellationToken);
+				await generator.InsertGroups(root.Uid, 3, 3, null, null, cancellationToken);
+				Assert.AreEqual(await File.ReadAllTextAsync("../../../Content/closure.3x3.txt", cancellationToken), generator.PrintClosure(root.Code));
 
 				// act & assert
-				await dbHelper.DeleteGroup(root.Code, "1", cancellationToken);
-				Assert.AreEqual(await File.ReadAllTextAsync("../../../Content/closure.3x3-1.txt", cancellationToken), dbHelper.PrintClosure(root.Code));
+				await generator.DeleteGroup(root.Code, "1", cancellationToken);
+				Assert.AreEqual(await File.ReadAllTextAsync("../../../Content/closure.3x3-1.txt", cancellationToken), generator.PrintClosure(root.Code));
 
 				// act & assert
-				await dbHelper.DeleteGroup(root.Code, "2.2", cancellationToken);
-				Assert.AreEqual(await File.ReadAllTextAsync("../../../Content/closure.3x3-1-2.2.txt", cancellationToken), dbHelper.PrintClosure(root.Code));
+				await generator.DeleteGroup(root.Code, "2.2", cancellationToken);
+				Assert.AreEqual(await File.ReadAllTextAsync("../../../Content/closure.3x3-1-2.2.txt", cancellationToken), generator.PrintClosure(root.Code));
 
 				// act & assert
-				await dbHelper.DeleteGroup(root.Code, "3.1.2", cancellationToken);
-				Assert.AreEqual(await File.ReadAllTextAsync("../../../Content/closure.3x3-1-2.2-3.1.2.txt", cancellationToken), dbHelper.PrintClosure(root.Code));
+				await generator.DeleteGroup(root.Code, "3.1.2", cancellationToken);
+				Assert.AreEqual(await File.ReadAllTextAsync("../../../Content/closure.3x3-1-2.2-3.1.2.txt", cancellationToken), generator.PrintClosure(root.Code));
 			}
 		}
 	}

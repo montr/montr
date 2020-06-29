@@ -12,6 +12,7 @@ using Montr.MasterData.Impl.CommandHandlers;
 using Montr.MasterData.Impl.Services;
 using Montr.MasterData.Models;
 using Montr.MasterData.Services;
+using Montr.MasterData.Tests.Services;
 using Montr.Metadata.Impl.Entities;
 using Montr.Metadata.Impl.Services;
 using Montr.Metadata.Models;
@@ -32,7 +33,7 @@ namespace Montr.MasterData.Tests.CommandHandlers
 			var dateTimeProvider = new DefaultDateTimeProvider();
 			var classifierTypeRepository = new DbClassifierTypeRepository(dbContextFactory);
 			var classifierTypeService = new DbClassifierTypeService(dbContextFactory, classifierTypeRepository);
-			var dbHelper = new DbHelper(unitOfWorkFactory, dbContextFactory);
+			var generator = new MasterDataDbGenerator(unitOfWorkFactory, dbContextFactory);
 			var fieldProviderRegistry = new DefaultFieldProviderRegistry();
 			fieldProviderRegistry.AddFieldType(typeof(TextField));
 			var dbFieldDataRepository = new DbFieldDataRepository(dbContextFactory, fieldProviderRegistry);
@@ -52,14 +53,14 @@ namespace Montr.MasterData.Tests.CommandHandlers
 			using (var _ = unitOfWorkFactory.Create())
 			{
 				// arrange
-				await dbHelper.InsertType(HierarchyType.None, cancellationToken);
+				await generator.InsertType(HierarchyType.None, cancellationToken);
 
 				// act
 				var command = new InsertClassifier
 				{
-					UserUid = dbHelper.UserUid,
-					CompanyUid = dbHelper.CompanyUid,
-					TypeCode = dbHelper.TypeCode,
+					UserUid = generator.UserUid,
+					CompanyUid = generator.CompanyUid,
+					TypeCode = generator.TypeCode,
 					Item = new Classifier
 					{
 						Code = "001",
@@ -82,7 +83,7 @@ namespace Montr.MasterData.Tests.CommandHandlers
 				Assert.AreNotEqual(Guid.Empty, result.Uid);
 
 				var classifierResult = await classifierRepository
-					.Search(new ClassifierSearchRequest { TypeCode = dbHelper.TypeCode, Uid = result.Uid, IncludeFields = true }, cancellationToken);
+					.Search(new ClassifierSearchRequest { TypeCode = generator.TypeCode, Uid = result.Uid, IncludeFields = true }, cancellationToken);
 
 				Assert.AreEqual(1, classifierResult.Rows.Count);
 				var inserted = classifierResult.Rows[0];
@@ -116,7 +117,7 @@ namespace Montr.MasterData.Tests.CommandHandlers
 			var dateTimeProvider = new DefaultDateTimeProvider();
 			var classifierTypeRepository = new DbClassifierTypeRepository(dbContextFactory);
 			var classifierTypeService = new DbClassifierTypeService(dbContextFactory, classifierTypeRepository);
-			var dbHelper = new DbHelper(unitOfWorkFactory, dbContextFactory);
+			var generator = new MasterDataDbGenerator(unitOfWorkFactory, dbContextFactory);
 			var dbFieldMetadataRepository = new DbFieldMetadataRepository(dbContextFactory, null, new NewtonsoftJsonSerializer());
 			var dbFieldDataRepository = new DbFieldDataRepository(dbContextFactory, null);
 			var classifierTypeMetadataService = new ClassifierTypeMetadataService(dbFieldMetadataRepository);
@@ -125,13 +126,13 @@ namespace Montr.MasterData.Tests.CommandHandlers
 			using (var _ = unitOfWorkFactory.Create())
 			{
 				// arrange
-				await dbHelper.InsertType(HierarchyType.None, cancellationToken);
+				await generator.InsertType(HierarchyType.None, cancellationToken);
 
 				var command = new InsertClassifier
 				{
-					UserUid = dbHelper.UserUid,
-					CompanyUid = dbHelper.CompanyUid,
-					TypeCode = dbHelper.TypeCode,
+					UserUid = generator.UserUid,
+					CompanyUid = generator.CompanyUid,
+					TypeCode = generator.TypeCode,
 					Item = new Classifier
 					{
 						Code = "001",

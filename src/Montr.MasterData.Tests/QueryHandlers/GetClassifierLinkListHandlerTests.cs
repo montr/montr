@@ -8,6 +8,7 @@ using Montr.MasterData.Impl.QueryHandlers;
 using Montr.MasterData.Impl.Services;
 using Montr.MasterData.Models;
 using Montr.MasterData.Queries;
+using Montr.MasterData.Tests.Services;
 
 namespace Montr.MasterData.Tests.QueryHandlers
 {
@@ -23,25 +24,25 @@ namespace Montr.MasterData.Tests.QueryHandlers
 			var dbContextFactory = new DefaultDbContextFactory();
 			var classifierTypeRepository = new DbClassifierTypeRepository(dbContextFactory);
 			var classifierTypeService = new DbClassifierTypeService(dbContextFactory, classifierTypeRepository);
-			var dbHelper = new DbHelper(unitOfWorkFactory, dbContextFactory);
+			var generator = new MasterDataDbGenerator(unitOfWorkFactory, dbContextFactory);
 			var handler = new GetClassifierLinkListHandler(dbContextFactory, classifierTypeService);
 
 			using (var _ = unitOfWorkFactory.Create())
 			{
-				await dbHelper.InsertType(HierarchyType.Groups, cancellationToken);
-				var tree = await dbHelper.FindTree(ClassifierTree.DefaultCode, cancellationToken);
-				var group1 = await dbHelper.InsertGroup(tree.Uid, "001", null, cancellationToken);
-				var item1 = await dbHelper.InsertItem("001", null, cancellationToken);
-				var item2 = await dbHelper.InsertItem("002", null, cancellationToken);
-				await dbHelper.InsertLink(group1.Uid, item1.Uid, cancellationToken);
-				await dbHelper.InsertLink(group1.Uid, item2.Uid, cancellationToken);
+				await generator.InsertType(HierarchyType.Groups, cancellationToken);
+				var tree = await generator.FindTree(ClassifierTree.DefaultCode, cancellationToken);
+				var group1 = await generator.InsertGroup(tree.Uid, "001", null, cancellationToken);
+				var item1 = await generator.InsertItem("001", null, cancellationToken);
+				var item2 = await generator.InsertItem("002", null, cancellationToken);
+				await generator.InsertLink(group1.Uid, item1.Uid, cancellationToken);
+				await generator.InsertLink(group1.Uid, item2.Uid, cancellationToken);
 
 				// act - search by group code
 				var result = await handler.Handle(new GetClassifierLinkList
 				{
-					CompanyUid = dbHelper.CompanyUid,
-					UserUid = dbHelper.UserUid,
-					TypeCode = dbHelper.TypeCode,
+					CompanyUid = generator.CompanyUid,
+					UserUid = generator.UserUid,
+					TypeCode = generator.TypeCode,
 					GroupUid = group1.Uid
 				}, cancellationToken);
 
@@ -59,9 +60,9 @@ namespace Montr.MasterData.Tests.QueryHandlers
 				// act - search by item code
 				result = await handler.Handle(new GetClassifierLinkList
 				{
-					CompanyUid = dbHelper.CompanyUid,
-					UserUid = dbHelper.UserUid,
-					TypeCode = dbHelper.TypeCode,
+					CompanyUid = generator.CompanyUid,
+					UserUid = generator.UserUid,
+					TypeCode = generator.TypeCode,
 					ItemUid = item1.Uid
 				}, cancellationToken);
 
@@ -75,9 +76,9 @@ namespace Montr.MasterData.Tests.QueryHandlers
 				// act - search by both group and item codes
 				result = await handler.Handle(new GetClassifierLinkList
 				{
-					CompanyUid = dbHelper.CompanyUid,
-					UserUid = dbHelper.UserUid,
-					TypeCode = dbHelper.TypeCode,
+					CompanyUid = generator.CompanyUid,
+					UserUid = generator.UserUid,
+					TypeCode = generator.TypeCode,
 					GroupUid = group1.Uid,
 					ItemUid = item2.Uid
 				}, cancellationToken);

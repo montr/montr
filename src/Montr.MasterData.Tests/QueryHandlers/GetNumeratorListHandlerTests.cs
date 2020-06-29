@@ -9,6 +9,7 @@ using Montr.MasterData.Impl.QueryHandlers;
 using Montr.MasterData.Impl.Services;
 using Montr.MasterData.Models;
 using Montr.MasterData.Queries;
+using Montr.MasterData.Tests.Services;
 
 namespace Montr.MasterData.Tests.QueryHandlers
 {
@@ -23,13 +24,13 @@ namespace Montr.MasterData.Tests.QueryHandlers
 			var dbContextFactory = new DefaultDbContextFactory();
 			var unitOfWorkFactory = new TransactionScopeUnitOfWorkFactory();
 			var dbNumeratorRepository = new DbNumeratorRepository(dbContextFactory);
-			var dbHelper = new DbHelper(unitOfWorkFactory, dbContextFactory);
+			var generator = new MasterDataDbGenerator(unitOfWorkFactory, dbContextFactory);
 			var handler = new GetNumeratorListHandler(dbNumeratorRepository);
 
 			using (var _ = unitOfWorkFactory.Create())
 			{
 				// arrange
-				var numerator = await dbHelper.InsertNumerator(
+				var numerator = await generator.InsertNumerator(
 					new Numerator(),
 					new GenerateNumberRequest
 					{
