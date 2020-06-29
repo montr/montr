@@ -16,15 +16,18 @@ namespace Montr.Automate.Impl.Services
 	public class DbAutomationRepository : IRepository<Automation>
 	{
 		private readonly IDbContextFactory _dbContextFactory;
+		private readonly INamedServiceFactory<IAutomationConditionProvider> _conditionProvider;
 		private readonly INamedServiceFactory<IAutomationActionProvider> _actionProvider;
 		private readonly IJsonSerializer _jsonSerializer;
 
 		public DbAutomationRepository(
 			IDbContextFactory dbContextFactory,
+			INamedServiceFactory<IAutomationConditionProvider> conditionProvider,
 			INamedServiceFactory<IAutomationActionProvider> actionProvider,
 			IJsonSerializer jsonSerializer)
 		{
 			_dbContextFactory = dbContextFactory;
+			_conditionProvider = conditionProvider;
 			_actionProvider = actionProvider;
 			_jsonSerializer = jsonSerializer;
 		}
@@ -81,32 +84,11 @@ namespace Montr.Automate.Impl.Services
 
 				if (request.Uid != null && result.Count == 1)
 				{
-					var dbActions = await db.GetTable<DbAutomationAction>()
-						.Where(x => x.AutomationUid == request.Uid)
-						.ToListAsync(cancellationToken);
+					var automation = result[0];
+					var automationUid = request.Uid;
 
-					var actions = new List<AutomationAction>();
-
-					foreach (var dbAction in dbActions)
-					{
-						var actionProvider = _actionProvider.Resolve(dbAction.TypeCode);
-
-						// todo: use factory (?) move to provider (!?)
-						var action = (AutomationAction)Activator.CreateInstance(actionProvider.ActionType);
-
-						if (dbAction.Props != null)
-						{
-							var propertiesType = action.GetPropertiesType();
-
-							var properties = _jsonSerializer.Deserialize(dbAction.Props, propertiesType);
-
-							action.SetProperties(properties);
-						}
-
-						actions.Add(action);
-					}
-
-					result[0].Actions = actions;
+					automation.Actions = await LoadActions(db, automationUid, cancellationToken);
+					automation.Conditions = await LoadConditions(db, automationUid, cancellationToken);
 				}
 
 				return new SearchResult<Automation>
@@ -115,6 +97,66 @@ namespace Montr.Automate.Impl.Services
 					Rows = result
 				};
 			}
+		}
+
+		private async Task<List<AutomationAction>> LoadActions(DbContext db, Guid? automationUid, CancellationToken cancellationToken)
+		{
+			var result = new List<AutomationAction>();
+
+			var dbActions = await db.GetTable<DbAutomationAction>()
+				.Where(x => x.AutomationUid == automationUid)
+				.ToListAsync(cancellationToken);
+
+			foreach (var dbAction in dbActions)
+			{
+				var actionProvider = _actionProvider.Resolve(dbAction.TypeCode);
+
+				// todo: use factory (?) move to provider (!?)
+				var action = (AutomationAction) Activator.CreateInstance(actionProvider.ActionType);
+
+				if (action != null && dbAction.Props != null)
+				{
+					var propertiesType = action.GetPropertiesType();
+
+					var properties = _jsonSerializer.Deserialize(dbAction.Props, propertiesType);
+
+					action.SetProperties(properties);
+				}
+
+				result.Add(action);
+			}
+
+			return result;
+		}
+
+		private async Task<List<AutomationCondition>> LoadConditions(DbContext db, Guid? automationUid, CancellationToken cancellationToken)
+		{
+			var result = new List<AutomationCondition>();
+
+			var dbConditions = await db.GetTable<DbAutomationCondition>()
+				.Where(x => x.AutomationUid == automationUid)
+				.ToListAsync(cancellationToken);
+
+			foreach (var dbCondition in dbConditions)
+			{
+				var conditionProvider = _conditionProvider.Resolve(dbCondition.TypeCode);
+
+				// todo: use factory (?) move to provider (!?)
+				var condition = (AutomationCondition) Activator.CreateInstance(conditionProvider.ConditionType);
+
+				if (condition != null && dbCondition.Props != null)
+				{
+					var propertiesType = condition.GetPropertiesType();
+
+					var properties = _jsonSerializer.Deserialize(dbCondition.Props, propertiesType);
+
+					condition.SetProperties(properties);
+				}
+
+				result.Add(condition);
+			}
+
+			return result;
 		}
 
 		public Task<SearchResult<Automation>> Search2(SearchRequest searchRequest, CancellationToken cancellationToken)

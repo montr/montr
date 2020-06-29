@@ -90,7 +90,7 @@ namespace Montr.Automate.Tests.CommandHandlers
 				Assert.AreEqual(1, result.AffectedRows);
 
 				var updated = await generator.GetAutomation(inserted.Uid.Value, cancellationToken);
-				// Assert.AreEqual(1, updated.Conditions.Count);
+				Assert.AreEqual(1, updated.Conditions.Count);
 				Assert.AreEqual(2, updated.Actions.Count);
 				var actions = updated.Actions.OfType<NotifyByEmailAutomationAction>().ToList();
 				Assert.IsNotNull(actions.FirstOrDefault(x => x.Props.Subject.Contains("#1")));

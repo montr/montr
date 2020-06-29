@@ -26,10 +26,15 @@ namespace Montr.Automate.Tests.Services
 		{
 			_dbContextFactory = dbContextFactory;
 
+			var acpfMock = new Mock<INamedServiceFactory<IAutomationConditionProvider>>();
+			acpfMock.Setup(x => x.Resolve(FieldAutomationCondition.TypeCode))
+				.Returns(new NoopAutomationConditionProvider { ConditionType = typeof(FieldAutomationCondition) });
+
 			var aapfMock = new Mock<INamedServiceFactory<IAutomationActionProvider>>();
 			aapfMock.Setup(x => x.Resolve(NotifyByEmailAutomationAction.TypeCode))
 				.Returns(new NoopAutomationActionProvider { ActionType = typeof(NotifyByEmailAutomationAction) });
-			var automationRepository = new DbAutomationRepository(dbContextFactory, aapfMock.Object, new NewtonsoftJsonSerializer());
+
+			var automationRepository = new DbAutomationRepository(dbContextFactory, acpfMock.Object, aapfMock.Object, new NewtonsoftJsonSerializer());
 
 			_insertAutomationHandler = new InsertAutomationHandler(unitOfWorkFactory, dbContextFactory);
 			_getAutomationHandler = new GetAutomationHandler(automationRepository);
@@ -74,6 +79,15 @@ namespace Montr.Automate.Tests.Services
 				throw new NotImplementedException();
 			}
 		}
-	}
 
+		private class NoopAutomationConditionProvider : IAutomationConditionProvider
+		{
+			public Type ConditionType { get; set; }
+
+			public Task<bool> Meet(AutomationCondition automationCondition, AutomationContext context, CancellationToken cancellationToken)
+			{
+				throw new NotImplementedException();
+			}
+		}
+	}
 }
