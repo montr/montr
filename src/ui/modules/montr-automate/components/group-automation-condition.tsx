@@ -25,31 +25,20 @@ export class GroupAutomationCondition extends React.Component<IProps> {
 		return (<>
 			<Space style={{ display: "flex" }} align="start">
 
-				{/* {typeSelector} */}
+				{typeSelector}
 
 				<Form.Item
 					{...item}
-					name={[item.name, "type"]}
-					fieldKey={[item.fieldKey, "type"]}
-					rules={[{ required: true }]}>
-					<Select placeholder="Select condition" style={{ minWidth: 150 }}>
-						<Select.Option value="group">Group</Select.Option>
-						<Select.Option value="field">Field</Select.Option>
-					</Select>
-				</Form.Item>
-
-				<Form.Item
-					{...item}
-					name={[item.name, "meet"]}
+					name={[item.name, "props", "meet"]}
 					fieldKey={[item.fieldKey, "meet"]}
 					rules={[{ required: true }]}>
 					<Radio.Group buttonStyle="solid">
-						<Radio.Button value="all">All</Radio.Button>
-						<Radio.Button value="any">Any</Radio.Button>
+						<Radio.Button value="All">All</Radio.Button>
+						<Radio.Button value="Any">Any</Radio.Button>
 					</Radio.Group>
 				</Form.Item>
 
-				<div style={{ border: "1px solid gray" }}>
+				<div style={{ border: "1px dotted lightgray" }}>
 					{children}
 				</div>
 			</Space>

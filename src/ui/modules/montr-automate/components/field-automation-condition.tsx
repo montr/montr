@@ -15,22 +15,11 @@ export class FieldAutomationCondition extends React.Component<IProps> {
 		return (
 			<Space style={{ display: "flex" }} align="start">
 
-				{/* {typeSelector} */}
+				{typeSelector}
 
 				<Form.Item
 					{...item}
-					name={[item.name, "type"]}
-					fieldKey={[item.fieldKey, "type"]}
-					rules={[{ required: true }]}>
-					<Select placeholder="Select condition" style={{ minWidth: 150 }}>
-						<Select.Option value="group">Group</Select.Option>
-						<Select.Option value="field">Field</Select.Option>
-					</Select>
-				</Form.Item>
-
-				<Form.Item
-					{...item}
-					name={[item.name, "field"]}
+					name={[item.name, "props", "field"]}
 					fieldKey={[item.fieldKey, "field"]}
 					/* rules={[{ required: true }]} */>
 					<Select placeholder="Select field" style={{ minWidth: 100 }}>
@@ -40,7 +29,7 @@ export class FieldAutomationCondition extends React.Component<IProps> {
 
 				<Form.Item
 					{...item}
-					name={[item.name, "operator"]}
+					name={[item.name, "props", "operator"]}
 					fieldKey={[item.fieldKey, "operator"]}
 					/* rules={[{ required: true }]} */>
 					<Select style={{ minWidth: 50 }}>
@@ -55,7 +44,7 @@ export class FieldAutomationCondition extends React.Component<IProps> {
 
 				<Form.Item
 					{...item}
-					name={[item.name, "value"]}
+					name={[item.name, "props", "value"]}
 					fieldKey={[item.fieldKey, "value"]}
 					/* rules={[{ required: true }]} */>
 					<Select placeholder="Select value" style={{ minWidth: 100 }}>
