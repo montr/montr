@@ -54,6 +54,7 @@ export class AutomationActionList extends React.Component<IProps> {
 										noStyle>
 										<AutomationAction item={item} typeSelector={typeSelector} options={options} />
 									</Form.Item>
+
 								</div>
 							);
 						})}

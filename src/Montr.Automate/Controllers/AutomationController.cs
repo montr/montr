@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -47,6 +48,18 @@ namespace Montr.Automate.Controllers
 		public async Task<ApiResult> Delete(DeleteAutomation request)
 		{
 			return await _mediator.Send(request);
+		}
+
+		[HttpPost]
+		public async Task<IList<AutomationAction>> ActionTypes()
+		{
+			return await _mediator.Send(new GetAutomationActionList());
+		}
+
+		[HttpPost]
+		public async Task<IList<AutomationCondition>> ConditionTypes()
+		{
+			return await _mediator.Send(new GetAutomationConditionList());
 		}
 	}
 }

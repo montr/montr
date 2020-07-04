@@ -56,6 +56,7 @@ export class AutomationConditionList extends React.Component<IProps> {
 										noStyle>
 										<AutomationCondition item={item} typeSelector={typeSelector} options={options} />
 									</Form.Item>
+
 								</div>
 							);
 						})}
