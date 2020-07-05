@@ -16,7 +16,7 @@ namespace Montr.Automate.Impl.QueryHandlers
 		{
 			_repository = repository;
 		}
-		
+
 		public async Task<Automation> Handle(GetAutomation request, CancellationToken cancellationToken)
 		{
 			var result = await _repository.Search(new AutomationSearchRequest

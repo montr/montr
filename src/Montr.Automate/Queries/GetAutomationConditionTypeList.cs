@@ -4,7 +4,7 @@ using Montr.Automate.Models;
 
 namespace Montr.Automate.Queries
 {
-	public class GetAutomationActionList : IRequest<IList<AutomationAction>>
+	public class GetAutomationConditionTypeList : IRequest<IList<AutomationRuleType>>
 	{
 	}
 }

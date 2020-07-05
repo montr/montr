@@ -1,18 +1,43 @@
 import React from "react";
 import { Divider, Form, Select } from "antd";
 import { ButtonAdd, Toolbar, FormListItemToolbar, IDataFormOptions } from "@montr-core/components";
-import { IAutomationActionListField } from "../models";
+import { IAutomationActionListField, AutomationRuleType } from "../models";
 import { AutomationAction } from ".";
+import { AutomationService } from "../services";
 
 interface IProps {
 	field: IAutomationActionListField;
 	options: IDataFormOptions;
 }
 
-export class AutomationActionList extends React.Component<IProps> {
+interface IState {
+	loading: boolean;
+	types?: AutomationRuleType[];
+}
+
+export class AutomationActionList extends React.Component<IProps, IState> {
+
+	private _automationService = new AutomationService();
+
+	constructor(props: IProps) {
+		super(props);
+
+		this.state = {
+			loading: true,
+		};
+	}
+
+	componentDidMount = async () => {
+		await this.fetchData();
+	};
+
+	fetchData = async () => {
+		this.setState({ loading: false, types: await this._automationService.actionTypes() });
+	};
 
 	render = () => {
-		const { field, options } = this.props;
+		const { field, options } = this.props,
+			{ types } = this.state;
 
 		return (
 			<Form.List name={field.key}>
@@ -30,10 +55,9 @@ export class AutomationActionList extends React.Component<IProps> {
 									name={[item.name, "type"]}
 									fieldKey={[item.fieldKey, "type"]}
 									rules={[{ required: true }]}>
-									<Select placeholder="Select action" style={{ minWidth: 150 }}>
-										<Select.Option value="set-field">Set Field</Select.Option>
-										<Select.Option value="notify-by-email">Notify By Email</Select.Option>
-									</Select>
+									{types && <Select placeholder="Select action" style={{ minWidth: 150 }}>
+										{types.map(x => <Select.Option key={x.code} value={x.code}>{x.name}</Select.Option>)}
+									</Select>}
 								</Form.Item>
 							);
 

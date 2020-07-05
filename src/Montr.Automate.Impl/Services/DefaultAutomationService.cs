@@ -7,6 +7,7 @@ using LinqToDB;
 using LinqToDB.Data;
 using Montr.Automate.Commands;
 using Montr.Automate.Impl.Entities;
+using Montr.Automate.Impl.Models;
 using Montr.Automate.Models;
 using Montr.Automate.Services;
 using Montr.Core.Models;

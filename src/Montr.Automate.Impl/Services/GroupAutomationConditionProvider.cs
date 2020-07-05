@@ -1,7 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Montr.Automate.Impl.Models;
 using Montr.Automate.Models;
 using Montr.Automate.Services;
 
@@ -16,7 +16,12 @@ namespace Montr.Automate.Impl.Services
 			_providerRegistry = providerRegistry;
 		}
 
-		public Type ConditionType => typeof(GroupAutomationCondition);
+		public AutomationRuleType RuleType => new AutomationRuleType
+		{
+			Code = GroupAutomationCondition.TypeCode,
+			Name = "Group",
+			Type = typeof(GroupAutomationCondition)
+		};
 
 		public async Task<bool> Meet(AutomationCondition automationCondition, AutomationContext context, CancellationToken cancellationToken)
 		{

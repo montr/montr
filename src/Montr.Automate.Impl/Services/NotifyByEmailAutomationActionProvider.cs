@@ -1,6 +1,6 @@
-﻿using System;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
+using Montr.Automate.Impl.Models;
 using Montr.Automate.Models;
 using Montr.Automate.Services;
 using Montr.Messages.Services;
@@ -23,7 +23,12 @@ namespace Montr.Automate.Impl.Services
 			_emailSender = emailSender;
 		}
 
-		public Type ActionType => typeof(NotifyByEmailAutomationAction);
+		public AutomationRuleType RuleType => new AutomationRuleType
+		{
+			Code = NotifyByEmailAutomationAction.TypeCode,
+			Name = "Notify By Email",
+			Type = typeof(NotifyByEmailAutomationAction)
+		};
 
 		public async Task Execute(AutomationAction automationAction, AutomationContext context, CancellationToken cancellationToken)
 		{

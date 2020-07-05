@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 
 namespace Montr.Automate.Models
 {
@@ -53,35 +52,5 @@ namespace Montr.Automate.Models
 		LessThanEqual,
 		GreaterThan,
 		GreaterThanEqual
-	}
-
-	public class GroupAutomationCondition : AutomationCondition<GroupAutomationCondition.Properties>
-	{
-		public const string TypeCode = "group";
-
-		public override string Type => TypeCode;
-
-		public class Properties
-		{
-			public AutomationConditionMeet Meet { get; set; }
-
-			public IList<AutomationCondition> Conditions { get; set; }
-		}
-	}
-
-	public class FieldAutomationCondition : AutomationCondition<FieldAutomationCondition.Properties>
-	{
-		public const string TypeCode = "field";
-
-		public override string Type => TypeCode;
-
-		public class Properties
-		{
-			public string Field { get; set; }
-
-			public AutomationConditionOperator Operator { get; set; }
-
-			public string Value { get; set; }
-		}
 	}
 }

@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Montr.Automate.Impl.Models;
 using Montr.Automate.Impl.Services;
 using Montr.Automate.Models;
 using Montr.Automate.Services;

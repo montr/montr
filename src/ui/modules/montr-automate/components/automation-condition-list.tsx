@@ -1,18 +1,43 @@
 import React from "react";
 import { Divider, Form, Select } from "antd";
 import { ButtonAdd, Toolbar, FormListItemToolbar, IDataFormOptions } from "@montr-core/components";
-import { IAutomationConditionListField, IFieldAutomationCondition } from "../models/";
+import { IAutomationConditionListField, IFieldAutomationCondition, AutomationRuleType } from "../models/";
 import { AutomationCondition } from ".";
+import { AutomationService } from "../services";
 
 interface IProps {
 	field: IAutomationConditionListField;
 	options: IDataFormOptions;
 }
 
-export class AutomationConditionList extends React.Component<IProps> {
+interface IState {
+	loading: boolean;
+	types?: AutomationRuleType[];
+}
+
+export class AutomationConditionList extends React.Component<IProps, IState> {
+
+	private _automationService = new AutomationService();
+
+	constructor(props: IProps) {
+		super(props);
+
+		this.state = {
+			loading: true,
+		};
+	}
+
+	componentDidMount = async () => {
+		await this.fetchData();
+	};
+
+	fetchData = async () => {
+		this.setState({ loading: false, types: await this._automationService.conditionTypes() });
+	};
 
 	render = () => {
-		const { field, options } = this.props;
+		const { field, options } = this.props,
+			{ types } = this.state;
 
 		const defaultCondition: IFieldAutomationCondition = { type: "field", operator: "Equal" };
 
@@ -32,10 +57,9 @@ export class AutomationConditionList extends React.Component<IProps> {
 									name={[item.name, "type"]}
 									fieldKey={[item.fieldKey, "type"]}
 									rules={[{ required: true }]}>
-									<Select placeholder="Select condition" style={{ minWidth: 150 }}>
-										<Select.Option value="group">Group</Select.Option>
-										<Select.Option value="field">Field</Select.Option>
-									</Select>
+									{types && <Select placeholder="Select condition" style={{ minWidth: 150 }}>
+										{types.map(x => <Select.Option key={x.code} value={x.code}>{x.name}</Select.Option>)}
+									</Select>}
 								</Form.Item>
 							);
 

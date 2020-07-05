@@ -37,34 +37,4 @@ namespace Montr.Automate.Models
 			Props = (TProps)value;
 		}
 	}
-
-	public class SetFieldAutomationAction : AutomationAction<SetFieldAutomationAction.Properties>
-	{
-		public const string TypeCode = "set-field";
-
-		public override string Type => TypeCode;
-
-		public class Properties
-		{
-			public string Field { get; set; }
-
-			public string Value { get; set; }
-		}
-	}
-
-	public class NotifyByEmailAutomationAction : AutomationAction<NotifyByEmailAutomationAction.Properties>
-	{
-		public const string TypeCode = "notify-by-email";
-
-		public override string Type => TypeCode;
-
-		public class Properties
-		{
-			public string Recipient { get; set; }
-
-			public string Subject { get; set; }
-
-			public string Body { get; set; }
-		}
-	}
 }

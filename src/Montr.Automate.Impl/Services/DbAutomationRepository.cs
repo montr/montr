@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using LinqToDB;
 using Montr.Automate.Impl.Entities;
+using Montr.Automate.Impl.Models;
 using Montr.Automate.Models;
 using Montr.Automate.Services;
 using Montr.Core.Models;
@@ -112,7 +113,7 @@ namespace Montr.Automate.Impl.Services
 				var actionProvider = _actionProvider.Resolve(dbAction.TypeCode);
 
 				// todo: use factory (?) move to provider (!?)
-				var action = (AutomationAction) Activator.CreateInstance(actionProvider.ActionType);
+				var action = (AutomationAction) Activator.CreateInstance(actionProvider.RuleType.Type);
 
 				if (action != null && dbAction.Props != null)
 				{
@@ -142,7 +143,7 @@ namespace Montr.Automate.Impl.Services
 				var conditionProvider = _conditionProvider.Resolve(dbCondition.TypeCode);
 
 				// todo: use factory (?) move to provider (!?)
-				var condition = (AutomationCondition) Activator.CreateInstance(conditionProvider.ConditionType);
+				var condition = (AutomationCondition) Activator.CreateInstance(conditionProvider.RuleType.Type);
 
 				if (condition != null && dbCondition.Props != null)
 				{

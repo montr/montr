@@ -1,11 +1,17 @@
 import { Guid } from "@montr-core/models";
 
-export interface IAutomation {
+export interface Automation {
 	uid?: Guid;
 	name?: string;
 	description?: string;
 	conditions?: IAutomationCondition[];
 	actions?: IAutomationAction[];
+}
+
+export interface AutomationRuleType {
+	code: string;
+	name: string;
+	icon: string;
 }
 
 export interface IAutomationCondition {

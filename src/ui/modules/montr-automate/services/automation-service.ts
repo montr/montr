@@ -1,12 +1,12 @@
 import { Fetcher } from "@montr-core/services/fetcher";
-import { IAutomation } from "../models/automation";
+import { Automation, AutomationRuleType } from "../models/automation";
 import { Guid, IApiResult } from "@montr-core/models";
 import { Constants } from "@montr-core/.";
 
 interface IManageAutomationRequest {
 	entityTypeCode: string;
 	entityTypeUid: Guid | string;
-	item: IAutomation;
+	item: Automation;
 }
 
 interface IDeleteAutomationRequest {
@@ -17,7 +17,7 @@ interface IDeleteAutomationRequest {
 
 export class AutomationService extends Fetcher {
 
-	get = async (entityTypeCode: string, entityTypeUid: Guid | string, uid: Guid): Promise<IAutomation> => {
+	get = async (entityTypeCode: string, entityTypeUid: Guid | string, uid: Guid): Promise<Automation> => {
 		return this.post(`${Constants.apiURL}/automation/get`, { entityTypeCode, entityTypeUid, uid });
 	};
 
@@ -33,4 +33,11 @@ export class AutomationService extends Fetcher {
 		return this.post(`${Constants.apiURL}/automation/delete`, request);
 	};
 
+	actionTypes = async (): Promise<AutomationRuleType[]> => {
+		return this.post(`${Constants.apiURL}/automation/actionTypes`, {});
+	};
+
+	conditionTypes = async (): Promise<AutomationRuleType[]> => {
+		return this.post(`${Constants.apiURL}/automation/conditionTypes`, {});
+	};
 }

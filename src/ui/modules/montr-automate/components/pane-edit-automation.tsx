@@ -3,7 +3,7 @@ import { Spin, Drawer } from "antd";
 import { FormInstance } from "antd/lib/form";
 import { Guid, IApiResult, IDataField } from "@montr-core/models";
 import { Toolbar, ButtonCancel, ButtonSave, DataForm } from "@montr-core/components";
-import { IAutomation, IGroupAutomationCondition, IFieldAutomationCondition } from "../models";
+import { Automation, IGroupAutomationCondition, IFieldAutomationCondition } from "../models";
 import { MetadataService } from "@montr-core/services";
 import { AutomationService } from "../services/automation-service";
 
@@ -17,7 +17,7 @@ interface IProps {
 
 interface IState {
 	loading: boolean;
-	data?: IAutomation;
+	data?: Automation;
 	fields?: IDataField[];
 }
 
@@ -49,12 +49,12 @@ export class PaneEditAutomation extends React.Component<IProps, IState> {
 		const condition1: IGroupAutomationCondition = { type: "group", meet: "all" };
 		const condition2: IFieldAutomationCondition = { type: "field" };
 
-		const data: IAutomation = (uid)
+		const data: Automation = (uid)
 			? await this._automationService.get(entityTypeCode, entityTypeUid, uid)
 			// todo: load defaults from server
 			: {
-				conditions: [condition1, condition2],
-				actions: [{ type: "set-field" }, { type: "notify-by-email" }]
+				conditions: [/* condition1, condition2 */],
+				actions: [/* { type: "set-field" }, { type: "notify-by-email" } */]
 			};
 
 		const dataView = await this._metadataService.load("Automation/Edit");
@@ -70,7 +70,7 @@ export class PaneEditAutomation extends React.Component<IProps, IState> {
 		await this._formRef.current.submit();
 	};
 
-	handleSubmit = async (values: IAutomation): Promise<IApiResult> => {
+	handleSubmit = async (values: Automation): Promise<IApiResult> => {
 		const { entityTypeCode, entityTypeUid, uid, onSuccess } = this.props;
 
 		const item = { ...values };

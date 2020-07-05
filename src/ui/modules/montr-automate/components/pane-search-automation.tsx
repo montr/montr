@@ -6,7 +6,7 @@ import { OperationService } from "@montr-core/services";
 import { Constants } from "@montr-core/.";
 import i18next from "i18next";
 import { AutomationService } from "../services/automation-service";
-import { IAutomation } from "../models/automation";
+import { Automation } from "../models/automation";
 import { PaneEditAutomation } from "./pane-edit-automation";
 
 interface IProps {
@@ -66,7 +66,7 @@ export class PaneSearchAutomation extends React.Component<IProps, IState> {
 		this.setState({ showPane: true, editUid: null });
 	};
 
-	showEditPane = (data: IAutomation) => {
+	showEditPane = (data: Automation) => {
 		this.setState({ showPane: true, editUid: data?.uid });
 	};
 

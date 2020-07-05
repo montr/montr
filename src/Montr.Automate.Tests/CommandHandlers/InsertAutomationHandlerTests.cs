@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Montr.Automate.Commands;
 using Montr.Automate.Impl.CommandHandlers;
+using Montr.Automate.Impl.Models;
 using Montr.Automate.Impl.Services;
 using Montr.Automate.Models;
 using Montr.Automate.Tests.Services;

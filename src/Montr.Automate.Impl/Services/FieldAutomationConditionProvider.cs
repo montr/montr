@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Montr.Automate.Impl.Models;
 using Montr.Automate.Models;
 using Montr.Automate.Services;
 
@@ -8,7 +9,12 @@ namespace Montr.Automate.Impl.Services
 {
 	public class FieldAutomationConditionProvider : IAutomationConditionProvider
 	{
-		public Type ConditionType => typeof(FieldAutomationCondition);
+		public AutomationRuleType RuleType => new AutomationRuleType
+		{
+			Code = FieldAutomationCondition.TypeCode,
+			Name = "Field",
+			Type = typeof(FieldAutomationCondition)
+		};
 
 		public Task<bool> Meet(AutomationCondition automationCondition, AutomationContext context, CancellationToken cancellationToken)
 		{

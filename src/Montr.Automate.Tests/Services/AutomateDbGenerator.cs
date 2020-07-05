@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Montr.Automate.Commands;
+using Montr.Automate.Impl.Models;
 using Montr.Automate.Impl.QueryHandlers;
 using Montr.Automate.Impl.Services;
 using Montr.Automate.Models;
@@ -26,11 +27,11 @@ namespace Montr.Automate.Tests.Services
 
 			var acpfMock = new Mock<INamedServiceFactory<IAutomationConditionProvider>>();
 			acpfMock.Setup(x => x.Resolve(FieldAutomationCondition.TypeCode))
-				.Returns(new NoopAutomationConditionProvider { ConditionType = typeof(FieldAutomationCondition) });
+				.Returns(new NoopAutomationConditionProvider { RuleType = new AutomationRuleType { Type = typeof(FieldAutomationCondition) } });
 
 			var aapfMock = new Mock<INamedServiceFactory<IAutomationActionProvider>>();
 			aapfMock.Setup(x => x.Resolve(NotifyByEmailAutomationAction.TypeCode))
-				.Returns(new NoopAutomationActionProvider { ActionType = typeof(NotifyByEmailAutomationAction) });
+				.Returns(new NoopAutomationActionProvider { RuleType = new AutomationRuleType { Type =  typeof(NotifyByEmailAutomationAction) } });
 
 			var automationRepository = new DbAutomationRepository(dbContextFactory, acpfMock.Object, aapfMock.Object, jsonSerializer);
 			_automationService = new DefaultAutomationService(dbContextFactory, jsonSerializer);
@@ -70,7 +71,7 @@ namespace Montr.Automate.Tests.Services
 
 		private class NoopAutomationActionProvider : IAutomationActionProvider
 		{
-			public Type ActionType { get; set; }
+			public AutomationRuleType RuleType { get; set; }
 
 			public Task Execute(AutomationAction automationAction, AutomationContext context, CancellationToken cancellationToken)
 			{
@@ -80,7 +81,7 @@ namespace Montr.Automate.Tests.Services
 
 		private class NoopAutomationConditionProvider : IAutomationConditionProvider
 		{
-			public Type ConditionType { get; set; }
+			public AutomationRuleType RuleType { get; set; }
 
 			public Task<bool> Meet(AutomationCondition automationCondition, AutomationContext context, CancellationToken cancellationToken)
 			{

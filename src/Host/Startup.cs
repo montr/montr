@@ -168,13 +168,13 @@ namespace Host
 			var conditionProviderFactory = app.ApplicationServices.GetRequiredService<INamedServiceFactory<IAutomationConditionProvider>>();
 			foreach (var name in conditionProviderFactory.GetNames())
 			{
-				_automateConditionTypeMap[name] = conditionProviderFactory.Resolve(name).ConditionType;
+				_automateConditionTypeMap[name] = conditionProviderFactory.Resolve(name).RuleType.Type;
 			}
 
 			var actionProviderFactory = app.ApplicationServices.GetRequiredService<INamedServiceFactory<IAutomationActionProvider>>();
 			foreach (var name in actionProviderFactory.GetNames())
 			{
-				_automateActionTypeMap[name] = actionProviderFactory.Resolve(name).ActionType;
+				_automateActionTypeMap[name] = actionProviderFactory.Resolve(name).RuleType.Type;
 			}
 		}
 	}

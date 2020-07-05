@@ -51,15 +51,15 @@ namespace Montr.Automate.Controllers
 		}
 
 		[HttpPost]
-		public async Task<IList<AutomationAction>> ActionTypes()
+		public async Task<IList<AutomationRuleType>> ActionTypes()
 		{
-			return await _mediator.Send(new GetAutomationActionList());
+			return await _mediator.Send(new GetAutomationActionTypeList());
 		}
 
 		[HttpPost]
-		public async Task<IList<AutomationCondition>> ConditionTypes()
+		public async Task<IList<AutomationRuleType>> ConditionTypes()
 		{
-			return await _mediator.Send(new GetAutomationConditionList());
+			return await _mediator.Send(new GetAutomationConditionTypeList());
 		}
 	}
 }
