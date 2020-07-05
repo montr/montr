@@ -48,7 +48,7 @@ export default class PageEditDocumentType extends React.Component<IProps, IState
 						<Tabs.TabPane key="fields" tab="Поля">
 							<PaneSearchMetadata entityTypeCode={`DocumentType`} entityUid={uid} />
 						</Tabs.TabPane>
-						<Tabs.TabPane key="automation" tab="Automation">
+						<Tabs.TabPane key="automation" tab="Automations">
 							<PaneSearchAutomation entityTypeCode={`DocumentType`} entityTypeUid={uid} />
 						</Tabs.TabPane>
 					</Tabs>

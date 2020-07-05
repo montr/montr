@@ -13,7 +13,7 @@ export class FieldAutomationCondition extends React.Component<IProps> {
 		const { typeSelector, item } = this.props;
 
 		return (
-			<Space style={{ display: "flex" }} align="start">
+			<Space align="start">
 
 				{typeSelector}
 
@@ -21,7 +21,7 @@ export class FieldAutomationCondition extends React.Component<IProps> {
 					{...item}
 					name={[item.name, "props", "field"]}
 					fieldKey={[item.fieldKey, "field"]}
-					/* rules={[{ required: true }]} */>
+					rules={[{ required: true }]}>
 					<Select placeholder="Select field" style={{ minWidth: 100 }}>
 						<Select.Option value="status">Status</Select.Option>
 					</Select>
@@ -31,7 +31,7 @@ export class FieldAutomationCondition extends React.Component<IProps> {
 					{...item}
 					name={[item.name, "props", "operator"]}
 					fieldKey={[item.fieldKey, "operator"]}
-					/* rules={[{ required: true }]} */>
+					rules={[{ required: true }]}>
 					<Select style={{ minWidth: 50 }}>
 						<Select.Option value="Equal">=</Select.Option>
 						<Select.Option value="NotEqual">&lt;&gt;</Select.Option>
@@ -46,7 +46,7 @@ export class FieldAutomationCondition extends React.Component<IProps> {
 					{...item}
 					name={[item.name, "props", "value"]}
 					fieldKey={[item.fieldKey, "value"]}
-					/* rules={[{ required: true }]} */>
+					rules={[{ required: true }]}>
 					<Select placeholder="Select value" style={{ minWidth: 100 }}>
 						<Select.Option value="draft">Draft</Select.Option>
 						<Select.Option value="published">Published</Select.Option>

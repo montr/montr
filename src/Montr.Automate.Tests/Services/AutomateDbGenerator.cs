@@ -61,12 +61,11 @@ namespace Montr.Automate.Tests.Services
 		public async Task<Automation> GetAutomation(Guid uid, CancellationToken cancellationToken)
 		{
 			return await _getAutomationHandler.Handle(new GetAutomation
-				{
-					EntityTypeCode = EntityTypeCode,
-					EntityTypeUid = EntityTypeUid,
-					Uid = uid
-				},
-				cancellationToken);
+			{
+				EntityTypeCode = EntityTypeCode,
+				EntityTypeUid = EntityTypeUid,
+				Uid = uid
+			}, cancellationToken);
 		}
 
 		private class NoopAutomationActionProvider : IAutomationActionProvider

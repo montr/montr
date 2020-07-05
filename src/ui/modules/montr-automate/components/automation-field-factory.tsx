@@ -2,7 +2,7 @@ import React from "react";
 import { IIndexer } from "@montr-core/models";
 import { FieldData } from "@montr-core/models/field-data";
 import { DataFieldFactory, IDataFormOptions } from "@montr-core/components";
-import { IAutomationConditionListField, IAutomationActionListField, IAutomationCondition, IAutomationAction, IGroupAutomationCondition, IFieldAutomationCondition, ISetFieldAutomationAction, INotifyByEmailAutomationAction } from "../models/";
+import { IAutomationConditionListField, IAutomationActionListField, IAutomationCondition, IAutomationAction, IGroupAutomationCondition, IFieldAutomationCondition, ISetFieldAutomationAction, INotifyByEmailAutomationAction, AutomationRuleType } from "../models/";
 import { AutomationConditionList, AutomationActionList, GroupAutomationCondition, FieldAutomationCondition, SetFieldAutomationAction, NotifyByEmailAutomationAction } from ".";
 
 export class AutomationConditionListFieldFactory extends DataFieldFactory<IAutomationConditionListField> {

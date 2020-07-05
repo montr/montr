@@ -13,7 +13,7 @@ export class SetFieldAutomationAction extends React.Component<IProps> {
 		const { typeSelector, item } = this.props;
 
 		return (
-			<Space style={{ display: "flex" }} align="start">
+			<Space align="start">
 
 				{typeSelector}
 

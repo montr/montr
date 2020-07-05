@@ -23,7 +23,7 @@ export class GroupAutomationCondition extends React.Component<IProps> {
 		const children = factory.createFormItem(field, condition.conditions, options);
 
 		return (<>
-			<Space style={{ display: "flex" }} align="start">
+			<Space align="start">
 
 				{typeSelector}
 

@@ -13,7 +13,9 @@ export class NotifyByEmailAutomationAction extends React.Component<IProps> {
 	render = () => {
 		const { typeSelector, item } = this.props;
 
-		const itemProps = { ...item, ...FormDefaults.formItemLayout };
+		const { key, ...other } = item;
+		const itemProps = { /* ...other, */ ...FormDefaults.formItemLayout };
+
 		return (<>
 			<Space align="start">
 				{typeSelector}

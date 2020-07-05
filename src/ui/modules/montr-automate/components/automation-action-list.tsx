@@ -12,7 +12,7 @@ interface IProps {
 
 interface IState {
 	loading: boolean;
-	types?: AutomationRuleType[];
+	types: AutomationRuleType[];
 }
 
 export class AutomationActionList extends React.Component<IProps, IState> {
@@ -24,6 +24,7 @@ export class AutomationActionList extends React.Component<IProps, IState> {
 
 		this.state = {
 			loading: true,
+			types: []
 		};
 	}
 
@@ -55,9 +56,9 @@ export class AutomationActionList extends React.Component<IProps, IState> {
 									name={[item.name, "type"]}
 									fieldKey={[item.fieldKey, "type"]}
 									rules={[{ required: true }]}>
-									{types && <Select placeholder="Select action" style={{ minWidth: 150 }}>
+									<Select placeholder="Select action" style={{ minWidth: 150 }}>
 										{types.map(x => <Select.Option key={x.code} value={x.code}>{x.name}</Select.Option>)}
-									</Select>}
+									</Select>
 								</Form.Item>
 							);
 
