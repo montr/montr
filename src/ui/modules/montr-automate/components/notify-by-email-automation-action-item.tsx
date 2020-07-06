@@ -1,14 +1,14 @@
 import React from "react";
 import { Space, Input, Form } from "antd";
-import { IAutomationItemProps } from "./automation-field-factory";
-import { INotifyByEmailAutomationAction } from "../models/automation";
+import { AutomationItemProps } from "./automation-field-factory";
+import { NotifyByEmailAutomationAction } from "../models/automation";
 import { FormDefaults } from "@montr-core/components";
 
-interface IProps extends IAutomationItemProps {
-	action: INotifyByEmailAutomationAction;
+interface Props extends AutomationItemProps {
+	action: NotifyByEmailAutomationAction;
 }
 
-export class NotifyByEmailAutomationAction extends React.Component<IProps> {
+export class NotifyByEmailAutomationActionItem extends React.Component<Props> {
 
 	render = () => {
 		const { typeSelector, item } = this.props;

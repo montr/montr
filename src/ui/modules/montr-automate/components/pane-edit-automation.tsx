@@ -3,11 +3,11 @@ import { Spin, Drawer } from "antd";
 import { FormInstance } from "antd/lib/form";
 import { Guid, IApiResult, IDataField } from "@montr-core/models";
 import { Toolbar, ButtonCancel, ButtonSave, DataForm } from "@montr-core/components";
-import { Automation, IGroupAutomationCondition, IFieldAutomationCondition } from "../models";
+import { Automation } from "../models";
 import { MetadataService } from "@montr-core/services";
-import { AutomationService } from "../services/automation-service";
+import { AutomationService } from "../services";
 
-interface IProps {
+interface Props {
 	entityTypeCode: string;
 	entityTypeUid: Guid | string;
 	uid?: Guid;
@@ -15,19 +15,19 @@ interface IProps {
 	onClose?: () => void;
 }
 
-interface IState {
+interface State {
 	loading: boolean;
 	data?: Automation;
 	fields?: IDataField[];
 }
 
-export class PaneEditAutomation extends React.Component<IProps, IState> {
+export class PaneEditAutomation extends React.Component<Props, State> {
 
 	private _metadataService = new MetadataService();
 	private _automationService = new AutomationService();
 	private _formRef = React.createRef<FormInstance>();
 
-	constructor(props: IProps) {
+	constructor(props: Props) {
 		super(props);
 
 		this.state = {
@@ -46,15 +46,12 @@ export class PaneEditAutomation extends React.Component<IProps, IState> {
 	fetchData = async () => {
 		const { entityTypeCode, entityTypeUid, uid } = this.props;
 
-		const condition1: IGroupAutomationCondition = { type: "group", meet: "all" };
-		const condition2: IFieldAutomationCondition = { type: "field" };
-
 		const data: Automation = (uid)
 			? await this._automationService.get(entityTypeCode, entityTypeUid, uid)
 			// todo: load defaults from server
 			: {
-				conditions: [/* condition1, condition2 */],
-				actions: [/* { type: "set-field" }, { type: "notify-by-email" } */]
+				conditions: [],
+				actions: []
 			};
 
 		const dataView = await this._metadataService.load("Automation/Edit");

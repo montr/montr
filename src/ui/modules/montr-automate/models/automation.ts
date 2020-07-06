@@ -4,8 +4,8 @@ export interface Automation {
 	uid?: Guid;
 	name?: string;
 	description?: string;
-	conditions?: IAutomationCondition[];
-	actions?: IAutomationAction[];
+	conditions?: AutomationCondition[];
+	actions?: AutomationAction[];
 }
 
 export interface AutomationRuleType {
@@ -14,31 +14,31 @@ export interface AutomationRuleType {
 	icon: string;
 }
 
-export interface IAutomationCondition {
+export interface AutomationCondition {
 	type?: string;
 }
 
-export interface IAutomationAction {
+export interface AutomationAction {
 	type?: string;
 }
 
-export interface IGroupAutomationCondition extends IAutomationCondition {
+export interface GroupAutomationCondition extends AutomationCondition {
 	meet?: string;
-	conditions?: IAutomationCondition[];
+	conditions?: AutomationCondition[];
 }
 
-export interface IFieldAutomationCondition extends IAutomationCondition {
+export interface FieldAutomationCondition extends AutomationCondition {
 	field?: string;
 	operator?: string;
 	value?: string;
 }
 
-export interface ISetFieldAutomationAction extends IAutomationAction {
+export interface SetFieldAutomationAction extends AutomationAction {
 	field?: string;
 	value?: string;
 }
 
-export interface INotifyByEmailAutomationAction extends IAutomationAction {
+export interface NotifyByEmailAutomationAction extends AutomationAction {
 	recipient?: string;
 	subject?: string;
 	body?: string;

@@ -9,24 +9,24 @@ import { AutomationService } from "../services/automation-service";
 import { Automation } from "../models/automation";
 import { PaneEditAutomation } from "./pane-edit-automation";
 
-interface IProps {
+interface Props {
 	entityTypeCode: string;
 	entityTypeUid: Guid | string;
 }
 
-interface IState {
+interface State {
 	showPane?: boolean;
 	editUid?: Guid;
 	selectedRowKeys?: string[] | number[];
 	updateTableToken?: DataTableUpdateToken;
 }
 
-export class PaneSearchAutomation extends React.Component<IProps, IState> {
+export class PaneSearchAutomation extends React.Component<Props, State> {
 
 	private _operation = new OperationService();
 	private _automationService = new AutomationService();
 
-	constructor(props: IProps) {
+	constructor(props: Props) {
 		super(props);
 
 		this.state = {

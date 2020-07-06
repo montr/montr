@@ -1,13 +1,13 @@
 import React from "react";
 import { Space } from "antd";
-import { AutomationConditionFactory, IAutomationItemProps } from ".";
-import { IAutomationCondition } from "../models";
+import { AutomationConditionFactory, AutomationItemProps } from ".";
+import { AutomationCondition } from "../models";
 
-interface IProps extends IAutomationItemProps {
-	value?: IAutomationCondition;
+interface Props extends AutomationItemProps {
+	value?: AutomationCondition;
 }
 
-export class AutomationCondition extends React.Component<IProps> {
+export class AutomationConditionItem extends React.Component<Props> {
 
 	render = () => {
 		const { value, typeSelector } = this.props;

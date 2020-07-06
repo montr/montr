@@ -1,7 +1,7 @@
-import { IDataField } from "@montr-core/models/data-field";
+import { IDataField } from "@montr-core/models";
 
-export interface IAutomationConditionListField extends IDataField {
+export interface AutomationConditionListField extends IDataField {
 }
 
-export interface IAutomationActionListField extends IDataField {
+export interface AutomationActionListField extends IDataField {
 }

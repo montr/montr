@@ -1,13 +1,13 @@
 import React from "react";
 import { Space, Input, Form, Select } from "antd";
-import { IAutomationItemProps } from "./automation-field-factory";
-import { ISetFieldAutomationAction } from "../models/automation";
+import { AutomationItemProps } from "./automation-field-factory";
+import { SetFieldAutomationAction } from "../models/automation";
 
-interface IProps extends IAutomationItemProps {
-	action: ISetFieldAutomationAction;
+interface Props extends AutomationItemProps {
+	action: SetFieldAutomationAction;
 }
 
-export class SetFieldAutomationAction extends React.Component<IProps> {
+export class SetFieldAutomationActionItem extends React.Component<Props> {
 
 	render = () => {
 		const { typeSelector, item } = this.props;

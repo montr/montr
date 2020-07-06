@@ -1,20 +1,20 @@
 import React from "react";
-import { Radio, Form, Space, Select } from "antd";
-import { IGroupAutomationCondition, IAutomationConditionListField } from "../models";
-import { IAutomationItemProps } from ".";
-import { DataFieldFactory, IDataFormOptions } from "@montr-core/components";
+import { Radio, Form, Space } from "antd";
+import { GroupAutomationCondition, AutomationConditionListField } from "../models";
+import { AutomationItemProps } from ".";
+import { DataFieldFactory } from "@montr-core/components";
 
-interface IProps extends IAutomationItemProps {
+interface Props extends AutomationItemProps {
 	// todo: rename to value here in other conditions and actions?
-	condition: IGroupAutomationCondition;
+	condition: GroupAutomationCondition;
 }
 
-export class GroupAutomationCondition extends React.Component<IProps> {
+export class GroupAutomationConditionItem extends React.Component<Props> {
 
 	render = () => {
 		const { condition, options, typeSelector, item } = this.props;
 
-		const field: IAutomationConditionListField = {
+		const field: AutomationConditionListField = {
 			type: "automation-condition-list",
 			key: "conditions"
 		};

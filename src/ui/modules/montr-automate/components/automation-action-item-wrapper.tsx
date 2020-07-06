@@ -1,13 +1,13 @@
 import React from "react";
 import { Space } from "antd";
-import { IAutomationItemProps, AutomationActionFactory } from ".";
-import { IAutomationAction } from "../models/automation";
+import { AutomationItemProps, AutomationActionFactory } from ".";
+import { AutomationAction } from "../models/automation";
 
-interface IActionProps extends IAutomationItemProps {
-	value?: IAutomationAction;
+interface Props extends AutomationItemProps {
+	value?: AutomationAction;
 }
 
-export class AutomationAction extends React.Component<IActionProps> {
+export class AutomationActionItemWrapper extends React.Component<Props> {
 
 	render = () => {
 		const { value, typeSelector } = this.props;
@@ -32,4 +32,3 @@ export class AutomationAction extends React.Component<IActionProps> {
 		);
 	};
 }
-

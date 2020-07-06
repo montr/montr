@@ -1,25 +1,25 @@
 import React from "react";
 import { Divider, Form, Select } from "antd";
 import { ButtonAdd, Toolbar, FormListItemToolbar, IDataFormOptions } from "@montr-core/components";
-import { IAutomationActionListField, AutomationRuleType } from "../models";
-import { AutomationAction } from ".";
+import { AutomationActionListField, AutomationRuleType } from "../models";
+import { AutomationActionItemWrapper } from ".";
 import { AutomationService } from "../services";
 
-interface IProps {
-	field: IAutomationActionListField;
+interface Props {
+	field: AutomationActionListField;
 	options: IDataFormOptions;
 }
 
-interface IState {
+interface State {
 	loading: boolean;
 	types: AutomationRuleType[];
 }
 
-export class AutomationActionList extends React.Component<IProps, IState> {
+export class AutomationActionList extends React.Component<Props, State> {
 
 	private _automationService = new AutomationService();
 
-	constructor(props: IProps) {
+	constructor(props: Props) {
 		super(props);
 
 		this.state = {
@@ -77,7 +77,7 @@ export class AutomationActionList extends React.Component<IProps, IState> {
 										fieldKey={[item.fieldKey]}
 										rules={[{ required: true }]}
 										noStyle>
-										<AutomationAction item={item} typeSelector={typeSelector} options={options} />
+										<AutomationActionItemWrapper item={item} typeSelector={typeSelector} options={options} />
 									</Form.Item>
 
 								</div>

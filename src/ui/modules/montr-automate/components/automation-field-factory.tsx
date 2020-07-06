@@ -2,94 +2,94 @@ import React from "react";
 import { IIndexer } from "@montr-core/models";
 import { FieldData } from "@montr-core/models/field-data";
 import { DataFieldFactory, IDataFormOptions } from "@montr-core/components";
-import { IAutomationConditionListField, IAutomationActionListField, IAutomationCondition, IAutomationAction, IGroupAutomationCondition, IFieldAutomationCondition, ISetFieldAutomationAction, INotifyByEmailAutomationAction, AutomationRuleType } from "../models/";
-import { AutomationConditionList, AutomationActionList, GroupAutomationCondition, FieldAutomationCondition, SetFieldAutomationAction, NotifyByEmailAutomationAction } from ".";
+import { AutomationConditionListField, AutomationActionListField, AutomationCondition, AutomationAction, GroupAutomationCondition, FieldAutomationCondition, SetFieldAutomationAction, NotifyByEmailAutomationAction } from "../models/";
+import { AutomationConditionList, AutomationActionList, GroupAutomationConditionItem, FieldAutomationConditionItem, SetFieldAutomationActionItem, NotifyByEmailAutomationActionItem } from ".";
 
-export class AutomationConditionListFieldFactory extends DataFieldFactory<IAutomationConditionListField> {
+export class AutomationConditionListFieldFactory extends DataFieldFactory<AutomationConditionListField> {
 
-	createFormItem = (field: IAutomationConditionListField, data: IIndexer, options: IDataFormOptions): React.ReactNode => {
+	createFormItem = (field: AutomationConditionListField, data: IIndexer, options: IDataFormOptions): React.ReactNode => {
 		return <AutomationConditionList key={field.key} field={field} options={options} />;
 	};
 
-	createEditNode(field: IAutomationConditionListField, data: IIndexer): React.ReactElement {
+	createEditNode(field: AutomationConditionListField, data: IIndexer): React.ReactElement {
 		return null;
 	}
 
-	createViewNode(field: IAutomationConditionListField, data: IIndexer): React.ReactElement {
+	createViewNode(field: AutomationConditionListField, data: IIndexer): React.ReactElement {
 		return null;
 	}
 }
 
-export class AutomationActionListFieldFactory extends DataFieldFactory<IAutomationActionListField> {
+export class AutomationActionListFieldFactory extends DataFieldFactory<AutomationActionListField> {
 
-	createFormItem = (field: IAutomationActionListField, data: IIndexer, options: IDataFormOptions): React.ReactNode => {
+	createFormItem = (field: AutomationActionListField, data: IIndexer, options: IDataFormOptions): React.ReactNode => {
 		return <AutomationActionList key={field.key} field={field} options={options} />;
 	};
 
-	createEditNode(field: IAutomationActionListField, data: IIndexer): React.ReactElement {
+	createEditNode(field: AutomationActionListField, data: IIndexer): React.ReactElement {
 		return null;
 	}
 
-	createViewNode(field: IAutomationActionListField, data: IIndexer): React.ReactElement {
+	createViewNode(field: AutomationActionListField, data: IIndexer): React.ReactElement {
 		return null;
 	}
 }
 
-export class IAutomationItemProps {
+export class AutomationItemProps {
 	item: FieldData;
 	typeSelector: React.ReactElement;
 	options: IDataFormOptions;
 }
 
-export abstract class AutomationConditionFactory<TCondition extends IAutomationCondition> {
-	private static Map: { [key: string]: AutomationConditionFactory<IAutomationCondition>; } = {};
+export abstract class AutomationConditionFactory<TCondition extends AutomationCondition> {
+	private static Map: { [key: string]: AutomationConditionFactory<AutomationCondition>; } = {};
 
-	static register(key: string, factory: AutomationConditionFactory<IAutomationCondition>) {
+	static register(key: string, factory: AutomationConditionFactory<AutomationCondition>) {
 		AutomationConditionFactory.Map[key] = factory;
 	}
 
-	static get(key: string): AutomationConditionFactory<IAutomationCondition> {
+	static get(key: string): AutomationConditionFactory<AutomationCondition> {
 		return AutomationConditionFactory.Map[key];
 	}
 
-	abstract createFormItem(condition: TCondition, props: IAutomationItemProps): React.ReactNode;
+	abstract createFormItem(condition: TCondition, props: AutomationItemProps): React.ReactNode;
 }
 
-export abstract class AutomationActionFactory<TAction extends IAutomationAction> {
-	private static Map: { [key: string]: AutomationActionFactory<IAutomationAction>; } = {};
+export abstract class AutomationActionFactory<TAction extends AutomationAction> {
+	private static Map: { [key: string]: AutomationActionFactory<AutomationAction>; } = {};
 
-	static register(key: string, factory: AutomationActionFactory<IAutomationAction>) {
+	static register(key: string, factory: AutomationActionFactory<AutomationAction>) {
 		AutomationActionFactory.Map[key] = factory;
 	}
 
-	static get(key: string): AutomationActionFactory<IAutomationAction> {
+	static get(key: string): AutomationActionFactory<AutomationAction> {
 		return AutomationActionFactory.Map[key];
 	}
 
-	abstract createFormItem(action: TAction, props: IAutomationItemProps): React.ReactNode;
+	abstract createFormItem(action: TAction, props: AutomationItemProps): React.ReactNode;
 }
 
-class GroupAutomationConditionFactory extends AutomationConditionFactory<IGroupAutomationCondition> {
-	createFormItem(condition: IGroupAutomationCondition, props: IAutomationItemProps): React.ReactElement {
-		return <GroupAutomationCondition condition={condition} {...props} />;
+class GroupAutomationConditionFactory extends AutomationConditionFactory<GroupAutomationCondition> {
+	createFormItem(condition: GroupAutomationCondition, props: AutomationItemProps): React.ReactElement {
+		return <GroupAutomationConditionItem condition={condition} {...props} />;
 	}
 }
 
-class FieldAutomationConditionFactory extends AutomationConditionFactory<IFieldAutomationCondition> {
-	createFormItem(condition: IFieldAutomationCondition, props: IAutomationItemProps): React.ReactElement {
-		return <FieldAutomationCondition condition={condition} {...props} />;
+class FieldAutomationConditionFactory extends AutomationConditionFactory<FieldAutomationCondition> {
+	createFormItem(condition: FieldAutomationCondition, props: AutomationItemProps): React.ReactElement {
+		return <FieldAutomationConditionItem condition={condition} {...props} />;
 	}
 }
 
-class SetFieldAutomationActionFactory extends AutomationConditionFactory<ISetFieldAutomationAction> {
-	createFormItem(action: ISetFieldAutomationAction, props: IAutomationItemProps): React.ReactElement {
-		return <SetFieldAutomationAction action={action} {...props} />;
+class SetFieldAutomationActionFactory extends AutomationConditionFactory<SetFieldAutomationAction> {
+	createFormItem(action: SetFieldAutomationAction, props: AutomationItemProps): React.ReactElement {
+		return <SetFieldAutomationActionItem action={action} {...props} />;
 	}
 }
 
-class NotifyByEmailAutomationActionFactory extends AutomationConditionFactory<INotifyByEmailAutomationAction> {
-	createFormItem(action: INotifyByEmailAutomationAction, props: IAutomationItemProps): React.ReactElement {
-		return <NotifyByEmailAutomationAction action={action} {...props} />;
+class NotifyByEmailAutomationActionFactory extends AutomationConditionFactory<NotifyByEmailAutomationAction> {
+	createFormItem(action: NotifyByEmailAutomationAction, props: AutomationItemProps): React.ReactElement {
+		return <NotifyByEmailAutomationActionItem action={action} {...props} />;
 	}
 }
 

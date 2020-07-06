@@ -1,13 +1,13 @@
 import React from "react";
 import { Form, Space, Select } from "antd";
-import { IFieldAutomationCondition } from "../models";
-import { IAutomationItemProps } from ".";
+import { FieldAutomationCondition } from "../models";
+import { AutomationItemProps } from ".";
 
-interface IProps extends IAutomationItemProps {
-	condition: IFieldAutomationCondition;
+interface Props extends AutomationItemProps {
+	condition: FieldAutomationCondition;
 }
 
-export class FieldAutomationCondition extends React.Component<IProps> {
+export class FieldAutomationConditionItem extends React.Component<Props> {
 
 	render = () => {
 		const { typeSelector, item } = this.props;
