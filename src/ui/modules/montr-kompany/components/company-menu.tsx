@@ -1,9 +1,10 @@
 import * as React from "react";
-import Menu, { MenuProps } from "antd/lib/menu";
+import Menu from "antd/lib/menu";
+import { MenuItemProps } from "antd/lib/menu/MenuItem";
 import { ICompany } from "../models";
 import { withCompanyContext, CompanyContextProps } from ".";
 
-class _CompanyMenu extends React.Component<MenuProps & CompanyContextProps> {
+class WrappedCompanyMenu extends React.Component<MenuItemProps & CompanyContextProps> {
 
 	render() {
 
@@ -44,4 +45,4 @@ class _CompanyMenu extends React.Component<MenuProps & CompanyContextProps> {
 	}
 }
 
-export const CompanyMenu = withCompanyContext(_CompanyMenu);
+export const CompanyMenu = withCompanyContext(WrappedCompanyMenu);

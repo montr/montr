@@ -40,7 +40,7 @@ export class AutomationConditionList extends React.Component<IProps, IState> {
 		const { field, options } = this.props,
 			{ types } = this.state;
 
-		const defaultCondition: IFieldAutomationCondition = { type: "field", operator: "Equal" };
+		const defaultCondition/* : IFieldAutomationCondition */ = { type: "field", props: { operator: "Equal" } };
 
 		return (
 			<Form.List name={field.key}>
