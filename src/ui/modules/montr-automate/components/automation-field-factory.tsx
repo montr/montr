@@ -1,6 +1,5 @@
 import React from "react";
-import { IIndexer } from "@montr-core/models";
-import { FieldData } from "@montr-core/models/field-data";
+import { IIndexer, FieldData } from "@montr-core/models";
 import { DataFieldFactory, IDataFormOptions } from "@montr-core/components";
 import { AutomationConditionListField, AutomationActionListField, AutomationCondition, AutomationAction, GroupAutomationCondition, FieldAutomationCondition, SetFieldAutomationAction, NotifyByEmailAutomationAction } from "../models/";
 import { AutomationConditionList, AutomationActionList, GroupAutomationConditionItem, FieldAutomationConditionItem, SetFieldAutomationActionItem, NotifyByEmailAutomationActionItem } from ".";
@@ -69,31 +68,26 @@ export abstract class AutomationActionFactory<TAction extends AutomationAction> 
 	abstract createFormItem(action: TAction, props: AutomationItemProps): React.ReactNode;
 }
 
-class GroupAutomationConditionFactory extends AutomationConditionFactory<GroupAutomationCondition> {
+export class GroupAutomationConditionFactory extends AutomationConditionFactory<GroupAutomationCondition> {
 	createFormItem(condition: GroupAutomationCondition, props: AutomationItemProps): React.ReactElement {
 		return <GroupAutomationConditionItem condition={condition} {...props} />;
 	}
 }
 
-class FieldAutomationConditionFactory extends AutomationConditionFactory<FieldAutomationCondition> {
+export class FieldAutomationConditionFactory extends AutomationConditionFactory<FieldAutomationCondition> {
 	createFormItem(condition: FieldAutomationCondition, props: AutomationItemProps): React.ReactElement {
 		return <FieldAutomationConditionItem condition={condition} {...props} />;
 	}
 }
 
-class SetFieldAutomationActionFactory extends AutomationConditionFactory<SetFieldAutomationAction> {
+export class SetFieldAutomationActionFactory extends AutomationConditionFactory<SetFieldAutomationAction> {
 	createFormItem(action: SetFieldAutomationAction, props: AutomationItemProps): React.ReactElement {
 		return <SetFieldAutomationActionItem action={action} {...props} />;
 	}
 }
 
-class NotifyByEmailAutomationActionFactory extends AutomationConditionFactory<NotifyByEmailAutomationAction> {
+export class NotifyByEmailAutomationActionFactory extends AutomationConditionFactory<NotifyByEmailAutomationAction> {
 	createFormItem(action: NotifyByEmailAutomationAction, props: AutomationItemProps): React.ReactElement {
 		return <NotifyByEmailAutomationActionItem action={action} {...props} />;
 	}
 }
-
-AutomationConditionFactory.register("group", new GroupAutomationConditionFactory());
-AutomationConditionFactory.register("field", new FieldAutomationConditionFactory());
-AutomationActionFactory.register("set-field", new SetFieldAutomationActionFactory());
-AutomationActionFactory.register("notify-by-email", new NotifyByEmailAutomationActionFactory());

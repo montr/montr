@@ -95,7 +95,7 @@ export abstract class DataFieldFactory<TField extends IDataField> {
 	abstract createEditNode(field: TField, data: IIndexer): React.ReactElement;
 }
 
-class BooleanFieldFactory extends DataFieldFactory<IBooleanField> {
+export class BooleanFieldFactory extends DataFieldFactory<IBooleanField> {
 	constructor() {
 		super();
 		this.valuePropName = "checked";
@@ -106,7 +106,7 @@ class BooleanFieldFactory extends DataFieldFactory<IBooleanField> {
 	}
 }
 
-class TextFieldFactory extends DataFieldFactory<ITextField> {
+export class TextFieldFactory extends DataFieldFactory<ITextField> {
 	createEditNode(field: ITextField, data: IIndexer): React.ReactElement {
 		return <Input
 			allowClear
@@ -117,7 +117,7 @@ class TextFieldFactory extends DataFieldFactory<ITextField> {
 	}
 }
 
-class NumberFieldFactory extends DataFieldFactory<INumberField> {
+export class NumberFieldFactory extends DataFieldFactory<INumberField> {
 	createEditNode(field: INumberField, data: IIndexer): React.ReactElement {
 		const props = field?.props;
 
@@ -130,7 +130,7 @@ class NumberFieldFactory extends DataFieldFactory<INumberField> {
 	}
 }
 
-class TextAreaFieldFactory extends DataFieldFactory<ITextAreaField> {
+export class TextAreaFieldFactory extends DataFieldFactory<ITextAreaField> {
 	createEditNode(field: ITextAreaField, data: IIndexer): React.ReactElement {
 		const props = field?.props;
 
@@ -142,7 +142,7 @@ class TextAreaFieldFactory extends DataFieldFactory<ITextAreaField> {
 	}
 }
 
-class SelectFieldFactory extends DataFieldFactory<ISelectField> {
+export class SelectFieldFactory extends DataFieldFactory<ISelectField> {
 	createEditNode(field: ISelectField, data: IIndexer): React.ReactElement {
 		const props = field?.props;
 
@@ -170,7 +170,7 @@ class SelectFieldFactory extends DataFieldFactory<ISelectField> {
 	}
 }
 
-class DesignSelectOptionsFieldFactory extends DataFieldFactory<IDesignSelectOptionsField> {
+export class DesignSelectOptionsFieldFactory extends DataFieldFactory<IDesignSelectOptionsField> {
 
 	/* createFormItem = (field: IDesignSelectOptionsField, data: IIndexer, options: IDataFormOptions): React.ReactNode => {
 		return <DesignSelectOptions key={field.key} />;
@@ -181,7 +181,7 @@ class DesignSelectOptionsFieldFactory extends DataFieldFactory<IDesignSelectOpti
 	}
 }
 
-class PasswordFieldFactory extends DataFieldFactory<IPasswordField> {
+export class PasswordFieldFactory extends DataFieldFactory<IPasswordField> {
 	createEditNode(field: IDataField, data: IIndexer): React.ReactElement {
 		return <Input.Password
 			allowClear
@@ -191,7 +191,7 @@ class PasswordFieldFactory extends DataFieldFactory<IPasswordField> {
 	}
 }
 
-class DateFieldFactory extends DataFieldFactory<IDateField> {
+export class DateFieldFactory extends DataFieldFactory<IDateField> {
 	constructor() {
 		super();
 		this.shouldFormatValue = true;
@@ -221,7 +221,7 @@ class DateFieldFactory extends DataFieldFactory<IDateField> {
 	}
 }
 
-/* class TimeFieldFactory extends DataFieldFactory<ITimeField> {
+/* export class TimeFieldFactory extends DataFieldFactory<ITimeField> {
 	constructor() {
 		super();
 		this.shouldFormatValue = true;
@@ -247,13 +247,3 @@ class DateFieldFactory extends DataFieldFactory<IDateField> {
 			: <EmptyFieldView />;
 	}
 } */
-
-DataFieldFactory.register("boolean", new BooleanFieldFactory());
-DataFieldFactory.register("number", new NumberFieldFactory());
-DataFieldFactory.register("text", new TextFieldFactory());
-DataFieldFactory.register("textarea", new TextAreaFieldFactory());
-DataFieldFactory.register("select", new SelectFieldFactory());
-DataFieldFactory.register("select-options", new DesignSelectOptionsFieldFactory());
-DataFieldFactory.register("password", new PasswordFieldFactory());
-DataFieldFactory.register("date", new DateFieldFactory());
-// DataFieldFactory.register("time", new TimeFieldFactory());

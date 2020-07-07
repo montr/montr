@@ -3,7 +3,7 @@ import { Page } from ".";
 import { List, Card, Skeleton } from "antd";
 import { IMenu } from "@montr-core/models";
 
-export default class Dashboard extends React.Component {
+export default class PageDashboard extends React.Component {
 
 	render() {
 		const data: IMenu[] = [];

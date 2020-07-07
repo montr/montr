@@ -7,21 +7,21 @@ import { Form, Select, Button, Upload } from "antd";
 import { UploadChangeParam } from "antd/lib/upload";
 import { Translation } from "react-i18next";
 
-interface IProps {
+interface Props {
 }
 
-interface IState {
+interface State {
 	locale?: string;
 	module?: string;
 	updateTableToken: DataTableUpdateToken;
 }
 
-export default class SearchLocaleString extends React.Component<IProps, IState> {
+export default class PageSearchLocaleString extends React.Component<Props, State> {
 
 	_notification = new NotificationService();
 	_localeService = new LocaleStringService();
 
-	constructor(props: IProps) {
+	constructor(props: Props) {
 		super(props);
 
 		this.state = {

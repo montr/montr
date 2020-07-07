@@ -1,14 +1,14 @@
 import React from "react";
 import { Page, Toolbar, PageHeader, DataBreadcrumb } from "@montr-core/components";
 
-interface IProps {
+interface Props {
 }
 
-interface IState {
+interface State {
 }
 
-export default class Settings extends React.Component<IProps, IState> {
-	constructor(props: IProps) {
+export default class PageSettings extends React.Component<Props, State> {
+	constructor(props: Props) {
 		super(props);
 
 		this.state = {
@@ -30,5 +30,5 @@ export default class Settings extends React.Component<IProps, IState> {
 
 			</Page>
 		);
-	}
+	};
 }

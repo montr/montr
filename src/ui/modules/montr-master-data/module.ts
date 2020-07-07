@@ -1,8 +1,8 @@
 import React from "react";
 import { generatePath } from "react-router";
-import { Guid } from "@montr-core/models/guid";
+import { Guid } from "@montr-core/models";
 import { AppRouteRegistry } from "@montr-core/services/app-route-registry";
-import { DataFieldFactory } from "@montr-core/components/data-field-factory";
+import { DataFieldFactory } from "@montr-core/components";
 import { Constants } from "@montr-core/.";
 
 import("./components").then(x => {

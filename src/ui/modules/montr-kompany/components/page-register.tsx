@@ -10,22 +10,21 @@ import { FormInstance } from "antd/lib/form";
 import { DataForm } from "@montr-core/components";
 import { IDataField, IApiResult } from "@montr-core/models";
 
-
-interface IProps extends CompanyContextProps {
+interface Props extends CompanyContextProps {
 }
 
-interface IState {
+interface State {
 	configCode?: string;
 	modalVisible: boolean;
 }
 
-class _RegistrationForm extends React.Component<IProps, IState> {
+class _RegistrationForm extends React.Component<Props, State> {
 
 	private _navigation = new NavigationService();
 	private _companyService = new CompanyService();
 	private _formRef = React.createRef<FormInstance>();
 
-	constructor(props: IProps) {
+	constructor(props: Props) {
 		super(props);
 
 		this.state = {
