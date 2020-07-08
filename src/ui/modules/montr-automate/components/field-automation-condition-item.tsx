@@ -23,7 +23,7 @@ export class FieldAutomationConditionItem extends React.Component<Props> {
 					fieldKey={[item.fieldKey, "field"]}
 					rules={[{ required: true }]}>
 					<Select placeholder="Select field" style={{ minWidth: 100 }}>
-						<Select.Option value="status">Status</Select.Option>
+						<Select.Option value="StatusCode">Status</Select.Option>
 					</Select>
 				</Form.Item>
 
@@ -48,10 +48,10 @@ export class FieldAutomationConditionItem extends React.Component<Props> {
 					fieldKey={[item.fieldKey, "value"]}
 					rules={[{ required: true }]}>
 					<Select placeholder="Select value" style={{ minWidth: 100 }}>
-						<Select.Option value="draft">Draft</Select.Option>
-						<Select.Option value="published">Published</Select.Option>
-						<Select.Option value="completed">Completed</Select.Option>
-						<Select.Option value="closed">Closed</Select.Option>
+						<Select.Option value="Draft">Draft</Select.Option>
+						<Select.Option value="Published">Published</Select.Option>
+						<Select.Option value="Completed">Completed</Select.Option>
+						<Select.Option value="Closed">Closed</Select.Option>
 					</Select>
 				</Form.Item>
 

@@ -25,6 +25,7 @@ namespace Montr.Automate.Impl.Services
 				EntityTypeCode = context.EntityTypeCode,
 				EntityTypeUid = context.EntityTypeUid,
 				IsActive = true,
+				IncludeRules = true,
 				PageSize = 100
 			}, cancellationToken);
 

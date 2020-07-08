@@ -23,7 +23,8 @@ namespace Montr.Automate.Impl.QueryHandlers
 			{
 				EntityTypeCode = request.EntityTypeCode,
 				EntityTypeUid = request.EntityTypeUid,
-				Uid = request.Uid
+				Uid = request.Uid,
+				IncludeRules = true
 			}, cancellationToken);
 
 			return result.Rows.Single();

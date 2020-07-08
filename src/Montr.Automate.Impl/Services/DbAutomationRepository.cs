@@ -83,13 +83,13 @@ namespace Montr.Automate.Impl.Services
 					result.Add(item);
 				}
 
-				if (request.Uid != null && result.Count == 1)
+				if (request.IncludeRules)
 				{
-					var automation = result[0];
-					var automationUid = request.Uid;
-
-					automation.Actions = await LoadActions(db, automationUid, cancellationToken);
-					automation.Conditions = await LoadConditions(db, automationUid, cancellationToken);
+					foreach (var automation in result)
+					{
+						automation.Actions = await LoadActions(db, automation.Uid, cancellationToken);
+						automation.Conditions = await LoadConditions(db, automation.Uid, cancellationToken);
+					}
 				}
 
 				return new SearchResult<Automation>
@@ -100,7 +100,7 @@ namespace Montr.Automate.Impl.Services
 			}
 		}
 
-		private async Task<List<AutomationAction>> LoadActions(DbContext db, Guid? automationUid, CancellationToken cancellationToken)
+		private async Task<List<AutomationAction>> LoadActions(DbContext db, Guid automationUid, CancellationToken cancellationToken)
 		{
 			var result = new List<AutomationAction>();
 
@@ -130,7 +130,7 @@ namespace Montr.Automate.Impl.Services
 			return result;
 		}
 
-		private async Task<List<AutomationCondition>> LoadConditions(DbContext db, Guid? automationUid, CancellationToken cancellationToken)
+		private async Task<List<AutomationCondition>> LoadConditions(DbContext db, Guid automationUid, CancellationToken cancellationToken)
 		{
 			var result = new List<AutomationCondition>();
 
@@ -160,7 +160,7 @@ namespace Montr.Automate.Impl.Services
 			return result;
 		}
 
-		public Task<SearchResult<Automation>> Search2(SearchRequest searchRequest, CancellationToken cancellationToken)
+		public Task<SearchResult<Automation>> _Search(SearchRequest searchRequest, CancellationToken cancellationToken)
 		{
 			var request = (AutomationSearchRequest)searchRequest ?? throw new ArgumentNullException(nameof(searchRequest));
 
