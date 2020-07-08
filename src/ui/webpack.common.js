@@ -60,18 +60,20 @@ module.exports = {
 					{
 						loader: "less-loader",
 						options: {
-							javascriptEnabled: true,
-							modifyVars: {
-								// https://github.com/ant-design/ant-design/blob/master/components/style/themes/default.less
-								// "primary-color": "#1DA57A",
-								// "primary-color": "#357ae8", // (?)
-								// "link-color": "#1DA57A",
-								// "border-radius-base": "4px",
-								// "font-size-base": "13px",
-								// "font-family": "'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif"
-								// "font-family": "'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif"
-								"font-family": "Nunito, 'Helvetica Neue', Helvetica, Arial, sans-serif"
-							},
+							lessOptions: {
+								javascriptEnabled: true,
+								modifyVars: {
+									// https://github.com/ant-design/ant-design/blob/master/components/style/themes/default.less
+									// "primary-color": "#1DA57A",
+									// "primary-color": "#357ae8", // (?)
+									// "link-color": "#1DA57A",
+									// "border-radius-base": "4px",
+									// "font-size-base": "13px",
+									// "font-family": "'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif"
+									// "font-family": "'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif"
+									"font-family": "Nunito, 'Helvetica Neue', Helvetica, Arial, sans-serif"
+								}
+							}
 						}
 					}
 				]
