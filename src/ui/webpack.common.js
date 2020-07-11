@@ -84,7 +84,7 @@ module.exports = {
 		new ForkTsCheckerWebpackPlugin(),
 		new copyPlugin({
 			patterns: [
-				{ from: "*", to: "../../Host/wwwroot/assets/", context: path.resolve(__dirname, "assets") }
+				{ from: "**/*", to: "../../Host/wwwroot/assets/", context: path.resolve(__dirname, "assets") }
 			]
 		})
 	]
