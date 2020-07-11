@@ -82,8 +82,10 @@ module.exports = {
 	},
 	plugins: [
 		new ForkTsCheckerWebpackPlugin(),
-		new copyPlugin([
-			{ from: "assets", to: "../../Host/wwwroot/assets" }
-		]),
-	],
+		new copyPlugin({
+			patterns: [
+				{ from: "assets", to: "../../Host/wwwroot/assets" }
+			]
+		})
+	]
 };
