@@ -17,7 +17,7 @@ using Montr.Data.Linq2Db;
 
 namespace Montr.Core.Impl.Services
 {
-	// todo: backup db before migration - always or when not applied migrations exists
+	// todo: backup db before migration (when not applied migrations exists)
 	public class DbMigrationRunner : IMigrationRunner
 	{
 		private readonly ILogger<DbMigrationRunner> _logger;

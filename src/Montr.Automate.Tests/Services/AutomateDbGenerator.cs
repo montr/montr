@@ -74,7 +74,7 @@ namespace Montr.Automate.Tests.Services
 
 			public Task Execute(AutomationAction automationAction, AutomationContext context, CancellationToken cancellationToken)
 			{
-				throw new NotImplementedException();
+				return Task.CompletedTask;
 			}
 		}
 
@@ -84,7 +84,7 @@ namespace Montr.Automate.Tests.Services
 
 			public Task<bool> Meet(AutomationCondition automationCondition, AutomationContext context, CancellationToken cancellationToken)
 			{
-				throw new NotImplementedException();
+				return Task.FromResult(false);
 			}
 		}
 	}

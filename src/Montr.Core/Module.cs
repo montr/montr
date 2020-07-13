@@ -24,6 +24,7 @@ namespace Montr.Core
 
 			services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
 
+			// ReSharper disable once RedundantTypeArgumentsOfMethod
 			services.AddScoped<IUrlHelper>(x =>
 			{
 				var actionContext = x.GetRequiredService<IActionContextAccessor>().ActionContext;
@@ -67,7 +68,7 @@ namespace Montr.Core
 			services.AddSingleton<IBinarySerializer, DefaultBinarySerializer>();
 			services.AddSingleton<IUnitOfWorkFactory, TransactionScopeUnitOfWorkFactory>();
 			services.AddSingleton<IContentProvider, DefaultContentProvider>();
-			
+
 			services.AddTransient<ICache, CombinedCache>();
 			services.AddTransient<ILocalizer, DefaultLocalizer>();
 		}
