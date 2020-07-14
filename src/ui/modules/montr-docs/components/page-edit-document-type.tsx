@@ -45,6 +45,12 @@ export default class PageEditDocumentType extends React.Component<IProps, IState
 			<Page title={`${uid}`}>
 				<Spin spinning={loading}>
 					<Tabs size="small" defaultActiveKey={tabKey} onChange={this.handleTabChange}>
+						<Tabs.TabPane key="common" tab="Информация">
+
+						</Tabs.TabPane>
+						<Tabs.TabPane key="statuses" tab="Statuses">
+
+						</Tabs.TabPane>
 						<Tabs.TabPane key="fields" tab="Поля">
 							<PaneSearchMetadata entityTypeCode={`DocumentType`} entityUid={uid} />
 						</Tabs.TabPane>

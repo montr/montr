@@ -134,7 +134,7 @@ namespace Montr.Kompany.Impl.CommandHandlers
 					MessageCode = ExpressionHelper.GetFullName<CreateCompany.Resources>(x => x.CompanyCreated)
 				});
 
-				// todo: (через события в фоне) авто-допуск заявки, оповещения для оператора и компании
+				// todo: (move to background) auto-approve request, notifications
 				await _automationRunner.Run(new AutomationContext
 				{
 					EntityTypeCode = DocumentType.EntityTypeCode,
