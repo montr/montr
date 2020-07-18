@@ -56,7 +56,7 @@ export class FieldAutomationConditionItem extends React.Component<Props, State> 
 					fieldKey={[item.fieldKey, "field"]}
 					rules={[{ required: true }]}>
 					<Select placeholder="Select field" style={{ minWidth: 200 }}>
-						{fields.map(x => <Select.Option value={x.key}>{x.name}</Select.Option>)}
+						{fields.map(x => <Select.Option key={x.key} value={x.key}>{x.name}</Select.Option>)}
 					</Select>
 				</Form.Item>
 
