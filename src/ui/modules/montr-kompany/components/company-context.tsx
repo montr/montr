@@ -3,18 +3,18 @@ import { ICompany } from "../models";
 import { Guid } from "@montr-core/models";
 
 export interface CompanyContextProps {
-	currentCompany?: ICompany,
-	companyList: ICompany[],
-	registerCompany: () => void,
-	manageCompany: () => void,
-	switchCompany: (companyUid: Guid) => void,
+	currentCompany?: ICompany;
+	companyList: ICompany[];
+	registerCompany: () => void;
+	manageCompany: () => void;
+	switchCompany: (companyUid: Guid) => void;
 }
 
 const defaultState: CompanyContextProps = {
 	companyList: [],
 	registerCompany: () => { },
 	manageCompany: () => { },
-	switchCompany: (companyUid: Guid) => { },
+	switchCompany: (companyUid: Guid) => { }
 };
 
 export const CompanyContext = React.createContext<CompanyContextProps>(defaultState);

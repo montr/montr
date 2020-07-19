@@ -6,6 +6,7 @@ import { Toolbar, ButtonCancel, ButtonSave, DataForm } from "@montr-core/compone
 import { Automation } from "../models";
 import { MetadataService } from "@montr-core/services";
 import { AutomationService } from "../services";
+import { AutomationContextProvider } from "./automation-context";
 
 interface Props {
 	entityTypeCode: string;
@@ -89,7 +90,7 @@ export class PaneEditAutomation extends React.Component<Props, State> {
 	};
 
 	render = () => {
-		const { onClose } = this.props,
+		const { entityTypeCode, entityTypeUid, onClose } = this.props,
 			{ loading, data, fields } = this.state;
 
 		return (<>
@@ -106,12 +107,15 @@ export class PaneEditAutomation extends React.Component<Props, State> {
 							<ButtonSave onClick={this.handleSubmitClick} />
 						</Toolbar>}>
 
-					<DataForm
-						formRef={this._formRef}
-						showControls={false}
-						fields={fields}
-						data={data}
-						onSubmit={this.handleSubmit} />
+					{/* todo: pass Autmation to context? */}
+					<AutomationContextProvider entityTypeCode={entityTypeCode} entityTypeUid={entityTypeUid}>
+						<DataForm
+							formRef={this._formRef}
+							showControls={false}
+							fields={fields}
+							data={data}
+							onSubmit={this.handleSubmit} />
+					</AutomationContextProvider>
 
 				</Drawer>
 			</Spin>
