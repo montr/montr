@@ -35,6 +35,7 @@ export class PaneEditAutomation extends React.Component<Props, State> {
 			loading: true,
 		};
 	}
+
 	componentDidMount = async () => {
 		await this.fetchData();
 	};
@@ -121,5 +122,4 @@ export class PaneEditAutomation extends React.Component<Props, State> {
 			</Spin>
 		</>);
 	};
-
 }
