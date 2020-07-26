@@ -11,6 +11,8 @@ namespace Montr.Automate
 	{
 		public void ConfigureServices(IConfiguration configuration, IServiceCollection services)
 		{
+			services.AddSingleton<IAutomationContextProvider, DefaultAutomationContextProvider>();
+
 			services.AddTransient<IStartupTask, RegisterMetadataStartupTask>();
 		}
 	}

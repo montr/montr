@@ -6,7 +6,7 @@ using Montr.Core.Models;
 namespace Montr.Tendr.Commands
 {
 	[DebuggerDisplay("{" + nameof(DebuggerDisplay) + ",nq}")]
-	public class SendInvitations: IRequest<ApiResult>
+	public class SendInvitations : IRequest<ApiResult>
 	{
 		private string DebuggerDisplay => $"{GetType().FullName}, EventUid: {EventUid}";
 

@@ -16,18 +16,20 @@ namespace Montr.Docs.Impl.Services
 			public const string Requester = "requester";
 		}
 
+		private readonly IAutomationContextProvider _automationContextProvider;
 		private readonly IRepository<User> _userRepository;
 
-		public DocumentRecipientResolver(IRepository<User> userRepository)
+		public DocumentRecipientResolver(IAutomationContextProvider automationContextProvider, IRepository<User> userRepository)
 		{
+			_automationContextProvider = automationContextProvider;
 			_userRepository = userRepository;
 		}
 
-		public async Task<Recipient> Resolve(string recipient, AutomationContext automationContext, CancellationToken cancellationToken)
+		public async Task<Recipient> Resolve(string recipient, AutomationContext context, CancellationToken cancellationToken)
 		{
 			if (recipient == KnownTypes.Requester)
 			{
-				var document = (Document) automationContext.Entity;
+				var document = (Document) await _automationContextProvider.GetEntity(context, cancellationToken);
 
 				var searchResult = await _userRepository.Search(
 					new UserSearchRequest { UserName = document.CreatedBy }, cancellationToken);

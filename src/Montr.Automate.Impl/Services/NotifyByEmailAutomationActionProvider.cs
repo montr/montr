@@ -9,15 +9,18 @@ namespace Montr.Automate.Impl.Services
 {
 	public class NotifyByEmailAutomationActionProvider : IAutomationActionProvider
 	{
+		private readonly IAutomationContextProvider _automationContextProvider;
 		private readonly IRecipientResolver _recipientResolver;
 		private readonly ITemplateRenderer _templateRenderer;
 		private readonly IEmailSender _emailSender;
 
 		public NotifyByEmailAutomationActionProvider(
+			IAutomationContextProvider automationContextProvider,
 			IRecipientResolver recipientResolver,
 			ITemplateRenderer templateRenderer,
 			IEmailSender emailSender)
 		{
+			_automationContextProvider = automationContextProvider;
 			_recipientResolver = recipientResolver;
 			_templateRenderer = templateRenderer;
 			_emailSender = emailSender;
@@ -40,7 +43,9 @@ namespace Montr.Automate.Impl.Services
 
 			if (recipient != null)
 			{
-				var message = await _templateRenderer.Render(props.Subject, props.Body, context.Entity, cancellationToken);
+				var entity = await _automationContextProvider.GetEntity(context, cancellationToken);
+
+				var message = await _templateRenderer.Render(props.Subject, props.Body, entity, cancellationToken);
 
 				await _emailSender.Send(recipient.Email, message.Subject, message.Body, cancellationToken);
 			}

@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using LinqToDB;
 using MediatR;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Montr.Automate.Services;
 using Montr.Core.Impl.Services;
 using Montr.Core.Models;
 using Montr.Core.Services;
@@ -24,7 +23,7 @@ using Montr.MasterData.Services;
 using Montr.Metadata.Impl.Entities;
 using Montr.Metadata.Impl.Services;
 using Montr.Metadata.Models;
-using Montr.Metadata.Services;
+using Montr.Worker.Services;
 using Moq;
 
 namespace Montr.Kompany.Tests.CommandHandlers
@@ -70,11 +69,11 @@ namespace Montr.Kompany.Tests.CommandHandlers
 					}
 				});
 
-			var automationServiceMock = new Mock<IAutomationRunner>();
+			var backgroundJobManagerMock = new Mock<IBackgroundJobManager>();
 
 			var handler = new CreateCompanyHandler(unitOfWorkFactory,
 				dbContextFactory, dateTimeProvider, metadataRepositoryMock.Object,
-				dbFieldDataRepository, dbDocumentTypeService, dbDocumentService, auditLogService, automationServiceMock.Object);
+				dbFieldDataRepository, dbDocumentTypeService, dbDocumentService, auditLogService, backgroundJobManagerMock.Object);
 
 			using (var _ = unitOfWorkFactory.Create())
 			{

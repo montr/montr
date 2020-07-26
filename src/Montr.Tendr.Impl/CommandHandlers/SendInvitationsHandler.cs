@@ -19,6 +19,7 @@ namespace Montr.Tendr.Impl.CommandHandlers
 {
 	public class SendInvitationsHandler : IRequestHandler<SendInvitations, ApiResult>
 	{
+		// todo: remove hardcoded template uids
 		public static readonly Guid TemplateUid = Guid.Parse("4d3c920c-abfc-4f21-b900-6afb894413dd");
 
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;

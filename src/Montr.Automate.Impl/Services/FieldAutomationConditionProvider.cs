@@ -9,6 +9,13 @@ namespace Montr.Automate.Impl.Services
 {
 	public class FieldAutomationConditionProvider : IAutomationConditionProvider
 	{
+		private readonly IAutomationContextProvider _automationContextProvider;
+
+		public FieldAutomationConditionProvider(IAutomationContextProvider automationContextProvider)
+		{
+			_automationContextProvider = automationContextProvider;
+		}
+
 		public AutomationRuleType RuleType => new AutomationRuleType
 		{
 			Code = FieldAutomationCondition.TypeCode,
@@ -16,15 +23,18 @@ namespace Montr.Automate.Impl.Services
 			Type = typeof(FieldAutomationCondition)
 		};
 
-		public Task<bool> Meet(AutomationCondition automationCondition, AutomationContext context, CancellationToken cancellationToken)
+		public async Task<bool> Meet(AutomationCondition automationCondition, AutomationContext context, CancellationToken cancellationToken)
 		{
 			var condition = (FieldAutomationCondition)automationCondition;
+
+			var entity = await _automationContextProvider.GetEntity(context, cancellationToken);
 
 			var props = condition.Props;
 
 			var result = false;
 
-			var property = context.Entity.GetType().GetProperty(props.Field);
+			// todo: move to automation context provider (?)
+			var property = entity.GetType().GetProperty(props.Field);
 
 			if (property != null)
 			{
@@ -32,7 +42,7 @@ namespace Montr.Automate.Impl.Services
 
 				if (getMethod != null)
 				{
-					var value = Convert.ToString(getMethod.Invoke(context.Entity, null));
+					var value = Convert.ToString(getMethod.Invoke(entity, null));
 
 					var compareResult = string.Compare(value, props.Value, StringComparison.OrdinalIgnoreCase);
 
@@ -62,7 +72,7 @@ namespace Montr.Automate.Impl.Services
 				}
 			}
 
-			return Task.FromResult(result);
+			return result;
 		}
 	}
 }

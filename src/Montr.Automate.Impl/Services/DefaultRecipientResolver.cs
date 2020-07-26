@@ -22,11 +22,11 @@ namespace Montr.Automate.Impl.Services
 			_recipientResolverFactory = recipientResolverFactory;
 		}
 
-		public async Task<Recipient> Resolve(string recipient, AutomationContext automationContext, CancellationToken cancellationToken)
+		public async Task<Recipient> Resolve(string recipient, AutomationContext context, CancellationToken cancellationToken)
 		{
-			var recipientResolver = _recipientResolverFactory.Resolve(automationContext.EntityTypeCode);
+			var recipientResolver = _recipientResolverFactory.Resolve(context.EntityTypeCode);
 
-			var result = await recipientResolver.Resolve(recipient, automationContext, cancellationToken);
+			var result = await recipientResolver.Resolve(recipient, context, cancellationToken);
 
 			if (result != null) return result;
 

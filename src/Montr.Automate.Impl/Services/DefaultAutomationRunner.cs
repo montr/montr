@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Montr.Automate.Models;
 using Montr.Automate.Services;
+using Montr.Core.Models;
 using Montr.Core.Services;
 
 namespace Montr.Automate.Impl.Services
@@ -18,7 +19,7 @@ namespace Montr.Automate.Impl.Services
 			_providerRegistry = providerRegistry;
 		}
 
-		public async Task Run(AutomationContext context, CancellationToken cancellationToken)
+		public async Task<ApiResult> Run(AutomationContext context, CancellationToken cancellationToken)
 		{
 			var automations = await _repository.Search(new AutomationSearchRequest
 			{
@@ -29,13 +30,19 @@ namespace Montr.Automate.Impl.Services
 				PageSize = 100
 			}, cancellationToken);
 
+			var affected = 0;
+
 			foreach (var automation in automations.Rows)
 			{
 				if (await MeetAll(automation.Conditions, context, cancellationToken))
 				{
 					await Execute(automation.Actions, context, cancellationToken);
+
+					affected++;
 				}
 			}
+
+			return new ApiResult { AffectedRows = affected };
 		}
 
 		private async Task<bool> MeetAll(IEnumerable<AutomationCondition> conditions, AutomationContext context, CancellationToken cancellationToken)

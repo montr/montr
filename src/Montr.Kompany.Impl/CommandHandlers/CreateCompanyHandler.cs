@@ -3,8 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using LinqToDB;
 using MediatR;
-using Montr.Automate.Models;
-using Montr.Automate.Services;
+using Montr.Automate.Commands;
 using Montr.Core.Models;
 using Montr.Core.Services;
 using Montr.Data.Linq2Db;
@@ -15,6 +14,7 @@ using Montr.Kompany.Impl.Entities;
 using Montr.Kompany.Models;
 using Montr.Metadata.Models;
 using Montr.Metadata.Services;
+using Montr.Worker.Services;
 
 namespace Montr.Kompany.Impl.CommandHandlers
 {
@@ -28,12 +28,12 @@ namespace Montr.Kompany.Impl.CommandHandlers
 		private readonly IDocumentTypeService _documentTypeRepository;
 		private readonly IDocumentService _documentRepository;
 		private readonly IAuditLogService _auditLogService;
-		private readonly IAutomationRunner _automationRunner;
+		private readonly IBackgroundJobManager _jobManager;
 
 		public CreateCompanyHandler(IUnitOfWorkFactory unitOfWorkFactory, IDbContextFactory dbContextFactory,
 			IDateTimeProvider dateTimeProvider, IRepository<FieldMetadata> fieldMetadataRepository, IFieldDataRepository fieldDataRepository,
 			IDocumentTypeService documentTypeRepository, IDocumentService documentRepository, IAuditLogService auditLogService,
-			IAutomationRunner automationRunner)
+			IBackgroundJobManager jobManager)
 		{
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_dbContextFactory = dbContextFactory;
@@ -43,7 +43,7 @@ namespace Montr.Kompany.Impl.CommandHandlers
 			_documentTypeRepository = documentTypeRepository;
 			_documentRepository = documentRepository;
 			_auditLogService = auditLogService;
-			_automationRunner = automationRunner;
+			_jobManager = jobManager;
 		}
 
 		public async Task<ApiResult> Handle(CreateCompany request, CancellationToken cancellationToken)
@@ -134,13 +134,13 @@ namespace Montr.Kompany.Impl.CommandHandlers
 					MessageCode = ExpressionHelper.GetFullName<CreateCompany.Resources>(x => x.CompanyCreated)
 				});
 
-				// todo: (move to background) auto-approve request, notifications
-				await _automationRunner.Run(new AutomationContext
+				// todo: auto-approve request, notifications
+				_jobManager.Enqueue<IMediator>(x => x.Send(new RunAutomations
 				{
 					EntityTypeCode = DocumentType.EntityTypeCode,
 					EntityTypeUid = documentType.Uid,
-					Entity = document
-				}, cancellationToken);
+					EntityUid = documentUid
+				}, cancellationToken));
 
 				scope.Commit();
 

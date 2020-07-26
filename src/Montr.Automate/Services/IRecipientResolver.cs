@@ -6,6 +6,6 @@ namespace Montr.Automate.Services
 {
 	public interface IRecipientResolver
 	{
-		Task<Recipient> Resolve(string recipient, AutomationContext automationContext, CancellationToken cancellationToken);
+		Task<Recipient> Resolve(string recipient, AutomationContext context, CancellationToken cancellationToken);
 	}
 }
