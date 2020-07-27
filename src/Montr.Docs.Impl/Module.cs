@@ -24,7 +24,6 @@ namespace Montr.Docs.Impl
 
 			services.AddNamedTransient<IRecipientResolver, DocumentRecipientResolver>(DocumentType.EntityTypeCode);
 			services.AddNamedTransient<IEntityNameResolver, DocumentTypeNameResolver>(DocumentType.EntityTypeCode);
-			services.AddNamedTransient<IEntityContextProvider, DocumentContextProvider>(DocumentType.EntityTypeCode);
 			services.AddNamedTransient<IAutomationContextProvider, DocumentAutomationContextProvider>(DocumentType.EntityTypeCode);
 		}
 	}

@@ -1,7 +1,9 @@
-﻿using System.Threading;
+﻿using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Montr.Automate.Models;
 using Montr.Core.Services;
+using Montr.Metadata.Models;
 
 namespace Montr.Automate.Services
 {
@@ -11,6 +13,8 @@ namespace Montr.Automate.Services
 	public interface IAutomationContextProvider
 	{
 		Task<object> GetEntity(AutomationContext context, CancellationToken cancellationToken);
+
+		Task<IList<FieldMetadata>> GetFields(AutomationContext context, CancellationToken cancellationToken);
 	}
 
 	public class DefaultAutomationContextProvider : IAutomationContextProvider
@@ -34,6 +38,11 @@ namespace Montr.Automate.Services
 			}
 
 			return entity;
+		}
+
+		public async Task<IList<FieldMetadata>> GetFields(AutomationContext context, CancellationToken cancellationToken)
+		{
+			return await _serviceFactory.Resolve(context.EntityTypeCode).GetFields(context, cancellationToken);
 		}
 	}
 }

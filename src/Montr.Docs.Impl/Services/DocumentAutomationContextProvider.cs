@@ -1,10 +1,12 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Montr.Automate.Models;
 using Montr.Automate.Services;
 using Montr.Core.Services;
 using Montr.Docs.Models;
+using Montr.Metadata.Models;
 
 namespace Montr.Docs.Impl.Services
 {
@@ -26,6 +28,20 @@ namespace Montr.Docs.Impl.Services
 			}, cancellationToken);
 
 			return result.Rows.Single();
+		}
+
+		public async Task<IList<FieldMetadata>> GetFields(AutomationContext context, CancellationToken cancellationToken)
+		{
+			// todo: combine common document fields + custom fields
+			var entityType = typeof(Document);
+
+			var fields = entityType
+				.GetProperties()
+				.Select(x => new TextField { Key = x.Name, Name = x.Name })
+				.Cast<FieldMetadata>()
+				.ToList();
+
+			return await Task.FromResult(fields);
 		}
 	}
 }
