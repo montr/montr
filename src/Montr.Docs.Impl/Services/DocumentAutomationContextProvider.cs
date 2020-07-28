@@ -32,7 +32,7 @@ namespace Montr.Docs.Impl.Services
 
 		public async Task<IList<FieldMetadata>> GetFields(AutomationContext context, CancellationToken cancellationToken)
 		{
-			// todo: combine common document fields + custom fields
+			// todo: combine document fields + fields from document questionaire
 			var entityType = typeof(Document);
 
 			var fields = entityType
