@@ -1,9 +1,8 @@
-import * as React from "react";
-import { Toolbar } from "./toolbar";
-import { IDataField, IDataResult, Guid } from "../models";
-import { MetadataService, OperationService } from "../services";
-import { DataTable, DataTableUpdateToken, ButtonAdd, PaneEditMetadata, ButtonDelete } from ".";
-import { Translation, WithTranslation, withTranslation } from "react-i18next";
+import React from "react";
+import { WithTranslation, Translation, withTranslation } from "react-i18next";
+import { Guid, IDataResult } from "../models";
+import { OperationService, MetadataService } from "../services";
+import { DataTableUpdateToken, Toolbar, ButtonAdd, ButtonDelete, DataTable } from ".";
 import { Views } from "../module";
 import { Constants } from "..";
 
@@ -19,7 +18,7 @@ interface State {
 	updateTableToken?: DataTableUpdateToken;
 }
 
-class WrappedPaneSearchMetadata extends React.Component<Props, State> {
+class WrappedPaneSearchEntityStatuses extends React.Component<Props, State> {
 
 	private _operation = new OperationService();
 	private _metadataService = new MetadataService();
@@ -60,18 +59,6 @@ class WrappedPaneSearchMetadata extends React.Component<Props, State> {
 		});
 	};
 
-	showAddPane = () => {
-		this.setState({ showPane: true, editUid: null });
-	};
-
-	showEditPane = (data: IDataField) => {
-		this.setState({ showPane: true, editUid: data?.uid });
-	};
-
-	closePane = () => {
-		this.setState({ showPane: false });
-	};
-
 	handleSuccess = () => {
 		this.setState({ showPane: false });
 		this.refreshTable(false);
@@ -84,13 +71,15 @@ class WrappedPaneSearchMetadata extends React.Component<Props, State> {
 			const { entityTypeCode, entityUid } = this.props,
 				{ selectedRowKeys } = this.state;
 
-			const result = await this._metadataService.delete({ entityTypeCode, entityUid, uids: selectedRowKeys });
+			/* const result = await this._metadataService.delete({ entityTypeCode, entityUid, uids: selectedRowKeys });
 
 			if (result.success) {
 				this.refreshTable(false, true);
 			}
 
-			return result;
+			return result; */
+
+			return null;
 		}, {
 			showConfirm: true,
 			confirmTitle: t("operation.confirm.delete.title")
@@ -104,32 +93,23 @@ class WrappedPaneSearchMetadata extends React.Component<Props, State> {
 		return (<Translation>{(t) => <>
 
 			<Toolbar clear>
-				<ButtonAdd type="primary" onClick={this.showAddPane} />
+				<ButtonAdd type="primary" /* onClick={this.showAddPane} */ />
 				<ButtonDelete onClick={this.delete} disabled={!selectedRowKeys?.length} />
 			</Toolbar>
 
 			<DataTable
 				rowKey="uid"
-				rowActions={[{ name: t("button.edit"), onClick: this.showEditPane }]}
-				viewId={Views.metadataList}
-				loadUrl={`${Constants.apiURL}/metadata/list/`}
+				// rowActions={[{ name: t("button.edit"), onClick: this.showEditPane }]}
+				viewId={Views.entityStatusList}
+				loadUrl={`${Constants.apiURL}/entityStatus/list/`}
 				onLoadData={this.onLoadTableData}
 				onSelectionChange={this.onSelectionChange}
 				updateToken={updateTableToken}
 				skipPaging={true}
 			/>
 
-			{showPane &&
-				<PaneEditMetadata
-					entityTypeCode={entityTypeCode}
-					entityUid={entityUid}
-					uid={editUid}
-					onSuccess={this.handleSuccess}
-					onClose={this.closePane}
-				/>}
-
 		</>}</Translation>);
 	};
 }
 
-export const PaneSearchMetadata = withTranslation()(WrappedPaneSearchMetadata);
+export const PaneSearchEntityStatuses = withTranslation()(WrappedPaneSearchEntityStatuses);

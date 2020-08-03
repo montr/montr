@@ -5,6 +5,11 @@ import { Layout } from "./constants";
 import "./i18n";
 import "./index.less";
 
+export const Views = {
+	metadataList: "Metadata/Grid",
+	entityStatusList: "EntityStatus/Grid",
+};
+
 import("./components").then(x => {
 	x.DataFieldFactory.register("boolean", new x.BooleanFieldFactory());
 	x.DataFieldFactory.register("number", new x.NumberFieldFactory());
