@@ -10,8 +10,12 @@
 
 	<ItemGroup>
 		<PackageReference Include="MediatR" Version="8.1.0" />
-		<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.6" />
-		<PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="3.1.6" />
+		<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="3.1.7" />
+		<PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="3.1.7" />
+	</ItemGroup>
+
+	<ItemGroup>
+	  <Compile Remove="Controllers\EntityStatusController.cs" />
 	</ItemGroup>
 
 </Project>
