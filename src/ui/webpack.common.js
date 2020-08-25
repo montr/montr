@@ -3,7 +3,7 @@ const tsImportPluginFactory = require("ts-import-plugin");
 const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
 const copyPlugin = require("copy-webpack-plugin");
 
-module.exports = {
+const options = {
 	// mode: process.env.test,
 	entry: {
 		"app": "./modules/host/app.tsx",
@@ -81,11 +81,18 @@ module.exports = {
 		],
 	},
 	plugins: [
-		new ForkTsCheckerWebpackPlugin(),
-		!process.env.CI && new copyPlugin({
+		new ForkTsCheckerWebpackPlugin()
+	]
+};
+
+if (!process.env.CI) {
+	options.plugins.push(
+		new copyPlugin({
 			patterns: [
 				{ from: "./assets/", to: "../../Host/wwwroot/assets" }
 			]
 		})
-	]
-};
+	);
+}
+
+module.exports = options;
