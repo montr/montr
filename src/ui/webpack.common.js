@@ -4,7 +4,7 @@ const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
 const copyPlugin = require("copy-webpack-plugin");
 
 module.exports = {
-	mode: process.env.test,
+	// mode: process.env.test,
 	entry: {
 		"app": "./modules/host/app.tsx",
 	},
@@ -82,8 +82,10 @@ module.exports = {
 	},
 	plugins: [
 		new ForkTsCheckerWebpackPlugin(),
-		new copyPlugin([
-			{ from: "assets", to: "../../Host/wwwroot/assets" }
-		])
+		new copyPlugin({
+			patterns: [
+				{ from: "assets", to: "../../Host/wwwroot/assets" }
+			]
+		})
 	]
 };
