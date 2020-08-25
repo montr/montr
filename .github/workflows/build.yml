@@ -49,3 +49,5 @@ jobs:
           npm run build-prod
           # - run: npm test
         working-directory: ./src/ui
+        env:
+          CI: true
