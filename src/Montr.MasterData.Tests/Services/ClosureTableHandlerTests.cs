@@ -32,7 +32,7 @@ namespace Montr.MasterData.Tests.Services
 
 				// assert
 				var closure = generator.PrintClosure(root.Code);
-				Assert.AreEqual(await File.ReadAllTextAsync("../../../Content/closure.2x3.txt", cancellationToken), closure);
+				await AssertClosureEqual("../../../Content/closure.2x3.txt", closure, cancellationToken);
 			}
 		}
 
@@ -51,7 +51,7 @@ namespace Montr.MasterData.Tests.Services
 				await generator.InsertType(HierarchyType.Groups, cancellationToken);
 				var root = await generator.FindTree(ClassifierTree.DefaultCode, cancellationToken);
 				await generator.InsertGroups(root.Uid, 3, 3, null, null, cancellationToken);
-				Assert.AreEqual(await File.ReadAllTextAsync("../../../Content/closure.3x3.txt", cancellationToken), generator.PrintClosure(root.Code));
+				await AssertClosureEqual("../../../Content/closure.3x3.txt", generator.PrintClosure(root.Code), cancellationToken);
 
 				// act & assert - cyclic dependency
 				var result = await generator.UpdateGroup(root.Code, "1.1", "1.1.1", cancellationToken, false);
@@ -78,19 +78,19 @@ namespace Montr.MasterData.Tests.Services
 				await generator.InsertType(HierarchyType.Groups, cancellationToken);
 				var root = await generator.FindTree(ClassifierTree.DefaultCode, cancellationToken);
 				await generator.InsertGroups(root.Uid, 3, 3, null, null, cancellationToken);
-				Assert.AreEqual(await File.ReadAllTextAsync("../../../Content/closure.3x3.txt", cancellationToken), generator.PrintClosure(root.Code));
+				await AssertClosureEqual("../../../Content/closure.3x3.txt", generator.PrintClosure(root.Code), cancellationToken);
 
 				// act & assert - from null to not null parent
 				await generator.UpdateGroup(root.Code, "1", "2.1", cancellationToken);
-				Assert.AreEqual(await File.ReadAllTextAsync("../../../Content/closure.3x3~1to2.1.txt", cancellationToken), generator.PrintClosure(root.Code));
+				await AssertClosureEqual("../../../Content/closure.3x3~1to2.1.txt", generator.PrintClosure(root.Code), cancellationToken);
 
 				// act & assert - from not null to null parent
 				await generator.UpdateGroup(root.Code, "2.2", null, cancellationToken);
-				Assert.AreEqual(await File.ReadAllTextAsync("../../../Content/closure.3x3~1to2.1~2.2toRoot.txt", cancellationToken), generator.PrintClosure(root.Code));
+				await AssertClosureEqual("../../../Content/closure.3x3~1to2.1~2.2toRoot.txt", generator.PrintClosure(root.Code), cancellationToken);
 
 				// act & assert - from not null to not null parent
 				await generator.UpdateGroup(root.Code, "3.3", "1.3", cancellationToken);
-				Assert.AreEqual(await File.ReadAllTextAsync("../../../Content/closure.3x3~1to2.1~2.2toRoot~3.3to1.3.txt", cancellationToken), generator.PrintClosure(root.Code));
+				await AssertClosureEqual("../../../Content/closure.3x3~1to2.1~2.2toRoot~3.3to1.3.txt", generator.PrintClosure(root.Code), cancellationToken);
 			}
 		}
 
@@ -109,20 +109,27 @@ namespace Montr.MasterData.Tests.Services
 				await generator.InsertType(HierarchyType.Groups, cancellationToken);
 				var root = await generator.FindTree(ClassifierTree.DefaultCode, cancellationToken);
 				await generator.InsertGroups(root.Uid, 3, 3, null, null, cancellationToken);
-				Assert.AreEqual(await File.ReadAllTextAsync("../../../Content/closure.3x3.txt", cancellationToken), generator.PrintClosure(root.Code));
+				await AssertClosureEqual("../../../Content/closure.3x3.txt", generator.PrintClosure(root.Code), cancellationToken);
 
 				// act & assert
 				await generator.DeleteGroup(root.Code, "1", cancellationToken);
-				Assert.AreEqual(await File.ReadAllTextAsync("../../../Content/closure.3x3-1.txt", cancellationToken), generator.PrintClosure(root.Code));
+				await AssertClosureEqual("../../../Content/closure.3x3-1.txt", generator.PrintClosure(root.Code), cancellationToken);
 
 				// act & assert
 				await generator.DeleteGroup(root.Code, "2.2", cancellationToken);
-				Assert.AreEqual(await File.ReadAllTextAsync("../../../Content/closure.3x3-1-2.2.txt", cancellationToken), generator.PrintClosure(root.Code));
+				await AssertClosureEqual("../../../Content/closure.3x3-1-2.2.txt", generator.PrintClosure(root.Code), cancellationToken);
 
 				// act & assert
 				await generator.DeleteGroup(root.Code, "3.1.2", cancellationToken);
-				Assert.AreEqual(await File.ReadAllTextAsync("../../../Content/closure.3x3-1-2.2-3.1.2.txt", cancellationToken), generator.PrintClosure(root.Code));
+				await AssertClosureEqual("../../../Content/closure.3x3-1-2.2-3.1.2.txt", generator.PrintClosure(root.Code), cancellationToken);
 			}
+		}
+
+		private async Task AssertClosureEqual(string expectedFileName, string actual, CancellationToken cancellationToken)
+		{
+			var expected = await File.ReadAllTextAsync(expectedFileName, cancellationToken);
+
+			Assert.AreEqual(expected.Replace("\r\n", "\n"), actual.Replace("\r\n", "\n"), $"Invalid closure table, expected equal to content of {expectedFileName}");
 		}
 	}
 }

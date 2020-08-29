@@ -42,7 +42,7 @@ namespace Montr.MasterData.Impl.Services
 			await closure
 				.Value(x => x.ParentUid, itemUid)
 				.Value(x => x.ChildUid, itemUid)
-				.Value(x => x.Level, 0)
+				.Value(x => x.Level, (short)0)
 				.InsertAsync(cancellationToken);
 
 			if (parentUid != null)
@@ -73,8 +73,8 @@ namespace Montr.MasterData.Impl.Services
 			if (Errors.Count > 0) return false;
 
 			var closure = _db.GetTable<DbClassifierClosure>();
-			
-			// delete moved node with children from old parent, i.e.:		
+
+			// delete moved node with children from old parent, i.e.:
 			// take all children of parents nodes for node to delete (parent)
 			// take all children nodes for node to delete (child)
 			// cross join all (parent) with (child) and remove it
@@ -127,7 +127,7 @@ namespace Montr.MasterData.Impl.Services
 			{
 				// take all children of parents nodes for node to delete (parent)
 				// take all children nodes for node to delete (child)
-				// cross join all (parent) with (child) and set its level = level - 1 
+				// cross join all (parent) with (child) and set its level = level - 1
 				// (make all children of deleted node one level closer to deleted node parents)
 				await (from parent in closure
 						where parent.ChildUid == itemUid && parent.Level > 0

@@ -33,12 +33,13 @@ namespace Montr.Metadata.Impl.Services
 
 			using (var db = _dbContextFactory.Create())
 			{
-				var result = await db.GetTable<DbFieldData>()
+				var result = db.GetTable<DbFieldData>()
 					// todo: load multiple items
 					.Where(x => x.EntityTypeCode == request.EntityTypeCode && request.EntityUids.Contains(x.EntityUid))
+					.AsEnumerable()
 					.GroupBy(x => x.EntityUid)
 					.Select(x => x)
-					.ToListAsync(cancellationToken);
+					.ToList();
 
 				return new SearchResult<FieldData>
 				{
