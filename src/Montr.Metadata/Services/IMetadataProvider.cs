@@ -32,6 +32,16 @@ namespace Montr.Metadata.Services
 
 			var result = new DataView { Id = viewId };
 
+			if (viewId == "EntityStatus/Grid")
+			{
+				result.Columns = new List<DataColumn>
+				{
+					new DataColumn { Key = "displayOrder", Name = "#", Width = 10, Sortable = true },
+					new DataColumn { Key = "code", Name = "Code", Width = 70, Sortable = true },
+					new DataColumn { Key = "name", Name = "Name", Width = 550, Sortable = true }
+				};
+			}
+
 			if (viewId == "Metadata/Grid")
 			{
 				result.Columns = new List<DataColumn>

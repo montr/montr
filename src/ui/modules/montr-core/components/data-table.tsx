@@ -114,7 +114,9 @@ export class DataTable<TModel extends IIndexer> extends React.Component<IProps<T
 
 		const dataView = await this._metadataService.load(viewId);
 
-		const columns = dataView.columns.map((item: IDataColumn): ColumnType<TModel> => {
+		if (!dataView.columns) throw new Error("Metadata columns is empty");
+
+		const columns = dataView.columns?.map((item: IDataColumn): ColumnType<TModel> => {
 
 			var render: (text: any, record: TModel, index: number) => React.ReactNode;
 
@@ -209,7 +211,7 @@ export class DataTable<TModel extends IIndexer> extends React.Component<IProps<T
 		}
 
 		const defaultSortColumn =
-			dataView.columns.filter((col: IDataColumn) => col.defaultSortOrder)[0];
+			dataView.columns?.filter((col: IDataColumn) => col.defaultSortOrder)[0];
 
 		paging.sortColumn = defaultSortColumn?.key;
 		paging.sortOrder = defaultSortColumn?.defaultSortOrder;

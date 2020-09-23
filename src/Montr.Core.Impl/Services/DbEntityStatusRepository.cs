@@ -30,7 +30,7 @@ namespace Montr.Core.Impl.Services
 					.Where(x => x.EntityTypeCode == request.EntityTypeCode && x.EntityUid == request.EntityUid);
 
 				var data = await Materialize(
-					query.Apply(request, x => x.DisplayOrder, SortOrder.Descending), cancellationToken);
+					query.Apply(request, x => x.DisplayOrder), cancellationToken);
 
 				return new SearchResult<EntityStatus>
 				{
@@ -43,6 +43,7 @@ namespace Montr.Core.Impl.Services
 		{
 			return await query.Select(x => new EntityStatus
 			{
+				DisplayOrder = x.DisplayOrder,
 				Code = x.Code,
 				Name = x.Name
 			}).ToListAsync(cancellationToken);

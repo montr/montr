@@ -1,37 +1,51 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Threading.Tasks;
+using MediatR;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
+using Montr.Core.Commands;
+using Montr.Core.Models;
+using Montr.Core.Queries;
 
 namespace Montr.Core.Controllers
 {
-	[ApiController, Route("api/[controller]/[action]")]
+	[Authorize, ApiController, Route("api/[controller]/[action]")]
 	public class EntityStatusController : ControllerBase
 	{
+		private readonly IMediator _mediator;
+
+		public EntityStatusController(IMediator mediator)
+		{
+			_mediator = mediator;
+		}
+
 		[HttpPost]
-		public async Task<SearchResult<Automation>> List(GetAutomationList request)
+		public async Task<SearchResult<EntityStatus>> List(GetEntityStatusList request)
 		{
 			return await _mediator.Send(request);
 		}
 
 		[HttpPost]
-		public async Task<Automation> Get(GetAutomation request)
+		public async Task<EntityStatus> Get(GetEntityStatus request)
 		{
 			return await _mediator.Send(request);
 		}
 
 		[HttpPost]
-		public async Task<ApiResult> Insert(InsertAutomation request)
+		public async Task<ApiResult> Insert(InsertEntityStatus request)
 		{
 			return await _mediator.Send(request);
 		}
 
 		[HttpPost]
-		public async Task<ApiResult> Update(UpdateAutomation request)
+		public async Task<ApiResult> Update(UpdateEntityStatus request)
 		{
 			return await _mediator.Send(request);
 		}
 
 		[HttpPost]
-		public async Task<ApiResult> Delete(DeleteAutomation request)
+		public async Task<ApiResult> Delete(DeleteEntityStatus request)
 		{
 			return await _mediator.Send(request);
-		}}
+		}
+	}
 }

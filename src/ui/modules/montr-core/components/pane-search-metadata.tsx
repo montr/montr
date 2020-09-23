@@ -50,7 +50,6 @@ class WrappedPaneSearchMetadata extends React.Component<Props, State> {
 		this.setState({ selectedRowKeys });
 	};
 
-	// todo: do not copy this method from class to class - move to DataTable somehow?
 	refreshTable = async (resetCurrentPage?: boolean, resetSelectedRows?: boolean) => {
 		const { selectedRowKeys } = this.state;
 
