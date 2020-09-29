@@ -34,6 +34,7 @@ namespace Montr.Core.Impl.Services
 
 				return new SearchResult<EntityStatus>
 				{
+					TotalCount = query.GetTotalCount(request),
 					Rows = data
 				};
 			}
