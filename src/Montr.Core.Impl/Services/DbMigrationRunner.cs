@@ -44,7 +44,7 @@ namespace Montr.Core.Impl.Services
 
 			if (options.MigrationPath == null)
 			{
-				_logger.LogInformation("Migrations path not specified, skipping migrations");
+				_logger.LogWarning("Migrations path not specified, skipping migrations");
 
 				return;
 			}
@@ -121,7 +121,7 @@ namespace Montr.Core.Impl.Services
 			{
 				watch.Start();
 
-				using (var transaction = db.BeginTransaction())
+				using (var transaction = await db.BeginTransactionAsync(cancellationToken))
 				{
 					await db.ExecuteAsync(migration.Sql, cancellationToken);
 
