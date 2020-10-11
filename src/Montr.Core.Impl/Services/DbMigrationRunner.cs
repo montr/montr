@@ -60,7 +60,7 @@ namespace Montr.Core.Impl.Services
 
 			_logger.LogInformation("Found {Count} migrations", migrations.Count);
 
-			using (var db = _dbContextFactory.Create(options.ConnectionName))
+			await using (var db = _dbContextFactory.Create(options.ConnectionName))
 			{
 				await Bootstrap(db, cancellationToken);
 

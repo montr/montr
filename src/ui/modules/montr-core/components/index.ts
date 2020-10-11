@@ -18,6 +18,7 @@ export * from "./icon";
 export * from "./language-selector";
 export * from "./page";
 export * from "./logo";
+export * from "./modal-edit-entity-status";
 export * from "./page-header";
 export * from "./pane-component";
 export * from "./pane-edit-metadata";

@@ -42,6 +42,16 @@ namespace Montr.Metadata.Services
 				};
 			}
 
+			if (viewId == "EntityStatus/Form")
+			{
+				result.Fields = new List<FieldMetadata>
+				{
+					new TextField { Key = "displayOrder", Name = "Номер", Required = true },
+					new TextField { Key = "code", Name = "Код", Required = true },
+					new TextField { Key = "name", Name = "Наименование", Required = true }
+				};
+			}
+
 			if (viewId == "Metadata/Grid")
 			{
 				result.Columns = new List<DataColumn>

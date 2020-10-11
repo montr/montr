@@ -1,8 +1,8 @@
 import React from "react";
 import { WithTranslation, Translation, withTranslation } from "react-i18next";
-import { Guid, IDataResult } from "../models";
+import { Guid, IDataResult, IEntityStatus } from "../models";
 import { OperationService, MetadataService } from "../services";
-import { DataTableUpdateToken, Toolbar, ButtonAdd, ButtonDelete, DataTable } from ".";
+import { DataTableUpdateToken, Toolbar, ButtonAdd, ButtonDelete, DataTable, ModalEditEntityStatus } from ".";
 import { Views } from "../module";
 import { Constants } from "..";
 
@@ -12,6 +12,7 @@ interface Props extends WithTranslation {
 }
 
 interface State {
+	editData?: Partial<IEntityStatus>;
 	showPane?: boolean;
 	editUid?: Guid;
 	selectedRowKeys?: string[] | number[];
@@ -63,6 +64,10 @@ class WrappedPaneSearchEntityStatuses extends React.Component<Props, State> {
 		this.refreshTable(false);
 	};
 
+	showAddModal = () => {
+		this.setState({ editData: {} });
+	};
+
 	delete = async () => {
 		const { t } = this.props;
 
@@ -85,19 +90,29 @@ class WrappedPaneSearchEntityStatuses extends React.Component<Props, State> {
 		});
 	};
 
+	onModalEditSuccess = async (data: IEntityStatus) => {
+		this.setState({ editData: null });
+
+		await this.refreshTable();
+	};
+
+	onModalEditCancel = () => {
+		this.setState({ editData: null });
+	};
+
 	render = () => {
 		const { entityTypeCode, entityUid } = this.props,
-			{ showPane, editUid, selectedRowKeys, updateTableToken } = this.state;
+			{ editData, selectedRowKeys, updateTableToken } = this.state;
 
 		return (<Translation>{(t) => <>
 
 			<Toolbar clear>
-				<ButtonAdd type="primary" /* onClick={this.showAddPane} */ />
+				<ButtonAdd type="primary" onClick={this.showAddModal} />
 				<ButtonDelete onClick={this.delete} disabled={!selectedRowKeys?.length} />
 			</Toolbar>
 
 			<DataTable
-				rowKey="uid"
+				rowKey="code"
 				// rowActions={[{ name: t("button.edit"), onClick: this.showEditPane }]}
 				viewId={Views.entityStatusList}
 				loadUrl={`${Constants.apiURL}/entityStatus/list/`}
@@ -106,6 +121,15 @@ class WrappedPaneSearchEntityStatuses extends React.Component<Props, State> {
 				updateToken={updateTableToken}
 				skipPaging={true}
 			/>
+
+
+			{editData &&
+				<ModalEditEntityStatus
+					entityTypeCode={entityTypeCode}
+					entityUid={entityUid}
+					onSuccess={this.onModalEditSuccess}
+					onCancel={this.onModalEditCancel}
+				/>}
 
 		</>}</Translation>);
 	};

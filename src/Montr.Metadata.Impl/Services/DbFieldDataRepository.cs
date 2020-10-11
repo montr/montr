@@ -31,9 +31,9 @@ namespace Montr.Metadata.Impl.Services
 
 			var metadataMap = metadata.ToDictionary(x => x.Key);
 
-			using (var db = _dbContextFactory.Create())
+			await using (var db = _dbContextFactory.Create())
 			{
-				var result = db.GetTable<DbFieldData>()
+				var fieldData = db.GetTable<DbFieldData>()
 					// todo: load multiple items
 					.Where(x => x.EntityTypeCode == request.EntityTypeCode && request.EntityUids.Contains(x.EntityUid))
 					.AsEnumerable()
@@ -41,9 +41,9 @@ namespace Montr.Metadata.Impl.Services
 					.Select(x => x)
 					.ToList();
 
-				return new SearchResult<FieldData>
+				var result = new SearchResult<FieldData>
 				{
-					Rows = result.Select(x =>
+					Rows = fieldData.Select(x =>
 					{
 						var data = new FieldData();
 
@@ -61,6 +61,8 @@ namespace Montr.Metadata.Impl.Services
 
 					}).ToList()
 				};
+
+				return await Task.FromResult(result);
 			}
 		}
 
@@ -107,7 +109,7 @@ namespace Montr.Metadata.Impl.Services
 			var insertable = new List<DbFieldData>();
 
 			// todo: validate/insert/update system fields stored in FieldData
-			// todo: exclude db fiedls
+			// todo: exclude db fields
 			foreach (var field in metadata /*.Where(x => x.System == false)*/)
 			{
 				var fieldProvider = _fieldProviderRegistry.GetFieldTypeProvider(field.Type);
@@ -126,9 +128,9 @@ namespace Montr.Metadata.Impl.Services
 				});
 			}
 
-			using (var db = _dbContextFactory.Create())
+			await using (var db = _dbContextFactory.Create())
 			{
-				var bc = await Task.Run(() => db.GetTable<DbFieldData>().BulkCopy(insertable), cancellationToken);
+				var bc = await db.GetTable<DbFieldData>().BulkCopyAsync(insertable, cancellationToken);
 
 				return new ApiResult { AffectedRows = bc.RowsCopied };
 			}
@@ -141,7 +143,7 @@ namespace Montr.Metadata.Impl.Services
 
 			var data = item.Fields ?? (item.Fields = new FieldData());
 
-			using (var db = _dbContextFactory.Create())
+			await using (var db = _dbContextFactory.Create())
 			{
 				// todo: reuse from context in request
 				var existingData = await db.GetTable<DbFieldData>()
@@ -154,7 +156,7 @@ namespace Montr.Metadata.Impl.Services
 				var updatable = new List<DbFieldData>();
 
 				// todo: validate/insert/update system fields stored in FieldData
-				// todo: exclude db fiedls
+				// todo: exclude db fields
 				foreach (var field in metadata /*.Where(x => x.System == false)*/)
 				{
 					var fieldProvider = _fieldProviderRegistry.GetFieldTypeProvider(field.Type);
@@ -186,7 +188,7 @@ namespace Montr.Metadata.Impl.Services
 				}
 
 				// insert
-				db.GetTable<DbFieldData>().BulkCopy(insertable);
+				await db.GetTable<DbFieldData>().BulkCopyAsync(insertable, cancellationToken);
 
 				// update
 				foreach (var field in updatable)
@@ -206,7 +208,7 @@ namespace Montr.Metadata.Impl.Services
 
 		public async Task<ApiResult> Delete(DeleteFieldDataRequest request, CancellationToken cancellationToken)
 		{
-			using (var db = _dbContextFactory.Create())
+			await using (var db = _dbContextFactory.Create())
 			{
 				var affected = await db.GetTable<DbFieldData>()
 					.Where(x => x.EntityTypeCode == request.EntityTypeCode && request.EntityUids.Contains(x.EntityUid))
