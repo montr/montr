@@ -1,27 +1,26 @@
 import React from "react";
 import { Modal, Spin } from "antd";
 import { DataForm } from ".";
-import { EntityStatusService, MetadataService, NotificationService } from "../services";
-import { Guid, IApiResult, IDataField, IEntityStatus } from "../models";
+import { EntityStatusService, MetadataService } from "../services";
+import { Guid, IApiResult, IDataField, EntityStatus } from "../models";
 import { FormInstance } from "antd/lib/form";
 
 interface IProps {
     entityTypeCode: string;
-    entityUid: Guid | string;
+    entityUid: Guid;
     uid?: Guid;
-    onSuccess?: (data: IEntityStatus) => void;
+    onSuccess?: (data: EntityStatus) => void;
     onCancel?: () => void;
 }
 
 interface IState {
     loading: boolean;
     fields?: IDataField[];
-    data: Partial<IEntityStatus>;
+    data: Partial<EntityStatus>;
 }
 
 export class ModalEditEntityStatus extends React.Component<IProps, IState> {
 
-    private _notificationService = new NotificationService();
     private _metadataService = new MetadataService();
     private _entityStatusService = new EntityStatusService();
 
@@ -73,10 +72,10 @@ export class ModalEditEntityStatus extends React.Component<IProps, IState> {
         if (this.props.onCancel) this.props.onCancel();
     };
 
-    save = async (values: IEntityStatus): Promise<IApiResult> => {
+    save = async (values: EntityStatus): Promise<IApiResult> => {
         const { entityTypeCode, entityUid, uid, onSuccess } = this.props;
 
-        let data: IEntityStatus,
+        let data: EntityStatus,
             result: IApiResult;
 
         if (uid) {

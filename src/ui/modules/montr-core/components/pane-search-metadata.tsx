@@ -9,7 +9,7 @@ import { Constants } from "..";
 
 interface Props extends WithTranslation {
 	entityTypeCode: string;
-	entityUid: Guid | string;
+	entityUid: Guid;
 }
 
 interface State {

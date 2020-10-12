@@ -4,13 +4,13 @@ import { IDataView, IPaneProps, IDataField, IApiResult, Guid, IFieldType } from 
 
 interface IManageFieldDataRequest {
 	entityTypeCode: string;
-	entityUid: Guid | string;
+	entityUid: Guid;
 	item: IDataField;
 }
 
 interface IDeleteFieldDataRequest {
 	entityTypeCode: string;
-	entityUid: Guid | string;
+	entityUid: Guid;
 	uids: string[] | number[];
 }
 
@@ -36,7 +36,7 @@ export class MetadataService extends Fetcher {
 		return this.post(`${Constants.apiURL}/metadata/fieldTypes`, { entityTypeCode });
 	};
 
-	get = async (entityTypeCode: string, entityUid: Guid | string, uid: Guid): Promise<IDataField> => {
+	get = async (entityTypeCode: string, entityUid: Guid, uid: Guid): Promise<IDataField> => {
 		return this.post(`${Constants.apiURL}/metadata/get`, { entityTypeCode, entityUid, uid });
 	};
 

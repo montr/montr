@@ -1,18 +1,18 @@
 import React from "react";
 import { WithTranslation, Translation, withTranslation } from "react-i18next";
-import { Guid, IDataResult, IEntityStatus } from "../models";
-import { OperationService, MetadataService } from "../services";
+import { Guid, IDataResult, EntityStatus } from "../models";
+import { OperationService, MetadataService, EntityStatusService } from "../services";
 import { DataTableUpdateToken, Toolbar, ButtonAdd, ButtonDelete, DataTable, ModalEditEntityStatus } from ".";
 import { Views } from "../module";
 import { Constants } from "..";
 
 interface Props extends WithTranslation {
 	entityTypeCode: string;
-	entityUid: Guid | string;
+	entityUid: Guid;
 }
 
 interface State {
-	editData?: Partial<IEntityStatus>;
+	editData?: Partial<EntityStatus>;
 	showPane?: boolean;
 	editUid?: Guid;
 	selectedRowKeys?: string[] | number[];
@@ -23,6 +23,7 @@ class WrappedPaneSearchEntityStatuses extends React.Component<Props, State> {
 
 	private _operation = new OperationService();
 	private _metadataService = new MetadataService();
+	private _entityStatusService = new EntityStatusService();
 
 	constructor(props: Props) {
 		super(props);
@@ -36,6 +37,7 @@ class WrappedPaneSearchEntityStatuses extends React.Component<Props, State> {
 
 	componentWillUnmount = async () => {
 		await this._metadataService.abort();
+		await this._entityStatusService.abort();
 	};
 
 	onLoadTableData = async (loadUrl: string, postParams: any): Promise<IDataResult<{}>> => {
@@ -75,22 +77,20 @@ class WrappedPaneSearchEntityStatuses extends React.Component<Props, State> {
 			const { entityTypeCode, entityUid } = this.props,
 				{ selectedRowKeys } = this.state;
 
-			/* const result = await this._metadataService.delete({ entityTypeCode, entityUid, uids: selectedRowKeys });
+			const result = await this._entityStatusService.delete({ entityTypeCode, entityUid, codes: selectedRowKeys });
 
 			if (result.success) {
 				this.refreshTable(false, true);
 			}
 
-			return result; */
-
-			return null;
+			return result;
 		}, {
 			showConfirm: true,
 			confirmTitle: t("operation.confirm.delete.title")
 		});
 	};
 
-	onModalEditSuccess = async (data: IEntityStatus) => {
+	onModalEditSuccess = async (data: EntityStatus) => {
 		this.setState({ editData: null });
 
 		await this.refreshTable();
@@ -121,7 +121,6 @@ class WrappedPaneSearchEntityStatuses extends React.Component<Props, State> {
 				updateToken={updateTableToken}
 				skipPaging={true}
 			/>
-
 
 			{editData &&
 				<ModalEditEntityStatus

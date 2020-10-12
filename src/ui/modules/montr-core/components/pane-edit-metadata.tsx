@@ -9,7 +9,7 @@ import { FormInstance } from "antd/lib/form";
 
 interface IProps {
 	entityTypeCode: string;
-	entityUid: Guid | string;
+	entityUid: Guid;
 	uid?: Guid;
 	onSuccess?: () => void;
 	onClose?: () => void;
