@@ -5,7 +5,7 @@ import { EntityStatusService, MetadataService } from "../services";
 import { Guid, IApiResult, IDataField, EntityStatus } from "../models";
 import { FormInstance } from "antd/lib/form";
 
-interface IProps {
+interface Props {
     entityTypeCode: string;
     entityUid: Guid;
     uid?: Guid;
@@ -13,20 +13,20 @@ interface IProps {
     onCancel?: () => void;
 }
 
-interface IState {
+interface State {
     loading: boolean;
     fields?: IDataField[];
     data: Partial<EntityStatus>;
 }
 
-export class ModalEditEntityStatus extends React.Component<IProps, IState> {
+export class ModalEditEntityStatus extends React.Component<Props, State> {
 
     private _metadataService = new MetadataService();
     private _entityStatusService = new EntityStatusService();
 
     private _formRef = React.createRef<FormInstance>();
 
-    constructor(props: IProps) {
+    constructor(props: Props) {
         super(props);
 
         this.state = {
@@ -54,7 +54,7 @@ export class ModalEditEntityStatus extends React.Component<IProps, IState> {
         let data;
 
         if (uid) {
-            // data = await this._classifierTreeService.get(typeCode, uid);
+            // data = await this._entityStatusService.get(typeCode, uid);
         }
         else {
             // todo: load defaults from server
