@@ -6,13 +6,16 @@ namespace Montr.Core.Impl.Entities
 	[Table(Schema = "montr", Name = "entity_status")]
 	public class DbEntityStatus
 	{
-		[Column(Name = "entity_type_code"), DataType(DataType.VarChar), NotNull, PrimaryKey(0)]
+		[Column(Name = "uid"), DataType(DataType.Guid), NotNull, PrimaryKey, Identity]
+		public System.Guid Uid { get; set; }
+
+		[Column(Name = "entity_type_code"), DataType(DataType.VarChar), NotNull]
 		public string EntityTypeCode { get; set; }
 
-		[Column(Name = "entity_uid"), DataType(DataType.Guid), NotNull, PrimaryKey(1)]
+		[Column(Name = "entity_uid"), DataType(DataType.Guid), NotNull]
 		public System.Guid EntityUid { get; set; }
 
-		[Column(Name = "code"), DataType(DataType.VarChar), NotNull, PrimaryKey(2)]
+		[Column(Name = "code"), DataType(DataType.VarChar), NotNull]
 		public string Code { get; set; }
 
 		[Column(Name = "display_order"), DataType(DataType.Int32), NotNull]

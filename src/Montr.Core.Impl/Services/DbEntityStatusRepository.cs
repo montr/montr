@@ -29,6 +29,11 @@ namespace Montr.Core.Impl.Services
 				var query = db.GetTable<DbEntityStatus>()
 					.Where(x => x.EntityTypeCode == request.EntityTypeCode && x.EntityUid == request.EntityUid);
 
+				if (request.Uid != null)
+				{
+					query = query.Where(x => x.Uid == request.Uid);
+				}
+
 				var data = await Materialize(
 					query.Apply(request, x => x.DisplayOrder), cancellationToken);
 
@@ -44,6 +49,7 @@ namespace Montr.Core.Impl.Services
 		{
 			return await query.Select(x => new EntityStatus
 			{
+				Uid = x.Uid,
 				DisplayOrder = x.DisplayOrder,
 				Code = x.Code,
 				Name = x.Name

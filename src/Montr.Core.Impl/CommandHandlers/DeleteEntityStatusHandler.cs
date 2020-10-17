@@ -33,7 +33,7 @@ namespace Montr.Core.Impl.CommandHandlers
 					affected = await db.GetTable<DbEntityStatus>()
 						.Where(x => x.EntityTypeCode == request.EntityTypeCode &&
 									x.EntityUid == request.EntityUid &&
-									request.Codes.Contains(x.Code))
+									request.Uids.Contains(x.Uid))
 						.DeleteAsync(cancellationToken);
 				}
 

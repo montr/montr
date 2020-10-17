@@ -117,9 +117,9 @@ namespace Montr.Core.Impl.Services
 
 				if (allAssemblies.TryGetValue(file, out _) == false)
 				{
-					if (_logger.IsEnabled(LogLevel.Information))
+					if (_logger.IsEnabled(LogLevel.Debug))
 					{
-						_logger.LogInformation("• {file}", file.Replace(baseDirectory, string.Empty));
+						_logger.LogDebug("• {file}", file.Replace(baseDirectory, string.Empty));
 					}
 
 					try

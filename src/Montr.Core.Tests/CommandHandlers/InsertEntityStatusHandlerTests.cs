@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Montr.Core.Commands;
@@ -34,6 +35,7 @@ namespace Montr.Core.Tests.CommandHandlers
 					EntityUid = generator.EntityUid,
 					Item = new EntityStatus
 					{
+						Uid = Guid.NewGuid(),
 						DisplayOrder = 12,
 						Code = "draft",
 						Name = "Draft"

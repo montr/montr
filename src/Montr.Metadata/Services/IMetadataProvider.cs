@@ -46,7 +46,7 @@ namespace Montr.Metadata.Services
 			{
 				result.Fields = new List<FieldMetadata>
 				{
-					new TextField { Key = "displayOrder", Name = "Номер", Required = true },
+					new NumberField { Key = "displayOrder", Name = "Номер", Required = true, Props = { Min = 0, Max = 256 } },
 					new TextField { Key = "code", Name = "Код", Required = true },
 					new TextField { Key = "name", Name = "Наименование", Required = true }
 				};

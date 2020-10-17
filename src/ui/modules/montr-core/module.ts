@@ -1,9 +1,16 @@
 import React from "react";
 import { AppRouteRegistry } from "./services";
-import { Layout } from "./constants";
+import { Constants, Layout } from "./constants";
 
 import "./i18n";
 import "./index.less";
+
+export const Api = {
+	entityStatusGet: `${Constants.apiURL}/entityStatus/get`,
+	entityStatusInsert: `${Constants.apiURL}/entityStatus/insert`,
+	entityStatusUpdate: `${Constants.apiURL}/entityStatus/update`,
+	entityStatusDelete: `${Constants.apiURL}/entityStatus/delete`,
+};
 
 export const Views = {
 	metadataList: "Metadata/Grid",

@@ -70,6 +70,10 @@ class WrappedPaneSearchEntityStatuses extends React.Component<Props, State> {
 		this.setState({ editData: {} });
 	};
 
+	showEditModal = (data: EntityStatus) => {
+		this.setState({ editData: data });
+	};
+
 	delete = async () => {
 		const { t } = this.props;
 
@@ -77,7 +81,7 @@ class WrappedPaneSearchEntityStatuses extends React.Component<Props, State> {
 			const { entityTypeCode, entityUid } = this.props,
 				{ selectedRowKeys } = this.state;
 
-			const result = await this._entityStatusService.delete({ entityTypeCode, entityUid, codes: selectedRowKeys });
+			const result = await this._entityStatusService.delete({ entityTypeCode, entityUid, uids: selectedRowKeys });
 
 			if (result.success) {
 				this.refreshTable(false, true);
@@ -112,8 +116,8 @@ class WrappedPaneSearchEntityStatuses extends React.Component<Props, State> {
 			</Toolbar>
 
 			<DataTable
-				rowKey="code"
-				// rowActions={[{ name: t("button.edit"), onClick: this.showEditPane }]}
+				rowKey="uid"
+				rowActions={[{ name: t("button.edit"), onClick: this.showEditModal }]}
 				viewId={Views.entityStatusList}
 				loadUrl={`${Constants.apiURL}/entityStatus/list/`}
 				onLoadData={this.onLoadTableData}
@@ -126,6 +130,7 @@ class WrappedPaneSearchEntityStatuses extends React.Component<Props, State> {
 				<ModalEditEntityStatus
 					entityTypeCode={entityTypeCode}
 					entityUid={entityUid}
+					uid={editData.uid}
 					onSuccess={this.onModalEditSuccess}
 					onCancel={this.onModalEditCancel}
 				/>}

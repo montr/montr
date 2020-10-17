@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using MediatR;
 using Montr.Core.Models;
 
@@ -10,6 +11,6 @@ namespace Montr.Core.Commands
 
 		public Guid EntityUid { get; set; }
 
-		public string[] Codes { get; set; }
+		public IList<Guid> Uids { get; set; }
 	}
 }

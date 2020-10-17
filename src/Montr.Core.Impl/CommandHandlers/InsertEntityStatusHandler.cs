@@ -26,11 +26,17 @@ namespace Montr.Core.Impl.CommandHandlers
 		{
 			var item = request.Item ?? throw new ArgumentNullException(nameof(request.Item));
 
+			if (item.Uid == Guid.Empty)
+			{
+				item.Uid = Guid.NewGuid();
+			}
+
 			using (var scope = _unitOfWorkFactory.Create())
 			{
 				using (var db = _dbContextFactory.Create())
 				{
 					var affected = await db.GetTable<DbEntityStatus>()
+						.Value(x => x.Uid, item.Uid)
 						.Value(x => x.EntityTypeCode, request.EntityTypeCode)
 						.Value(x => x.EntityUid, request.EntityUid)
 						.Value(x => x.Code, item.Code)
@@ -40,7 +46,7 @@ namespace Montr.Core.Impl.CommandHandlers
 
 					scope.Commit();
 
-					return new ApiResult { AffectedRows = affected };
+					return new ApiResult { Uid = item.Uid, AffectedRows = affected };
 				}
 			}
 		}

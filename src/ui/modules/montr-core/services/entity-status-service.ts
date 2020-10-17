@@ -1,8 +1,14 @@
 import { Guid, IApiResult, EntityStatus } from "../models";
-import { Constants } from "..";
 import { Fetcher } from "./fetcher";
+import { Api } from "../module";
 
-interface InsertEntityStatusRequest {
+interface GetEntityStatusRequest {
+    entityTypeCode: string;
+    entityUid: Guid | string;
+    uid: Guid;
+}
+
+interface ManageEntityStatusRequest {
     entityTypeCode: string;
     entityUid: Guid | string;
     item: EntityStatus;
@@ -11,16 +17,24 @@ interface InsertEntityStatusRequest {
 interface DeleteEntityStatusRequest {
     entityTypeCode: string;
     entityUid: Guid;
-    codes: string[] | number[];
+    uids: string[] | number[];
 }
 
 export class EntityStatusService extends Fetcher {
 
-    insert = async (request: InsertEntityStatusRequest): Promise<IApiResult> => {
-        return this.post(`${Constants.apiURL}/entityStatus/insert`, request);
+    get = async (request: GetEntityStatusRequest): Promise<EntityStatus> => {
+        return this.post(Api.entityStatusGet, request);
+    };
+
+    insert = async (request: ManageEntityStatusRequest): Promise<IApiResult> => {
+        return this.post(Api.entityStatusInsert, request);
+    };
+
+    update = async (request: ManageEntityStatusRequest): Promise<IApiResult> => {
+        return this.post(Api.entityStatusUpdate, request);
     };
 
     delete = async (request: DeleteEntityStatusRequest): Promise<IApiResult> => {
-        return this.post(`${Constants.apiURL}/entityStatus/delete`, request);
+        return this.post(Api.entityStatusDelete, request);
     };
 }

@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -27,13 +29,18 @@ namespace Montr.Core.Tests.CommandHandlers
 			using (var _ = unitOfWorkFactory.Create())
 			{
 				// arrange
+				var uids = new List<Guid>();
 				for (var i = 0; i < 42; i++)
 				{
-					await generator.InsertEntityStatus(new EntityStatus
+					var insertResult = await generator.InsertEntityStatus(new EntityStatus
 					{
+						Uid = Guid.NewGuid(),
 						Code = "status_code_" + i,
 						Name = "Status Name " + i
 					}, cancellationToken);
+
+					// ReSharper disable once PossibleInvalidOperationException
+					uids.Add(insertResult.Uid.Value);
 				}
 
 				// act
@@ -41,7 +48,7 @@ namespace Montr.Core.Tests.CommandHandlers
 				{
 					EntityTypeCode = generator.EntityTypeCode,
 					EntityUid = generator.EntityUid,
-					Codes = new[] { "status_code_1", "status_code_2", "status_code_12" }
+					Uids = uids.Take(3).ToList()
 				};
 
 				var result = await handler.Handle(request, cancellationToken);
@@ -51,12 +58,12 @@ namespace Montr.Core.Tests.CommandHandlers
 				Assert.AreEqual(3, result.AffectedRows);
 
 				var statuses = await generator.GetEntityStatuses(cancellationToken);
-				
+
 				Assert.AreEqual(39, statuses.Rows.Count);
 
-				foreach (var code in request.Codes)
+				foreach (var uid in request.Uids)
 				{
-					Assert.IsNull(statuses.Rows.FirstOrDefault(x => x.Code == code));
+					Assert.IsNull(statuses.Rows.FirstOrDefault(x => x.Uid == uid));
 				}
 			}
 		}

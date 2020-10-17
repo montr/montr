@@ -20,6 +20,6 @@ namespace Montr.Core.Impl.Entities
 		public DateTime ExecutedAtUtc { get; set; }
 
 		[Column(Name = "duration_ms"), DataType(DataType.Int32)]
-		public int DurationMs { get; set; }
+		public long DurationMs { get; set; }
 	}
 }

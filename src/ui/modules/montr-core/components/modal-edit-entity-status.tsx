@@ -45,7 +45,7 @@ export class ModalEditEntityStatus extends React.Component<Props, State> {
     };
 
     fetchData = async () => {
-        const { uid } = this.props;
+        const { entityTypeCode, entityUid, uid } = this.props;
 
         const dataView = await this._metadataService.load(`EntityStatus/Form`);
 
@@ -54,7 +54,7 @@ export class ModalEditEntityStatus extends React.Component<Props, State> {
         let data;
 
         if (uid) {
-            // data = await this._entityStatusService.get(typeCode, uid);
+            data = await this._entityStatusService.get({ entityTypeCode, entityUid, uid });
         }
         else {
             // todo: load defaults from server
@@ -79,9 +79,11 @@ export class ModalEditEntityStatus extends React.Component<Props, State> {
             result: IApiResult;
 
         if (uid) {
-            // data = { uid: uid, ...values };
+            data = { uid: uid, ...values };
 
-            // result = await this._entityStatusService.update(typeCode, data);
+            result = await this._entityStatusService.update({
+                entityTypeCode, entityUid, item: data
+            });
         }
         else {
             const insertResult = await this._entityStatusService.insert({
@@ -89,7 +91,7 @@ export class ModalEditEntityStatus extends React.Component<Props, State> {
             });
 
             // todo: reload from server?
-            // data = { uid: insertResult.uid, ...values };
+            data = { uid: insertResult.uid, ...values };
 
             result = insertResult;
         }

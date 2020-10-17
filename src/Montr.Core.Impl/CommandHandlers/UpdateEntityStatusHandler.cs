@@ -34,7 +34,9 @@ namespace Montr.Core.Impl.CommandHandlers
 					var affected = await db.GetTable<DbEntityStatus>()
 						.Where(x => x.EntityTypeCode == request.EntityTypeCode &&
 									x.EntityUid == request.EntityUid &&
-									x.Code == item.Code)
+									x.Uid == item.Uid)
+						.Set(x => x.DisplayOrder, item.DisplayOrder)
+						.Set(x => x.Code, item.Code)
 						.Set(x => x.Name, item.Name)
 						.UpdateAsync(cancellationToken);
 

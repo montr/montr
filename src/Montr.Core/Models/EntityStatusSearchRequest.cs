@@ -7,5 +7,7 @@ namespace Montr.Core.Models
 		public string EntityTypeCode { get; set; }
 
 		public Guid EntityUid { get; set; }
+
+		public Guid? Uid { get; set; }
 	}
 }

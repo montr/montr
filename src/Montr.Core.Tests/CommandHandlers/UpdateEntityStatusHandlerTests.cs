@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Montr.Core.Commands;
@@ -26,8 +27,11 @@ namespace Montr.Core.Tests.CommandHandlers
 			using (var _ = unitOfWorkFactory.Create())
 			{
 				// arrange
-				await generator.InsertEntityStatus(new EntityStatus { DisplayOrder = 1, Code = "draft", Name = "Draft" }, cancellationToken);
-				await generator.InsertEntityStatus(new EntityStatus { DisplayOrder = 2, Code = "published", Name = "Published" }, cancellationToken);
+				var item1 = new EntityStatus { Uid = Guid.NewGuid(), DisplayOrder = 1, Code = "drafted", Name = "Draft" };
+				var item2 = new EntityStatus { Uid = Guid.NewGuid(), DisplayOrder = 2, Code = "published", Name = "Published" };
+
+				await generator.InsertEntityStatus(item1, cancellationToken);
+				await generator.InsertEntityStatus(item2, cancellationToken);
 
 				// act
 				var request = new UpdateEntityStatus
@@ -36,8 +40,10 @@ namespace Montr.Core.Tests.CommandHandlers
 					EntityUid = generator.EntityUid,
 					Item = new EntityStatus
 					{
+						Uid = item1.Uid,
 						Code = "draft",
-						Name = "The Draft"
+						Name = "The Draft",
+						DisplayOrder = 10
 					}
 				};
 
@@ -51,13 +57,13 @@ namespace Montr.Core.Tests.CommandHandlers
 
 				Assert.AreEqual(2, statuses.Rows.Count);
 
-				Assert.AreEqual(1, statuses.Rows[0].DisplayOrder);
-				Assert.AreEqual("draft", statuses.Rows[0].Code);
-				Assert.AreEqual("The Draft", statuses.Rows[0].Name);
+				Assert.AreEqual(2, statuses.Rows[0].DisplayOrder);
+				Assert.AreEqual("published", statuses.Rows[0].Code);
+				Assert.AreEqual("Published", statuses.Rows[0].Name);
 
-				Assert.AreEqual(2, statuses.Rows[1].DisplayOrder);
-				Assert.AreEqual("published", statuses.Rows[1].Code);
-				Assert.AreEqual("Published", statuses.Rows[1].Name);
+				Assert.AreEqual(10, statuses.Rows[1].DisplayOrder);
+				Assert.AreEqual("draft", statuses.Rows[1].Code);
+				Assert.AreEqual("The Draft", statuses.Rows[1].Name);
 			}
 		}
 	}

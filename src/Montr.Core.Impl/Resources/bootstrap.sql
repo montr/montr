@@ -21,12 +21,12 @@ BEGIN
 			file_name character varying(500) NOT NULL,
 			hash character(40) NOT NULL,
 			executed_at_utc timestamp with time zone,
-			duration_ms integer,
+			duration_ms bigint,
 			PRIMARY KEY (id),
 			CONSTRAINT ux_file_name UNIQUE (file_name),
 			CONSTRAINT ux_hash UNIQUE (hash)
 		);
 	end if;
 END
-$$ 
+$$
 
