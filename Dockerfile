@@ -3,7 +3,7 @@ WORKDIR /ui
 COPY ./src/ui .
 RUN npm install && npm run build-prod
 
-FROM mcr.microsoft.com/dotnet/core/sdk:3.1-alpine AS build
+FROM mcr.microsoft.com/dotnet/core/sdk:3.1.401-alpine AS build
 WORKDIR /src
 COPY ./src .
 COPY ./database /database
