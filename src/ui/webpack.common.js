@@ -31,18 +31,7 @@ const options = {
 			{
 				test: /\.(jsx|tsx|js|ts)$/,
 				loader: "babel-loader",
-				/* loader: "ts-loader",
-				loader: "awesome-typescript-loader",
-				options: {
-					transpileOnly: false,
-					getCustomTransformers: () => ({
-						before: [tsImportPluginFactory({
-							libraryName: "antd",
-							libraryDirectory: "lib",
-							style: true
-						})]
-					}),
-				}, */
+				/* loader: "ts-loader", */
 				exclude: /node_modules/
 			},
 
