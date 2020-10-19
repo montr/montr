@@ -1,9 +1,9 @@
 import * as React from "react";
 import { withTranslation, WithTranslation } from 'react-i18next';
 import { Tabs, Button, Modal, message, Tag } from "antd";
-import { IApiResult, IDataView, IPaneProps } from "@montr-core/models";
+import { ApiResult, IDataView, PaneProps } from "@montr-core/models";
 import { EventService, EventTemplateService } from "../services";
-import { Page, IPaneComponent, Toolbar, PageHeader, DataBreadcrumb, Icon } from "@montr-core/components";
+import { Page, PaneComponent, Toolbar, PageHeader, DataBreadcrumb, Icon } from "@montr-core/components";
 import { MetadataService } from "@montr-core/services";
 import { IEvent } from "../models";
 import * as panes from ".";
@@ -111,7 +111,7 @@ class _EditEvent extends React.Component<IProps, IState> {
 
 	handleSave() {
 		this._refsByKey.forEach((ref) => {
-			(ref.current as IPaneComponent).save();
+			(ref.current as PaneComponent).save();
 		});
 
 		this.fetchData();
@@ -126,7 +126,7 @@ class _EditEvent extends React.Component<IProps, IState> {
 			onOk: () => {
 				this._eventService
 					.publish(this.props.match.params.uid)
-					.then((result: IApiResult) => {
+					.then((result: ApiResult) => {
 						message.success(t("operation.success"));
 						this.fetchData();
 					})
@@ -146,7 +146,7 @@ class _EditEvent extends React.Component<IProps, IState> {
 			onOk: () => {
 				this._eventService
 					.cancel(this.props.match.params.uid)
-					.then((result: IApiResult) => {
+					.then((result: ApiResult) => {
 						message.success(t("operation.success"));
 						this.fetchData();
 					});
@@ -206,7 +206,7 @@ class _EditEvent extends React.Component<IProps, IState> {
 					<Tabs size="small" defaultActiveKey={tabKey} onChange={this.handleTabChange}>
 						{dataView.panes.map(pane => {
 
-							let component: React.ReactElement<IPaneProps<IEvent>>;
+							let component: React.ReactElement<PaneProps<IEvent>>;
 							if (pane.component) {
 								component = React.createElement(pane.component,
 									{ data: data /* , ref: this.createRefForKey(pane.key) */ });

@@ -1,5 +1,5 @@
 import * as React from "react";
-import { IApiResult, IPaneProps, IDataField } from "@montr-core/models";
+import { ApiResult, PaneProps, IDataField } from "@montr-core/models";
 import { EventService, EventMetadataService } from "../services";
 import { DataForm } from "@montr-core/components";
 import { IEvent } from "../models";
@@ -42,7 +42,7 @@ class EventForm extends React.Component<IProps, IState> {
 		this.setState({ loading: false, fields: dataView.fields });
 	};
 
-	save = async (values: IEvent): Promise<IApiResult> => {
+	save = async (values: IEvent): Promise<ApiResult> => {
 		return await this._eventService.update({ uid: this.props.data.uid, ...values });
 	};
 
@@ -61,7 +61,7 @@ class EventForm extends React.Component<IProps, IState> {
 	};
 }
 
-interface IEditEventPaneProps extends IPaneProps<IEvent> {
+interface IEditEventPaneProps extends PaneProps<IEvent> {
 	data: IEvent;
 }
 

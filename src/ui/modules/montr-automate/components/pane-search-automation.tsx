@@ -1,7 +1,7 @@
 import React from "react";
 import { Translation } from "react-i18next";
 import { DataTableUpdateToken, Toolbar, ButtonAdd, ButtonDelete, DataTable } from "@montr-core/components";
-import { Guid, IDataResult } from "@montr-core/models";
+import { Guid, DataResult } from "@montr-core/models";
 import { OperationService } from "@montr-core/services";
 import { Constants } from "@montr-core/.";
 import i18next from "i18next";
@@ -40,7 +40,7 @@ export class PaneSearchAutomation extends React.Component<Props, State> {
 		await this._automationService.abort();
 	};
 
-	onLoadTableData = async (loadUrl: string, postParams: any): Promise<IDataResult<{}>> => {
+	onLoadTableData = async (loadUrl: string, postParams: any): Promise<DataResult<{}>> => {
 		const { entityTypeCode, entityTypeUid } = this.props;
 
 		const params = { entityTypeCode, entityTypeUid, ...postParams };

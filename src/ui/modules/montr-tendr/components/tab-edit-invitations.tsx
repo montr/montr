@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Button, Drawer, Alert } from "antd";
-import { IPaneProps, Guid, IDataResult, IMenu } from "@montr-core/models";
+import { PaneProps, Guid, DataResult, IMenu } from "@montr-core/models";
 import { DataTable, Toolbar, DataTableUpdateToken, ButtonAdd, ButtonDelete, Icon } from "@montr-core/components";
 import { PaneSearchClassifier } from "@montr-master-data/components";
 import { ModalEditInvitation } from "../components";
@@ -9,7 +9,7 @@ import { InvitationService } from "../services";
 import { Constants } from "@montr-core/.";
 import { OperationService } from "@montr-core/services";
 
-interface IProps extends IPaneProps<IEvent> {
+interface IProps extends PaneProps<IEvent> {
 	data: IEvent;
 }
 
@@ -37,7 +37,7 @@ export class TabEditInvitations extends React.Component<IProps, IState> {
 		await this._invitationService.abort();
 	};
 
-	onLoadTableData = async (loadUrl: string, postParams: any): Promise<IDataResult<{}>> => {
+	onLoadTableData = async (loadUrl: string, postParams: any): Promise<DataResult<{}>> => {
 		const { data } = this.props;
 
 		if (data) {

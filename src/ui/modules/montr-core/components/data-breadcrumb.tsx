@@ -4,11 +4,11 @@ import { IMenu } from "../models";
 import { Link } from "react-router-dom";
 import { Icon } from ".";
 
-interface IProps {
+interface Props {
 	items: IMenu[];
 }
 
-export class DataBreadcrumb extends React.Component<IProps> {
+export class DataBreadcrumb extends React.Component<Props> {
 
 	getItemRoute = (item: IMenu): string => {
 		if (typeof item.route == "string") {

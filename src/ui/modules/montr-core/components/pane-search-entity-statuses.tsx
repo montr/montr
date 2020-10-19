@@ -1,10 +1,9 @@
 import React from "react";
 import { WithTranslation, Translation, withTranslation } from "react-i18next";
-import { Guid, IDataResult, EntityStatus } from "../models";
+import { Guid, DataResult, EntityStatus } from "../models";
 import { OperationService, MetadataService, EntityStatusService } from "../services";
 import { DataTableUpdateToken, Toolbar, ButtonAdd, ButtonDelete, DataTable, ModalEditEntityStatus } from ".";
-import { Views } from "../module";
-import { Constants } from "..";
+import { Api, Views } from "../module";
 
 interface Props extends WithTranslation {
 	entityTypeCode: string;
@@ -40,7 +39,7 @@ class WrappedPaneSearchEntityStatuses extends React.Component<Props, State> {
 		await this._entityStatusService.abort();
 	};
 
-	onLoadTableData = async (loadUrl: string, postParams: any): Promise<IDataResult<{}>> => {
+	onLoadTableData = async (loadUrl: string, postParams: any): Promise<DataResult<{}>> => {
 		const { entityTypeCode, entityUid } = this.props;
 
 		const params = { entityTypeCode, entityUid, ...postParams };
@@ -119,7 +118,7 @@ class WrappedPaneSearchEntityStatuses extends React.Component<Props, State> {
 				rowKey="uid"
 				rowActions={[{ name: t("button.edit"), onClick: this.showEditModal }]}
 				viewId={Views.entityStatusList}
-				loadUrl={`${Constants.apiURL}/entityStatus/list/`}
+				loadUrl={Api.entityStatusList}
 				onLoadData={this.onLoadTableData}
 				onSelectionChange={this.onSelectionChange}
 				updateToken={updateTableToken}

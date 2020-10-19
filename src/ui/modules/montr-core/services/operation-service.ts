@@ -1,11 +1,11 @@
 import i18next from "i18next";
-import { IApiResult, IValidationProblemDetails, IApiResultError } from "../models";
+import { ApiResult, ValidationProblemDetails, ApiResultError } from "../models";
 import { NotificationService, NavigationService } from ".";
 
-interface IOperationExecuteOptions {
+interface OperationExecuteOptions {
 	successMessage?: string;
 	errorMessage?: string;
-	showFieldErrors?: (result: IApiResult) => void;
+	showFieldErrors?: (result: ApiResult) => void;
 	showConfirm?: boolean;
 	confirmTitle?: string;
 	confirmContent?: string;
@@ -16,11 +16,11 @@ export class OperationService {
 	private _navigation = new NavigationService();
 	private _notification = new NotificationService();
 
-	execute = async (operation: () => Promise<IApiResult>, options?: IOperationExecuteOptions): Promise<void> => {
+	execute = async (operation: () => Promise<ApiResult>, options?: OperationExecuteOptions): Promise<void> => {
 
 		const t = (key: string) => i18next.t(key);
 
-		const showFieldErrors = (result: IApiResult) => {
+		const showFieldErrors = (result: ApiResult) => {
 			// todo: show detailed field errors as notification.error?
 			if (options?.showFieldErrors) {
 				options.showFieldErrors(result);
@@ -34,7 +34,7 @@ export class OperationService {
 			}
 		};
 
-		const executeInternal = async (): Promise<IApiResult> => {
+		const executeInternal = async (): Promise<ApiResult> => {
 
 			const hide = this._notification.loading(t("operation.executing"));
 
@@ -61,7 +61,7 @@ export class OperationService {
 				this._notification.error(options?.errorMessage ?? t("operation.error"), error.message);
 
 				if (error.response?.status == 400) {
-					const result = this.convertToApiResult(<IValidationProblemDetails>error.response.data);
+					const result = this.convertToApiResult(<ValidationProblemDetails>error.response.data);
 
 					showFieldErrors(result);
 				}
@@ -85,15 +85,15 @@ export class OperationService {
 		}
 	};
 
-	convertToApiResult = (details: IValidationProblemDetails): IApiResult => {
+	convertToApiResult = (details: ValidationProblemDetails): ApiResult => {
 
-		const errors: IApiResultError[] = [];
+		const errors: ApiResultError[] = [];
 
 		Object.entries(details?.errors).forEach(
 			([key, value]) => errors.push({ key, messages: value })
 		);
 
-		const result: IApiResult = { success: false, errors };
+		const result: ApiResult = { success: false, errors };
 
 		return result;
 	};

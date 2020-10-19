@@ -1,7 +1,7 @@
 import React from "react";
 import { Modal, Spin } from "antd";
 import { Translation } from "react-i18next";
-import { IDataField, IApiResult } from "@montr-core/models";
+import { IDataField, ApiResult } from "@montr-core/models";
 import { DataForm } from "@montr-core/components";
 import { MetadataService } from "@montr-core/services";
 import { ProfileService } from "../services";
@@ -62,7 +62,7 @@ export class ModalChangeEmail extends React.Component<IProps, IState> {
 		if (this.props.onCancel) this.props.onCancel();
 	};
 
-	handleSubmit = async (values: IProfileModel): Promise<IApiResult> => {
+	handleSubmit = async (values: IProfileModel): Promise<ApiResult> => {
 		const { onSuccess } = this.props;
 
 		const result = await this._profileService.changeEmail(values);

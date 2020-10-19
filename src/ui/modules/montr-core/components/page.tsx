@@ -1,11 +1,11 @@
 import * as React from "react";
 import { PageHeader } from ".";
 
-interface IProps {
+interface Props {
 	title?: string | React.ReactNode;
 }
 
-export class Page extends React.Component<IProps> {
+export class Page extends React.Component<Props> {
 	render = () => {
 
 		const { title, children } = this.props;

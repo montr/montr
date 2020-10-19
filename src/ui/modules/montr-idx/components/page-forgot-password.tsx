@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useLocalStorage, Page, DataForm, Icon } from "@montr-core/components";
-import { IDataField, IApiResult } from "@montr-core/models";
+import { IDataField, ApiResult } from "@montr-core/models";
 import { Spin } from "antd";
 import { MetadataService } from "@montr-core/services";
 import { ILoginModel } from "../models";
@@ -43,7 +43,7 @@ export default function ForgotPassword() {
 		setEmail(values.email);
 	};
 
-	async function handleSubmit(values: ILoginModel): Promise<IApiResult> {
+	async function handleSubmit(values: ILoginModel): Promise<ApiResult> {
 		return await accountService.forgotPassword(values);
 	};
 

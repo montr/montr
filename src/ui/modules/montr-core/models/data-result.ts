@@ -1,6 +1,6 @@
-import { IApiResult } from "@montr-core/models";
+import { ApiResult } from "@montr-core/models";
 
-export interface IDataResult<TResult> extends IApiResult {
+export interface DataResult<TResult> extends ApiResult {
 	totalCount: number;
 	rows: TResult[];
 }

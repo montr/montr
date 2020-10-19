@@ -1,21 +1,21 @@
 import { Guid } from ".";
 
-export interface IApiResult<TData = any> {
+export interface ApiResult<TData = any> {
 	success: boolean;
 	message?: string;
 	uid?: Guid;
 	affectedRows?: number;
-	errors?: IApiResultError[];
+	errors?: ApiResultError[];
 	redirectUrl?: string;
 	data?: TData;
 }
 
-export interface IApiResultError {
+export interface ApiResultError {
 	key: string;
 	messages: string[];
 }
 
-export interface IProblemDetails {
+export interface ProblemDetails {
 	detail?: string;
 	instance?: string;
 	status?: number;
@@ -23,6 +23,6 @@ export interface IProblemDetails {
 	type?: string;
 }
 
-export interface IValidationProblemDetails extends IProblemDetails {
+export interface ValidationProblemDetails extends ProblemDetails {
 	errors?: Map<string, string[]>;
 }

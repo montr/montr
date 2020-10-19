@@ -1,7 +1,7 @@
 // import { AppService } from "./services/app-service";
-import { IAppOptions } from "./models";
+import { AppOptions } from "./models";
 
-declare var APP_OPTIONS: IAppOptions;
+declare var APP_OPTIONS: AppOptions;
 
 if (!APP_OPTIONS.appUrl) APP_OPTIONS.appUrl = window.location.origin;
 

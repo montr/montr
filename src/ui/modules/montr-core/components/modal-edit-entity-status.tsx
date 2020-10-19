@@ -1,9 +1,10 @@
 import React from "react";
 import { Modal, Spin } from "antd";
+import { FormInstance } from "antd/lib/form";
 import { DataForm } from ".";
 import { EntityStatusService, MetadataService } from "../services";
-import { Guid, IApiResult, IDataField, EntityStatus } from "../models";
-import { FormInstance } from "antd/lib/form";
+import { Guid, ApiResult, IDataField, EntityStatus } from "../models";
+import { Views } from "../module";
 
 interface Props {
     entityTypeCode: string;
@@ -47,7 +48,7 @@ export class ModalEditEntityStatus extends React.Component<Props, State> {
     fetchData = async () => {
         const { entityTypeCode, entityUid, uid } = this.props;
 
-        const dataView = await this._metadataService.load(`EntityStatus/Form`);
+        const dataView = await this._metadataService.load(Views.entityStatusForm);
 
         const fields = dataView.fields;
 
@@ -72,11 +73,11 @@ export class ModalEditEntityStatus extends React.Component<Props, State> {
         if (this.props.onCancel) this.props.onCancel();
     };
 
-    save = async (values: EntityStatus): Promise<IApiResult> => {
+    save = async (values: EntityStatus): Promise<ApiResult> => {
         const { entityTypeCode, entityUid, uid, onSuccess } = this.props;
 
         let data: EntityStatus,
-            result: IApiResult;
+            result: ApiResult;
 
         if (uid) {
             data = { uid: uid, ...values };

@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Toolbar } from "./toolbar";
-import { IDataField, IDataResult, Guid } from "../models";
+import { IDataField, DataResult, Guid } from "../models";
 import { MetadataService, OperationService } from "../services";
 import { DataTable, DataTableUpdateToken, ButtonAdd, PaneEditMetadata, ButtonDelete } from ".";
 import { Translation, WithTranslation, withTranslation } from "react-i18next";
@@ -38,7 +38,7 @@ class WrappedPaneSearchMetadata extends React.Component<Props, State> {
 		await this._metadataService.abort();
 	};
 
-	onLoadTableData = async (loadUrl: string, postParams: any): Promise<IDataResult<{}>> => {
+	onLoadTableData = async (loadUrl: string, postParams: any): Promise<DataResult<{}>> => {
 		const { entityTypeCode, entityUid } = this.props;
 
 		const params = { entityTypeCode, entityUid, ...postParams };

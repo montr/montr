@@ -1,4 +1,4 @@
-import { Guid, IApiResult, EntityStatus } from "../models";
+import { Guid, ApiResult, EntityStatus } from "../models";
 import { Fetcher } from "./fetcher";
 import { Api } from "../module";
 
@@ -26,15 +26,15 @@ export class EntityStatusService extends Fetcher {
         return this.post(Api.entityStatusGet, request);
     };
 
-    insert = async (request: ManageEntityStatusRequest): Promise<IApiResult> => {
+    insert = async (request: ManageEntityStatusRequest): Promise<ApiResult> => {
         return this.post(Api.entityStatusInsert, request);
     };
 
-    update = async (request: ManageEntityStatusRequest): Promise<IApiResult> => {
+    update = async (request: ManageEntityStatusRequest): Promise<ApiResult> => {
         return this.post(Api.entityStatusUpdate, request);
     };
 
-    delete = async (request: DeleteEntityStatusRequest): Promise<IApiResult> => {
+    delete = async (request: DeleteEntityStatusRequest): Promise<ApiResult> => {
         return this.post(Api.entityStatusDelete, request);
     };
 }

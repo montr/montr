@@ -1,5 +1,5 @@
 import { Fetcher } from "@montr-core/services";
-import { Guid, IApiResult, IDataResult } from "@montr-core/models";
+import { Guid, ApiResult, DataResult } from "@montr-core/models";
 import { IClassifier } from "../models";
 import { Api } from "../module";
 
@@ -18,7 +18,7 @@ interface IInsertClassifierRequest {
 
 export class ClassifierService extends Fetcher {
 
-	list = async (request: IClassifierSearchRequest): Promise<IDataResult<IClassifier>> => {
+	list = async (request: IClassifierSearchRequest): Promise<DataResult<IClassifier>> => {
 		return this.post(Api.classifierList, request);
 	};
 
@@ -34,11 +34,11 @@ export class ClassifierService extends Fetcher {
 		return this.post(Api.classifierGet, { typeCode, uid });
 	};
 
-	insert = async (request: IInsertClassifierRequest): Promise<IApiResult> => {
+	insert = async (request: IInsertClassifierRequest): Promise<ApiResult> => {
 		return this.post(Api.classifierInsert, request);
 	};
 
-	update = async (typeCode: string, item: IClassifier): Promise<IApiResult> => {
+	update = async (typeCode: string, item: IClassifier): Promise<ApiResult> => {
 		return this.post(Api.classifierUpdate, { typeCode, item });
 	};
 

@@ -1,6 +1,6 @@
 import { Fetcher } from "./fetcher";
 import { Constants } from "..";
-import { ILocaleString, IDataResult } from "../models";
+import { LocaleString, DataResult } from "../models";
 
 interface ILocaleStringSearchRequest {
 	locale: string;
@@ -9,7 +9,7 @@ interface ILocaleStringSearchRequest {
 
 export class LocaleStringService extends Fetcher {
 
-	list = async (request: ILocaleStringSearchRequest): Promise<IDataResult<ILocaleString>> => {
+	list = async (request: ILocaleStringSearchRequest): Promise<DataResult<LocaleString>> => {
 		return this.post(`${Constants.apiURL}/locale/list`, request);
 	};
 

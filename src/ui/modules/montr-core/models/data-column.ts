@@ -1,21 +1,21 @@
-export interface IDataColumn {
+export interface DataColumn {
 	key: string;
 	type: string;
 	path: string;
 	name: string;
 	align?: "left" | "right" | "center";
 	sortable: boolean;
-	defaultSortOrder?: ISortOrder;
+	defaultSortOrder?: SortOrder;
 	width?: number;
 	urlProperty?: string;
 }
 
-export declare type ISortOrder = "ascending" | "descending";
+export declare type SortOrder = "ascending" | "descending";
 
-export interface IPaging {
+export interface Paging {
 	pageNo?: number;
 	pageSize?: number;
 	sortColumn?: string;
-	sortOrder?: ISortOrder;
+	sortOrder?: SortOrder;
 	skipPaging?: boolean;
 }

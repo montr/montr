@@ -1,3 +1,3 @@
-export interface ISearchRequest {
+export interface SearchRequest {
 	skipPaging?: boolean;
 }

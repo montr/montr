@@ -3,7 +3,7 @@ import { Alert, Modal } from "antd";
 import { Constants } from "@montr-core/.";
 import { DataTableUpdateToken, Toolbar, DataTable, ButtonAdd } from "@montr-core/components";
 import { IClassifierType, IClassifier, IClassifierLink } from "../models";
-import { IDataResult, IMenu, Guid } from "@montr-core/models";
+import { DataResult, IMenu, Guid } from "@montr-core/models";
 import { ClassifierLinkService } from "../services";
 import { ModalEditClassifierLink } from ".";
 
@@ -47,7 +47,7 @@ export class TabEditClassifierHierarchy extends React.Component<IProps, IState> 
 		});
 	};
 
-	onLoadTableData = async (loadUrl: string, postParams: any): Promise<IDataResult<{}>> => {
+	onLoadTableData = async (loadUrl: string, postParams: any): Promise<DataResult<{}>> => {
 		const { type, data } = this.props;
 
 		if (type.code) {

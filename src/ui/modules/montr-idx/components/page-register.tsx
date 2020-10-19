@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Page, DataForm, Icon } from "@montr-core/components";
-import { IDataField, IApiResult } from "@montr-core/models";
+import { IDataField, ApiResult } from "@montr-core/models";
 import { Spin, Divider } from "antd";
 import { MetadataService } from "@montr-core/services";
 import { IRegisterModel } from "../models";
@@ -48,7 +48,7 @@ export default class Register extends React.Component<IProps, IState> {
 		this.setState({ loading: false, fields: dataView.fields });
 	};
 
-	save = async (values: IRegisterModel): Promise<IApiResult> => {
+	save = async (values: IRegisterModel): Promise<ApiResult> => {
 		return await this._accountService.register(values);
 	};
 

@@ -1,5 +1,5 @@
 import React from "react";
-import { IDataField, IApiResult } from "@montr-core/models";
+import { IDataField, ApiResult } from "@montr-core/models";
 import { INumerator } from "../models";
 import { NumeratorService } from "../services";
 import { Spin } from "antd";
@@ -44,7 +44,7 @@ export class TabEditNumerator extends React.Component<IProps, IState> {
 		this.setState({ loading: false, fields: dataView.fields });
 	};
 
-	save = async (values: INumerator): Promise<IApiResult> => {
+	save = async (values: INumerator): Promise<ApiResult> => {
 		const { data, onDataChange } = this.props;
 
 		if (data.uid) {

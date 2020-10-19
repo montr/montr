@@ -7,7 +7,7 @@ import { AccountService } from "../services/account-service";
 import { Patterns, Views } from "../module";
 import { MetadataService } from "@montr-core/services";
 import { IResetPasswordModel } from "../models";
-import { IApiResult, IDataField } from "@montr-core/models";
+import { ApiResult, IDataField } from "@montr-core/models";
 
 interface IRouteProps {
 	code: string;
@@ -49,7 +49,7 @@ export default class ResetPassword extends React.Component<IProps, IState> {
 		this.setState({ loading: false, fields: dataView.fields });
 	};
 
-	resetPassword = async (values: IResetPasswordModel): Promise<IApiResult> => {
+	resetPassword = async (values: IResetPasswordModel): Promise<ApiResult> => {
 		const { code } = this.props.match.params;
 
 		return await this._accountService.resetPassword({ code, ...values });

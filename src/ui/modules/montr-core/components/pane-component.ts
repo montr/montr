@@ -1,3 +1,3 @@
-export interface IPaneComponent {
+export interface PaneComponent {
 	save(): void;
 }

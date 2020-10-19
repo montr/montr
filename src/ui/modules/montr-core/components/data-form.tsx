@@ -2,7 +2,7 @@ import * as React from "react";
 import { Form, Spin } from "antd";
 import { FormInstance } from "antd/lib/form";
 import { FieldData, Store } from "rc-field-form/lib/interface";
-import { IDataField, IApiResult, IIndexer } from "../models";
+import { IDataField, ApiResult, IIndexer } from "../models";
 import { NotificationService } from "../services/notification-service";
 import { OperationService, DataHelper } from "../services";
 import { FormDefaults, DataFieldFactory, ButtonSave, Toolbar } from ".";
@@ -25,7 +25,7 @@ interface IProps extends IDataFormOptions {
 	successMessage?: string;
 	errorMessage?: string;
 	onChange?: (values: IIndexer, changedValues: IIndexer) => void;
-	onSubmit?: (values: any /* IIndexer */) => Promise<IApiResult>;
+	onSubmit?: (values: any /* IIndexer */) => Promise<ApiResult>;
 	formRef?: React.RefObject<FormInstance>;
 }
 
@@ -76,7 +76,7 @@ class WrappedDataForm extends React.Component<IProps, IState> {
 		}, {
 			successMessage: successMessage || t("dataForm.submit.success"),
 			errorMessage: errorMessage || t("dataForm.submit.error"),
-			showFieldErrors: async (result: IApiResult) => {
+			showFieldErrors: async (result: ApiResult) => {
 				await this.setFieldErrors(result, values);
 			}
 		});
@@ -84,7 +84,7 @@ class WrappedDataForm extends React.Component<IProps, IState> {
 		if (this._isMounted) this.setState({ loading: false });
 	};
 
-	setFieldErrors = async (result: IApiResult, values: any /* IIndexer */) => {
+	setFieldErrors = async (result: ApiResult, values: any /* IIndexer */) => {
 		const { fields } = this.props,
 			fieldErrors: FieldData[] = [],
 			otherErrors: string[] = [];

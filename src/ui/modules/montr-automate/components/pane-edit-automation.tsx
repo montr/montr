@@ -1,7 +1,7 @@
 import React from "react";
 import { Spin, Drawer } from "antd";
 import { FormInstance } from "antd/lib/form";
-import { Guid, IApiResult, IDataField } from "@montr-core/models";
+import { Guid, ApiResult, IDataField } from "@montr-core/models";
 import { Toolbar, ButtonCancel, ButtonSave, DataForm } from "@montr-core/components";
 import { Automation } from "../models";
 import { MetadataService } from "@montr-core/services";
@@ -69,7 +69,7 @@ export class PaneEditAutomation extends React.Component<Props, State> {
 		await this._formRef.current.submit();
 	};
 
-	handleSubmit = async (values: Automation): Promise<IApiResult> => {
+	handleSubmit = async (values: Automation): Promise<ApiResult> => {
 		const { entityTypeCode, entityTypeUid, uid, onSuccess } = this.props;
 
 		const item = { ...values };

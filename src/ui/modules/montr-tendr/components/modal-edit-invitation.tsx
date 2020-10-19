@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Guid, IDataField, IApiResult } from "@montr-core/models";
+import { Guid, IDataField, ApiResult } from "@montr-core/models";
 import { IInvitation } from "../models";
 import { Modal, Spin } from "antd";
 import { DataForm } from "@montr-core/components";
@@ -82,11 +82,11 @@ export class ModalEditInvitation extends React.Component<IProps, IState> {
 		if (this.props.onCancel) this.props.onCancel();
 	};
 
-	save = async (values: IInvitation): Promise<IApiResult> => {
+	save = async (values: IInvitation): Promise<ApiResult> => {
 		const { eventUid, uid, onSuccess } = this.props;
 
 		let data: IInvitation,
-			result: IApiResult;
+			result: ApiResult;
 
 		if (uid) {
 			data = { uid: uid, ...values };

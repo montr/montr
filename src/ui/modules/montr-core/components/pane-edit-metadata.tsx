@@ -1,13 +1,13 @@
 import React from "react";
 import { DataForm, ButtonSave, Icon } from ".";
 import { MetadataService, DataHelper } from "../services";
-import { IDataField, IApiResult, Guid } from "../models";
+import { IDataField, ApiResult, Guid } from "../models";
 import { Spin, Button, Popover, Switch, List, Drawer } from "antd";
 import { Toolbar } from "./toolbar";
 import { ButtonCancel } from "./buttons";
 import { FormInstance } from "antd/lib/form";
 
-interface IProps {
+interface Props {
 	entityTypeCode: string;
 	entityUid: Guid;
 	uid?: Guid;
@@ -15,7 +15,7 @@ interface IProps {
 	onClose?: () => void;
 }
 
-interface IState {
+interface State {
 	loading: boolean;
 	typeFieldMap: { [key: string]: IDataField[]; };
 	typeData?: IDataField;
@@ -28,12 +28,12 @@ interface IState {
 // todo: read from server
 const DefaultFieldType = "text";
 
-export class PaneEditMetadata extends React.Component<IProps, IState> {
+export class PaneEditMetadata extends React.Component<Props, State> {
 
 	private _metadataService = new MetadataService();
 	private _formRef = React.createRef<FormInstance>();
 
-	constructor(props: IProps) {
+	constructor(props: Props) {
 		super(props);
 
 		this.state = {
@@ -125,7 +125,7 @@ export class PaneEditMetadata extends React.Component<IProps, IState> {
 		await this._formRef.current.submit();
 	};
 
-	handleSubmit = async (values: IDataField): Promise<IApiResult> => {
+	handleSubmit = async (values: IDataField): Promise<ApiResult> => {
 		const { entityTypeCode, entityUid, uid, onSuccess } = this.props,
 			{ typeData } = this.state;
 

@@ -2,7 +2,7 @@ import * as React from "react";
 import { Modal, Spin } from "antd";
 import { IClassifierLink, IClassifierField } from "../models";
 import { ClassifierLinkService } from "../services";
-import { IDataField, IApiResult, Guid } from "@montr-core/models";
+import { IDataField, ApiResult, Guid } from "@montr-core/models";
 import { DataForm } from "@montr-core/components";
 import { NotificationService, MetadataService } from "@montr-core/services";
 import { FormInstance } from "antd/lib/form";
@@ -75,7 +75,7 @@ export class ModalEditClassifierLink extends React.Component<IProps, IState> {
 		if (this.props.onCancel) this.props.onCancel();
 	};
 
-	save = async (values: IClassifierLink): Promise<IApiResult> => {
+	save = async (values: IClassifierLink): Promise<ApiResult> => {
 		const { typeCode, itemUid, onSuccess } = this.props;
 
 		const result = await this._classifierLinkService.insert(typeCode, values.group.uid, itemUid);

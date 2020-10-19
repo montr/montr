@@ -6,6 +6,7 @@ import "./i18n";
 import "./index.less";
 
 export const Api = {
+	entityStatusList: `${Constants.apiURL}/entityStatus/list`,
 	entityStatusGet: `${Constants.apiURL}/entityStatus/get`,
 	entityStatusInsert: `${Constants.apiURL}/entityStatus/insert`,
 	entityStatusUpdate: `${Constants.apiURL}/entityStatus/update`,
@@ -14,7 +15,9 @@ export const Api = {
 
 export const Views = {
 	metadataList: "Metadata/Grid",
+
 	entityStatusList: "EntityStatus/Grid",
+	entityStatusForm: "EntityStatus/Form",
 };
 
 import("./components").then(x => {

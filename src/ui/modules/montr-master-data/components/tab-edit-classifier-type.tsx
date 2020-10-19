@@ -2,7 +2,7 @@ import * as React from "react";
 import { Redirect } from "react-router";
 import { Spin } from "antd";
 import { DataForm } from "@montr-core/components";
-import { IDataField, IApiResult } from "@montr-core/models";
+import { IDataField, ApiResult } from "@montr-core/models";
 import { MetadataService } from "@montr-core/services";
 import { IClassifierType } from "../models";
 import { ClassifierTypeService } from "../services";
@@ -46,7 +46,7 @@ export class TabEditClassifierType extends React.Component<IProps, IState> {
 		this.setState({ loading: false, fields: dataView.fields });
 	};
 
-	save = async (values: IClassifierType): Promise<IApiResult> => {
+	save = async (values: IClassifierType): Promise<ApiResult> => {
 
 		const { data, onDataChange } = this.props;
 

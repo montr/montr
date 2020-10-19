@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import { Spin, Divider } from "antd";
 import { useTranslation } from "react-i18next";
 import { useLocalStorage, Page, DataForm } from "@montr-core/components";
-import { IDataField, IApiResult } from "@montr-core/models";
+import { IDataField, ApiResult } from "@montr-core/models";
 import { MetadataService, NavigationService } from "@montr-core/services";
 import { ILoginModel } from "../models";
 import { AccountService } from "../services/account-service";
@@ -44,7 +44,7 @@ export default function Login() {
 		setEmail(values.email);
 	};
 
-	async function handleSubmit(values: ILoginModel): Promise<IApiResult> {
+	async function handleSubmit(values: ILoginModel): Promise<ApiResult> {
 		return await accountService.login({
 			returnUrl: navigation.getReturnUrlParameter() ?? "/",
 			...values

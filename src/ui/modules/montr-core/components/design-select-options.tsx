@@ -5,14 +5,13 @@ import { IOption, IIndexer, IDesignSelectOptionsField } from "../models";
 import { ButtonAdd } from ".";
 import { Icon } from "./icon";
 
-
-interface IProps {
+interface Props {
 	field: IDesignSelectOptionsField;
 	value?: IOption[];
 	onChange?: (value: any) => void;
 }
 
-interface IState {
+interface State {
 	options?: IOption[];
 }
 
@@ -20,7 +19,7 @@ interface IState {
 // https://next.ant.design/components/form/#components-form-demo-dynamic-form-item
 // or using table with inline editing
 // https://next.ant.design/components/table/#components-table-demo-edit-cell
-export class DesignSelectOptions extends React.Component<IProps, IState> {
+export class DesignSelectOptions extends React.Component<Props, State> {
 
 	/* static getDerivedStateFromProps(nextProps: IProps, prevState: IState) {
 		console.log("getDerivedStateFromProps", nextProps, prevState);
@@ -30,7 +29,7 @@ export class DesignSelectOptions extends React.Component<IProps, IState> {
 		return null;
 	} */
 
-	constructor(props: IProps) {
+	constructor(props: Props) {
 		super(props);
 
 		this.state = {
@@ -38,7 +37,7 @@ export class DesignSelectOptions extends React.Component<IProps, IState> {
 		};
 	}
 
-	componentDidUpdate = async (prevProps: IProps) => {
+	componentDidUpdate = async (prevProps: Props) => {
 		if (this.props.value !== prevProps.value) {
 			this.setState({ options: this.props.value });
 		}

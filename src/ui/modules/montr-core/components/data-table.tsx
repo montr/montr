@@ -4,45 +4,45 @@ import { Table, Tag, Divider } from "antd";
 import { PaginationConfig } from "antd/lib/pagination";
 import { SorterResult, SortOrder, ColumnType, TablePaginationConfig } from "antd/lib/table/interface";
 import { Fetcher, NotificationService, MetadataService, DateHelper } from "../services";
-import { IIndexer, IDataColumn, IDataResult, IMenu, IPaging } from "../models";
+import { IIndexer, DataColumn, DataResult, IMenu, Paging } from "../models";
 import { Constants } from "..";
 import { Icon } from ".";
 
-interface IProps<TModel> {
+interface Props<TModel> {
 	rowKey?: string | ((record: TModel, index: number) => string);
 	rowActions?: IMenu[];
 	viewId: string;
 	loadUrl: string; // todo: (?) add data[]
 	// todo: add type for post params
-	onLoadData?: (loadUrl: string, postParams: any) => Promise<IDataResult<TModel>>;
+	onLoadData?: (loadUrl: string, postParams: any) => Promise<DataResult<TModel>>;
 	onSelectionChange?: (selectedRowKeys: string[] | number[], selectedRows: TModel[]) => void;
 	skipPaging?: boolean;
 	updateToken?: DataTableUpdateToken;
 }
 
-interface IState<TModel> {
+interface State<TModel> {
 	loading: boolean;
 	selectedRowKeys: string[] | number[];
 	error?: any;
 	columns: any[];
 	data: TModel[];
 	totalCount: number;
-	paging: IPaging;
+	paging: Paging;
 }
 
-export class DataTableUpdateToken {
+export interface DataTableUpdateToken {
 	date: Date;
 	resetCurrentPage?: boolean;
 	resetSelectedRows?: boolean;
 }
 
-export class DataTable<TModel extends IIndexer> extends React.Component<IProps<TModel>, IState<TModel>> {
+export class DataTable<TModel extends IIndexer> extends React.Component<Props<TModel>, State<TModel>> {
 
 	private _fetcher = new Fetcher();
 	private _metadataService = new MetadataService();
 	private _notification = new NotificationService();
 
-	constructor(props: IProps<TModel>) {
+	constructor(props: Props<TModel>) {
 		super(props);
 
 		this.state = {
@@ -63,7 +63,7 @@ export class DataTable<TModel extends IIndexer> extends React.Component<IProps<T
 		await this.fetchMetadata();
 	};
 
-	componentDidUpdate = async (prevProps: IProps<TModel>) => {
+	componentDidUpdate = async (prevProps: Props<TModel>) => {
 		if (this.props.updateToken !== prevProps.updateToken) {
 
 			const { updateToken } = this.props,
@@ -116,7 +116,7 @@ export class DataTable<TModel extends IIndexer> extends React.Component<IProps<T
 
 		if (!dataView.columns) throw new Error("Metadata columns is empty");
 
-		const columns = dataView.columns?.map((item: IDataColumn): ColumnType<TModel> => {
+		const columns = dataView.columns?.map((item: DataColumn): ColumnType<TModel> => {
 
 			var render: (text: any, record: TModel, index: number) => React.ReactNode;
 
@@ -211,7 +211,7 @@ export class DataTable<TModel extends IIndexer> extends React.Component<IProps<T
 		}
 
 		const defaultSortColumn =
-			dataView.columns?.filter((col: IDataColumn) => col.defaultSortOrder)[0];
+			dataView.columns?.filter((col: DataColumn) => col.defaultSortOrder)[0];
 
 		paging.sortColumn = defaultSortColumn?.key;
 		paging.sortOrder = defaultSortColumn?.defaultSortOrder;
@@ -229,7 +229,7 @@ export class DataTable<TModel extends IIndexer> extends React.Component<IProps<T
 		try {
 			let postParams: any = { ...paging };
 
-			const data: IDataResult<TModel> = onLoadData
+			const data: DataResult<TModel> = onLoadData
 				? await onLoadData(loadUrl, postParams)
 				: await this._fetcher.post(loadUrl, postParams);
 

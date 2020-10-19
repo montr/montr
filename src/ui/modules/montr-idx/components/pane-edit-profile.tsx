@@ -1,5 +1,5 @@
 import React from "react";
-import { IDataField, IApiResult } from "@montr-core/models";
+import { IDataField, ApiResult } from "@montr-core/models";
 import { MetadataService } from "@montr-core/services";
 import { IProfileModel } from "../models";
 import { ProfileService } from "../services";
@@ -48,7 +48,7 @@ export default class PaneEditProfile extends React.Component<IProps, IState> {
 		this.setState({ loading: false, data, fields: dataView.fields });
 	};
 
-	save = async (values: IProfileModel): Promise<IApiResult> => {
+	save = async (values: IProfileModel): Promise<ApiResult> => {
 		return await this._profileService.update(values);
 	};
 

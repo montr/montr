@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Modal, Spin } from "antd";
-import { Guid, IDataField, IApiResult } from "@montr-core/models";
+import { Guid, IDataField, ApiResult } from "@montr-core/models";
 import { ClassifierTreeService } from "../services";
 import { IClassifierGroup } from "../models";
 import { NotificationService, MetadataService } from "@montr-core/services";
@@ -81,11 +81,11 @@ export class ModalEditClassifierTree extends React.Component<IProps, IState> {
 		if (this.props.onCancel) this.props.onCancel();
 	};
 
-	save = async (values: IClassifierGroup): Promise<IApiResult> => {
+	save = async (values: IClassifierGroup): Promise<ApiResult> => {
 		const { typeCode, uid, onSuccess } = this.props;
 
 		let data: IClassifierGroup,
-			result: IApiResult;
+			result: ApiResult;
 
 		if (uid) {
 			data = { uid: uid, ...values };

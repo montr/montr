@@ -4,7 +4,7 @@ import { Redirect } from "react-router-dom";
 import { Constants } from "@montr-core/.";
 import { Page, DataTable } from "@montr-core/components";
 import { IEvent } from "../models";
-import { IApiResult, Guid, IMenu } from "@montr-core/models";
+import { ApiResult, Guid, IMenu } from "@montr-core/models";
 import { RouteBuilder } from "../module";
 
 interface IProps {
@@ -30,7 +30,7 @@ export default class SelectEventTemplate extends React.Component<IProps, IState>
 	};
 
 	handleSelect = async (data: IEvent) => {
-		const result: IApiResult = await this._eventService.insert({
+		const result: ApiResult = await this._eventService.insert({
 			templateUid: data.uid,
 			configCode: data.configCode
 		});

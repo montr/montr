@@ -3,13 +3,13 @@ import * as React from "react";
 declare const Sizes: ["small", "default", "large"];
 declare const Floats: ["left", "right", "bottom"];
 
-interface IProps {
+interface Props {
 	size?: (typeof Sizes)[number];
 	float?: (typeof Floats)[number];
 	clear?: boolean;
 }
 
-export class Toolbar extends React.Component<IProps> {
+export class Toolbar extends React.Component<Props> {
 	render = () => {
 
 		const { size, float, clear, children } = this.props;

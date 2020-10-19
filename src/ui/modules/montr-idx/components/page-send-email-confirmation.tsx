@@ -2,7 +2,7 @@ import * as React from "react";
 import { Spin } from "antd";
 import { useTranslation } from "react-i18next";
 import { useLocalStorage, Page, DataForm, Icon } from "@montr-core/components";
-import { IDataField, IApiResult } from "@montr-core/models";
+import { IDataField, ApiResult } from "@montr-core/models";
 import { MetadataService } from "@montr-core/services";
 import { ISendEmailConfirmationModel } from "../models";
 import { AccountService } from "../services/account-service";
@@ -43,7 +43,7 @@ export default function SendEmailConfirmation() {
 		setEmail(values.email);
 	};
 
-	async function handleSubmit(values: ISendEmailConfirmationModel): Promise<IApiResult> {
+	async function handleSubmit(values: ISendEmailConfirmationModel): Promise<ApiResult> {
 		return await accountService.sendEmailConfirmation(values);
 	};
 

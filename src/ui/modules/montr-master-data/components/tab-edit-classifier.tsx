@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Spin } from "antd";
-import { IDataField, IApiResult } from "@montr-core/models";
+import { IDataField, ApiResult } from "@montr-core/models";
 import { DataForm } from "@montr-core/components";
 import { ClassifierService, ClassifierMetadataService } from "../services";
 import { IClassifier, IClassifierType } from "../models";
@@ -63,7 +63,7 @@ export class TabEditClassifier extends React.Component<IProps, IState> {
 		}
 	};
 
-	save = async (values: IClassifier): Promise<IApiResult> => {
+	save = async (values: IClassifier): Promise<ApiResult> => {
 		const { type, data, onDataChange } = this.props;
 
 		if (data.uid) {

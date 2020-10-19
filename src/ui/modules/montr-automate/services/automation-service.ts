@@ -1,6 +1,6 @@
 import { Fetcher } from "@montr-core/services/fetcher";
 import { Automation, AutomationRuleType } from "../models/automation";
-import { Guid, IApiResult } from "@montr-core/models";
+import { Guid, ApiResult } from "@montr-core/models";
 import { Constants } from "@montr-core/.";
 
 interface IManageAutomationRequest {
@@ -21,15 +21,15 @@ export class AutomationService extends Fetcher {
 		return this.post(`${Constants.apiURL}/automation/get`, { entityTypeCode, entityTypeUid, uid });
 	};
 
-	insert = async (request: IManageAutomationRequest): Promise<IApiResult> => {
+	insert = async (request: IManageAutomationRequest): Promise<ApiResult> => {
 		return this.post(`${Constants.apiURL}/automation/insert`, request);
 	};
 
-	update = async (request: IManageAutomationRequest): Promise<IApiResult> => {
+	update = async (request: IManageAutomationRequest): Promise<ApiResult> => {
 		return this.post(`${Constants.apiURL}/automation/update`, request);
 	};
 
-	delete = async (request: IDeleteAutomationRequest): Promise<IApiResult> => {
+	delete = async (request: IDeleteAutomationRequest): Promise<ApiResult> => {
 		return this.post(`${Constants.apiURL}/automation/delete`, request);
 	};
 

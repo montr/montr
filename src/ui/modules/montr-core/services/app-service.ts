@@ -1,14 +1,14 @@
 import axios from "axios";
-import { IAppOptions } from "../models";
+import { AppOptions } from "../models";
 
 export class AppService {
 
-	options = (): Promise<IAppOptions> => {
+	options = (): Promise<AppOptions> => {
 		return axios
 			.post("/api/app/options", {})
 			.then(response => {
 				console.log(response.data);
-				return (response.data as IAppOptions);
+				return (response.data as AppOptions);
 			});
 	};
 

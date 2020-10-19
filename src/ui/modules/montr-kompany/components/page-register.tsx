@@ -8,7 +8,7 @@ import { Constants } from "@montr-core/.";
 import { withCompanyContext, CompanyContextProps } from ".";
 import { FormInstance } from "antd/lib/form";
 import { DataForm } from "@montr-core/components";
-import { IDataField, IApiResult } from "@montr-core/models";
+import { IDataField, ApiResult } from "@montr-core/models";
 
 interface Props extends CompanyContextProps {
 }
@@ -201,7 +201,7 @@ class _PageCompanyRegistration extends React.Component<IRProps, IRState> {
 		this.setState({ loading: false, data: {}, fields: dataView.fields });
 	};
 
-	handleSubmit = async (values: ICompany): Promise<IApiResult> => {
+	handleSubmit = async (values: ICompany): Promise<ApiResult> => {
 		const { manageCompany, switchCompany } = this.props;
 
 		const result = await this._companyService.create({ item: values });

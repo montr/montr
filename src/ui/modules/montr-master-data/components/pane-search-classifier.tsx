@@ -5,7 +5,7 @@ import { Button, Tree, Select, Radio, Layout, Modal, Spin } from "antd";
 import { TreeNodeNormal } from "antd/lib/tree/Tree";
 import { EventDataNode } from "rc-tree/lib/interface";
 import { RadioChangeEvent } from "antd/lib/radio";
-import { Guid, IDataResult } from "@montr-core/models";
+import { Guid, DataResult } from "@montr-core/models";
 import { NotificationService } from "@montr-core/services";
 import { withCompanyContext, CompanyContextProps } from "@montr-kompany/components";
 import { ClassifierService, ClassifierTypeService, ClassifierGroupService, ClassifierTreeService } from "../services";
@@ -336,7 +336,7 @@ class _PaneSearchClassifier extends React.Component<IProps, IState> {
 		this.setState({ groupEditData: null });
 	};
 
-	onTableLoadData = async (loadUrl: string, postParams: any): Promise<IDataResult<{}>> => {
+	onTableLoadData = async (loadUrl: string, postParams: any): Promise<DataResult<{}>> => {
 		const { currentCompany } = this.props,
 			{ type, selectedTree, selectedGroup, depth } = this.state;
 

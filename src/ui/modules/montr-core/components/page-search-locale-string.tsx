@@ -1,7 +1,7 @@
 import React from "react";
 import { DataTableUpdateToken, Page, DataTable, Toolbar, PageHeader, DataBreadcrumb, ButtonImport, ButtonExport, Icon } from ".";
 import { Constants } from "..";
-import { IMenu, ILocaleString, IDataResult } from "../models";
+import { IMenu, LocaleString, DataResult } from "../models";
 import { LocaleStringService, NotificationService } from "../services";
 import { Form, Select, Button, Upload } from "antd";
 import { UploadChangeParam } from "antd/lib/upload";
@@ -35,7 +35,7 @@ export default class PageSearchLocaleString extends React.Component<Props, State
 		await this._localeService.abort();
 	};
 
-	onLoadTableData = async (loadUrl: string, postParams: any): Promise<IDataResult<{}>> => {
+	onLoadTableData = async (loadUrl: string, postParams: any): Promise<DataResult<{}>> => {
 
 		const params = {
 			locale: this.state.locale,
@@ -84,8 +84,8 @@ export default class PageSearchLocaleString extends React.Component<Props, State
 		const { locale, module, updateTableToken } = this.state;
 
 		const rowActions: IMenu[] = [
-			{ name: "Редактировать", route: (item: ILocaleString) => item.key },
-			{ name: "Удалить", route: (item: ILocaleString) => item.key },
+			{ name: "Редактировать", route: (item: LocaleString) => item.key },
+			{ name: "Удалить", route: (item: LocaleString) => item.key },
 		];
 
 		const locales = ["en", "ru"],
@@ -137,7 +137,7 @@ export default class PageSearchLocaleString extends React.Component<Props, State
 						<br />
 
 						<DataTable
-							rowKey={(x: ILocaleString) => `${x.locale}-${x.module}-${x.key}`}
+							rowKey={(x: LocaleString) => `${x.locale}-${x.module}-${x.key}`}
 							rowActions={rowActions}
 							viewId={`LocaleString/Grid/`}
 							loadUrl={`${Constants.apiURL}/locale/list/`}

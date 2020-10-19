@@ -2,7 +2,7 @@ import React from "react";
 import { OperationService } from "@montr-core/services";
 import { DataTableUpdateToken, DataTable } from "@montr-core/components";
 import { Views, Api } from "../module";
-import { IDataResult } from "@montr-core/models";
+import { DataResult } from "@montr-core/models";
 import { INumerator } from "@montr-master-data/models";
 import { NumeratorService } from "@montr-master-data/services";
 
@@ -33,7 +33,7 @@ export class TabEditNumeratorEntities extends React.Component<IProps, IState> {
 		await this._numeratorService.abort();
 	};
 
-	onLoadTableData = async (loadUrl: string, postParams: any): Promise<IDataResult<{}>> => {
+	onLoadTableData = async (loadUrl: string, postParams: any): Promise<DataResult<{}>> => {
 		const { data } = this.props;
 
 		const params = { numeratorUid: data.uid, ...postParams };

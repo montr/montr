@@ -7,7 +7,7 @@ import { IExternalRegisterModel } from "../models";
 import { MetadataService, NavigationService, OperationService } from "@montr-core/services";
 import { RouteComponentProps } from "react-router";
 import { Patterns, Views } from "../module";
-import { IDataField, IApiResult } from "@montr-core/models";
+import { IDataField, ApiResult } from "@montr-core/models";
 import { Constants } from "@montr-core/constants";
 import { Link } from "react-router-dom";
 
@@ -66,7 +66,7 @@ export default class ExternalLogin extends React.Component<IProps, IState> {
 		});
 	};
 
-	handleSubmit = async (values: IExternalRegisterModel): Promise<IApiResult> => {
+	handleSubmit = async (values: IExternalRegisterModel): Promise<ApiResult> => {
 		const { data } = this.state;
 
 		return await this._accountService.externalRegister({
