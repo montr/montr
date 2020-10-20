@@ -31,7 +31,6 @@ const options = {
 			{
 				test: /\.(jsx|tsx|js|ts)$/,
 				loader: "babel-loader",
-				/* loader: "ts-loader", */
 				exclude: /node_modules/
 			},
 
@@ -43,9 +42,13 @@ const options = {
 			},
 
 			{
-				test: /\.less$/, use: [
-					"style-loader",
-					"css-loader",
+				test: /\.less$/,
+				use: [
+					{
+						loader: 'style-loader',
+					}, {
+						loader: 'css-loader', // translates CSS into CommonJS
+					},
 					{
 						loader: "less-loader",
 						options: {
