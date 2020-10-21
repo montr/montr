@@ -7,6 +7,7 @@ export * from "./data-field-factory";
 export * from "./data-form";
 export * from "./data-menu";
 export * from "./data-table";
+export * from "./data-tabs";
 export * from "./design-select-options";
 export * from "./design-select-options-fi";
 export * from "./empty-field-view";

@@ -1,9 +1,9 @@
 import * as React from "react";
 import { withTranslation, WithTranslation } from 'react-i18next';
-import { Tabs, Button, Modal, message, Tag } from "antd";
-import { ApiResult, IDataView, PaneProps } from "@montr-core/models";
+import { Button, Modal, message, Tag } from "antd";
+import { ApiResult, IDataView } from "@montr-core/models";
 import { EventService, EventTemplateService } from "../services";
-import { Page, PaneComponent, Toolbar, PageHeader, DataBreadcrumb, Icon } from "@montr-core/components";
+import { Page, PaneComponent, Toolbar, PageHeader, DataBreadcrumb, DataTabs } from "@montr-core/components";
 import { MetadataService } from "@montr-core/services";
 import { IEvent } from "../models";
 import * as panes from ".";
@@ -17,21 +17,21 @@ const componentToClass: Map<string, React.ComponentClass> = new Map<string, Reac
 componentToClass.set("panes/private/EditEventPane", panes.TabEditEvent);
 componentToClass.set("panes/private/InvitationPane", panes.TabEditInvitations as unknown as React.ComponentClass);
 
-interface IRouteProps {
+interface RouteProps {
 	uid?: string;
 	tabKey?: string;
 }
 
-interface IProps extends WithTranslation, RouteComponentProps<IRouteProps> {
+interface Props extends WithTranslation, RouteComponentProps<RouteProps> {
 }
 
-interface IState {
+interface State {
 	data: IEvent;
 	dataView: IDataView<IEvent>;
 	configCodes: IEvent[];
 }
 
-class _EditEvent extends React.Component<IProps, IState> {
+class _EditEvent extends React.Component<Props, State> {
 
 	private _metadataService = new MetadataService();
 	private _eventTemplateService = new EventTemplateService();
@@ -39,7 +39,7 @@ class _EditEvent extends React.Component<IProps, IState> {
 
 	private _refsByKey: Map<string, any> = new Map<string, React.RefObject<any>>();
 
-	constructor(props: IProps) {
+	constructor(props: Props) {
 		super(props);
 
 		this.state = {
@@ -103,8 +103,8 @@ class _EditEvent extends React.Component<IProps, IState> {
 		return result;
 	}
 
-	createRefForKey(key: string): React.RefObject<IProps> {
-		const ref: React.RefObject<IProps> = React.createRef();
+	createRefForKey(key: string): React.RefObject<Props> {
+		const ref: React.RefObject<Props> = React.createRef();
 		this._refsByKey.set(key, ref);
 		return ref;
 	}
@@ -202,25 +202,14 @@ class _EditEvent extends React.Component<IProps, IState> {
 
 				<h3 title={data.name} className="single-line-text">{data.name}</h3>
 
-				{dataView && dataView.panes &&
-					<Tabs size="small" defaultActiveKey={tabKey} onChange={this.handleTabChange}>
-						{dataView.panes.map(pane => {
+				<DataTabs
+					tabKey={tabKey}
+					panes={dataView.panes}
+					buildRoute={(tabKey: string) => RouteBuilder.editEvent(this.props.match.params.uid, tabKey)}
+					history={this.props.history}
+					data={data}
+				/>
 
-							let component: React.ReactElement<PaneProps<IEvent>>;
-							if (pane.component) {
-								component = React.createElement(pane.component,
-									{ data: data /* , ref: this.createRefForKey(pane.key) */ });
-							}
-
-							return (
-								<Tabs.TabPane key={pane.key}
-									tab={<span>{pane.icon && Icon.get(pane.icon)} {pane.name}</span>}>
-									{component}
-								</Tabs.TabPane>
-							);
-						})}
-					</Tabs>
-				}
 			</Page>
 		);
 	};
