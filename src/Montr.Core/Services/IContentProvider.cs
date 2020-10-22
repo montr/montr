@@ -40,7 +40,7 @@ namespace Montr.Core.Services
 			if (menuId == "SideMenu")
 			{
 				result.Items.Add(new Menu { Id = "m.0", Name = "Панель управления", Icon = "dashboard", Route = "/dashboard" });
-				// result.Items.Add(new Menu { Id = "m.1", Name = "Процедуры", Icon = "project", Route = "/events" });
+				result.Items.Add(new Menu { Id = "m.1", Name = "Процедуры", Icon = "project", Route = "/events" });
 				// result.Items.Add(new Menu { Id = "reports", Name = "Отчеты", Icon = "bar-chart", Route = "/reports" });
 				result.Items.Add(new Menu { Id = "documents", Name = "Документы", Icon = "container", Route = "/documents" });
 

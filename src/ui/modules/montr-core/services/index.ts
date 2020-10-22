@@ -2,6 +2,7 @@ export * from "./app-layout-registry";
 export * from "./app-route-registry";
 export * from "./app-service";
 export * from "./auth-service";
+export * from "./component-registry";
 export * from "./content-service";
 export * from "./data-helper";
 export * from "./date-helper";

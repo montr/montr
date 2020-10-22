@@ -1,8 +1,8 @@
-export interface Pane<TEntity> {
+export interface DataPane<TEntity> {
 	key?: string;
 	name?: string;
 	icon?: string;
-	component?: React.ComponentClass<PaneProps<TEntity>>;
+	component?: string; // React.ComponentClass<PaneProps<TEntity>>;
 }
 
 export interface PaneProps<TEntity> {

@@ -20,7 +20,7 @@ interface IState {
 	updateTableToken: DataTableUpdateToken;
 }
 
-export class TabEditInvitations extends React.Component<IProps, IState> {
+export default class TabEditInvitations extends React.Component<IProps, IState> {
 
 	private _operation = new OperationService();
 	private _invitationService = new InvitationService();

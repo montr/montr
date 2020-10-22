@@ -266,7 +266,7 @@ namespace Montr.Metadata.Services
 				result.Panes = new List<DataPane>
 				{
 					new DataPane { Key = "info", Name = "Информация", Icon = "profile", Component = "panes/private/EditEventPane" },
-					new DataPane { Key = "invitations", Name = "Приглашения (0)", Icon = "solution", Component = "panes/private/InvitationPane" },
+					new DataPane { Key = "invitations", Name = "Приглашения (😎)", Icon = "solution", Component = "panes/private/InvitationPane" },
 					new DataPane { Key = "proposals", Name = "Предложения", Icon = "solution" },
 					new DataPane { Key = "questions", Name = "Разъяснения", Icon = "solution" },
 					new DataPane { Key = "team", Name = "Команда", Icon = "team" },

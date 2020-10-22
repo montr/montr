@@ -1,6 +1,6 @@
 import { Fetcher } from "./fetcher";
 import { Constants } from "..";
-import { IDataView, PaneProps, IDataField, ApiResult, Guid, IFieldType } from "../models";
+import { DataView, IDataField, ApiResult, Guid, IFieldType } from "../models";
 
 interface IManageFieldDataRequest {
 	entityTypeCode: string;
@@ -16,18 +16,10 @@ interface IDeleteFieldDataRequest {
 
 export class MetadataService extends Fetcher {
 
-	load = async<TEntity>(viewId: string, componentToClass?: (component: string) => React.ComponentClass): Promise<IDataView<TEntity>> => {
+	load = async<TEntity>(viewId: string): Promise<DataView<TEntity>> => {
 
-		const data: IDataView<TEntity> =
+		const data: DataView<TEntity> =
 			await this.post(`${Constants.apiURL}/metadata/view`, { viewId: viewId });
-
-		if (componentToClass) {
-			data.panes && data.panes.forEach((pane) => {
-				if (pane.component) {
-					pane.component = componentToClass(pane.component.toString()) as React.ComponentClass<PaneProps<TEntity>>;
-				}
-			});
-		}
 
 		return data;
 	};

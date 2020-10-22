@@ -1,8 +1,8 @@
-import { DataColumn, Pane, IDataField } from ".";
+import { DataColumn, DataPane, IDataField } from ".";
 
-export interface IDataView<TEntity> {
+export interface DataView<TEntity> {
 	id: string;
 	columns?: DataColumn[];
 	fields?: IDataField[];
-	panes?: Pane<TEntity>[];
+	panes?: DataPane<TEntity>[];
 }

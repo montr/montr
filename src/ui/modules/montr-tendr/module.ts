@@ -1,6 +1,6 @@
 import React from "react";
 import { generatePath } from "react-router";
-import { AppRouteRegistry } from "@montr-core/services/";
+import { AppRouteRegistry, ComponentRegistry } from "@montr-core/services/";
 import { Layout } from "@montr-core/constants";
 
 export const Patterns = {
@@ -19,4 +19,9 @@ AppRouteRegistry.add([
 	{ path: "/events/", exact: true, component: React.lazy(() => import("./components/page-search-events")) },
 	{ path: "/events/new", exact: true, component: React.lazy(() => import("./components/page-select-event-template")) },
 	{ path: Patterns.editEvent, exact: true, component: React.lazy(() => import("./components/page-edit-event")) }
+]);
+
+ComponentRegistry.add([
+	{ path: "panes/private/EditEventPane", component: React.lazy(() => import("./components/tab-edit-event")) },
+	{ path: "panes/private/InvitationPane", component: React.lazy(() => import("./components/tab-edit-invitations")) }
 ]);

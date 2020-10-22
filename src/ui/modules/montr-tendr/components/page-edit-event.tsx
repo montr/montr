@@ -1,21 +1,13 @@
 import * as React from "react";
 import { withTranslation, WithTranslation } from 'react-i18next';
 import { Button, Modal, message, Tag } from "antd";
-import { ApiResult, IDataView } from "@montr-core/models";
+import { ApiResult, DataView } from "@montr-core/models";
 import { EventService, EventTemplateService } from "../services";
 import { Page, PaneComponent, Toolbar, PageHeader, DataBreadcrumb, DataTabs } from "@montr-core/components";
 import { MetadataService } from "@montr-core/services";
 import { IEvent } from "../models";
-import * as panes from ".";
 import { RouteBuilder } from "../module";
 import { RouteComponentProps } from "react-router";
-
-const componentToClass: Map<string, React.ComponentClass> = new Map<string, React.ComponentClass>();
-
-// todo: register tabs outside
-// todo: fix cast
-componentToClass.set("panes/private/EditEventPane", panes.TabEditEvent);
-componentToClass.set("panes/private/InvitationPane", panes.TabEditInvitations as unknown as React.ComponentClass);
 
 interface RouteProps {
 	uid?: string;
@@ -27,7 +19,7 @@ interface Props extends WithTranslation, RouteComponentProps<RouteProps> {
 
 interface State {
 	data: IEvent;
-	dataView: IDataView<IEvent>;
+	dataView: DataView<IEvent>;
 	configCodes: IEvent[];
 }
 
@@ -71,13 +63,9 @@ class _EditEvent extends React.Component<Props, State> {
 		this.setState({ data: await this._eventService.get(this.props.match.params.uid) });
 	};
 
-	resolveComponent = (component: string): React.ComponentClass => {
-		return componentToClass.get(component);
-	};
-
 	fetchMetadata = async () => {
 		// todo: get metadata key from server
-		const dataView = await this._metadataService.load("PrivateEvent/Edit", this.resolveComponent);
+		const dataView = await this._metadataService.load("PrivateEvent/Edit");
 
 		this.setState({ dataView: dataView });
 	};
@@ -205,8 +193,7 @@ class _EditEvent extends React.Component<Props, State> {
 				<DataTabs
 					tabKey={tabKey}
 					panes={dataView.panes}
-					buildRoute={(tabKey: string) => RouteBuilder.editEvent(this.props.match.params.uid, tabKey)}
-					history={this.props.history}
+					onTabChange={this.handleTabChange}
 					data={data}
 				/>
 
