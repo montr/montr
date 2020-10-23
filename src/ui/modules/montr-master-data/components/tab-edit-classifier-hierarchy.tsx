@@ -7,22 +7,22 @@ import { DataResult, IMenu, Guid } from "@montr-core/models";
 import { ClassifierLinkService } from "../services";
 import { ModalEditClassifierLink } from ".";
 
-interface IProps {
+interface Props {
 	type: IClassifierType;
 	data: IClassifier;
 	onDataChange?: (values: IClassifier) => void;
 }
 
-interface IState {
+interface State {
 	modalData?: IClassifierLink;
 	updateTableToken: DataTableUpdateToken;
 }
 
-export class TabEditClassifierHierarchy extends React.Component<IProps, IState> {
+export default class TabEditClassifierHierarchy extends React.Component<Props, State> {
 
 	_classifierLinkService = new ClassifierLinkService();
 
-	constructor(props: IProps) {
+	constructor(props: Props) {
 		super(props);
 
 		this.state = {
@@ -30,7 +30,7 @@ export class TabEditClassifierHierarchy extends React.Component<IProps, IState> 
 		};
 	}
 
-	componentDidUpdate = async (prevProps: IProps) => {
+	componentDidUpdate = async (prevProps: Props) => {
 		if (this.props.type !== prevProps.type ||
 			this.props.data !== prevProps.data) {
 			await this.refreshTable();

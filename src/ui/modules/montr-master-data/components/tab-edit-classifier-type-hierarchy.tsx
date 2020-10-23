@@ -7,20 +7,20 @@ import { DataResult, IMenu } from "@montr-core/models";
 import { Alert, Modal } from "antd";
 import { ModalEditClassifierTree } from ".";
 
-interface IProps {
+interface Props {
 	type: IClassifierType;
 }
 
-interface IState {
+interface State {
 	editData?: IClassifierTree;
 	updateTableToken: DataTableUpdateToken;
 }
 
-export class TabEditClassifierTypeHierarchy extends React.Component<IProps, IState> {
+export class TabEditClassifierTypeHierarchy extends React.Component<Props, State> {
 
 	private _classifierTreeService = new ClassifierTreeService();
 
-	constructor(props: IProps) {
+	constructor(props: Props) {
 		super(props);
 
 		this.state = {
@@ -28,7 +28,7 @@ export class TabEditClassifierTypeHierarchy extends React.Component<IProps, ISta
 		};
 	}
 
-	componentDidUpdate = async (prevProps: IProps) => {
+	componentDidUpdate = async (prevProps: Props) => {
 		if (this.props.type !== prevProps.type) {
 			await this.refreshTable();
 		}

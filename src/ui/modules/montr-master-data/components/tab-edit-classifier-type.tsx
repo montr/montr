@@ -8,22 +8,22 @@ import { IClassifierType } from "../models";
 import { ClassifierTypeService } from "../services";
 import { RouteBuilder } from "../module";
 
-interface IProps {
+interface Props {
 	data: IClassifierType;
 	onDataChange?: (values: IClassifierType) => void;
 }
 
-interface IState {
+interface State {
 	loading: boolean;
 	fields?: IDataField[];
 	redirect?: string;
 }
 
-export class TabEditClassifierType extends React.Component<IProps, IState> {
+export class TabEditClassifierType extends React.Component<Props, State> {
 	private _metadataService = new MetadataService();
 	private _classifierTypeService = new ClassifierTypeService();
 
-	constructor(props: IProps) {
+	constructor(props: Props) {
 		super(props);
 
 		this.state = {

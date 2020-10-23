@@ -6,21 +6,21 @@ import { DataResult } from "@montr-core/models";
 import { INumerator } from "@montr-master-data/models";
 import { NumeratorService } from "@montr-master-data/services";
 
-interface IProps {
+interface Props {
 	data: INumerator;
 }
 
-interface IState {
+interface State {
 	selectedRowKeys: string[] | number[];
 	updateTableToken: DataTableUpdateToken;
 }
 
-export class TabEditNumeratorEntities extends React.Component<IProps, IState> {
+export class TabEditNumeratorEntities extends React.Component<Props, State> {
 
 	private _operation = new OperationService();
 	private _numeratorService = new NumeratorService();
 
-	constructor(props: IProps) {
+	constructor(props: Props) {
 		super(props);
 
 		this.state = {

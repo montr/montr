@@ -13,13 +13,13 @@ import { IClassifierType, IClassifierGroup, IClassifierTree } from "../models";
 import { ClassifierBreadcrumb, ModalEditClassifierGroup } from "../components";
 import { RouteBuilder, Api, Views } from "../module";
 
-interface IProps extends CompanyContextProps {
+interface Props extends CompanyContextProps {
 	typeCode: string;
 	mode: "Page" | "Drawer";
 	onSelect?: (keys: string[] | number[]) => void;
 }
 
-interface IState {
+interface State {
 	types: IClassifierType[];
 	type?: IClassifierType;
 	trees?: IClassifierTree[];
@@ -51,7 +51,7 @@ interface ITreeNodeExpandEvent {
 	nativeEvent: MouseEvent;
 }
 
-class _PaneSearchClassifier extends React.Component<IProps, IState> {
+class _PaneSearchClassifier extends React.Component<Props, State> {
 
 	_classifierTypeService = new ClassifierTypeService();
 	_classifierTreeService = new ClassifierTreeService();
@@ -59,7 +59,7 @@ class _PaneSearchClassifier extends React.Component<IProps, IState> {
 	_classifierService = new ClassifierService();
 	_notificationService = new NotificationService();
 
-	constructor(props: IProps) {
+	constructor(props: Props) {
 		super(props);
 
 		this.state = {
@@ -76,7 +76,7 @@ class _PaneSearchClassifier extends React.Component<IProps, IState> {
 		// await this.loadClassifierType();
 	};
 
-	componentDidUpdate = async (prevProps: IProps) => {
+	componentDidUpdate = async (prevProps: Props) => {
 		// todo: remove after current company will be selected on separate page
 		if (this.props.currentCompany !== prevProps.currentCompany) {
 			// todo: check if selected type belongs to company (show 404)

@@ -11,20 +11,20 @@ import { IMenu } from "@montr-core/models";
 import { IClassifierGroup } from "../models";
 import { RouteBuilder, Locale } from "../module";
 
-interface IProps extends CompanyContextProps, WithTranslation {
+interface Props extends CompanyContextProps, WithTranslation {
 }
 
-interface IState {
+interface State {
 	selectedRowKeys: string[] | number[];
 	updateTableToken: DataTableUpdateToken;
 }
 
-class WrappedSearchClassifierType extends React.Component<IProps, IState> {
+class WrappedSearchClassifierType extends React.Component<Props, State> {
 
 	private _operation = new OperationService();
 	private _classifierTypeService = new ClassifierTypeService();
 
-	constructor(props: IProps) {
+	constructor(props: Props) {
 		super(props);
 
 		this.state = {
@@ -33,7 +33,7 @@ class WrappedSearchClassifierType extends React.Component<IProps, IState> {
 		};
 	}
 
-	componentDidUpdate = async (prevProps: IProps) => {
+	componentDidUpdate = async (prevProps: Props) => {
 		// todo: detect company changed without CompanyContextProps (here and everywhere)
 		if (this.props.currentCompany !== prevProps.currentCompany) {
 			this.refreshTable(true);

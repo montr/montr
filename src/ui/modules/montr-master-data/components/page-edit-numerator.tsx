@@ -7,24 +7,25 @@ import { NumeratorService } from "../services";
 import { RouteBuilder } from "../module";
 import { TabEditNumerator, TabEditNumeratorEntities } from "./";
 
-interface IRouteProps {
+interface RouteProps {
 	uid?: string;
 	tabKey?: string;
 }
 
-interface IProps extends RouteComponentProps<IRouteProps> {
+interface Props extends RouteComponentProps<RouteProps> {
 }
 
-interface IState {
+interface State {
 	loading: boolean;
 	data?: INumerator;
 }
 
-export default class PageEditNumerator extends React.Component<IProps, IState> {
+// todo: use PageEditClassifier
+export default class PageEditNumerator extends React.Component<Props, State> {
 
 	private _numeratorService = new NumeratorService();
 
-	constructor(props: IProps) {
+	constructor(props: Props) {
 		super(props);
 
 		this.state = {
@@ -36,7 +37,7 @@ export default class PageEditNumerator extends React.Component<IProps, IState> {
 		await this.fetchData();
 	};
 
-	componentDidUpdate = async (prevProps: IProps) => {
+	componentDidUpdate = async (prevProps: Props) => {
 		if (this.props.match.params.uid !== prevProps.match.params.uid) {
 			await this.fetchData();
 		}

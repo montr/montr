@@ -7,22 +7,22 @@ import { DataForm } from "@montr-core/components";
 import { MetadataService } from "@montr-core/services";
 import { Views } from "../module";
 
-interface IProps {
+interface Props {
 	data: INumerator;
 	onDataChange?: (values: INumerator) => void;
 }
 
-interface IState {
+interface State {
 	loading: boolean;
 	fields?: IDataField[];
 }
 
-export class TabEditNumerator extends React.Component<IProps, IState> {
+export class TabEditNumerator extends React.Component<Props, State> {
 
 	private _metadataService = new MetadataService();
 	private _numeratorService = new NumeratorService();
 
-	constructor(props: IProps) {
+	constructor(props: Props) {
 		super(props);
 
 		this.state = {

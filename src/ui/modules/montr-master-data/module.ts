@@ -4,6 +4,7 @@ import { Guid } from "@montr-core/models";
 import { AppRouteRegistry } from "@montr-core/services/app-route-registry";
 import { DataFieldFactory } from "@montr-core/components";
 import { Constants } from "@montr-core/.";
+import { ComponentRegistry } from "@montr-core/services";
 
 import("./components").then(x => {
 	DataFieldFactory.register("classifier-group", new x.ClassifierGroupFieldFactory());
@@ -87,4 +88,9 @@ AppRouteRegistry.add([
 
 	{ path: Patterns.addNumerator, exact: true, component: React.lazy(() => import("./components/page-edit-numerator")) },
 	{ path: Patterns.editNumerator, exact: true, component: React.lazy(() => import("./components/page-edit-numerator")) }
+]);
+
+ComponentRegistry.add([
+	{ path: "panes/TabEditClassifier", component: React.lazy(() => import("./components/tab-edit-classifier")) },
+	{ path: "panes/TabEditClassifierHierarchy", component: React.lazy(() => import("./components/tab-edit-classifier-hierarchy")) }
 ]);

@@ -1,6 +1,6 @@
 import React from "react";
 import { Tabs } from "antd";
-import { DataPane, PaneProps } from "../models";
+import { DataPane } from "../models";
 import { ComponentRegistry } from "../services";
 import { Icon } from ".";
 
@@ -8,26 +8,25 @@ interface Props<TModel> {
     tabKey: string;
     panes: DataPane<TModel>[],
     onTabChange?: (tabKey: string) => void,
-    data: TModel;
+    tabProps?: any;
 }
 
 export class DataTabs<TModel> extends React.Component<Props<TModel>> {
 
     render = () => {
-        const { tabKey, panes, onTabChange, data } = this.props;
+        const { tabKey, panes, onTabChange, tabProps } = this.props;
 
         return (<>
             {panes &&
                 <Tabs size="small" defaultActiveKey={tabKey} onChange={onTabChange}>
                     {panes.map(pane => {
 
-                        let component: React.ReactElement<PaneProps<TModel>>;
+                        let component: React.ReactElement;
 
                         if (pane.component) {
                             const componentClass = ComponentRegistry.getComponent(pane.component);
 
-                            component = React.createElement(componentClass,
-                                { data: data /* , ref: this.createRefForKey(pane.key) */ });
+                            component = React.createElement(componentClass, tabProps);
                         }
 
                         return (

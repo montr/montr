@@ -1,35 +1,39 @@
 import * as React from "react";
-import { Page, PageHeader } from "@montr-core/components";
+import { DataTabs, Page, PageHeader } from "@montr-core/components";
+import { DataView } from "@montr-core/models";
 import { RouteComponentProps } from "react-router";
-import { Spin, Tabs } from "antd";
+import { Spin } from "antd";
 import { ClassifierService, ClassifierTypeService, ClassifierLinkService } from "../services";
 import { IClassifier, IClassifierType } from "../models";
-import { ClassifierBreadcrumb, TabEditClassifier, TabEditClassifierHierarchy } from ".";
+import { ClassifierBreadcrumb } from ".";
 import { RouteBuilder } from "../module";
+import { MetadataService } from "@montr-core/services";
 
-interface IRouteProps {
+interface RouteProps {
 	typeCode: string;
 	uid?: string;
 	parentUid?: string;
 	tabKey?: string;
 }
 
-interface IProps extends RouteComponentProps<IRouteProps> {
+interface Props extends RouteComponentProps<RouteProps> {
 }
 
-interface IState {
+interface State {
 	loading: boolean;
+	dataView?: DataView<IClassifier>;
 	type?: IClassifierType;
 	data?: IClassifier;
 }
 
-export default class PageEditClassifier extends React.Component<IProps, IState> {
+export default class PageEditClassifier extends React.Component<Props, State> {
 
+	private _metadataService = new MetadataService();
 	private _classifierTypeService = new ClassifierTypeService();
 	private _classifierService = new ClassifierService();
 	private _classifierLinkService = new ClassifierLinkService();
 
-	constructor(props: IProps) {
+	constructor(props: Props) {
 		super(props);
 
 		this.state = {
@@ -41,7 +45,7 @@ export default class PageEditClassifier extends React.Component<IProps, IState> 
 		await this.fetchData();
 	};
 
-	componentDidUpdate = async (prevProps: IProps) => {
+	componentDidUpdate = async (prevProps: Props) => {
 		if (this.props.match.params.typeCode !== prevProps.match.params.typeCode ||
 			this.props.match.params.uid !== prevProps.match.params.uid) {
 			await this.fetchData();
@@ -49,6 +53,7 @@ export default class PageEditClassifier extends React.Component<IProps, IState> 
 	};
 
 	componentWillUnmount = async () => {
+		await this._metadataService.abort();
 		await this._classifierTypeService.abort();
 		await this._classifierService.abort();
 		await this._classifierLinkService.abort();
@@ -56,6 +61,8 @@ export default class PageEditClassifier extends React.Component<IProps, IState> 
 
 	fetchData = async () => {
 		const { typeCode, uid, parentUid } = this.props.match.params;
+
+		const dataView = await this._metadataService.load("Classifier/Edit");
 
 		const type = await this._classifierTypeService.get({ typeCode });
 
@@ -71,7 +78,7 @@ export default class PageEditClassifier extends React.Component<IProps, IState> 
 			if (defaultLink) data.parentUid = defaultLink.group.uid;
 		}
 
-		this.setState({ loading: false, type, data });
+		this.setState({ loading: false, dataView, type, data });
 	};
 
 	handleDataChange = (data: IClassifier) => {
@@ -97,7 +104,7 @@ export default class PageEditClassifier extends React.Component<IProps, IState> 
 
 	render = () => {
 		const { tabKey } = this.props.match.params,
-			{ loading, type, data } = this.state;
+			{ loading, dataView, type, data } = this.state;
 
 		const otherTabsDisabled = !data?.uid;
 
@@ -107,7 +114,15 @@ export default class PageEditClassifier extends React.Component<IProps, IState> 
 				<PageHeader>{data?.name}</PageHeader>
 			</>}>
 				<Spin spinning={loading}>
-					<Tabs size="small" defaultActiveKey={tabKey} onChange={this.handleTabChange}>
+
+					<DataTabs
+						tabKey={tabKey}
+						panes={dataView?.panes}
+						onTabChange={this.handleTabChange}
+						tabProps={{ type, data, onDataChange: this.handleDataChange }}
+					/>
+
+					{/* <Tabs size="small" defaultActiveKey={tabKey} onChange={this.handleTabChange}>
 						<Tabs.TabPane key="info" tab="Информация">
 							<TabEditClassifier type={type} data={data} onDataChange={this.handleDataChange} />
 						</Tabs.TabPane>
@@ -116,7 +131,8 @@ export default class PageEditClassifier extends React.Component<IProps, IState> 
 						</Tabs.TabPane>
 						<Tabs.TabPane key="dependencies" tab="Зависимости" disabled={otherTabsDisabled}></Tabs.TabPane>
 						<Tabs.TabPane key="history" tab="История изменений" disabled={otherTabsDisabled}></Tabs.TabPane>
-					</Tabs>
+					</Tabs> */}
+
 				</Spin>
 			</Page>
 		);

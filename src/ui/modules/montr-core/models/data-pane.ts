@@ -2,7 +2,7 @@ export interface DataPane<TEntity> {
 	key?: string;
 	name?: string;
 	icon?: string;
-	component?: string; // React.ComponentClass<PaneProps<TEntity>>;
+	component?: string;
 }
 
 export interface PaneProps<TEntity> {

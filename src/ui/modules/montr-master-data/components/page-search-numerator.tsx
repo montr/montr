@@ -6,20 +6,21 @@ import { OperationService } from "@montr-core/services";
 import { Views, Api, RouteBuilder, Patterns, Locale } from "../module";
 import { NumeratorService } from "../services";
 
-interface IProps extends WithTranslation {
+interface Props extends WithTranslation {
 }
 
-interface IState {
+interface State {
 	selectedRowKeys: string[] | number[];
 	updateTableToken: DataTableUpdateToken;
 }
 
-class WrappedPageSearchNumerator extends React.Component<IProps, IState> {
+// todo: use classifiers
+class WrappedPageSearchNumerator extends React.Component<Props, State> {
 
 	private _operation = new OperationService();
 	private _numeratorService = new NumeratorService();
 
-	constructor(props: IProps) {
+	constructor(props: Props) {
 		super(props);
 
 		this.state = {

@@ -48,6 +48,17 @@ namespace Montr.MasterData.Services
 				}
 			}*/
 
+			_registrator.Register("Classifier/Edit", viewId => new DataView
+			{
+				Panes = new List<DataPane>
+				{
+					new DataPane { Key = "info", Name = "Информация", Component = "panes/TabEditClassifier" },
+					new DataPane { Key = "hierarchy", Name = "Иерархия", Component = "panes/TabEditClassifierHierarchy" },
+					new DataPane { Key = "dependencies", Name = "Зависимости" },
+					new DataPane { Key = "history", Name = "История изменений" }
+				}
+			});
+
 			_registrator.Register("ClassifierTree/Form", viewId => new DataView
 			{
 				Fields = new List<FieldMetadata>

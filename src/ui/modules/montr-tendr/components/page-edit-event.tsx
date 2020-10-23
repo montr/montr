@@ -1,6 +1,6 @@
 import * as React from "react";
 import { withTranslation, WithTranslation } from 'react-i18next';
-import { Button, Modal, message, Tag } from "antd";
+import { Button, Modal, message, Tag, Spin } from "antd";
 import { ApiResult, DataView } from "@montr-core/models";
 import { EventService, EventTemplateService } from "../services";
 import { Page, PaneComponent, Toolbar, PageHeader, DataBreadcrumb, DataTabs } from "@montr-core/components";
@@ -18,8 +18,9 @@ interface Props extends WithTranslation, RouteComponentProps<RouteProps> {
 }
 
 interface State {
+	loading: boolean;
 	data: IEvent;
-	dataView: DataView<IEvent>;
+	dataView?: DataView<IEvent>;
 	configCodes: IEvent[];
 }
 
@@ -35,17 +36,15 @@ class _EditEvent extends React.Component<Props, State> {
 		super(props);
 
 		this.state = {
-			data: {},
-			dataView: { id: "" },
-			configCodes: []
+			loading: true,
+			configCodes: [],
+			data: {}
 		};
 	}
 
-	componentDidMount() {
-		this.fetchConfigCodes();
-		this.fetchMetadata();
-		this.fetchData();
-	}
+	componentDidMount = async () => {
+		await this.fetchData();
+	};
 
 	componentWillUnmount = async () => {
 		await this._metadataService.abort();
@@ -53,21 +52,16 @@ class _EditEvent extends React.Component<Props, State> {
 		await this._eventService.abort();
 	};
 
-	fetchConfigCodes = async () => {
+	fetchData = async () => {
 		const templates = await this._eventTemplateService.list();
 
-		this.setState({ configCodes: templates.rows });
-	};
-
-	fetchData = async () => {
-		this.setState({ data: await this._eventService.get(this.props.match.params.uid) });
-	};
-
-	fetchMetadata = async () => {
 		// todo: get metadata key from server
 		const dataView = await this._metadataService.load("PrivateEvent/Edit");
 
-		this.setState({ dataView: dataView });
+		const data = await this._eventService.get(this.props.match.params.uid);
+
+
+		this.setState({ loading: false, configCodes: templates.rows, dataView, data });
 	};
 
 	formatPageTitle(): string {
@@ -151,9 +145,9 @@ class _EditEvent extends React.Component<Props, State> {
 	};
 
 	render = () => {
-		const { t } = this.props;
-		const { tabKey } = this.props.match.params;
-		const { data, dataView } = this.state;
+		const { t } = this.props,
+			{ tabKey } = this.props.match.params,
+			{ loading, data, dataView } = this.state;
 
 		if (data.id == null) return null;
 
@@ -187,16 +181,18 @@ class _EditEvent extends React.Component<Props, State> {
 				<DataBreadcrumb items={[]} />
 				<PageHeader>{this.formatPageTitle()} <Tag color="green">{data.statusCode}</Tag></PageHeader>
 			</>}>
+				<Spin spinning={loading}>
 
-				<h3 title={data.name} className="single-line-text">{data.name}</h3>
+					<h3 title={data.name} className="single-line-text">{data.name}</h3>
 
-				<DataTabs
-					tabKey={tabKey}
-					panes={dataView.panes}
-					onTabChange={this.handleTabChange}
-					data={data}
-				/>
+					<DataTabs
+						tabKey={tabKey}
+						panes={dataView?.panes}
+						onTabChange={this.handleTabChange}
+						tabProps={{ data /* , ref: this.createRefForKey(pane.key) */ }}
+					/>
 
+				</Spin>
 			</Page>
 		);
 	};

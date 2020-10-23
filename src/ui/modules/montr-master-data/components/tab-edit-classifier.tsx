@@ -5,22 +5,22 @@ import { DataForm } from "@montr-core/components";
 import { ClassifierService, ClassifierMetadataService } from "../services";
 import { IClassifier, IClassifierType } from "../models";
 
-interface IProps {
+interface Props {
 	type: IClassifierType;
 	data: IClassifier;
 	onDataChange?: (values: IClassifier) => void;
 }
 
-interface IState {
+interface State {
 	loading: boolean;
 	fields?: IDataField[];
 }
 
-export class TabEditClassifier extends React.Component<IProps, IState> {
+export default class TabEditClassifier extends React.Component<Props, State> {
 	private _classifierMetadataService = new ClassifierMetadataService();
 	private _classifierService = new ClassifierService();
 
-	constructor(props: IProps) {
+	constructor(props: Props) {
 		super(props);
 
 		this.state = {
@@ -32,7 +32,7 @@ export class TabEditClassifier extends React.Component<IProps, IState> {
 		await this.fetchData();
 	};
 
-	componentDidUpdate = async (prevProps: IProps) => {
+	componentDidUpdate = async (prevProps: Props) => {
 		if (this.props.type !== prevProps.type) {
 			await this.fetchData();
 		}
