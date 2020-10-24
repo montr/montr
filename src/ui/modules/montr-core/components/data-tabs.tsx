@@ -8,18 +8,19 @@ interface Props<TModel> {
     tabKey: string;
     panes: DataPane<TModel>[],
     onTabChange?: (tabKey: string) => void,
+    disabled?: (pane: DataPane<TModel>, index: number) => boolean,
     tabProps?: any;
 }
 
 export class DataTabs<TModel> extends React.Component<Props<TModel>> {
 
     render = () => {
-        const { tabKey, panes, onTabChange, tabProps } = this.props;
+        const { tabKey, panes, onTabChange, disabled, tabProps } = this.props;
 
         return (<>
             {panes &&
                 <Tabs size="small" defaultActiveKey={tabKey} onChange={onTabChange}>
-                    {panes.map(pane => {
+                    {panes.map((pane, index) => {
 
                         let component: React.ReactElement;
 
@@ -31,10 +32,9 @@ export class DataTabs<TModel> extends React.Component<Props<TModel>> {
 
                         return (
                             <Tabs.TabPane key={pane.key}
-                                tab={<span>{pane.icon && Icon.get(pane.icon)} {pane.name}</span>}>
-
+                                tab={<span>{pane.icon && Icon.get(pane.icon)} {pane.name}</span>}
+                                disabled={disabled ? disabled(pane, index) : false}>
                                 {component}
-
                             </Tabs.TabPane>
                         );
                     })}

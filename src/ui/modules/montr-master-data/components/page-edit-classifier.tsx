@@ -106,8 +106,6 @@ export default class PageEditClassifier extends React.Component<Props, State> {
 		const { tabKey } = this.props.match.params,
 			{ loading, dataView, type, data } = this.state;
 
-		const otherTabsDisabled = !data?.uid;
-
 		return (
 			<Page title={<>
 				<ClassifierBreadcrumb type={type} item={data} />
@@ -119,19 +117,9 @@ export default class PageEditClassifier extends React.Component<Props, State> {
 						tabKey={tabKey}
 						panes={dataView?.panes}
 						onTabChange={this.handleTabChange}
+						disabled={(pane, index) => index > 0 && !data?.uid}
 						tabProps={{ type, data, onDataChange: this.handleDataChange }}
 					/>
-
-					{/* <Tabs size="small" defaultActiveKey={tabKey} onChange={this.handleTabChange}>
-						<Tabs.TabPane key="info" tab="Информация">
-							<TabEditClassifier type={type} data={data} onDataChange={this.handleDataChange} />
-						</Tabs.TabPane>
-						<Tabs.TabPane key="hierarchy" tab="Иерархия" disabled={otherTabsDisabled}>
-							<TabEditClassifierHierarchy type={type} data={data} onDataChange={this.handleDataChange} />
-						</Tabs.TabPane>
-						<Tabs.TabPane key="dependencies" tab="Зависимости" disabled={otherTabsDisabled}></Tabs.TabPane>
-						<Tabs.TabPane key="history" tab="История изменений" disabled={otherTabsDisabled}></Tabs.TabPane>
-					</Tabs> */}
 
 				</Spin>
 			</Page>

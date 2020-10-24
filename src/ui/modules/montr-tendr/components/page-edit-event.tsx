@@ -189,6 +189,7 @@ class _EditEvent extends React.Component<Props, State> {
 						tabKey={tabKey}
 						panes={dataView?.panes}
 						onTabChange={this.handleTabChange}
+						disabled={(pane, index) => index > 0 && !data?.uid}
 						tabProps={{ data /* , ref: this.createRefForKey(pane.key) */ }}
 					/>
 
