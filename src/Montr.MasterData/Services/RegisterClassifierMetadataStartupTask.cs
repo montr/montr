@@ -19,46 +19,6 @@ namespace Montr.MasterData.Services
 
 		public Task Run(CancellationToken cancellationToken)
 		{
-			/*if (viewId.StartsWith("Classifier/"))
-			{
-				if (viewId.EndsWith("/okv"))
-				{
-					result.Fields = new List<FieldMetadata>
-					{
-						new TextField { Key = "code", Name = "Код", Required = true },
-						new TextAreaField { Key = "name", Name = "Наименование", Required = true, Props = new TextAreaField.Properties { Rows = 10 } },
-						new TextField { Key = "digitalCode", Name = "Цифровой код", Required = true },
-						new TextField { Key = "shortName", Name = "Краткое наименование" }
-					};
-
-					// todo: remove, only to test long form
-					for (var i = 0; i < 100; i++)
-					{
-						result.Fields.Add(new TextField { Key = "test" + i, Name = "Тестовое поле №" + i });
-					}
-				}
-				else
-				{
-					result.Fields = new List<FieldMetadata>
-					{
-						// new TextField { Key = "statusCode", Name = "Статус", Readonly = true },
-						new TextField { Key = "code", Name = "Код", Required = true },
-						new TextAreaField { Key = "name", Name = "Наименование", Required = true, Props = new TextAreaField.Properties { Rows = 10 } }
-					};
-				}
-			}*/
-
-			_registrator.Register("Classifier/Edit", viewId => new DataView
-			{
-				Panes = new List<DataPane>
-				{
-					new DataPane { Key = "info", Name = "Информация", Component = "panes/TabEditClassifier" },
-					new DataPane { Key = "hierarchy", Name = "Иерархия", Component = "panes/TabEditClassifierHierarchy" },
-					new DataPane { Key = "dependencies", Name = "Зависимости" },
-					new DataPane { Key = "history", Name = "История изменений" }
-				}
-			});
-
 			_registrator.Register("ClassifierTree/Form", viewId => new DataView
 			{
 				Fields = new List<FieldMetadata>
@@ -95,7 +55,8 @@ namespace Montr.MasterData.Services
 					new TextAreaField { Key = "description", Name = "Описание" },
 					new SelectField
 					{
-						Key = "hierarchyType", Name = "Иерархия",
+						Key = "hierarchyType",
+						Name = "Иерархия",
 						Description = "Классификатор может быть без иерархии, с иерархией групп (например, контрагентов можно распределить по группам по их регионам, размеру или отношению к нашей организации) или иерархией элементов (например, одни виды деятельности уточняются другими видами деятельности)",
 						Props =
 						{

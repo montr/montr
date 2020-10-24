@@ -6,10 +6,10 @@ namespace Montr.Metadata.Models
 	{
 		public string Id { get; set; }
 
-		public ICollection<DataColumn> Columns { get; set; }
+		public IList<DataColumn> Columns { get; set; }
 
-		public ICollection<DataPane> Panes { get; set; }
+		public IList<DataPane> Panes { get; set; }
 
-		public ICollection<FieldMetadata> Fields { get; set; }
+		public IList<FieldMetadata> Fields { get; set; }
 	}
 }

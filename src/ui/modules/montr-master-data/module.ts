@@ -17,6 +17,8 @@ export const Locale = {
 };
 
 export const Api = {
+	classifierMetadataView: `${Constants.apiURL}/classifierMetadata/view`,
+
 	classifierList: `${Constants.apiURL}/classifier/list`,
 	classifierExport: `${Constants.apiURL}/classifier/export`,
 	classifierCreate: `${Constants.apiURL}/classifier/create`,
@@ -35,6 +37,8 @@ export const Api = {
 };
 
 export const Views = {
+	classifierTabs: "Classifier/Tabs",
+	classifierForm: "Classifier/Form",
 	classifierList: "Classifier/Grid",
 
 	numeratorList: "Numerator/Grid",

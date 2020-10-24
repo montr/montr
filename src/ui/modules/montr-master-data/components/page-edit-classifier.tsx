@@ -3,11 +3,10 @@ import { DataTabs, Page, PageHeader } from "@montr-core/components";
 import { DataView } from "@montr-core/models";
 import { RouteComponentProps } from "react-router";
 import { Spin } from "antd";
-import { ClassifierService, ClassifierTypeService, ClassifierLinkService } from "../services";
+import { ClassifierService, ClassifierTypeService, ClassifierLinkService, ClassifierMetadataService } from "../services";
 import { IClassifier, IClassifierType } from "../models";
 import { ClassifierBreadcrumb } from ".";
-import { RouteBuilder } from "../module";
-import { MetadataService } from "@montr-core/services";
+import { RouteBuilder, Views } from "../module";
 
 interface RouteProps {
 	typeCode: string;
@@ -28,7 +27,7 @@ interface State {
 
 export default class PageEditClassifier extends React.Component<Props, State> {
 
-	private _metadataService = new MetadataService();
+	private _metadataService = new ClassifierMetadataService();
 	private _classifierTypeService = new ClassifierTypeService();
 	private _classifierService = new ClassifierService();
 	private _classifierLinkService = new ClassifierLinkService();
@@ -62,7 +61,7 @@ export default class PageEditClassifier extends React.Component<Props, State> {
 	fetchData = async () => {
 		const { typeCode, uid, parentUid } = this.props.match.params;
 
-		const dataView = await this._metadataService.load("Classifier/Edit");
+		const dataView = await this._metadataService.load(typeCode, Views.classifierTabs);
 
 		const type = await this._classifierTypeService.get({ typeCode });
 

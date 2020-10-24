@@ -4,6 +4,7 @@ import { IDataField, ApiResult } from "@montr-core/models";
 import { DataForm } from "@montr-core/components";
 import { ClassifierService, ClassifierMetadataService } from "../services";
 import { IClassifier, IClassifierType } from "../models";
+import { Views } from "@montr-master-data/module";
 
 interface Props {
 	type: IClassifierType;
@@ -17,6 +18,7 @@ interface State {
 }
 
 export default class TabEditClassifier extends React.Component<Props, State> {
+
 	private _classifierMetadataService = new ClassifierMetadataService();
 	private _classifierService = new ClassifierService();
 
@@ -48,7 +50,7 @@ export default class TabEditClassifier extends React.Component<Props, State> {
 
 		if (type) {
 
-			const dataView = await this._classifierMetadataService.load(type.code);
+			const dataView = await this._classifierMetadataService.load(type.code, Views.classifierForm);
 
 			/* const fields = dataView.fields;
 

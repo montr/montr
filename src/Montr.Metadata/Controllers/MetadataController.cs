@@ -7,7 +7,6 @@ using Montr.Idx.Services;
 using Montr.Metadata.Commands;
 using Montr.Metadata.Models;
 using Montr.Metadata.Queries;
-using Montr.Metadata.Services;
 
 namespace Montr.Metadata.Controllers
 {
@@ -15,21 +14,18 @@ namespace Montr.Metadata.Controllers
 	public class MetadataController : ControllerBase
 	{
 		private readonly IMediator _mediator;
-		private readonly IMetadataProvider _metadataProvider;
 		private readonly ICurrentUserProvider _currentUserProvider;
 
-		public MetadataController(IMediator mediator, IMetadataProvider metadataProvider,
-			ICurrentUserProvider currentUserProvider)
+		public MetadataController(IMediator mediator, ICurrentUserProvider currentUserProvider)
 		{
 			_mediator = mediator;
-			_metadataProvider = metadataProvider;
 			_currentUserProvider = currentUserProvider;
 		}
 
 		[HttpPost]
-		public async Task<DataView> View(MetadataRequest request)
+		public async Task<DataView> View(GetMetadata request)
 		{
-			return await _metadataProvider.GetView(request.ViewId);
+			return await _mediator.Send(request);
 		}
 
 		[HttpPost]

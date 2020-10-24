@@ -31,6 +31,36 @@ namespace Montr.MasterData.Impl.QueryHandlers
 
 			var type = await _classifierTypeService.Get(typeCode, cancellationToken);
 
+			if (request.ViewId == "Classifier/Tabs")
+			{
+				return GetTabsMetadata(type);
+			}
+
+			return await GetFormMetadata(type, cancellationToken);
+		}
+
+		private static DataView GetTabsMetadata(ClassifierType type)
+		{
+			var panes = new List<DataPane>
+			{
+				new DataPane { Key = "info", Name = "Информация", Component = "panes/TabEditClassifier" },
+				new DataPane { Key = "hierarchy", Name = "Иерархия", Component = "panes/TabEditClassifierHierarchy" },
+				new DataPane { Key = "dependencies", Name = "Зависимости" },
+				new DataPane { Key = "history", Name = "История изменений" }
+			};
+
+			// todo: register different tabs for different classifiers on startup
+			if (type.Code == "questionnaire")
+			{
+				panes.Insert(panes.FindIndex(x => x.Key == "info") + 1,
+					new DataPane { Key = "questionnaire", Name = "Вопросы" });
+			}
+
+			return new DataView { Panes = panes };
+		}
+
+		private async Task<DataView> GetFormMetadata(ClassifierType type, CancellationToken cancellationToken)
+		{
 			var metadata = await _metadataRepository.Search(new MetadataSearchRequest
 			{
 				EntityTypeCode = ClassifierType.EntityTypeCode,
@@ -64,7 +94,7 @@ namespace Montr.MasterData.Impl.QueryHandlers
 			return result;
 		}
 
-		// todo: should be edited outside classifier fields
+		// todo: parent group or item should be edited outside classifier fields
 		private static ICollection<FieldMetadata> GetCommonFields(ClassifierType type)
 		{
 			if (type.HierarchyType == HierarchyType.Groups)
