@@ -1,31 +1,34 @@
 import * as React from "react";
 import { RouteComponentProps } from "react-router";
-import { Spin, Tabs } from "antd";
-import { Page, PageHeader, PaneSearchMetadata } from "@montr-core/components";
-import { ClassifierTypeService } from "../services";
+import { Spin } from "antd";
+import { DataView } from "@montr-core/models";
+import { DataTabs, Page, PageHeader } from "@montr-core/components";
+import { ClassifierMetadataService, ClassifierTypeService } from "../services";
 import { IClassifierType } from "../models";
-import { ClassifierBreadcrumb, TabEditClassifierType, TabEditClassifierTypeHierarchy } from ".";
-import { RouteBuilder } from "../module";
+import { ClassifierBreadcrumb } from ".";
+import { RouteBuilder, Views } from "../module";
 
-interface IRouteProps {
+interface RouteProps {
 	uid?: string;
 	tabKey?: string;
 }
 
-interface IProps extends RouteComponentProps<IRouteProps> {
+interface Props extends RouteComponentProps<RouteProps> {
 }
 
-interface IState {
+interface State {
 	loading: boolean;
+	dataView?: DataView<IClassifierType>;
 	types?: IClassifierType[];
 	data?: IClassifierType;
 }
 
-export default class EditClassifierType extends React.Component<IProps, IState> {
+export default class EditClassifierType extends React.Component<Props, State> {
 
+	private _classifierMetadataService = new ClassifierMetadataService();
 	private _classifierTypeService = new ClassifierTypeService();
 
-	constructor(props: IProps) {
+	constructor(props: Props) {
 		super(props);
 
 		this.state = {
@@ -37,18 +40,21 @@ export default class EditClassifierType extends React.Component<IProps, IState> 
 		await this.fetchData();
 	};
 
-	componentDidUpdate = async (prevProps: IProps) => {
+	componentDidUpdate = async (prevProps: Props) => {
 		if (this.props.match.params.uid !== prevProps.match.params.uid) {
 			await this.fetchData();
 		}
 	};
 
 	componentWillUnmount = async () => {
+		await this._classifierMetadataService.abort();
 		await this._classifierTypeService.abort();
 	};
 
 	fetchData = async () => {
 		const { uid } = this.props.match.params;
+
+		const dataView = await this._classifierMetadataService.load(null, Views.classifierTypeTabs);
 
 		const types = await this._classifierTypeService.list({ skipPaging: true });
 
@@ -57,7 +63,7 @@ export default class EditClassifierType extends React.Component<IProps, IState> 
 			// todo: load defaults from server
 			: { name: "", hierarchyType: "None" };
 
-		this.setState({ loading: false, data, types: types.rows });
+		this.setState({ loading: false, dataView, data, types: types.rows });
 	};
 
 	handleDataChange = (data: IClassifierType) => {
@@ -74,7 +80,7 @@ export default class EditClassifierType extends React.Component<IProps, IState> 
 
 	render = () => {
 		const { uid, tabKey } = this.props.match.params,
-			{ loading, data, types } = this.state;
+			{ loading, dataView, data, types } = this.state;
 
 		let title;
 		// todo: remove this sh*t
@@ -94,23 +100,23 @@ export default class EditClassifierType extends React.Component<IProps, IState> 
 			</>;
 		}
 
-		const otherTabsDisabled = !data?.uid;
-
 		return (
 			<Page title={title}>
 				<Spin spinning={loading}>
-					{data && <Tabs size="small" defaultActiveKey={tabKey} onChange={this.handleTabChange}>
-						<Tabs.TabPane key="info" tab="Информация">
-							<TabEditClassifierType data={data} onDataChange={this.handleDataChange} />
-						</Tabs.TabPane>
-						<Tabs.TabPane key="hierarchy" tab="Иерархия" disabled={otherTabsDisabled}>
-							<TabEditClassifierTypeHierarchy type={data} />
-						</Tabs.TabPane>
-						<Tabs.TabPane key="fields" tab="Поля" disabled={otherTabsDisabled}>
-							{data?.code && <PaneSearchMetadata entityTypeCode={`ClassifierType`} entityUid={data.uid} />}
-						</Tabs.TabPane>
-						<Tabs.TabPane key="history" tab="История изменений" disabled={otherTabsDisabled}></Tabs.TabPane>
-					</Tabs>}
+
+					<DataTabs
+						tabKey={tabKey}
+						panes={dataView?.panes}
+						onTabChange={this.handleTabChange}
+						disabled={(_, index) => index > 0 && !data?.uid}
+						tabProps={{
+							data,
+							onDataChange: this.handleDataChange,
+							entityTypeCode: `ClassifierType`,
+							entityUid: data?.uid
+						}}
+					/>
+
 				</Spin>
 			</Page>
 		);

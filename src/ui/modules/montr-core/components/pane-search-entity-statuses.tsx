@@ -138,4 +138,6 @@ class WrappedPaneSearchEntityStatuses extends React.Component<Props, State> {
 	};
 }
 
-export const PaneSearchEntityStatuses = withTranslation()(WrappedPaneSearchEntityStatuses);
+const PaneSearchEntityStatuses = withTranslation()(WrappedPaneSearchEntityStatuses);
+
+export default PaneSearchEntityStatuses;

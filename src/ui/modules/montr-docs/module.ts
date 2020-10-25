@@ -20,8 +20,12 @@ export const Patterns = {
 };
 
 export const Views = {
+	documentTypeTabs: "DocumentType/Tabs",
+
 	documentList: "Document/List",
+
 	processList: "Process/List",
+	processTabs: "Process/Tabs",
 };
 
 export const RouteBuilder = {

@@ -1,31 +1,50 @@
 import React from "react";
 import { RouteComponentProps } from "react-router";
-import { Page, PaneSearchMetadata } from "@montr-core/components";
-import { Guid } from "@montr-core/models";
-import { Spin, Tabs } from "antd";
-import { RouteBuilder } from "../module";
+import { Spin } from "antd";
+import { DataTabs, Page } from "@montr-core/components";
+import { MetadataService } from "@montr-core/services";
+import { Guid, DataView } from "@montr-core/models";
+import { RouteBuilder, Views } from "../module";
+import { Process } from "../models/process";
 
-interface IRouteProps {
+interface RouteProps {
 	uid?: string;
 	tabKey?: string;
 }
 
-interface IProps extends RouteComponentProps<IRouteProps> {
+interface Props extends RouteComponentProps<RouteProps> {
 }
 
-interface IState {
+interface State {
 	loading: boolean;
+	dataView?: DataView<Process>;
 }
 
-export default class PageEditProcess extends React.Component<IProps, IState> {
+export default class PageEditProcess extends React.Component<Props, State> {
 
-	constructor(props: IProps) {
+	private _metadataService = new MetadataService();
+
+	constructor(props: Props) {
 		super(props);
 
 		this.state = {
 			loading: false
 		};
 	}
+
+	componentDidMount = async () => {
+		await this.fetchData();
+	};
+
+	componentWillUnmount = async () => {
+		await this._metadataService.abort();
+	};
+
+	fetchData = async () => {
+		const dataView = await this._metadataService.load(Views.processTabs);
+
+		this.setState({ loading: false, dataView });
+	};
 
 	handleTabChange = (tabKey: string) => {
 		const { uid } = this.props.match.params;
@@ -37,24 +56,31 @@ export default class PageEditProcess extends React.Component<IProps, IState> {
 
 	render = () => {
 		const { uid, tabKey } = this.props.match.params,
-			{ loading } = this.state;
+			{ loading, dataView } = this.state;
 
 		if (Guid.isValid(uid) == false) {
-			return <span>Not a valid identifier</span>
+			return <span>Not a valid identifier</span>;
 		}
 
 		const entityUid = new Guid(uid);
 
-		const otherTabsDisabled = !uid;
-
 		return (
 			<Page title={`${uid}`}>
 				<Spin spinning={loading}>
-					<Tabs size="small" defaultActiveKey={tabKey} onChange={this.handleTabChange}>
-						<Tabs.TabPane key="fields" tab="Поля">
-							<PaneSearchMetadata entityTypeCode={`Process`} entityUid={entityUid} />
-						</Tabs.TabPane>
-					</Tabs>
+
+					<DataTabs
+						tabKey={tabKey}
+						panes={dataView?.panes}
+						onTabChange={this.handleTabChange}
+						// disabled={(_, index) => index > 0 && !data?.uid}
+						tabProps={{
+							// data,
+							// onDataChange: this.handleDataChange,
+							entityTypeCode: `Process`,
+							entityUid: entityUid // data?.uid
+						}}
+					/>
+
 				</Spin>
 			</Page>
 		);

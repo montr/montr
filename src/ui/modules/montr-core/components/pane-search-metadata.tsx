@@ -4,8 +4,7 @@ import { IDataField, DataResult, Guid } from "../models";
 import { MetadataService, OperationService } from "../services";
 import { DataTable, DataTableUpdateToken, ButtonAdd, PaneEditMetadata, ButtonDelete } from ".";
 import { Translation, WithTranslation, withTranslation } from "react-i18next";
-import { Views } from "../module";
-import { Constants } from "..";
+import { Api, Views } from "../module";
 
 interface Props extends WithTranslation {
 	entityTypeCode: string;
@@ -111,7 +110,7 @@ class WrappedPaneSearchMetadata extends React.Component<Props, State> {
 				rowKey="uid"
 				rowActions={[{ name: t("button.edit"), onClick: this.showEditPane }]}
 				viewId={Views.metadataList}
-				loadUrl={`${Constants.apiURL}/metadata/list/`}
+				loadUrl={Api.metadataList}
 				onLoadData={this.onLoadTableData}
 				onSelectionChange={this.onSelectionChange}
 				updateToken={updateTableToken}
@@ -131,4 +130,6 @@ class WrappedPaneSearchMetadata extends React.Component<Props, State> {
 	};
 }
 
-export const PaneSearchMetadata = withTranslation()(WrappedPaneSearchMetadata);
+const PaneSearchMetadata = withTranslation()(WrappedPaneSearchMetadata);
+
+export default PaneSearchMetadata;

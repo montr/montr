@@ -1,11 +1,13 @@
 import React from "react";
-import { AppRouteRegistry } from "./services";
+import { AppRouteRegistry, ComponentRegistry } from "./services";
 import { Constants, Layout } from "./constants";
 
 import "./i18n";
 import "./index.less";
 
 export const Api = {
+	metadataList: `${Constants.apiURL}/metadata/list`,
+
 	entityStatusList: `${Constants.apiURL}/entityStatus/list`,
 	entityStatusGet: `${Constants.apiURL}/entityStatus/get`,
 	entityStatusInsert: `${Constants.apiURL}/entityStatus/insert`,
@@ -37,4 +39,9 @@ AppRouteRegistry.add([
 	{ path: "/dashboard/", exact: true, component: React.lazy(() => import("./components/page-dashboard")) },
 	{ path: "/locales/", exact: true, component: React.lazy(() => import("./components/page-search-locale-string")) },
 	{ path: "/settings/", exact: true, component: React.lazy(() => import("./components/page-settings")) },
+]);
+
+ComponentRegistry.add([
+	{ path: "panes/PaneSearchMetadata", component: React.lazy(() => import("./components/pane-search-metadata")) },
+	{ path: "panes/PaneSearchEntityStatuses", component: React.lazy(() => import("./components/pane-search-entity-statuses")) }
 ]);

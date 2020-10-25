@@ -19,7 +19,7 @@ interface State {
 	redirect?: string;
 }
 
-export class TabEditClassifierType extends React.Component<Props, State> {
+export default class TabEditClassifierType extends React.Component<Props, State> {
 	private _metadataService = new MetadataService();
 	private _classifierTypeService = new ClassifierTypeService();
 

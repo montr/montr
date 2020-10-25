@@ -3,13 +3,13 @@ import { DataBreadcrumb } from "@montr-core/components";
 import { IMenu } from "@montr-core/models";
 import { IClassifierType, IClassifier } from "../models";
 
-interface IProps {
+interface Props {
 	type?: IClassifierType;
 	types?: IClassifierType[];
 	item?: IClassifier;
 }
 
-export class ClassifierBreadcrumb extends React.Component<IProps> {
+export class ClassifierBreadcrumb extends React.Component<Props> {
 	public render() {
 		const { type, types, item } = this.props;
 

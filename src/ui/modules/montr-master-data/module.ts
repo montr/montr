@@ -37,6 +37,8 @@ export const Api = {
 };
 
 export const Views = {
+	classifierTypeTabs: "ClassifierType/Tabs",
+
 	classifierTabs: "Classifier/Tabs",
 	classifierForm: "Classifier/Form",
 	classifierList: "Classifier/Grid",
@@ -95,6 +97,9 @@ AppRouteRegistry.add([
 ]);
 
 ComponentRegistry.add([
+	{ path: "panes/TabEditClassifierType", component: React.lazy(() => import("./components/tab-edit-classifier-type")) },
+	{ path: "panes/TabEditClassifierTypeHierarchy", component: React.lazy(() => import("./components/tab-edit-classifier-type-hierarchy")) },
+
 	{ path: "panes/TabEditClassifier", component: React.lazy(() => import("./components/tab-edit-classifier")) },
 	{ path: "panes/TabEditClassifierHierarchy", component: React.lazy(() => import("./components/tab-edit-classifier-hierarchy")) }
 ]);

@@ -8,7 +8,7 @@ import { Alert, Modal } from "antd";
 import { ModalEditClassifierTree } from ".";
 
 interface Props {
-	type: IClassifierType;
+	data: IClassifierType;
 }
 
 interface State {
@@ -16,7 +16,7 @@ interface State {
 	updateTableToken: DataTableUpdateToken;
 }
 
-export class TabEditClassifierTypeHierarchy extends React.Component<Props, State> {
+export default class TabEditClassifierTypeHierarchy extends React.Component<Props, State> {
 
 	private _classifierTreeService = new ClassifierTreeService();
 
@@ -29,7 +29,7 @@ export class TabEditClassifierTypeHierarchy extends React.Component<Props, State
 	}
 
 	componentDidUpdate = async (prevProps: Props) => {
-		if (this.props.type !== prevProps.type) {
+		if (this.props.data !== prevProps.data) {
 			await this.refreshTable();
 		}
 	};
@@ -45,7 +45,7 @@ export class TabEditClassifierTypeHierarchy extends React.Component<Props, State
 	};
 
 	onLoadTableData = async (loadUrl: string, postParams: any): Promise<DataResult<{}>> => {
-		const { type } = this.props;
+		const { data: type } = this.props;
 
 		if (type.code) {
 
@@ -73,7 +73,7 @@ export class TabEditClassifierTypeHierarchy extends React.Component<Props, State
 			title: "Вы действительно хотите удалить выбранную иерархию?",
 			content: "Наверняка что-то случится с группами и элементами классификатора...",
 			onOk: async () => {
-				const { type } = this.props;
+				const { data: type } = this.props;
 
 				await this._classifierTreeService.delete(type.code, [data.uid]);
 
@@ -93,7 +93,7 @@ export class TabEditClassifierTypeHierarchy extends React.Component<Props, State
 	};
 
 	render() {
-		const { type } = this.props,
+		const { data: type } = this.props,
 			{ editData: groupEditData, updateTableToken } = this.state;
 
 		const rowActions: IMenu[] = [

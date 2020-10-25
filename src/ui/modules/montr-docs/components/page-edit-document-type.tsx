@@ -1,10 +1,12 @@
 import React from "react";
 import { RouteComponentProps } from "react-router";
-import { Spin, Tabs } from "antd";
-import { Page, PaneSearchMetadata, PaneSearchEntityStatuses } from "@montr-core/components";
-import { RouteBuilder } from "../module";
-import { PaneSearchAutomation } from "@montr-automate/components/pane-search-automation";
+import { Spin } from "antd";
+import { DataView } from "@montr-core/models";
+import { DataTabs, Page } from "@montr-core/components";
+import { RouteBuilder, Views } from "../module";
 import { Guid } from "@montr-core/models";
+import { MetadataService } from "@montr-core/services";
+import { IDocument } from "../models";
 
 interface IRouteProps {
 	uid?: string;
@@ -16,9 +18,12 @@ interface IProps extends RouteComponentProps<IRouteProps> {
 
 interface IState {
 	loading: boolean;
+	dataView?: DataView<IDocument>;
 }
 
 export default class PageEditDocumentType extends React.Component<IProps, IState> {
+
+	private _metadataService = new MetadataService();
 
 	constructor(props: IProps) {
 		super(props);
@@ -27,6 +32,20 @@ export default class PageEditDocumentType extends React.Component<IProps, IState
 			loading: false
 		};
 	}
+
+	componentDidMount = async () => {
+		await this.fetchData();
+	};
+
+	componentWillUnmount = async () => {
+		await this._metadataService.abort();
+	};
+
+	fetchData = async () => {
+		const dataView = await this._metadataService.load(Views.documentTypeTabs);
+
+		this.setState({ loading: false, dataView });
+	};
 
 	handleTabChange = (tabKey: string) => {
 		const { uid } = this.props.match.params;
@@ -38,32 +57,32 @@ export default class PageEditDocumentType extends React.Component<IProps, IState
 
 	render = () => {
 		const { uid, tabKey } = this.props.match.params,
-			{ loading } = this.state;
+			{ loading, dataView } = this.state;
 
 		if (Guid.isValid(uid) == false) {
-			return <span>Not a valid identifier</span>
+			return <span>Not a valid identifier</span>;
 		}
 
 		const entityUid = new Guid(uid);
 
-		const otherTabsDisabled = !uid;
-
 		return (
 			<Page title={`${uid}`}>
 				<Spin spinning={loading}>
-					<Tabs size="small" defaultActiveKey={tabKey} onChange={this.handleTabChange}>
-						<Tabs.TabPane key="common" tab="Информация">
-						</Tabs.TabPane>
-						<Tabs.TabPane key="statuses" tab="Statuses">
-							<PaneSearchEntityStatuses entityTypeCode={`DocumentType`} entityUid={entityUid} />
-						</Tabs.TabPane>
-						<Tabs.TabPane key="fields" tab="Поля">
-							<PaneSearchMetadata entityTypeCode={`DocumentType`} entityUid={entityUid} />
-						</Tabs.TabPane>
-						<Tabs.TabPane key="automation" tab="Automations">
-							<PaneSearchAutomation entityTypeCode={`DocumentType`} entityTypeUid={entityUid} />
-						</Tabs.TabPane>
-					</Tabs>
+
+					<DataTabs
+						tabKey={tabKey}
+						panes={dataView?.panes}
+						onTabChange={this.handleTabChange}
+						// disabled={(_, index) => index > 0 && !data?.uid}
+						tabProps={{
+							// data,
+							// onDataChange: this.handleDataChange,
+							entityTypeCode: `DocumentType`,
+							entityUid: entityUid, // data?.uid
+							entityTypeUid: entityUid // todo: rename to entityUid?
+						}}
+					/>
+
 				</Spin>
 			</Page>
 		);

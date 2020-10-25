@@ -27,7 +27,7 @@ interface State {
 
 export default class PageEditClassifier extends React.Component<Props, State> {
 
-	private _metadataService = new ClassifierMetadataService();
+	private _classifierMetadataService = new ClassifierMetadataService();
 	private _classifierTypeService = new ClassifierTypeService();
 	private _classifierService = new ClassifierService();
 	private _classifierLinkService = new ClassifierLinkService();
@@ -52,7 +52,7 @@ export default class PageEditClassifier extends React.Component<Props, State> {
 	};
 
 	componentWillUnmount = async () => {
-		await this._metadataService.abort();
+		await this._classifierMetadataService.abort();
 		await this._classifierTypeService.abort();
 		await this._classifierService.abort();
 		await this._classifierLinkService.abort();
@@ -61,7 +61,7 @@ export default class PageEditClassifier extends React.Component<Props, State> {
 	fetchData = async () => {
 		const { typeCode, uid, parentUid } = this.props.match.params;
 
-		const dataView = await this._metadataService.load(typeCode, Views.classifierTabs);
+		const dataView = await this._classifierMetadataService.load(typeCode, Views.classifierTabs);
 
 		const type = await this._classifierTypeService.get({ typeCode });
 
@@ -116,8 +116,14 @@ export default class PageEditClassifier extends React.Component<Props, State> {
 						tabKey={tabKey}
 						panes={dataView?.panes}
 						onTabChange={this.handleTabChange}
-						disabled={(pane, index) => index > 0 && !data?.uid}
-						tabProps={{ type, data, onDataChange: this.handleDataChange }}
+						disabled={(_, index) => index > 0 && !data?.uid}
+						tabProps={{
+							type,
+							data,
+							onDataChange: this.handleDataChange,
+							entityTypeCode: `Classifier`,
+							entityUid: data?.uid
+						}}
 					/>
 
 				</Spin>

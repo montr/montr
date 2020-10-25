@@ -27,19 +27,38 @@ namespace Montr.MasterData.Impl.QueryHandlers
 
 		public async Task<DataView> Handle(GetClassifierMetadata request, CancellationToken cancellationToken)
 		{
+			if (request.ViewId == "ClassifierType/Tabs")
+			{
+				return GetClassifierTypeTabs();
+			}
+
 			var typeCode = request.TypeCode ?? throw new ArgumentNullException(nameof(request.TypeCode));
 
 			var type = await _classifierTypeService.Get(typeCode, cancellationToken);
 
 			if (request.ViewId == "Classifier/Tabs")
 			{
-				return GetTabsMetadata(type);
+				return GetClassifierTabs(type);
 			}
 
-			return await GetFormMetadata(type, cancellationToken);
+			return await GetClassifierForm(type, cancellationToken);
 		}
 
-		private static DataView GetTabsMetadata(ClassifierType type)
+		private static DataView GetClassifierTypeTabs()
+		{
+			return new DataView
+			{
+				Panes = new List<DataPane>
+				{
+					new DataPane { Key = "info", Name = "Информация", Component = "panes/TabEditClassifierType" },
+					new DataPane { Key = "hierarchy", Name = "Иерархия", Component = "panes/TabEditClassifierTypeHierarchy" },
+					new DataPane { Key = "fields", Name = "Поля", Component = "panes/PaneSearchMetadata" },
+					new DataPane { Key = "history", Name = "История изменений" }
+				}
+			};
+		}
+
+		private static DataView GetClassifierTabs(ClassifierType type)
 		{
 			var panes = new List<DataPane>
 			{
@@ -53,13 +72,13 @@ namespace Montr.MasterData.Impl.QueryHandlers
 			if (type.Code == "questionnaire")
 			{
 				panes.Insert(panes.FindIndex(x => x.Key == "info") + 1,
-					new DataPane { Key = "questionnaire", Name = "Вопросы" });
+					new DataPane { Key = "questionnaire", Name = "Вопросы", Component = "panes/PaneSearchMetadata" });
 			}
 
 			return new DataView { Panes = panes };
 		}
 
-		private async Task<DataView> GetFormMetadata(ClassifierType type, CancellationToken cancellationToken)
+		private async Task<DataView> GetClassifierForm(ClassifierType type, CancellationToken cancellationToken)
 		{
 			var metadata = await _metadataRepository.Search(new MetadataSearchRequest
 			{

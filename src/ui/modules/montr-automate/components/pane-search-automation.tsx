@@ -21,7 +21,7 @@ interface State {
 	updateTableToken?: DataTableUpdateToken;
 }
 
-export class PaneSearchAutomation extends React.Component<Props, State> {
+export default class PaneSearchAutomation extends React.Component<Props, State> {
 
 	private _operation = new OperationService();
 	private _automationService = new AutomationService();
