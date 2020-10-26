@@ -5,20 +5,20 @@ import { Spin } from "antd";
 import { IDocument } from "@montr-docs/models";
 import { DocumentMetadataService } from "@montr-docs/services";
 
-interface IProps {
+interface Props {
 	data: IDocument;
 }
 
-interface IState {
+interface State {
 	loading: boolean;
 	fields?: IDataField[];
 }
 
-export class TabViewDocumentFields extends React.Component<IProps, IState> {
+export class TabViewDocumentFields extends React.Component<Props, State> {
 
 	private _documentMetadataService = new DocumentMetadataService();
 
-	constructor(props: IProps) {
+	constructor(props: Props) {
 		super(props);
 
 		this.state = {
@@ -30,7 +30,7 @@ export class TabViewDocumentFields extends React.Component<IProps, IState> {
 		await this.fetchData();
 	};
 
-	componentDidUpdate = async (prevProps: IProps) => {
+	componentDidUpdate = async (prevProps: Props) => {
 		if (this.props.data !== prevProps.data) {
 			await this.fetchData();
 		}

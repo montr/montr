@@ -9,24 +9,24 @@ import { DateHelper } from "@montr-core/services";
 import { Icon } from "@montr-core/components";
 import { Link } from "react-router-dom";
 
-interface IRouteProps {
+interface RouteProps {
 	uid?: string;
 	tabKey?: string;
 }
 
-interface IProps extends RouteComponentProps<IRouteProps> {
+interface Props extends RouteComponentProps<RouteProps> {
 }
 
-interface IState {
+interface State {
 	loading: boolean;
 	data?: IDocument;
 }
 
-export default class PageViewDocument extends React.Component<IProps, IState> {
+export default class PageViewDocument extends React.Component<Props, State> {
 
 	private _documentService = new DocumentService();
 
-	constructor(props: IProps) {
+	constructor(props: Props) {
 		super(props);
 
 		this.state = {
@@ -67,8 +67,6 @@ export default class PageViewDocument extends React.Component<IProps, IState> {
 			{ loading, data } = this.state;
 
 		if (!data || !data.documentTypeUid) return null;
-
-		const otherTabsDisabled = !uid;
 
 		const documentDate = DateHelper.toLocaleDateTimeString(data.documentDate);
 
