@@ -8,6 +8,7 @@ using Montr.MasterData.Commands;
 
 namespace Montr.MasterData.Services
 {
+	// todo: convert to ClassifierTypeRegistrator service
 	public abstract class AbstractRegisterClassifierTypeStartupTask : IStartupTask
 	{
 		private readonly ILogger _logger;

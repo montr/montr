@@ -48,6 +48,7 @@ namespace Host
 			{
 				var logger = scope.ServiceProvider.GetService<ILogger<Program>>();
 
+				// todo: run startup tasks from modules or sort IStartupTask's by module initialization order
 				var tasks = scope.ServiceProvider.GetServices<IStartupTask>().ToArray();
 
 				foreach (var task in tasks)
