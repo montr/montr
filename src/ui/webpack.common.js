@@ -9,7 +9,7 @@ const options = {
 		"app": "./modules/host/app.tsx",
 	},
 	output: {
-		path: path.resolve(__dirname, "assets"),
+		path: path.resolve(__dirname, "./assets"),
 		filename: "[name].bundle.js",
 		chunkFilename: "[name].chunk.js",
 		publicPath: "/assets/"

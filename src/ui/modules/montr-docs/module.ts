@@ -1,7 +1,7 @@
 import React from "react";
 import { generatePath } from "react-router";
 import { Guid } from "@montr-core/models";
-import { AppRouteRegistry } from "@montr-core/services";
+import { AppRouteRegistry, ComponentRegistry } from "@montr-core/services";
 import { Constants } from "@montr-core/.";
 
 export const Api = {
@@ -46,4 +46,8 @@ AppRouteRegistry.add([
 	{ path: Patterns.viewDocument, exact: true, component: React.lazy(() => import("./components/page-view-document")) },
 	{ path: Patterns.searchProcess, exact: true, component: React.lazy(() => import("./components/page-search-processes")) },
 	{ path: Patterns.editProcess, exact: true, component: React.lazy(() => import("./components/page-edit-process")) },
+]);
+
+ComponentRegistry.add([
+	{ path: "panes/PaneProcessStepList", component: React.lazy(() => import("./components/pane-prosess-step-list")) }
 ]);

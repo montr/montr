@@ -34,4 +34,21 @@ namespace Montr.Docs.Controllers
 			return await _mediator.Send(request);
 		}
 	}
+
+	[Authorize, ApiController, Route("api/[controller]/[action]")]
+	public class ProcessStepController : ControllerBase
+	{
+		private readonly IMediator _mediator;
+
+		public ProcessStepController(IMediator mediator)
+		{
+			_mediator = mediator;
+		}
+
+		[HttpPost]
+		public async Task<SearchResult<ProcessStep>> List(GetProcessStepList request)
+		{
+			return await _mediator.Send(request);
+		}
+	}
 }
