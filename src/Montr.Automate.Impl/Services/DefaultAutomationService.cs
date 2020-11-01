@@ -52,9 +52,9 @@ namespace Montr.Automate.Impl.Services
 					.Value(x => x.DisplayOrder, item.DisplayOrder)
 					.InsertAsync(cancellationToken);
 
-				db.GetTable<DbAutomationAction>().BulkCopy(dbActions);
+				await db.GetTable<DbAutomationAction>().BulkCopyAsync(dbActions, cancellationToken);
 
-				db.GetTable<DbAutomationCondition>().BulkCopy(dbConditions);
+				await db.GetTable<DbAutomationCondition>().BulkCopyAsync(dbConditions, cancellationToken);
 			}
 
 			return new ApiResult { Uid = item.Uid, AffectedRows = affected };
@@ -83,12 +83,12 @@ namespace Montr.Automate.Impl.Services
 				await db.GetTable<DbAutomationAction>()
 					.Where(x => x.AutomationUid == item.Uid).DeleteAsync(cancellationToken);
 
-				db.GetTable<DbAutomationAction>().BulkCopy(dbActions);
+				await db.GetTable<DbAutomationAction>().BulkCopyAsync(dbActions, cancellationToken);
 
 				await db.GetTable<DbAutomationCondition>()
 					.Where(x => x.AutomationUid == item.Uid).DeleteAsync(cancellationToken);
 
-				db.GetTable<DbAutomationCondition>().BulkCopy(dbConditions);
+				await db.GetTable<DbAutomationCondition>().BulkCopyAsync(dbConditions, cancellationToken);
 			}
 
 			return new ApiResult { AffectedRows = affected };

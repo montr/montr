@@ -17,6 +17,8 @@ namespace Montr.Docs.Impl
 		{
 			services.AddTransient<IStartupTask, RegisterClassifierTypeStartupTask>();
 
+			services.AddSingleton<IProcessService, DefaultProcessService>();
+
 			services.AddSingleton<IRepository<DocumentType>, DbDocumentTypeRepository>();
 			services.AddSingleton<IRepository<Document>, DbDocumentRepository>();
 			services.AddTransient<IDocumentTypeService, DbDocumentTypeService>();
