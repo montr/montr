@@ -298,11 +298,11 @@ export class DataTable<TModel extends IIndexer> extends React.Component<Props<TM
 				loading={this.state.loading}
 				onChange={this.handleTableChange}
 				rowSelection={rowSelection}
-				title={() =>
-					<Toolbar clear size="small" float="right">
-						<Button type="link" icon={Icon.Setting} />
-					</Toolbar>
-				}
+			/* title={() =>
+				<Toolbar clear size="small" float="right">
+					<Button type="link" icon={Icon.Setting} />
+				</Toolbar>
+			} */
 			/>
 		);
 	}
