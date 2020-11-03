@@ -244,7 +244,7 @@ namespace Montr.Metadata.Services
 				{
 					new DataPane { Key = "common", Name = "Информация" },
 					new DataPane { Key = "statuses", Name = "Statuses", Component = "panes/PaneSearchEntityStatuses" },
-					new DataPane { Key = "fields", Name = "Поля", Component = "panes/PaneSearchMetadata" },
+					new DataPane { Key = "fields", Name = "Анкета", Component = "panes/PaneSearchMetadata" },
 					new DataPane { Key = "automation", Name = "Automations", Component = "panes/PaneSearchAutomation" }
 				};
 			}
