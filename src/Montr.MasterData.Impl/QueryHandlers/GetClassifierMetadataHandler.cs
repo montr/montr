@@ -75,6 +75,12 @@ namespace Montr.MasterData.Impl.QueryHandlers
 					new DataPane { Key = "questionnaire", Name = "Вопросы", Component = "panes/PaneSearchMetadata" });
 			}
 
+			if (type.Code == "numerator")
+			{
+				panes.Insert(panes.FindIndex(x => x.Key == "info") + 1,
+					new DataPane { Key = "usage", Name = "Использование", Component = "panes/PaneNumeratorEntityList" });
+			}
+
 			// todo: move to own module
 			if (type.Code == "process")
 			{

@@ -15,6 +15,8 @@ namespace Montr.MasterData.Impl
 	{
 		public void ConfigureServices(IConfiguration configuration, IServiceCollection services)
 		{
+			services.AddTransient<IStartupTask, RegisterClassifierTypeStartupTask>();
+
 			services.AddTransient<INumberGenerator, DbNumberGenerator>();
 
 			services.AddTransient<IRepository<ClassifierType>, DbClassifierTypeRepository>();

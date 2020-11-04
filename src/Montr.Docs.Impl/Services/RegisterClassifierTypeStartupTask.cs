@@ -49,7 +49,6 @@ namespace Montr.Docs.Impl.Services
 					new TextAreaField { Key = "name", Name = "Наименование", Required = true, Active = true, DisplayOrder = 20, System = true, Props = new TextAreaField.Properties { Rows = 10 } },
 				}
 			};
-
 		}
 	}
 }
