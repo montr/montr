@@ -5,6 +5,7 @@ using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Montr.Core;
 using Montr.Core.Services;
 using Serilog;
 using Serilog.Events;
@@ -48,6 +49,20 @@ namespace Host
 			{
 				var logger = scope.ServiceProvider.GetService<ILogger<Program>>();
 
+				var cts = new CancellationTokenSource();
+
+				var modules = host.Services.GetServices<IModule>().ToArray();
+
+				foreach (var module in modules)
+				{
+					if (module is IStartupTask startupTask)
+					{
+						logger.LogInformation("Running {module} startup task", module);
+
+						await startupTask.Run(cts.Token);
+					}
+				}
+
 				// todo: run startup tasks from modules or sort IStartupTask's by module initialization order
 				var tasks = scope.ServiceProvider.GetServices<IStartupTask>().ToArray();
 
@@ -55,7 +70,7 @@ namespace Host
 				{
 					logger.LogInformation("Running {task} startup task", task);
 
-					await task.Run(CancellationToken.None);
+					await task.Run(cts.Token);
 				}
 			}
 

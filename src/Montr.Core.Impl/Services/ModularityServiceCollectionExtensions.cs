@@ -17,7 +17,7 @@ namespace Montr.Core.Impl.Services
 			// register module types to create modules later with dependencies
 			foreach (var type in modules)
 			{
-				// modules instances will be created twice (with temp and real service providers) 
+				// modules instances will be created twice (?) (with temp and real service providers)
 				// todo: create modules using ActivatorUtilities?
 				services.AddTransient(type);
 			}
@@ -30,6 +30,9 @@ namespace Montr.Core.Impl.Services
 			foreach (var type in modules)
 			{
 				var module = (IModule)serviceProvider.GetService(type);
+
+				// to prevent modules to be created twice
+				services.AddTransient(typeof(IModule), _ => module);
 
 				if (logger.IsEnabled(LogLevel.Information))
 				{

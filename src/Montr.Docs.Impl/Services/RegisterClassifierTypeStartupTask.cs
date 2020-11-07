@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
-using MediatR;
-using Microsoft.Extensions.Logging;
+using System.Threading;
+using System.Threading.Tasks;
+using Montr.Core.Services;
 using Montr.MasterData.Commands;
 using Montr.MasterData.Models;
 using Montr.MasterData.Services;
@@ -8,13 +9,24 @@ using Montr.Metadata.Models;
 
 namespace Montr.Docs.Impl.Services
 {
-	public class RegisterClassifierTypeStartupTask : AbstractRegisterClassifierTypeStartupTask
+	public class RegisterClassifierTypeStartupTask : IStartupTask
 	{
-		public RegisterClassifierTypeStartupTask(ILogger<RegisterClassifierTypeStartupTask> logger, IMediator mediator) : base(logger, mediator)
+		private readonly IClassifierTypeRegistrator _classifierTypeRegistrator;
+
+		public RegisterClassifierTypeStartupTask(IClassifierTypeRegistrator classifierTypeRegistrator)
 		{
+			_classifierTypeRegistrator = classifierTypeRegistrator;
 		}
 
-		protected override IEnumerable<RegisterClassifierType> GetCommands()
+		public async Task Run(CancellationToken cancellationToken)
+		{
+			foreach (var command in GetCommands())
+			{
+				await _classifierTypeRegistrator.Register(command.Item, command.Fields, cancellationToken);
+			}
+		}
+
+		protected IEnumerable<RegisterClassifierType> GetCommands()
 		{
 			yield return new RegisterClassifierType
 			{

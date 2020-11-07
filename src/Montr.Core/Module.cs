@@ -1,5 +1,6 @@
 ﻿using System.Globalization;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Localization;
@@ -14,7 +15,7 @@ using Montr.Core.Services;
 namespace Montr.Core
 {
 	// ReSharper disable once UnusedMember.Global
-	public class Module : IWebModule
+	public class Module : IWebModule, IStartupTask
 	{
 		public static readonly bool UseSystemJson = false;
 
@@ -77,6 +78,11 @@ namespace Montr.Core
 		{
 			app.UseRequestLocalization(
 				app.ApplicationServices.GetService<IOptions<RequestLocalizationOptions>>().Value);
+		}
+
+		public Task Run(CancellationToken cancellationToken)
+		{
+			return Task.CompletedTask;
 		}
 	}
 }

@@ -6,6 +6,7 @@ using Montr.Metadata.Models;
 
 namespace Montr.MasterData.Commands
 {
+	// todo: remove
 	public class RegisterClassifierType : IRequest<ApiResult>
 	{
 		public ClassifierType Item { get; set; }

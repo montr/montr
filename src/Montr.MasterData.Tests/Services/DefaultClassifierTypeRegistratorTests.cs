@@ -2,23 +2,24 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Montr.Core.Services;
 using Montr.Data.Linq2Db;
 using Montr.MasterData.Commands;
-using Montr.MasterData.Impl.CommandHandlers;
 using Montr.MasterData.Impl.Services;
 using Montr.MasterData.Models;
 using Montr.Metadata.Impl.Services;
 using Montr.Metadata.Models;
+using Moq;
 
-namespace Montr.MasterData.Tests.CommandHandlers
+namespace Montr.MasterData.Tests.Services
 {
 	[TestClass]
-	public class RegisterClassifierTypeHandlerTests
+	public class DefaultClassifierTypeRegistratorTests
 	{
 		[TestMethod]
-		public async Task Handle_NormalValues_RegisterClassifierType()
+		public async Task Register_NormalValues_RegisterClassifierType()
 		{
 			// arrange
 			var cancellationToken = new CancellationToken();
@@ -27,7 +28,9 @@ namespace Montr.MasterData.Tests.CommandHandlers
 			var classifierTypeRepository = new DbClassifierTypeRepository(dbContextFactory);
 			var classifierTypeService = new DbClassifierTypeService(dbContextFactory, classifierTypeRepository);
 			var dbFieldMetadataService = new DbFieldMetadataService(dbContextFactory, new NewtonsoftJsonSerializer());
-			var handler = new RegisterClassifierTypeHandler(unitOfWorkFactory, classifierTypeService, dbFieldMetadataService);
+			var handler = new DefaultClassifierTypeRegistrator(
+				new Mock<ILogger<DefaultClassifierTypeRegistrator>>().Object,
+				unitOfWorkFactory, classifierTypeService, dbFieldMetadataService);
 
 			using (var _ = unitOfWorkFactory.Create())
 			{
@@ -47,7 +50,7 @@ namespace Montr.MasterData.Tests.CommandHandlers
 					}
 				};
 
-				var result = await handler.Handle(command, cancellationToken);
+				var result = await handler.Register(command.Item, command.Fields, cancellationToken);
 
 				// assert
 				Assert.IsNotNull(result);
