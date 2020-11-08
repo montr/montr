@@ -60,7 +60,7 @@ namespace Montr.MasterData.Impl.Services
 					{
 						var insertFieldResult = await _metadataService.Insert(new ManageFieldMetadataRequest
 						{
-							EntityTypeCode = ClassifierType.EntityTypeCode,
+							EntityTypeCode = ClassifierType.TypeCode,
 							EntityUid = entityUid,
 							Item = metadata
 						}, cancellationToken);

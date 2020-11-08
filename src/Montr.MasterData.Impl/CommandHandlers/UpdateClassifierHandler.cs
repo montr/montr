@@ -55,7 +55,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 
 			var manageFieldDataRequest = new ManageFieldDataRequest
 			{
-				EntityTypeCode = Classifier.EntityTypeCode,
+				EntityTypeCode = Classifier.TypeCode,
 				// ReSharper disable once PossibleInvalidOperationException
 				EntityUid = item.Uid.Value,
 				Metadata = metadata,

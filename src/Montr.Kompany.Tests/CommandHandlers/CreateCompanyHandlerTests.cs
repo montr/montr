@@ -129,7 +129,7 @@ namespace Montr.Kompany.Tests.CommandHandlers
 				using (var db = dbContextFactory.Create())
 				{
 					fieldData = await db.GetTable<DbFieldData>()
-						.Where(x => x.EntityTypeCode == Document.EntityTypeCode && x.EntityUid == dbDocument.Uid)
+						.Where(x => x.EntityTypeCode == Document.TypeCode && x.EntityUid == dbDocument.Uid)
 						.ToListAsync(cancellationToken);
 				}
 

@@ -8,7 +8,7 @@ namespace Montr.Docs.Models
 	{
 		private string DebuggerDisplay => $"{Code}, {Name}";
 
-		public static readonly string EntityTypeCode = nameof(Process);
+		public static readonly string TypeCode = nameof(Process);
 
 		public Guid Uid { get; set; }
 

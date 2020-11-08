@@ -9,7 +9,7 @@ namespace Montr.Docs.Models
 	{
 		private string DebuggerDisplay => $"{StatusCode}, {Name}";
 
-		public static readonly string EntityTypeCode = nameof(Document);
+		public static readonly string TypeCode = nameof(Document);
 
 		public Guid? Uid { get; set; }
 

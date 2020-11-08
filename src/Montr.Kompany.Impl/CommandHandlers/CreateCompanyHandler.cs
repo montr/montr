@@ -71,7 +71,7 @@ namespace Montr.Kompany.Impl.CommandHandlers
 
 			var manageFieldDataRequest = new ManageFieldDataRequest
 			{
-				EntityTypeCode = Document.EntityTypeCode,
+				EntityTypeCode = Document.TypeCode,
 				EntityUid = documentUid,
 				Metadata = metadata.Rows,
 				Item = company

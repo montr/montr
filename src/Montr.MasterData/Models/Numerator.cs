@@ -4,7 +4,7 @@ using System.Diagnostics;
 namespace Montr.MasterData.Models
 {
 	[DebuggerDisplay("{" + nameof(DebuggerDisplay) + ",nq}")]
-	public class Numerator
+	public class Numerator : Classifier
 	{
 		private string DebuggerDisplay => $"{Name} - {Pattern}";
 
@@ -12,23 +12,26 @@ namespace Montr.MasterData.Models
 
 		public static readonly string DefaultPattern = "{Number}";
 
-		public Guid? Uid { get; set; }
+		// public Guid? Uid { get; set; }
 
 		public string EntityTypeCode { get; set; }
 
-		public string Name { get; set; }
+		// public string Name { get; set; }
 
 		public string Pattern { get; set; }
 
+		// (?) tags used to build unique numerator keys (unique numbers in scope of these tags)
+		// todo: display in UI as checkboxes (?) - only for documents (?)
 		public string[] KeyTags { get; set; }
 
 		public NumeratorPeriodicity Periodicity { get; set; }
 
+		// todo: move to classifier
 		public bool IsActive { get; set; }
 
 		public bool IsSystem { get; set; }
 
-		public string Url { get; set; }
+		// public string Url { get; set; }
 	}
 
 	public enum NumeratorPeriodicity : byte

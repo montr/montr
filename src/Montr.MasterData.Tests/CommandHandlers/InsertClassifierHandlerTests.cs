@@ -96,7 +96,7 @@ namespace Montr.MasterData.Tests.CommandHandlers
 				using (var db = dbContextFactory.Create())
 				{
 					fieldData = await db.GetTable<DbFieldData>()
-						.Where(x => x.EntityTypeCode == Classifier.EntityTypeCode && x.EntityUid == result.Uid)
+						.Where(x => x.EntityTypeCode == Classifier.TypeCode && x.EntityUid == result.Uid)
 						.ToListAsync(cancellationToken);
 				}
 

@@ -147,7 +147,7 @@ namespace Montr.MasterData.Impl.Services
 						var fields = await _fieldDataRepository.Search(new FieldDataSearchRequest
 						{
 							Metadata = metadata,
-							EntityTypeCode = Classifier.EntityTypeCode,
+							EntityTypeCode = Classifier.TypeCode,
 							// ReSharper disable once PossibleInvalidOperationException
 							EntityUids = new[] { item.Uid.Value }
 						}, cancellationToken);

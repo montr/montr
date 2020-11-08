@@ -55,7 +55,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 
 			var manageFieldDataRequest = new ManageFieldDataRequest
 			{
-				EntityTypeCode = Classifier.EntityTypeCode,
+				EntityTypeCode = Classifier.TypeCode,
 				EntityUid = itemUid,
 				Metadata = metadata,
 				Item = item
@@ -90,6 +90,22 @@ namespace Montr.MasterData.Impl.CommandHandlers
 						.Value(x => x.ParentUid, type.HierarchyType == HierarchyType.Items ? item.ParentUid : null)
 						.InsertAsync(cancellationToken);
 
+					// todo: move to separate service for specific classifier type
+					if (type.Code == "numerator")
+					{
+						var numerator = (Numerator)item;
+
+						await db.GetTable<DbNumerator>()
+							.Value(x => x.Uid, itemUid)
+							.Value(x => x.EntityTypeCode, numerator.EntityTypeCode)
+							// .Value(x => x.Name, numerator.Name)
+							.Value(x => x.Pattern, numerator.Pattern)
+							.Value(x => x.Periodicity, numerator.Periodicity.ToString())
+							.Value(x => x.IsActive, numerator.IsActive)
+							.Value(x => x.IsSystem, numerator.IsSystem)
+							.InsertAsync(cancellationToken);
+					}
+
 					if (type.HierarchyType == HierarchyType.Groups)
 					{
 						// todo: validate group belongs to the same classifier
@@ -101,6 +117,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 							throw new InvalidOperationException("Classifier should belong to one of the default hierarchy group.");
 						}*/
 
+						// todo: should be linked to at least one main group?
 						if (/*request.TreeUid != null &&*/ item.ParentUid != null)
 						{
 							// link to selected group

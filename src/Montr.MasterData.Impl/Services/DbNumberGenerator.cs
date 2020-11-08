@@ -46,6 +46,8 @@ namespace Montr.MasterData.Impl.Services
 				var tags = pattern.Tokens.OfType<TagToken>().Select(x => x.Name).ToList();
 
 				DateTime? date = null;
+
+				// todo: check why default value 00 is required
 				var values = tags.ToDictionary(x => x, x => "00", Numerator.TagComparer);
 
 				foreach (var tagProvider in _resolvers)
@@ -82,8 +84,10 @@ namespace Montr.MasterData.Impl.Services
 
 				if (numerator.KeyTags != null)
 				{
-					foreach (var tag in tags.Where(x =>
-						numerator.KeyTags.Contains(x, Numerator.TagComparer)).OrderBy(x => x, Numerator.TagComparer))
+					var orderedTags = tags.Where(x =>
+						numerator.KeyTags.Contains(x, Numerator.TagComparer)).OrderBy(x => x, Numerator.TagComparer);
+
+					foreach (var tag in orderedTags)
 					{
 						keyBuilder.Append(tag, values[tag]);
 					}
@@ -181,7 +185,7 @@ namespace Montr.MasterData.Impl.Services
 			{
 				var quarter = (date.Value.Month - 1) / 3 + 1;
 				var year2 = date.Value.Year - (int)Math.Floor(date.Value.Year / 100M) * 100;
-				
+
 				values[NumeratorKnownTags.Day] = date.Value.Day.ToString("D2");
 				values[NumeratorKnownTags.Month] = date.Value.Month.ToString("D2");
 				values[NumeratorKnownTags.Quarter] = quarter.ToString();

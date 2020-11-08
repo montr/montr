@@ -26,7 +26,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 
 			var number = await _numerator.GenerateNumber(new GenerateNumberRequest
 			{
-				EntityTypeCode = Classifier.EntityTypeCode,
+				EntityTypeCode = Classifier.TypeCode,
 				EntityTypeUid = type.Uid
 			}, cancellationToken);
 

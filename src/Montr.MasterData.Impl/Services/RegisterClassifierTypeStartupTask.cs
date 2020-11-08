@@ -40,7 +40,7 @@ namespace Montr.MasterData.Impl.Services
 				Fields = new List<FieldMetadata>
 				{
 					// todo: remove "Numerator/Grid" and "Numerator/Form" from RegisterClassifierMetadataStartupTask
-					// new TextField { Key = "code", Name = "Код", Required = true, Active = true, DisplayOrder = 10, System = true },
+					new TextField { Key = "code", Name = "Код", Required = true, Active = true, DisplayOrder = 10, System = true },
 					new TextAreaField { Key = "name", Name = "Наименование", Required = true, Active = true, System = true, Props = new TextAreaField.Properties { Rows = 2 } },
 					new SelectField
 					{

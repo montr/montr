@@ -62,7 +62,7 @@ namespace Montr.Docs.Impl.Services
 						var fields = await _fieldDataRepository.Search(new FieldDataSearchRequest
 						{
 							Metadata = metadata.Rows,
-							EntityTypeCode = Document.EntityTypeCode,
+							EntityTypeCode = Document.TypeCode,
 							// ReSharper disable once PossibleInvalidOperationException
 							EntityUids = new[] { item.Uid.Value }
 						}, cancellationToken);

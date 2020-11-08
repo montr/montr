@@ -21,7 +21,7 @@ namespace Montr.MasterData.Impl.Services
 		{
 			var metadata = await _fieldMetadataRepository.Search(new MetadataSearchRequest
 			{
-				EntityTypeCode = ClassifierType.EntityTypeCode,
+				EntityTypeCode = ClassifierType.TypeCode,
 				EntityUid = type.Uid,
 				// todo: check flags
 				// IsSystem = false,

@@ -60,7 +60,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 				// delete fields
 				await _fieldDataRepository.Delete(new DeleteFieldDataRequest
 				{
-					EntityTypeCode = Classifier.EntityTypeCode,
+					EntityTypeCode = Classifier.TypeCode,
 					EntityUids = request.Uids
 				}, cancellationToken);
 

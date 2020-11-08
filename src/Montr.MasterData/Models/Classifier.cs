@@ -10,7 +10,7 @@ namespace Montr.MasterData.Models
 	{
 		private string DebuggerDisplay => $"{Code}, {Name}";
 
-		public static readonly string EntityTypeCode = typeof(Classifier).Name;
+		public static readonly string TypeCode = nameof(Classifier);
 
 		public Guid? Uid { get; set; }
 

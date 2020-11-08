@@ -116,6 +116,7 @@ namespace Montr.MasterData.Services
 			{
 				Columns = new List<DataColumn>
 				{
+					new DataColumn { Key = "code", Name = "Код", Sortable = true, UrlProperty = "url", Width = 200 },
 					new DataColumn { Key = "name", Name = "Наименование", Sortable = true, UrlProperty = "url", Width = 200 },
 					new DataColumn { Key = "pattern", Name = "Формат номера", UrlProperty = "url", Width = 150 },
 					new DataColumn { Key = "entityTypeCode", Name = "Применимость", Sortable = true, Width = 30 },
@@ -129,6 +130,7 @@ namespace Montr.MasterData.Services
 			{
 				Fields = new List<FieldMetadata>
 				{
+					new TextField { Key = "code", Name = "Код", Required = true, Active = true, DisplayOrder = 10, System = true },
 					new TextField { Key = "name", Name = "Наименование", Required = true },
 					new SelectField
 					{
@@ -157,7 +159,7 @@ namespace Montr.MasterData.Services
 							}
 						}
 					},
-					new TextAreaField { Key = "pattern", Name = "Pattern", Required = true, Props = new TextAreaField.Properties { Rows = 4 } },
+					new TextAreaField { Key = "pattern", Name = "Pattern", Required = true, Props = new TextAreaField.Properties { Rows = 2 } },
 				}
 			});
 
