@@ -32,7 +32,7 @@ namespace Montr.Automate.Services
 		{
 			if (context.Values.TryGetValue(EntityKey, out var entity) == false)
 			{
-				var contextProvider = _serviceFactory.Resolve(context.EntityTypeCode);
+				var contextProvider = _serviceFactory.GetRequiredService(context.EntityTypeCode);
 
 				entity = context.Values[EntityKey] = await contextProvider.GetEntity(context, cancellationToken);
 			}
@@ -42,7 +42,7 @@ namespace Montr.Automate.Services
 
 		public async Task<IList<FieldMetadata>> GetFields(AutomationContext context, CancellationToken cancellationToken)
 		{
-			return await _serviceFactory.Resolve(context.EntityTypeCode).GetFields(context, cancellationToken);
+			return await _serviceFactory.GetRequiredService(context.EntityTypeCode).GetFields(context, cancellationToken);
 		}
 	}
 }

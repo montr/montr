@@ -24,7 +24,7 @@ namespace Montr.Automate.Impl.QueryHandlers
 			CancellationToken cancellationToken)
 		{
 			var result = _providerFactory.GetNames()
-				.Select(x => _providerFactory.Resolve(x).RuleType).ToList();
+				.Select(x => _providerFactory.GetRequiredService(x).RuleType).ToList();
 
 			return await Task.FromResult(result);
 		}

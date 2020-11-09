@@ -24,7 +24,7 @@ namespace Montr.Automate.Impl.Services
 
 		public async Task<Recipient> Resolve(string recipient, AutomationContext context, CancellationToken cancellationToken)
 		{
-			var recipientResolver = _recipientResolverFactory.Resolve(context.EntityTypeCode);
+			var recipientResolver = _recipientResolverFactory.GetRequiredService(context.EntityTypeCode);
 
 			var result = await recipientResolver.Resolve(recipient, context, cancellationToken);
 

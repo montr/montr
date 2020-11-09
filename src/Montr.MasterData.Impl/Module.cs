@@ -18,6 +18,7 @@ namespace Montr.MasterData.Impl
 			services.AddTransient<IStartupTask, RegisterClassifierTypeStartupTask>();
 
 			services.AddTransient<INumberGenerator, DbNumberGenerator>();
+			services.AddNamedTransient<IClassifierTypeProvider, NumeratorTypeProvider>(NumeratorTypeProvider.TypeCode);
 
 			services.AddTransient<IRepository<ClassifierType>, DbClassifierTypeRepository>();
 			services.AddTransient<IRepository<ClassifierTree>, DbClassifierTreeRepository>();
@@ -30,11 +31,6 @@ namespace Montr.MasterData.Impl
 
 			services.AddTransient<IRepository<Numerator>, DbNumeratorRepository>();
 			services.AddTransient<INumberGenerator, DbNumberGenerator>();
-
-			/*services.AddControllers(options =>
-			{
-				options.ModelBinderProviders.Insert(0, new ClassifierModelBinderProvider());
-			});*/
 		}
 
 		public void Configure(IApplicationBuilder app)

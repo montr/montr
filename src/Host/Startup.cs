@@ -129,6 +129,7 @@ namespace Host
 				mvcBuilder.AddNewtonsoftJson(options =>
 				{
 					// options.SerializerSettings.DefaultValueHandling = DefaultValueHandling.Ignore; // do not use - zeros in numbers ignored also
+
 					options.SerializerSettings.Converters.Add(new StringEnumConverter());
 					options.SerializerSettings.Converters.Add(new PolymorphicNewtonsoftJsonConverter<Classifier>(x => x.Code, _classTypeMap));
 					options.SerializerSettings.Converters.Add(new PolymorphicNewtonsoftJsonConverter<FieldMetadata>(x => x.Type, _fieldTypeMap));
@@ -178,13 +179,13 @@ namespace Host
 			var conditionProviderFactory = app.ApplicationServices.GetRequiredService<INamedServiceFactory<IAutomationConditionProvider>>();
 			foreach (var name in conditionProviderFactory.GetNames())
 			{
-				_automateConditionTypeMap[name] = conditionProviderFactory.Resolve(name).RuleType.Type;
+				_automateConditionTypeMap[name] = conditionProviderFactory.GetRequiredService(name).RuleType.Type;
 			}
 
 			var actionProviderFactory = app.ApplicationServices.GetRequiredService<INamedServiceFactory<IAutomationActionProvider>>();
 			foreach (var name in actionProviderFactory.GetNames())
 			{
-				_automateActionTypeMap[name] = actionProviderFactory.Resolve(name).RuleType.Type;
+				_automateActionTypeMap[name] = actionProviderFactory.GetRequiredService(name).RuleType.Type;
 			}
 		}
 	}

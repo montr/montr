@@ -43,7 +43,7 @@ namespace Montr.MasterData.Impl.QueryHandlers
 
 				foreach (var entity in data)
 				{
-					var entityNameResolver = _entityNameResolverFactory.Resolve(entity.EntityTypeCode);
+					var entityNameResolver = _entityNameResolverFactory.GetRequiredService(entity.EntityTypeCode);
 
 					var entityName = await entityNameResolver.Resolve(entity.EntityTypeCode, entity.EntityUid, cancellationToken);
 

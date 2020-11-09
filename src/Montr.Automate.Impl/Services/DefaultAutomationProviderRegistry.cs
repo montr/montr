@@ -18,12 +18,12 @@ namespace Montr.Automate.Impl.Services
 
 		public IAutomationConditionProvider GetConditionProvider(string typeCode)
 		{
-			return _conditionProviderFactory.Resolve(typeCode);
+			return _conditionProviderFactory.GetRequiredService(typeCode);
 		}
 
 		public IAutomationActionProvider GetActionProvider(string typeCode)
 		{
-			return _actionProviderFactory.Resolve(typeCode);
+			return _actionProviderFactory.GetRequiredService(typeCode);
 		}
 	}
 }

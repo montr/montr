@@ -110,7 +110,7 @@ namespace Montr.Automate.Impl.Services
 
 			foreach (var dbAction in dbActions)
 			{
-				var actionProvider = _actionProvider.Resolve(dbAction.TypeCode);
+				var actionProvider = _actionProvider.GetRequiredService(dbAction.TypeCode);
 
 				// todo: use factory (?) move to provider (!?)
 				var action = (AutomationAction) Activator.CreateInstance(actionProvider.RuleType.Type);
@@ -140,7 +140,7 @@ namespace Montr.Automate.Impl.Services
 
 			foreach (var dbCondition in dbConditions)
 			{
-				var conditionProvider = _conditionProvider.Resolve(dbCondition.TypeCode);
+				var conditionProvider = _conditionProvider.GetRequiredService(dbCondition.TypeCode);
 
 				// todo: use factory (?) move to provider (!?)
 				var condition = (AutomationCondition) Activator.CreateInstance(conditionProvider.RuleType.Type);

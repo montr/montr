@@ -7,7 +7,9 @@ namespace Montr.Core.Services
 {
 	public interface INamedServiceFactory<out TService>
 	{
-		TService Resolve(string name);
+		TService GetService(string name);
+
+		TService GetRequiredService(string name);
 
 		IEnumerable<string> GetNames();
 	}
@@ -23,14 +25,26 @@ namespace Montr.Core.Services
 			_registrations = registrations;
 		}
 
-		public TService Resolve(string name)
+		public TService GetService(string name)
 		{
 			if (_registrations.TryGetValue(name, out var serviceType))
 			{
 				return (TService)_serviceProvider.GetRequiredService(serviceType);
 			}
 
-			throw new ArgumentException($"Service with name {name} is not registered.");
+			return default;
+		}
+
+		public TService GetRequiredService(string name)
+		{
+			var service = GetService(name);
+
+			if (service == null)
+			{
+				throw new ArgumentException($"Service with name {name} is not registered.");
+			}
+
+			return service;
 		}
 
 		public IEnumerable<string> GetNames()

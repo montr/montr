@@ -23,17 +23,20 @@ namespace Montr.MasterData.Impl.CommandHandlers
 		private readonly IDbContextFactory _dbContextFactory;
 		private readonly IDateTimeProvider _dateTimeProvider;
 		private readonly IClassifierTypeService _classifierTypeService;
+		private readonly INamedServiceFactory<IClassifierTypeProvider> _classifierTypeProviderFactory;
 		private readonly IClassifierTypeMetadataService _metadataService;
 		private readonly IFieldDataRepository _fieldDataRepository;
 
 		public InsertClassifierHandler(IUnitOfWorkFactory unitOfWorkFactory, IDbContextFactory dbContextFactory,
 			IDateTimeProvider dateTimeProvider, IClassifierTypeService classifierTypeService,
+			INamedServiceFactory<IClassifierTypeProvider> classifierTypeProviderFactory,
 			IClassifierTypeMetadataService metadataService, IFieldDataRepository fieldDataRepository)
 		{
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_dbContextFactory = dbContextFactory;
 			_dateTimeProvider = dateTimeProvider;
 			_classifierTypeService = classifierTypeService;
+			_classifierTypeProviderFactory = classifierTypeProviderFactory;
 			_metadataService = metadataService;
 			_fieldDataRepository = fieldDataRepository;
 		}
@@ -50,6 +53,8 @@ namespace Montr.MasterData.Impl.CommandHandlers
 
 			var itemUid = Guid.NewGuid();
 
+			item.Uid = itemUid;
+
 			// todo: validate fields
 			var metadata = await _metadataService.GetMetadata(type, cancellationToken);
 
@@ -65,6 +70,8 @@ namespace Montr.MasterData.Impl.CommandHandlers
 			var result = await _fieldDataRepository.Validate(manageFieldDataRequest, cancellationToken);
 
 			if (result.Success == false) return result;
+
+			var classifierTypeProvider = _classifierTypeProviderFactory.GetService(type.Code);
 
 			using (var scope = _unitOfWorkFactory.Create())
 			{
@@ -90,20 +97,9 @@ namespace Montr.MasterData.Impl.CommandHandlers
 						.Value(x => x.ParentUid, type.HierarchyType == HierarchyType.Items ? item.ParentUid : null)
 						.InsertAsync(cancellationToken);
 
-					// todo: move to separate service for specific classifier type
-					if (type.Code == "numerator")
+					if (classifierTypeProvider != null)
 					{
-						var numerator = (Numerator)item;
-
-						await db.GetTable<DbNumerator>()
-							.Value(x => x.Uid, itemUid)
-							.Value(x => x.EntityTypeCode, numerator.EntityTypeCode)
-							// .Value(x => x.Name, numerator.Name)
-							.Value(x => x.Pattern, numerator.Pattern)
-							.Value(x => x.Periodicity, numerator.Periodicity.ToString())
-							.Value(x => x.IsActive, numerator.IsActive)
-							.Value(x => x.IsSystem, numerator.IsSystem)
-							.InsertAsync(cancellationToken);
+						await classifierTypeProvider.Insert(db, type, item, cancellationToken);
 					}
 
 					if (type.HierarchyType == HierarchyType.Groups)

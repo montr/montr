@@ -30,7 +30,7 @@ namespace Montr.MasterData.Tests.QueryHandlers
 				.ReturnsAsync(() => "Numerator Entity Name");
 
 			var entityTypeResolverFactory = new Mock<INamedServiceFactory<IEntityNameResolver>>();
-			entityTypeResolverFactory.Setup(x => x.Resolve(It.IsAny<string>()))
+			entityTypeResolverFactory.Setup(x => x.GetRequiredService(It.IsAny<string>()))
 				.Returns(() => entityTypeResolverMock.Object);
 
 			var handler = new GetNumeratorEntityListHandler(dbContextFactory, entityTypeResolverFactory.Object);

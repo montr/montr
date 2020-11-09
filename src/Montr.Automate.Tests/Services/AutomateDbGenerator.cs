@@ -26,11 +26,11 @@ namespace Montr.Automate.Tests.Services
 			var jsonSerializer = new NewtonsoftJsonSerializer();
 
 			var acpfMock = new Mock<INamedServiceFactory<IAutomationConditionProvider>>();
-			acpfMock.Setup(x => x.Resolve(FieldAutomationCondition.TypeCode))
+			acpfMock.Setup(x => x.GetRequiredService(FieldAutomationCondition.TypeCode))
 				.Returns(new NoopAutomationConditionProvider { RuleType = new AutomationRuleType { Type = typeof(FieldAutomationCondition) } });
 
 			var aapfMock = new Mock<INamedServiceFactory<IAutomationActionProvider>>();
-			aapfMock.Setup(x => x.Resolve(NotifyByEmailAutomationAction.TypeCode))
+			aapfMock.Setup(x => x.GetRequiredService(NotifyByEmailAutomationAction.TypeCode))
 				.Returns(new NoopAutomationActionProvider { RuleType = new AutomationRuleType { Type =  typeof(NotifyByEmailAutomationAction) } });
 
 			var automationRepository = new DbAutomationRepository(dbContextFactory, acpfMock.Object, aapfMock.Object, jsonSerializer);
