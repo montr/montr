@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using LinqToDB;
 using Montr.Data.Linq2Db;
@@ -10,21 +11,52 @@ namespace Montr.MasterData.Impl.Services
 {
 	public class NumeratorTypeProvider : IClassifierTypeProvider
 	{
+		private readonly IDbContextFactory _dbContextFactory;
 		public static readonly string TypeCode = nameof(Numerator);
 
-		public async Task Insert(DbContext db, ClassifierType type, Classifier item, CancellationToken cancellationToken)
+		public NumeratorTypeProvider(IDbContextFactory dbContextFactory)
+		{
+			_dbContextFactory = dbContextFactory;
+		}
+
+		public Task<Classifier> Create(ClassifierType type, CancellationToken cancellationToken)
+		{
+			throw new System.NotImplementedException();
+		}
+
+		public async Task Insert(ClassifierType type, Classifier item, CancellationToken cancellationToken)
 		{
 			var numerator = (Numerator)item;
 
-			await db.GetTable<DbNumerator>()
-				.Value(x => x.Uid, item.Uid)
-				.Value(x => x.EntityTypeCode, numerator.EntityTypeCode ?? "DocumentType")
-				// .Value(x => x.Name, numerator.Name)
-				.Value(x => x.Pattern, numerator.Pattern)
-				.Value(x => x.Periodicity, numerator.Periodicity.ToString())
-				.Value(x => x.IsActive, numerator.IsActive)
-				.Value(x => x.IsSystem, numerator.IsSystem)
-				.InsertAsync(cancellationToken);
+			using (var db = _dbContextFactory.Create())
+			{
+				await db.GetTable<DbNumerator>()
+					.Value(x => x.Uid, item.Uid)
+					.Value(x => x.EntityTypeCode, numerator.EntityTypeCode)
+					// .Value(x => x.Name, numerator.Name)
+					.Value(x => x.Pattern, numerator.Pattern)
+					.Value(x => x.Periodicity, numerator.Periodicity.ToString())
+					.Value(x => x.IsActive, numerator.IsActive)
+					.Value(x => x.IsSystem, numerator.IsSystem)
+					.InsertAsync(cancellationToken);
+			}
+		}
+
+		public async Task Update(ClassifierType type, Classifier item, CancellationToken cancellationToken)
+		{
+			var numerator = (Numerator)item;
+
+			using (var db = _dbContextFactory.Create())
+			{
+				await db.GetTable<DbNumerator>()
+					.Where(x => x.Uid == item.Uid)
+					// .Set(x => x.Name, item.Name)
+					.Set(x => x.Pattern, numerator.Pattern)
+					.Set(x => x.Periodicity, numerator.Periodicity.ToString())
+					.Set(x => x.IsActive, numerator.IsActive)
+					// .Set(x => x.IsSystem, item.IsSystem)
+					.UpdateAsync(cancellationToken);
+			}
 		}
 	}
 }

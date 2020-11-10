@@ -59,7 +59,7 @@ namespace Montr.MasterData.Impl.Services
 					})
 					.ToListAsync(cancellationToken);
 
-				_db.BulkCopy(insertable);
+				await _db.BulkCopyAsync(insertable, cancellationToken);
 			}
 
 			return true;
@@ -107,7 +107,7 @@ namespace Montr.MasterData.Impl.Services
 						Level = (short)(parent.Level + child.Level + 1)
 					}).ToListAsync(cancellationToken);
 
-				_db.BulkCopy(insertable);
+				await _db.BulkCopyAsync(insertable, cancellationToken);
 			}
 
 			return true;

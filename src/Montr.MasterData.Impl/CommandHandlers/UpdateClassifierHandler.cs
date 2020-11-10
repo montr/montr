@@ -23,17 +23,20 @@ namespace Montr.MasterData.Impl.CommandHandlers
 		private readonly IDbContextFactory _dbContextFactory;
 		private readonly IClassifierTypeService _classifierTypeService;
 		private readonly IClassifierTreeService _classifierTreeService;
+		private readonly INamedServiceFactory<IClassifierTypeProvider> _classifierTypeProviderFactory;
 		private readonly IClassifierTypeMetadataService _metadataService;
 		private readonly IFieldDataRepository _fieldDataRepository;
 
 		public UpdateClassifierHandler(IUnitOfWorkFactory unitOfWorkFactory, IDbContextFactory dbContextFactory,
 			IClassifierTypeService classifierTypeService, IClassifierTreeService classifierTreeService,
+			INamedServiceFactory<IClassifierTypeProvider> classifierTypeProviderFactory,
 			IClassifierTypeMetadataService metadataService, IFieldDataRepository fieldDataRepository)
 		{
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_dbContextFactory = dbContextFactory;
 			_classifierTypeService = classifierTypeService;
 			_classifierTreeService = classifierTreeService;
+			_classifierTypeProviderFactory = classifierTypeProviderFactory;
 			_metadataService = metadataService;
 			_fieldDataRepository = fieldDataRepository;
 		}
@@ -69,6 +72,8 @@ namespace Montr.MasterData.Impl.CommandHandlers
 			{
 				return result;
 			}
+
+			var classifierTypeProvider = _classifierTypeProviderFactory.GetService(type.Code);
 
 			using (var scope = _unitOfWorkFactory.Create())
 			{
@@ -125,6 +130,9 @@ namespace Montr.MasterData.Impl.CommandHandlers
 
 				// update fields
 				await _fieldDataRepository.Update(manageFieldDataRequest, cancellationToken);
+
+				// update specific classifier table
+				if (classifierTypeProvider != null) await classifierTypeProvider.Update(type, item, cancellationToken);
 
 				// todo: (события)
 

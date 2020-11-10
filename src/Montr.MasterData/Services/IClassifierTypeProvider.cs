@@ -1,6 +1,5 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using Montr.Data.Linq2Db;
 using Montr.MasterData.Models;
 
 namespace Montr.MasterData.Services
@@ -10,6 +9,16 @@ namespace Montr.MasterData.Services
 	/// </summary>
 	public interface IClassifierTypeProvider
 	{
-		Task Insert(DbContext db, ClassifierType type, Classifier item, CancellationToken cancellationToken);
+		/// <summary>
+		/// Create classifier item with defaults to display to user before inserting to database.
+		/// </summary>
+		/// <param name="type"></param>
+		/// <param name="cancellationToken"></param>
+		/// <returns></returns>
+		Task<Classifier> Create(ClassifierType type, CancellationToken cancellationToken);
+
+		Task Insert(ClassifierType type, Classifier item, CancellationToken cancellationToken);
+
+		Task Update(ClassifierType type, Classifier item, CancellationToken cancellationToken);
 	}
 }

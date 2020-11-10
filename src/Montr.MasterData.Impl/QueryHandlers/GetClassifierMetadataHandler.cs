@@ -100,18 +100,11 @@ namespace Montr.MasterData.Impl.QueryHandlers
 				IsActive = true
 			}, cancellationToken);
 
-			var dbFields = new List<string>
-			{
-				nameof(Classifier.Code),
-				nameof(Classifier.Name)
-			};
-
 			var result = new DataView { Fields = metadata.Rows };
 
 			foreach (var field in result.Fields)
 			{
-				// if (field.System == false)
-				if (dbFields.Contains(field.Key, StringComparer.InvariantCultureIgnoreCase) == false)
+				if (field.System == false)
 				{
 					field.Key = FieldKey.FormatFullKey(field.Key);
 				}

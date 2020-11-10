@@ -9,7 +9,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Montr.Data.Linq2Db\Montr.Data.Linq2Db.csproj" />
     <ProjectReference Include="..\Montr.Kompany\Montr.Kompany.csproj" />
     <ProjectReference Include="..\Montr.Metadata\Montr.Metadata.csproj" />
   </ItemGroup>

@@ -30,6 +30,8 @@ namespace Montr.MasterData.Impl.CommandHandlers
 				EntityTypeUid = type.Uid
 			}, cancellationToken);
 
+			// todo: use IClassifierTypeProvider to create specific classifiers
+
 			return new Classifier
 			{
 				ParentUid = request.ParentUid,

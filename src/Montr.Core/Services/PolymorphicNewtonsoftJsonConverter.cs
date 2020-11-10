@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq.Expressions;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
@@ -10,6 +11,8 @@ namespace Montr.Core.Services
 	{
 		private readonly string _typeProp;
 		private readonly IDictionary<string, Type> _typeMap;
+
+		public PolymorphicJsonConverterMode Mode { get; set; }
 
 		public PolymorphicNewtonsoftJsonConverter(string typeProp, IDictionary<string, Type> typeMap)
 		{
@@ -25,7 +28,17 @@ namespace Montr.Core.Services
 
 		public override bool CanConvert(Type objectType)
 		{
-			return objectType == typeof(TBaseType);
+			return Mode switch
+			{
+				PolymorphicJsonConverterMode.Exact
+					=> typeof(TBaseType) == objectType,
+
+				PolymorphicJsonConverterMode.Inheritors
+					=> typeof(TBaseType) != objectType &&
+					   typeof(TBaseType).IsAssignableFrom(objectType),
+
+				_ => throw new InvalidEnumArgumentException(nameof(Mode))
+			};
 		}
 
 		public override object ReadJson(JsonReader reader, Type objectType, object existingValue, JsonSerializer serializer)
@@ -43,5 +56,18 @@ namespace Montr.Core.Services
 		{
 			serializer.Serialize(writer, value);
 		}
+	}
+
+	public enum PolymorphicJsonConverterMode : byte
+	{
+		/// <summary>
+		/// Exact type check. Default mode.
+		/// </summary>
+		Exact,
+
+		/// <summary>
+		/// Inheritors types check.
+		/// </summary>
+		Inheritors
 	}
 }

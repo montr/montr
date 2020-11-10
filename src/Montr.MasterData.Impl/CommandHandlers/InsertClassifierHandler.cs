@@ -97,11 +97,6 @@ namespace Montr.MasterData.Impl.CommandHandlers
 						.Value(x => x.ParentUid, type.HierarchyType == HierarchyType.Items ? item.ParentUid : null)
 						.InsertAsync(cancellationToken);
 
-					if (classifierTypeProvider != null)
-					{
-						await classifierTypeProvider.Insert(db, type, item, cancellationToken);
-					}
-
 					if (type.HierarchyType == HierarchyType.Groups)
 					{
 						// todo: validate group belongs to the same classifier
@@ -145,6 +140,9 @@ namespace Montr.MasterData.Impl.CommandHandlers
 				// insert fields
 				// todo: exclude db fields and sections
 				await _fieldDataRepository.Insert(manageFieldDataRequest, cancellationToken);
+
+				// insert to specific classifier table
+				if (classifierTypeProvider != null) await classifierTypeProvider.Insert(type, item, cancellationToken);
 
 				// todo: events
 

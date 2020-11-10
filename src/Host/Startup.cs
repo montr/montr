@@ -16,7 +16,6 @@ using Montr.Automate.Services;
 using Montr.Core;
 using Montr.Core.Impl.Services;
 using Montr.Core.Services;
-using Montr.MasterData.Impl.Services;
 using Montr.MasterData.Models;
 using Montr.Metadata.Models;
 using Montr.Metadata.Services;
@@ -28,7 +27,7 @@ namespace Host
 	public class Startup
 	{
 		private ICollection<IModule> _modules;
-		private IDictionary<string, Type> _classTypeMap;
+		private IDictionary<string, Type> _classifierTypeMap;
 		private IDictionary<string, Type> _fieldTypeMap;
 		private IDictionary<string, Type> _automateConditionTypeMap;
 		private IDictionary<string, Type> _automateActionTypeMap;
@@ -80,7 +79,6 @@ namespace Host
 			services
 				.AddControllers(options =>
 				{
-					// options.ModelBinderProviders.Insert(0, new ClassifierModelBinderProvider());
 				})
 				.AddRazorPagesOptions(options =>
 				{
@@ -117,24 +115,28 @@ namespace Host
 			else
 			{
 				// todo: use event (?)
-				_classTypeMap = new ConcurrentDictionary<string, Type>
-				{
-					["numerator"] = typeof(Numerator)
-				};
-
 				_fieldTypeMap = new ConcurrentDictionary<string, Type>();
 				_automateConditionTypeMap = new ConcurrentDictionary<string, Type>();
 				_automateActionTypeMap = new ConcurrentDictionary<string, Type>();
+
+				_classifierTypeMap = new ConcurrentDictionary<string, Type>
+				{
+					["numerator"] = typeof(Numerator)
+				};
 
 				mvcBuilder.AddNewtonsoftJson(options =>
 				{
 					// options.SerializerSettings.DefaultValueHandling = DefaultValueHandling.Ignore; // do not use - zeros in numbers ignored also
 
 					options.SerializerSettings.Converters.Add(new StringEnumConverter());
-					options.SerializerSettings.Converters.Add(new PolymorphicNewtonsoftJsonConverter<Classifier>(x => x.Code, _classTypeMap));
 					options.SerializerSettings.Converters.Add(new PolymorphicNewtonsoftJsonConverter<FieldMetadata>(x => x.Type, _fieldTypeMap));
 					options.SerializerSettings.Converters.Add(new PolymorphicNewtonsoftJsonConverter<AutomationCondition>(x => x.Type, _automateConditionTypeMap));
 					options.SerializerSettings.Converters.Add(new PolymorphicNewtonsoftJsonConverter<AutomationAction>(x => x.Type, _automateActionTypeMap));
+
+					options.SerializerSettings.Converters.Add(new PolymorphicNewtonsoftJsonConverter<Classifier>(x => x.Code, _classifierTypeMap)
+					{
+						Mode = PolymorphicJsonConverterMode.Inheritors
+					});
 					options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
 				});
 			}
