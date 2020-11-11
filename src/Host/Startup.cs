@@ -128,15 +128,13 @@ namespace Host
 				{
 					// options.SerializerSettings.DefaultValueHandling = DefaultValueHandling.Ignore; // do not use - zeros in numbers ignored also
 
+					// options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
+
 					options.SerializerSettings.Converters.Add(new StringEnumConverter());
 					options.SerializerSettings.Converters.Add(new PolymorphicNewtonsoftJsonConverter<FieldMetadata>(x => x.Type, _fieldTypeMap));
 					options.SerializerSettings.Converters.Add(new PolymorphicNewtonsoftJsonConverter<AutomationCondition>(x => x.Type, _automateConditionTypeMap));
 					options.SerializerSettings.Converters.Add(new PolymorphicNewtonsoftJsonConverter<AutomationAction>(x => x.Type, _automateActionTypeMap));
-
-					options.SerializerSettings.Converters.Add(new PolymorphicNewtonsoftJsonConverter<Classifier>(x => x.Code, _classifierTypeMap)
-					{
-						Mode = PolymorphicJsonConverterMode.Inheritors
-					});
+					options.SerializerSettings.Converters.Add(new PolymorphicNewtonsoftJsonConverterWithPopulate<Classifier>(x => x.Code, _classifierTypeMap));
 					options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
 				});
 			}
