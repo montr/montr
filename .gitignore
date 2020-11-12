@@ -10,6 +10,7 @@
 *.sln.docstates
 .idea
 .vscode
+tempkey.*
 
 # Build results
 [Dd]ebug/

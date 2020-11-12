@@ -126,7 +126,7 @@ namespace Montr.Idx.Impl
 			var builder = services
 				.AddIdentityServer(options =>
 				{
-					options.PublicOrigin = appOptions.AppUrl;
+					// options.PublicOrigin = appOptions.AppUrl; // todo: missing in dotnet 5.0
 					// options.Authentication.CookieAuthenticationScheme = IdentityConstants.ApplicationScheme;
 
 					options.Cors.CorsPolicyName = AppConstants.CorsPolicyName;
