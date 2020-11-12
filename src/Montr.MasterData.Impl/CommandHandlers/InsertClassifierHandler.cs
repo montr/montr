@@ -71,7 +71,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 
 			if (result.Success == false) return result;
 
-			var classifierTypeProvider = _classifierTypeProviderFactory.GetService(type.Code);
+			var classifierTypeProvider = _classifierTypeProviderFactory?.GetService(type.Code);
 
 			using (var scope = _unitOfWorkFactory.Create())
 			{

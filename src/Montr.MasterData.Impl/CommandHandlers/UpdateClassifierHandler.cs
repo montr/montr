@@ -73,7 +73,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 				return result;
 			}
 
-			var classifierTypeProvider = _classifierTypeProviderFactory.GetService(type.Code);
+			var classifierTypeProvider = _classifierTypeProviderFactory?.GetService(type.Code);
 
 			using (var scope = _unitOfWorkFactory.Create())
 			{
@@ -134,7 +134,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 				// update specific classifier table
 				if (classifierTypeProvider != null) await classifierTypeProvider.Update(type, item, cancellationToken);
 
-				// todo: (события)
+				// todo: events
 
 				scope.Commit();
 
