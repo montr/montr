@@ -13,7 +13,7 @@
 	"license": "GPL-3.0",
 	"private": true,
 	"dependencies": {
-		"antd": "^4.8.0",
+		"antd": "^4.8.2",
 		"axios": "^0.21.0",
 		"i18next": "^19.8.3",
 		"i18next-browser-languagedetector": "^6.0.1",
@@ -40,9 +40,9 @@
 		"@types/react-dom": "^16.9.9",
 		"@types/react-router": "^5.1.8",
 		"@types/react-router-dom": "^5.1.6",
-		"babel-loader": "^8.1.0",
+		"babel-loader": "^8.2.1",
 		"babel-plugin-import": "^1.13.1",
-		"copy-webpack-plugin": "^6.3.0",
+		"copy-webpack-plugin": "^6.3.1",
 		"css-loader": "^3.6.0",
 		"fork-ts-checker-webpack-plugin": "^5.2.1",
 		"hard-source-webpack-plugin": "^0.13.1",
@@ -57,6 +57,6 @@
 		"webpack": "^4.44.2",
 		"webpack-bundle-analyzer": "^4.1.0",
 		"webpack-cli": "^4.2.0",
-		"webpack-merge": "^5.3.0"
+		"webpack-merge": "^5.4.0"
 	}
 }
