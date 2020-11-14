@@ -7,7 +7,7 @@ class AuthConstants {
 	public static authority = Constants.authorityURL;
 	public static clientId = "ui";
 	public static clientRoot = window.location.origin;
-	public static clientScope = "openid profile email tendr";
+	public static clientScope = "openid profile email";
 
 	public static RedirectUri = "/signin-oidc";
 	public static SilentRedirectUri = "/silent-renew-oidc";

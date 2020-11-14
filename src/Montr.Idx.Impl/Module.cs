@@ -160,6 +160,7 @@ namespace Montr.Idx.Impl
 		{
 			// app.UseCors("default"); // not needed, since UseIdentityServer adds cors
 			// app.UseAuthentication(); // not needed, since UseIdentityServer adds the authentication middleware
+
 			app.UseIdentityServer();
 			app.UseAuthorization();
 		}

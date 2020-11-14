@@ -77,7 +77,7 @@ namespace Montr.Core
 		public void Configure(IApplicationBuilder app)
 		{
 			app.UseRequestLocalization(
-				app.ApplicationServices.GetService<IOptions<RequestLocalizationOptions>>().Value);
+				app.ApplicationServices.GetRequiredService<IOptions<RequestLocalizationOptions>>().Value);
 		}
 
 		public Task Run(CancellationToken cancellationToken)

@@ -50,7 +50,7 @@ namespace Host
 		{
 			services.Configure<CookiePolicyOptions>(options =>
 			{
-				options.CheckConsentNeeded = context => true;
+				options.CheckConsentNeeded = _ => true;
 				options.MinimumSameSitePolicy = SameSiteMode.None;
 			});
 
@@ -77,10 +77,10 @@ namespace Host
 				.SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
 
 			services
-				.AddControllers(options =>
+				.AddControllers(_ =>
 				{
 				})
-				.AddRazorPagesOptions(options =>
+				.AddRazorPagesOptions(_ =>
 				{
 					// options.AllowAreas = true;
 					// options.Conventions.AuthorizeAreaFolder("Identity", "/Account/Manage");
@@ -142,9 +142,10 @@ namespace Host
 
 		public void Configure(IApplicationBuilder app)
 		{
-			app.UseWhen(context => context.Request.Path.StartsWithSegments("/api") == false, x =>
+			app.UseWhen(context => context.Request.Path.StartsWithSegments("/api") == false, context =>
 			{
-				x.UseExceptionHandler("/Home/Error");
+				// context.SetIdentityServerOrigin(appOptions.AppUrl);
+				context.UseExceptionHandler("/Home/Error");
 			});
 
 			app.UseHsts();
