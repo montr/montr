@@ -77,6 +77,7 @@ namespace Montr.MasterData.Impl.QueryHandlers
 						},
                         Item = new Classifier
                         {
+	                        Type = type.Code,
 	                        Uid = x.Item.Uid,
 	                        Code = x.Item.Code,
 	                        Name = x.Item.Name

@@ -47,10 +47,10 @@ namespace Montr.MasterData.Impl.CommandHandlers
 
 			var item = request.Item ?? throw new ArgumentNullException(nameof(request.Item));
 
-			var type = await _classifierTypeService.Get(request.TypeCode, cancellationToken);
+			var type = await _classifierTypeService.Get(item.Type, cancellationToken);
 
 			var tree = type.HierarchyType == HierarchyType.Groups
-				? await _classifierTreeService.GetClassifierTree(request.CompanyUid, request.TypeCode, ClassifierTree.DefaultCode, cancellationToken)
+				? await _classifierTreeService.GetClassifierTree(request.CompanyUid, type.Code, ClassifierTree.DefaultCode, cancellationToken)
 				: null;
 
 			// todo: validate fields

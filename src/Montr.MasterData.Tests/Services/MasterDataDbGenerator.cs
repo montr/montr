@@ -233,9 +233,9 @@ namespace Montr.MasterData.Tests.Services
 			{
 				UserUid = UserUid,
 				CompanyUid = CompanyUid,
-				TypeCode = TypeCode,
 				Item = new Classifier
 				{
+					Type = TypeCode,
 					Code = itemCode,
 					Name = itemCode + " - Test Classifier",
 					ParentUid = parentUid

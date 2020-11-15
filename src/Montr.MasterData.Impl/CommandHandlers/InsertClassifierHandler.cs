@@ -49,7 +49,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 
 			var now = _dateTimeProvider.GetUtcNow();
 
-			var type = await _classifierTypeService.Get(request.TypeCode, cancellationToken);
+			var type = await _classifierTypeService.Get(item.Type, cancellationToken);
 
 			var itemUid = Guid.NewGuid();
 

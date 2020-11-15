@@ -61,9 +61,9 @@ namespace Montr.MasterData.Tests.CommandHandlers
 				{
 					UserUid = generator.UserUid,
 					CompanyUid = generator.CompanyUid,
-					TypeCode = generator.TypeCode,
 					Item = new Classifier
 					{
+						Type = generator.TypeCode,
 						Code = "001",
 						Name = "Test Classifier",
 						Fields = new FieldData
@@ -135,9 +135,9 @@ namespace Montr.MasterData.Tests.CommandHandlers
 				{
 					UserUid = generator.UserUid,
 					CompanyUid = generator.CompanyUid,
-					TypeCode = generator.TypeCode,
 					Item = new Classifier
 					{
+						Type = generator.TypeCode,
 						Code = "001",
 						Name = "Test Classifier"
 					}

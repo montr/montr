@@ -17,6 +17,7 @@ using Montr.Core;
 using Montr.Core.Impl.Services;
 using Montr.Core.Services;
 using Montr.MasterData.Models;
+using Montr.MasterData.Services;
 using Montr.Metadata.Models;
 using Montr.Metadata.Services;
 using Newtonsoft.Json.Converters;
@@ -118,23 +119,17 @@ namespace Host
 				_fieldTypeMap = new ConcurrentDictionary<string, Type>();
 				_automateConditionTypeMap = new ConcurrentDictionary<string, Type>();
 				_automateActionTypeMap = new ConcurrentDictionary<string, Type>();
-
-				_classifierTypeMap = new ConcurrentDictionary<string, Type>
-				{
-					["numerator"] = typeof(Numerator)
-				};
+				_classifierTypeMap = new ConcurrentDictionary<string, Type>();
 
 				mvcBuilder.AddNewtonsoftJson(options =>
 				{
 					// options.SerializerSettings.DefaultValueHandling = DefaultValueHandling.Ignore; // do not use - zeros in numbers ignored also
 
-					// options.SerializerSettings.ReferenceLoopHandling = ReferenceLoopHandling.Ignore;
-
 					options.SerializerSettings.Converters.Add(new StringEnumConverter());
 					options.SerializerSettings.Converters.Add(new PolymorphicNewtonsoftJsonConverter<FieldMetadata>(x => x.Type, _fieldTypeMap));
 					options.SerializerSettings.Converters.Add(new PolymorphicNewtonsoftJsonConverter<AutomationCondition>(x => x.Type, _automateConditionTypeMap));
 					options.SerializerSettings.Converters.Add(new PolymorphicNewtonsoftJsonConverter<AutomationAction>(x => x.Type, _automateActionTypeMap));
-					options.SerializerSettings.Converters.Add(new PolymorphicNewtonsoftJsonConverterWithPopulate<Classifier>(x => x.Code, _classifierTypeMap));
+					options.SerializerSettings.Converters.Add(new PolymorphicNewtonsoftJsonConverterWithPopulate<Classifier>(x => x.Type, _classifierTypeMap));
 					options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
 				});
 			}
@@ -187,6 +182,12 @@ namespace Host
 			foreach (var name in actionProviderFactory.GetNames())
 			{
 				_automateActionTypeMap[name] = actionProviderFactory.GetRequiredService(name).RuleType.Type;
+			}
+
+			var classifierTypeFactory = app.ApplicationServices.GetRequiredService<INamedServiceFactory<IClassifierTypeProvider>>();
+			foreach (var name in classifierTypeFactory.GetNames())
+			{
+				_classifierTypeMap[name] = classifierTypeFactory.GetRequiredService(name).ClassifierType;
 			}
 		}
 	}

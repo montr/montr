@@ -34,6 +34,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 
 			return new Classifier
 			{
+				Type = type.Code,
 				ParentUid = request.ParentUid,
 				Code = number
 			};

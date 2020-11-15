@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using LinqToDB;
@@ -19,9 +20,11 @@ namespace Montr.MasterData.Impl.Services
 			_dbContextFactory = dbContextFactory;
 		}
 
+		public Type ClassifierType { get; } = typeof(Numerator);
+
 		public Task<Classifier> Create(ClassifierType type, CancellationToken cancellationToken)
 		{
-			throw new System.NotImplementedException();
+			throw new NotImplementedException();
 		}
 
 		public async Task Insert(ClassifierType type, Classifier item, CancellationToken cancellationToken)

@@ -11,11 +11,6 @@ interface IClassifierSearchRequest {
 	searchTerm?: string;
 }
 
-interface IInsertClassifierRequest {
-	typeCode: string;
-	item: IClassifier;
-}
-
 export class ClassifierService extends Fetcher {
 
 	list = async (request: IClassifierSearchRequest): Promise<DataResult<IClassifier>> => {
@@ -34,12 +29,12 @@ export class ClassifierService extends Fetcher {
 		return this.post(Api.classifierGet, { typeCode, uid });
 	};
 
-	insert = async (request: IInsertClassifierRequest): Promise<ApiResult> => {
-		return this.post(Api.classifierInsert, request);
+	insert = async (typeCode: string, item: IClassifier): Promise<ApiResult> => {
+		return this.post(Api.classifierInsert, { typeCode, ...item });
 	};
 
 	update = async (typeCode: string, item: IClassifier): Promise<ApiResult> => {
-		return this.post(Api.classifierUpdate, { typeCode, item });
+		return this.post(Api.classifierUpdate, { typeCode, ...item });
 	};
 
 	delete = async (typeCode: string, uids: string[] | number[]): Promise<number> => {

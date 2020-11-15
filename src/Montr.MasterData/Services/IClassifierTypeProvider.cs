@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Montr.MasterData.Models;
 
@@ -9,6 +10,8 @@ namespace Montr.MasterData.Services
 	/// </summary>
 	public interface IClassifierTypeProvider
 	{
+		Type ClassifierType { get; }
+
 		/// <summary>
 		/// Create classifier item with defaults to display to user before inserting to database.
 		/// </summary>

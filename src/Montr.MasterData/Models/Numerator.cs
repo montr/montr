@@ -23,6 +23,7 @@ namespace Montr.MasterData.Models
 		public NumeratorPeriodicity Periodicity { get; set; }
 
 		// todo: move to classifier
+		// todo: add FK to classifier
 		public bool IsActive { get; set; }
 
 		public bool IsSystem { get; set; }

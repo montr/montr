@@ -80,7 +80,7 @@ export default class TabEditClassifier extends React.Component<Props, State> {
 			return result;
 		}
 		else {
-			const result = await this._classifierService.insert({ typeCode: type.code, item: values });
+			const result = await this._classifierService.insert(type.code, values);
 
 			if (result.success) {
 				if (onDataChange) await onDataChange(result);

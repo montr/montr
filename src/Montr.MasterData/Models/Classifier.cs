@@ -8,9 +8,11 @@ namespace Montr.MasterData.Models
 	[DebuggerDisplay("{" + nameof(DebuggerDisplay) + ",nq}")]
 	public class Classifier : IFieldDataContainer
 	{
-		private string DebuggerDisplay => $"{Code}, {Name}";
+		private string DebuggerDisplay => $"[{Type}] {Code}, {Name}";
 
 		public static readonly string TypeCode = nameof(Classifier);
+
+		public string Type { get; set; }
 
 		public Guid? Uid { get; set; }
 

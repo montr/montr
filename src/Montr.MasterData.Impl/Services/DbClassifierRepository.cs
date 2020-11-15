@@ -124,6 +124,13 @@ namespace Montr.MasterData.Impl.Services
 					// query = query.Where(x => x.Name.Contains(request.SearchTerm));
 				}
 
+				/*if (type.Code == "numerator")
+				{
+					var joined = from c in query
+						join t in db.GetTable<DbNumerator>() on c.Uid equals t.Uid
+						select new { c, t };
+				}*/
+
 				var data = await Materialize(
 					query.Apply(request, x => x.Code), type, cancellationToken);
 
@@ -141,7 +148,7 @@ namespace Montr.MasterData.Impl.Services
 				if (request.IncludeFields)
 				{
 					var metadata = await _metadataService.GetMetadata(type, cancellationToken);
-					
+
 					foreach (var item in data)
 					{
 						var fields = await _fieldDataRepository.Search(new FieldDataSearchRequest
@@ -170,6 +177,7 @@ namespace Montr.MasterData.Impl.Services
 			return await query
 				.Select(x => new Classifier
 				{
+					Type = type.Code,
 					Uid = x.Uid,
 					StatusCode = x.StatusCode,
 					Code = x.Code,
