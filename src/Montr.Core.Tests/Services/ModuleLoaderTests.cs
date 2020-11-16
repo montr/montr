@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Console;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Montr.Core.Impl.Services;
 
@@ -13,14 +12,14 @@ namespace Montr.Core.Tests.Services
 		{
 			// arrange
 			var loggerFactory = LoggerFactory.Create(
-				builder => builder.AddConsole(options => options.Format = ConsoleLoggerFormat.Systemd));
+				builder => builder.AddConsole(options => options.FormatterName = "systemd"));
 			var loader = new ModuleLoader(loggerFactory.CreateLogger<ModuleLoader>());
 
 			// act
 			var modules = loader.GetSortedModules("../../../../Host/bin/Debug/net5.0/", false);
 
 			// assert
-			// Assert.AreEqual(0, loader.Errors.Count); // todo: fix errors in github actions tests
+			Assert.AreEqual(0, loader.Errors.Count); // todo: fix errors in github actions tests
 			Assert.IsTrue(modules.Count > 0);
 		}
 
@@ -32,7 +31,7 @@ namespace Montr.Core.Tests.Services
 		{
 			// arrange
 			var loggerFactory = LoggerFactory.Create(
-				builder => builder.AddConsole(options => options.Format = ConsoleLoggerFormat.Systemd));
+				builder => builder.AddConsole(options => options.FormatterName = "systemd"));
 			var loader = new ModuleLoader(loggerFactory.CreateLogger<ModuleLoader>());
 
 			// act

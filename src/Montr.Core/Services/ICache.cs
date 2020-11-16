@@ -15,9 +15,9 @@ namespace Montr.Core.Services
 	{
 		private readonly IMemoryCache _memoryCache;
 		private readonly IDistributedCache _distributedCache;
-		private readonly IBinarySerializer _serializer;
+		private readonly IJsonSerializer _serializer;
 
-		public CombinedCache(IMemoryCache memoryCache, IDistributedCache distributedCache, IBinarySerializer serializer)
+		public CombinedCache(IMemoryCache memoryCache, IDistributedCache distributedCache, IJsonSerializer serializer)
 		{
 			_memoryCache = memoryCache;
 			_distributedCache = distributedCache;
@@ -26,9 +26,9 @@ namespace Montr.Core.Services
 
 		public async Task<T> GetOrCreate<T>(string key, Func<Task<T>> valueFactory, CancellationToken token) where T : class
 		{
-			return await _memoryCache.GetOrCreateAsync(key, async entry =>  
+			return await _memoryCache.GetOrCreateAsync(key, async _ =>
 			{
-				var result = await _distributedCache.GetAsync(key, token);
+				var result = await _distributedCache.GetStringAsync(key, token);
 
 				if (result == null)
 				{
@@ -37,7 +37,7 @@ namespace Montr.Core.Services
 
 					var value = await valueFactory();
 
-					await _distributedCache.SetAsync(key, _serializer.Serialize(value), options, token);
+					await _distributedCache.SetStringAsync(key, _serializer.Serialize(value), options, token);
 
 					return value;
 				}

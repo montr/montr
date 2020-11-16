@@ -1,7 +1,6 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Console;
 using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Montr.Core.Impl.Services;
@@ -19,7 +18,7 @@ namespace Montr.Core.Tests.Services
 			// arrange
 			var cancellationToken = new CancellationToken();
 			var loggerFactory = LoggerFactory.Create(
-				builder => builder.AddConsole(options => options.Format = ConsoleLoggerFormat.Systemd));
+				builder => builder.AddConsole(options => options.FormatterName = "systemd"));
 			var optionsMonitorMock = new Mock<IOptionsMonitor<MigrationOptions>>();
 			optionsMonitorMock.Setup(x => x.CurrentValue).Returns(() => new MigrationOptions
 			{
