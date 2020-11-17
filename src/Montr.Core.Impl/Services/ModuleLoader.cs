@@ -13,7 +13,7 @@ namespace Montr.Core.Impl.Services
 	{
 		private readonly ILogger _logger;
 
-		private readonly Regex _excludePattern = new Regex(@".*(Microsoft\.|System\.).*");
+		private readonly Regex _excludePattern = new(@".*(Microsoft\.|System\.).*");
 
 		public IList<Exception> Errors { get; } = new List<Exception>();
 

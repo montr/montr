@@ -30,11 +30,11 @@ export class ClassifierService extends Fetcher {
 	};
 
 	insert = async (typeCode: string, item: IClassifier): Promise<ApiResult> => {
-		return this.post(Api.classifierInsert, { typeCode, ...item });
+		return this.post(Api.classifierInsert, { item: { type: typeCode, ...item } });
 	};
 
 	update = async (typeCode: string, item: IClassifier): Promise<ApiResult> => {
-		return this.post(Api.classifierUpdate, { typeCode, ...item });
+		return this.post(Api.classifierUpdate, { item: { type: typeCode, ...item } });
 	};
 
 	delete = async (typeCode: string, uids: string[] | number[]): Promise<number> => {

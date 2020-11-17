@@ -12,8 +12,9 @@ namespace Montr.MasterData.Impl.Services
 {
 	public class NumeratorTypeProvider : IClassifierTypeProvider
 	{
+		public static readonly string TypeCode = nameof(Numerator).ToLower();
+
 		private readonly IDbContextFactory _dbContextFactory;
-		public static readonly string TypeCode = nameof(Numerator);
 
 		public NumeratorTypeProvider(IDbContextFactory dbContextFactory)
 		{

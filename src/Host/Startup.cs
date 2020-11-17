@@ -119,7 +119,7 @@ namespace Host
 				_fieldTypeMap = new ConcurrentDictionary<string, Type>();
 				_automateConditionTypeMap = new ConcurrentDictionary<string, Type>();
 				_automateActionTypeMap = new ConcurrentDictionary<string, Type>();
-				_classifierTypeMap = new ConcurrentDictionary<string, Type>();
+				_classifierTypeMap = new ConcurrentDictionary<string, Type>(StringComparer.OrdinalIgnoreCase);
 
 				mvcBuilder.AddNewtonsoftJson(options =>
 				{
