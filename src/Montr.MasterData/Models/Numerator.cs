@@ -12,13 +12,18 @@ namespace Montr.MasterData.Models
 
 		public static readonly string DefaultPattern = "{Number}";
 
+		/// <summary>
+		/// DocumentType or ClassifierType
+		/// </summary>
 		public string EntityTypeCode { get; set; }
 
 		public string Pattern { get; set; }
 
-		// (?) tags used to build unique numerator keys (unique numbers in scope of these tags)
-		// todo: display in UI as checkboxes (?) - only for documents (?)
-		public string[] KeyTags { get; set; }
+		/// <summary>
+        /// Tags used to build unique numerator keys (unique numbers in scope of these tags)
+        /// todo: display in UI as checkboxes (?) - only for documents (?)
+        /// </summary>
+        public string[] KeyTags { get; set; }
 
 		public NumeratorPeriodicity Periodicity { get; set; }
 
