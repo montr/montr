@@ -38,6 +38,7 @@ namespace Montr.MasterData.Tests.CommandHandlers
 			var fieldProviderRegistry = new DefaultFieldProviderRegistry();
 			fieldProviderRegistry.AddFieldType(typeof(TextField));
 			var dbFieldDataRepository = new DbFieldDataRepository(dbContextFactory, fieldProviderRegistry);
+
 			var metadataServiceMock = new Mock<IClassifierTypeMetadataService>();
 			metadataServiceMock
 				.Setup(x => x.GetMetadata(It.IsAny<ClassifierType>(), It.IsAny<CancellationToken>()))
@@ -47,7 +48,12 @@ namespace Montr.MasterData.Tests.CommandHandlers
 					new TextField { Key = "test2", Active = true, System = false },
 					new TextField { Key = "test3", Active = true, System = false }
 				});
-			var classifierRepository = new DbClassifierRepository(dbContextFactory, classifierTypeService, metadataServiceMock.Object, dbFieldDataRepository);
+
+			var ctpMock = new Mock<INamedServiceFactory<IClassifierTypeProvider>>();
+			ctpMock.Setup(x => x.GetNamedOrDefaultService(It.IsAny<string>()))
+				.Returns(new ClassifierTypeProvider(dbContextFactory, null, null));
+
+			var classifierRepository = new DbClassifierRepository(classifierTypeService, ctpMock.Object);
 			var handler = new InsertClassifierHandler(unitOfWorkFactory, dbContextFactory, dateTimeProvider,
 				classifierTypeService, classifierTypeProviderFactoryMock.Object, metadataServiceMock.Object, dbFieldDataRepository);
 

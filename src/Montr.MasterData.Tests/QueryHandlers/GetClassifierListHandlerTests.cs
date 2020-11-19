@@ -8,7 +8,9 @@ using Montr.MasterData.Impl.QueryHandlers;
 using Montr.MasterData.Impl.Services;
 using Montr.MasterData.Models;
 using Montr.MasterData.Queries;
+using Montr.MasterData.Services;
 using Montr.MasterData.Tests.Services;
+using Moq;
 
 namespace Montr.MasterData.Tests.QueryHandlers
 {
@@ -24,7 +26,12 @@ namespace Montr.MasterData.Tests.QueryHandlers
 			var unitOfWorkFactory = new TransactionScopeUnitOfWorkFactory();
 			var classifierTypeRepository = new DbClassifierTypeRepository(dbContextFactory);
 			var classifierTypeService = new DbClassifierTypeService(dbContextFactory, classifierTypeRepository);
-			var classifierRepository = new DbClassifierRepository(dbContextFactory, classifierTypeService, null, null);
+
+			var ctpMock = new Mock<INamedServiceFactory<IClassifierTypeProvider>>();
+			ctpMock.Setup(x => x.GetNamedOrDefaultService(It.IsAny<string>()))
+				.Returns(new ClassifierTypeProvider(dbContextFactory, null, null));
+
+			var classifierRepository = new DbClassifierRepository(classifierTypeService, ctpMock.Object);
 			var generator = new MasterDataDbGenerator(unitOfWorkFactory, dbContextFactory);
 			var handler = new GetClassifierListHandler(classifierRepository);
 

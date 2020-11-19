@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Montr.Core.Models;
 using Montr.MasterData.Models;
 
 namespace Montr.MasterData.Services
@@ -11,6 +12,9 @@ namespace Montr.MasterData.Services
 	public interface IClassifierTypeProvider
 	{
 		Type ClassifierType { get; }
+
+		Task<SearchResult<Classifier>> Search(ClassifierType type,
+			ClassifierSearchRequest request, CancellationToken cancellationToken);
 
 		/// <summary>
 		/// Create classifier item with defaults to display to user before inserting to database.

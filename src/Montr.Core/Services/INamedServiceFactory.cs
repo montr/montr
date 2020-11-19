@@ -7,11 +7,13 @@ namespace Montr.Core.Services
 {
 	public interface INamedServiceFactory<out TService>
 	{
+		IEnumerable<string> GetNames();
+
 		TService GetService(string name);
 
 		TService GetRequiredService(string name);
 
-		IEnumerable<string> GetNames();
+		TService GetNamedOrDefaultService(string name);
 	}
 
 	public class DefaultNamedServiceFactory<TService> : INamedServiceFactory<TService>
@@ -23,6 +25,11 @@ namespace Montr.Core.Services
 		{
 			_serviceProvider = serviceProvider;
 			_registrations = registrations;
+		}
+
+		public IEnumerable<string> GetNames()
+		{
+			return _registrations.Keys;
 		}
 
 		public TService GetService(string name)
@@ -47,20 +54,26 @@ namespace Montr.Core.Services
 			return service;
 		}
 
-		public IEnumerable<string> GetNames()
+		public TService GetNamedOrDefaultService(string name)
 		{
-			return _registrations.Keys;
+			var service = GetService(name);
+
+			if (service == null)
+			{
+				return _serviceProvider.GetRequiredService<TService>();
+			}
+
+			return service;
 		}
 	}
 
 	/// <summary>
 	/// Registration of named services, for example:
-	/// services.AddNamedTransient<INumeratorTagProvider, ClassifierNumeratorTagProvider>(ClassifierType.EntityTypeCode);
+	/// services.AddNamedTransient&lt;INumeratorTagProvider, ClassifierNumeratorTagProvider>(ClassifierType.EntityTypeCode);
 	/// </summary>
 	public static class NamedServiceCollectionExtensions
 	{
-		private static readonly ConcurrentDictionary<Type, IDictionary<string, Type>>
-			FactoryRegistrations = new ConcurrentDictionary<Type, IDictionary<string, Type>>();
+		private static readonly ConcurrentDictionary<Type, IDictionary<string, Type>> FactoryRegistrations = new();
 
 		public static IServiceCollection AddNamedTransient<TService, TImplementation>(this IServiceCollection services, string name)
 			where TService : class

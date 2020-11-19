@@ -5,12 +5,13 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Montr.Core.Services;
 using Montr.Data.Linq2Db;
 using Montr.MasterData.Impl.Services;
-using Montr.MasterData.Tests;
+using Montr.MasterData.Services;
 using Montr.MasterData.Tests.Services;
 using Montr.Metadata.Impl.Services;
 using Montr.Tendr.Commands;
 using Montr.Tendr.Impl.CommandHandlers;
 using Montr.Tendr.Models;
+using Moq;
 
 namespace Montr.Tendr.Tests.CommandHandlers
 {
@@ -27,7 +28,12 @@ namespace Montr.Tendr.Tests.CommandHandlers
 			var classifierTypeRepository = new DbClassifierTypeRepository(dbContextFactory);
 			var classifierTypeService = new DbClassifierTypeService(dbContextFactory, classifierTypeRepository);
 			var dbFieldDataRepository = new DbFieldDataRepository(dbContextFactory, null);
-			var classifierRepository = new DbClassifierRepository(dbContextFactory, classifierTypeService, null, dbFieldDataRepository);
+
+			var ctpMock = new Mock<INamedServiceFactory<IClassifierTypeProvider>>();
+			ctpMock.Setup(x => x.GetNamedOrDefaultService(It.IsAny<string>()))
+				.Returns(new ClassifierTypeProvider(dbContextFactory, null, dbFieldDataRepository));
+
+			var classifierRepository = new DbClassifierRepository(classifierTypeService, ctpMock.Object);
 			var generator = new MasterDataDbGenerator(unitOfWorkFactory, dbContextFactory);
 			var handler = new InsertInvitationHandler(unitOfWorkFactory, dbContextFactory, classifierRepository);
 
