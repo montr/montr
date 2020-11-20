@@ -161,7 +161,7 @@ export class ClassifierGroupSelect extends React.Component<IProps, IState> {
 				}
 			}
 
-			resolve();
+			resolve(null);
 		});
 	};
 
