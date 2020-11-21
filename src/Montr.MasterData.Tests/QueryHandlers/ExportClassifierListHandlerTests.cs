@@ -30,7 +30,7 @@ namespace Montr.MasterData.Tests.QueryHandlers
 
 			var ctpMock = new Mock<INamedServiceFactory<IClassifierTypeProvider>>();
 			ctpMock.Setup(x => x.GetNamedOrDefaultService(It.IsAny<string>()))
-				.Returns(new ClassifierTypeProvider(dbContextFactory, null, null));
+				.Returns(new ClassifierTypeProvider<Classifier>(dbContextFactory, null, null));
 
 			var classifierRepository = new DbClassifierRepository(classifierTypeService, ctpMock.Object);
 			var generator = new MasterDataDbGenerator(unitOfWorkFactory, dbContextFactory);

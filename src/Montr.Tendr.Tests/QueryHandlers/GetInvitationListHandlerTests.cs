@@ -5,6 +5,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Montr.Core.Services;
 using Montr.Data.Linq2Db;
 using Montr.MasterData.Impl.Services;
+using Montr.MasterData.Models;
 using Montr.MasterData.Services;
 using Montr.Tendr.Impl.QueryHandlers;
 using Montr.Tendr.Queries;
@@ -26,7 +27,7 @@ namespace Montr.Tendr.Tests.QueryHandlers
 
 			var ctpMock = new Mock<INamedServiceFactory<IClassifierTypeProvider>>();
 			ctpMock.Setup(x => x.GetNamedOrDefaultService(It.IsAny<string>()))
-				.Returns(new ClassifierTypeProvider(dbContextFactory, null, null));
+				.Returns(new ClassifierTypeProvider<Classifier>(dbContextFactory, null, null));
 
 			var classifierRepository = new DbClassifierRepository(classifierTypeService, ctpMock.Object);
 			var handler = new GetInvitationListHandler(dbContextFactory, classifierRepository);

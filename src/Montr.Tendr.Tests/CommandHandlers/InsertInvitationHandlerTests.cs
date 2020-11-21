@@ -5,6 +5,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Montr.Core.Services;
 using Montr.Data.Linq2Db;
 using Montr.MasterData.Impl.Services;
+using Montr.MasterData.Models;
 using Montr.MasterData.Services;
 using Montr.MasterData.Tests.Services;
 using Montr.Metadata.Impl.Services;
@@ -31,7 +32,7 @@ namespace Montr.Tendr.Tests.CommandHandlers
 
 			var ctpMock = new Mock<INamedServiceFactory<IClassifierTypeProvider>>();
 			ctpMock.Setup(x => x.GetNamedOrDefaultService(It.IsAny<string>()))
-				.Returns(new ClassifierTypeProvider(dbContextFactory, null, dbFieldDataRepository));
+				.Returns(new ClassifierTypeProvider<Classifier>(dbContextFactory, null, dbFieldDataRepository));
 
 			var classifierRepository = new DbClassifierRepository(classifierTypeService, ctpMock.Object);
 			var generator = new MasterDataDbGenerator(unitOfWorkFactory, dbContextFactory);

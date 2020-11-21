@@ -27,6 +27,7 @@ namespace Montr.Core.Services
 				paging.SortOrder = defaultSortOrder;
 			}
 
+			// todo: add skip order?
 			var ordered = paging.SortOrder == SortOrder.Ascending
 				? source.OrderBy(paging.SortColumn)
 				: source.OrderByDescending(paging.SortColumn);
@@ -56,27 +57,28 @@ namespace Montr.Core.Services
 
 		public static IOrderedQueryable<T> OrderBy<T>(this IQueryable<T> source, string property)
 		{
-			return ApplyOrder(source, property, "OrderBy");
+			return ApplyOrder(source, property, nameof(Queryable.OrderBy));
 		}
 
 		public static IOrderedQueryable<T> OrderByDescending<T>(this IQueryable<T> source, string property)
 		{
-			return ApplyOrder(source, property, "OrderByDescending");
+			return ApplyOrder(source, property, nameof(Queryable.OrderByDescending));
 		}
 
 		public static IOrderedQueryable<T> ThenBy<T>(this IOrderedQueryable<T> source, string property)
 		{
-			return ApplyOrder(source, property, "ThenBy");
+			return ApplyOrder(source, property, nameof(Queryable.ThenBy));
 		}
 
 		public static IOrderedQueryable<T> ThenByDescending<T>(this IOrderedQueryable<T> source, string property)
 		{
-			return ApplyOrder(source, property, "ThenByDescending");
+			return ApplyOrder(source, property, nameof(Queryable.ThenByDescending));
 		}
 
 		private static IOrderedQueryable<T> ApplyOrder<T>(IQueryable<T> source, string property, string methodName)
 		{
 			var type = typeof(T);
+
 			var arg = Expression.Parameter(type, "x");
 			Expression expr = arg;
 
