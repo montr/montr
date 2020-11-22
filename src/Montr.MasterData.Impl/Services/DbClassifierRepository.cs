@@ -14,14 +14,14 @@ using Montr.Metadata.Services;
 
 namespace Montr.MasterData.Impl.Services
 {
-	public class ClassifierRepository<T> : IClassifierRepository where T : Classifier, new()
+	public class DbClassifierRepository<T> : IClassifierRepository where T : Classifier, new()
 	{
 		private readonly IDbContextFactory _dbContextFactory;
 		private readonly IClassifierTypeService _classifierTypeService;
 		private readonly IClassifierTypeMetadataService _metadataService;
 		private readonly IFieldDataRepository _fieldDataRepository;
 
-		public ClassifierRepository(IDbContextFactory dbContextFactory,
+		public DbClassifierRepository(IDbContextFactory dbContextFactory,
 			IClassifierTypeService classifierTypeService,
 			IClassifierTypeMetadataService metadataService,
 			IFieldDataRepository fieldDataRepository)

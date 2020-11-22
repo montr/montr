@@ -44,7 +44,7 @@ namespace Montr.MasterData.Tests.QueryHandlers
 					new TextField { Key = "test3", Active = true, System = false }
 				});
 
-			var classifierRepository = new ClassifierRepository<Classifier>(dbContextFactory, classifierTypeService, metadataServiceMock.Object, dbFieldDataRepository);
+			var classifierRepository = new DbClassifierRepository<Classifier>(dbContextFactory, classifierTypeService, metadataServiceMock.Object, dbFieldDataRepository);
 			var generator = new MasterDataDbGenerator(unitOfWorkFactory, dbContextFactory);
 			var handler = new ExportClassifierListHandler(classifierRepository);
 

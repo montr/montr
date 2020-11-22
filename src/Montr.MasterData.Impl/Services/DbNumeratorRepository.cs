@@ -12,6 +12,7 @@ using Montr.MasterData.Models;
 
 namespace Montr.MasterData.Impl.Services
 {
+	// todo: move to NumeratorRepository
 	public class DbNumeratorRepository : IRepository<Numerator>
 	{
 		private readonly IDbContextFactory _dbContextFactory;
@@ -44,7 +45,7 @@ namespace Montr.MasterData.Impl.Services
 
 				var paged = query.Apply(request, x => x.Name);
 
-				var data = await Materialize(paged, cancellationToken); 
+				var data = await Materialize(paged, cancellationToken);
 
 				return new SearchResult<Numerator>
 				{

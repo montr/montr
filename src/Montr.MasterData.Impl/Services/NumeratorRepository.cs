@@ -13,7 +13,7 @@ using Montr.Metadata.Services;
 
 namespace Montr.MasterData.Impl.Services
 {
-	public class NumeratorRepository : ClassifierRepository<Numerator>
+	public class NumeratorRepository : DbClassifierRepository<Numerator>
 	{
 		public static readonly string TypeCode = nameof(Numerator).ToLower();
 
