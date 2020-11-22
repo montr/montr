@@ -184,7 +184,7 @@ namespace Host
 				_automateActionTypeMap[name] = actionProviderFactory.GetRequiredService(name).RuleType.Type;
 			}
 
-			var classifierTypeFactory = app.ApplicationServices.GetRequiredService<INamedServiceFactory<IClassifierTypeProvider>>();
+			var classifierTypeFactory = app.ApplicationServices.GetRequiredService<INamedServiceFactory<IClassifierRepository>>();
 			foreach (var name in classifierTypeFactory.GetNames())
 			{
 				_classifierTypeMap[name] = classifierTypeFactory.GetRequiredService(name).ClassifierType;

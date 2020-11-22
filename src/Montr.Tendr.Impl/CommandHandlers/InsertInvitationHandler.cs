@@ -8,6 +8,7 @@ using Montr.Core.Models;
 using Montr.Core.Services;
 using Montr.Data.Linq2Db;
 using Montr.MasterData.Models;
+using Montr.MasterData.Services;
 using Montr.Tendr.Commands;
 using Montr.Tendr.Impl.Entities;
 using Montr.Tendr.Models;
@@ -18,10 +19,10 @@ namespace Montr.Tendr.Impl.CommandHandlers
 	{
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IDbContextFactory _dbContextFactory;
-		private readonly IRepository<Classifier> _classifierRepository;
+		private readonly IClassifierRepository _classifierRepository;
 
 		public InsertInvitationHandler(IUnitOfWorkFactory unitOfWorkFactory, IDbContextFactory dbContextFactory,
-			IRepository<Classifier> classifierRepository)
+			IClassifierRepository classifierRepository)
 		{
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_dbContextFactory = dbContextFactory;

@@ -9,6 +9,7 @@ using Montr.MasterData.Models;
 using Montr.MasterData.Services;
 using Montr.MasterData.Tests.Services;
 using Montr.Metadata.Impl.Services;
+using Montr.Metadata.Models;
 using Montr.Tendr.Commands;
 using Montr.Tendr.Impl.CommandHandlers;
 using Montr.Tendr.Models;
@@ -28,13 +29,23 @@ namespace Montr.Tendr.Tests.CommandHandlers
 			var dbContextFactory = new DefaultDbContextFactory();
 			var classifierTypeRepository = new DbClassifierTypeRepository(dbContextFactory);
 			var classifierTypeService = new DbClassifierTypeService(dbContextFactory, classifierTypeRepository);
-			var dbFieldDataRepository = new DbFieldDataRepository(dbContextFactory, null);
 
-			var ctpMock = new Mock<INamedServiceFactory<IClassifierTypeProvider>>();
-			ctpMock.Setup(x => x.GetNamedOrDefaultService(It.IsAny<string>()))
-				.Returns(new ClassifierTypeProvider<Classifier>(dbContextFactory, null, dbFieldDataRepository));
+			var fieldProviderRegistry = new DefaultFieldProviderRegistry();
+			fieldProviderRegistry.AddFieldType(typeof(TextField));
+			var dbFieldDataRepository = new DbFieldDataRepository(dbContextFactory, fieldProviderRegistry);
 
-			var classifierRepository = new DbClassifierRepository(classifierTypeService, ctpMock.Object);
+			var metadataServiceMock = new Mock<IClassifierTypeMetadataService>();
+			metadataServiceMock
+				.Setup(x => x.GetMetadata(It.IsAny<ClassifierType>(), It.IsAny<CancellationToken>()))
+				.ReturnsAsync(() => new FieldMetadata[]
+				{
+					new TextField { Key = "test1", Active = true, System = false },
+					new TextField { Key = "test2", Active = true, System = false },
+					new TextField { Key = "test3", Active = true, System = false }
+				});
+
+			var classifierRepository = new ClassifierRepository<Classifier>(
+				dbContextFactory, classifierTypeService, metadataServiceMock.Object, dbFieldDataRepository);
 			var generator = new MasterDataDbGenerator(unitOfWorkFactory, dbContextFactory);
 			var handler = new InsertInvitationHandler(unitOfWorkFactory, dbContextFactory, classifierRepository);
 

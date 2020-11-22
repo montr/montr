@@ -14,25 +14,30 @@ using Montr.Metadata.Services;
 
 namespace Montr.MasterData.Impl.Services
 {
-	public class ClassifierTypeProvider<T> : IClassifierTypeProvider where T : Classifier, new()
+	public class ClassifierRepository<T> : IClassifierRepository where T : Classifier, new()
 	{
 		private readonly IDbContextFactory _dbContextFactory;
+		private readonly IClassifierTypeService _classifierTypeService;
 		private readonly IClassifierTypeMetadataService _metadataService;
 		private readonly IFieldDataRepository _fieldDataRepository;
 
-		public ClassifierTypeProvider(IDbContextFactory dbContextFactory,
-			IClassifierTypeMetadataService metadataService, IFieldDataRepository fieldDataRepository)
+		public ClassifierRepository(IDbContextFactory dbContextFactory,
+			IClassifierTypeService classifierTypeService,
+			IClassifierTypeMetadataService metadataService,
+			IFieldDataRepository fieldDataRepository)
 		{
 			_dbContextFactory = dbContextFactory;
+			_classifierTypeService = classifierTypeService;
 			_metadataService = metadataService;
 			_fieldDataRepository = fieldDataRepository;
 		}
 
 		public Type ClassifierType => typeof(T);
 
-		public async Task<SearchResult<Classifier>> Search(ClassifierType type,
-			ClassifierSearchRequest request, CancellationToken cancellationToken)
+		public async Task<SearchResult<Classifier>> Search(ClassifierSearchRequest request, CancellationToken cancellationToken)
 		{
+			var type = await _classifierTypeService.Get(request.TypeCode, cancellationToken);
+
 			using (var db = _dbContextFactory.Create())
 			{
 				var result = await SearchInternal(db, type, request, cancellationToken);

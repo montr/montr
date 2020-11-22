@@ -23,13 +23,13 @@ namespace Montr.MasterData.Impl.CommandHandlers
 		private readonly IDbContextFactory _dbContextFactory;
 		private readonly IDateTimeProvider _dateTimeProvider;
 		private readonly IClassifierTypeService _classifierTypeService;
-		private readonly INamedServiceFactory<IClassifierTypeProvider> _classifierTypeProviderFactory;
+		private readonly INamedServiceFactory<IClassifierRepository> _classifierTypeProviderFactory;
 		private readonly IClassifierTypeMetadataService _metadataService;
 		private readonly IFieldDataRepository _fieldDataRepository;
 
 		public InsertClassifierHandler(IUnitOfWorkFactory unitOfWorkFactory, IDbContextFactory dbContextFactory,
 			IDateTimeProvider dateTimeProvider, IClassifierTypeService classifierTypeService,
-			INamedServiceFactory<IClassifierTypeProvider> classifierTypeProviderFactory,
+			INamedServiceFactory<IClassifierRepository> classifierTypeProviderFactory,
 			IClassifierTypeMetadataService metadataService, IFieldDataRepository fieldDataRepository)
 		{
 			_unitOfWorkFactory = unitOfWorkFactory;

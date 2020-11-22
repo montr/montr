@@ -2,17 +2,17 @@
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
-using Montr.Core.Services;
 using Montr.MasterData.Models;
 using Montr.MasterData.Queries;
+using Montr.MasterData.Services;
 
 namespace Montr.MasterData.Impl.QueryHandlers
 {
 	public class GetClassifierHandler : IRequestHandler<GetClassifier, Classifier>
 	{
-		private readonly IRepository<Classifier> _repository;
+		private readonly IClassifierRepository _repository;
 
-		public GetClassifierHandler(IRepository<Classifier> repository)
+		public GetClassifierHandler(IClassifierRepository repository)
 		{
 			_repository = repository;
 		}
@@ -24,7 +24,8 @@ namespace Montr.MasterData.Impl.QueryHandlers
 				CompanyUid = request.CompanyUid,
 				TypeCode = request.TypeCode,
 				Uid = request.Uid,
-				IncludeFields = true
+				IncludeFields = true,
+				SkipPaging = true
 			}, cancellationToken);
 
 			return result.Rows.Single();

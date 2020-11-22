@@ -14,7 +14,7 @@
 
 		public SortOrder? SortOrder { get; set; }
 
-		// todo: should not always be controlled from client, change to method SkipPaging() ?
+		// todo: should not be controlled from client, change to method SkipPaging() ?
 		public bool SkipPaging { get; set; }
 	}
 

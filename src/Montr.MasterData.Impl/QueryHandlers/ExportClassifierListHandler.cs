@@ -6,9 +6,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using Montr.Core.Models;
-using Montr.Core.Services;
 using Montr.MasterData.Models;
 using Montr.MasterData.Queries;
+using Montr.MasterData.Services;
 using OfficeOpenXml;
 using OfficeOpenXml.Style;
 
@@ -22,9 +22,9 @@ namespace Montr.MasterData.Impl.QueryHandlers
 		private static readonly int FirstDataRow = 3;
 		private static readonly int FirstDataCol = 1;
 
-		private readonly IRepository<Classifier> _repository;
+		private readonly IClassifierRepository _repository;
 
-		public ExportClassifierListHandler(IRepository<Classifier> repository)
+		public ExportClassifierListHandler(IClassifierRepository repository)
 		{
 			_repository = repository;
 		}
@@ -50,7 +50,7 @@ namespace Montr.MasterData.Impl.QueryHandlers
 					new { Code = "name", Name = "Наименование" },
 					new { Code = "statusCode", Name = "Статус" }
 				};
-				
+
 				foreach (var column in columns)
 				{
 					ws.Cells[ColumnNameRow, col].Value = column.Name;

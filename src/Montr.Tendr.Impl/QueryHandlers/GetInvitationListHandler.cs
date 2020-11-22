@@ -9,6 +9,7 @@ using Montr.Core.Services;
 using Montr.Data.Linq2Db;
 using Montr.MasterData.Impl.Entities;
 using Montr.MasterData.Models;
+using Montr.MasterData.Services;
 using Montr.Tendr.Impl.Entities;
 using Montr.Tendr.Models;
 using Montr.Tendr.Queries;
@@ -18,9 +19,9 @@ namespace Montr.Tendr.Impl.QueryHandlers
 	public class GetInvitationListHandler : IRequestHandler<GetInvitationList, SearchResult<InvitationListItem>>
 	{
 		private readonly IDbContextFactory _dbContextFactory;
-		private readonly IRepository<Classifier> _classifierRepository;
+		private readonly IClassifierRepository _classifierRepository;
 
-		public GetInvitationListHandler(IDbContextFactory dbContextFactory, IRepository<Classifier> classifierRepository)
+		public GetInvitationListHandler(IDbContextFactory dbContextFactory, IClassifierRepository classifierRepository)
 		{
 			_dbContextFactory = dbContextFactory;
 			_classifierRepository = classifierRepository;
@@ -46,7 +47,7 @@ namespace Montr.Tendr.Impl.QueryHandlers
 						CounterpartyName = c.Name,
 						Email = i.Email
 					};
-				
+
 				var data = await all
 					.Apply(request, x => x.CounterpartyName, SortOrder.Descending)
 					.ToListAsync(cancellationToken);

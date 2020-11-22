@@ -13,15 +13,17 @@ using Montr.Metadata.Services;
 
 namespace Montr.MasterData.Impl.Services
 {
-	public class NumeratorTypeProvider : ClassifierTypeProvider<Numerator>
+	public class NumeratorRepository : ClassifierRepository<Numerator>
 	{
 		public static readonly string TypeCode = nameof(Numerator).ToLower();
 
 		private readonly IDbContextFactory _dbContextFactory;
 
-		public NumeratorTypeProvider(IDbContextFactory dbContextFactory,
-			IClassifierTypeMetadataService metadataService, IFieldDataRepository fieldDataRepository)
-			: base(dbContextFactory, metadataService, fieldDataRepository)
+		public NumeratorRepository(IDbContextFactory dbContextFactory,
+			IClassifierTypeService classifierTypeService,
+			IClassifierTypeMetadataService metadataService,
+			IFieldDataRepository fieldDataRepository)
+			: base(dbContextFactory, classifierTypeService, metadataService, fieldDataRepository)
 		{
 			_dbContextFactory = dbContextFactory;
 		}

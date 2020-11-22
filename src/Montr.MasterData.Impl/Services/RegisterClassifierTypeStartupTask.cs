@@ -69,7 +69,11 @@ namespace Montr.MasterData.Impl.Services
 							}
 						}
 					},
-					new TextAreaField { Key = "pattern", Name = "Pattern", Required = true, Props = new TextAreaField.Properties { Rows = 4 } },
+					new TextAreaField
+					{
+						Key = "pattern", Name = "Формат номера", Required = true, Props = new TextAreaField.Properties { Rows = 4 },
+						Description = "Укажите шаблон наблон с использованием возможных подстановок, например: {DocumentType}-{Number}/{Year2}"
+					}
 				}
 			};
 		}
