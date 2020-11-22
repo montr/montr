@@ -44,9 +44,13 @@ namespace Montr.MasterData.Tests.QueryHandlers
 				});
 
 			var classifierRepository = new DbClassifierRepository<Classifier>(
-				dbContextFactory, classifierTypeService, metadataServiceMock.Object, dbFieldDataRepository);
+				dbContextFactory, classifierTypeService, metadataServiceMock.Object, dbFieldDataRepository, null);
+
+			var ctpMock = new Mock<INamedServiceFactory<IClassifierRepository>>();
+			ctpMock.Setup(x => x.GetNamedOrDefaultService(It.IsAny<string>())).Returns(classifierRepository);
+
+			var handler = new GetClassifierListHandler(ctpMock.Object);
 			var generator = new MasterDataDbGenerator(unitOfWorkFactory, dbContextFactory);
-			var handler = new GetClassifierListHandler(classifierRepository);
 
 			using (var _ = unitOfWorkFactory.Create())
 			{

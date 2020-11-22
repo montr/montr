@@ -22,8 +22,9 @@ namespace Montr.MasterData.Impl.Services
 		public NumeratorRepository(IDbContextFactory dbContextFactory,
 			IClassifierTypeService classifierTypeService,
 			IClassifierTypeMetadataService metadataService,
-			IFieldDataRepository fieldDataRepository)
-			: base(dbContextFactory, classifierTypeService, metadataService, fieldDataRepository)
+			IFieldDataRepository fieldDataRepository,
+			INumberGenerator numberGenerator)
+			: base(dbContextFactory, classifierTypeService, metadataService, fieldDataRepository, numberGenerator)
 		{
 			_dbContextFactory = dbContextFactory;
 		}
@@ -70,9 +71,16 @@ namespace Montr.MasterData.Impl.Services
 			return item;
 		}
 
-		public override Task<Classifier> Create(ClassifierType type, CancellationToken cancellationToken)
+		protected override async Task<Numerator> CreateInternal(ClassifierCreateRequest request, CancellationToken cancellationToken)
 		{
-			throw new NotImplementedException();
+			var result = await base.CreateInternal(request, cancellationToken);
+
+			result.EntityTypeCode = Models.ClassifierType.TypeCode;
+			result.Periodicity = NumeratorPeriodicity.Year;
+			result.Pattern = "{Number}";
+			result.IsActive = true;
+
+			return result;
 		}
 
 		public override async Task Insert(ClassifierType type, Classifier item, CancellationToken cancellationToken)

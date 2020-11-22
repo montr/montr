@@ -51,7 +51,7 @@ namespace Montr.MasterData.Tests.CommandHandlers
 				});
 
 			var classifierRepository = new DbClassifierRepository<Classifier>(
-				dbContextFactory, classifierTypeService, metadataServiceMock.Object, dbFieldDataRepository);
+				dbContextFactory, classifierTypeService, metadataServiceMock.Object, dbFieldDataRepository, null);
 			var handler = new InsertClassifierHandler(unitOfWorkFactory, dbContextFactory, dateTimeProvider,
 				classifierTypeService, classifierTypeProviderFactoryMock.Object, metadataServiceMock.Object, dbFieldDataRepository);
 

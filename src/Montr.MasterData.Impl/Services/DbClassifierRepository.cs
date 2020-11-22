@@ -20,16 +20,19 @@ namespace Montr.MasterData.Impl.Services
 		private readonly IClassifierTypeService _classifierTypeService;
 		private readonly IClassifierTypeMetadataService _metadataService;
 		private readonly IFieldDataRepository _fieldDataRepository;
+		private readonly INumberGenerator _numberGenerator;
 
 		public DbClassifierRepository(IDbContextFactory dbContextFactory,
 			IClassifierTypeService classifierTypeService,
 			IClassifierTypeMetadataService metadataService,
-			IFieldDataRepository fieldDataRepository)
+			IFieldDataRepository fieldDataRepository,
+			INumberGenerator numberGenerator)
 		{
 			_dbContextFactory = dbContextFactory;
 			_classifierTypeService = classifierTypeService;
 			_metadataService = metadataService;
 			_fieldDataRepository = fieldDataRepository;
+			_numberGenerator = numberGenerator;
 		}
 
 		public Type ClassifierType => typeof(T);
@@ -189,7 +192,7 @@ namespace Montr.MasterData.Impl.Services
 
 		protected T Materialize(ClassifierType type, DbClassifier dbItem)
 		{
-			return new T
+			return new()
 			{
 				Type = type.Code,
 				Uid = dbItem.Uid,
@@ -201,9 +204,27 @@ namespace Montr.MasterData.Impl.Services
 			};
 		}
 
-		public virtual Task<Classifier> Create(ClassifierType type, CancellationToken cancellationToken)
+		public async Task<Classifier> Create(ClassifierCreateRequest request, CancellationToken cancellationToken)
 		{
-			throw new NotImplementedException();
+			return await CreateInternal(request, cancellationToken);
+		}
+
+		protected virtual async Task<T> CreateInternal(ClassifierCreateRequest request, CancellationToken cancellationToken)
+		{
+			var type = await _classifierTypeService.Get(request.TypeCode, cancellationToken);
+
+			var number = await _numberGenerator.GenerateNumber(new GenerateNumberRequest
+			{
+				EntityTypeCode = Classifier.TypeCode,
+				EntityTypeUid = type.Uid
+			}, cancellationToken);
+
+			return new()
+			{
+				Type = type.Code,
+				ParentUid = request.ParentUid,
+				Code = number
+			};
 		}
 
 		public virtual Task Insert(ClassifierType type, Classifier item, CancellationToken cancellationToken)

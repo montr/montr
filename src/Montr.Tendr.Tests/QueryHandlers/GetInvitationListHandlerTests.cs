@@ -41,7 +41,7 @@ namespace Montr.Tendr.Tests.QueryHandlers
 				});
 
 			var classifierRepository = new DbClassifierRepository<Classifier>(
-				dbContextFactory, classifierTypeService, metadataServiceMock.Object, dbFieldDataRepository);
+				dbContextFactory, classifierTypeService, metadataServiceMock.Object, dbFieldDataRepository, null);
 			var handler = new GetInvitationListHandler(dbContextFactory, classifierRepository);
 
 			// act

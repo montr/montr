@@ -45,7 +45,7 @@ namespace Montr.Tendr.Tests.CommandHandlers
 				});
 
 			var classifierRepository = new DbClassifierRepository<Classifier>(
-				dbContextFactory, classifierTypeService, metadataServiceMock.Object, dbFieldDataRepository);
+				dbContextFactory, classifierTypeService, metadataServiceMock.Object, dbFieldDataRepository, null);
 			var generator = new MasterDataDbGenerator(unitOfWorkFactory, dbContextFactory);
 			var handler = new InsertInvitationHandler(unitOfWorkFactory, dbContextFactory, classifierRepository);
 

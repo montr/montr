@@ -18,10 +18,7 @@ namespace Montr.MasterData.Services
 		/// <summary>
 		/// Create classifier item with defaults to display to user before inserting to database.
 		/// </summary>
-		/// <param name="type"></param>
-		/// <param name="cancellationToken"></param>
-		/// <returns></returns>
-		Task<Classifier> Create(ClassifierType type, CancellationToken cancellationToken);
+		Task<Classifier> Create(ClassifierCreateRequest request, CancellationToken cancellationToken);
 
 		Task Insert(ClassifierType type, Classifier item, CancellationToken cancellationToken);
 

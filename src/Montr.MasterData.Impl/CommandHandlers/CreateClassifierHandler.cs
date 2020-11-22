@@ -1,6 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
+using Montr.Core.Services;
 using Montr.MasterData.Commands;
 using Montr.MasterData.Models;
 using Montr.MasterData.Services;
@@ -9,35 +10,18 @@ namespace Montr.MasterData.Impl.CommandHandlers
 {
 	public class CreateClassifierHandler : IRequestHandler<CreateClassifier, Classifier>
 	{
-		private readonly IClassifierTypeService _classifierTypeService;
-		private readonly INumberGenerator _numerator;
+		private readonly INamedServiceFactory<IClassifierRepository> _repositoryFactory;
 
-		public CreateClassifierHandler(
-			IClassifierTypeService classifierTypeService,
-			INumberGenerator numerator)
+		public CreateClassifierHandler(INamedServiceFactory<IClassifierRepository> repositoryFactory)
 		{
-			_classifierTypeService = classifierTypeService;
-			_numerator = numerator;
+			_repositoryFactory = repositoryFactory;
 		}
 
 		public async Task<Classifier> Handle(CreateClassifier request, CancellationToken cancellationToken)
 		{
-			var type = await _classifierTypeService.Get(request.TypeCode, cancellationToken);
+			var repository = _repositoryFactory.GetNamedOrDefaultService(request.TypeCode);
 
-			var number = await _numerator.GenerateNumber(new GenerateNumberRequest
-			{
-				EntityTypeCode = Classifier.TypeCode,
-				EntityTypeUid = type.Uid
-			}, cancellationToken);
-
-			// todo: use IClassifierTypeProvider to create specific classifiers
-
-			return new Classifier
-			{
-				Type = type.Code,
-				ParentUid = request.ParentUid,
-				Code = number
-			};
+			return await repository.Create(request, cancellationToken);
 		}
 	}
 }

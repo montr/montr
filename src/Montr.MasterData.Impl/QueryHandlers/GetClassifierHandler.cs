@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
+using Montr.Core.Services;
 using Montr.MasterData.Models;
 using Montr.MasterData.Queries;
 using Montr.MasterData.Services;
@@ -10,16 +11,18 @@ namespace Montr.MasterData.Impl.QueryHandlers
 {
 	public class GetClassifierHandler : IRequestHandler<GetClassifier, Classifier>
 	{
-		private readonly IClassifierRepository _repository;
+		private readonly INamedServiceFactory<IClassifierRepository> _repositoryFactory;
 
-		public GetClassifierHandler(IClassifierRepository repository)
+		public GetClassifierHandler(INamedServiceFactory<IClassifierRepository> repositoryFactory)
 		{
-			_repository = repository;
+			_repositoryFactory = repositoryFactory;
 		}
 
 		public async Task<Classifier> Handle(GetClassifier request, CancellationToken cancellationToken)
 		{
-			var result = await _repository.Search(new ClassifierSearchRequest
+			var repository = _repositoryFactory.GetNamedOrDefaultService(request.TypeCode);
+
+			var result = await repository.Search(new ClassifierSearchRequest
 			{
 				CompanyUid = request.CompanyUid,
 				TypeCode = request.TypeCode,
