@@ -51,7 +51,7 @@ namespace Montr.MasterData.Tests.CommandHandlers
 
 			var ctpMock = new Mock<INamedServiceFactory<IClassifierTypeProvider>>();
 			ctpMock.Setup(x => x.GetNamedOrDefaultService(It.IsAny<string>()))
-				.Returns(new ClassifierTypeProvider<Classifier>(dbContextFactory, null, null));
+				.Returns(new ClassifierTypeProvider<Classifier>(dbContextFactory, metadataServiceMock.Object, dbFieldDataRepository));
 
 			var classifierRepository = new DbClassifierRepository(classifierTypeService, ctpMock.Object);
 			var handler = new InsertClassifierHandler(unitOfWorkFactory, dbContextFactory, dateTimeProvider,
