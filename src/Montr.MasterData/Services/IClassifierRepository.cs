@@ -20,8 +20,8 @@ namespace Montr.MasterData.Services
 		/// </summary>
 		Task<Classifier> Create(ClassifierCreateRequest request, CancellationToken cancellationToken);
 
-		Task Insert(ClassifierType type, Classifier item, CancellationToken cancellationToken);
+		Task<ApiResult> Insert(Classifier item, CancellationToken cancellationToken);
 
-		Task Update(ClassifierType type, Classifier item, CancellationToken cancellationToken);
+		Task<ApiResult> Update(Classifier item, CancellationToken cancellationToken);
 	}
 }

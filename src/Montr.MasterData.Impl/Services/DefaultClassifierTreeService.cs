@@ -17,12 +17,12 @@ namespace Montr.MasterData.Impl.Services
 			_repository = repository;
 		}
 
-		public async Task<ClassifierTree> GetClassifierTree(Guid companyUid, string typeCode, string treeCode, CancellationToken cancellationToken)
+		public async Task<ClassifierTree> GetClassifierTree(/*Guid companyUid,*/ string typeCode, string treeCode, CancellationToken cancellationToken)
 		{
 			var types = await _repository.Search(
 				new ClassifierTreeSearchRequest
 				{
-					CompanyUid = companyUid,
+					// CompanyUid = companyUid,
 					TypeCode = typeCode,
 					Code = treeCode ?? throw new ArgumentNullException(nameof(treeCode)),
 					PageNo = 0,
@@ -37,12 +37,12 @@ namespace Montr.MasterData.Impl.Services
 			return types.Rows.Single();
 		}
 
-		public async Task<ClassifierTree> GetClassifierTree(Guid companyUid, string typeCode, Guid treeUid, CancellationToken cancellationToken)
+		public async Task<ClassifierTree> GetClassifierTree(/*Guid companyUid,*/ string typeCode, Guid treeUid, CancellationToken cancellationToken)
 		{
 			var types = await _repository.Search(
 				new ClassifierTreeSearchRequest
 				{
-					CompanyUid = companyUid,
+					// CompanyUid = companyUid,
 					TypeCode = typeCode,
 					Uid = treeUid,
 					PageNo = 0,

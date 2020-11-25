@@ -50,8 +50,8 @@ namespace Montr.MasterData.Tests.CommandHandlers
 					new TextField { Key = "test3", Active = true, System = false }
 				});
 
-			var classifierRepository = new DbClassifierRepository<Classifier>(
-				dbContextFactory, classifierTypeService, metadataServiceMock.Object, dbFieldDataRepository, null);
+			var classifierRepository = new DbClassifierRepository<Classifier>(unitOfWorkFactory,
+				dbContextFactory, null, classifierTypeService, null, metadataServiceMock.Object, dbFieldDataRepository, null);
 			var handler = new InsertClassifierHandler(unitOfWorkFactory, dbContextFactory, dateTimeProvider,
 				classifierTypeService, classifierTypeProviderFactoryMock.Object, metadataServiceMock.Object, dbFieldDataRepository);
 

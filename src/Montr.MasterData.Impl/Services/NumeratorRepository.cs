@@ -19,12 +19,12 @@ namespace Montr.MasterData.Impl.Services
 
 		private readonly IDbContextFactory _dbContextFactory;
 
-		public NumeratorRepository(IDbContextFactory dbContextFactory,
-			IClassifierTypeService classifierTypeService,
-			IClassifierTypeMetadataService metadataService,
-			IFieldDataRepository fieldDataRepository,
-			INumberGenerator numberGenerator)
-			: base(dbContextFactory, classifierTypeService, metadataService, fieldDataRepository, numberGenerator)
+		public NumeratorRepository(IUnitOfWorkFactory unitOfWorkFactory, IDbContextFactory dbContextFactory,
+			IDateTimeProvider dateTimeProvider, IClassifierTypeService classifierTypeService,
+			IClassifierTreeService classifierTreeService, IClassifierTypeMetadataService metadataService,
+			IFieldDataRepository fieldDataRepository, INumberGenerator numberGenerator)
+			: base(unitOfWorkFactory, dbContextFactory, dateTimeProvider, classifierTypeService, classifierTreeService,
+				metadataService, fieldDataRepository, numberGenerator)
 		{
 			_dbContextFactory = dbContextFactory;
 		}
@@ -83,7 +83,7 @@ namespace Montr.MasterData.Impl.Services
 			return result;
 		}
 
-		public override async Task Insert(ClassifierType type, Classifier item, CancellationToken cancellationToken)
+		protected override async Task InsertInternal(ClassifierType type, Classifier item, CancellationToken cancellationToken)
 		{
 			var numerator = (Numerator)item;
 
@@ -101,7 +101,7 @@ namespace Montr.MasterData.Impl.Services
 			}
 		}
 
-		public override async Task Update(ClassifierType type, Classifier item, CancellationToken cancellationToken)
+		protected override async Task UpdateInternal(ClassifierType type, Classifier item, CancellationToken cancellationToken)
 		{
 			var numerator = (Numerator)item;
 

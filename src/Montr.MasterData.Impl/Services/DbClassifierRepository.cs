@@ -6,6 +6,7 @@ using LinqToDB;
 using Montr.Core.Models;
 using Montr.Core.Services;
 using Montr.Data.Linq2Db;
+using Montr.MasterData.Impl.CommandHandlers;
 using Montr.MasterData.Impl.Entities;
 using Montr.MasterData.Models;
 using Montr.MasterData.Services;
@@ -16,20 +17,30 @@ namespace Montr.MasterData.Impl.Services
 {
 	public class DbClassifierRepository<T> : IClassifierRepository where T : Classifier, new()
 	{
+		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IDbContextFactory _dbContextFactory;
+		private readonly IDateTimeProvider _dateTimeProvider;
 		private readonly IClassifierTypeService _classifierTypeService;
+		private readonly IClassifierTreeService _classifierTreeService;
 		private readonly IClassifierTypeMetadataService _metadataService;
 		private readonly IFieldDataRepository _fieldDataRepository;
 		private readonly INumberGenerator _numberGenerator;
 
-		public DbClassifierRepository(IDbContextFactory dbContextFactory,
+		public DbClassifierRepository(
+			IUnitOfWorkFactory unitOfWorkFactory,
+			IDbContextFactory dbContextFactory,
+			IDateTimeProvider dateTimeProvider,
 			IClassifierTypeService classifierTypeService,
+			IClassifierTreeService classifierTreeService,
 			IClassifierTypeMetadataService metadataService,
 			IFieldDataRepository fieldDataRepository,
 			INumberGenerator numberGenerator)
 		{
+			_unitOfWorkFactory = unitOfWorkFactory;
 			_dbContextFactory = dbContextFactory;
+			_dateTimeProvider = dateTimeProvider;
 			_classifierTypeService = classifierTypeService;
+			_classifierTreeService = classifierTreeService;
 			_metadataService = metadataService;
 			_fieldDataRepository = fieldDataRepository;
 			_numberGenerator = numberGenerator;
@@ -227,14 +238,220 @@ namespace Montr.MasterData.Impl.Services
 			};
 		}
 
-		public virtual Task Insert(ClassifierType type, Classifier item, CancellationToken cancellationToken)
+		public virtual async Task<ApiResult> Insert(Classifier item, CancellationToken cancellationToken)
 		{
-			throw new NotImplementedException();
+			var now = _dateTimeProvider.GetUtcNow();
+
+			var type = await _classifierTypeService.Get(item.Type, cancellationToken);
+
+			var itemUid = Guid.NewGuid();
+
+			item.Uid = itemUid;
+
+			// todo: validate fields
+			var metadata = await _metadataService.GetMetadata(type, cancellationToken);
+
+			var manageFieldDataRequest = new ManageFieldDataRequest
+			{
+				EntityTypeCode = Classifier.TypeCode,
+				EntityUid = itemUid,
+				Metadata = metadata,
+				Item = item
+			};
+
+			// todo: move to ClassifierValidator (?)
+			var result = await _fieldDataRepository.Validate(manageFieldDataRequest, cancellationToken);
+
+			if (result.Success == false) return result;
+
+			using (var scope = _unitOfWorkFactory.Create())
+			{
+				using (var db = _dbContextFactory.Create())
+				{
+					var validator = new ClassifierValidator(db, type);
+
+					if (await validator.ValidateInsert(item, cancellationToken) == false)
+					{
+						return new ApiResult { Success = false, Errors = validator.Errors };
+					}
+
+					// todo: company + modification data
+
+					// insert classifier
+					await db.GetTable<DbClassifier>()
+						.Value(x => x.Uid, itemUid)
+						.Value(x => x.TypeUid, type.Uid)
+						.Value(x => x.StatusCode, ClassifierStatusCode.Active)
+						.Value(x => x.Code, item.Code)
+						.Value(x => x.Name, item.Name)
+						// todo: validate parent belongs to the same classifier
+						.Value(x => x.ParentUid, type.HierarchyType == HierarchyType.Items ? item.ParentUid : null)
+						.InsertAsync(cancellationToken);
+
+					if (type.HierarchyType == HierarchyType.Groups)
+					{
+						// todo: validate group belongs to the same classifier
+						// todo: validate selected group belong to default tree
+
+						// what if insert classifier and no groups inserted before?
+						/*if (request.TreeUid == null || request.ParentUid == null)
+						{
+							throw new InvalidOperationException("Classifier should belong to one of the default hierarchy group.");
+						}*/
+
+						// todo: should be linked to at least one main group?
+						if (/*request.TreeUid != null &&*/ item.ParentUid != null)
+						{
+							// link to selected group
+							await db.GetTable<DbClassifierLink>()
+								.Value(x => x.GroupUid, item.ParentUid)
+								.Value(x => x.ItemUid, itemUid)
+								.InsertAsync(cancellationToken);
+						}
+
+						// if group is not of default hierarchy, link to default hierarchy root
+						/*var root = await GetRoot(db, request.ParentUid.Value, cancellationToken);
+
+						if (root.Code != ClassifierTree.DefaultCode)
+						{
+							await LinkToDefaultRoot(db, type, itemUid, cancellationToken);
+						}*/
+					}
+					else if (type.HierarchyType == HierarchyType.Items)
+					{
+						var closureTable = new ClosureTableHandler(db, type);
+
+						if (await closureTable.Insert(itemUid, item.ParentUid, cancellationToken) == false)
+						{
+							return new ApiResult { Success = false, Errors = closureTable.Errors };
+						}
+					}
+				}
+
+				// insert fields
+				// todo: exclude db fields and sections
+				await _fieldDataRepository.Insert(manageFieldDataRequest, cancellationToken);
+
+				// insert to specific classifier table
+				// if (classifierTypeProvider != null) await classifierTypeProvider.Insert(type, item, cancellationToken);
+
+				await InsertInternal(type, item, cancellationToken);
+
+				// todo: events
+
+				scope.Commit();
+
+				return new ApiResult { Uid = itemUid };
+			}
 		}
 
-		public virtual Task Update(ClassifierType type, Classifier item, CancellationToken cancellationToken)
+		protected virtual Task InsertInternal(ClassifierType type, Classifier item, CancellationToken cancellationToken)
 		{
-			throw new NotImplementedException();
+			return Task.CompletedTask;
+		}
+
+		public virtual async Task<ApiResult> Update(Classifier item, CancellationToken cancellationToken)
+		{
+			var type = await _classifierTypeService.Get(item.Type, cancellationToken);
+
+			var tree = type.HierarchyType == HierarchyType.Groups
+				? await _classifierTreeService.GetClassifierTree(/*request.CompanyUid,*/ type.Code, ClassifierTree.DefaultCode, cancellationToken)
+				: null;
+
+			// todo: validate fields
+			var metadata = await _metadataService.GetMetadata(type, cancellationToken);
+
+			var manageFieldDataRequest = new ManageFieldDataRequest
+			{
+				EntityTypeCode = Classifier.TypeCode,
+				// ReSharper disable once PossibleInvalidOperationException
+				EntityUid = item.Uid.Value,
+				Metadata = metadata,
+				Item = item
+			};
+
+			// todo: move to ClassifierValidator (?)
+			var result = await _fieldDataRepository.Validate(manageFieldDataRequest, cancellationToken);
+
+			if (result.Success == false)
+			{
+				return result;
+			}
+
+			// var classifierTypeProvider = _classifierTypeProviderFactory?.GetService(type.Code);
+
+			using (var scope = _unitOfWorkFactory.Create())
+			{
+				int affected;
+
+				using (var db = _dbContextFactory.Create())
+				{
+					var validator = new ClassifierValidator(db, type);
+
+					if (await validator.ValidateUpdate(item, cancellationToken) == false)
+					{
+						return new ApiResult { Success = false, Errors = validator.Errors };
+					}
+
+					affected = await db.GetTable<DbClassifier>()
+						.Where(x => x.Uid == item.Uid)
+						.Set(x => x.Code, item.Code)
+						.Set(x => x.Name, item.Name)
+						.Set(x => x.ParentUid, type.HierarchyType == HierarchyType.Items ? item.ParentUid : null)
+						.UpdateAsync(cancellationToken);
+
+					if (type.HierarchyType == HierarchyType.Groups)
+					{
+						// todo: combine with InsertClassifierLinkHandler in one service
+
+						// delete other links in same tree
+						var deleted = await (
+							from link in db.GetTable<DbClassifierLink>().Where(x => x.ItemUid == item.Uid)
+							join groups in db.GetTable<DbClassifierGroup>() on link.GroupUid equals groups.Uid
+							where groups.TreeUid == tree.Uid
+							select link
+						).DeleteAsync(cancellationToken);
+
+						// todo: check parent belongs to default tree
+						if (item.ParentUid != null)
+						{
+							var inserted = await db.GetTable<DbClassifierLink>()
+								.Value(x => x.GroupUid, item.ParentUid)
+								.Value(x => x.ItemUid, item.Uid)
+								.InsertAsync(cancellationToken);
+						}
+					}
+					else if (type.HierarchyType == HierarchyType.Items)
+					{
+						var closureTable = new ClosureTableHandler(db, type);
+
+						// ReSharper disable once PossibleInvalidOperationException
+						if (await closureTable.Update(item.Uid.Value, item.ParentUid, cancellationToken) == false)
+						{
+							return new ApiResult { Success = false, Errors = closureTable.Errors };
+						}
+					}
+				}
+
+				// update fields
+				await _fieldDataRepository.Update(manageFieldDataRequest, cancellationToken);
+
+				// update specific classifier table
+				// if (classifierTypeProvider != null) await classifierTypeProvider.Update(type, item, cancellationToken);
+
+				await UpdateInternal(type, item, cancellationToken);
+
+				// todo: events
+
+				scope.Commit();
+
+				return new ApiResult { AffectedRows = affected };
+			}
+		}
+
+		protected virtual Task UpdateInternal(ClassifierType type, Classifier item, CancellationToken cancellationToken)
+		{
+			return Task.CompletedTask;
 		}
 	}
 }

@@ -47,7 +47,11 @@ namespace Montr.MasterData.Impl.CommandHandlers
 
 			var item = request.Item ?? throw new ArgumentNullException(nameof(request.Item));
 
-			var type = await _classifierTypeService.Get(item.Type, cancellationToken);
+			var classifierTypeProvider = _classifierTypeProviderFactory.GetService(item.Type);
+
+			return await classifierTypeProvider.Update(item, cancellationToken);
+
+			/*var type = await _classifierTypeService.Get(item.Type, cancellationToken);
 
 			var tree = type.HierarchyType == HierarchyType.Groups
 				? await _classifierTreeService.GetClassifierTree(request.CompanyUid, type.Code, ClassifierTree.DefaultCode, cancellationToken)
@@ -139,7 +143,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 				scope.Commit();
 
 				return new ApiResult { AffectedRows = affected };
-			}
+			}*/
 		}
 	}
 }

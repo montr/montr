@@ -47,7 +47,11 @@ namespace Montr.MasterData.Impl.CommandHandlers
 
 			var item = request.Item ?? throw new ArgumentNullException(nameof(request.Item));
 
-			var now = _dateTimeProvider.GetUtcNow();
+			var classifierTypeProvider = _classifierTypeProviderFactory.GetNamedOrDefaultService(item.Type);
+
+			return await classifierTypeProvider.Insert(item, cancellationToken);
+
+			/*var now = _dateTimeProvider.GetUtcNow();
 
 			var type = await _classifierTypeService.Get(item.Type, cancellationToken);
 
@@ -106,10 +110,10 @@ namespace Montr.MasterData.Impl.CommandHandlers
 						/*if (request.TreeUid == null || request.ParentUid == null)
 						{
 							throw new InvalidOperationException("Classifier should belong to one of the default hierarchy group.");
-						}*/
+						}#1#
 
 						// todo: should be linked to at least one main group?
-						if (/*request.TreeUid != null &&*/ item.ParentUid != null)
+						if (/*request.TreeUid != null &&#1# item.ParentUid != null)
 						{
 							// link to selected group
 							await db.GetTable<DbClassifierLink>()
@@ -124,7 +128,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 						if (root.Code != ClassifierTree.DefaultCode)
 						{
 							await LinkToDefaultRoot(db, type, itemUid, cancellationToken);
-						}*/
+						}#1#
 					}
 					else if (type.HierarchyType == HierarchyType.Items)
 					{
@@ -149,7 +153,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 				scope.Commit();
 
 				return new ApiResult { Uid = itemUid };
-			}
+			}*/
 		}
 
 		/*private static async Task LinkToDefaultRoot(DbContext db, ClassifierType type, Guid itemUid, CancellationToken cancellationToken)

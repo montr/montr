@@ -40,8 +40,8 @@ namespace Montr.MasterData.Impl.QueryHandlers
 				if (type.HierarchyType == HierarchyType.Groups)
 				{
 					var tree = request.TreeUid != null
-						? await _classifierTreeService.GetClassifierTree(request.CompanyUid, request.TypeCode, request.TreeUid.Value, cancellationToken)
-						: await _classifierTreeService.GetClassifierTree(request.CompanyUid, request.TypeCode, request.TreeCode, cancellationToken);
+						? await _classifierTreeService.GetClassifierTree(/*request.CompanyUid,*/ request.TypeCode, request.TreeUid.Value, cancellationToken)
+						: await _classifierTreeService.GetClassifierTree(/*request.CompanyUid,*/ request.TypeCode, request.TreeCode, cancellationToken);
 
 					if (request.FocusUid != null)
 					{
@@ -50,7 +50,7 @@ namespace Montr.MasterData.Impl.QueryHandlers
 
 					return await GetGroupsByParent(db, type, tree, request.ParentUid, request, true);
 				}
-				
+
 				if (type.HierarchyType == HierarchyType.Items)
 				{
 					if (request.FocusUid != null)

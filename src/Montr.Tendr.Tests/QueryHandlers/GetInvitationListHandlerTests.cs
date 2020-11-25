@@ -40,8 +40,8 @@ namespace Montr.Tendr.Tests.QueryHandlers
 					new TextField { Key = "test3", Active = true, System = false }
 				});
 
-			var classifierRepository = new DbClassifierRepository<Classifier>(
-				dbContextFactory, classifierTypeService, metadataServiceMock.Object, dbFieldDataRepository, null);
+			var classifierRepository = new DbClassifierRepository<Classifier>(null,
+				dbContextFactory, null, classifierTypeService, null, metadataServiceMock.Object, dbFieldDataRepository, null);
 			var handler = new GetInvitationListHandler(dbContextFactory, classifierRepository);
 
 			// act
