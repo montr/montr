@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
@@ -15,6 +16,7 @@ using Montr.MasterData.Impl.QueryHandlers;
 using Montr.MasterData.Impl.Services;
 using Montr.MasterData.Models;
 using Montr.MasterData.Queries;
+using Montr.MasterData.Services;
 using Montr.Metadata.Impl.Services;
 
 namespace Montr.MasterData.Tests.Services
@@ -47,9 +49,16 @@ namespace Montr.MasterData.Tests.Services
 			_insertClassifierTreeTypeHandler = new InsertClassifierTreeHandler(unitOfWorkFactory, dbContextFactory, classifierTypeService);
 			_insertClassifierTypeHandler = new InsertClassifierTypeHandler(unitOfWorkFactory, classifierTypeService);
 			_insertClassifierGroupHandler = new InsertClassifierGroupHandler(unitOfWorkFactory, dbContextFactory, classifierTypeService);
+
 			var classifierTypeMetadataService = new ClassifierTypeMetadataService(dbFieldMetadataRepository);
-			_insertClassifierHandler = new InsertClassifierHandler(unitOfWorkFactory, dbContextFactory, dateTimeProvider, classifierTypeService,
-				null, classifierTypeMetadataService, dbFieldDataRepository);
+			var classifierTreeService = new DefaultClassifierTreeService(classifierTreeRepository);
+			var dbNumberGenerator = new DbNumberGenerator(dbContextFactory, null, dateTimeProvider, null);
+
+			var classifierRepositoryFactory = new ClassifierRepositoryFactory(new DbClassifierRepository<Classifier>(
+				unitOfWorkFactory, dbContextFactory, dateTimeProvider, classifierTypeService, classifierTreeService,
+				classifierTypeMetadataService, dbFieldDataRepository, dbNumberGenerator));
+
+			_insertClassifierHandler = new InsertClassifierHandler(classifierRepositoryFactory);
 			_updateClassifierGroupHandler = new UpdateClassifierGroupHandler(unitOfWorkFactory, dbContextFactory, classifierTypeService);
 			_deleteClassifierGroupHandler = new DeleteClassifierGroupHandler(unitOfWorkFactory, dbContextFactory, classifierTypeService);
 			_insertClassifierLinkHandler = new InsertClassifierLinkHandler(unitOfWorkFactory, dbContextFactory, classifierTypeService);
@@ -122,7 +131,7 @@ namespace Montr.MasterData.Tests.Services
 				var query = from tree in db.GetTable<DbClassifierTree>()
 					join type in db.GetTable<DbClassifierType>() on tree.TypeUid equals type.Uid
 					where type.Code == TypeCode && tree.Code == treeCode
-							select tree;
+					select tree;
 
 				return await query.SingleAsync(cancellationToken);
 			}
@@ -165,7 +174,7 @@ namespace Montr.MasterData.Tests.Services
 				UserUid = UserUid,
 				TypeCode = TypeCode,
 				TreeUid = treeUid,
-				Item = new ClassifierGroup {Code = code, Name = $"Test Group {code}", ParentUid = parentUid}
+				Item = new ClassifierGroup { Code = code, Name = $"Test Group {code}", ParentUid = parentUid }
 			}, cancellationToken);
 
 			Assert.IsNotNull(result);
@@ -294,11 +303,13 @@ namespace Montr.MasterData.Tests.Services
 					orderby parent.Code, child.Code, c.Level
 					select new { ParentCode = parent.Code, ChildCode = child.Code, c.Level };
 
-				var sb = new StringBuilder().AppendLine($"{"Parent",-printColumnWidth} {"Child",-printColumnWidth} Level");
+				var sb = new StringBuilder().AppendLine(
+					$"{"Parent",-printColumnWidth} {"Child",-printColumnWidth} Level");
 
 				foreach (var line in print)
 				{
-					sb.AppendLine($"{line.ParentCode,-printColumnWidth} {line.ChildCode,-printColumnWidth} {line.Level}");
+					sb.AppendLine(
+						$"{line.ParentCode,-printColumnWidth} {line.ChildCode,-printColumnWidth} {line.Level}");
 				}
 
 				return sb.ToString();
@@ -328,6 +339,36 @@ namespace Montr.MasterData.Tests.Services
 					.InsertAsync(cancellationToken);
 
 				return new ApiResult { Uid = numeratorUid };
+			}
+		}
+
+		private class ClassifierRepositoryFactory : INamedServiceFactory<IClassifierRepository>
+		{
+			private readonly IClassifierRepository _defaultClassifierRepository;
+
+			public ClassifierRepositoryFactory(IClassifierRepository defaultClassifierRepository)
+			{
+				_defaultClassifierRepository = defaultClassifierRepository;
+			}
+
+			public IEnumerable<string> GetNames()
+			{
+				throw new NotImplementedException();
+			}
+
+			public IClassifierRepository GetService(string name)
+			{
+				throw new NotImplementedException();
+			}
+
+			public IClassifierRepository GetRequiredService(string name)
+			{
+				throw new NotImplementedException();
+			}
+
+			public IClassifierRepository GetNamedOrDefaultService(string name)
+			{
+				return _defaultClassifierRepository;
 			}
 		}
 	}

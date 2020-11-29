@@ -33,7 +33,7 @@ namespace Montr.MasterData.Tests.CommandHandlers
 			var dateTimeProvider = new DefaultDateTimeProvider();
 			var classifierTypeRepository = new DbClassifierTypeRepository(dbContextFactory);
 			var classifierTypeService = new DbClassifierTypeService(dbContextFactory, classifierTypeRepository);
-			var classifierTypeProviderFactoryMock = new Mock<INamedServiceFactory<IClassifierRepository>>();
+
 			var generator = new MasterDataDbGenerator(unitOfWorkFactory, dbContextFactory);
 
 			var fieldProviderRegistry = new DefaultFieldProviderRegistry();
@@ -51,9 +51,12 @@ namespace Montr.MasterData.Tests.CommandHandlers
 				});
 
 			var classifierRepository = new DbClassifierRepository<Classifier>(unitOfWorkFactory,
-				dbContextFactory, null, classifierTypeService, null, metadataServiceMock.Object, dbFieldDataRepository, null);
-			var handler = new InsertClassifierHandler(unitOfWorkFactory, dbContextFactory, dateTimeProvider,
-				classifierTypeService, classifierTypeProviderFactoryMock.Object, metadataServiceMock.Object, dbFieldDataRepository);
+				dbContextFactory, dateTimeProvider, classifierTypeService, null, metadataServiceMock.Object, dbFieldDataRepository, null);
+
+			var classifierRepositoryFactoryMock = new Mock<INamedServiceFactory<IClassifierRepository>>();
+			classifierRepositoryFactoryMock.Setup(x => x.GetNamedOrDefaultService(It.IsAny<string>())).Returns(classifierRepository);
+
+			var handler = new InsertClassifierHandler(classifierRepositoryFactoryMock.Object);
 
 			using (var _ = unitOfWorkFactory.Create())
 			{
@@ -122,13 +125,19 @@ namespace Montr.MasterData.Tests.CommandHandlers
 			var dateTimeProvider = new DefaultDateTimeProvider();
 			var classifierTypeRepository = new DbClassifierTypeRepository(dbContextFactory);
 			var classifierTypeService = new DbClassifierTypeService(dbContextFactory, classifierTypeRepository);
-			var classifierTypeProviderFactoryMock = new Mock<INamedServiceFactory<IClassifierRepository>>();
+
 			var generator = new MasterDataDbGenerator(unitOfWorkFactory, dbContextFactory);
 			var dbFieldMetadataRepository = new DbFieldMetadataRepository(dbContextFactory, null, new NewtonsoftJsonSerializer());
 			var dbFieldDataRepository = new DbFieldDataRepository(dbContextFactory, null);
 			var classifierTypeMetadataService = new ClassifierTypeMetadataService(dbFieldMetadataRepository);
-			var handler = new InsertClassifierHandler(unitOfWorkFactory, dbContextFactory, dateTimeProvider,
-				classifierTypeService, classifierTypeProviderFactoryMock.Object, classifierTypeMetadataService, dbFieldDataRepository);
+
+			var classifierRepository = new DbClassifierRepository<Classifier>(unitOfWorkFactory,
+				dbContextFactory, dateTimeProvider, classifierTypeService, null, classifierTypeMetadataService, dbFieldDataRepository, null);
+
+			var classifierRepositoryFactoryMock = new Mock<INamedServiceFactory<IClassifierRepository>>();
+			classifierRepositoryFactoryMock.Setup(x => x.GetNamedOrDefaultService(It.IsAny<string>())).Returns(classifierRepository);
+
+			var handler = new InsertClassifierHandler(classifierRepositoryFactoryMock.Object);
 
 			using (var _ = unitOfWorkFactory.Create())
 			{

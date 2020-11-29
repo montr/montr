@@ -96,7 +96,9 @@ namespace Montr.Metadata.Impl.Services
 				}
 			}
 
-			return await Task.FromResult(new ApiResult { Success = errors.Count == 0, Errors = errors });
+			var result = new ApiResult { Success = errors.Count == 0, Errors = errors };
+
+			return await Task.FromResult(result);
 		}
 
 		public async Task<ApiResult> Insert(ManageFieldDataRequest request, CancellationToken cancellationToken)

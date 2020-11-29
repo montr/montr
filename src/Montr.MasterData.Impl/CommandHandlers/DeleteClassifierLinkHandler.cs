@@ -55,7 +55,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 
 					if (affected > 0)
 					{
-						var root = await InsertClassifierHandler.GetRoot(db, request.GroupUid, cancellationToken);
+						var root = await GetRoot(db, request.GroupUid, cancellationToken);
 
 						if (root.Code == ClassifierTree.DefaultCode)
 						{
@@ -86,6 +86,23 @@ namespace Montr.MasterData.Impl.CommandHandlers
 
 				return result;
 			}
+		}
+
+		// todo: move to ClassifierGroupService.GetRoot()
+		public static async Task<DbClassifierGroup> GetRoot(DbContext db, Guid groupUid, CancellationToken cancellationToken)
+		{
+			return await (
+				from closure in db.GetTable<DbClassifierClosure>()
+					.Where(x => x.ChildUid == groupUid)
+				join maxLevel in (
+					from path in db.GetTable<DbClassifierClosure>()
+						.Where(x => x.ChildUid == groupUid)
+					group path by path.ChildUid
+					into parents
+					select parents.Max(x => x.Level)) on closure.Level equals maxLevel
+				join parent in db.GetTable<DbClassifierGroup>() on closure.ParentUid equals parent.Uid
+				select parent
+			).SingleAsync(cancellationToken);
 		}
 	}
 }

@@ -17,8 +17,6 @@ namespace Montr.MasterData.Impl.Services
 	{
 		public static readonly string TypeCode = nameof(Numerator).ToLower();
 
-		private readonly IDbContextFactory _dbContextFactory;
-
 		public NumeratorRepository(IUnitOfWorkFactory unitOfWorkFactory, IDbContextFactory dbContextFactory,
 			IDateTimeProvider dateTimeProvider, IClassifierTypeService classifierTypeService,
 			IClassifierTreeService classifierTreeService, IClassifierTypeMetadataService metadataService,
@@ -26,7 +24,6 @@ namespace Montr.MasterData.Impl.Services
 			: base(unitOfWorkFactory, dbContextFactory, dateTimeProvider, classifierTypeService, classifierTreeService,
 				metadataService, fieldDataRepository, numberGenerator)
 		{
-			_dbContextFactory = dbContextFactory;
 		}
 
 		protected override async Task<SearchResult<Classifier>> SearchInternal(DbContext db,
@@ -83,12 +80,15 @@ namespace Montr.MasterData.Impl.Services
 			return result;
 		}
 
-		protected override async Task InsertInternal(ClassifierType type, Classifier item, CancellationToken cancellationToken)
+		protected override async Task<ApiResult> InsertInternal(
+			DbContext db, ClassifierType type, Classifier item, CancellationToken cancellationToken)
 		{
-			var numerator = (Numerator)item;
+			var result = await base.InsertInternal(db, type, item, cancellationToken);
 
-			using (var db = _dbContextFactory.Create())
+			if (result.Success)
 			{
+				var numerator = (Numerator) item;
+
 				await db.GetTable<DbNumerator>()
 					.Value(x => x.Uid, item.Uid)
 					.Value(x => x.EntityTypeCode, numerator.EntityTypeCode)
@@ -99,14 +99,19 @@ namespace Montr.MasterData.Impl.Services
 					.Value(x => x.IsSystem, numerator.IsSystem)
 					.InsertAsync(cancellationToken);
 			}
+
+			return result;
 		}
 
-		protected override async Task UpdateInternal(ClassifierType type, Classifier item, CancellationToken cancellationToken)
+		protected override async Task<ApiResult> UpdateInternal(
+			DbContext db, ClassifierType type, ClassifierTree tree, Classifier item, CancellationToken cancellationToken)
 		{
-			var numerator = (Numerator)item;
+			var result = await base.InsertInternal(db, type, item, cancellationToken);
 
-			using (var db = _dbContextFactory.Create())
+			if (result.Success)
 			{
+				var numerator = (Numerator)item;
+
 				await db.GetTable<DbNumerator>()
 					.Where(x => x.Uid == item.Uid)
 					// .Set(x => x.Name, item.Name)
@@ -116,6 +121,8 @@ namespace Montr.MasterData.Impl.Services
 					// .Set(x => x.IsSystem, item.IsSystem)
 					.UpdateAsync(cancellationToken);
 			}
+
+			return result;
 		}
 
 		private class DbItem
