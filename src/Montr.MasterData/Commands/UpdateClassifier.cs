@@ -5,7 +5,7 @@ using Montr.MasterData.Models;
 
 namespace Montr.MasterData.Commands
 {
-	public class UpdateClassifier: IRequest<ApiResult>
+	public class UpdateClassifier : IRequest<ApiResult>
 	{
 		public Guid UserUid { get; set; }
 

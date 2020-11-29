@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Montr.Core.Models;
+using Montr.MasterData.Commands;
 using Montr.MasterData.Models;
 
 namespace Montr.MasterData.Services
@@ -23,5 +24,7 @@ namespace Montr.MasterData.Services
 		Task<ApiResult> Insert(Classifier item, CancellationToken cancellationToken);
 
 		Task<ApiResult> Update(Classifier item, CancellationToken cancellationToken);
+
+		Task<ApiResult> Delete(DeleteClassifier request, CancellationToken cancellationToken);
 	}
 }

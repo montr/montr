@@ -6,6 +6,7 @@ using LinqToDB;
 using Montr.Core.Models;
 using Montr.Core.Services;
 using Montr.Data.Linq2Db;
+using Montr.MasterData.Commands;
 using Montr.MasterData.Impl.CommandHandlers;
 using Montr.MasterData.Impl.Entities;
 using Montr.MasterData.Models;
@@ -287,6 +288,8 @@ namespace Montr.MasterData.Impl.Services
 		protected virtual async Task<ApiResult> InsertInternal(
 			DbContext db, ClassifierType type, Classifier item, CancellationToken cancellationToken)
 		{
+			var now = _dateTimeProvider.GetUtcNow();
+
 			var validator = new ClassifierValidator(db, type);
 
 			if (await validator.ValidateInsert(item, cancellationToken) == false)
@@ -295,7 +298,6 @@ namespace Montr.MasterData.Impl.Services
 			}
 
 			// todo: company + modification data
-			var now = _dateTimeProvider.GetUtcNow();
 
 			// insert classifier
 			await db.GetTable<DbClassifier>()
@@ -466,7 +468,7 @@ namespace Montr.MasterData.Impl.Services
 				// todo: combine with InsertClassifierLinkHandler in one service
 
 				// delete other links in same tree
-				var deleted = await (
+				await (
 					from link in db.GetTable<DbClassifierLink>().Where(x => x.ItemUid == item.Uid)
 					join groups in db.GetTable<DbClassifierGroup>() on link.GroupUid equals groups.Uid
 					where groups.TreeUid == tree.Uid
@@ -476,7 +478,7 @@ namespace Montr.MasterData.Impl.Services
 				// todo: check parent belongs to default tree
 				if (item.ParentUid != null)
 				{
-					var inserted = await db.GetTable<DbClassifierLink>()
+					await db.GetTable<DbClassifierLink>()
 						.Value(x => x.GroupUid, item.ParentUid)
 						.Value(x => x.ItemUid, item.Uid)
 						.InsertAsync(cancellationToken);
@@ -486,7 +488,6 @@ namespace Montr.MasterData.Impl.Services
 			{
 				var closureTable = new ClosureTableHandler(db, type);
 
-				// ReSharper disable once PossibleInvalidOperationException
 				if (await closureTable.Update(item.Uid, item.ParentUid, cancellationToken) == false)
 				{
 					return new ApiResult { Success = false, Errors = closureTable.Errors };
@@ -494,6 +495,56 @@ namespace Montr.MasterData.Impl.Services
 			}
 
 			return new ApiResult();
+		}
+
+		public async Task<ApiResult> Delete(DeleteClassifier request, CancellationToken cancellationToken)
+		{
+			var type = await _classifierTypeService.Get(request.TypeCode, cancellationToken);
+
+			using (var scope = _unitOfWorkFactory.Create())
+			{
+				ApiResult deleteResult;
+
+				using (var db = _dbContextFactory.Create())
+				{
+					deleteResult = await DeleteInternal(db, type, request, cancellationToken);
+
+					if (deleteResult.Success == false) return deleteResult;
+				}
+
+				// delete fields
+				var result = await _fieldDataRepository.Delete(new DeleteFieldDataRequest
+				{
+					EntityTypeCode = Classifier.TypeCode,
+					EntityUids = request.Uids
+				}, cancellationToken);
+
+				if (result.Success == false) return result;
+
+				// todo: (события)
+
+				scope.Commit();
+
+				return deleteResult;
+			}
+		}
+
+		protected virtual async Task<ApiResult> DeleteInternal(
+			DbContext db, ClassifierType type, DeleteClassifier request, CancellationToken cancellationToken)
+		{
+			if (type.HierarchyType == HierarchyType.Groups)
+			{
+				// delete link with group
+				await db.GetTable<DbClassifierLink>()
+					.Where(x => request.Uids.Contains(x.ItemUid))
+					.DeleteAsync(cancellationToken);
+			}
+
+			var affected = await db.GetTable<DbClassifier>()
+				.Where(x => x.TypeUid == type.Uid && request.Uids.Contains(x.Uid))
+				.DeleteAsync(cancellationToken);
+
+			return new ApiResult { AffectedRows = affected };
 		}
 	}
 }

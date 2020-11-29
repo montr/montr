@@ -6,6 +6,7 @@ using LinqToDB;
 using Montr.Core.Models;
 using Montr.Core.Services;
 using Montr.Data.Linq2Db;
+using Montr.MasterData.Commands;
 using Montr.MasterData.Impl.Entities;
 using Montr.MasterData.Models;
 using Montr.MasterData.Services;
@@ -125,11 +126,34 @@ namespace Montr.MasterData.Impl.Services
 			return result;
 		}
 
+		protected override async Task<ApiResult> DeleteInternal(DbContext db, ClassifierType type, DeleteClassifier request, CancellationToken cancellationToken)
+		{
+			var result = await base.DeleteInternal(db, type, request, cancellationToken);
+
+			if (result.Success)
+			{
+				await db.GetTable<DbNumeratorCounter>()
+					.Where(x => request.Uids.Contains(x.NumeratorUid))
+					.DeleteAsync(cancellationToken);
+
+				// todo: validate numerator is not used in entities?
+				await db.GetTable<DbNumeratorEntity>()
+					.Where(x => request.Uids.Contains(x.NumeratorUid))
+					.DeleteAsync(cancellationToken);
+
+				await db.GetTable<DbNumerator>()
+					.Where(x => request.Uids.Contains(x.Uid))
+					.DeleteAsync(cancellationToken);
+			}
+
+			return result;
+		}
+
 		private class DbItem
 		{
-			public DbClassifier Classifier { get; set; }
+			public DbClassifier Classifier { get; init; }
 
-			public DbNumerator Numerator { get; set; }
+			public DbNumerator Numerator { get; init; }
 		}
 	}
 }

@@ -4,7 +4,7 @@ using Montr.Core.Models;
 
 namespace Montr.MasterData.Commands
 {
-	public class DeleteClassifier: IRequest<ApiResult>
+	public class DeleteClassifier : IRequest<ApiResult>
 	{
 		public Guid CompanyUid { get; set; }
 
