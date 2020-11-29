@@ -24,7 +24,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 
 			var item = request.Item ?? throw new ArgumentNullException(nameof(request.Item));
 
-			var classifierTypeProvider = _classifierTypeProviderFactory.GetService(item.Type);
+			var classifierTypeProvider = _classifierTypeProviderFactory.GetNamedOrDefaultService(item.Type);
 
 			return await classifierTypeProvider.Update(item, cancellationToken);
 		}
