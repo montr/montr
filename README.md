@@ -16,7 +16,7 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Prerequisites
 
-* [.NET Core 3.1](https://dotnet.microsoft.com/download)
+* [.NET Core 5.0](https://dotnet.microsoft.com/download)
 * [Node.js LTS](https://nodejs.org/en/download/)
 * [PostgreSQL 12](https://www.postgresql.org/download/)
 
