@@ -84,7 +84,8 @@ namespace Montr.MasterData.Impl.Services
 						{
 							Metadata = metadata,
 							EntityTypeCode = Classifier.TypeCode,
-							EntityUids = new[] { item.Uid }
+							// ReSharper disable once PossibleInvalidOperationException
+							EntityUids = new[] { item.Uid.Value }
 						}, cancellationToken);
 
 						item.Fields = fields.Rows.SingleOrDefault();
@@ -251,7 +252,7 @@ namespace Montr.MasterData.Impl.Services
 			var manageFieldDataRequest = new ManageFieldDataRequest
 			{
 				EntityTypeCode = Classifier.TypeCode,
-				EntityUid = item.Uid,
+				EntityUid = item.Uid.Value,
 				Metadata = metadata,
 				Item = item
 			};
@@ -353,7 +354,8 @@ namespace Montr.MasterData.Impl.Services
 			{
 				var closureTable = new ClosureTableHandler(db, type);
 
-				if (await closureTable.Insert(item.Uid, item.ParentUid, cancellationToken) == false)
+				// ReSharper disable once PossibleInvalidOperationException
+				if (await closureTable.Insert(item.Uid.Value, item.ParentUid, cancellationToken) == false)
 				{
 					return new ApiResult { Success = false, Errors = closureTable.Errors };
 				}
@@ -401,7 +403,8 @@ namespace Montr.MasterData.Impl.Services
 			var manageFieldDataRequest = new ManageFieldDataRequest
 			{
 				EntityTypeCode = Classifier.TypeCode,
-				EntityUid = item.Uid,
+				// ReSharper disable once PossibleInvalidOperationException
+				EntityUid = item.Uid.Value,
 				Metadata = metadata,
 				Item = item
 			};
@@ -488,7 +491,8 @@ namespace Montr.MasterData.Impl.Services
 			{
 				var closureTable = new ClosureTableHandler(db, type);
 
-				if (await closureTable.Update(item.Uid, item.ParentUid, cancellationToken) == false)
+				// ReSharper disable once PossibleInvalidOperationException
+				if (await closureTable.Update(item.Uid.Value, item.ParentUid, cancellationToken) == false)
 				{
 					return new ApiResult { Success = false, Errors = closureTable.Errors };
 				}

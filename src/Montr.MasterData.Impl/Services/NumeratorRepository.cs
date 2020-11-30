@@ -107,7 +107,7 @@ namespace Montr.MasterData.Impl.Services
 		protected override async Task<ApiResult> UpdateInternal(
 			DbContext db, ClassifierType type, ClassifierTree tree, Classifier item, CancellationToken cancellationToken)
 		{
-			var result = await base.InsertInternal(db, type, item, cancellationToken);
+			var result = await base.UpdateInternal(db, type, tree, item, cancellationToken);
 
 			if (result.Success)
 			{

@@ -209,7 +209,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 						links.Add(new DbClassifierLink
 						{
 							GroupUid = groups[link.GroupCode].Uid,
-							ItemUid = items[link.ItemCode].Uid,
+							ItemUid = items[link.ItemCode].Uid
 						});
 					}
 				}
@@ -365,7 +365,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 										}
 										else
 										{
-											// todo: validate all before import or throw error 
+											// todo: validate all before import or throw error
 											errors.Add($"Group {group.ParentCode} specified as parent for group {group.Code} not found in classifier {_type.Code}.");
 										}
 									}
