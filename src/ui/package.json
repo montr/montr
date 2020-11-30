@@ -13,7 +13,7 @@
 	"license": "GPL-3.0",
 	"private": true,
 	"dependencies": {
-		"antd": "^4.8.6",
+		"antd": "^4.9.0",
 		"axios": "^0.21.0",
 		"i18next": "^19.8.4",
 		"i18next-browser-languagedetector": "^6.0.1",
