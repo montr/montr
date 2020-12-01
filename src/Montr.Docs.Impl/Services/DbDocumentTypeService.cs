@@ -99,8 +99,6 @@ namespace Montr.Docs.Impl.Services
 					.InsertAsync(cancellationToken);
 			}
 
-			// todo: (events)
-
 			return new ApiResult { Uid = itemUid };
 		}
 	}

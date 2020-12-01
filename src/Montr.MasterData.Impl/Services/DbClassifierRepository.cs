@@ -278,8 +278,6 @@ namespace Montr.MasterData.Impl.Services
 
 				if (result.Success == false) return result;
 
-				// todo: events
-
 				scope.Commit();
 
 				return insertResult;
@@ -289,8 +287,6 @@ namespace Montr.MasterData.Impl.Services
 		protected virtual async Task<ApiResult> InsertInternal(
 			DbContext db, ClassifierType type, Classifier item, CancellationToken cancellationToken)
 		{
-			var now = _dateTimeProvider.GetUtcNow();
-
 			var validator = new ClassifierValidator(db, type);
 
 			if (await validator.ValidateInsert(item, cancellationToken) == false)
@@ -413,8 +409,6 @@ namespace Montr.MasterData.Impl.Services
 
 			if (result.Success == false) return result;
 
-			// var classifierTypeProvider = _classifierTypeProviderFactory?.GetService(type.Code);
-
 			using (var scope = _unitOfWorkFactory.Create())
 			{
 				ApiResult updateResult;
@@ -430,8 +424,6 @@ namespace Montr.MasterData.Impl.Services
 				result = await _fieldDataRepository.Update(manageFieldDataRequest, cancellationToken);
 
 				if (result.Success == false) return result;
-
-				// todo: events
 
 				scope.Commit();
 
@@ -524,8 +516,6 @@ namespace Montr.MasterData.Impl.Services
 				}, cancellationToken);
 
 				if (result.Success == false) return result;
-
-				// todo: (события)
 
 				scope.Commit();
 

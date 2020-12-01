@@ -62,8 +62,6 @@ namespace Montr.Messages.Impl.Services
 					.InsertAsync(cancellationToken);
 			}
 
-			// todo: (events)
-
 			return new ApiResult { Uid = item.Uid };
 		}
 	}

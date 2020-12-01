@@ -21,6 +21,7 @@ namespace Montr.Tendr.Impl.CommandHandlers
 		private readonly IDbContextFactory _dbContextFactory;
 		private readonly IClassifierRepository _classifierRepository;
 
+		// todo: use INamedServiceFactory<IClassifierRepository> repositoryFactory
 		public InsertInvitationHandler(IUnitOfWorkFactory unitOfWorkFactory, IDbContextFactory dbContextFactory,
 			IClassifierRepository classifierRepository)
 		{

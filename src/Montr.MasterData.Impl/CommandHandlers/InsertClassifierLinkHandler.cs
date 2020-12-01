@@ -46,7 +46,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 					}
 
 					// delete other links in same hierarchy
-					var deleted = await (
+					await (
 						from link in db.GetTable<DbClassifierLink>().Where(x => x.ItemUid == request.ItemUid)
 						join allGroups in db.GetTable<DbClassifierGroup>() on link.GroupUid equals allGroups.Uid
 						join newGroup in db.GetTable<DbClassifierGroup>().Where(x => x.Uid == request.GroupUid)
@@ -54,13 +54,11 @@ namespace Montr.MasterData.Impl.CommandHandlers
 						select link
 					).DeleteAsync(cancellationToken);
 
-					var inserted = await db.GetTable<DbClassifierLink>()
+					await db.GetTable<DbClassifierLink>()
 						.Value(x => x.GroupUid, request.GroupUid)
 						.Value(x => x.ItemUid, request.ItemUid)
 						.InsertAsync(cancellationToken);
 				}
-
-				// todo: events
 
 				scope.Commit();
 

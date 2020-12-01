@@ -24,6 +24,7 @@ namespace Montr.MasterData.Impl.QueryHandlers
 
 		private readonly IClassifierRepository _repository;
 
+		// todo: use INamedServiceFactory<IClassifierRepository> repositoryFactory
 		public ExportClassifierListHandler(IClassifierRepository repository)
 		{
 			_repository = repository;

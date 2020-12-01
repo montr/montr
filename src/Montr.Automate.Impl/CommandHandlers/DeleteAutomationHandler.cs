@@ -25,8 +25,6 @@ namespace Montr.Automate.Impl.CommandHandlers
 			{
 				var result = await _automationService.Delete(request, cancellationToken);
 
-				// todo: (события)
-
 				scope.Commit();
 
 				return result;

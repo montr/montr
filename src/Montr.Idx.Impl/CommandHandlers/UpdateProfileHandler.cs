@@ -50,8 +50,6 @@ namespace Montr.Idx.Impl.CommandHandlers
 						.UpdateAsync(cancellationToken);
 				}
 
-				// todo: events
-
 				scope.Commit();
 
 				return new ApiResult { AffectedRows = affected };

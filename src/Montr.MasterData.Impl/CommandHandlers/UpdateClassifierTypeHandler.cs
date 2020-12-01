@@ -70,8 +70,6 @@ namespace Montr.MasterData.Impl.CommandHandlers
 					}
 				}
 
-				// todo: (events)
-
 				scope.Commit();
 
 				return new ApiResult();

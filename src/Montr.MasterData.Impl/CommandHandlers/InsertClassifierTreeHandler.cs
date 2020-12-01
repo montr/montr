@@ -50,8 +50,6 @@ namespace Montr.MasterData.Impl.CommandHandlers
 						.Value(x => x.Name, item.Name)
 						.InsertAsync(cancellationToken);
 
-					// todo: events
-
 					scope.Commit();
 				}
 

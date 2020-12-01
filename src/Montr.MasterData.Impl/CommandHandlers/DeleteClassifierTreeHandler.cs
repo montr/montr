@@ -47,8 +47,6 @@ namespace Montr.MasterData.Impl.CommandHandlers
 						.DeleteAsync(cancellationToken);
 				}
 
-				// todo: (события)
-
 				scope.Commit();
 
 				return new ApiResult { AffectedRows = affected };

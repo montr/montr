@@ -73,8 +73,6 @@ namespace Montr.MasterData.Impl.CommandHandlers
 					}
 				}
 
-				// todo: events
-
 				scope.Commit();
 
 				var result = new ApiResult { AffectedRows = affected };

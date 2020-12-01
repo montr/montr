@@ -89,8 +89,6 @@ namespace Montr.MasterData.Impl.Services
 				}
 			}
 
-			// todo: (events)
-
 			return new ApiResult { Uid = itemUid };
 		}
 	}
