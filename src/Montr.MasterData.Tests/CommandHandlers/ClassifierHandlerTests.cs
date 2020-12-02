@@ -23,6 +23,8 @@ namespace Montr.MasterData.Tests.CommandHandlers
 	[TestClass]
 	public class ClassifierHandlerTests
 	{
+		private static readonly string TypedClassifierTypeCode = "typed_test";
+
 		private static INamedServiceFactory<IClassifierRepository> CreateClassifierRepositoryFactory(
 			IUnitOfWorkFactory unitOfWorkFactory, IDbContextFactory dbContextFactory)
 		{
@@ -48,15 +50,24 @@ namespace Montr.MasterData.Tests.CommandHandlers
 				dbContextFactory, dateTimeProvider, classifierTypeService, null, metadataServiceMock.Object,
 				dbFieldDataRepository, null);
 
+			var numeratorRepository = new NumeratorRepository(unitOfWorkFactory,
+				dbContextFactory, dateTimeProvider, classifierTypeService, null, metadataServiceMock.Object,
+				dbFieldDataRepository, null);
+
 			var classifierRepositoryFactoryMock = new Mock<INamedServiceFactory<IClassifierRepository>>();
-			classifierRepositoryFactoryMock.Setup(x => x.GetNamedOrDefaultService(It.IsAny<string>()))
-				.Returns(classifierRepository);
+
+			classifierRepositoryFactoryMock
+				.Setup(x => x.GetNamedOrDefaultService(It.Is<string>(name => name == TypedClassifierTypeCode)))
+				.Returns(() => numeratorRepository);
+			classifierRepositoryFactoryMock
+				.Setup(x => x.GetNamedOrDefaultService(It.Is<string>(name => name != TypedClassifierTypeCode)))
+				.Returns(() => classifierRepository);
 
 			return classifierRepositoryFactoryMock.Object;
 		}
 
 		[TestMethod]
-		public async Task Insert_NormalValues_InsertClassifier()
+		public async Task InsertClassifier_NormalValues_InsertItems()
 		{
 			// arrange
 			var cancellationToken = new CancellationToken();
@@ -98,7 +109,7 @@ namespace Montr.MasterData.Tests.CommandHandlers
 				Assert.IsNotNull(result.Uid);
 				Assert.AreNotEqual(Guid.Empty, result.Uid);
 
-				var classifierResult = await factory.GetNamedOrDefaultService(null)
+				var classifierResult = await factory.GetNamedOrDefaultService(generator.TypeCode)
 					.Search(new ClassifierSearchRequest { TypeCode = generator.TypeCode, Uid = result.Uid, IncludeFields = true }, cancellationToken);
 
 				Assert.AreEqual(1, classifierResult.Rows.Count);
@@ -124,7 +135,7 @@ namespace Montr.MasterData.Tests.CommandHandlers
 		}
 
 		[TestMethod]
-		public async Task Insert_DuplicateCode_ReturnError()
+		public async Task InsertClassifier_DuplicateCode_ReturnError()
 		{
 			// arrange
 			var cancellationToken = new CancellationToken();
@@ -177,7 +188,7 @@ namespace Montr.MasterData.Tests.CommandHandlers
 
 
 		[TestMethod]
-		public async Task Update_NormalValues_UpdateClassifier()
+		public async Task UpdateClassifier_NormalValues_UpdateItems()
 		{
 			// arrange
 			var cancellationToken = new CancellationToken();
@@ -224,7 +235,7 @@ namespace Montr.MasterData.Tests.CommandHandlers
 		}
 
 		[TestMethod]
-		public async Task Delete_NormalValues_DeleteClassifier()
+		public async Task DeleteClassifier_NormalValues_DeleteItems()
 		{
 			// arrange
 			var cancellationToken = new CancellationToken();
@@ -246,7 +257,7 @@ namespace Montr.MasterData.Tests.CommandHandlers
 					insertedIds.Add(insertItem.Uid.Value);
 				}
 
-				var searchResult = await factory.GetNamedOrDefaultService(null)
+				var searchResult = await factory.GetNamedOrDefaultService(generator.TypeCode)
 					.Search(new ClassifierSearchRequest { TypeCode = generator.TypeCode }, cancellationToken);
 
 				// assert
@@ -268,7 +279,113 @@ namespace Montr.MasterData.Tests.CommandHandlers
 				Assert.IsTrue(result.Success);
 				Assert.AreEqual(insertedIds.Count, result.AffectedRows);
 
-				searchResult = await factory.GetNamedOrDefaultService(null)
+				searchResult = await factory.GetNamedOrDefaultService(generator.TypeCode)
+					.Search(new ClassifierSearchRequest { TypeCode = generator.TypeCode }, cancellationToken);
+
+				// assert
+				Assert.IsNotNull(searchResult);
+				Assert.AreEqual(0, searchResult.Rows.Count);
+			}
+		}
+
+		[TestMethod]
+		public async Task ManageNumerator_NormalValues_ManageItems()
+		{
+			// arrange
+			var cancellationToken = new CancellationToken();
+			var unitOfWorkFactory = new TransactionScopeUnitOfWorkFactory();
+			var dbContextFactory = new DefaultDbContextFactory();
+			var generator = new MasterDataDbGenerator(unitOfWorkFactory, dbContextFactory);
+			var factory = CreateClassifierRepositoryFactory(unitOfWorkFactory, dbContextFactory);
+			var insertHandler = new InsertClassifierHandler(factory);
+			var updateHandler = new UpdateClassifierHandler(factory);
+			var deleteHandler = new DeleteClassifierHandler(factory);
+
+			using (var _ = unitOfWorkFactory.Create())
+			{
+				// arrange
+				generator.TypeCode = TypedClassifierTypeCode;
+
+				await generator.InsertType(HierarchyType.None, cancellationToken);
+
+				// act - insert
+				var insertedIds = new List<Guid>();
+				for (var i = 0; i < 5; i++)
+				{
+					var insertResult = await insertHandler.Handle(new InsertClassifier
+					{
+						UserUid = generator.UserUid,
+						CompanyUid = generator.CompanyUid,
+						Item = new Numerator
+						{
+							Type = generator.TypeCode,
+							Code = "00" + i,
+							Name = "00" + i + " - Test Numerator",
+							EntityTypeCode = "DocumentType",
+							Pattern = "{Number}"
+						}
+					}, cancellationToken);
+
+					Assert.IsNotNull(insertResult);
+					Assert.AreEqual(true, insertResult.Success);
+
+					// ReSharper disable once PossibleInvalidOperationException
+					insertedIds.Add(insertResult.Uid.Value);
+				}
+
+				var searchResult = await factory.GetNamedOrDefaultService(generator.TypeCode)
+					.Search(new ClassifierSearchRequest { TypeCode = generator.TypeCode }, cancellationToken);
+
+				// assert
+				Assert.IsNotNull(searchResult);
+				Assert.AreEqual(insertedIds.Count, searchResult.Rows.Count);
+
+				// act - update
+				foreach (var classifier in searchResult.Rows.Cast<Numerator>())
+				{
+					classifier.Name = classifier.Name.Replace("Test", "Updated");
+					classifier.Pattern = "No. " + classifier.Pattern;
+
+					var updateCommand = new UpdateClassifier
+					{
+						UserUid = generator.UserUid,
+						CompanyUid = generator.CompanyUid,
+						Item = classifier
+					};
+
+					var updateResult = await updateHandler.Handle(updateCommand, cancellationToken);
+
+					Assert.IsNotNull(updateResult);
+					Assert.AreEqual(true, updateResult.Success);
+				}
+
+				searchResult = await factory.GetNamedOrDefaultService(generator.TypeCode)
+					.Search(new ClassifierSearchRequest { TypeCode = generator.TypeCode }, cancellationToken);
+
+				// assert
+				Assert.IsNotNull(searchResult);
+				Assert.AreEqual(insertedIds.Count, searchResult.Rows.Count);
+				Assert.AreEqual(0, searchResult.Rows.Count(x => x.Name.Contains("Test")));
+				Assert.AreEqual(insertedIds.Count, searchResult.Rows.Count(x => x.Name.Contains("Updated")));
+				Assert.AreEqual(insertedIds.Count, searchResult.Rows.Cast<Numerator>().Count(x => x.Pattern.Contains("No.")));
+
+				// act - delete
+				var command = new DeleteClassifier
+				{
+					UserUid = generator.UserUid,
+					CompanyUid = generator.CompanyUid,
+					TypeCode = generator.TypeCode,
+					Uids = insertedIds.ToArray()
+				};
+
+				var result = await deleteHandler.Handle(command, cancellationToken);
+
+				// assert
+				Assert.IsNotNull(result);
+				Assert.IsTrue(result.Success);
+				Assert.AreEqual(insertedIds.Count, result.AffectedRows);
+
+				searchResult = await factory.GetNamedOrDefaultService(generator.TypeCode)
 					.Search(new ClassifierSearchRequest { TypeCode = generator.TypeCode }, cancellationToken);
 
 				// assert
@@ -278,4 +395,3 @@ namespace Montr.MasterData.Tests.CommandHandlers
 		}
 	}
 }
-
