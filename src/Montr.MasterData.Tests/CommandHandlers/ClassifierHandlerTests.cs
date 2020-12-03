@@ -186,7 +186,6 @@ namespace Montr.MasterData.Tests.CommandHandlers
 			}
 		}
 
-
 		[TestMethod]
 		public async Task UpdateClassifier_NormalValues_UpdateItems()
 		{
