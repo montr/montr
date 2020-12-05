@@ -211,6 +211,8 @@ namespace Montr.MasterData.Impl.Services
 				StatusCode = dbItem.StatusCode,
 				Code = dbItem.Code,
 				Name = dbItem.Name,
+				IsActive = dbItem.IsActive,
+				IsSystem = dbItem.IsSystem,
 				ParentUid = dbItem.ParentUid,
 				Url = $"/classifiers/{type.Code}/edit/{dbItem.Uid}"
 			};
@@ -235,7 +237,9 @@ namespace Montr.MasterData.Impl.Services
 			{
 				Type = type.Code,
 				ParentUid = request.ParentUid,
-				Code = number
+				Code = number,
+				IsActive = true,
+				IsSystem = false
 			};
 		}
 
@@ -305,6 +309,8 @@ namespace Montr.MasterData.Impl.Services
 				.Value(x => x.Name, item.Name)
 				// todo: validate parent belongs to the same classifier
 				.Value(x => x.ParentUid, type.HierarchyType == HierarchyType.Items ? item.ParentUid : null)
+				.Value(x => x.IsActive, item.IsActive)
+				.Value(x => x.IsSystem, item.IsSystem)
 				.InsertAsync(cancellationToken);
 
 			var result = await InsertHierarchy(db, type, item, cancellationToken);
@@ -446,6 +452,7 @@ namespace Montr.MasterData.Impl.Services
 				.Set(x => x.Code, item.Code)
 				.Set(x => x.Name, item.Name)
 				.Set(x => x.ParentUid, type.HierarchyType == HierarchyType.Items ? item.ParentUid : null)
+				.Set(x => x.IsActive, item.IsActive)
 				.UpdateAsync(cancellationToken);
 
 			var result = await UpdateHierarchy(db, type, tree, item, cancellationToken);

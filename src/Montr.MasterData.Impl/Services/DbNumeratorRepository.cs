@@ -43,7 +43,7 @@ namespace Montr.MasterData.Impl.Services
 					query = query.Where(x => x.Uid == request.Uid);
 				}
 
-				var paged = query.Apply(request, x => x.Name);
+				var paged = query.Apply(request, x => x.EntityTypeCode);
 
 				var data = await Materialize(paged, cancellationToken);
 
@@ -62,14 +62,14 @@ namespace Montr.MasterData.Impl.Services
 				{
 					Uid = x.Uid,
 					EntityTypeCode = x.EntityTypeCode,
-					Name = x.Name,
+					// Name = x.Name,
 					Periodicity = Enum.Parse<NumeratorPeriodicity>(x.Periodicity),
 					Pattern = x.Pattern,
 					KeyTags = x.KeyTags != null
 						? x.KeyTags.Split(DbNumerator.KeyTagsSeparator, StringSplitOptions.RemoveEmptyEntries)
 						: null,
-					IsActive = x.IsActive,
-					IsSystem = x.IsSystem,
+					// IsActive = x.IsActive,
+					// IsSystem = x.IsSystem,
 					Url = $"/numerators/edit/{x.Uid}/"
 				})
 				.ToListAsync(cancellationToken);

@@ -8,6 +8,11 @@ namespace Montr.MasterData.Models
 	[DebuggerDisplay("{" + nameof(DebuggerDisplay) + ",nq}")]
 	public class Classifier : IFieldDataContainer
 	{
+		public Classifier()
+		{
+			IsActive = true;
+		}
+
 		private string DebuggerDisplay => $"[{Type}] {Code}, {Name}";
 
 		public static readonly string TypeCode = nameof(Classifier);
@@ -23,6 +28,10 @@ namespace Montr.MasterData.Models
 
 		[Required]
 		public string Name { get; set; }
+
+		public bool IsActive { get; set; }
+
+		public bool IsSystem { get; set; }
 
 		public Guid? ParentUid { get; set; }
 

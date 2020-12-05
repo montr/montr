@@ -63,8 +63,6 @@ namespace Montr.MasterData.Impl.Services
 			item.Periodicity = Enum.Parse<NumeratorPeriodicity>(dbNumerator.Periodicity);
 			item.Pattern = dbNumerator.Pattern;
 			item.KeyTags = dbNumerator.KeyTags?.Split(DbNumerator.KeyTagsSeparator, StringSplitOptions.RemoveEmptyEntries);
-			item.IsActive = dbNumerator.IsActive;
-			item.IsSystem = dbNumerator.IsSystem;
 
 			return item;
 		}
@@ -76,7 +74,6 @@ namespace Montr.MasterData.Impl.Services
 			result.EntityTypeCode = Models.ClassifierType.TypeCode;
 			result.Periodicity = NumeratorPeriodicity.Year;
 			result.Pattern = "{Number}";
-			result.IsActive = true;
 
 			return result;
 		}
@@ -93,11 +90,8 @@ namespace Montr.MasterData.Impl.Services
 				await db.GetTable<DbNumerator>()
 					.Value(x => x.Uid, item.Uid)
 					.Value(x => x.EntityTypeCode, numerator.EntityTypeCode)
-					// .Value(x => x.Name, numerator.Name)
 					.Value(x => x.Pattern, numerator.Pattern)
 					.Value(x => x.Periodicity, numerator.Periodicity.ToString())
-					.Value(x => x.IsActive, numerator.IsActive)
-					.Value(x => x.IsSystem, numerator.IsSystem)
 					.InsertAsync(cancellationToken);
 			}
 
@@ -115,38 +109,31 @@ namespace Montr.MasterData.Impl.Services
 
 				await db.GetTable<DbNumerator>()
 					.Where(x => x.Uid == item.Uid)
-					// .Set(x => x.Name, item.Name)
 					.Set(x => x.Pattern, numerator.Pattern)
 					.Set(x => x.Periodicity, numerator.Periodicity.ToString())
-					.Set(x => x.IsActive, numerator.IsActive)
-					// .Set(x => x.IsSystem, item.IsSystem)
 					.UpdateAsync(cancellationToken);
 			}
 
 			return result;
 		}
 
-		protected override async Task<ApiResult> DeleteInternal(DbContext db, ClassifierType type, DeleteClassifier request, CancellationToken cancellationToken)
+		protected override async Task<ApiResult> DeleteInternal(DbContext db, ClassifierType type,
+			DeleteClassifier request, CancellationToken cancellationToken)
 		{
-			var result = await base.DeleteInternal(db, type, request, cancellationToken);
+			await db.GetTable<DbNumeratorCounter>()
+				.Where(x => request.Uids.Contains(x.NumeratorUid))
+				.DeleteAsync(cancellationToken);
 
-			if (result.Success)
-			{
-				await db.GetTable<DbNumeratorCounter>()
-					.Where(x => request.Uids.Contains(x.NumeratorUid))
-					.DeleteAsync(cancellationToken);
+			// todo: validate numerator is not used in entities?
+			await db.GetTable<DbNumeratorEntity>()
+				.Where(x => request.Uids.Contains(x.NumeratorUid))
+				.DeleteAsync(cancellationToken);
 
-				// todo: validate numerator is not used in entities?
-				await db.GetTable<DbNumeratorEntity>()
-					.Where(x => request.Uids.Contains(x.NumeratorUid))
-					.DeleteAsync(cancellationToken);
+			await db.GetTable<DbNumerator>()
+				.Where(x => request.Uids.Contains(x.Uid))
+				.DeleteAsync(cancellationToken);
 
-				await db.GetTable<DbNumerator>()
-					.Where(x => request.Uids.Contains(x.Uid))
-					.DeleteAsync(cancellationToken);
-			}
-
-			return result;
+			return await base.DeleteInternal(db, type, request, cancellationToken);
 		}
 
 		private class DbItem

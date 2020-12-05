@@ -7,10 +7,11 @@ CREATE TABLE montr.numerator
     pattern character varying(64) NOT NULL,
     periodicity character varying(8) NOT NULL,
     key_tags character varying(128),
-    name character varying(128),
-    is_active boolean NOT NULL,
-    is_system boolean NOT NULL,
-    PRIMARY KEY (uid)
+    PRIMARY KEY (uid),
+    CONSTRAINT fk_numerator_classifier_uid FOREIGN KEY (uid)
+        REFERENCES montr.classifier (uid) MATCH SIMPLE
+        ON UPDATE NO ACTION
+        ON DELETE NO ACTION
 );
 
 CREATE TABLE montr.numerator_counter
@@ -24,7 +25,6 @@ CREATE TABLE montr.numerator_counter
         REFERENCES montr.numerator (uid) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
-        NOT VALID
 );
 
 CREATE TABLE montr.numerator_entity
@@ -36,7 +36,6 @@ CREATE TABLE montr.numerator_entity
         REFERENCES montr.numerator (uid) MATCH SIMPLE
         ON UPDATE NO ACTION
         ON DELETE NO ACTION
-        NOT VALID
 );
 
 CREATE INDEX ix_numerator_entity_numerator_uid

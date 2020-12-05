@@ -28,5 +28,11 @@ namespace Montr.MasterData.Impl.Entities
 
 		[Column(Name = "name"), DataType(DataType.VarChar), Nullable]
 		public string Name { get; set; }
+
+		[Column(Name = "is_active"), DataType(DataType.Boolean), NotNull]
+		public bool IsActive { get; set; }
+
+		[Column(Name = "is_system"), DataType(DataType.Boolean), NotNull]
+		public bool IsSystem { get; set; }
 	}
 }

@@ -35,11 +35,11 @@ namespace Montr.MasterData.Impl.CommandHandlers
 					await db.GetTable<DbNumerator>()
 						.Value(x => x.Uid, itemUid)
 						.Value(x => x.EntityTypeCode, item.EntityTypeCode)
-						.Value(x => x.Name, item.Name)
+						// .Value(x => x.Name, item.Name)
 						.Value(x => x.Pattern, item.Pattern)
 						.Value(x => x.Periodicity, item.Periodicity.ToString())
-						.Value(x => x.IsActive, item.IsActive)
-						.Value(x => x.IsSystem, item.IsSystem)
+						// .Value(x => x.IsActive, item.IsActive)
+						// .Value(x => x.IsSystem, item.IsSystem)
 						.InsertAsync(cancellationToken);
 				}
 

@@ -33,10 +33,10 @@ namespace Montr.MasterData.Impl.CommandHandlers
 				{
 					await db.GetTable<DbNumerator>()
 						.Where(x => x.Uid == item.Uid)
-						.Set(x => x.Name, item.Name)
+						// .Set(x => x.Name, item.Name)
 						.Set(x => x.Pattern, item.Pattern)
 						.Set(x => x.Periodicity, item.Periodicity.ToString())
-						.Set(x => x.IsActive, item.IsActive)
+						// .Set(x => x.IsActive, item.IsActive)
 						// .Set(x => x.IsSystem, item.IsSystem)
 						.UpdateAsync(cancellationToken);
 				}

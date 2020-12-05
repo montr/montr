@@ -9,7 +9,7 @@ namespace Montr.MasterData.Impl.Entities
 	[DebuggerDisplay("{" + nameof(DebuggerDisplay) + ",nq}")]
 	public class DbNumerator
 	{
-		private string DebuggerDisplay => $"{Name} - {Pattern}";
+		private string DebuggerDisplay => $"{EntityTypeCode} - {Pattern}";
 
 		public static readonly string KeyTagsSeparator = ",";
 
@@ -25,17 +25,8 @@ namespace Montr.MasterData.Impl.Entities
 		[Column(Name = "periodicity"), DataType(DataType.VarChar), NotNull]
 		public string Periodicity { get; set; }
 
-		[Column(Name = "name"), DataType(DataType.VarChar), NotNull]
-		public string Name { get; set; }
-
 		[Column(Name = "key_tags"), DataType(DataType.VarChar)]
 		public string KeyTags { get; set; }
-
-		[Column(Name = "is_active"), DataType(DataType.Boolean), NotNull]
-		public bool IsActive { get; set; }
-
-		[Column(Name = "is_system"), DataType(DataType.Boolean), NotNull]
-		public bool IsSystem { get; set; }
 	}
 
 	[Table(Schema = "montr", Name = "numerator_counter")]

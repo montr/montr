@@ -26,12 +26,6 @@ namespace Montr.MasterData.Models
         public string[] KeyTags { get; set; }
 
 		public NumeratorPeriodicity Periodicity { get; set; }
-
-		// todo: move to classifier
-		// todo: add FK to classifier
-		public bool IsActive { get; set; }
-
-		public bool IsSystem { get; set; }
 	}
 
 	public enum NumeratorPeriodicity : byte
