@@ -28,7 +28,7 @@ namespace Montr.Core.Impl.Services
 				{
 					foreach (var module in locale.Modules)
 					{
-						var deleted = await db.GetTable<DbLocaleString>()
+						await db.GetTable<DbLocaleString>()
 							.Where(x => x.Locale == locale.Locale && x.Module == module.Module)
 							.DeleteAsync(cancellationToken);
 
@@ -40,7 +40,7 @@ namespace Montr.Core.Impl.Services
 							Value = x.Value
 						});
 
-						var copied = db.BulkCopy(inserted);
+						await db.BulkCopyAsync(inserted, cancellationToken);
 
 						// todo: write audit logs
 					}

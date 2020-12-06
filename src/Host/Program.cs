@@ -49,8 +49,6 @@ namespace Host
 			{
 				var logger = scope.ServiceProvider.GetService<ILogger<Program>>();
 
-				var cts = new CancellationTokenSource();
-
 				var modules = host.Services.GetServices<IModule>().ToArray();
 
 				foreach (var module in modules)
@@ -59,7 +57,7 @@ namespace Host
 					{
 						logger.LogInformation("Running {module} startup task", module);
 
-						await startupTask.Run(cts.Token);
+						await startupTask.Run(CancellationToken.None);
 					}
 				}
 
@@ -70,7 +68,7 @@ namespace Host
 				{
 					logger.LogInformation("Running {task} startup task", task);
 
-					await task.Run(cts.Token);
+					await task.Run(CancellationToken.None);
 				}
 			}
 

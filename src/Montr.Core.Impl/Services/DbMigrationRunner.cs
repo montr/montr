@@ -196,11 +196,11 @@ namespace Montr.Core.Impl.Services
 
 		private class Migration
 		{
-			public string FileName { get; set; }
+			public string FileName { get; init; }
 
-			public string Sql { get; set; }
+			public string Sql { get; init; }
 
-			public string Hash { get; set; }
+			public string Hash { get; init; }
 		}
 	}
 }

@@ -185,7 +185,7 @@ export class ClassifierGroupSelect extends React.Component<IProps, IState> {
 			});
 		}
 		else if (groups) {
-			return groups && groups.map(group => {
+			return groups.map(group => {
 
 				const result: DataNode = {
 					value: group.uid.toString(),

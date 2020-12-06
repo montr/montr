@@ -77,7 +77,7 @@ export default class TabEditClassifierType extends React.Component<Props, State>
 			{ loading, redirect, fields } = this.state;
 
 		if (redirect) {
-			this.setState({ redirect: null });
+			// this.setState({ redirect: null });
 			return <Redirect to={redirect} />;
 		}
 

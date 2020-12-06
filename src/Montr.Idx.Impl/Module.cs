@@ -43,8 +43,8 @@ namespace Montr.Idx.Impl
 				options.SignIn.RequireConfirmedEmail = false;
 				options.SignIn.RequireConfirmedPhoneNumber = false;
 
-				options.User.RequireUniqueEmail = false;
-				options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
+				options.User.RequireUniqueEmail = true;
+				// options.User.AllowedUserNameCharacters = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789-._@+";
 
 				options.Password.RequireDigit = true;
 				options.Password.RequireLowercase = true;

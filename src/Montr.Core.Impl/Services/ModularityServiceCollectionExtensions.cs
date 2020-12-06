@@ -29,7 +29,7 @@ namespace Montr.Core.Impl.Services
 
 			foreach (var type in modules)
 			{
-				var module = (IModule)serviceProvider.GetService(type);
+				var module = (IModule)serviceProvider.GetRequiredService(type);
 
 				// to prevent modules to be created twice
 				services.AddTransient(typeof(IModule), _ => module);
