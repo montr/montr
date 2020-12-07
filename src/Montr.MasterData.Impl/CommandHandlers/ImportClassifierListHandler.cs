@@ -16,7 +16,7 @@ using Montr.MasterData.Services;
 
 namespace Montr.MasterData.Impl.CommandHandlers
 {
-	// todo: move to service? should recieve stream?
+	// todo: move to service? should receive stream?
 	public class ImportClassifierListHandler : IRequestHandler<ImportClassifierList, ImportResult>
 	{
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
