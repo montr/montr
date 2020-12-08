@@ -1,5 +1,5 @@
 import * as React from "react";
-import { withTranslation, WithTranslation } from 'react-i18next';
+import i18next from "i18next";
 import { Button, Modal, message, Tag, Spin } from "antd";
 import { ApiResult, DataView } from "@montr-core/models";
 import { EventService, EventTemplateService } from "../services";
@@ -14,7 +14,7 @@ interface RouteProps {
 	tabKey?: string;
 }
 
-interface Props extends WithTranslation, RouteComponentProps<RouteProps> {
+interface Props extends RouteComponentProps<RouteProps> {
 }
 
 interface State {
@@ -100,7 +100,7 @@ class _EditEvent extends React.Component<Props, State> {
 	}
 
 	handlePublish() {
-		const { t } = this.props;
+		const t = (key: string) => i18next.getFixedT(null, "tendr")(key);
 
 		Modal.confirm({
 			title: t("confirm.title"),
@@ -120,7 +120,7 @@ class _EditEvent extends React.Component<Props, State> {
 	}
 
 	handleCancel() {
-		const { t } = this.props;
+		const t = (key: string) => i18next.getFixedT(null, "tendr")(key);
 
 		Modal.confirm({
 			title: t("confirm.title"),
@@ -145,7 +145,7 @@ class _EditEvent extends React.Component<Props, State> {
 	};
 
 	render = () => {
-		const { t } = this.props,
+		const t = (key: string) => i18next.getFixedT(null, "tendr")(key),
 			{ tabKey } = this.props.match.params,
 			{ loading, data, dataView } = this.state;
 
@@ -199,6 +199,6 @@ class _EditEvent extends React.Component<Props, State> {
 	};
 }
 
-const EditEvent = withTranslation("tendr")(_EditEvent);
+const EditEvent = _EditEvent;
 
 export default EditEvent;

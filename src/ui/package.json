@@ -21,7 +21,7 @@
 		"oidc-client": "^1.10.1",
 		"react": "^17.0.1",
 		"react-dom": "^17.0.1",
-		"react-i18next": "^11.7.4",
+		"react-i18next": "^11.8.1",
 		"react-router": "^5.2.0",
 		"react-router-dom": "^5.2.0",
 		"universal-cookie": "^4.0.4"
@@ -42,7 +42,7 @@
 		"@types/react-router-dom": "^5.1.6",
 		"babel-loader": "^8.2.2",
 		"babel-plugin-import": "^1.13.3",
-		"copy-webpack-plugin": "^6.3.2",
+		"copy-webpack-plugin": "^6.4.0",
 		"css-loader": "^3.6.0",
 		"fork-ts-checker-webpack-plugin": "^6.0.5",
 		"hard-source-webpack-plugin": "^0.13.1",
@@ -57,6 +57,6 @@
 		"webpack": "^4.44.2",
 		"webpack-bundle-analyzer": "^4.2.0",
 		"webpack-cli": "^4.2.0",
-		"webpack-merge": "^5.4.0"
+		"webpack-merge": "^5.4.1"
 	}
 }
