@@ -44,7 +44,7 @@
 		"babel-plugin-import": "^1.13.3",
 		"copy-webpack-plugin": "^6.3.2",
 		"css-loader": "^3.6.0",
-		"fork-ts-checker-webpack-plugin": "^6.0.4",
+		"fork-ts-checker-webpack-plugin": "^6.0.6",
 		"hard-source-webpack-plugin": "^0.13.1",
 		"kind-of": ">=6.0.3",
 		"less": "^3.12.2",
