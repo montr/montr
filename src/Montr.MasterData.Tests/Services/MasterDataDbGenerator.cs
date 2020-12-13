@@ -24,6 +24,7 @@ namespace Montr.MasterData.Tests.Services
 	public class MasterDataDbGenerator
 	{
 		private readonly IDbContextFactory _dbContextFactory;
+		private readonly DbClassifierTypeService _classifierTypeService;
 		private readonly GetClassifierTreeListHandler _getClassifierTreeListHandler;
 		private readonly InsertClassifierTreeHandler _insertClassifierTreeTypeHandler;
 		private readonly InsertClassifierTypeHandler _insertClassifierTypeHandler;
@@ -41,28 +42,28 @@ namespace Montr.MasterData.Tests.Services
 			var dateTimeProvider = new DefaultDateTimeProvider();
 			var classifierTreeRepository = new DbClassifierTreeRepository(dbContextFactory);
 			var classifierTypeRepository = new DbClassifierTypeRepository(dbContextFactory);
-			var classifierTypeService = new DbClassifierTypeService(dbContextFactory, classifierTypeRepository);
 			var dbFieldMetadataRepository = new DbFieldMetadataRepository(dbContextFactory, null, new NewtonsoftJsonSerializer());
 			var dbFieldDataRepository = new DbFieldDataRepository(dbContextFactory, null);
 
+			_classifierTypeService = new DbClassifierTypeService(dbContextFactory, classifierTypeRepository);
 			_getClassifierTreeListHandler = new GetClassifierTreeListHandler(classifierTreeRepository);
-			_insertClassifierTreeTypeHandler = new InsertClassifierTreeHandler(unitOfWorkFactory, dbContextFactory, classifierTypeService);
-			_insertClassifierTypeHandler = new InsertClassifierTypeHandler(unitOfWorkFactory, classifierTypeService);
-			_insertClassifierGroupHandler = new InsertClassifierGroupHandler(unitOfWorkFactory, dbContextFactory, classifierTypeService);
+			_insertClassifierTreeTypeHandler = new InsertClassifierTreeHandler(unitOfWorkFactory, dbContextFactory, _classifierTypeService);
+			_insertClassifierTypeHandler = new InsertClassifierTypeHandler(unitOfWorkFactory, _classifierTypeService);
+			_insertClassifierGroupHandler = new InsertClassifierGroupHandler(unitOfWorkFactory, dbContextFactory, _classifierTypeService);
 
 			var classifierTypeMetadataService = new ClassifierTypeMetadataService(dbFieldMetadataRepository);
 			var classifierTreeService = new DefaultClassifierTreeService(classifierTreeRepository);
 			var dbNumberGenerator = new DbNumberGenerator(dbContextFactory, null, dateTimeProvider, null);
 
 			var classifierRepositoryFactory = new ClassifierRepositoryFactory(new DbClassifierRepository<Classifier>(
-				unitOfWorkFactory, dbContextFactory, dateTimeProvider, classifierTypeService, classifierTreeService,
+				unitOfWorkFactory, dbContextFactory, dateTimeProvider, _classifierTypeService, classifierTreeService,
 				classifierTypeMetadataService, dbFieldDataRepository, dbNumberGenerator));
 
 			_insertClassifierHandler = new InsertClassifierHandler(classifierRepositoryFactory);
-			_updateClassifierGroupHandler = new UpdateClassifierGroupHandler(unitOfWorkFactory, dbContextFactory, classifierTypeService);
-			_deleteClassifierGroupHandler = new DeleteClassifierGroupHandler(unitOfWorkFactory, dbContextFactory, classifierTypeService);
-			_insertClassifierLinkHandler = new InsertClassifierLinkHandler(unitOfWorkFactory, dbContextFactory, classifierTypeService);
-			_getClassifierLinkListHandler = new GetClassifierLinkListHandler(dbContextFactory, classifierTypeService);
+			_updateClassifierGroupHandler = new UpdateClassifierGroupHandler(unitOfWorkFactory, dbContextFactory, _classifierTypeService);
+			_deleteClassifierGroupHandler = new DeleteClassifierGroupHandler(unitOfWorkFactory, dbContextFactory, _classifierTypeService);
+			_insertClassifierLinkHandler = new InsertClassifierLinkHandler(unitOfWorkFactory, dbContextFactory, _classifierTypeService);
+			_getClassifierLinkListHandler = new GetClassifierLinkListHandler(dbContextFactory, _classifierTypeService);
 		}
 
 		public string TypeCode { get; set; } = "test_closure";
@@ -319,19 +320,28 @@ namespace Montr.MasterData.Tests.Services
 		// todo: use numerator repository
 		public async Task<ApiResult> InsertNumerator(Numerator numerator, GenerateNumberRequest request, CancellationToken cancellationToken)
 		{
+			var type = await _classifierTypeService.Get(NumeratorRepository.TypeCode, cancellationToken);
+
 			var numeratorUid = Guid.NewGuid();
 
 			using (var db = _dbContextFactory.Create())
 			{
+				await db.GetTable<DbClassifier>()
+					.Value(x => x.Uid, numeratorUid)
+					.Value(x => x.TypeUid, type.Uid)
+					.Value(x => x.StatusCode, ClassifierStatusCode.Active)
+					.Value(x => x.Code, numeratorUid.ToString().Substring(0, 32))
+					.Value(x => x.Name, numerator.Name ?? "Test numerator")
+					.Value(x => x.IsActive, true)
+					.Value(x => x.IsSystem, false)
+					.InsertAsync(cancellationToken);
+
 				await db.GetTable<DbNumerator>()
 					.Value(x => x.Uid, numeratorUid)
 					.Value(x => x.EntityTypeCode, request.EntityTypeCode)
 					.Value(x => x.Pattern, numerator.Pattern ?? Numerator.DefaultPattern)
 					.Value(x => x.Periodicity, numerator.Periodicity.ToString())
-					// .Value(x => x.Name, numerator.Name ?? "Test numerator")
 					.Value(x => x.KeyTags, numerator.KeyTags != null ? string.Join(DbNumerator.KeyTagsSeparator, numerator.KeyTags) : null)
-					// .Value(x => x.IsActive, true)
-					// .Value(x => x.IsSystem, false)
 					.InsertAsync(cancellationToken);
 
 				await db.GetTable<DbNumeratorEntity>()
