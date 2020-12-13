@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using LinqToDB;
+using Microsoft.Extensions.Logging;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Montr.Core.Models;
 using Montr.Core.Services;
@@ -18,6 +19,7 @@ using Montr.MasterData.Models;
 using Montr.MasterData.Queries;
 using Montr.MasterData.Services;
 using Montr.Metadata.Impl.Services;
+using Moq;
 
 namespace Montr.MasterData.Tests.Services
 {
@@ -25,6 +27,7 @@ namespace Montr.MasterData.Tests.Services
 	{
 		private readonly IDbContextFactory _dbContextFactory;
 		private readonly DbClassifierTypeService _classifierTypeService;
+		private readonly DefaultClassifierTypeRegistrator _classifierTypeRegistrator;
 		private readonly GetClassifierTreeListHandler _getClassifierTreeListHandler;
 		private readonly InsertClassifierTreeHandler _insertClassifierTreeTypeHandler;
 		private readonly InsertClassifierTypeHandler _insertClassifierTypeHandler;
@@ -50,6 +53,9 @@ namespace Montr.MasterData.Tests.Services
 			_insertClassifierTreeTypeHandler = new InsertClassifierTreeHandler(unitOfWorkFactory, dbContextFactory, _classifierTypeService);
 			_insertClassifierTypeHandler = new InsertClassifierTypeHandler(unitOfWorkFactory, _classifierTypeService);
 			_insertClassifierGroupHandler = new InsertClassifierGroupHandler(unitOfWorkFactory, dbContextFactory, _classifierTypeService);
+
+			_classifierTypeRegistrator = new DefaultClassifierTypeRegistrator(new Mock<ILogger<DefaultClassifierTypeRegistrator>>().Object,
+				unitOfWorkFactory, _classifierTypeService, new DbFieldMetadataService(dbContextFactory, new NewtonsoftJsonSerializer()));
 
 			var classifierTypeMetadataService = new ClassifierTypeMetadataService(dbFieldMetadataRepository);
 			var classifierTreeService = new DefaultClassifierTreeService(classifierTreeRepository);
@@ -320,6 +326,9 @@ namespace Montr.MasterData.Tests.Services
 		// todo: use numerator repository
 		public async Task<ApiResult> InsertNumerator(Numerator numerator, GenerateNumberRequest request, CancellationToken cancellationToken)
 		{
+			// ensure numerator type registered
+			var numeratorType = RegisterClassifierTypeStartupTask.GetNumeratorType();
+			await _classifierTypeRegistrator.Register(numeratorType.Item, numeratorType.Fields, cancellationToken);
 			var type = await _classifierTypeService.Get(NumeratorRepository.TypeCode, cancellationToken);
 
 			var numeratorUid = Guid.NewGuid();

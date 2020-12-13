@@ -26,13 +26,18 @@ namespace Montr.MasterData.Impl.Services
 			}
 		}
 
-		protected IEnumerable<RegisterClassifierType> GetCommands()
+		protected  static IEnumerable<RegisterClassifierType> GetCommands()
 		{
-			yield return new RegisterClassifierType
+			yield return GetNumeratorType();
+		}
+
+		public static RegisterClassifierType GetNumeratorType()
+		{
+			return new RegisterClassifierType
 			{
 				Item = new ClassifierType
 				{
-					Code = "numerator",
+					Code = NumeratorRepository.TypeCode,
 					Name = "Нумераторы",
 					HierarchyType = HierarchyType.Groups,
 					IsSystem = true
