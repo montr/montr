@@ -27,12 +27,6 @@ export const Api = {
 	classifierUpdate: `${Constants.apiURL}/classifier/update`,
 	classifierDelete: `${Constants.apiURL}/classifier/delete`,
 
-	numeratorList: `${Constants.apiURL}/numerator/list`,
-	numeratorCreate: `${Constants.apiURL}/numerator/create`,
-	numeratorGet: `${Constants.apiURL}/numerator/get`,
-	numeratorInsert: `${Constants.apiURL}/numerator/insert`,
-	numeratorUpdate: `${Constants.apiURL}/numerator/update`,
-	numeratorDelete: `${Constants.apiURL}/numerator/delete`,
 	numeratorEntityList: `${Constants.apiURL}/numeratorEntity/list`,
 };
 
@@ -43,8 +37,6 @@ export const Views = {
 	classifierForm: "Classifier/Form",
 	classifierList: "Classifier/Grid",
 
-	numeratorList: "Numerator/Grid",
-	formEditNumerator: "Numerator/Form",
 	numeratorEntityList: "NumeratorEntity/Grid",
 };
 
@@ -56,10 +48,6 @@ export const Patterns = {
 	searchClassifier: "/classifiers/:typeCode/",
 	addClassifier: "/classifiers/:typeCode/add/:parentUid?",
 	editClassifier: "/classifiers/:typeCode/edit/:uid/:tabKey?",
-
-	searchNumerator: "/numerators/",
-	addNumerator: "/numerators/add/",
-	editNumerator: "/numerators/edit/:uid/:tabKey?",
 };
 
 export const RouteBuilder = {
@@ -73,13 +61,6 @@ export const RouteBuilder = {
 	editClassifier: (typeCode: string, uid: Guid | string, tabKey?: string) => {
 		return generatePath(Patterns.editClassifier, { typeCode, uid: uid.toString(), tabKey });
 	},
-
-	addNumerator: () => {
-		return generatePath(Patterns.addNumerator, {});
-	},
-	editNumerator: (uid: Guid | string, tabKey?: string) => {
-		return generatePath(Patterns.editNumerator, { uid: uid.toString(), tabKey });
-	},
 };
 
 AppRouteRegistry.add([
@@ -90,10 +71,6 @@ AppRouteRegistry.add([
 	{ path: Patterns.searchClassifier, exact: true, component: React.lazy(() => import("./components/page-search-classifier")) },
 	{ path: Patterns.addClassifier, exact: true, component: React.lazy(() => import("./components/page-edit-classifier")) },
 	{ path: Patterns.editClassifier, exact: true, component: React.lazy(() => import("./components/page-edit-classifier")) },
-	{ path: Patterns.searchNumerator, exact: true, component: React.lazy(() => import("./components/page-search-numerator")) },
-
-	{ path: Patterns.addNumerator, exact: true, component: React.lazy(() => import("./components/page-edit-numerator")) },
-	{ path: Patterns.editNumerator, exact: true, component: React.lazy(() => import("./components/page-edit-numerator")) }
 ]);
 
 ComponentRegistry.add([
@@ -101,5 +78,6 @@ ComponentRegistry.add([
 	{ path: "panes/TabEditClassifierTypeHierarchy", component: React.lazy(() => import("./components/tab-edit-classifier-type-hierarchy")) },
 
 	{ path: "panes/TabEditClassifier", component: React.lazy(() => import("./components/tab-edit-classifier")) },
-	{ path: "panes/TabEditClassifierHierarchy", component: React.lazy(() => import("./components/tab-edit-classifier-hierarchy")) }
+	{ path: "panes/TabEditClassifierHierarchy", component: React.lazy(() => import("./components/tab-edit-classifier-hierarchy")) },
+	{ path: "panes/TabEditNumeratorEntities", component: React.lazy(() => import("./components/tab-edit-numerator-entities")) },
 ]);

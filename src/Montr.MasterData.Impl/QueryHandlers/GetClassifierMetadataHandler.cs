@@ -78,7 +78,7 @@ namespace Montr.MasterData.Impl.QueryHandlers
 			if (type.Code == "numerator")
 			{
 				panes.Insert(panes.FindIndex(x => x.Key == "info") + 1,
-					new DataPane { Key = "usage", Name = "Использование", Component = "panes/PaneNumeratorEntityList" });
+					new DataPane { Key = "usage", Name = "Использование", Component = "panes/TabEditNumeratorEntities" });
 			}
 
 			// todo: move to own module

@@ -9,7 +9,7 @@ interface Props<TModel> {
     panes: DataPane<TModel>[],
     onTabChange?: (tabKey: string) => void,
     disabled?: (pane: DataPane<TModel>, index: number) => boolean,
-    tabProps?: any;
+    tabProps?: any; // todo: add types for classifiers, documents
 }
 
 export class DataTabs<TModel> extends React.Component<Props<TModel>> {
@@ -27,7 +27,11 @@ export class DataTabs<TModel> extends React.Component<Props<TModel>> {
                         if (pane.component) {
                             const componentClass = ComponentRegistry.getComponent(pane.component);
 
-                            component = React.createElement(componentClass, tabProps);
+                            if (componentClass) {
+                                component = React.createElement(componentClass, tabProps);
+                            } else {
+                                console.error(`Tab component ${pane.component} is not found.`);
+                            }
                         }
 
                         return (
