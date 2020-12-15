@@ -36,7 +36,7 @@ export class OperationService {
 
 		const executeInternal = async (): Promise<ApiResult> => {
 
-			const hide = this._notification.loading(t("operation.executing"));
+			const message = this._notification.loading(t("operation.executing"));
 
 			try {
 				const result = await operation();
@@ -67,7 +67,7 @@ export class OperationService {
 				}
 			}
 			finally {
-				hide();
+				message.then();
 			}
 		};
 
