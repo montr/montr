@@ -11,18 +11,18 @@ namespace Montr.MasterData.Impl.CommandHandlers
 {
 	public class DeleteClassifierHandler : IRequestHandler<DeleteClassifier, ApiResult>
 	{
-		private readonly INamedServiceFactory<IClassifierRepository> _classifierTypeProviderFactory;
+		private readonly INamedServiceFactory<IClassifierRepository> _repositoryFactory;
 
-		public DeleteClassifierHandler(INamedServiceFactory<IClassifierRepository> classifierTypeProviderFactory)
+		public DeleteClassifierHandler(INamedServiceFactory<IClassifierRepository> repositoryFactory)
 		{
-			_classifierTypeProviderFactory = classifierTypeProviderFactory;
+			_repositoryFactory = repositoryFactory;
 		}
 
 		public async Task<ApiResult> Handle(DeleteClassifier request, CancellationToken cancellationToken)
 		{
 			if (request.UserUid == Guid.Empty) throw new InvalidOperationException("User is required.");
 
-			var classifierTypeProvider = _classifierTypeProviderFactory.GetNamedOrDefaultService(request.TypeCode);
+			var classifierTypeProvider = _repositoryFactory.GetNamedOrDefaultService(request.TypeCode);
 
 			return await classifierTypeProvider.Delete(request, cancellationToken);
 		}

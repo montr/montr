@@ -30,11 +30,23 @@ namespace Montr.MasterData.Impl.Services
 		protected override async Task<SearchResult<Classifier>> SearchInternal(DbContext db,
 			ClassifierType type, ClassifierSearchRequest request, CancellationToken cancellationToken)
 		{
-			var query = BuildQuery(db, type, request);
+			var classifiers = BuildQuery(db, type, request);
 
-			var joined = from c in query
-				join t in db.GetTable<DbNumerator>() on c.Uid equals t.Uid
-				select new DbItem { Classifier = c, Numerator = t };
+			var numerators = db.GetTable<DbNumerator>().AsQueryable();
+
+			var numeratorRequest = request as NumeratorSearchRequest;
+
+			if (numeratorRequest?.EntityTypeCode != null && numeratorRequest.EntityTypeUid != null)
+			{
+				numerators = from n in numerators.Where(x => x.EntityTypeCode == numeratorRequest.EntityTypeCode)
+					join ne in db.GetTable<DbNumeratorEntity>().Where(x => x.EntityUid == numeratorRequest.EntityTypeUid)
+						on n.Uid equals ne.NumeratorUid
+					select n;
+			}
+
+			var joined = from classifier in classifiers
+				join numerator in numerators on classifier.Uid equals numerator.Uid
+				select new DbItem { Classifier = classifier, Numerator = numerator };
 
 			// todo: fix paging - map column to expression
 			request.SortColumn ??= nameof(Classifier.Code);
@@ -48,7 +60,7 @@ namespace Montr.MasterData.Impl.Services
 
 			return new SearchResult<Classifier>
 			{
-				TotalCount = query.GetTotalCount(request),
+				TotalCount = joined.GetTotalCount(request),
 				Rows = data
 			};
 		}

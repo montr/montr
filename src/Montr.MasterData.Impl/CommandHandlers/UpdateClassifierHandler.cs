@@ -11,11 +11,11 @@ namespace Montr.MasterData.Impl.CommandHandlers
 {
 	public class UpdateClassifierHandler : IRequestHandler<UpdateClassifier, ApiResult>
 	{
-		private readonly INamedServiceFactory<IClassifierRepository> _classifierTypeProviderFactory;
+		private readonly INamedServiceFactory<IClassifierRepository> _repositoryFactory;
 
-		public UpdateClassifierHandler(INamedServiceFactory<IClassifierRepository> classifierTypeProviderFactory)
+		public UpdateClassifierHandler(INamedServiceFactory<IClassifierRepository> repositoryFactory)
 		{
-			_classifierTypeProviderFactory = classifierTypeProviderFactory;
+			_repositoryFactory = repositoryFactory;
 		}
 
 		public async Task<ApiResult> Handle(UpdateClassifier request, CancellationToken cancellationToken)
@@ -24,7 +24,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 
 			var item = request.Item ?? throw new ArgumentNullException(nameof(request.Item));
 
-			var classifierTypeProvider = _classifierTypeProviderFactory.GetNamedOrDefaultService(item.Type);
+			var classifierTypeProvider = _repositoryFactory.GetNamedOrDefaultService(item.Type);
 
 			return await classifierTypeProvider.Update(item, cancellationToken);
 		}

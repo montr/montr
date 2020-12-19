@@ -19,6 +19,7 @@ using Montr.Kompany.Commands;
 using Montr.Kompany.Impl.CommandHandlers;
 using Montr.Kompany.Models;
 using Montr.MasterData.Impl.Services;
+using Montr.MasterData.Models;
 using Montr.MasterData.Services;
 using Montr.Metadata.Impl.Entities;
 using Montr.Metadata.Impl.Services;
@@ -31,6 +32,39 @@ namespace Montr.Kompany.Tests.CommandHandlers
 	[TestClass]
 	public class CreateCompanyHandlerTests
 	{
+		private static INamedServiceFactory<IClassifierRepository> CreateClassifierRepositoryFactory(
+			IUnitOfWorkFactory unitOfWorkFactory, IDbContextFactory dbContextFactory)
+		{
+			var dateTimeProvider = new DefaultDateTimeProvider();
+			var classifierTypeRepository = new DbClassifierTypeRepository(dbContextFactory);
+			var classifierTypeService = new DbClassifierTypeService(dbContextFactory, classifierTypeRepository);
+
+			var fieldProviderRegistry = new DefaultFieldProviderRegistry();
+			fieldProviderRegistry.AddFieldType(typeof(TextField));
+			var dbFieldDataRepository = new DbFieldDataRepository(dbContextFactory, fieldProviderRegistry);
+
+			var metadataServiceMock = new Mock<IClassifierTypeMetadataService>();
+
+			var classifierRepository = new DbClassifierRepository<Classifier>(unitOfWorkFactory,
+				dbContextFactory, dateTimeProvider, classifierTypeService, null, metadataServiceMock.Object,
+				dbFieldDataRepository, null);
+
+			var numeratorRepository = new NumeratorRepository(unitOfWorkFactory,
+				dbContextFactory, dateTimeProvider, classifierTypeService, null, metadataServiceMock.Object,
+				dbFieldDataRepository, null);
+
+			var classifierRepositoryFactoryMock = new Mock<INamedServiceFactory<IClassifierRepository>>();
+
+			classifierRepositoryFactoryMock
+				.Setup(x => x.GetNamedOrDefaultService(It.Is<string>(name => name == NumeratorRepository.TypeCode)))
+				.Returns(() => numeratorRepository);
+			classifierRepositoryFactoryMock
+				.Setup(x => x.GetNamedOrDefaultService(It.Is<string>(name => name != NumeratorRepository.TypeCode)))
+				.Returns(() => classifierRepository);
+
+			return classifierRepositoryFactoryMock.Object;
+		}
+
 		[TestMethod]
 		public async Task CreateCompany_Should_CreateCompany()
 		{
@@ -47,8 +81,8 @@ namespace Montr.Kompany.Tests.CommandHandlers
 
 			// var dbFieldMetadataRepository = new DbFieldMetadataRepository(dbContextFactory, fieldProviderRegistry, new NewtonsoftJsonSerializer());
 			var dbFieldDataRepository = new DbFieldDataRepository(dbContextFactory, fieldProviderRegistry);
-			var dbNumeratorRepository = new DbNumeratorRepository(dbContextFactory);
-			var dbNumberGenerator = new DbNumberGenerator(dbContextFactory, dbNumeratorRepository, dateTimeProvider, new INumberTagResolver[0]);
+			var classifierRepositoryFactory = CreateClassifierRepositoryFactory(unitOfWorkFactory, dbContextFactory);
+			var dbNumberGenerator = new DbNumberGenerator(dbContextFactory, classifierRepositoryFactory, dateTimeProvider, new INumberTagResolver[0]);
 			var dbDocumentTypeRepository = new DbDocumentTypeRepository(dbContextFactory);
 			var dbDocumentTypeService = new DbDocumentTypeService(dbContextFactory, dbDocumentTypeRepository);
 			var dbDocumentService = new DbDocumentService(dbContextFactory, dbNumberGenerator, mediatorMock.Object);
