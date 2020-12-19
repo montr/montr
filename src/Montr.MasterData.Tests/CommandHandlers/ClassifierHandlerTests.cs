@@ -50,7 +50,7 @@ namespace Montr.MasterData.Tests.CommandHandlers
 				dbContextFactory, dateTimeProvider, classifierTypeService, null, metadataServiceMock.Object,
 				dbFieldDataRepository, null);
 
-			var numeratorRepository = new NumeratorRepository(unitOfWorkFactory,
+			var numeratorRepository = new DbNumeratorRepository(unitOfWorkFactory,
 				dbContextFactory, dateTimeProvider, classifierTypeService, null, metadataServiceMock.Object,
 				dbFieldDataRepository, null);
 

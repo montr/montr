@@ -20,7 +20,7 @@ namespace Montr.MasterData.Impl
 			services.AddTransient<INumberGenerator, DbNumberGenerator>();
 
 			services.AddTransient<IClassifierRepository, DbClassifierRepository<Classifier>>();
-			services.AddNamedTransient<IClassifierRepository, NumeratorRepository>(NumeratorRepository.TypeCode);
+			services.AddNamedTransient<IClassifierRepository, DbNumeratorRepository>(DbNumeratorRepository.TypeCode);
 
 			services.AddTransient<IRepository<ClassifierType>, DbClassifierTypeRepository>();
 			services.AddTransient<IRepository<ClassifierTree>, DbClassifierTreeRepository>();

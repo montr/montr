@@ -329,7 +329,7 @@ namespace Montr.MasterData.Tests.Services
 			// ensure numerator type registered
 			var numeratorType = RegisterClassifierTypeStartupTask.GetNumeratorType();
 			await _classifierTypeRegistrator.Register(numeratorType.Item, numeratorType.Fields, cancellationToken);
-			var type = await _classifierTypeService.Get(NumeratorRepository.TypeCode, cancellationToken);
+			var type = await _classifierTypeService.Get(DbNumeratorRepository.TypeCode, cancellationToken);
 
 			var numeratorUid = Guid.NewGuid();
 

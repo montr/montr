@@ -14,11 +14,11 @@ using Montr.Metadata.Services;
 
 namespace Montr.MasterData.Impl.Services
 {
-	public class NumeratorRepository : DbClassifierRepository<Numerator>
+	public class DbNumeratorRepository : DbClassifierRepository<Numerator>
 	{
 		public static readonly string TypeCode = nameof(Numerator).ToLower();
 
-		public NumeratorRepository(IUnitOfWorkFactory unitOfWorkFactory, IDbContextFactory dbContextFactory,
+		public DbNumeratorRepository(IUnitOfWorkFactory unitOfWorkFactory, IDbContextFactory dbContextFactory,
 			IDateTimeProvider dateTimeProvider, IClassifierTypeService classifierTypeService,
 			IClassifierTreeService classifierTreeService, IClassifierTypeMetadataService metadataService,
 			IFieldDataRepository fieldDataRepository, INumberGenerator numberGenerator)

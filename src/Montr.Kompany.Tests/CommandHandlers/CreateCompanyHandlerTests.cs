@@ -49,17 +49,17 @@ namespace Montr.Kompany.Tests.CommandHandlers
 				dbContextFactory, dateTimeProvider, classifierTypeService, null, metadataServiceMock.Object,
 				dbFieldDataRepository, null);
 
-			var numeratorRepository = new NumeratorRepository(unitOfWorkFactory,
+			var numeratorRepository = new DbNumeratorRepository(unitOfWorkFactory,
 				dbContextFactory, dateTimeProvider, classifierTypeService, null, metadataServiceMock.Object,
 				dbFieldDataRepository, null);
 
 			var classifierRepositoryFactoryMock = new Mock<INamedServiceFactory<IClassifierRepository>>();
 
 			classifierRepositoryFactoryMock
-				.Setup(x => x.GetNamedOrDefaultService(It.Is<string>(name => name == NumeratorRepository.TypeCode)))
+				.Setup(x => x.GetNamedOrDefaultService(It.Is<string>(name => name == DbNumeratorRepository.TypeCode)))
 				.Returns(() => numeratorRepository);
 			classifierRepositoryFactoryMock
-				.Setup(x => x.GetNamedOrDefaultService(It.Is<string>(name => name != NumeratorRepository.TypeCode)))
+				.Setup(x => x.GetNamedOrDefaultService(It.Is<string>(name => name != DbNumeratorRepository.TypeCode)))
 				.Returns(() => classifierRepository);
 
 			return classifierRepositoryFactoryMock.Object;

@@ -107,11 +107,11 @@ namespace Montr.MasterData.Impl.Services
 		// todo: get numerator from cache
 		private async Task<Numerator> GetNumerator(GenerateNumberRequest request, CancellationToken cancellationToken)
 		{
-			var repository = _repositoryFactory.GetNamedOrDefaultService(NumeratorRepository.TypeCode);
+			var repository = _repositoryFactory.GetNamedOrDefaultService(DbNumeratorRepository.TypeCode);
 
 			var result = await repository.Search(new NumeratorSearchRequest
 			{
-				TypeCode = NumeratorRepository.TypeCode,
+				TypeCode = DbNumeratorRepository.TypeCode,
 				EntityTypeCode = request.EntityTypeCode,
 				EntityTypeUid = request.EntityTypeUid
 			}, cancellationToken);

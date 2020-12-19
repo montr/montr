@@ -37,7 +37,7 @@ namespace Montr.MasterData.Impl.Services
 			{
 				Item = new ClassifierType
 				{
-					Code = NumeratorRepository.TypeCode,
+					Code = DbNumeratorRepository.TypeCode,
 					Name = "Нумераторы",
 					HierarchyType = HierarchyType.Groups,
 					IsSystem = true
