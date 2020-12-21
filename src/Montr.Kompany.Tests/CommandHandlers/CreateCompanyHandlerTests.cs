@@ -21,6 +21,7 @@ using Montr.Kompany.Models;
 using Montr.MasterData.Impl.Services;
 using Montr.MasterData.Models;
 using Montr.MasterData.Services;
+using Montr.MasterData.Tests.Services;
 using Montr.Metadata.Impl.Entities;
 using Montr.Metadata.Impl.Services;
 using Montr.Metadata.Models;
@@ -105,12 +106,16 @@ namespace Montr.Kompany.Tests.CommandHandlers
 
 			var backgroundJobManagerMock = new Mock<IBackgroundJobManager>();
 
+			var generator = new MasterDataDbGenerator(unitOfWorkFactory, dbContextFactory);
+
 			var handler = new CreateCompanyHandler(unitOfWorkFactory,
 				dbContextFactory, dateTimeProvider, metadataRepositoryMock.Object,
 				dbFieldDataRepository, dbDocumentTypeService, dbDocumentService, auditLogService, backgroundJobManagerMock.Object);
 
 			using (var _ = unitOfWorkFactory.Create())
 			{
+				await generator.EnsureNumeratorTypeRegistered(cancellationToken);
+
 				await registerDocumentTypeHandler.Handle(new RegisterDocumentType
 				{
 					Item = new DocumentType
