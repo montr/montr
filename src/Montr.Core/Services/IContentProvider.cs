@@ -49,13 +49,12 @@ namespace Montr.Core.Services
 					Id = "m.3",
 					Name = "Администрирование",
 					Icon = "setting",
-					Items = new List<Menu>
+					Items = new []
 					{
 						new Menu { Id = "companies", Name = "Компании", Route = "/companies" },
 						new Menu { Id = "users", Name = "Пользователи", Route = "/users" },
 						// new Menu { Id = "integrations", Name = "Интеграции", Route = "/integrations" },
 						new Menu { Id = "classifiers", Name = "Классификаторы", Route = "/classifiers" },
-						new Menu { Id = "numerators", Name = "Нумераторы", Route = "/numerators" },
 						new Menu { Id = "settings", Name = "Настройки", Route = "/settings" },
 						new Menu { Id = "locales", Name = "Локализация", Route = "/locales" },
 						new Menu { Id = "hangfire", Name = "Hangfire Dashboard", Url = "/hangfire" }
@@ -67,7 +66,7 @@ namespace Montr.Core.Services
 					Id = "m.4",
 					Name = "Пользователь",
 					Icon = "user",
-					Items = new List<Menu>
+					Items = new []
 					{
 						new Menu { Id = "m.4.1", Name = "Профиль", Route = "/profile" }
 					}
