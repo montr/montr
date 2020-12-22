@@ -14,7 +14,7 @@
 	"private": true,
 	"dependencies": {
 		"antd": "^4.9.4",
-		"axios": "^0.21.0",
+		"axios": "^0.21.1",
 		"i18next": "^19.8.4",
 		"i18next-browser-languagedetector": "^6.0.1",
 		"i18next-xhr-backend": "^3.2.2",
