@@ -55,6 +55,6 @@ namespace Montr.MasterData.Impl.Entities
 		public bool IsAutoNumbering { get; set; }
 
 		[Column(Name = "numerator_uid"), DataType(DataType.Guid)]
-		public Guid NumeratorUid { get; set; }
+		public Guid? NumeratorUid { get; set; }
 	}
 }

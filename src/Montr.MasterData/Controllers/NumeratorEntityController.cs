@@ -23,5 +23,11 @@ namespace Montr.MasterData.Controllers
 		{
 			return await _mediator.Send(request);
 		}
+
+		[HttpPost]
+		public async Task<NumeratorEntity> Get(GetNumeratorEntity request)
+		{
+			return await _mediator.Send(request);
+		}
 	}
 }

@@ -138,7 +138,7 @@ namespace Montr.MasterData.Impl.Services
 
 			// todo: validate numerator is not used in entities?
 			await db.GetTable<DbNumeratorEntity>()
-				.Where(x => request.Uids.Contains(x.NumeratorUid))
+				.Where(x => x.NumeratorUid != null && request.Uids.Contains(x.NumeratorUid.Value))
 				.DeleteAsync(cancellationToken);
 
 			await db.GetTable<DbNumerator>()

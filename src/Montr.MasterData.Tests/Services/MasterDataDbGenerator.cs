@@ -360,6 +360,7 @@ namespace Montr.MasterData.Tests.Services
 					.InsertAsync(cancellationToken);
 
 				await db.GetTable<DbNumeratorEntity>()
+					.Value(x => x.IsAutoNumbering, true)
 					.Value(x => x.NumeratorUid, numeratorUid)
 					.Value(x => x.EntityUid, request.EntityTypeUid)
 					.InsertAsync(cancellationToken);
