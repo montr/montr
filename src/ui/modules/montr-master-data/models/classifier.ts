@@ -5,5 +5,7 @@ export interface IClassifier extends IIndexer {
 	statusCode?: string;
 	code?: string;
 	name?: string;
+	isActive?: boolean;
+	isSystem?: boolean;
 	url?: string;
 }

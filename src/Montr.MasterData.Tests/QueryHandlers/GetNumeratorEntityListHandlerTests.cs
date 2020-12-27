@@ -6,6 +6,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Montr.Core.Services;
 using Montr.Data.Linq2Db;
 using Montr.MasterData.Impl.QueryHandlers;
+using Montr.MasterData.Impl.Services;
 using Montr.MasterData.Models;
 using Montr.MasterData.Queries;
 using Montr.MasterData.Tests.Services;
@@ -33,7 +34,8 @@ namespace Montr.MasterData.Tests.QueryHandlers
 			entityTypeResolverFactory.Setup(x => x.GetRequiredService(It.IsAny<string>()))
 				.Returns(() => entityTypeResolverMock.Object);
 
-			var handler = new GetNumeratorEntityListHandler(dbContextFactory, entityTypeResolverFactory.Object);
+			var repository = new DbNumeratorEntityRepository(dbContextFactory, entityTypeResolverFactory.Object);
+			var handler = new GetNumeratorEntityListHandler(repository);
 
 			using (var _ = unitOfWorkFactory.Create())
 			{

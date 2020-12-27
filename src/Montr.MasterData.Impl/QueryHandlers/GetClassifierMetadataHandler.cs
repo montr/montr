@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using Montr.Core.Services;
+using Montr.MasterData.Impl.Services;
 using Montr.MasterData.Models;
 using Montr.MasterData.Queries;
 using Montr.MasterData.Services;
@@ -32,6 +33,11 @@ namespace Montr.MasterData.Impl.QueryHandlers
 				return GetClassifierTypeTabs();
 			}
 
+			if (request.ViewId == "NumeratorEntity/Form")
+			{
+				return GetNumeratorEntityForm();
+			}
+
 			var typeCode = request.TypeCode ?? throw new ArgumentNullException(nameof(request.TypeCode));
 
 			var type = await _classifierTypeService.Get(typeCode, cancellationToken);
@@ -46,13 +52,14 @@ namespace Montr.MasterData.Impl.QueryHandlers
 
 		private static DataView GetClassifierTypeTabs()
 		{
-			return new DataView
+			return new()
 			{
 				Panes = new List<DataPane>
 				{
 					new DataPane { Key = "info", Name = "Информация", Component = "panes/TabEditClassifierType" },
 					new DataPane { Key = "hierarchy", Name = "Иерархия", Component = "panes/TabEditClassifierTypeHierarchy" },
 					new DataPane { Key = "fields", Name = "Поля", Component = "panes/PaneSearchMetadata" },
+					new DataPane { Key = "numeration", Name = "Нумерация", Component = "panes/PaneEditNumeration" },
 					new DataPane { Key = "history", Name = "История изменений" }
 				}
 			};
@@ -89,6 +96,28 @@ namespace Montr.MasterData.Impl.QueryHandlers
 			}
 
 			return new DataView { Panes = panes };
+		}
+
+		private DataView GetNumeratorEntityForm()
+		{
+			return new()
+			{
+				Fields = new List<FieldMetadata>
+				{
+					new BooleanField
+					{
+						Key = "isAutoNumbering",
+						Name = "Автонумерация",
+						Required = true
+					},
+					new ClassifierField
+					{
+						Key = "numeratorUid",
+						Name = "Нумератор",
+						Props = { TypeCode = DbNumeratorRepository.TypeCode }
+					}
+				}
+			};
 		}
 
 		private async Task<DataView> GetClassifierForm(ClassifierType type, CancellationToken cancellationToken)

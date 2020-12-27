@@ -3,10 +3,10 @@ import { Fetcher, OperationService } from "@montr-core/services";
 import { DataTableUpdateToken, DataTable } from "@montr-core/components";
 import { Views, Api } from "../module";
 import { DataResult } from "@montr-core/models";
-import { INumerator } from "@montr-master-data/models";
+import { Numerator } from "../models";
 
 interface Props {
-	data: INumerator;
+	data: Numerator;
 }
 
 interface State {

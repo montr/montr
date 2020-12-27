@@ -28,15 +28,18 @@ export const Api = {
 	classifierDelete: `${Constants.apiURL}/classifier/delete`,
 
 	numeratorEntityList: `${Constants.apiURL}/numeratorEntity/list`,
+	numeratorEntitySave: `${Constants.apiURL}/numeratorEntity/save`,
 };
 
 export const Views = {
 	classifierTypeTabs: "ClassifierType/Tabs",
+	classifierTypeForm: "ClassifierType",
 
 	classifierTabs: "Classifier/Tabs",
 	classifierForm: "Classifier/Form",
 	classifierList: "Classifier/Grid",
 
+	numeratorEntityForm: "NumeratorEntity/Form",
 	numeratorEntityList: "NumeratorEntity/Grid",
 };
 
@@ -79,5 +82,7 @@ ComponentRegistry.add([
 
 	{ path: "panes/TabEditClassifier", component: React.lazy(() => import("./components/tab-edit-classifier")) },
 	{ path: "panes/TabEditClassifierHierarchy", component: React.lazy(() => import("./components/tab-edit-classifier-hierarchy")) },
+
 	{ path: "panes/TabEditNumeratorEntities", component: React.lazy(() => import("./components/tab-edit-numerator-entities")) },
+	{ path: "panes/PaneEditNumeration", component: React.lazy(() => import("./components/tab-edit-numeration")) },
 ]);

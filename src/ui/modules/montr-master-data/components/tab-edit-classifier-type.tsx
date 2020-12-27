@@ -6,7 +6,7 @@ import { IDataField, ApiResult } from "@montr-core/models";
 import { MetadataService } from "@montr-core/services";
 import { IClassifierType } from "../models";
 import { ClassifierTypeService } from "../services";
-import { RouteBuilder } from "../module";
+import { RouteBuilder, Views } from "../module";
 
 interface Props {
 	data: IClassifierType;
@@ -41,7 +41,7 @@ export default class TabEditClassifierType extends React.Component<Props, State>
 	};
 
 	fetchData = async () => {
-		const dataView = await this._metadataService.load(`ClassifierType`);
+		const dataView = await this._metadataService.load(Views.classifierTypeForm);
 
 		this.setState({ loading: false, fields: dataView.fields });
 	};
