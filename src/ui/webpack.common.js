@@ -1,5 +1,4 @@
 const path = require("path");
-const tsImportPluginFactory = require("ts-import-plugin");
 const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
 const copyPlugin = require("copy-webpack-plugin");
 
@@ -27,41 +26,48 @@ const options = {
 		extensions: [".ts", ".tsx", ".js", ".json"]
 	},
 	module: {
-		rules: [{
-			test: /\.(jsx|tsx|js|ts)$/,
-			loader: "babel-loader",
-			exclude: /node_modules/
-		}, {
-			test: /\.js$/,
-			loader: "source-map-loader",
-			enforce: "pre",
-			exclude: [/mutationobserver-shim/g]
-		}, {
-			test: /\.less$/,
-			use: [{
-				loader: 'style-loader',
+		rules: [
+			{
+				test: /\.(jsx|tsx|js|ts)$/,
+				loader: "babel-loader",
+				exclude: /node_modules/
 			}, {
-				loader: 'css-loader', // translates CSS into CommonJS
-			}, {
-				loader: "less-loader",
-				options: {
-					lessOptions: {
-						javascriptEnabled: true,
-						modifyVars: {
-							// https://github.com/ant-design/ant-design/blob/master/components/style/themes/default.less
-							// "primary-color": "#1DA57A",
-							// "primary-color": "#357ae8", // (?)
-							// "link-color": "#1DA57A",
-							// "border-radius-base": "4px",
-							// "font-size-base": "13px",
-							// "font-family": "'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif"
-							// "font-family": "'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif"
-							"font-family": "Nunito, 'Helvetica Neue', Helvetica, Arial, sans-serif"
+				test: /\.js$/,
+				loader: "source-map-loader",
+				enforce: "pre",
+				exclude: [/mutationobserver-shim/g]
+			},
+			{
+				test: /\.less$/,
+				use: [
+					{
+						loader: 'style-loader'
+					},
+					{
+						loader: 'css-loader' // translates CSS into CommonJS
+					},
+					{
+						loader: "less-loader",
+						options: {
+							lessOptions: {
+								javascriptEnabled: true,
+								modifyVars: {
+									// https://github.com/ant-design/ant-design/blob/master/components/style/themes/default.less
+									// "primary-color": "#1DA57A",
+									// "primary-color": "#357ae8", // (?)
+									// "link-color": "#1DA57A",
+									// "border-radius-base": "4px",
+									// "font-size-base": "13px",
+									// "font-family": "'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif"
+									// "font-family": "'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif"
+									"font-family": "Nunito, 'Helvetica Neue', Helvetica, Arial, sans-serif"
+								}
+							}
 						}
 					}
-				}
-			}]
-		}],
+				]
+			}
+		]
 	},
 	plugins: [
 		new ForkTsCheckerWebpackPlugin()
