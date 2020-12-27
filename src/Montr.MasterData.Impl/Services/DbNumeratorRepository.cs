@@ -38,9 +38,15 @@ namespace Montr.MasterData.Impl.Services
 
 			if (numeratorRequest?.EntityTypeCode != null && numeratorRequest.EntityTypeUid != null)
 			{
+				var numeratorEntities = db.GetTable<DbNumeratorEntity>().Where(x => x.EntityUid == numeratorRequest.EntityTypeUid);
+
+				if (numeratorRequest.IsAutoNumbering != null)
+				{
+					numeratorEntities = numeratorEntities.Where(x => x.IsAutoNumbering == numeratorRequest.IsAutoNumbering);
+				}
+
 				numerators = from n in numerators.Where(x => x.EntityTypeCode == numeratorRequest.EntityTypeCode)
-					join ne in db.GetTable<DbNumeratorEntity>().Where(x => x.EntityUid == numeratorRequest.EntityTypeUid)
-						on n.Uid equals ne.NumeratorUid
+					join ne in numeratorEntities on n.Uid equals ne.NumeratorUid
 					select n;
 			}
 

@@ -51,7 +51,7 @@ namespace Montr.MasterData.Impl.Entities
 		[Column(Name = "entity_uid"), DataType(DataType.Guid), NotNull, PrimaryKey]
 		public Guid EntityUid { get; set; }
 
-		[Column(Name = "is_autonumbering"), DataType(DataType.Boolean), NotNull]
+		[Column(Name = "is_auto_numbering"), DataType(DataType.Boolean), NotNull]
 		public bool IsAutoNumbering { get; set; }
 
 		[Column(Name = "numerator_uid"), DataType(DataType.Guid)]

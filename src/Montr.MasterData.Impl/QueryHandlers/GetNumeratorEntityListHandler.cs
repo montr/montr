@@ -35,6 +35,7 @@ namespace Montr.MasterData.Impl.QueryHandlers
 						join ne in db.GetTable<DbNumeratorEntity>() on n.Uid equals ne.NumeratorUid
 						select new NumeratorEntity
 						{
+							IsAutoNumbering = ne.IsAutoNumbering,
 							NumeratorUid = n.Uid,
 							EntityTypeCode = n.EntityTypeCode,
 							EntityUid = ne.EntityUid

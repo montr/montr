@@ -113,7 +113,8 @@ namespace Montr.MasterData.Impl.Services
 			{
 				TypeCode = DbNumeratorRepository.TypeCode,
 				EntityTypeCode = request.EntityTypeCode,
-				EntityTypeUid = request.EntityTypeUid
+				EntityTypeUid = request.EntityTypeUid,
+				IsAutoNumbering = true
 			}, cancellationToken);
 
 			return (Numerator)result.Rows.SingleOrDefault();

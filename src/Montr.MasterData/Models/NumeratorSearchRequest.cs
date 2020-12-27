@@ -8,5 +8,7 @@ namespace Montr.MasterData.Models
 		public string EntityTypeCode { get; set; }
 
 		public Guid? EntityTypeUid { get; set; }
+
+		public bool? IsAutoNumbering { get; set; }
 	}
 }
