@@ -20,9 +20,9 @@ namespace Montr.Docs.Impl.Services
 		{
 			var result = await _repository.Search(new DocumentTypeSearchRequest { Uid = entityUid }, cancellationToken);
 
-			var documentType = result?.Rows.SingleOrDefault();
+			var entity = result?.Rows.SingleOrDefault();
 
-			return documentType?.Name;
+			return entity?.Name;
 
 			/*if (entityUid == Process.CompanyRegistrationRequest)
 			{

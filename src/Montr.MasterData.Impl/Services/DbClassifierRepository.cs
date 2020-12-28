@@ -229,7 +229,7 @@ namespace Montr.MasterData.Impl.Services
 
 			var number = await _numberGenerator.GenerateNumber(new GenerateNumberRequest
 			{
-				EntityTypeCode = Classifier.TypeCode,
+				EntityTypeCode = Models.ClassifierType.TypeCode,
 				EntityTypeUid = type.Uid
 			}, cancellationToken);
 

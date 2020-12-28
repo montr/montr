@@ -28,6 +28,7 @@ export const Api = {
 	classifierDelete: `${Constants.apiURL}/classifier/delete`,
 
 	numeratorEntityList: `${Constants.apiURL}/numeratorEntity/list`,
+	numeratorEntityGet: `${Constants.apiURL}/numeratorEntity/get`,
 	numeratorEntitySave: `${Constants.apiURL}/numeratorEntity/save`,
 };
 

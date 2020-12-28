@@ -22,6 +22,8 @@ namespace Montr.MasterData.Impl
 			services.AddTransient<IClassifierRepository, DbClassifierRepository<Classifier>>();
 			services.AddNamedTransient<IClassifierRepository, DbNumeratorRepository>(DbNumeratorRepository.TypeCode);
 
+			services.AddNamedTransient<IEntityNameResolver, ClassifierTypeNameResolver>(ClassifierType.TypeCode);
+
 			services.AddTransient<IRepository<ClassifierType>, DbClassifierTypeRepository>();
 			services.AddTransient<IRepository<ClassifierTree>, DbClassifierTreeRepository>();
 			services.AddTransient<IRepository<NumeratorEntity>, DbNumeratorEntityRepository>();

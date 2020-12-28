@@ -1,20 +1,20 @@
 import React from "react";
+import { Spin } from "antd";
+import { DataForm } from "@montr-core/components";
 import { ApiResult, Guid, IDataField } from "@montr-core/models";
 import { NumeratorEntity } from "../models";
 import { ClassifierMetadataService, NumeratorEntityService } from "../services";
-import { Views } from "@montr-master-data/module";
-import { Spin } from "antd";
-import { DataForm } from "@montr-core/components";
+import { Views } from "../module";
 
 interface Props {
     entityTypeCode: string;
     entityUid: Guid;
-    data: NumeratorEntity;
 }
 
 interface State {
     loading: boolean;
     fields?: IDataField[];
+    data?: NumeratorEntity;
 }
 
 export default class TabEditNumeration extends React.Component<Props, State> {
@@ -41,12 +41,18 @@ export default class TabEditNumeration extends React.Component<Props, State> {
 
     fetchData = async () => {
 
+        const { entityTypeCode, entityUid } = this.props;
+
+        // todo: load metadata from common service
         const dataView = await this._classifierMetadataService.load(null, Views.numeratorEntityForm);
 
-        this.setState({ loading: false, fields: dataView.fields });
+        const data: NumeratorEntity = await this._numeratorEntityService.get(entityTypeCode, entityUid);
+
+        this.setState({ loading: false, fields: dataView.fields, data });
     };
 
     save = async (values: NumeratorEntity): Promise<ApiResult> => {
+
         const { entityTypeCode, entityUid } = this.props;
 
         const updated = {
@@ -61,8 +67,7 @@ export default class TabEditNumeration extends React.Component<Props, State> {
     };
 
     render() {
-        const { data } = this.props,
-            { loading, fields } = this.state;
+        const { loading, fields, data } = this.state;
 
         return (
             <Spin spinning={loading}>

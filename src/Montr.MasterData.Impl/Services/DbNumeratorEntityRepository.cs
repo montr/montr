@@ -28,9 +28,28 @@ namespace Montr.MasterData.Impl.Services
 
 			using (var db = _dbContextFactory.Create())
 			{
+				var dbNumerators = db.GetTable<DbNumerator>().AsQueryable();
+
+				if (request.EntityTypeCode != null)
+				{
+					dbNumerators = dbNumerators.Where(x => x.EntityTypeCode == request.EntityTypeCode);
+				}
+
+				if (request.NumeratorUid != null)
+				{
+					dbNumerators = dbNumerators.Where(x => x.Uid == request.NumeratorUid);
+				}
+
+				var dbNumeratorEntities = db.GetTable<DbNumeratorEntity>().AsQueryable();
+
+				if (request.EntityUid != null)
+				{
+					dbNumeratorEntities = dbNumeratorEntities.Where(x => x.EntityUid == request.EntityUid);
+				}
+
 				var data = await (
-						from n in db.GetTable<DbNumerator>().Where(x => x.Uid == request.NumeratorUid)
-						join ne in db.GetTable<DbNumeratorEntity>() on n.Uid equals ne.NumeratorUid
+						from n in dbNumerators
+						join ne in dbNumeratorEntities on n.Uid equals ne.NumeratorUid
 						select new NumeratorEntity
 						{
 							IsAutoNumbering = ne.IsAutoNumbering,
