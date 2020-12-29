@@ -3,7 +3,7 @@ import { TreeSelect, Spin, Select } from "antd";
 import { DataNode } from "rc-tree-select/lib/interface";
 import { Guid } from "@montr-core/models";
 import { ClassifierGroupService, ClassifierTreeService, ClassifierTypeService } from "../services";
-import { IClassifierGroup, IClassifierTree, IClassifierType, IClassifierGroupField } from "../models";
+import { ClassifierGroup, ClassifierTree, ClassifierType, IClassifierGroupField } from "../models";
 import { Icon } from "@montr-core/components";
 
 interface IProps {
@@ -16,9 +16,9 @@ interface IProps {
 interface IState {
 	loading: boolean;
 	value: string;
-	type?: IClassifierType;
-	trees?: IClassifierTree[];
-	groups?: IClassifierGroup[];
+	type?: ClassifierType;
+	trees?: ClassifierTree[];
+	groups?: ClassifierGroup[];
 	expanded: Guid[];
 }
 
@@ -72,7 +72,7 @@ export class ClassifierGroupSelect extends React.Component<IProps, IState> {
 
 		const type = await this._classifierTypeService.get({ typeCode: field.props.typeCode });
 
-		let trees: IClassifierTree[], groups: IClassifierGroup[];
+		let trees: ClassifierTree[], groups: ClassifierGroup[];
 
 		if (type.hierarchyType == "Groups") {
 			if (field.props.treeCode || field.props.treeUid) {
@@ -105,7 +105,7 @@ export class ClassifierGroupSelect extends React.Component<IProps, IState> {
 		this.setState({ loading: false, type, trees, groups, expanded });
 	};
 
-	async collectExpanded(groups: IClassifierGroup[], expanded?: Guid[]) {
+	async collectExpanded(groups: ClassifierGroup[], expanded?: Guid[]) {
 		groups && groups.forEach(group => {
 			if (group.children) {
 
@@ -131,7 +131,7 @@ export class ClassifierGroupSelect extends React.Component<IProps, IState> {
 	onLoadData = (node: DataNode) => {
 		return new Promise(async (resolve) => {
 			if (node.dataType == "Tree") {
-				const tree: IClassifierTree = node.dataRef;
+				const tree: ClassifierTree = node.dataRef;
 
 				if (!tree.children) {
 					const { field } = this.props,
@@ -146,7 +146,7 @@ export class ClassifierGroupSelect extends React.Component<IProps, IState> {
 				}
 			}
 			else {
-				const group: IClassifierGroup = node.dataRef;
+				const group: ClassifierGroup = node.dataRef;
 
 				if (!group.children) {
 					const { field } = this.props,
@@ -165,7 +165,7 @@ export class ClassifierGroupSelect extends React.Component<IProps, IState> {
 		});
 	};
 
-	buildTree(trees: IClassifierTree[], groups: IClassifierGroup[]): DataNode[] {
+	buildTree(trees: ClassifierTree[], groups: ClassifierGroup[]): DataNode[] {
 		if (trees) {
 			return trees.map(tree => {
 

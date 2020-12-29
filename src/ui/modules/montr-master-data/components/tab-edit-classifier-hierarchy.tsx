@@ -2,19 +2,19 @@ import * as React from "react";
 import { Alert, Modal } from "antd";
 import { Constants } from "@montr-core/.";
 import { DataTableUpdateToken, Toolbar, DataTable, ButtonAdd } from "@montr-core/components";
-import { IClassifierType, IClassifier, IClassifierLink } from "../models";
+import { ClassifierType, Classifier, ClassifierLink } from "../models";
 import { DataResult, IMenu, Guid } from "@montr-core/models";
 import { ClassifierLinkService } from "../services";
 import { ModalEditClassifierLink } from ".";
 
 interface Props {
-	type: IClassifierType;
-	data: IClassifier;
-	onDataChange?: (values: IClassifier) => void;
+	type: ClassifierType;
+	data: Classifier;
+	onDataChange?: (values: Classifier) => void;
 }
 
 interface State {
-	modalData?: IClassifierLink;
+	modalData?: ClassifierLink;
 	updateTableToken: DataTableUpdateToken;
 }
 
@@ -68,7 +68,7 @@ export default class TabEditClassifierHierarchy extends React.Component<Props, S
 		this.setState({ modalData: {} });
 	};
 
-	showDeleteLinkConfirm = (data: IClassifierLink) => {
+	showDeleteLinkConfirm = (data: ClassifierLink) => {
 		Modal.confirm({
 			title: "Вы действительно хотите удалить связь с выбранной группой?",
 			content: "При удалении связи с группой иерархии по-умолчанию, элемент будет привязан к корню иерархии по-умолчанию.",
@@ -82,7 +82,7 @@ export default class TabEditClassifierHierarchy extends React.Component<Props, S
 		});
 	};
 
-	onModalSuccess = async (data: IClassifierLink) => {
+	onModalSuccess = async (data: ClassifierLink) => {
 		this.setState({ modalData: null });
 
 		await this.refreshTable();
@@ -112,7 +112,7 @@ export default class TabEditClassifierHierarchy extends React.Component<Props, S
 				</Toolbar>
 
 				<DataTable
-					rowKey={(x: IClassifierLink) => `${x.tree.uid}`}
+					rowKey={(x: ClassifierLink) => `${x.tree.uid}`}
 					viewId="ClassifierLink/Grid"
 					loadUrl={`${Constants.apiURL}/classifierLink/list/`}
 					rowActions={rowActions}

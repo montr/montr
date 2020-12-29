@@ -4,7 +4,7 @@ import { Spin } from "antd";
 import { DataView } from "@montr-core/models";
 import { DataTabs, Page, PageHeader } from "@montr-core/components";
 import { ClassifierMetadataService, ClassifierTypeService } from "../services";
-import { IClassifierType } from "../models";
+import { ClassifierType } from "../models";
 import { ClassifierBreadcrumb } from ".";
 import { RouteBuilder, Views } from "../module";
 
@@ -18,9 +18,9 @@ interface Props extends RouteComponentProps<RouteProps> {
 
 interface State {
 	loading: boolean;
-	dataView?: DataView<IClassifierType>;
-	types?: IClassifierType[];
-	data?: IClassifierType;
+	dataView?: DataView<ClassifierType>;
+	types?: ClassifierType[];
+	data?: ClassifierType;
 }
 
 export default class EditClassifierType extends React.Component<Props, State> {
@@ -58,7 +58,7 @@ export default class EditClassifierType extends React.Component<Props, State> {
 
 		const types = await this._classifierTypeService.list({ skipPaging: true });
 
-		const data: IClassifierType = (uid)
+		const data: ClassifierType = (uid)
 			? await this._classifierTypeService.get({ uid })
 			// todo: load defaults from server
 			: { name: "", hierarchyType: "None" };
@@ -66,7 +66,7 @@ export default class EditClassifierType extends React.Component<Props, State> {
 		this.setState({ loading: false, dataView, data, types: types.rows });
 	};
 
-	handleDataChange = (data: IClassifierType) => {
+	handleDataChange = (data: ClassifierType) => {
 		this.setState({ data });
 	};
 

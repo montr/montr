@@ -1,7 +1,7 @@
-import { IClassifier, IClassifierGroup, IClassifierTree } from ".";
+import { Classifier, ClassifierGroup, ClassifierTree } from ".";
 
-export interface IClassifierLink {
-	tree?: IClassifierTree;
-	group?: IClassifierGroup;
-	item?: IClassifier;
+export interface ClassifierLink {
+	tree?: ClassifierTree;
+	group?: ClassifierGroup;
+	item?: Classifier;
 }

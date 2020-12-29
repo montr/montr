@@ -1,24 +1,24 @@
 import React from "react";
 import { Select } from "antd";
-import { IClassifierType, IClassifierTypeField } from "../models";
+import { ClassifierType, IClassifierTypeField } from "../models";
 import { ClassifierTypeService } from "../services";
 
-interface IProps {
+interface Props {
 	value?: string;
 	field: IClassifierTypeField;
 	onChange?: (value: any) => void;
 }
 
-interface IState {
+interface State {
 	loading: boolean;
-	types?: IClassifierType[];
+	types?: ClassifierType[];
 }
 
-export class ClassifierTypeSelect extends React.Component<IProps, IState> {
+export class ClassifierTypeSelect extends React.Component<Props, State> {
 
 	private _classifierTypeService = new ClassifierTypeService();
 
-	constructor(props: IProps) {
+	constructor(props: Props) {
 		super(props);
 
 		this.state = {

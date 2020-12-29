@@ -1,7 +1,7 @@
 import { Fetcher } from "@montr-core/services";
 import { Constants } from "@montr-core/.";
 import { Guid, DataResult, ApiResult } from "@montr-core/models";
-import { IClassifierType } from "../models";
+import { ClassifierType } from "../models";
 import { SearchRequest } from "@montr-core/models";
 
 interface IGetClassifierType {
@@ -10,19 +10,19 @@ interface IGetClassifierType {
 }
 
 export class ClassifierTypeService extends Fetcher {
-	list = async (request?: SearchRequest): Promise<DataResult<IClassifierType>> => {
+	list = async (request?: SearchRequest): Promise<DataResult<ClassifierType>> => {
 		return this.post(`${Constants.apiURL}/classifierType/list`, request);
 	};
 
-	get = async (request: IGetClassifierType): Promise<IClassifierType> => {
+	get = async (request: IGetClassifierType): Promise<ClassifierType> => {
 		return this.post(`${Constants.apiURL}/classifierType/get`, request);
 	};
 
-	insert = async (item: IClassifierType): Promise<ApiResult> => {
+	insert = async (item: ClassifierType): Promise<ApiResult> => {
 		return this.post(`${Constants.apiURL}/classifierType/insert`, { item });
 	};
 
-	update = async (item: IClassifierType): Promise<ApiResult> => {
+	update = async (item: ClassifierType): Promise<ApiResult> => {
 		return this.post(`${Constants.apiURL}/classifierType/update`, { item });
 	};
 

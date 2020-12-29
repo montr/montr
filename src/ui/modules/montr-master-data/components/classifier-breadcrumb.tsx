@@ -1,12 +1,12 @@
 import * as React from "react";
 import { DataBreadcrumb } from "@montr-core/components";
 import { IMenu } from "@montr-core/models";
-import { IClassifierType, IClassifier } from "../models";
+import { ClassifierType, Classifier } from "../models";
 
 interface Props {
-	type?: IClassifierType;
-	types?: IClassifierType[];
-	item?: IClassifier;
+	type?: ClassifierType;
+	types?: ClassifierType[];
+	item?: Classifier;
 }
 
 export class ClassifierBreadcrumb extends React.Component<Props> {

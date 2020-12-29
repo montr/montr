@@ -1,6 +1,6 @@
 import { Guid, IIndexer } from "@montr-core/models";
 
-export interface IClassifier extends IIndexer {
+export interface Classifier extends IIndexer {
 	uid?: Guid | string;
 	statusCode?: string;
 	code?: string;

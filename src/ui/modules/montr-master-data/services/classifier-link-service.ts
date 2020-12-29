@@ -1,7 +1,7 @@
 import { Fetcher } from "@montr-core/services";
 import { Constants } from "@montr-core/.";
 import { Guid, ApiResult, DataResult } from "@montr-core/models";
-import { IClassifierLink } from "../models";
+import { ClassifierLink } from "../models";
 
 interface IClassifierLinkSearchRequest {
 	typeCode: string;
@@ -11,7 +11,7 @@ interface IClassifierLinkSearchRequest {
 
 export class ClassifierLinkService extends Fetcher {
 
-	list = async (request: IClassifierLinkSearchRequest): Promise<DataResult<IClassifierLink>> => {
+	list = async (request: IClassifierLinkSearchRequest): Promise<DataResult<ClassifierLink>> => {
 		return this.post(`${Constants.apiURL}/classifierLink/list`, request);
 	};
 

@@ -1,6 +1,6 @@
 import { Fetcher } from "@montr-core/services";
 import { Guid, ApiResult, DataResult } from "@montr-core/models";
-import { IClassifier } from "../models";
+import { Classifier } from "../models";
 import { Api } from "../module";
 
 interface IClassifierSearchRequest {
@@ -13,7 +13,7 @@ interface IClassifierSearchRequest {
 
 export class ClassifierService extends Fetcher {
 
-	list = async (request: IClassifierSearchRequest): Promise<DataResult<IClassifier>> => {
+	list = async (request: IClassifierSearchRequest): Promise<DataResult<Classifier>> => {
 		return this.post(Api.classifierList, request);
 	};
 
@@ -21,19 +21,19 @@ export class ClassifierService extends Fetcher {
 		return this.download(Api.classifierExport, request);
 	};
 
-	create = async (typeCode: string, parentUid: Guid | string): Promise<IClassifier> => {
+	create = async (typeCode: string, parentUid: Guid | string): Promise<Classifier> => {
 		return this.post(Api.classifierCreate, { typeCode, parentUid });
 	};
 
-	get = async (typeCode: string, uid: Guid | string): Promise<IClassifier> => {
+	get = async (typeCode: string, uid: Guid | string): Promise<Classifier> => {
 		return this.post(Api.classifierGet, { typeCode, uid });
 	};
 
-	insert = async (typeCode: string, item: IClassifier): Promise<ApiResult> => {
+	insert = async (typeCode: string, item: Classifier): Promise<ApiResult> => {
 		return this.post(Api.classifierInsert, { item: { type: typeCode, ...item } });
 	};
 
-	update = async (typeCode: string, item: IClassifier): Promise<ApiResult> => {
+	update = async (typeCode: string, item: Classifier): Promise<ApiResult> => {
 		return this.post(Api.classifierUpdate, { item: { type: typeCode, ...item } });
 	};
 

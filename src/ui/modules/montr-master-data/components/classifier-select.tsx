@@ -2,7 +2,7 @@ import * as React from "react";
 import { Spin, Select, Divider, Button } from "antd";
 import { Guid } from "@montr-core/models";
 import { ClassifierService } from "../services";
-import { IClassifierField, IClassifierGroup, IClassifierTree, IClassifierType, IClassifier } from "../models";
+import { IClassifierField, ClassifierGroup, ClassifierTree, ClassifierType, Classifier } from "../models";
 import { RouteBuilder } from "../module";
 import { Link } from "react-router-dom";
 import { Icon } from "@montr-core/components";
@@ -17,12 +17,12 @@ interface IProps {
 interface IState {
 	loading: boolean;
 	fetching: boolean;
-	items?: IClassifier[];
+	items?: Classifier[];
 
 	value: string;
-	type?: IClassifierType;
-	trees?: IClassifierTree[];
-	groups?: IClassifierGroup[];
+	type?: ClassifierType;
+	trees?: ClassifierTree[];
+	groups?: ClassifierGroup[];
 	expanded: Guid[];
 }
 

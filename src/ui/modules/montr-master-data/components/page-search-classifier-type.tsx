@@ -8,7 +8,7 @@ import { Link } from "react-router-dom";
 import { ClassifierTypeService } from "../services";
 import { OperationService } from "@montr-core/services";
 import { IMenu } from "@montr-core/models";
-import { IClassifierGroup } from "../models";
+import { ClassifierGroup } from "../models";
 import { RouteBuilder, Locale } from "../module";
 
 interface Props extends CompanyContextProps, WithTranslation {
@@ -75,7 +75,7 @@ class WrappedSearchClassifierType extends React.Component<Props, State> {
 		const { updateTableToken } = this.state;
 
 		const rowActions: IMenu[] = [
-			{ name: "Настроить", route: (item: IClassifierGroup) => RouteBuilder.editClassifierType(item.uid) }
+			{ name: "Настроить", route: (item: ClassifierGroup) => RouteBuilder.editClassifierType(item.uid) }
 		];
 
 		return (

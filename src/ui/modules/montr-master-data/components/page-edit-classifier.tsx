@@ -4,7 +4,7 @@ import { DataView } from "@montr-core/models";
 import { RouteComponentProps } from "react-router";
 import { Spin } from "antd";
 import { ClassifierService, ClassifierTypeService, ClassifierLinkService, ClassifierMetadataService } from "../services";
-import { IClassifier, IClassifierType } from "../models";
+import { Classifier, ClassifierType } from "../models";
 import { ClassifierBreadcrumb } from ".";
 import { RouteBuilder, Views } from "../module";
 
@@ -20,9 +20,9 @@ interface Props extends RouteComponentProps<RouteProps> {
 
 interface State {
 	loading: boolean;
-	dataView?: DataView<IClassifier>;
-	type?: IClassifierType;
-	data?: IClassifier;
+	dataView?: DataView<Classifier>;
+	type?: ClassifierType;
+	data?: Classifier;
 }
 
 export default class PageEditClassifier extends React.Component<Props, State> {
@@ -80,7 +80,7 @@ export default class PageEditClassifier extends React.Component<Props, State> {
 		this.setState({ loading: false, dataView, type, data });
 	};
 
-	handleDataChange = (data: IClassifier) => {
+	handleDataChange = (data: Classifier) => {
 		const { typeCode, uid } = this.props.match.params;
 
 		if (uid) {

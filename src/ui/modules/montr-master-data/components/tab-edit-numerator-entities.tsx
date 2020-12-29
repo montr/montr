@@ -1,5 +1,5 @@
 import React from "react";
-import { Fetcher, OperationService } from "@montr-core/services";
+import { Fetcher } from "@montr-core/services";
 import { DataTableUpdateToken, DataTable } from "@montr-core/components";
 import { Views, Api } from "../module";
 import { DataResult } from "@montr-core/models";
@@ -16,7 +16,6 @@ interface State {
 
 export default class TabEditNumeratorEntities extends React.Component<Props, State> {
 
-	private _operation = new OperationService();
 	private _numeratorService = new Fetcher();
 
 	constructor(props: Props) {
@@ -50,7 +49,7 @@ export default class TabEditNumeratorEntities extends React.Component<Props, Sta
 	};
 
 	render = () => {
-		const { selectedRowKeys, updateTableToken } = this.state;
+		const { updateTableToken } = this.state;
 
 		return (
 			<DataTable

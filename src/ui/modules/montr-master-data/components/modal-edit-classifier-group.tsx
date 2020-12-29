@@ -1,36 +1,36 @@
 import * as React from "react";
 import { Modal, Spin } from "antd";
+import { FormInstance } from "antd/lib/form";
 import { Guid, IDataField, ApiResult } from "@montr-core/models";
 import { ClassifierGroupService } from "../services";
-import { IClassifierGroup, IClassifierGroupField } from "../models";
+import { ClassifierGroup, IClassifierGroupField } from "../models";
 import { NotificationService, MetadataService } from "@montr-core/services";
 import { DataForm } from "@montr-core/components";
-import { FormInstance } from "antd/lib/form";
 
-interface IProps {
+interface Props {
 	typeCode: string;
 	treeUid: Guid;
 	uid?: Guid;
 	parentUid?: Guid;
 	hideFields?: string[];
-	onSuccess?: (data: IClassifierGroup) => void;
+	onSuccess?: (data: ClassifierGroup) => void;
 	onCancel?: () => void;
 }
 
-interface IState {
+interface State {
 	loading: boolean;
 	fields?: IDataField[];
-	data: IClassifierGroup;
+	data: ClassifierGroup;
 }
 
-export class ModalEditClassifierGroup extends React.Component<IProps, IState> {
+export class ModalEditClassifierGroup extends React.Component<Props, State> {
 	private _notificationService = new NotificationService();
 	private _metadataService = new MetadataService();
 	private _classifierGroupService = new ClassifierGroupService();
 
 	private _formRef = React.createRef<FormInstance>();
 
-	constructor(props: IProps) {
+	constructor(props: Props) {
 		super(props);
 
 		this.state = {
@@ -91,10 +91,10 @@ export class ModalEditClassifierGroup extends React.Component<IProps, IState> {
 		if (this.props.onCancel) this.props.onCancel();
 	};
 
-	save = async (values: IClassifierGroup): Promise<ApiResult> => {
+	save = async (values: ClassifierGroup): Promise<ApiResult> => {
 		const { typeCode, treeUid, uid, onSuccess } = this.props;
 
-		let data: IClassifierGroup,
+		let data: ClassifierGroup,
 			result: ApiResult;
 
 		if (uid) {

@@ -1,7 +1,7 @@
 import { Guid } from "@montr-core/models";
-import { IClassifier } from ".";
+import { Classifier } from ".";
 
-export interface Numerator extends IClassifier {
+export interface Numerator extends Classifier {
 	entityTypeCode?: string;
 	pattern?: string;
 	key_tags?: string[];

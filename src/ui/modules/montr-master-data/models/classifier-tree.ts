@@ -1,9 +1,9 @@
 import { Guid } from "@montr-core/models";
-import { IClassifierGroup } from ".";
+import { ClassifierGroup } from ".";
 
-export interface IClassifierTree {
+export interface ClassifierTree {
 	uid?: Guid;
 	code?: string;
 	name?: string;
-	children?: IClassifierGroup[];
+	children?: ClassifierGroup[];
 }

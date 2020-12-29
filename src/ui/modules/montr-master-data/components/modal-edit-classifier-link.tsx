@@ -1,33 +1,33 @@
 import * as React from "react";
 import { Modal, Spin } from "antd";
-import { IClassifierLink, IClassifierField } from "../models";
+import { FormInstance } from "antd/lib/form";
+import { ClassifierLink, IClassifierField } from "../models";
 import { ClassifierLinkService } from "../services";
 import { IDataField, ApiResult, Guid } from "@montr-core/models";
 import { DataForm } from "@montr-core/components";
 import { NotificationService, MetadataService } from "@montr-core/services";
-import { FormInstance } from "antd/lib/form";
 
-interface IProps {
+interface Props {
 	typeCode: string;
 	itemUid: Guid;
-	onSuccess?: (data: IClassifierLink) => void;
+	onSuccess?: (data: ClassifierLink) => void;
 	onCancel?: () => void;
 }
 
-interface IState {
+interface State {
 	loading: boolean;
 	fields?: IDataField[];
-	data: IClassifierLink;
+	data: ClassifierLink;
 }
 
-export class ModalEditClassifierLink extends React.Component<IProps, IState> {
+export class ModalEditClassifierLink extends React.Component<Props, State> {
 	private _notificationService = new NotificationService();
 	private _metadataService = new MetadataService();
 	private _classifierLinkService = new ClassifierLinkService();
 
 	private _formRef = React.createRef<FormInstance>();
 
-	constructor(props: IProps) {
+	constructor(props: Props) {
 		super(props);
 
 		this.state = {
@@ -75,7 +75,7 @@ export class ModalEditClassifierLink extends React.Component<IProps, IState> {
 		if (this.props.onCancel) this.props.onCancel();
 	};
 
-	save = async (values: IClassifierLink): Promise<ApiResult> => {
+	save = async (values: ClassifierLink): Promise<ApiResult> => {
 		const { typeCode, itemUid, onSuccess } = this.props;
 
 		const result = await this._classifierLinkService.insert(typeCode, values.group.uid, itemUid);

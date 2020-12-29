@@ -9,7 +9,7 @@ import { Guid, DataResult } from "@montr-core/models";
 import { NotificationService } from "@montr-core/services";
 import { withCompanyContext, CompanyContextProps } from "@montr-kompany/components";
 import { ClassifierService, ClassifierTypeService, ClassifierGroupService, ClassifierTreeService } from "../services";
-import { IClassifierType, IClassifierGroup, IClassifierTree } from "../models";
+import { ClassifierType, ClassifierGroup, ClassifierTree } from "../models";
 import { ClassifierBreadcrumb, ModalEditClassifierGroup } from "../components";
 import { RouteBuilder, Api, Views } from "../module";
 
@@ -20,13 +20,13 @@ interface Props extends CompanyContextProps {
 }
 
 interface State {
-	types: IClassifierType[];
-	type?: IClassifierType;
-	trees?: IClassifierTree[];
-	groups?: IClassifierGroup[];
-	selectedTree?: IClassifierTree,
-	selectedGroup?: IClassifierGroup;
-	groupEditData?: IClassifierGroup;
+	types: ClassifierType[];
+	type?: ClassifierType;
+	trees?: ClassifierTree[];
+	groups?: ClassifierGroup[];
+	selectedTree?: ClassifierTree,
+	selectedGroup?: ClassifierGroup;
+	groupEditData?: ClassifierGroup;
 	expandedKeys: string[];
 	selectedRowKeys: string[] | number[];
 	depth: string; // todo: make enum
@@ -34,7 +34,7 @@ interface State {
 }
 
 interface ITreeNode extends EventDataNode /* AntTreeNode */ {
-	dataRef: IClassifierGroup;
+	dataRef: ClassifierGroup;
 }
 
 interface ITreeNodeSelectEvent {
@@ -124,8 +124,8 @@ class _PaneSearchClassifier extends React.Component<Props, State> {
 		const { type } = this.state;
 
 		if (type) {
-			let trees: IClassifierTree[] = [],
-				selectedTree: IClassifierTree;
+			let trees: ClassifierTree[] = [],
+				selectedTree: ClassifierTree;
 
 			if (type.hierarchyType == "Groups") {
 				trees = (await this._classifierTreeService.list({ typeCode: type.code })).rows;
@@ -151,7 +151,7 @@ class _PaneSearchClassifier extends React.Component<Props, State> {
 		const { type, selectedTree } = this.state;
 
 		if (type) {
-			let groups: IClassifierGroup[] = [];
+			let groups: ClassifierGroup[] = [];
 
 			if (type.hierarchyType == "Groups" && selectedTree) {
 				groups = await this.fetchClassifierGroups(type.code, selectedTree.uid, null, focusGroupUid, true);
@@ -165,7 +165,7 @@ class _PaneSearchClassifier extends React.Component<Props, State> {
 		}
 	};
 
-	fetchClassifierGroups = async (typeCode: string, treeUid?: Guid, parentUid?: Guid, focusUid?: Guid, expandSingleChild?: boolean): Promise<IClassifierGroup[]> => {
+	fetchClassifierGroups = async (typeCode: string, treeUid?: Guid, parentUid?: Guid, focusUid?: Guid, expandSingleChild?: boolean): Promise<ClassifierGroup[]> => {
 		const result = await this._classifierGroupService.list({
 			typeCode,
 			treeUid,
@@ -214,7 +214,7 @@ class _PaneSearchClassifier extends React.Component<Props, State> {
 
 	onTreeLoadData = async (node: ITreeNode /* AntTreeNode */) => {
 		return new Promise<void>(async (resolve) => {
-			const group: IClassifierGroup = node.dataRef;
+			const group: ClassifierGroup = node.dataRef;
 
 			if (!group.children) {
 				const { type, selectedTree, expandedKeys } = this.state;
@@ -257,7 +257,7 @@ class _PaneSearchClassifier extends React.Component<Props, State> {
 		await this.refreshTable();
 	};
 
-	buildGroupsTree = (groups: IClassifierGroup[], expanded?: string[]): TreeNodeNormal[] => {
+	buildGroupsTree = (groups: ClassifierGroup[], expanded?: string[]): TreeNodeNormal[] => {
 		return groups && groups.map(x => {
 
 			if (expanded && x.children) {
@@ -318,7 +318,7 @@ class _PaneSearchClassifier extends React.Component<Props, State> {
 		});
 	};
 
-	onGroupModalSuccess = async (data: IClassifierGroup) => {
+	onGroupModalSuccess = async (data: ClassifierGroup) => {
 		const { expandedKeys } = this.state;
 
 		// after group added - expand parent group

@@ -1,6 +1,6 @@
 import * as React from "react";
 import { DataTable, DataTableUpdateToken, Toolbar, ButtonAdd } from "@montr-core/components";
-import { IClassifierType, IClassifierTree } from "../models";
+import { ClassifierType, ClassifierTree } from "../models";
 import { Constants } from "@montr-core/.";
 import { ClassifierTreeService } from "../services";
 import { DataResult, IMenu } from "@montr-core/models";
@@ -8,11 +8,11 @@ import { Alert, Modal } from "antd";
 import { ModalEditClassifierTree } from ".";
 
 interface Props {
-	data: IClassifierType;
+	data: ClassifierType;
 }
 
 interface State {
-	editData?: IClassifierTree;
+	editData?: ClassifierTree;
 	updateTableToken: DataTableUpdateToken;
 }
 
@@ -64,11 +64,11 @@ export default class TabEditClassifierTypeHierarchy extends React.Component<Prop
 		this.setState({ editData: {} });
 	};
 
-	showEditModal = (data: IClassifierTree) => {
+	showEditModal = (data: ClassifierTree) => {
 		this.setState({ editData: data });
 	};
 
-	showDeleteConfirm = (data: IClassifierTree) => {
+	showDeleteConfirm = (data: ClassifierTree) => {
 		Modal.confirm({
 			title: "Вы действительно хотите удалить выбранную иерархию?",
 			content: "Наверняка что-то случится с группами и элементами классификатора...",
@@ -82,7 +82,7 @@ export default class TabEditClassifierTypeHierarchy extends React.Component<Prop
 		});
 	};
 
-	onGroupModalSuccess = async (data: IClassifierTree) => {
+	onGroupModalSuccess = async (data: ClassifierTree) => {
 		this.setState({ editData: null });
 
 		await this.refreshTable();

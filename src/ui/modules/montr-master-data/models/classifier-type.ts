@@ -1,6 +1,6 @@
 import { Guid } from "@montr-core/models";
 
-export interface IClassifierType {
+export interface ClassifierType {
 	uid?: Guid;
 	code?: string;
 	name?: string;

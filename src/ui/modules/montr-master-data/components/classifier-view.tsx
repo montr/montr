@@ -1,22 +1,22 @@
 import * as React from "react";
-import { IClassifierField, IClassifier } from "../models";
+import { IClassifierField, Classifier } from "../models";
 import { IIndexer } from "@montr-core/models";
 import { DataHelper } from "@montr-core/services";
 import { ClassifierService } from "@montr-master-data/services";
 import { EmptyFieldView } from "@montr-core/components";
 
-interface IProps {
+interface Props {
 	value?: string;
 	field: IClassifierField;
 	data: IIndexer;
 }
 
-interface IState {
+interface State {
 	loading: boolean;
-	item?: IClassifier;
+	item?: Classifier;
 }
 
-export class ClassifierView extends React.Component<IProps, IState> {
+export class ClassifierView extends React.Component<Props, State> {
 
 	static getDerivedStateFromProps(nextProps: any) {
 		// Should be a controlled component.
@@ -28,7 +28,7 @@ export class ClassifierView extends React.Component<IProps, IState> {
 
 	private _classifierService = new ClassifierService();
 
-	constructor(props: IProps) {
+	constructor(props: Props) {
 		super(props);
 
 		this.state = {
