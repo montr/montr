@@ -167,7 +167,8 @@ namespace Montr.MasterData.Services
 			{
 				Columns = new List<DataColumn>
 				{
-					new DataColumn { Key = "entityName", Name = "Тип" }
+					new DataColumn { Key = "entityName", Name = "Тип" },
+					new DataColumn { Key = "isAutoNumbering", Name = "Автонумерация", Type = BooleanField.TypeCode }
 				}
 			});
 
