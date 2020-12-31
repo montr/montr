@@ -6,7 +6,7 @@ import {
 	IDataField, IIndexer, ISelectField, ITextAreaField, INumberField, IDateField, IBooleanField, ITextField,
 	IDesignSelectOptionsField, IPasswordField
 } from "../models";
-import { Icon, DesignSelectOptions, DesignSelectOptionsFI, EmptyFieldView, IDataFormOptions, FormDefaults } from ".";
+import { Icon, DesignSelectOptions, DesignSelectOptionsFI, EmptyFieldView, DataFormOptions, FormDefaults } from ".";
 import moment from "moment";
 import { DataHelper } from "../services";
 
@@ -25,7 +25,7 @@ export abstract class DataFieldFactory<TField extends IDataField> {
 
 	shouldFormatValue: boolean = false;
 
-	createFormItem = (field: TField, data: IIndexer, options: IDataFormOptions): React.ReactNode => {
+	createFormItem = (field: TField, data: IIndexer, options: DataFormOptions): React.ReactNode => {
 		const { t, layout, mode, hideLabels } = options;
 
 		const required: Rule = {

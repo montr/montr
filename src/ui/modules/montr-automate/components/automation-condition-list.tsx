@@ -1,13 +1,13 @@
 import React from "react";
 import { Divider, Form, Select } from "antd";
-import { ButtonAdd, Toolbar, FormListItemToolbar, IDataFormOptions } from "@montr-core/components";
+import { ButtonAdd, Toolbar, FormListItemToolbar, DataFormOptions } from "@montr-core/components";
 import { AutomationConditionListField, AutomationRuleType } from "../models/";
 import { AutomationConditionItem } from ".";
 import { AutomationService } from "../services";
 
 interface Props {
 	field: AutomationConditionListField;
-	options: IDataFormOptions;
+	options: DataFormOptions;
 }
 
 interface State {

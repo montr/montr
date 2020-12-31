@@ -10,13 +10,13 @@ import { withTranslation, WithTranslation } from "react-i18next";
 
 declare const FormLayouts: ["horizontal", "inline", "vertical"];
 
-export interface IDataFormOptions extends WithTranslation {
+export interface DataFormOptions extends WithTranslation {
 	layout?: (typeof FormLayouts)[number];
 	mode?: "Edit" | "View";
 	hideLabels?: boolean;
 }
 
-interface IProps extends IDataFormOptions {
+interface Props extends DataFormOptions {
 	fields: IDataField[]; // todo: provide url to load fields or create wrapped component
 	data: any; // IIndexer;
 	showControls?: boolean;
@@ -29,11 +29,11 @@ interface IProps extends IDataFormOptions {
 	formRef?: React.RefObject<FormInstance>;
 }
 
-interface IState {
+interface State {
 	loading: boolean;
 }
 
-class WrappedDataForm extends React.Component<IProps, IState> {
+class WrappedDataForm extends React.Component<Props, State> {
 
 	private _operation = new OperationService();
 	private _notificationService = new NotificationService();
@@ -41,7 +41,7 @@ class WrappedDataForm extends React.Component<IProps, IState> {
 	private _isMounted: boolean = true;
 	private _formRef = React.createRef<FormInstance>();
 
-	constructor(props: IProps) {
+	constructor(props: Props) {
 		super(props);
 
 		this.state = {

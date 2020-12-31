@@ -1,12 +1,12 @@
 import React from "react";
 import { IIndexer, FieldData } from "@montr-core/models";
-import { DataFieldFactory, IDataFormOptions } from "@montr-core/components";
+import { DataFieldFactory, DataFormOptions } from "@montr-core/components";
 import { AutomationConditionListField, AutomationActionListField, AutomationCondition, AutomationAction, GroupAutomationCondition, FieldAutomationCondition, SetFieldAutomationAction, NotifyByEmailAutomationAction } from "../models/";
 import { AutomationConditionList, AutomationActionList, GroupAutomationConditionItem, FieldAutomationConditionItem, SetFieldAutomationActionItem, NotifyByEmailAutomationActionItem } from ".";
 
 export class AutomationConditionListFieldFactory extends DataFieldFactory<AutomationConditionListField> {
 
-	createFormItem = (field: AutomationConditionListField, data: IIndexer, options: IDataFormOptions): React.ReactNode => {
+	createFormItem = (field: AutomationConditionListField, data: IIndexer, options: DataFormOptions): React.ReactNode => {
 		return <AutomationConditionList key={field.key} field={field} options={options} />;
 	};
 
@@ -21,7 +21,7 @@ export class AutomationConditionListFieldFactory extends DataFieldFactory<Automa
 
 export class AutomationActionListFieldFactory extends DataFieldFactory<AutomationActionListField> {
 
-	createFormItem = (field: AutomationActionListField, data: IIndexer, options: IDataFormOptions): React.ReactNode => {
+	createFormItem = (field: AutomationActionListField, data: IIndexer, options: DataFormOptions): React.ReactNode => {
 		return <AutomationActionList key={field.key} field={field} options={options} />;
 	};
 
@@ -37,7 +37,7 @@ export class AutomationActionListFieldFactory extends DataFieldFactory<Automatio
 export class AutomationItemProps {
 	item: FieldData;
 	typeSelector: React.ReactElement;
-	options: IDataFormOptions;
+	options: DataFormOptions;
 }
 
 export abstract class AutomationConditionFactory<TCondition extends AutomationCondition> {
