@@ -1,12 +1,17 @@
 ﻿using System.Linq;
+using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Montr.Core;
+using Montr.Core.Impl.Services;
 using Montr.Core.Services;
+using Montr.Data.Linq2Db;
 using Serilog;
 using Serilog.Events;
 
@@ -18,15 +23,31 @@ namespace Host
 		{
 			var hostBuilder = WebHost
 				.CreateDefaultBuilder(args)
-				/*.ConfigureAppConfiguration((builderContext, config) =>
+				.ConfigureAppConfiguration((context, config) =>
 				{
-					var env = builderContext.HostingEnvironment;
+					var env = context.HostingEnvironment;
 
-					config.SetBasePath(Directory.GetCurrentDirectory());
-					config.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true);
-					config.AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true);
-					config.AddEnvironmentVariables();
-				})*/
+					// config.SetBasePath(Directory.GetCurrentDirectory());
+
+					config
+						.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
+						.AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true);
+
+					if (env.IsDevelopment())
+					{
+						// todo: remove
+						config.AddUserSecrets(Assembly.Load(new AssemblyName(env.ApplicationName)), optional: true);
+					}
+
+					config
+						.AddEnvironmentVariables()
+						.AddCommandLine(args);
+
+					// build temp config and preload connection strings
+					config.Build().SetLinq2DbDefaultSettings();
+
+					config.AddDbConfiguration();
+				})
 				.UseStartup<Startup>()
 				.UseSentry()
 				.UseSerilog((context, configuration) =>
