@@ -1,12 +1,14 @@
-import React, { ErrorInfo } from "react";
+import React from "react";
 import { Alert } from "antd";
 
 interface Props {
+	children: React.ReactNode;
 }
 
 interface State {
+	hasError: boolean;
 	error?: Error;
-	errorInfo?: ErrorInfo;
+	errorInfo?: React.ErrorInfo;
 }
 
 export class ErrorBoundary extends React.Component<Props, State> {
@@ -15,10 +17,15 @@ export class ErrorBoundary extends React.Component<Props, State> {
 		super(props);
 
 		this.state = {
+			hasError: false
 		};
 	}
 
-	componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
+	static getDerivedStateFromError(_: Error): State {
+		return { hasError: true };
+	}
+
+	componentDidCatch(error: Error, errorInfo: React.ErrorInfo): void {
 
 		this.setState({
 			error: error,
@@ -30,17 +37,16 @@ export class ErrorBoundary extends React.Component<Props, State> {
 
 	render = () => {
 
-		if (this.state.error) {
+		if (this.state.hasError) {
 			return (
 				<Alert
 					type="error"
 					showIcon
-					message="Error"
+					message={this.state.error?.toString()}
 					description={
 						<details>
 							<p style={{ whiteSpace: "pre-wrap" }}>
-								{this.state.error && this.state.error.toString()}
-								{this.state.errorInfo && this.state.errorInfo.componentStack}
+								{this.state.errorInfo?.componentStack}
 							</p>
 						</details>
 					}
