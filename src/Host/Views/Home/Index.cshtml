@@ -1,4 +1,5 @@
 ﻿@using System.Text.Json
+@using System.Text.Json.Serialization
 @using Microsoft.Extensions.Options
 @using Montr.Core
 
@@ -14,8 +15,8 @@
 <body>
 	<div id="root"></div>
 <script>
-	var APP_OPTIONS = @Html.Raw(JsonSerializer.Serialize(new { Options.Value.AppUrl, Options.Value.CookieDomain },
-		new JsonSerializerOptions { IgnoreNullValues = true, PropertyNamingPolicy = JsonNamingPolicy.CamelCase }));
+	var APP_OPTIONS = @Html.Raw(JsonSerializer.Serialize(new { Options.Value.AppUrl, Options.Value.CookieDomain, Options.Value.State },
+		new JsonSerializerOptions { IgnoreNullValues = true, PropertyNamingPolicy = JsonNamingPolicy.CamelCase, Converters = { new JsonStringEnumConverter() } }));
 </script>
 	<script src="/assets/app.bundle.js"></script>
 </body>

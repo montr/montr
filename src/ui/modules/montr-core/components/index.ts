@@ -1,5 +1,6 @@
 export * from "./app-route";
 export * from "./app-route-list";
+export * from "./app-setup-redirect";
 export * from "./auth-callback-handler";
 export * from "./buttons";
 export * from "./data-breadcrumb";

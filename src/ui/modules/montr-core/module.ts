@@ -15,6 +15,14 @@ export const Api = {
 	entityStatusDelete: `${Constants.apiURL}/entityStatus/delete`,
 };
 
+export const Patterns = {
+	home: "/",
+	setup: "/setup/",
+	dashboard: "/dashboard/",
+	locales: "/locales/",
+	settings: "/settings/",
+};
+
 export const Views = {
 	metadataList: "Metadata/Grid",
 
@@ -34,11 +42,12 @@ import("./components").then(x => {
 });
 
 AppRouteRegistry.add([
-	{ path: "/", layout: Layout.public, exact: true, component: React.lazy(() => import("./components/page-home")) },
+	{ path: Patterns.home, layout: Layout.public, exact: true, component: React.lazy(() => import("./components/page-home")) },
+	{ path: Patterns.setup, layout: Layout.auth, exact: true, component: React.lazy(() => import("./components/page-setup")) },
 
-	{ path: "/dashboard/", exact: true, component: React.lazy(() => import("./components/page-dashboard")) },
-	{ path: "/locales/", exact: true, component: React.lazy(() => import("./components/page-search-locale-string")) },
-	{ path: "/settings/", exact: true, component: React.lazy(() => import("./components/page-settings")) },
+	{ path: Patterns.dashboard, exact: true, component: React.lazy(() => import("./components/page-dashboard")) },
+	{ path: Patterns.locales, exact: true, component: React.lazy(() => import("./components/page-search-locale-string")) },
+	{ path: Patterns.settings, exact: true, component: React.lazy(() => import("./components/page-settings")) },
 ]);
 
 ComponentRegistry.add([

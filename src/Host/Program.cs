@@ -46,7 +46,7 @@ namespace Host
 					// build temp config and preload connection strings
 					config.Build().SetLinq2DbDefaultSettings();
 
-					config.AddDbConfiguration();
+					// config.AddDbConfiguration();
 				})
 				.UseStartup<Startup>()
 				.UseSentry()

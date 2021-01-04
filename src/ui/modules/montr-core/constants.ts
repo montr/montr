@@ -13,6 +13,8 @@ export const Constants = {
 	apiURL: APP_OPTIONS.appUrl + "/api",
 	authorityURL: APP_OPTIONS.authorityAppUrl ?? APP_OPTIONS.appUrl,
 	cookieDomain: APP_OPTIONS.cookieDomain,
+	appState: APP_OPTIONS.state,
+
 	// todo: move or rename
 	cookieName: "current_company_uid",
 

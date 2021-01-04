@@ -11,5 +11,13 @@
 
 		// todo: always auto calc (?)
 		public string CookieDomain { get; set; }
+
+		public AppState State { get; set; }
+	}
+
+	public enum AppState : byte
+	{
+		None,
+		Initialized
 	}
 }

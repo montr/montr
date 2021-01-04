@@ -52,12 +52,12 @@ export class DataBreadcrumb extends React.Component<Props> {
 		);
 	};
 
-	public render() {
+	render = () => {
 		return (
 			<Breadcrumb>
 				<Breadcrumb.Item>{Icon.Home}</Breadcrumb.Item>
 				{this.props.items.map(this.getItem)}
 			</Breadcrumb>
 		);
-	}
+	};
 };

@@ -1,6 +1,7 @@
 import * as React from "react";
-import { Page } from "@montr-core/components";
 import { Spin, Button } from "antd";
+import { Patterns } from "@montr-core/module";
+import { Page } from "@montr-core/components";
 import { RouteComponentProps } from "react-router-dom";
 import { Translation } from "react-i18next";
 import { AccountService } from "../services/account-service";
@@ -49,8 +50,7 @@ export default class ConfirmEmailChange extends React.Component<IProps, IState> 
 	};
 
 	handleContinue = async () => {
-		// todo: use route const
-		this.props.history.push("/dashboard");
+		this.props.history.push(Patterns.dashboard);
 	};
 
 	render = () => {
