@@ -8,6 +8,8 @@ import "./index.less";
 export const Api = {
 	metadataList: `${Constants.apiURL}/metadata/list`,
 
+	setupSave: `${Constants.apiURL}/setup/save`,
+
 	entityStatusList: `${Constants.apiURL}/entityStatus/list`,
 	entityStatusGet: `${Constants.apiURL}/entityStatus/get`,
 	entityStatusInsert: `${Constants.apiURL}/entityStatus/insert`,
@@ -25,6 +27,8 @@ export const Patterns = {
 
 export const Views = {
 	metadataList: "Metadata/Grid",
+
+	setupForm: "Setup/Form",
 
 	entityStatusList: "EntityStatus/Grid",
 	entityStatusForm: "EntityStatus/Form",

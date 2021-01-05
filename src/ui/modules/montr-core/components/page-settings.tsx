@@ -1,5 +1,5 @@
 import React from "react";
-import { Page, Toolbar, PageHeader, DataBreadcrumb } from "@montr-core/components";
+import { Page, Toolbar, PageHeader, DataBreadcrumb } from "./";
 
 interface Props {
 }

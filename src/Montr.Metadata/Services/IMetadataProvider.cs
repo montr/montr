@@ -32,6 +32,16 @@ namespace Montr.Metadata.Services
 
 			var result = new DataView { Id = viewId };
 
+			if (viewId == "Setup/Form")
+			{
+				result.Fields = new List<FieldMetadata>
+				{
+					new TextField { Key = "companyName", Name = "Наименование компании", Required = true },
+					new TextField { Key = "adminEmail", Name = "Email администратора", Required = true },
+					new PasswordField { Key = "adminPassword", Name = "Пароль администратора", Required = true },
+				};
+			}
+
 			if (viewId == "EntityStatus/Grid")
 			{
 				result.Columns = new List<DataColumn>

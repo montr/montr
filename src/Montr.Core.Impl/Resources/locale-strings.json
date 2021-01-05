@@ -22,7 +22,9 @@
       "operation.confirm.title": "Are you sure you want to perform the operation?",
       "operation.error": "An error occurred while performing the operation.",
       "operation.executing": "Please wait until the operation is completed...",
-      "operation.success": "The operation completed successfully."
+      "operation.success": "The operation completed successfully.",
+      "page.setup.subtitle": "Setup initial parameters of application",
+      "page.setup.title": "Setup"
     },
     "idx": {
       "button.addLogin": "Link",
@@ -80,6 +82,7 @@
       "page.setPassword.title": "Set password"
     },
     "master-data": {
+      "page.searchClassifierTypes.title": "Classifiers"
     },
     "tendr": {
       "cancel.confirm.content": "Are you sure you want to cancel the event?",
@@ -108,7 +111,9 @@
       "operation.confirm.title": "Вы действительно хотите выполнить операцию?",
       "operation.error": "Произошла ошибка при выполнении операции.",
       "operation.executing": "Пожалуйста подождите, операция выполняется...",
-      "operation.success": "Операция выполнена успешно."
+      "operation.success": "Операция выполнена успешно.",
+      "page.setup.subtitle": "Настройка основных параметров приложения",
+      "page.setup.title": "Настройка"
     },
     "idx": {
       "button.changePassword": "Изменить пароль",
@@ -172,6 +177,7 @@
       "page.setPassword.title": "Установить пароль"
     },
     "master-data": {
+      "page.searchClassifierTypes.title": "Классификаторы"
     },
     "tendr": {
       "cancel.confirm.content": "Вы действительно хотите отменить событие?",

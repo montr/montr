@@ -10,21 +10,21 @@ import { ExternalLoginForm } from ".";
 import { Views, Patterns } from "../module";
 import { Link } from "react-router-dom";
 
-interface IProps {
+interface Props {
 }
 
-interface IState {
+interface State {
 	loading: boolean;
 	data: IRegisterModel;
 	fields?: IDataField[];
 }
 
-export default class Register extends React.Component<IProps, IState> {
+export default class Register extends React.Component<Props, State> {
 
 	private _metadataService = new MetadataService();
 	private _accountService = new AccountService();
 
-	constructor(props: IProps) {
+	constructor(props: Props) {
 		super(props);
 
 		this.state = {
