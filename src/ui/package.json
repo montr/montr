@@ -38,7 +38,7 @@
 		"@types/lodash": "^4.14.166",
 		"@types/react": "^17.0.0",
 		"@types/react-dom": "^17.0.0",
-		"@types/react-router": "^5.1.9",
+		"@types/react-router": "^5.1.10",
 		"@types/react-router-dom": "^5.1.6",
 		"babel-loader": "^8.2.2",
 		"babel-plugin-import": "^1.13.3",
