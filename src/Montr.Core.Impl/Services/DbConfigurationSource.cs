@@ -28,8 +28,6 @@ namespace Montr.Core.Impl.Services
 
 		public override void Load()
 		{
-			Console.WriteLine("DbConfigurationProvider.Load");
-
 			using (var db = _dbContextFactory.Create())
 			{
 				Data = db.GetTable<DbSettings>()

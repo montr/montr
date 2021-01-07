@@ -21,6 +21,8 @@ namespace Host
 	{
 		public static async Task Main(string[] args)
 		{
+			await Migrate(args);
+
 			var hostBuilder = WebHost
 				.CreateDefaultBuilder(args)
 				.ConfigureAppConfiguration((context, config) =>
@@ -46,7 +48,7 @@ namespace Host
 					// build temp config and preload connection strings
 					config.Build().SetLinq2DbDefaultSettings();
 
-					// config.AddDbConfiguration();
+					config.AddDbConfiguration();
 				})
 				.UseStartup<Startup>()
 				.UseSentry()
@@ -94,6 +96,60 @@ namespace Host
 			}
 
 			await host.RunAsync();
+		}
+
+		// todo: run migration in production before application
+		public static async Task Migrate(string[] args)
+		{
+			var hostBuilder = Microsoft.Extensions.Hosting.Host
+				.CreateDefaultBuilder()
+				.ConfigureAppConfiguration((context, config) =>
+				{
+					var env = context.HostingEnvironment;
+
+					config
+						.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+						.AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true)
+						.AddUserSecrets(Assembly.Load(new AssemblyName(env.ApplicationName)), optional: true)
+						.AddEnvironmentVariables()
+						.AddCommandLine(args);
+
+					config.Build().SetLinq2DbDefaultSettings();
+				})
+				.ConfigureServices((context, services) =>
+				{
+					services.BindOptions<MigrationOptions>(context.Configuration);
+
+					services.AddSingleton<IMigrationRunner, DbMigrationRunner>();
+					services.AddSingleton<IDbContextFactory, DefaultDbContextFactory>();
+					services.AddSingleton<EmbeddedResourceProvider, EmbeddedResourceProvider>();
+				})
+				.UseSerilog((context, configuration) =>
+				{
+					configuration
+						.MinimumLevel.Debug()
+						.MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
+						.MinimumLevel.Override("System", LogEventLevel.Warning)
+						.MinimumLevel.Override("Microsoft.AspNetCore.Authentication", LogEventLevel.Information)
+						.MinimumLevel.Override("Hangfire.Processing.BackgroundExecution", LogEventLevel.Information)
+						.MinimumLevel.Override("Hangfire.Server.ServerHeartbeatProcess", LogEventLevel.Information)
+						.Enrich.FromLogContext()
+						.WriteTo.File($"../../../.logs/{typeof(Startup).Namespace}-{context.HostingEnvironment.EnvironmentName}.log")
+						.WriteTo.Console(outputTemplate: "{Timestamp:o} [{Level:w4}] {SourceContext} - {Message:lj}{NewLine}{Exception}");
+				});
+
+			var host = hostBuilder.Build();
+
+			using (var scope = host.Services.CreateScope())
+			{
+				var migrator = scope.ServiceProvider.GetRequiredService<IMigrationRunner>();
+
+				await migrator.Run(CancellationToken.None);
+			}
+
+			host.Dispose();
+
+			NamedServiceCollectionExtensions.ClearRegistrations();
 		}
 	}
 }

@@ -35,9 +35,6 @@ namespace Montr.Core
 			});
 
 			services.BindOptions<AppOptions>(configuration);
-			services.BindOptions<MigrationOptions>(configuration);
-
-			services.AddTransient<IStartupTask, MigrateDatabaseStartupTask>();
 
 			services.Configure<RequestLocalizationOptions>(options =>
 			{

@@ -13,7 +13,6 @@ namespace Montr.Core.Impl
 		{
 			services.AddTransient<IStartupTask, ImportDefaultLocaleStringListStartupTask>();
 
-			services.AddSingleton<IMigrationRunner, DbMigrationRunner>();
 			services.AddSingleton<EmbeddedResourceProvider, EmbeddedResourceProvider>();
 			services.AddSingleton<LocaleStringSerializer, LocaleStringSerializer>();
 			services.AddSingleton<ILocaleStringImporter, DbLocaleStringImporter>();

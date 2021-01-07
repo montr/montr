@@ -97,5 +97,10 @@ namespace Montr.Core.Services
 
 			return services;
 		}
+
+		public static void ClearRegistrations()
+		{
+			FactoryRegistrations.Clear();
+		}
 	}
 }
