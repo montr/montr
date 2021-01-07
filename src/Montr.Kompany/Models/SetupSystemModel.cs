@@ -2,7 +2,7 @@
 
 namespace Montr.Kompany.Models
 {
-	public class SetupModel
+	public class SetupSystemModel
 	{
 		[Required]
 		public string CompanyName { get; set; }

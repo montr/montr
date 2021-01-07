@@ -28,13 +28,11 @@ namespace Montr.Idx.Impl
 
 		public void ConfigureServices(IConfiguration configuration, IServiceCollection services)
 		{
-			services.BindOptions<Options>(configuration);
-
-			services.AddTransient<IStartupTask, CreateDefaultAdminStartupTask>();
 			services.AddTransient<IStartupTask, RegisterMessageTemplateStartupTask>();
 
 			services.AddTransient<IEmailConfirmationService, EmailConfirmationService>();
 			services.AddTransient<IRepository<User>, DbUserRepository>();
+			services.AddTransient<IUserManager, DefaultUserManager>();
 
 			// todo: move from impl to idx?
 			services.Configure<IdentityOptions>(options =>

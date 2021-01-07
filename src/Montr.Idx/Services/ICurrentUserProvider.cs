@@ -26,9 +26,9 @@ namespace Montr.Idx.Services
 
 		public T GetUserId<T>()
 		{
-			var user = _httpContextAccessor.HttpContext.User;
+			var user = _httpContextAccessor.HttpContext?.User;
 
-			if (user.Identity.IsAuthenticated)
+			if (user?.Identity?.IsAuthenticated == true)
 			{
 				var sub = user.Claims.First(x => x.Type == "sub").Value;
 
@@ -49,9 +49,9 @@ namespace Montr.Idx.Services
 
 		public ClaimsPrincipal GetUser(bool throwIfNotAuthenticated = true)
 		{
-			var user = _httpContextAccessor.HttpContext.User;
+			var user = _httpContextAccessor.HttpContext?.User;
 
-			if (user.Identity.IsAuthenticated)
+			if (user?.Identity?.IsAuthenticated == true)
 			{
 				return user;
 			}

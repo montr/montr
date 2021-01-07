@@ -21,7 +21,7 @@ namespace Montr.Kompany.Impl.Services
 				Item = new DocumentType
 				{
 					Code = DocumentTypes.CompanyRegistrationRequest,
-					Name = "Заявка на регистацию компании",
+					Name = "Заявка на регистрацию компании",
 					// IsSystem = true
 				}
 			};

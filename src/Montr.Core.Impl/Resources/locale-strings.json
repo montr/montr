@@ -23,7 +23,7 @@
       "operation.error": "An error occurred while performing the operation.",
       "operation.executing": "Please wait until the operation is completed...",
       "operation.success": "The operation completed successfully.",
-      "page.setup.subtitle": "Setup initial parameters of application",
+      "page.setup.subtitle": "Congratulations, your system is up and running! Please answer some questions to initially configure your system.",
       "page.setup.title": "Setup"
     },
     "idx": {
@@ -112,7 +112,7 @@
       "operation.error": "Произошла ошибка при выполнении операции.",
       "operation.executing": "Пожалуйста подождите, операция выполняется...",
       "operation.success": "Операция выполнена успешно.",
-      "page.setup.subtitle": "Настройка основных параметров приложения",
+      "page.setup.subtitle": "Поздравляем, ваша система запущена и работает! Пожалуйста ответьте на несколько вопросов для первоначальной настройки системы.",
       "page.setup.title": "Настройка"
     },
     "idx": {

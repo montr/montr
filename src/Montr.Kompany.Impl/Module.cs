@@ -13,9 +13,6 @@ namespace Montr.Kompany.Impl
 	{
 		public void ConfigureServices(IConfiguration configuration, IServiceCollection services)
 		{
-			services.BindOptions<Options>(configuration);
-
-			services.AddTransient<IStartupTask, CreateDefaultCompanyStartupTask>();
 			services.AddTransient<IStartupTask, RegisterDocumentTypeStartupTask>();
 
 			services.AddTransient<IRepository<Company>, DbCompanyRepository>();

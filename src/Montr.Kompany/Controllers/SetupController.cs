@@ -17,7 +17,7 @@ namespace Montr.Kompany.Controllers
 		}
 
 		[HttpPost]
-		public async Task<ApiResult> Save(SetupApplication request)
+		public async Task<ApiResult> Save(SetupSystem request)
 		{
 			return await _mediator.Send(request);
 		}

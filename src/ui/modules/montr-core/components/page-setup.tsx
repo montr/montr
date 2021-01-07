@@ -42,6 +42,7 @@ export default class PageSetup extends React.Component<Props, State> {
         this.setState({ loading: false, fields: dataView.fields });
     };
 
+    // todo: redirect to login after success
     save = async (values: IIndexer): Promise<ApiResult> => {
         return await this._setupService.save(values);
     };

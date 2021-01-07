@@ -33,7 +33,7 @@ namespace Montr.Kompany.Impl.Services
 					join cu in db.GetTable<DbCompanyUser>()
 						on c.Uid equals cu.CompanyUid
 					orderby c.Name
-					where cu.UserUid == userUid
+					// where cu.UserUid == userUid
 					select c;
 
 				var data = await Materialize(

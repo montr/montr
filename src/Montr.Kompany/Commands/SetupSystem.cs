@@ -4,7 +4,7 @@ using Montr.Kompany.Models;
 
 namespace Montr.Kompany.Commands
 {
-	public class SetupApplication : SetupModel, IRequest<ApiResult>
+	public class SetupSystem : SetupSystemModel, IRequest<ApiResult>
 	{
 	}
 }

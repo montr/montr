@@ -31,14 +31,17 @@ namespace Montr.Docs.Impl.Services
 			{
 				var document = (Document) await _automationContextProvider.GetEntity(context, cancellationToken);
 
-				var searchResult = await _userRepository.Search(
-					new UserSearchRequest { UserName = document.CreatedBy }, cancellationToken);
-
-				var user = searchResult.Rows.SingleOrDefault();
-
-				if (user != null)
+				if (document.CreatedBy != null)
 				{
-					return new Recipient { Email = user.Email };
+					var searchResult = await _userRepository.Search(
+						new UserSearchRequest { UserName = document.CreatedBy }, cancellationToken);
+
+					var user = searchResult.Rows.SingleOrDefault();
+
+					if (user != null)
+					{
+						return new Recipient { Email = user.Email };
+					}
 				}
 			}
 

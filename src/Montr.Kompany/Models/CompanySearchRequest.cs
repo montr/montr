@@ -5,6 +5,6 @@ namespace Montr.Kompany.Models
 {
 	public class CompanySearchRequest : SearchRequest
 	{
-		public Guid UserUid { get; set; }
+		public Guid? UserUid { get; set; }
 	}
 }
