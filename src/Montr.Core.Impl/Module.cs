@@ -15,9 +15,11 @@ namespace Montr.Core.Impl
 
 			services.AddSingleton<EmbeddedResourceProvider, EmbeddedResourceProvider>();
 			services.AddSingleton<LocaleStringSerializer, LocaleStringSerializer>();
+
 			services.AddSingleton<ILocaleStringImporter, DbLocaleStringImporter>();
 			services.AddSingleton<IRepository<LocaleString>, DbLocaleStringRepository>();
 			services.AddSingleton<IAuditLogService, DbAuditLogService>();
+			services.AddSingleton<IOptionsRepository, DbSettingsRepository>();
 
 			services.AddSingleton<IRepository<EntityStatus>, DbEntityStatusRepository>();
 			services.AddSingleton<IEntityStatusProvider, DefaultEntityStatusProvider>();

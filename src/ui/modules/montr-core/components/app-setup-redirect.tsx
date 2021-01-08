@@ -15,7 +15,7 @@ export function AppSetupRedirect({ children }: Props): JSX.Element {
 
     if (appState == AppState.None && history.location.pathname != redirectTo) {
 
-        // history.push(redirectTo);
+        history.push(redirectTo);
     }
 
     return children;

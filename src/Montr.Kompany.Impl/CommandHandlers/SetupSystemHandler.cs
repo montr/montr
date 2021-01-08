@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using Montr.Core;
 using Montr.Core.Models;
 using Montr.Core.Services;
 using Montr.Idx.Models;
@@ -16,14 +17,19 @@ namespace Montr.Kompany.Impl.CommandHandlers
 		private readonly ILogger<SetupSystemHandler> _logger;
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IUserManager _userManager;
+		private readonly IOptionsRepository _optionsRepository;
 		private readonly IMediator _mediator;
 
 		public SetupSystemHandler(ILogger<SetupSystemHandler> logger,
-			IUnitOfWorkFactory unitOfWorkFactory, IUserManager userManager, IMediator mediator)
+			IUnitOfWorkFactory unitOfWorkFactory,
+			IUserManager userManager,
+			IOptionsRepository optionsRepository,
+			IMediator mediator)
 		{
 			_logger = logger;
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_userManager = userManager;
+			_optionsRepository = optionsRepository;
 			_mediator = mediator;
 		}
 
@@ -59,7 +65,9 @@ namespace Montr.Kompany.Impl.CommandHandlers
 
 				if (companyResult.Success == false) return companyResult;
 
-				// todo: save settings - system.state = Initialized
+				await _optionsRepository.GetOptions<AppOptions>()
+					.Set(x => x.State, AppState.Initialized)
+					.Update(cancellationToken);
 
 				scope.Commit();
 
