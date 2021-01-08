@@ -78,7 +78,7 @@ namespace Montr.Core.Impl.Services
 
 			public IUpdatableOptions<TOptions> Set<TValue>(Expression<Func<TOptions, TValue>> keyExpr, TValue value)
 			{
-				var key = typeof(TOptions).FullName + "." + ExpressionHelper.GetMemberName(keyExpr);
+				var key = typeof(TOptions).FullName + ":" + ExpressionHelper.GetMemberName(keyExpr);
 
 				_values.Add((key, value));
 

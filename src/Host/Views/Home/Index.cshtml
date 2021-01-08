@@ -3,7 +3,7 @@
 @using Microsoft.Extensions.Options
 @using Montr.Core
 
-@inject IOptions<AppOptions> Options
+@inject IOptionsMonitor<AppOptions> Options
 
 <!DOCTYPE html>
 
@@ -15,7 +15,7 @@
 <body>
 	<div id="root"></div>
 <script>
-	var APP_OPTIONS = @Html.Raw(JsonSerializer.Serialize(new { Options.Value.AppUrl, Options.Value.CookieDomain, Options.Value.State },
+	var APP_OPTIONS = @Html.Raw(JsonSerializer.Serialize(new { Options.CurrentValue.AppUrl, Options.CurrentValue.CookieDomain, Options.CurrentValue.State },
 		new JsonSerializerOptions { IgnoreNullValues = true, PropertyNamingPolicy = JsonNamingPolicy.CamelCase, Converters = { new JsonStringEnumConverter() } }));
 </script>
 	<script src="/assets/app.bundle.js"></script>

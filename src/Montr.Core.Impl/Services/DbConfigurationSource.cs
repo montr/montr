@@ -8,6 +8,8 @@ namespace Montr.Core.Impl.Services
 {
 	public class DbConfigurationSource : IConfigurationSource
 	{
+		public bool ReloadOnChange { get; set; }
+
 		public IConfigurationProvider Build(IConfigurationBuilder builder)
 		{
 			// todo: resolve services
@@ -33,14 +35,16 @@ namespace Montr.Core.Impl.Services
 				Data = db.GetTable<DbSettings>()
 					.ToDictionary(x => x.Id, x => x.Value, StringComparer.OrdinalIgnoreCase);
 			}
+
+			// OnReload();
 		}
 	}
 
 	public static class ConfigurationBuilderExtensions
 	{
-		public static IConfigurationBuilder AddDbConfiguration(this IConfigurationBuilder builder)
+		public static IConfigurationBuilder AddDbSettings(this IConfigurationBuilder builder, bool reloadOnChange = true)
 		{
-			return builder.Add(new DbConfigurationSource());
+			return builder.Add(new DbConfigurationSource { ReloadOnChange = reloadOnChange });
 		}
 	}
 }

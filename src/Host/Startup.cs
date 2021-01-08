@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Primitives;
 using Montr.Automate.Models;
 using Montr.Automate.Services;
 using Montr.Core;
@@ -164,6 +165,9 @@ namespace Host
 				// endpoints.MapGrpcService<MyCalculatorService>()
 				endpoints.MapDefaultControllerRoute();
 			});
+
+			ChangeToken.OnChange(() => Configuration.GetReloadToken(),
+				_ => Logger.LogInformation("Configuration changed."), Environment);
 
 			// todo: try to remove hack to fill field type map
 			var fieldProviderRegistry = app.ApplicationServices.GetRequiredService<IFieldProviderRegistry>();

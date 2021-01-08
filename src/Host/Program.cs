@@ -6,7 +6,6 @@ using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Montr.Core;
 using Montr.Core.Impl.Services;
@@ -29,26 +28,13 @@ namespace Host
 				{
 					var env = context.HostingEnvironment;
 
-					// config.SetBasePath(Directory.GetCurrentDirectory());
-
 					config
 						.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-						.AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true);
-
-					if (env.IsDevelopment())
-					{
-						// todo: remove
-						config.AddUserSecrets(Assembly.Load(new AssemblyName(env.ApplicationName)), optional: true);
-					}
-
-					config
+						.AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true)
+						.AddUserSecrets(Assembly.Load(new AssemblyName(env.ApplicationName)), optional: true) // todo: remove
 						.AddEnvironmentVariables()
-						.AddCommandLine(args);
-
-					// build temp config and preload connection strings
-					config.Build().SetLinq2DbDefaultSettings();
-
-					config.AddDbConfiguration();
+						.AddCommandLine(args)
+						.AddDbSettings(reloadOnChange: true);
 				})
 				.UseStartup<Startup>()
 				.UseSentry()
@@ -98,7 +84,7 @@ namespace Host
 			await host.RunAsync();
 		}
 
-		// todo: run migration in production before application
+		// todo: run migration in production in separate process before application
 		public static async Task Migrate(string[] args)
 		{
 			var hostBuilder = Microsoft.Extensions.Hosting.Host
