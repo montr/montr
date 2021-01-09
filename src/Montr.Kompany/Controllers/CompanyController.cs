@@ -13,10 +13,10 @@ namespace Montr.Kompany.Controllers
 	[ApiController, Route("api/[controller]/[action]")]
 	public class CompanyController : ControllerBase
 	{
-		private readonly IMediator _mediator;
+		private readonly ISender _mediator;
 		private readonly ICurrentUserProvider _currentUserProvider;
 
-		public CompanyController(IMediator mediator, ICurrentUserProvider currentUserProvider)
+		public CompanyController(ISender mediator, ICurrentUserProvider currentUserProvider)
 		{
 			_mediator = mediator;
 			_currentUserProvider = currentUserProvider;

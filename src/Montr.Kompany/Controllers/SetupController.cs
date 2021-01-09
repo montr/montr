@@ -9,9 +9,9 @@ namespace Montr.Kompany.Controllers
 	[ApiController, Route("api/[controller]/[action]")]
 	public class SetupController : Controller
 	{
-		private readonly IMediator _mediator;
+		private readonly ISender _mediator;
 
-		public SetupController(IMediator mediator)
+		public SetupController(ISender mediator)
 		{
 			_mediator = mediator;
 		}

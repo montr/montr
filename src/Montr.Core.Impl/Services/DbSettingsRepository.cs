@@ -11,7 +11,7 @@ using Montr.Data.Linq2Db;
 
 namespace Montr.Core.Impl.Services
 {
-	public class DbSettingsRepository : IOptionsRepository
+	public class DbSettingsRepository : ISettingsRepository
 	{
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IDbContextFactory _dbContextFactory;
@@ -22,12 +22,12 @@ namespace Montr.Core.Impl.Services
 			_dbContextFactory = dbContextFactory;
 		}
 
-		public IUpdatableOptions<TOptions> GetOptions<TOptions>()
+		public IUpdatableSettings<TSettings> GetSettings<TSettings>()
 		{
-			return new UpdatableOptions<TOptions>(this);
+			return new UpdatableSettings<TSettings>(this);
 		}
 
-		public async Task<int> Update<TOptions>(IEnumerable<(string, object)> values, CancellationToken cancellationToken)
+		public async Task<int> Update<TSettings>(IEnumerable<(string, object)> values, CancellationToken cancellationToken)
 		{
 			var affected = 0;
 
@@ -65,20 +65,20 @@ namespace Montr.Core.Impl.Services
 			return affected;
 		}
 
-		private class UpdatableOptions<TOptions> : IUpdatableOptions<TOptions>
+		private class UpdatableSettings<TSettings> : IUpdatableSettings<TSettings>
 		{
-			private readonly IOptionsRepository _repository;
+			private readonly ISettingsRepository _repository;
 
 			private readonly IList<(string, object)> _values = new List<(string, object)>();
 
-			public UpdatableOptions(IOptionsRepository repository)
+			public UpdatableSettings(ISettingsRepository repository)
 			{
 				_repository = repository;
 			}
 
-			public IUpdatableOptions<TOptions> Set<TValue>(Expression<Func<TOptions, TValue>> keyExpr, TValue value)
+			public IUpdatableSettings<TSettings> Set<TValue>(Expression<Func<TSettings, TValue>> keyExpr, TValue value)
 			{
-				var key = typeof(TOptions).FullName + ":" + ExpressionHelper.GetMemberName(keyExpr);
+				var key = typeof(TSettings).FullName + ":" + ExpressionHelper.GetMemberName(keyExpr);
 
 				_values.Add((key, value));
 
@@ -87,7 +87,7 @@ namespace Montr.Core.Impl.Services
 
 			public async Task<int> Update(CancellationToken cancellationToken)
 			{
-				return await _repository.Update<TOptions>(_values, cancellationToken);
+				return await _repository.Update<TSettings>(_values, cancellationToken);
 			}
 		}
 	}

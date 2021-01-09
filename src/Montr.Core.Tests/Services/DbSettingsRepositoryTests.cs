@@ -26,7 +26,7 @@ namespace Montr.Core.Tests.Services
 			using (var _ = unitOfWorkFactory.Create())
 			{
 				// act (insert)
-				var options =  repository.GetOptions<TestOptions>()
+				var options =  repository.GetSettings<TestOptions>()
 					.Set(x => x.Number, 42)
 					.Set(x => x.Value, null)
 					.Set(x => x.State, AppState.Initialized);
@@ -52,7 +52,7 @@ namespace Montr.Core.Tests.Services
 				Assert.AreEqual("Initialized", s3.Value);
 
 				// act (update)
-				options =  repository.GetOptions<TestOptions>()
+				options =  repository.GetSettings<TestOptions>()
 					.Set(x => x.State, AppState.None);
 
 				affected = await options.Update(cancellationToken);

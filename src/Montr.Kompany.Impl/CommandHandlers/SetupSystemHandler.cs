@@ -17,19 +17,19 @@ namespace Montr.Kompany.Impl.CommandHandlers
 		private readonly ILogger<SetupSystemHandler> _logger;
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IUserManager _userManager;
-		private readonly IOptionsRepository _optionsRepository;
-		private readonly IMediator _mediator;
+		private readonly ISettingsRepository _settingsRepository;
+		private readonly ISender _mediator;
 
 		public SetupSystemHandler(ILogger<SetupSystemHandler> logger,
 			IUnitOfWorkFactory unitOfWorkFactory,
 			IUserManager userManager,
-			IOptionsRepository optionsRepository,
-			IMediator mediator)
+			ISettingsRepository settingsRepository,
+			ISender mediator)
 		{
 			_logger = logger;
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_userManager = userManager;
-			_optionsRepository = optionsRepository;
+			_settingsRepository = settingsRepository;
 			_mediator = mediator;
 		}
 
@@ -65,7 +65,7 @@ namespace Montr.Kompany.Impl.CommandHandlers
 
 				if (companyResult.Success == false) return companyResult;
 
-				await _optionsRepository.GetOptions<AppOptions>()
+				await _settingsRepository.GetSettings<AppOptions>()
 					.Set(x => x.State, AppState.Initialized)
 					.Update(cancellationToken);
 

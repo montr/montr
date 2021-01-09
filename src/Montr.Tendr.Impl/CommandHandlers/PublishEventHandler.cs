@@ -40,7 +40,7 @@ namespace Montr.Tendr.Impl.CommandHandlers
 						.UpdateAsync(cancellationToken);
 				}
 
-				_jobManager.Enqueue<IMediator>(
+				_jobManager.Enqueue<ISender>(
 					x => x.Send(new SendInvitations { EventUid = request.Uid }, cancellationToken));
 
 				scope.Commit();
