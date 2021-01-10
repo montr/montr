@@ -3,11 +3,13 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using LinqToDB;
+using MediatR;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Montr.Core.Impl.Entities;
 using Montr.Core.Impl.Services;
 using Montr.Core.Services;
 using Montr.Data.Linq2Db;
+using Moq;
 
 namespace Montr.Core.Tests.Services
 {
@@ -21,7 +23,8 @@ namespace Montr.Core.Tests.Services
 			var cancellationToken = new CancellationToken();
 			var unitOfWorkFactory = new TransactionScopeUnitOfWorkFactory();
 			var dbContextFactory = new DefaultDbContextFactory();
-			var repository = new DbSettingsRepository(unitOfWorkFactory, dbContextFactory);
+			var mediatorMock = new Mock<IPublisher>();
+			var repository = new DbSettingsRepository(dbContextFactory, mediatorMock.Object);
 
 			using (var _ = unitOfWorkFactory.Create())
 			{
@@ -38,9 +41,9 @@ namespace Montr.Core.Tests.Services
 
 				var allSettings = await LoadSettings(dbContextFactory, cancellationToken);
 
-				var s1 = allSettings.SingleOrDefault(x => x.Id == "Montr.Core.Tests.Services.TestOptions.Number");
-				var s2 = allSettings.SingleOrDefault(x => x.Id == "Montr.Core.Tests.Services.TestOptions.Value");
-				var s3 = allSettings.SingleOrDefault(x => x.Id == "Montr.Core.Tests.Services.TestOptions.State");
+				var s1 = allSettings.SingleOrDefault(x => x.Id == "Montr.Core.Tests.Services.TestOptions:Number");
+				var s2 = allSettings.SingleOrDefault(x => x.Id == "Montr.Core.Tests.Services.TestOptions:Value");
+				var s3 = allSettings.SingleOrDefault(x => x.Id == "Montr.Core.Tests.Services.TestOptions:State");
 
 				Assert.IsNotNull(s1);
 				Assert.AreEqual("42", s1.Value);
@@ -62,7 +65,7 @@ namespace Montr.Core.Tests.Services
 
 				allSettings = await LoadSettings(dbContextFactory, cancellationToken);
 
-				s3 = allSettings.SingleOrDefault(x => x.Id == "Montr.Core.Tests.Services.TestOptions.State");
+				s3 = allSettings.SingleOrDefault(x => x.Id == "Montr.Core.Tests.Services.TestOptions:State");
 
 				Assert.IsNotNull(s3);
 				Assert.AreEqual("None", s3.Value);

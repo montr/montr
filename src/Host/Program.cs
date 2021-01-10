@@ -2,17 +2,18 @@
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
+using Host.Services;
+using MediatR;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Montr.Core;
+using Montr.Core.Events;
 using Montr.Core.Impl.Services;
 using Montr.Core.Services;
 using Montr.Data.Linq2Db;
-using Serilog;
-using Serilog.Events;
 
 namespace Host
 {
@@ -21,6 +22,8 @@ namespace Host
 		public static async Task Main(string[] args)
 		{
 			await Migrate(args);
+
+			var configurationReloadToken = new DbConfigurationSettingsChangedHandler { Enabled = true };
 
 			var hostBuilder = WebHost
 				.CreateDefaultBuilder(args)
@@ -33,24 +36,20 @@ namespace Host
 						.AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true)
 						.AddUserSecrets(Assembly.Load(new AssemblyName(env.ApplicationName)), optional: true) // todo: remove
 						.AddEnvironmentVariables()
-						.AddCommandLine(args)
-						.AddDbSettings(reloadOnChange: true);
+						.AddCommandLine(args);
+				})
+				.ConfigureAppConfiguration((context, config) =>
+				{
+					config
+						.AddDbSettings(configurationReloadToken, reloadOnChange: true);
+				})
+				.ConfigureServices((context, services) =>
+				{
+					services.AddSingleton<INotificationHandler<SettingsChanged>>(configurationReloadToken);
 				})
 				.UseStartup<Startup>()
 				.UseSentry()
-				.UseSerilog((context, configuration) =>
-				{
-					configuration
-						.MinimumLevel.Debug()
-						.MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
-						.MinimumLevel.Override("System", LogEventLevel.Warning)
-						.MinimumLevel.Override("Microsoft.AspNetCore.Authentication", LogEventLevel.Information)
-						.MinimumLevel.Override("Hangfire.Processing.BackgroundExecution", LogEventLevel.Information)
-						.MinimumLevel.Override("Hangfire.Server.ServerHeartbeatProcess", LogEventLevel.Information)
-						.Enrich.FromLogContext()
-						.WriteTo.File($"../../../.logs/{typeof(Startup).Namespace}-{context.HostingEnvironment.EnvironmentName}.log")
-						.WriteTo.Console(outputTemplate: "{Timestamp:o} [{Level:w4}] {SourceContext} - {Message:lj}{NewLine}{Exception}");
-				});
+				.UseLogging();
 
 			var host = hostBuilder.Build();
 
@@ -110,19 +109,7 @@ namespace Host
 					services.AddSingleton<IDbContextFactory, DefaultDbContextFactory>();
 					services.AddSingleton<EmbeddedResourceProvider, EmbeddedResourceProvider>();
 				})
-				.UseSerilog((context, configuration) =>
-				{
-					configuration
-						.MinimumLevel.Debug()
-						.MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
-						.MinimumLevel.Override("System", LogEventLevel.Warning)
-						.MinimumLevel.Override("Microsoft.AspNetCore.Authentication", LogEventLevel.Information)
-						.MinimumLevel.Override("Hangfire.Processing.BackgroundExecution", LogEventLevel.Information)
-						.MinimumLevel.Override("Hangfire.Server.ServerHeartbeatProcess", LogEventLevel.Information)
-						.Enrich.FromLogContext()
-						.WriteTo.File($"../../../.logs/{typeof(Startup).Namespace}-{context.HostingEnvironment.EnvironmentName}.log")
-						.WriteTo.Console(outputTemplate: "{Timestamp:o} [{Level:w4}] {SourceContext} - {Message:lj}{NewLine}{Exception}");
-				});
+				.UseLogging();
 
 			var host = hostBuilder.Build();
 

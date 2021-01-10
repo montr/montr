@@ -18,9 +18,9 @@ namespace Montr.Docs.Impl.Services
 	{
 		private readonly IDbContextFactory _dbContextFactory;
 		private readonly INumberGenerator _numberGenerator;
-		private readonly IMediator _mediator;
+		private readonly IPublisher _mediator;
 
-		public DbDocumentService(IDbContextFactory dbContextFactory, INumberGenerator numberGenerator, IMediator mediator)
+		public DbDocumentService(IDbContextFactory dbContextFactory, INumberGenerator numberGenerator, IPublisher mediator)
 		{
 			_dbContextFactory = dbContextFactory;
 			_numberGenerator = numberGenerator;

@@ -135,7 +135,8 @@ namespace Montr.Kompany.Impl.CommandHandlers
 				});
 
 				// todo: auto-approve request, notifications
-				_jobManager.Enqueue<IMediator>(x => x.Send(new RunAutomations
+				// todo: remove usage of mediator.Send - it should be used only on top-level (in controllers)
+				_jobManager.Enqueue<ISender>(x => x.Send(new RunAutomations
 				{
 					EntityTypeCode = DocumentType.EntityTypeCode,
 					EntityTypeUid = documentType.Uid,

@@ -75,7 +75,7 @@ namespace Montr.Kompany.Tests.CommandHandlers
 			var dbContextFactory = new DefaultDbContextFactory();
 			var dateTimeProvider = new DefaultDateTimeProvider();
 
-			var mediatorMock = new Mock<IMediator>();
+			var mediatorMock = new Mock<IPublisher>();
 
 			var fieldProviderRegistry = new DefaultFieldProviderRegistry();
 			fieldProviderRegistry.AddFieldType(typeof(TextField));

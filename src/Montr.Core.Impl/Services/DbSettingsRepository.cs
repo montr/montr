@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Transactions;
 using LinqToDB;
+using MediatR;
+using Montr.Core.Events;
 using Montr.Core.Impl.Entities;
 using Montr.Core.Services;
 using Montr.Data.Linq2Db;
@@ -13,13 +17,13 @@ namespace Montr.Core.Impl.Services
 {
 	public class DbSettingsRepository : ISettingsRepository
 	{
-		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IDbContextFactory _dbContextFactory;
+		private readonly IPublisher _mediator;
 
-		public DbSettingsRepository(IUnitOfWorkFactory unitOfWorkFactory, IDbContextFactory dbContextFactory)
+		public DbSettingsRepository(IDbContextFactory dbContextFactory, IPublisher mediator)
 		{
-			_unitOfWorkFactory = unitOfWorkFactory;
 			_dbContextFactory = dbContextFactory;
+			_mediator = mediator;
 		}
 
 		public IUpdatableSettings<TSettings> GetSettings<TSettings>()
@@ -27,41 +31,42 @@ namespace Montr.Core.Impl.Services
 			return new UpdatableSettings<TSettings>(this);
 		}
 
-		public async Task<int> Update<TSettings>(IEnumerable<(string, object)> values, CancellationToken cancellationToken)
+		public async Task<int> Update<TSettings>(ICollection<(string, object)> values, CancellationToken cancellationToken)
 		{
 			var affected = 0;
 
-			using (var scope = _unitOfWorkFactory.Create())
+			using (var db = _dbContextFactory.Create())
 			{
-				using (var db = _dbContextFactory.Create())
+				foreach (var (key, value) in values)
 				{
-					foreach (var (key, value) in values)
+					var stringValue = value != null ? Convert.ToString(value, CultureInfo.InvariantCulture) : null;
+
+					var updated = await db.GetTable<DbSettings>()
+						.Where(x => x.Id == key)
+						.Set(x => x.Value, stringValue)
+						.UpdateAsync(cancellationToken);
+
+					affected += updated;
+
+					if (updated == 0)
 					{
-						var stringValue = value != null ? Convert.ToString(value) : null;
+						var inserted = await db.GetTable<DbSettings>()
+							.Value(x => x.Id, key)
+							.Value(x => x.Value, stringValue)
+							.InsertAsync(cancellationToken);
 
-						var updated = await db.GetTable<DbSettings>()
-							.Where(x => x.Id == key)
-							.Set(x => x.Value, stringValue)
-							.UpdateAsync(cancellationToken);
-
-						affected += updated;
-
-						if (updated == 0)
-						{
-							var inserted = await db.GetTable<DbSettings>()
-								.Value(x => x.Id, key)
-								.Value(x => x.Value, stringValue)
-								.InsertAsync(cancellationToken);
-
-							affected += inserted;
-						}
+						affected += inserted;
 					}
 				}
-
-				scope.Commit();
 			}
 
-			// todo: notify settings changed to reload from db
+			// todo: move to UnitOfWork.Completed
+			// ReSharper disable once PossibleNullReferenceException
+			Transaction.Current.TransactionCompleted += async (sender, args) =>
+			{
+				await _mediator.Publish(new SettingsChanged { Values = values }, cancellationToken);
+			};
+
 			return affected;
 		}
 
@@ -69,7 +74,7 @@ namespace Montr.Core.Impl.Services
 		{
 			private readonly ISettingsRepository _repository;
 
-			private readonly IList<(string, object)> _values = new List<(string, object)>();
+			private readonly ICollection<(string, object)> _values = new List<(string, object)>();
 
 			public UpdatableSettings(ISettingsRepository repository)
 			{

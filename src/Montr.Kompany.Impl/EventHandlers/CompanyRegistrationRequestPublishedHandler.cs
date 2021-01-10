@@ -18,6 +18,8 @@ namespace Montr.Kompany.Impl.EventHandlers
 
 		public Task Handle(EntityStatusChanged<Document> notification, CancellationToken cancellationToken)
 		{
+			// todo: wtf, what this handler for?
+
 			return Task.CompletedTask;
 		}
 	}

@@ -10,7 +10,7 @@ namespace Montr.Core.Services
 	{
 		IUpdatableSettings<TSettings> GetSettings<TSettings>();
 
-		Task<int> Update<TSettings>(IEnumerable<(string, object)> values, CancellationToken cancellationToken);
+		Task<int> Update<TSettings>(ICollection<(string, object)> values, CancellationToken cancellationToken);
 	}
 
 	public interface IUpdatableSettings<TSettings>
