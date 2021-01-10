@@ -3,14 +3,12 @@ using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using Host.Services;
-using MediatR;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Montr.Core;
-using Montr.Core.Events;
 using Montr.Core.Impl.Services;
 using Montr.Core.Services;
 using Montr.Data.Linq2Db;
@@ -22,8 +20,6 @@ namespace Host
 		public static async Task Main(string[] args)
 		{
 			await Migrate(args);
-
-			var configurationReloadToken = new DbConfigurationSettingsChangedHandler { Enabled = true };
 
 			var hostBuilder = WebHost
 				.CreateDefaultBuilder(args)
@@ -38,15 +34,7 @@ namespace Host
 						.AddEnvironmentVariables()
 						.AddCommandLine(args);
 				})
-				.ConfigureAppConfiguration((context, config) =>
-				{
-					config
-						.AddDbSettings(configurationReloadToken, reloadOnChange: true);
-				})
-				.ConfigureServices((context, services) =>
-				{
-					services.AddSingleton<INotificationHandler<SettingsChanged>>(configurationReloadToken);
-				})
+				.UseDbSettings(reloadOnChange: true)
 				.UseStartup<Startup>()
 				.UseSentry()
 				.UseLogging();

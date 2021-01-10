@@ -1,9 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Threading;
 using System.Threading.Tasks;
-using MediatR;
-using Montr.Core.Events;
 using Montr.Core.Models;
 using Montr.Metadata.Models;
 
@@ -19,13 +16,11 @@ namespace Montr.Metadata.Services
 	{
 		private readonly IFieldProviderRegistry _fieldProviderRegistry;
 		private readonly IMetadataRegistrator _registrator;
-		private readonly IMediator _mediator;
 
-		public DefaultMetadataProvider(IFieldProviderRegistry fieldProviderRegistry, IMetadataRegistrator registrator, IMediator mediator)
+		public DefaultMetadataProvider(IFieldProviderRegistry fieldProviderRegistry, IMetadataRegistrator registrator)
 		{
 			_fieldProviderRegistry = fieldProviderRegistry;
 			_registrator = registrator;
-			_mediator = mediator;
 		}
 
 		public async Task<DataView> GetView(string viewId)
@@ -39,8 +34,6 @@ namespace Montr.Metadata.Services
 
 			if (viewId == "Setup/Form")
 			{
-				await _mediator.Publish(new SettingsChanged { Values = new List<(string, object)>() }, CancellationToken.None);
-
 				result.Fields = new List<FieldMetadata>
 				{
 					new TextField { Key = "companyName", Name = "Наименование компании", Required = true, Description = "Наименовании компании-оператора системы" },
