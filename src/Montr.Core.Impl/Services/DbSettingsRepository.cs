@@ -18,11 +18,13 @@ namespace Montr.Core.Impl.Services
 	public class DbSettingsRepository : ISettingsRepository
 	{
 		private readonly IDbContextFactory _dbContextFactory;
+		private readonly IDateTimeProvider _dateTimeProvider;
 		private readonly IPublisher _mediator;
 
-		public DbSettingsRepository(IDbContextFactory dbContextFactory, IPublisher mediator)
+		public DbSettingsRepository(IDbContextFactory dbContextFactory, IDateTimeProvider dateTimeProvider, IPublisher mediator)
 		{
 			_dbContextFactory = dbContextFactory;
+			_dateTimeProvider = dateTimeProvider;
 			_mediator = mediator;
 		}
 
@@ -35,6 +37,8 @@ namespace Montr.Core.Impl.Services
 		{
 			var affected = 0;
 
+			var utcNow = _dateTimeProvider.GetUtcNow();
+
 			using (var db = _dbContextFactory.Create())
 			{
 				foreach (var (key, value) in values)
@@ -44,6 +48,7 @@ namespace Montr.Core.Impl.Services
 					var updated = await db.GetTable<DbSettings>()
 						.Where(x => x.Id == key)
 						.Set(x => x.Value, stringValue)
+						.Set(x => x.ModifiedAtUtc, utcNow)
 						.UpdateAsync(cancellationToken);
 
 					affected += updated;
@@ -53,6 +58,7 @@ namespace Montr.Core.Impl.Services
 						var inserted = await db.GetTable<DbSettings>()
 							.Value(x => x.Id, key)
 							.Value(x => x.Value, stringValue)
+							.Value(x => x.CreatedAtUtc, utcNow)
 							.InsertAsync(cancellationToken);
 
 						affected += inserted;

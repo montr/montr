@@ -61,6 +61,7 @@ namespace Montr.Core.Impl.Services
 			{
 				var previousToken = Interlocked.Exchange(ref _reloadToken, new ConfigurationReloadToken());
 
+				// todo: notify other workers (Redis)
 				previousToken.OnReload();
 			}
 

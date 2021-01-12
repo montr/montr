@@ -23,8 +23,9 @@ namespace Montr.Core.Tests.Services
 			var cancellationToken = new CancellationToken();
 			var unitOfWorkFactory = new TransactionScopeUnitOfWorkFactory();
 			var dbContextFactory = new DefaultDbContextFactory();
+			var dateTimeProvider = new DefaultDateTimeProvider();
 			var mediatorMock = new Mock<IPublisher>();
-			var repository = new DbSettingsRepository(dbContextFactory, mediatorMock.Object);
+			var repository = new DbSettingsRepository(dbContextFactory, dateTimeProvider, mediatorMock.Object);
 
 			using (var _ = unitOfWorkFactory.Create())
 			{

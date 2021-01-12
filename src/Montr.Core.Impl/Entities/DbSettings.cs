@@ -11,5 +11,17 @@ namespace Montr.Core.Impl.Entities
 
 		[Column(Name = "value"), DataType(DataType.VarChar)]
 		public string Value { get; set; }
+
+		[Column(Name = "created_by"), DataType(DataType.Guid)]
+		public System.Guid CreatedBy { get; set; }
+
+		[Column(Name = "created_at_utc"), DataType(DataType.DateTime2)]
+		public System.DateTime CreatedAtUtc { get; set; }
+
+		[Column(Name = "modified_by"), DataType(DataType.Guid)]
+		public System.Guid ModifiedBy { get; set; }
+
+		[Column(Name = "modified_at_utc"), DataType(DataType.DateTime2)]
+		public System.DateTime ModifiedAtUtc { get; set; }
 	}
 }
