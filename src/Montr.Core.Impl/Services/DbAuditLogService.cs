@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using LinqToDB;
 using Montr.Core.Impl.Entities;
@@ -19,7 +20,7 @@ namespace Montr.Core.Impl.Services
 			_jsonSerializer = jsonSerializer;
 		}
 
-		public async Task Save(AuditEvent entry)
+		public async Task Save(AuditEvent entry, CancellationToken cancellationToken)
 		{
 			using (var db = _dbContextFactory.Create())
 			{
@@ -40,7 +41,7 @@ namespace Montr.Core.Impl.Services
 						.Value(x=> x.MessageParameters, _jsonSerializer.Serialize(entry.MessageParameters));
 				}
 
-				await insertable.InsertAsync();
+				await insertable.InsertAsync(cancellationToken);
 			}
 		}
 	}

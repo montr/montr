@@ -132,10 +132,9 @@ namespace Montr.Kompany.Impl.CommandHandlers
 					UserUid = userUid,
 					CreatedAtUtc = now,
 					MessageCode = ExpressionHelper.GetFullName<CreateCompany.Resources>(x => x.CompanyCreated)
-				});
+				}, cancellationToken);
 
 				// todo: auto-approve request, notifications
-				// todo: remove usage of mediator.Send - it should be used only on top-level (in controllers)
 				_jobManager.Enqueue<ISender>(x => x.Send(new RunAutomations
 				{
 					EntityTypeCode = DocumentType.EntityTypeCode,

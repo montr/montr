@@ -51,7 +51,7 @@ namespace Montr.Kompany.Impl.Services
 
 		private Guid? GetCurrentCompanyUid()
 		{
-			var cookieValue = _httpContextAccessor.HttpContext.Request.Cookies[CookieName];
+			var cookieValue = _httpContextAccessor.HttpContext?.Request.Cookies[CookieName];
 
 			if (cookieValue != null)
 			{
