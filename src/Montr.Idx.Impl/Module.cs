@@ -33,6 +33,7 @@ namespace Montr.Idx.Impl
 			services.AddTransient<IEmailConfirmationService, EmailConfirmationService>();
 			services.AddTransient<IRepository<User>, DbUserRepository>();
 			services.AddTransient<IUserManager, DefaultUserManager>();
+			services.AddTransient<ISignInManager, DefaultSignInManager>();
 
 			// todo: move from impl to idx?
 			services.Configure<IdentityOptions>(options =>

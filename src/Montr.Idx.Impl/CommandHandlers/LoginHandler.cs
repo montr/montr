@@ -43,9 +43,6 @@ namespace Montr.Idx.Impl.CommandHandlers
 
 			if (result.RequiresTwoFactor)
 			{
-				// return RedirectToPage("./LoginWith2fa", new { ReturnUrl = returnUrl, RememberMe = Input.RememberMe });
-				// return new ApiResult { RedirectRoute = "./LoginWith2fa", RedirectUrl = request.ReturnUrl };
-
 				return new ApiResult { Success = false, Message = await _localizer.Get<Login.Resources>(x => x.RequiresTwoFactor, cancellationToken) };
 			}
 

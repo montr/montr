@@ -42,7 +42,6 @@ export default class PageSetup extends React.Component<Props, State> {
         this.setState({ loading: false, fields: dataView.fields });
     };
 
-    // todo: redirect to login after success
     save = async (values: IIndexer): Promise<ApiResult> => {
         return await this._setupService.save(values);
     };
@@ -50,6 +49,7 @@ export default class PageSetup extends React.Component<Props, State> {
     render = () => {
         const { loading, fields } = this.state, data = {};
 
+        // todo: check (server side?) system initialized
         return (
             <Translation>
                 {(t) => <Page title={t("page.setup.title")}>

@@ -57,8 +57,6 @@ namespace Montr.Idx.Impl.CommandHandlers
 
 				if (_userManager.Options.SignIn.RequireConfirmedAccount)
 				{
-					// return RedirectToPage("RegisterConfirmation", new { email = request.Email });
-
 					var redirectUrl = _appUrlBuilder.Build(ClientRoutes.RegisterConfirmation,
 						new Dictionary<string, string> { { "email", request.Email } });
 

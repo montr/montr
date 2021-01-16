@@ -17,19 +17,26 @@ namespace Montr.Kompany.Impl.CommandHandlers
 		private readonly ILogger<SetupSystemHandler> _logger;
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IUserManager _userManager;
+		private readonly ISignInManager _signInManager;
 		private readonly ISettingsRepository _settingsRepository;
+		private readonly IAppUrlBuilder _appUrlBuilder;
 		private readonly ISender _mediator;
 
 		public SetupSystemHandler(ILogger<SetupSystemHandler> logger,
 			IUnitOfWorkFactory unitOfWorkFactory,
 			IUserManager userManager,
+			ISignInManager signInManager,
 			ISettingsRepository settingsRepository,
+			IAppUrlBuilder appUrlBuilder,
 			ISender mediator)
 		{
 			_logger = logger;
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_userManager = userManager;
+			_signInManager = signInManager;
 			_settingsRepository = settingsRepository;
+
+			_appUrlBuilder = appUrlBuilder;
 			_mediator = mediator;
 		}
 
@@ -48,6 +55,10 @@ namespace Montr.Kompany.Impl.CommandHandlers
 				var userResult = await _userManager.CreateUser(user, request.AdminPassword, cancellationToken);
 
 				if (userResult.Success == false) return userResult;
+
+				var signInResult = await _signInManager.PasswordSignIn(user.UserName, request.AdminPassword, true, false);
+
+				if (signInResult.Success == false) return signInResult;
 
 				_logger.LogInformation($"Creating default company {request.CompanyName}", request.CompanyName);
 
@@ -71,7 +82,7 @@ namespace Montr.Kompany.Impl.CommandHandlers
 
 				scope.Commit();
 
-				return new ApiResult();
+				return new ApiResult { RedirectUrl = _appUrlBuilder.Build(ClientRoutes.Dashboard) };
 			}
 		}
 	}
