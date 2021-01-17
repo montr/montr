@@ -29,7 +29,7 @@ export class UserContextProvider extends React.Component<any, UserContextState> 
 		this._authService.addUserSignedOut(() => {
 			this.setState({ user: null });
 		});
-	}
+	};
 
 	login = () => {
 		this._authService.login()
@@ -74,5 +74,5 @@ export class UserContextProvider extends React.Component<any, UserContextState> 
 				{this.props.children}
 			</UserContext.Provider>
 		);
-	}
+	};
 }

@@ -1,5 +1,4 @@
 import { Log, User, UserManager, SignoutResponse, UserManagerSettings } from "oidc-client";
-import { message } from "antd";
 import { Constants } from "../constants";
 import { NavigationService } from "./navigation-service";
 
@@ -49,37 +48,31 @@ export class AuthService {
 		};
 
 		this._userManager = new UserManager(settings);
-		// this._navigator = new NavigationService();
 
 		// todo: use logger here and below
+		/*
 		this._userManager.events.addAccessTokenExpired((...args: any[]) => {
-			// console.log("AccessTokenExpired", window.frameElement, args);
-			message.error("AccessTokenExpired");
+			console.log("AccessTokenExpired", window.frameElement, args);
 		});
 		this._userManager.events.addAccessTokenExpiring((...args: any[]) => {
-			// console.log("AccessTokenExpiring", window.frameElement, args);
-			message.warning("AccessTokenExpiring");
+			console.log("AccessTokenExpiring", window.frameElement, args);
 		});
 		this._userManager.events.addSilentRenewError((...args: any[]) => {
-			// console.log("SilentRenewError", window.frameElement, args);
-			message.error("SilentRenewError");
+			console.log("SilentRenewError", window.frameElement, args);
 		});
 		this._userManager.events.addUserLoaded((...args: any[]) => {
-			// console.log("UserLoaded", window.frameElement, args);
-			message.info("UserLoaded");
+			console.log("UserLoaded", window.frameElement, args);
 		});
 		this._userManager.events.addUserSessionChanged((...args: any[]) => {
-			// console.log("UserSessionChanged", window.frameElement, args);
-			message.info("UserSessionChanged");
+			console.log("UserSessionChanged", window.frameElement, args);
 		});
 		this._userManager.events.addUserSignedOut((...args: any[]) => {
-			// console.log("UserSignedOut", window.frameElement, args);
-			message.info("UserSignedOut");
+			console.log("UserSignedOut", window.frameElement, args);
 		});
 		this._userManager.events.addUserUnloaded((...args: any[]) => {
-			// console.log("UserUnloaded", window.frameElement, args);
-			message.info("UserUnloaded");
+			console.log("UserUnloaded", window.frameElement, args);
 		});
+		*/
 
 		AuthService.instance = this;
 	}
@@ -121,12 +114,17 @@ export class AuthService {
 		}
 	}
 
+	get userManager(): UserManager {
+		return this._userManager;
+	}
+
 	public getUser(): Promise<User> {
 		return this._userManager.getUser();
 	}
 
 	public login(): Promise<any> {
 		const args = this.getRedirectArgs();
+
 		return this._userManager.signinRedirect(args);
 	}
 
@@ -136,6 +134,7 @@ export class AuthService {
 
 	public logout(): Promise<any> {
 		const args = this.getRedirectArgs();
+
 		return this._userManager.signoutRedirect(args);
 	}
 

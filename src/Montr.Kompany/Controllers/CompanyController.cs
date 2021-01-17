@@ -25,7 +25,11 @@ namespace Montr.Kompany.Controllers
 		[HttpPost]
 		public async Task<SearchResult<Company>> List(GetCompanyList request)
 		{
-			request.UserUid = _currentUserProvider.GetUserUid();
+			// todo: remove hack
+			if (_currentUserProvider.GetUser(false) != null)
+			{
+				request.UserUid = _currentUserProvider.GetUserUid();
+			}
 
 			return await _mediator.Send(request);
 		}

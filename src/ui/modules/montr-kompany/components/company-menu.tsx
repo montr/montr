@@ -1,7 +1,7 @@
 import * as React from "react";
 import Menu from "antd/lib/menu";
 import { MenuItemProps } from "antd/lib/menu/MenuItem";
-import { ICompany } from "../models";
+import { Company } from "../models";
 import { withCompanyContext, CompanyContextProps } from ".";
 
 class WrappedCompanyMenu extends React.Component<MenuItemProps & CompanyContextProps> {
@@ -21,7 +21,7 @@ class WrappedCompanyMenu extends React.Component<MenuItemProps & CompanyContextP
 				</Menu.Item>
 				<Menu.SubMenu key="company:switch" {...props} title="Переключить организацию &#xA0; &#xA0;">
 
-					{Array.isArray(companyList) && companyList.map((item: ICompany) => {
+					{Array.isArray(companyList) && companyList.map((item: Company) => {
 						return (
 							<Menu.Item key={`company:${item.uid.toString()}`}>
 								<a onClick={(e) => {

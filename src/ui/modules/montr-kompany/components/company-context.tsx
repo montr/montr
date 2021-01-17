@@ -1,10 +1,10 @@
 import * as React from "react";
-import { ICompany } from "../models";
+import { Company } from "../models";
 import { Guid } from "@montr-core/models";
 
 export interface CompanyContextProps {
-	currentCompany?: ICompany;
-	companyList: ICompany[];
+	currentCompany?: Company;
+	companyList: Company[];
 	registerCompany: () => void;
 	manageCompany: () => void;
 	switchCompany: (companyUid: Guid) => void;

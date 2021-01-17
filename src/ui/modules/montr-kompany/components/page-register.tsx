@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Form, Input, Checkbox, Button, Radio, Modal, message, Spin } from "antd";
 import { CompanyService, CompanyMetadataService } from "../services";
-import { ICompany } from "../models";
+import { Company } from "../models";
 import { RadioChangeEvent } from "antd/lib/radio/interface";
 import { NavigationService } from "@montr-core/services";
 import { Constants } from "@montr-core/.";
@@ -37,7 +37,7 @@ class _RegistrationForm extends React.Component<Props, State> {
 		await this._companyService.abort();
 	};
 
-	handleSubmit = async (values: ICompany) => {
+	handleSubmit = async (values: Company) => {
 		const { manageCompany, switchCompany } = this.props;
 
 		const result = await this._companyService.create({ item: values });
@@ -201,7 +201,7 @@ class _PageCompanyRegistration extends React.Component<IRProps, IRState> {
 		this.setState({ loading: false, data: {}, fields: dataView.fields });
 	};
 
-	handleSubmit = async (values: ICompany): Promise<ApiResult> => {
+	handleSubmit = async (values: Company): Promise<ApiResult> => {
 		const { manageCompany, switchCompany } = this.props;
 
 		const result = await this._companyService.create({ item: values });

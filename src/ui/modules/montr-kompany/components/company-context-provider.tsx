@@ -1,15 +1,16 @@
 import * as React from "react";
 import Cookies from "universal-cookie";
-import { ICompany } from "../models";
+import { Company } from "../models";
 import { CompanyService, } from "../services";
 import { CompanyContextProps, CompanyContext } from "./";
 import { Constants } from "@montr-core/.";
 import { Guid } from "@montr-core/models";
 import { NavigationService, NotificationService, AuthService } from "@montr-core/services";
+import { User } from "oidc-client";
 
 interface State {
-	currentCompany?: ICompany;
-	companyList: ICompany[];
+	currentCompany?: Company;
+	companyList: Company[];
 }
 
 export class CompanyContextProvider extends React.Component<any, State> {
@@ -29,15 +30,25 @@ export class CompanyContextProvider extends React.Component<any, State> {
 	}
 
 	componentDidMount = async () => {
-		const user = await this._authService.getUser();
+		this._authService.userManager.events.addUserLoaded(this.onUserLoaded);
+		this._authService.userManager.events.addUserUnloaded(this.onUserUnloaded);
 
-		if (user) {
-			await this.switchCompany();
-		}
+		await this.switchCompany();
 	};
 
 	componentWillUnmount = async () => {
+		this._authService.userManager.events.removeUserLoaded(this.onUserLoaded);
+		this._authService.userManager.events.removeUserUnloaded(this.onUserUnloaded);
+
 		await this._companyService.abort();
+	};
+
+	onUserLoaded = async (user: User) => {
+		await this.switchCompany();
+	};
+
+	onUserUnloaded = async () => {
+		await this.switchCompany();
 	};
 
 	registerCompany = (): void => {
@@ -52,13 +63,13 @@ export class CompanyContextProvider extends React.Component<any, State> {
 
 	switchCompany = async (companyUid?: Guid) => {
 
-		await this._loadCompanyList();
+		await this.loadCompanyList();
 
 		const { companyList } = this.state;
 
 		if (companyList && Array.isArray(companyList) && companyList.length > 0) {
 
-			const cookieCompanyUid = this._getCookieCompanyUid();
+			const cookieCompanyUid = this.getCookieCompanyUid();
 
 			const setCookieCompanyUid = companyUid || cookieCompanyUid;
 
@@ -66,14 +77,14 @@ export class CompanyContextProvider extends React.Component<any, State> {
 				companyList.find(x => x.uid == setCookieCompanyUid) || companyList[0];
 
 			if (company && company.uid != cookieCompanyUid) {
-				this._setCookieCompanyUid(company.uid);
+				this.setCookieCompanyUid(company.uid);
 			}
 
 			this.setState({ currentCompany: company });
 		}
 	};
 
-	private _loadCompanyList = async () => {
+	loadCompanyList = async () => {
 		try {
 			const result = await this._companyService.list();
 
@@ -83,7 +94,7 @@ export class CompanyContextProvider extends React.Component<any, State> {
 		}
 	};
 
-	private _getCookieCompanyUid = (): Guid => {
+	getCookieCompanyUid = (): Guid => {
 		var storageValue = this._cookies.get(Constants.cookieName);
 
 		if (Guid.isValid(storageValue)) {
@@ -93,7 +104,7 @@ export class CompanyContextProvider extends React.Component<any, State> {
 		return null;
 	};
 
-	private _setCookieCompanyUid = (companyUid: Guid): void => {
+	setCookieCompanyUid = (companyUid: Guid): void => {
 		this._cookies.set(Constants.cookieName, companyUid.toString(), {
 			domain: Constants.cookieDomain, path: "/"
 		});
