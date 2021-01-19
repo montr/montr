@@ -4,7 +4,7 @@ import { Patterns } from "../module";
 import { AppState } from "../models";
 
 interface Props {
-    children?: JSX.Element;
+    children: JSX.Element;
 }
 
 export function AppSetupRedirect({ children }: Props): JSX.Element {
@@ -14,7 +14,6 @@ export function AppSetupRedirect({ children }: Props): JSX.Element {
         history = useHistory();
 
     if (appState == AppState.None && history.location.pathname != redirectTo) {
-
         history.push(redirectTo);
     }
 

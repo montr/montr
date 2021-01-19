@@ -16,7 +16,7 @@ import { RouteBuilder, Api, Views } from "../module";
 interface Props extends CompanyContextProps {
 	typeCode: string;
 	mode: "Page" | "Drawer";
-	onSelect?: (keys: string[] | number[]) => void;
+	onSelect?: (keys: string[] | number[]) => Promise<void>;
 }
 
 interface State {

@@ -14,7 +14,7 @@ interface Props<TModel> {
 	viewId: string;
 	loadUrl: string; // todo: (?) add data[]
 	// todo: add type for post params
-	onLoadData?: (loadUrl: string, postParams: any) => Promise<DataResult<TModel>>;
+	onLoadData?: (loadUrl: string, postParams: any) => Promise<DataResult<TModel> | undefined>;
 	onSelectionChange?: (selectedRowKeys: string[] | number[], selectedRows: TModel[]) => void;
 	skipPaging?: boolean;
 	updateToken?: DataTableUpdateToken;
@@ -95,7 +95,7 @@ export class DataTable<TModel extends IIndexer> extends React.Component<Props<TM
 
 		// todo: check other field types
 		// todo: add support of multiple sort columns
-		let sortColumn: string;
+		let sortColumn: string | undefined = undefined;
 		if (sorter.field instanceof Array) sortColumn = sorter.field[0] as string;
 		if (sorter.field instanceof String) sortColumn = sorter.field as string;
 
@@ -103,7 +103,7 @@ export class DataTable<TModel extends IIndexer> extends React.Component<Props<TM
 		paging.sortOrder =
 			sorter.order == "ascend" ? "ascending"
 				: sorter.order == "descend" ? "descending"
-					: null;
+					: undefined;
 
 		this.setState({ paging }, () => this.fetchData());
 	};
@@ -118,7 +118,7 @@ export class DataTable<TModel extends IIndexer> extends React.Component<Props<TM
 
 		const columns = dataView.columns?.map((item: DataColumn): ColumnType<TModel> => {
 
-			var render: (text: any, record: TModel, index: number) => React.ReactNode;
+			var render;
 
 			if (item.urlProperty) {
 				render = (text: any, record: TModel, index: number): React.ReactNode => {
@@ -165,7 +165,7 @@ export class DataTable<TModel extends IIndexer> extends React.Component<Props<TM
 				};
 			}
 
-			let defaultSortOrder: SortOrder;
+			let defaultSortOrder: SortOrder | undefined = undefined;
 			if (item.defaultSortOrder == "ascending") defaultSortOrder = "ascend";
 			else if (item.defaultSortOrder == "descending") defaultSortOrder = "descend";
 

@@ -4,28 +4,28 @@ import { PaneProps, Guid, DataResult, IMenu } from "@montr-core/models";
 import { DataTable, Toolbar, DataTableUpdateToken, ButtonAdd, ButtonDelete, Icon } from "@montr-core/components";
 import { PaneSearchClassifier } from "@montr-master-data/components";
 import { ModalEditInvitation } from "../components";
-import { IEvent, IInvitation } from "../models";
+import { IEvent, Invitation } from "../models";
 import { InvitationService } from "../services";
 import { Constants } from "@montr-core/.";
 import { OperationService } from "@montr-core/services";
 
-interface IProps extends PaneProps<IEvent> {
+interface Props extends PaneProps<IEvent> {
 	data: IEvent;
 }
 
-interface IState {
+interface State {
 	showDrawer?: boolean;
-	editData?: IInvitation;
+	editData?: Invitation;
 	selectedRowKeys?: string[] | number[];
 	updateTableToken: DataTableUpdateToken;
 }
 
-export default class TabEditInvitations extends React.Component<IProps, IState> {
+export default class TabEditInvitations extends React.Component<Props, State> {
 
 	private _operation = new OperationService();
 	private _invitationService = new InvitationService();
 
-	constructor(props: IProps) {
+	constructor(props: Props) {
 		super(props);
 
 		this.state = {
@@ -37,7 +37,7 @@ export default class TabEditInvitations extends React.Component<IProps, IState> 
 		await this._invitationService.abort();
 	};
 
-	onLoadTableData = async (loadUrl: string, postParams: any): Promise<DataResult<{}>> => {
+	onLoadTableData = async (loadUrl: string, postParams: any): Promise<DataResult<{}> | undefined> => {
 		const { data } = this.props;
 
 		if (data) {
@@ -50,7 +50,7 @@ export default class TabEditInvitations extends React.Component<IProps, IState> 
 			return await this._invitationService.post(loadUrl, params);
 		}
 
-		return null;
+		return undefined;
 	};
 
 	onSelectionChange = async (selectedRowKeys: string[] | number[]) => {
@@ -77,12 +77,14 @@ export default class TabEditInvitations extends React.Component<IProps, IState> 
 	onSelect = async (keys: string[]) => {
 		const { data } = this.props;
 
-		await this._invitationService.insert({
-			eventUid: data.uid,
-			items: keys.map(x => {
-				return { counterpartyUid: new Guid(x) };
-			})
-		});
+		if (data.uid) {
+			const result = await this._invitationService.insert({
+				eventUid: data.uid,
+				items: keys.map(x => {
+					return { counterpartyUid: new Guid(x) };
+				})
+			});
+		}
 
 		await this.onCloseDrawer();
 
@@ -93,32 +95,36 @@ export default class TabEditInvitations extends React.Component<IProps, IState> 
 		this.setState({ editData: {} });
 	};
 
-	showEditModal = (data: IInvitation) => {
+	showEditModal = (data: Invitation) => {
 		this.setState({ editData: data });
 	};
 
-	onModalSuccess = async (data: IInvitation) => {
-		this.setState({ editData: null });
+	onModalSuccess = async (data: Invitation) => {
+		this.setState({ editData: undefined });
 
 		await this.refreshTable();
 	};
 
 	onModalCancel = () => {
-		this.setState({ editData: null });
+		this.setState({ editData: undefined });
 	};
 
 	delete = async () => {
-		await this._operation.execute(async () => {
-			const { selectedRowKeys } = this.state;
-			const result = await this._invitationService.delete(selectedRowKeys);
-			if (result.success) {
-				this.refreshTable(true);
-			}
-			return result;
-		}, {
-			showConfirm: true,
-			confirmTitle: "Вы действительно хотите удалить выбранные приглашения?"
-		});
+		const { selectedRowKeys } = this.state;
+
+		if (selectedRowKeys) {
+			await this._operation.execute(async () => {
+				const result = await this._invitationService.delete(selectedRowKeys);
+				if (result.success) {
+					this.refreshTable(true);
+				}
+				return result;
+
+			}, {
+				showConfirm: true,
+				confirmTitle: "Вы действительно хотите удалить выбранные приглашения?"
+			});
+		}
 	};
 
 	render() {
@@ -159,7 +165,7 @@ export default class TabEditInvitations extends React.Component<IProps, IState> 
 				</ul>
 			} />
 
-			{editData &&
+			{data.uid && editData &&
 				<ModalEditInvitation
 					eventUid={data.uid}
 					uid={editData.uid}

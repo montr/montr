@@ -5,8 +5,8 @@ import { ComponentRegistry } from "../services";
 import { Icon } from ".";
 
 interface Props<TModel> {
-    tabKey: string;
-    panes: DataPane<TModel>[],
+    tabKey?: string;
+    panes?: DataPane<TModel>[],
     onTabChange?: (tabKey: string) => void,
     disabled?: (pane: DataPane<TModel>, index: number) => boolean,
     tabProps?: any; // todo: add types for classifiers, documents
@@ -22,7 +22,7 @@ export class DataTabs<TModel> extends React.Component<Props<TModel>> {
                 <Tabs size="small" defaultActiveKey={tabKey} onChange={onTabChange}>
                     {panes.map((pane, index) => {
 
-                        let component: React.ReactElement;
+                        let component = undefined;
 
                         if (pane.component) {
                             const componentClass = ComponentRegistry.getComponent(pane.component);

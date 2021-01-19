@@ -1,26 +1,26 @@
 import * as React from "react";
 import { Guid, IDataField, ApiResult } from "@montr-core/models";
-import { IInvitation } from "../models";
+import { Invitation } from "../models";
 import { Modal, Spin } from "antd";
 import { DataForm } from "@montr-core/components";
 import { NotificationService, MetadataService } from "@montr-core/services";
 import { InvitationService } from "../services";
 import { FormInstance } from "antd/lib/form";
 
-interface IProps {
+interface Props {
 	eventUid: Guid;
 	uid?: Guid;
-	onSuccess?: (data: IInvitation) => void;
+	onSuccess?: (data: Invitation) => void;
 	onCancel?: () => void;
 }
 
-interface IState {
+interface State {
 	loading: boolean;
 	fields?: IDataField[];
-	data: IInvitation;
+	data: Invitation;
 }
 
-export class ModalEditInvitation extends React.Component<IProps, IState> {
+export class ModalEditInvitation extends React.Component<Props, State> {
 
 	private _notificationService = new NotificationService();
 	private _metadataService = new MetadataService();
@@ -28,7 +28,7 @@ export class ModalEditInvitation extends React.Component<IProps, IState> {
 
 	private _formRef = React.createRef<FormInstance>();
 
-	constructor(props: IProps) {
+	constructor(props: Props) {
 		super(props);
 
 		this.state = {
@@ -75,17 +75,20 @@ export class ModalEditInvitation extends React.Component<IProps, IState> {
 	};
 
 	onOk = async (e: React.MouseEvent<any>) => {
-		await this._formRef.current.submit();
+		const form = this._formRef.current;
+		if (form) {
+			await form.submit();
+		}
 	};
 
 	onCancel = () => {
 		if (this.props.onCancel) this.props.onCancel();
 	};
 
-	save = async (values: IInvitation): Promise<ApiResult> => {
+	save = async (values: Invitation): Promise<ApiResult> => {
 		const { eventUid, uid, onSuccess } = this.props;
 
-		let data: IInvitation,
+		let data: Invitation,
 			result: ApiResult;
 
 		if (uid) {

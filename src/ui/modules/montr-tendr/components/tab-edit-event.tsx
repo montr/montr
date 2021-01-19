@@ -74,7 +74,10 @@ export default class TabEditEvent extends React.Component<IEditEventPaneProps, I
 	private _formRef = React.createRef<FormInstance>();
 
 	save() {
-		this._formRef.current.submit();
+		const form = this._formRef.current;
+		if (form) {
+			form.submit();
+		}
 	}
 
 	render() {

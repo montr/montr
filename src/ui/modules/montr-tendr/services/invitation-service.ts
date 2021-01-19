@@ -1,21 +1,21 @@
 import { Constants } from "@montr-core/.";
 import { Fetcher } from "@montr-core/services";
 import { ApiResult, Guid } from "@montr-core/models";
-import { IInvitation } from "../models";
+import { Invitation } from "../models";
 
 interface IInsertInvitationRequest {
 	eventUid: Guid;
-	items: IInvitation[];
+	items: Invitation[];
 }
 
 interface IUpdateInvitationRequest {
 	eventUid: Guid;
-	item: IInvitation;
+	item: Invitation;
 }
 
 export class InvitationService extends Fetcher {
 
-	get = async (uid: Guid | string): Promise<IInvitation> => {
+	get = async (uid: Guid | string): Promise<Invitation> => {
 		return this.post(`${Constants.apiURL}/invitation/get`, { uid });
 	};
 

@@ -17,8 +17,8 @@ export interface DataFormOptions extends WithTranslation {
 }
 
 interface Props extends DataFormOptions {
-	fields: IDataField[]; // todo: provide url to load fields or create wrapped component
-	data: any; // IIndexer;
+	fields?: IDataField[]; // todo: provide url to load fields or create wrapped component
+	data?: any; // IIndexer;
 	showControls?: boolean;
 	submitButton?: string;
 	resetButton?: string;
@@ -66,50 +66,57 @@ class WrappedDataForm extends React.Component<Props, State> {
 	};
 
 	handleSubmit = async (values: any /* IIndexer */) => {
-
 		const { t, onSubmit, successMessage, errorMessage } = this.props;
 
-		if (this._isMounted) this.setState({ loading: true });
+		if (onSubmit) {
+			if (this._isMounted) this.setState({ loading: true });
 
-		await this._operation.execute(async () => {
-			return await onSubmit(values);
-		}, {
-			successMessage: successMessage || t("dataForm.submit.success"),
-			errorMessage: errorMessage || t("dataForm.submit.error"),
-			showFieldErrors: async (result: ApiResult) => {
-				await this.setFieldErrors(result, values);
-			}
-		});
-
-		if (this._isMounted) this.setState({ loading: false });
-	};
-
-	setFieldErrors = async (result: ApiResult, values: any /* IIndexer */) => {
-		const { fields } = this.props,
-			fieldErrors: FieldData[] = [],
-			otherErrors: string[] = [];
-
-		if (result && result.errors) {
-			result.errors.forEach(error => {
-				// todo: check key exists in state.fields (ignore case + add tests)
-				const field = fields.find(x => x.key && error.key && x.key.toLowerCase() == error.key.toLowerCase());
-				if (field) {
-					fieldErrors.push({
-						name: field.key.split("."),
-						value: DataHelper.indexer(values, field.key, undefined),
-						errors: error.messages
-					});
-				}
-				else {
-					// todo: display one message with list of errors
-					error.messages.forEach(message => {
-						// todo: remove key (?)
-						otherErrors.push(`${message} (${error.key})`);
-					});
+			await this._operation.execute(async () => {
+				return await onSubmit(values);
+			}, {
+				successMessage: successMessage || t("dataForm.submit.success"),
+				errorMessage: errorMessage || t("dataForm.submit.error"),
+				showFieldErrors: async (result: ApiResult) => {
+					await this.setFieldErrors(result, values);
 				}
 			});
 
-			this.getFormRef().current.setFields(fieldErrors);
+			if (this._isMounted) this.setState({ loading: false });
+		}
+	};
+
+	setFieldErrors = async (result: ApiResult, values: any /* IIndexer */) => {
+		const { fields } = this.props;
+
+		const form = this.getFormRef().current;
+
+		if (form && result && result.errors) {
+
+			const fieldErrors: FieldData[] = [], otherErrors: string[] = [];
+
+			if (fields) {
+				result.errors.forEach(error => {
+					// todo: check key exists in state.fields (ignore case + add tests)
+					const field = fields.find(x => x.key && error.key && x.key.toLowerCase() == error.key.toLowerCase());
+
+					if (field && field.key) {
+						fieldErrors.push({
+							name: field.key.split("."),
+							value: DataHelper.indexer(values, field.key, undefined),
+							errors: error.messages
+						});
+					}
+					else {
+						// todo: display one message with list of errors
+						error.messages.forEach(message => {
+							// todo: remove key (?)
+							otherErrors.push(`${message} (${error.key})`);
+						});
+					}
+				});
+			}
+
+			form.setFields(fieldErrors);
 
 			if (otherErrors.length > 0) {
 				// todo: show as alert before form
@@ -131,7 +138,7 @@ class WrappedDataForm extends React.Component<Props, State> {
 						ref={this.getFormRef()}
 						autoComplete="off"
 						colon={false}
-						className={mode == "View" ? "data-form-mode-view" : null}
+						className={mode == "View" ? "data-form-mode-view" : undefined}
 						initialValues={data}
 						scrollToFirstError={true}
 						layout={layout || "horizontal"}
