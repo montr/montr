@@ -22,7 +22,7 @@
     <PackageReference Include="MediatR" Version="9.0.0" />
     <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="9.0.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="5.0.1" />
-    <PackageReference Include="Npgsql" Version="5.0.1.1" />
+    <PackageReference Include="Npgsql" Version="5.0.2" />
     <PackageReference Include="Sentry" Version="2.1.8" />
     <PackageReference Include="Sentry.AspNetCore" Version="2.1.8" />
     <PackageReference Include="Serilog" Version="2.10.0" />
