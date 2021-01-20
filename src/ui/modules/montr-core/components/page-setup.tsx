@@ -1,10 +1,11 @@
 import * as React from "react";
-import { Spin } from "antd";
+import { Alert, Spin } from "antd";
 import { Translation } from "react-i18next";
-import { ApiResult, IDataField, IIndexer } from "../models";
+import { ApiResult, AppState, IDataField, IIndexer } from "../models";
 import { MetadataService, SetupService } from "../services";
 import { DataForm, Page } from ".";
 import { Views } from "../module";
+import { Constants } from "..";
 
 interface Props {
 }
@@ -47,9 +48,23 @@ export default class PageSetup extends React.Component<Props, State> {
     };
 
     render = () => {
-        const { loading, fields } = this.state, data = {};
+        const { loading, fields } = this.state,
+            appState = Constants.appState,
+            data = {};
 
         // todo: check (server side?) system initialized
+        if (appState == AppState.Initialized) {
+            return (
+                <Translation>
+                    {(t) => <Page title={t("page.setup.title")}>
+
+                        <Alert type="warning" message="Первоначальная настройка системы выполнена. Для дальнейшей настройки системы воспользуйтесь страницей Настройки в личном кабинете." />
+
+                    </Page>}
+                </Translation>
+            );
+        }
+
         return (
             <Translation>
                 {(t) => <Page title={t("page.setup.title")}>
