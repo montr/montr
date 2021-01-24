@@ -36,9 +36,11 @@ export class AuthService {
 		const settings: UserManagerSettings = {
 			authority: AuthConstants.authority,
 			client_id: AuthConstants.clientId,
+
 			redirect_uri: AuthConstants.clientRoot + AuthConstants.RedirectUri,
 			silent_redirect_uri: AuthConstants.clientRoot + AuthConstants.SilentRedirectUri,
 			post_logout_redirect_uri: AuthConstants.clientRoot + AuthConstants.PostLogoutRedirectUri,
+
 			// revokeAccessTokenOnSignout: true,
 			// response_type: "id_token token",
 			response_type: "code",

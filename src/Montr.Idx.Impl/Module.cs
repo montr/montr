@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Linq;
 using System.Security.Cryptography;
 using LinqToDB.Mapping;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -13,6 +15,7 @@ using Montr.Idx.Impl.Entities;
 using Montr.Idx.Impl.Services;
 using Montr.Idx.Models;
 using Montr.Idx.Services;
+using OpenIddict.Abstractions;
 
 namespace Montr.Idx.Impl
 {
@@ -55,6 +58,16 @@ namespace Montr.Idx.Impl
 				options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
 				options.Lockout.MaxFailedAccessAttempts = 5;
 				options.Lockout.AllowedForNewUsers = true;
+			});
+
+			services.AddDbContext<ApplicationDbContext>(options =>
+			{
+				options.UseNpgsql(configuration.GetConnectionString("Default"));
+
+				// Register the entity sets needed by OpenIddict.
+				// Note: use the generic overload if you need
+				// to replace the default OpenIddict entities.
+				options.UseOpenIddict();
 			});
 
 			IdentitySchemaMapper.MapSchema(MappingSchema.Default);
@@ -121,8 +134,65 @@ namespace Montr.Idx.Impl
 			// todo: use IOptions
 			var appOptions = configuration.GetOptions<AppOptions>();
 
+			services.AddOpenIddict()
+
+				// Register the OpenIddict core components.
+				.AddCore(options =>
+				{
+					// Configure OpenIddict to use the Entity Framework Core stores and models.
+					// Note: call ReplaceDefaultEntities() to replace the default OpenIddict entities.
+					options.UseEntityFrameworkCore()
+						.UseDbContext<ApplicationDbContext>();
+				})
+
+				// Register the OpenIddict server components.
+				.AddServer(options =>
+				{
+					// Enable the authorization, logout, token and userinfo endpoints.
+					options.SetAuthorizationEndpointUris("/connect/authorize")
+						.SetLogoutEndpointUris("/connect/logout")
+						.SetTokenEndpointUris("/connect/token")
+						.SetUserinfoEndpointUris("/connect/userinfo");
+
+					// Mark the "email", "profile" and "roles" scopes as supported scopes.
+					options.RegisterScopes(OpenIddictConstants.Scopes.Email, OpenIddictConstants.Scopes.Profile, OpenIddictConstants.Scopes.Roles);
+
+					// Note: the sample uses the code and refresh token flows but you can enable
+					// the other flows if you need to support implicit, password or client credentials.
+					options.AllowAuthorizationCodeFlow()
+						.AllowRefreshTokenFlow();
+
+					// Enable the client credentials flow.
+					options.AllowClientCredentialsFlow();
+
+					// Register the signing and encryption credentials.
+					options.AddDevelopmentEncryptionCertificate()
+						.AddDevelopmentSigningCertificate();
+
+					// Register the ASP.NET Core host and configure the ASP.NET Core-specific options.
+					options.UseAspNetCore()
+						.EnableAuthorizationEndpointPassthrough()
+						.EnableLogoutEndpointPassthrough()
+						.EnableStatusCodePagesIntegration()
+						.EnableTokenEndpointPassthrough();
+				})
+
+				// Register the OpenIddict validation components.
+				.AddValidation(options =>
+				{
+					// Import the configuration from the local OpenIddict server instance.
+					options.UseLocalServer();
+
+					// Register the ASP.NET Core host.
+					options.UseAspNetCore();
+				});
+
+			// Register the worker responsible of seeding the database with the sample clients.
+			// Note: in a real world application, this step should be part of a setup script.
+			services.AddHostedService<Worker>();
+
 			// todo: move to Montr.Idx.Plugin.IdentityServer
-			var builder = services
+			/*var builder = services
 				.AddIdentityServer(options =>
 				{
 					// options.PublicOrigin = appOptions.AppUrl; // todo: missing in dotnet 5.0
@@ -152,15 +222,16 @@ namespace Montr.Idx.Impl
 				builder.AddSigningCredential(new SigningCredentials(
 					new RsaSecurityKey(RSA.Create(2048)), SecurityAlgorithms.RsaSha256Signature
 				));
-			}
+			}*/
 		}
 
 		public void Configure(IApplicationBuilder app)
 		{
 			// app.UseCors("default"); // not needed, since UseIdentityServer adds cors
 			// app.UseAuthentication(); // not needed, since UseIdentityServer adds the authentication middleware
+			// app.UseIdentityServer();
 
-			app.UseIdentityServer();
+			app.UseAuthentication();
 			app.UseAuthorization();
 		}
 	}

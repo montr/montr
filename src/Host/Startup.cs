@@ -158,9 +158,10 @@ namespace Host
 
 			app.UseEndpoints(endpoints =>
 			{
-				endpoints.MapControllers();
 				endpoints.MapRazorPages();
+				endpoints.MapControllers();
 				endpoints.MapFallbackToController("Index", "Home");
+				// endpoints.MapFallbackToFile("Home/Index.cshtml");
 				// endpoints.MapHub<MyChatHub>()
 				// endpoints.MapGrpcService<MyCalculatorService>()
 				endpoints.MapDefaultControllerRoute();
