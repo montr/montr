@@ -24,6 +24,7 @@
       "operation.executing": "Please wait until the operation is completed...",
       "operation.success": "The operation completed successfully.",
       "page.setup.subtitle": "Congratulations, your system is up and running! Please answer some questions to initially configure your system.",
+      "page.setup.initializedMessage": "Initial setup is completed. For additional system setup please use page Settings in personal cabinet.",
       "page.setup.title": "Setup"
     },
     "idx": {
@@ -113,6 +114,7 @@
       "operation.executing": "Пожалуйста подождите, операция выполняется...",
       "operation.success": "Операция выполнена успешно.",
       "page.setup.subtitle": "Поздравляем, ваша система запущена и работает! Пожалуйста ответьте на несколько вопросов для первоначальной настройки системы.",
+      "page.setup.initializedMessage": "Первоначальная настройка системы выполнена. Для дальнейшей настройки системы воспользуйтесь страницей Настройки в личном кабинете.",
       "page.setup.title": "Настройка"
     },
     "idx": {

@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using MediatR;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Options;
 using Montr.Core;
 using Montr.Core.Models;
 using Montr.Core.Services;
@@ -15,33 +16,50 @@ namespace Montr.Kompany.Impl.CommandHandlers
 	public class SetupSystemHandler : IRequestHandler<SetupSystem, ApiResult>
 	{
 		private readonly ILogger<SetupSystemHandler> _logger;
+		private readonly IOptionsMonitor<AppOptions> _optionsMonitor;
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IUserManager _userManager;
 		private readonly ISignInManager _signInManager;
 		private readonly ISettingsRepository _settingsRepository;
 		private readonly IAppUrlBuilder _appUrlBuilder;
+		private readonly ILocalizer _localizer;
 		private readonly ISender _mediator;
 
 		public SetupSystemHandler(ILogger<SetupSystemHandler> logger,
+			IOptionsMonitor<AppOptions> optionsMonitor,
 			IUnitOfWorkFactory unitOfWorkFactory,
 			IUserManager userManager,
 			ISignInManager signInManager,
 			ISettingsRepository settingsRepository,
 			IAppUrlBuilder appUrlBuilder,
+			ILocalizer localizer,
 			ISender mediator)
 		{
 			_logger = logger;
+			_optionsMonitor = optionsMonitor;
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_userManager = userManager;
 			_signInManager = signInManager;
 			_settingsRepository = settingsRepository;
 
 			_appUrlBuilder = appUrlBuilder;
+			_localizer = localizer;
 			_mediator = mediator;
 		}
 
 		public async Task<ApiResult> Handle(SetupSystem request, CancellationToken cancellationToken)
 		{
+			var appOptions = _optionsMonitor.CurrentValue;
+
+			if (appOptions.State == AppState.Initialized)
+			{
+				return new ApiResult
+				{
+					Success = false,
+					Message = await _localizer.Get("page.setup.initializedMessage", cancellationToken)
+				};
+			}
+
 			using (var scope = _unitOfWorkFactory.Create())
 			{
 				_logger.LogInformation($"Creating default administrator {request.AdminEmail}", request.AdminEmail);

@@ -58,7 +58,7 @@ export default class PageSetup extends React.Component<Props, State> {
                 <Translation>
                     {(t) => <Page title={t("page.setup.title")}>
 
-                        <Alert type="warning" message="Первоначальная настройка системы выполнена. Для дальнейшей настройки системы воспользуйтесь страницей Настройки в личном кабинете." />
+                        <Alert type="warning" message={t("page.setup.initializedMessage")} />
 
                     </Page>}
                 </Translation>
