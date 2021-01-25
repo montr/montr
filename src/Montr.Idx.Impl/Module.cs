@@ -231,6 +231,7 @@ namespace Montr.Idx.Impl
 			// app.UseAuthentication(); // not needed, since UseIdentityServer adds the authentication middleware
 			// app.UseIdentityServer();
 
+			app.UseCors(AppConstants.CorsPolicyName);
 			app.UseAuthentication();
 			app.UseAuthorization();
 		}
