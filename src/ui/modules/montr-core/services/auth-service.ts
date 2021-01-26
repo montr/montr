@@ -42,8 +42,8 @@ export class AuthService {
 			post_logout_redirect_uri: AuthConstants.clientRoot + AuthConstants.PostLogoutRedirectUri,
 
 			// revokeAccessTokenOnSignout: true,
-			// response_type: "id_token token",
-			response_type: "code",
+			response_type: "id_token token",
+			// response_type: "code",
 			scope: AuthConstants.clientScope,
 			automaticSilentRenew: runTasks,
 			monitorSession: runTasks
@@ -52,7 +52,7 @@ export class AuthService {
 		this._userManager = new UserManager(settings);
 
 		// todo: use logger here and below
-		/*
+
 		this._userManager.events.addAccessTokenExpired((...args: any[]) => {
 			console.log("AccessTokenExpired", window.frameElement, args);
 		});
@@ -74,7 +74,6 @@ export class AuthService {
 		this._userManager.events.addUserUnloaded((...args: any[]) => {
 			console.log("UserUnloaded", window.frameElement, args);
 		});
-		*/
 
 		AuthService.instance = this;
 	}

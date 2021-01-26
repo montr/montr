@@ -16,6 +16,7 @@ using Montr.Idx.Impl.Services;
 using Montr.Idx.Models;
 using Montr.Idx.Services;
 using OpenIddict.Abstractions;
+using static OpenIddict.Abstractions.OpenIddictConstants;
 
 namespace Montr.Idx.Impl
 {
@@ -58,6 +59,11 @@ namespace Montr.Idx.Impl
 				options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
 				options.Lockout.MaxFailedAccessAttempts = 5;
 				options.Lockout.AllowedForNewUsers = true;
+
+				options.ClaimsIdentity.UserNameClaimType = Claims.Name;
+				options.ClaimsIdentity.UserIdClaimType = Claims.Subject;
+				options.ClaimsIdentity.RoleClaimType = Claims.Role;
+				options.ClaimsIdentity.EmailClaimType = Claims.Email;
 			});
 
 			services.AddDbContext<ApplicationDbContext>(options =>
@@ -164,6 +170,10 @@ namespace Montr.Idx.Impl
 
 					// Enable the client credentials flow.
 					options.AllowClientCredentialsFlow();
+
+					// Note: the sample only uses the implicit flow but you can enable the other
+					// flows if you need to support code, password or client credentials.
+					options.AllowImplicitFlow();
 
 					// Register the signing and encryption credentials.
 					options.AddDevelopmentEncryptionCertificate()

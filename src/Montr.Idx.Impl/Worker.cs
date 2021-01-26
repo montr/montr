@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Montr.Idx.Impl.Entities;
 using OpenIddict.Abstractions;
+using static OpenIddict.Abstractions.OpenIddictConstants;
 
 namespace Montr.Idx.Impl
 {
@@ -32,9 +33,10 @@ namespace Montr.Idx.Impl
 				await manager.CreateAsync(new OpenIddictApplicationDescriptor
 				{
 					ClientId = "ui",
-					ConsentType = OpenIddictConstants.ConsentTypes.Explicit,
+					// ConsentType = ConsentTypes.Explicit,
+					ConsentType = ConsentTypes.Implicit,
 					DisplayName = "UI Client",
-					Type = OpenIddictConstants.ClientTypes.Public,
+					Type = ClientTypes.Public,
 					PostLogoutRedirectUris =
 					{
 						new Uri("https://app.montr.io:5001/authentication/logout-callback"),
@@ -48,20 +50,27 @@ namespace Montr.Idx.Impl
 					},
 					Permissions =
 					{
-						OpenIddictConstants.Permissions.Endpoints.Authorization,
-						OpenIddictConstants.Permissions.Endpoints.Logout,
-						OpenIddictConstants.Permissions.Endpoints.Token,
-						OpenIddictConstants.Permissions.GrantTypes.AuthorizationCode,
-						OpenIddictConstants.Permissions.GrantTypes.RefreshToken,
-						OpenIddictConstants.Permissions.ResponseTypes.Code,
-						OpenIddictConstants.Permissions.Scopes.Email,
-						OpenIddictConstants.Permissions.Scopes.Profile,
-						OpenIddictConstants.Permissions.Scopes.Roles
+						Permissions.Endpoints.Authorization,
+						Permissions.Endpoints.Logout,
+						Permissions.Endpoints.Token,
+
+						Permissions.GrantTypes.Implicit,
+						Permissions.GrantTypes.AuthorizationCode,
+						Permissions.GrantTypes.RefreshToken,
+
+						Permissions.ResponseTypes.Code,
+						Permissions.ResponseTypes.IdToken,
+						Permissions.ResponseTypes.IdTokenToken,
+						Permissions.ResponseTypes.Token,
+
+						Permissions.Scopes.Email,
+						Permissions.Scopes.Profile,
+						Permissions.Scopes.Roles
 					},
-					Requirements =
+					/*Requirements =
 					{
-						OpenIddictConstants.Requirements.Features.ProofKeyForCodeExchange
-					}
+						Requirements.Features.ProofKeyForCodeExchange
+					}*/
 				});
 			}
 		}
