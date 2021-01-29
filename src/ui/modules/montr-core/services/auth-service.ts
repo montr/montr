@@ -6,7 +6,6 @@ class AuthConstants {
 	public static authority = Constants.authorityURL;
 	public static clientId = "ui";
 	public static clientRoot = window.location.origin;
-	public static clientScope = "openid profile email";
 
 	public static RedirectUri = "/signin-oidc";
 	public static SilentRedirectUri = "/silent-renew-oidc";
@@ -44,7 +43,7 @@ export class AuthService {
 			// revokeAccessTokenOnSignout: true,
 			response_type: "id_token token",
 			// response_type: "code",
-			scope: AuthConstants.clientScope,
+			scope: "openid profile email",
 			automaticSilentRenew: runTasks,
 			monitorSession: runTasks
 		};
