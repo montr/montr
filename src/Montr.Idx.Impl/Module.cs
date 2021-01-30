@@ -38,6 +38,7 @@ namespace Montr.Idx.Impl
 			services.AddTransient<IRepository<User>, DbUserRepository>();
 			services.AddTransient<IUserManager, DefaultUserManager>();
 			services.AddTransient<ISignInManager, DefaultSignInManager>();
+			services.AddTransient<IOidcServer, OpenIddictServer>();
 
 			// todo: move from impl to idx?
 			services.Configure<IdentityOptions>(options =>

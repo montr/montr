@@ -1,10 +1,9 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
 
-namespace Montr.Idx.Commands
+namespace Montr.Idx.Commands.Oidc
 {
 	public class OidcAuthorize : IRequest<IActionResult>
 	{
-		public Controller Controller { get; set; }
 	}
 }

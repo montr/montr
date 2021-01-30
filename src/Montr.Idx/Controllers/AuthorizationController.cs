@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Montr.Idx.Commands;
+using Montr.Idx.Commands.Oidc;
 
 namespace Montr.Idx.Controllers
 {
@@ -19,7 +19,13 @@ namespace Montr.Idx.Controllers
 		[IgnoreAntiforgeryToken]
 		public async Task<IActionResult> Authorize()
 		{
-			return await _mediator.Send(new OidcAuthorize { Controller = this });
+			return await _mediator.Send(new OidcAuthorize());
+		}
+
+		[HttpGet("~/connect/logout")]
+		public async Task<IActionResult> Logout()
+		{
+			return await _mediator.Send(new OidcLogout());
 		}
 	}
 }
