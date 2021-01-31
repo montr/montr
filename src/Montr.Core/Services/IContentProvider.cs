@@ -30,11 +30,11 @@ namespace Montr.Core.Services
 
 			if (menuId == "ProfileMenu")
 			{
-				result.Items.Add(new Menu { Id = "p.0", Name = "Profile", Route = "/profile" });
-				result.Items.Add(new Menu { Id = "p.1", Name = "Security", Route = "/profile/security" });
-				result.Items.Add(new Menu { Id = "p.2", Name = "External Logins", Route = "/profile/external-login" });
-				result.Items.Add(new Menu { Id = "p.3", Name = "Notifications", Route = "/profile/notifications" });
-				result.Items.Add(new Menu { Id = "p.4", Name = "History", Route = "/profile/history" });
+				result.Items.Add(new Menu { Id = "p.0", Name = "Profile", Route = "/profile/" });
+				result.Items.Add(new Menu { Id = "p.1", Name = "Security", Route = "/profile/security/" });
+				result.Items.Add(new Menu { Id = "p.2", Name = "External Logins", Route = "/profile/external-login/" });
+				result.Items.Add(new Menu { Id = "p.3", Name = "Notifications", Route = "/profile/notifications/" });
+				result.Items.Add(new Menu { Id = "p.4", Name = "History", Route = "/profile/history/" });
 			}
 
 			if (menuId == "SideMenu")
@@ -58,17 +58,6 @@ namespace Montr.Core.Services
 						new Menu { Id = "settings", Name = "Настройки", Route = "/settings" },
 						new Menu { Id = "locales", Name = "Локализация", Route = "/locales" },
 						new Menu { Id = "hangfire", Name = "Hangfire Dashboard", Url = "/hangfire" }
-					}
-				});
-
-				result.Items.Add(new Menu
-				{
-					Id = "m.4",
-					Name = "Пользователь",
-					Icon = "user",
-					Items = new []
-					{
-						new Menu { Id = "m.4.1", Name = "Профиль", Route = "/profile" }
 					}
 				});
 

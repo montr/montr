@@ -1,18 +1,18 @@
 ﻿using System;
-using System.Security.Cryptography;
 using LinqToDB.Mapping;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.IdentityModel.Tokens;
 using Montr.Core;
 using Montr.Core.Services;
 using Montr.Idx.Impl.Entities;
 using Montr.Idx.Impl.Services;
 using Montr.Idx.Models;
 using Montr.Idx.Services;
+using static OpenIddict.Abstractions.OpenIddictConstants;
 
 namespace Montr.Idx.Impl
 {
@@ -34,6 +34,7 @@ namespace Montr.Idx.Impl
 			services.AddTransient<IRepository<User>, DbUserRepository>();
 			services.AddTransient<IUserManager, DefaultUserManager>();
 			services.AddTransient<ISignInManager, DefaultSignInManager>();
+			services.AddTransient<IOidcServer, OpenIddictServer>();
 
 			// todo: move from impl to idx?
 			services.Configure<IdentityOptions>(options =>
@@ -55,6 +56,21 @@ namespace Montr.Idx.Impl
 				options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
 				options.Lockout.MaxFailedAccessAttempts = 5;
 				options.Lockout.AllowedForNewUsers = true;
+
+				options.ClaimsIdentity.UserNameClaimType = Claims.Name;
+				options.ClaimsIdentity.UserIdClaimType = Claims.Subject;
+				options.ClaimsIdentity.RoleClaimType = Claims.Role;
+				options.ClaimsIdentity.EmailClaimType = Claims.Email;
+			});
+
+			services.AddDbContext<ApplicationDbContext>(options =>
+			{
+				options.UseNpgsql(configuration.GetConnectionString("Default"));
+
+				// Register the entity sets needed by OpenIddict.
+				// Note: use the generic overload if you need
+				// to replace the default OpenIddict entities.
+				options.UseOpenIddict();
 			});
 
 			IdentitySchemaMapper.MapSchema(MappingSchema.Default);
@@ -101,66 +117,68 @@ namespace Montr.Idx.Impl
 				};
 			});*/
 
-			// services.AddOpenIdAuthentication(configuration.GetSection("OpenId").Get<OpenIdOptions>());
-
-			/* services.AddAuthentication(options =>
-				{
-					// x.DefaultAuthenticateScheme = IdentityServerConstants.DefaultCookieAuthenticationScheme;
-					x.DefaultAuthenticateScheme = IdentityConstants.ApplicationScheme;
-					x.DefaultSignInScheme = IdentityConstants.ApplicationScheme;
-					x.DefaultSignOutScheme = IdentityConstants.ApplicationScheme;
-
-					options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-					options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-					options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-				}) */
-
-			// .AddIdentityServerAuthentication()
-			// .AddJwtBearer()
-
 			// todo: use IOptions
 			var appOptions = configuration.GetOptions<AppOptions>();
 
-			// todo: move to Montr.Idx.Plugin.IdentityServer
-			var builder = services
-				.AddIdentityServer(options =>
+			services.AddOpenIddict()
+				.AddCore(options =>
 				{
-					// options.PublicOrigin = appOptions.AppUrl; // todo: missing in dotnet 5.0
-					// options.Authentication.CookieAuthenticationScheme = IdentityConstants.ApplicationScheme;
-
-					options.Cors.CorsPolicyName = AppConstants.CorsPolicyName;
-
-					options.UserInteraction.LoginUrl = ClientRoutes.Login;
-					options.UserInteraction.LogoutUrl = ClientRoutes.Logout;
+					// Configure OpenIddict to use the Entity Framework Core stores and models.
+					// Note: call ReplaceDefaultEntities() to replace the default OpenIddict entities.
+					options.UseEntityFrameworkCore()
+						.UseDbContext<ApplicationDbContext>();
 				})
-				// https://www.scottbrady91.com/Identity-Server/Creating-Your-Own-IdentityServer4-Storage-Library
-				// https://damienbod.com/2017/12/30/using-an-ef-core-database-for-the-identityserver4-configuration-data/
-				// .AddPersistedGrantStore<>()
-				.AddInMemoryPersistedGrants()
-				.AddInMemoryIdentityResources(Config.GetIdentityResources())
-				.AddInMemoryApiResources(Config.GetApiResources())
-				.AddInMemoryClients(Config.GetClients(appOptions.ClientUrls))
-				.AddAspNetIdentity<DbUser>();
 
-			if (_environment.IsDevelopment())
-			{
-				builder.AddDeveloperSigningCredential(); // tempkey.rsa
-			}
-			else
-			{
-				// todo: use one certificate for all instances
-				builder.AddSigningCredential(new SigningCredentials(
-					new RsaSecurityKey(RSA.Create(2048)), SecurityAlgorithms.RsaSha256Signature
-				));
-			}
+				// Register the OpenIddict server components.
+				.AddServer(options =>
+				{
+					// Enable the authorization, logout, token and userinfo endpoints.
+					options
+						.SetAuthorizationEndpointUris("/connect/authorize")
+						.SetLogoutEndpointUris("/connect/logout")
+						.SetTokenEndpointUris("/connect/token")
+						.SetUserinfoEndpointUris("/connect/userinfo");
+
+					// Mark the "email", "profile" and "roles" scopes as supported scopes.
+					options.RegisterScopes(Scopes.Email, Scopes.Profile, Scopes.Roles);
+
+					options
+						.AllowAuthorizationCodeFlow()
+						.AllowRefreshTokenFlow()
+						.AllowClientCredentialsFlow()
+						.AllowImplicitFlow();
+
+					// Register the signing and encryption credentials.
+					options.AddDevelopmentEncryptionCertificate()
+						.AddDevelopmentSigningCertificate();
+
+					// Register the ASP.NET Core host and configure the ASP.NET Core-specific options.
+					options.UseAspNetCore()
+						.EnableAuthorizationEndpointPassthrough()
+						.EnableTokenEndpointPassthrough()
+						.EnableLogoutEndpointPassthrough()
+						.EnableStatusCodePagesIntegration();
+				})
+
+				// Register the OpenIddict validation components.
+				.AddValidation(options =>
+				{
+					// Import the configuration from the local OpenIddict server instance.
+					options.UseLocalServer();
+
+					// Register the ASP.NET Core host.
+					options.UseAspNetCore();
+				});
+
+			// Register the worker responsible of seeding the database with the sample clients.
+			// Note: in a real world application, this step should be part of a setup script.
+			services.AddHostedService<Worker>();
 		}
 
 		public void Configure(IApplicationBuilder app)
 		{
-			// app.UseCors("default"); // not needed, since UseIdentityServer adds cors
-			// app.UseAuthentication(); // not needed, since UseIdentityServer adds the authentication middleware
-
-			app.UseIdentityServer();
+			app.UseCors(AppConstants.CorsPolicyName);
+			app.UseAuthentication();
 			app.UseAuthorization();
 		}
 	}

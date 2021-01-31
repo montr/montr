@@ -23,7 +23,6 @@ export class UserContextProvider extends React.Component<any, UserContextState> 
 
 		this._authService.onAuthenticated((user: User) => {
 			this.setState({ user });
-			// this.getUser(false);
 		});
 
 		this._authService.addUserSignedOut(() => {
@@ -34,14 +33,14 @@ export class UserContextProvider extends React.Component<any, UserContextState> 
 	login = () => {
 		this._authService.login()
 			.catch(error => { // todo: use logger here and below
-				console.log("login error", error);
+				console.error("login error", error);
 			});
 	};
 
 	logout = () => {
 		this._authService.logout()
 			.catch(error => {
-				console.log("logout error", error);
+				console.error("logout error", error);
 			});
 	};
 
@@ -49,14 +48,14 @@ export class UserContextProvider extends React.Component<any, UserContextState> 
 		this._authService.getUser().then((user: User) => {
 			this.setState({ user });
 			// todo: move to AuthService (?)
-			if (withLoginSilent && (!user || user.expired)) {
+			if (withLoginSilent && user?.expired) {
 				this._authService.loginSilent()
 					.catch(error => {
-						console.log("loginSilent error", error);
+						console.error("loginSilent error", error);
 					});
 			}
 		}).catch(error => {
-			console.log("getUser error", error);
+			console.error("getUser error", error);
 		});
 	};
 

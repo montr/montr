@@ -52,7 +52,6 @@ export default class PageSetup extends React.Component<Props, State> {
             appState = Constants.appState,
             data = {};
 
-        // todo: check (server side?) system initialized
         if (appState == AppState.Initialized) {
             return (
                 <Translation>

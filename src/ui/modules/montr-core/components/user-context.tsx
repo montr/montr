@@ -3,8 +3,10 @@ import { User } from "oidc-client";
 
 export interface UserContextProps {
 	user?: User,
+
+	// todo: remove methods below
 	login: () => void,
-	logout: () => void
+	logout: () => void;
 }
 
 const defaultState: UserContextProps = {

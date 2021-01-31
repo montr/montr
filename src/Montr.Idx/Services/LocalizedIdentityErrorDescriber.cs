@@ -125,7 +125,7 @@ namespace Montr.Idx.Services
 
 		private IdentityError Translate(IdentityError error, params object[] args)
 		{
-			var key = $"{typeof(IdentityError).Name}.{error.Code}";
+			var key = $"{nameof(IdentityError)}.{error.Code}";
 
 			var message = _localizer.Get(key, CancellationToken.None).Result;
 
