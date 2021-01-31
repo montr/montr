@@ -51,8 +51,8 @@ namespace Montr.Idx.Impl
 					Permissions =
 					{
 						Permissions.Endpoints.Authorization,
-						Permissions.Endpoints.Logout,
 						Permissions.Endpoints.Token,
+						Permissions.Endpoints.Logout,
 
 						Permissions.GrantTypes.Implicit,
 						Permissions.GrantTypes.AuthorizationCode,
@@ -71,7 +71,7 @@ namespace Montr.Idx.Impl
 					{
 						Requirements.Features.ProofKeyForCodeExchange
 					}*/
-				});
+				}, cancellationToken);
 			}
 		}
 

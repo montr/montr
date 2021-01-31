@@ -1,16 +1,10 @@
 import * as React from "react";
 import { Steps } from "antd";
-import { Constants } from "@montr-core/.";
+import { Patterns } from "@montr-core/module";
 import { Page } from "@montr-core/components";
 import { UserContextProps, withUserContext } from "@montr-core/components/";
 import { CompanyContextProps, withCompanyContext } from "@montr-kompany/components";
 import { Link } from "react-router-dom";
-
-class RegistrationConstants {
-	// todo: use routing constants
-	public static UserRegisterUri = Constants.authorityURL + "/account/register";
-	public static UserManageUri = Constants.authorityURL + "/profile";
-}
 
 const RegisterUser = (props: UserContextProps) => {
 	const { user, login } = props;
@@ -19,14 +13,14 @@ const RegisterUser = (props: UserContextProps) => {
 		return (
 			<p>
 				Пользователь <strong>{user.profile.name} ({user.profile.email})</strong> зарегистрирован.<br />
-				Вы можете изменить регистрационные данные в <a href={RegistrationConstants.UserManageUri}>Личном кабинете</a>.
+				Вы можете изменить регистрационные данные в <Link to={Patterns.profile}>Личном кабинете</Link>.
 			</p>
 		);
 	}
 
 	return (
 		<p>
-			Зарегистрируйте пользователя пройдя по <a href={RegistrationConstants.UserRegisterUri}> ссылке</a>.<br />
+			Зарегистрируйте пользователя пройдя по <Link to={Patterns.accountRegister}> ссылке</Link>.<br />
 			Если вы уже зарегистрированы, войдите в систему пройдя по <a onClick={login}> ссылке</a >.
 		</p >
 	);
@@ -65,7 +59,7 @@ const StartWork = (props: UserContextProps & CompanyContextProps) => {
 	if (user && company) {
 		return (
 			<p>
-				Продолжайте работать в <Link to="/dashboard/">Личном кабинете</Link>.
+				Продолжайте работать в <Link to={Patterns.dashboard}>Личном кабинете</Link>.
 			</p>
 		);
 	}

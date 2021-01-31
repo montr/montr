@@ -183,9 +183,9 @@ namespace Montr.Idx.Impl
 					// Register the ASP.NET Core host and configure the ASP.NET Core-specific options.
 					options.UseAspNetCore()
 						.EnableAuthorizationEndpointPassthrough()
+						.EnableTokenEndpointPassthrough()
 						.EnableLogoutEndpointPassthrough()
-						.EnableStatusCodePagesIntegration()
-						.EnableTokenEndpointPassthrough();
+						.EnableStatusCodePagesIntegration();
 				})
 
 				// Register the OpenIddict validation components.

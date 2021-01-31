@@ -3,6 +3,8 @@ import { Menu } from "antd";
 import { UserContextProps, withUserContext } from "./";
 import { MenuProps } from "antd/lib/menu";
 import { Icon } from "./";
+import { Patterns } from "@montr-core/module";
+import { Link } from "react-router-dom";
 
 interface Props {
 	strongTitle?: string;
@@ -18,26 +20,23 @@ class _UserMenu extends React.Component<MenuProps & UserContextProps & Props> {
 
 		if (user) {
 
+			const userTitle = user.profile.name ?? user.profile.email;
+
 			let title = (strongTitle)
 				? (<span>
 					{/* <Icon type="user" /> */}
 					<div style={{ lineHeight: '14px' }}>&#xA0;</div>
 					<div style={{ lineHeight: '18px' }}><strong>{strongTitle}</strong></div>
-					<div style={{ lineHeight: '32px' }}>{user.profile.name}</div>
-				</span>) : user.profile.name;
+					<div style={{ lineHeight: '32px' }}>{userTitle}</div>
+				</span>) : userTitle;
 
 			return (
 				<Menu.SubMenu {...props} className="user-menu" title={title}>
 
 					{head}
 
-					<Menu.Item key="user:0" className="menu-header" disabled>
-						{/* <Icon type="user" /> */}
-						<strong>{user.profile.name}</strong>
-					</Menu.Item>
 					<Menu.Item key="user:1">
-						{/* todo: use routes */}
-						<a href="/profile">Настройки пользователя</a>
+						<Link to={Patterns.profile}>{userTitle}</Link>
 					</Menu.Item>
 					<Menu.Item key="user:logout">
 						<a onClick={logout}>Выйти</a>

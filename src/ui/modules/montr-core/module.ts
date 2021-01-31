@@ -23,6 +23,9 @@ export const Patterns = {
 	dashboard: "/dashboard/",
 	locales: "/locales/",
 	settings: "/settings/",
+
+	profile: "/profile/",
+	accountRegister: "/account/register/",
 };
 
 export const Views = {

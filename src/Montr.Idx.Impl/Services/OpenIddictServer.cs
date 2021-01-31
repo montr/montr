@@ -55,10 +55,9 @@ namespace Montr.Idx.Impl.Services
 				return await AuthorizeImplicitFlow(oidcRequest, httpContext, cancellationToken);
 			}
 
-			throw new InvalidOperationException($"ResponseType {oidcRequest.ResponseType} is not supported.");
+			throw new InvalidOperationException($"Response type \"{oidcRequest.ResponseType}\" is not supported.");
 		}
 
-		// from OpenIddict sample Zirku: implicit flow demo, with an Aurelia JS application acting as the client
 		private async Task<IActionResult> AuthorizeImplicitFlow(
 			OpenIddictRequest oidcRequest, HttpContext httpContext, CancellationToken cancellationToken)
 		{
