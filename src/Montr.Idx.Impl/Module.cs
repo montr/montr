@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Linq;
-using System.Security.Cryptography;
 using LinqToDB.Mapping;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
@@ -8,14 +6,12 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.IdentityModel.Tokens;
 using Montr.Core;
 using Montr.Core.Services;
 using Montr.Idx.Impl.Entities;
 using Montr.Idx.Impl.Services;
 using Montr.Idx.Models;
 using Montr.Idx.Services;
-using OpenIddict.Abstractions;
 using static OpenIddict.Abstractions.OpenIddictConstants;
 
 namespace Montr.Idx.Impl
@@ -121,29 +117,10 @@ namespace Montr.Idx.Impl
 				};
 			});*/
 
-			// services.AddOpenIdAuthentication(configuration.GetSection("OpenId").Get<OpenIdOptions>());
-
-			/* services.AddAuthentication(options =>
-				{
-					// x.DefaultAuthenticateScheme = IdentityServerConstants.DefaultCookieAuthenticationScheme;
-					x.DefaultAuthenticateScheme = IdentityConstants.ApplicationScheme;
-					x.DefaultSignInScheme = IdentityConstants.ApplicationScheme;
-					x.DefaultSignOutScheme = IdentityConstants.ApplicationScheme;
-
-					options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
-					options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-					options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-				}) */
-
-			// .AddIdentityServerAuthentication()
-			// .AddJwtBearer()
-
 			// todo: use IOptions
 			var appOptions = configuration.GetOptions<AppOptions>();
 
 			services.AddOpenIddict()
-
-				// Register the OpenIddict core components.
 				.AddCore(options =>
 				{
 					// Configure OpenIddict to use the Entity Framework Core stores and models.
@@ -156,25 +133,20 @@ namespace Montr.Idx.Impl
 				.AddServer(options =>
 				{
 					// Enable the authorization, logout, token and userinfo endpoints.
-					options.SetAuthorizationEndpointUris("/connect/authorize")
+					options
+						.SetAuthorizationEndpointUris("/connect/authorize")
 						.SetLogoutEndpointUris("/connect/logout")
 						.SetTokenEndpointUris("/connect/token")
 						.SetUserinfoEndpointUris("/connect/userinfo");
 
 					// Mark the "email", "profile" and "roles" scopes as supported scopes.
-					options.RegisterScopes(OpenIddictConstants.Scopes.Email, OpenIddictConstants.Scopes.Profile, OpenIddictConstants.Scopes.Roles);
+					options.RegisterScopes(Scopes.Email, Scopes.Profile, Scopes.Roles);
 
-					// Note: the sample uses the code and refresh token flows but you can enable
-					// the other flows if you need to support implicit, password or client credentials.
-					options.AllowAuthorizationCodeFlow()
-						.AllowRefreshTokenFlow();
-
-					// Enable the client credentials flow.
-					options.AllowClientCredentialsFlow();
-
-					// Note: the sample only uses the implicit flow but you can enable the other
-					// flows if you need to support code, password or client credentials.
-					options.AllowImplicitFlow();
+					options
+						.AllowAuthorizationCodeFlow()
+						.AllowRefreshTokenFlow()
+						.AllowClientCredentialsFlow()
+						.AllowImplicitFlow();
 
 					// Register the signing and encryption credentials.
 					options.AddDevelopmentEncryptionCertificate()
@@ -201,47 +173,10 @@ namespace Montr.Idx.Impl
 			// Register the worker responsible of seeding the database with the sample clients.
 			// Note: in a real world application, this step should be part of a setup script.
 			services.AddHostedService<Worker>();
-
-			// todo: move to Montr.Idx.Plugin.IdentityServer
-			/*var builder = services
-				.AddIdentityServer(options =>
-				{
-					// options.PublicOrigin = appOptions.AppUrl; // todo: missing in dotnet 5.0
-					// options.Authentication.CookieAuthenticationScheme = IdentityConstants.ApplicationScheme;
-
-					options.Cors.CorsPolicyName = AppConstants.CorsPolicyName;
-
-					options.UserInteraction.LoginUrl = ClientRoutes.Login;
-					options.UserInteraction.LogoutUrl = ClientRoutes.Logout;
-				})
-				// https://www.scottbrady91.com/Identity-Server/Creating-Your-Own-IdentityServer4-Storage-Library
-				// https://damienbod.com/2017/12/30/using-an-ef-core-database-for-the-identityserver4-configuration-data/
-				// .AddPersistedGrantStore<>()
-				.AddInMemoryPersistedGrants()
-				.AddInMemoryIdentityResources(Config.GetIdentityResources())
-				.AddInMemoryApiResources(Config.GetApiResources())
-				.AddInMemoryClients(Config.GetClients(appOptions.ClientUrls))
-				.AddAspNetIdentity<DbUser>();
-
-			if (_environment.IsDevelopment())
-			{
-				builder.AddDeveloperSigningCredential(); // tempkey.rsa
-			}
-			else
-			{
-				// todo: use one certificate for all instances
-				builder.AddSigningCredential(new SigningCredentials(
-					new RsaSecurityKey(RSA.Create(2048)), SecurityAlgorithms.RsaSha256Signature
-				));
-			}*/
 		}
 
 		public void Configure(IApplicationBuilder app)
 		{
-			// app.UseCors("default"); // not needed, since UseIdentityServer adds cors
-			// app.UseAuthentication(); // not needed, since UseIdentityServer adds the authentication middleware
-			// app.UseIdentityServer();
-
 			app.UseCors(AppConstants.CorsPolicyName);
 			app.UseAuthentication();
 			app.UseAuthorization();
