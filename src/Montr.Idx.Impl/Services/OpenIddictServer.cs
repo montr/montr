@@ -20,23 +20,17 @@ namespace Montr.Idx.Impl.Services
 	public class OpenIddictServer : IOidcServer
 	{
 		private readonly IHttpContextAccessor _httpContextAccessor;
-		private readonly IOpenIddictApplicationManager _applicationManager;
-		private readonly IOpenIddictAuthorizationManager _authorizationManager;
 		private readonly IOpenIddictScopeManager _scopeManager;
 		private readonly Microsoft.AspNetCore.Identity.SignInManager<DbUser> _signInManager;
 		private readonly Microsoft.AspNetCore.Identity.UserManager<DbUser> _userManager;
 
 		public OpenIddictServer(
 			IHttpContextAccessor httpContextAccessor,
-			IOpenIddictApplicationManager applicationManager,
-			IOpenIddictAuthorizationManager authorizationManager,
 			IOpenIddictScopeManager scopeManager,
 			Microsoft.AspNetCore.Identity.SignInManager<DbUser> signInManager,
 			Microsoft.AspNetCore.Identity.UserManager<DbUser> userManager)
 		{
 			_httpContextAccessor = httpContextAccessor;
-			_applicationManager = applicationManager;
-			_authorizationManager = authorizationManager;
 			_scopeManager = scopeManager;
 			_signInManager = signInManager;
 			_userManager = userManager;
@@ -103,6 +97,56 @@ namespace Montr.Idx.Impl.Services
 
             // Returning a SignInResult will ask OpenIddict to issue the appropriate access/identity tokens.
             return new SignInResult(OpenIddictServerAspNetCoreDefaults.AuthenticationScheme, principal);
+		}
+
+		public async Task<IActionResult> UserInfo(OidcUserInfo request, CancellationToken cancellationToken)
+		{
+			var httpContext = _httpContextAccessor.HttpContext
+			                  ?? throw new InvalidOperationException("The HttpContext cannot be retrieved.");
+
+			var principal = httpContext.User;
+
+			var user = await _userManager.GetUserAsync(principal);
+
+			if (user == null)
+			{
+				return new ChallengeResult(
+					OpenIddictServerAspNetCoreDefaults.AuthenticationScheme,
+					new AuthenticationProperties(new Dictionary<string, string>
+					{
+						[OpenIddictServerAspNetCoreConstants.Properties.Error] = Errors.InvalidToken,
+						[OpenIddictServerAspNetCoreConstants.Properties.ErrorDescription] =
+							"The specified access token is bound to an account that no longer exists."
+					}));
+			}
+
+			var claims = new Dictionary<string, object>(StringComparer.Ordinal)
+			{
+				// Note: the "sub" claim is a mandatory claim and must be included in the JSON response.
+				[Claims.Subject] = await _userManager.GetUserIdAsync(user)
+			};
+
+			if (principal.HasScope(Scopes.Email))
+			{
+				claims[Claims.Email] = await _userManager.GetEmailAsync(user);
+				claims[Claims.EmailVerified] = await _userManager.IsEmailConfirmedAsync(user);
+			}
+
+			if (principal.HasScope(Scopes.Phone))
+			{
+				claims[Claims.PhoneNumber] = await _userManager.GetPhoneNumberAsync(user);
+				claims[Claims.PhoneNumberVerified] = await _userManager.IsPhoneNumberConfirmedAsync(user);
+			}
+
+			if (principal.HasScope(Scopes.Roles))
+			{
+				claims[Claims.Role] = await _userManager.GetRolesAsync(user);
+			}
+
+			// Note: the complete list of standard claims supported by the OpenID Connect specification
+			// can be found here: http://openid.net/specs/openid-connect-core-1_0.html#StandardClaims
+
+			return new OkObjectResult(claims);
 		}
 
 		public async Task<IActionResult> Logout(OidcLogout request, CancellationToken cancellationToken)

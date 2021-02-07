@@ -157,6 +157,7 @@ namespace Montr.Idx.Impl
 						.EnableAuthorizationEndpointPassthrough()
 						.EnableTokenEndpointPassthrough()
 						.EnableLogoutEndpointPassthrough()
+						// .EnableUserinfoEndpointPassthrough()
 						.EnableStatusCodePagesIntegration();
 				})
 
