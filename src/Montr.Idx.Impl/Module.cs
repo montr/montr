@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Hosting;
 using Montr.Core;
 using Montr.Core.Services;
 using Montr.Idx.Impl.Entities;
@@ -19,13 +18,6 @@ namespace Montr.Idx.Impl
 	// ReSharper disable once UnusedMember.Global
 	public class Module : IWebModule
 	{
-		private readonly IHostEnvironment _environment;
-
-		public Module(IHostEnvironment environment)
-		{
-			_environment = environment;
-		}
-
 		public void ConfigureServices(IConfiguration configuration, IServiceCollection services)
 		{
 			services.AddTransient<IStartupTask, RegisterMessageTemplateStartupTask>();
@@ -39,6 +31,7 @@ namespace Montr.Idx.Impl
 			// todo: move from impl to idx?
 			services.Configure<IdentityOptions>(options =>
 			{
+				// todo: move to settings
 				options.SignIn.RequireConfirmedAccount = false;
 				options.SignIn.RequireConfirmedEmail = false;
 				options.SignIn.RequireConfirmedPhoneNumber = false;
@@ -65,11 +58,9 @@ namespace Montr.Idx.Impl
 
 			services.AddDbContext<ApplicationDbContext>(options =>
 			{
+				// todo: remove hardcoded connection name
 				options.UseNpgsql(configuration.GetConnectionString("Default"));
 
-				// Register the entity sets needed by OpenIddict.
-				// Note: use the generic overload if you need
-				// to replace the default OpenIddict entities.
 				options.UseOpenIddict();
 			});
 
@@ -87,44 +78,9 @@ namespace Montr.Idx.Impl
 					typeof(LinqToDB.Identity.IdentityRoleClaim<Guid>))
 				.AddDefaultTokenProviders();
 
-			/*services.ConfigureApplicationCookie(options =>
-			{
-				options.LoginPath = PathString.Empty;
-				options.LoginPath = "/account/login";
-				options.LogoutPath = "/account/logout";
-				options.AccessDeniedPath = "/account/access-denied";
-
-				options.Events = new CookieAuthenticationEvents()
-				{
-					OnRedirectToLogin = (ctx) =>
-					{
-						if (ctx.Request.Path.StartsWithSegments("/api") && ctx.Response.StatusCode == 200)
-						{
-							ctx.Response.StatusCode = 401;
-						}
-
-						return Task.CompletedTask;
-					},
-					OnRedirectToAccessDenied = (ctx) =>
-					{
-						if (ctx.Request.Path.StartsWithSegments("/api") && ctx.Response.StatusCode == 200)
-						{
-							ctx.Response.StatusCode = 403;
-						}
-
-						return Task.CompletedTask;
-					}
-				};
-			});*/
-
-			// todo: use IOptions
-			var appOptions = configuration.GetOptions<AppOptions>();
-
 			services.AddOpenIddict()
 				.AddCore(options =>
 				{
-					// Configure OpenIddict to use the Entity Framework Core stores and models.
-					// Note: call ReplaceDefaultEntities() to replace the default OpenIddict entities.
 					options.UseEntityFrameworkCore()
 						.UseDbContext<ApplicationDbContext>();
 				})

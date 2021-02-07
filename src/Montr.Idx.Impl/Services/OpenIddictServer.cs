@@ -7,13 +7,16 @@ using LinqToDB.Async;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Options;
 using Montr.Idx.Commands.Oidc;
 using Montr.Idx.Impl.Entities;
 using Montr.Idx.Services;
 using OpenIddict.Abstractions;
 using OpenIddict.Server.AspNetCore;
 using static OpenIddict.Abstractions.OpenIddictConstants;
+using SignInResult = Microsoft.AspNetCore.Mvc.SignInResult;
 
 namespace Montr.Idx.Impl.Services
 {
@@ -21,19 +24,22 @@ namespace Montr.Idx.Impl.Services
 	{
 		private readonly IHttpContextAccessor _httpContextAccessor;
 		private readonly IOpenIddictScopeManager _scopeManager;
-		private readonly Microsoft.AspNetCore.Identity.SignInManager<DbUser> _signInManager;
-		private readonly Microsoft.AspNetCore.Identity.UserManager<DbUser> _userManager;
+		private readonly SignInManager<DbUser> _signInManager;
+		private readonly UserManager<DbUser> _userManager;
+		private readonly IOptionsMonitor<IdentityOptions> _identityOptions;
 
 		public OpenIddictServer(
 			IHttpContextAccessor httpContextAccessor,
 			IOpenIddictScopeManager scopeManager,
-			Microsoft.AspNetCore.Identity.SignInManager<DbUser> signInManager,
-			Microsoft.AspNetCore.Identity.UserManager<DbUser> userManager)
+			SignInManager<DbUser> signInManager,
+			UserManager<DbUser> userManager,
+			IOptionsMonitor<IdentityOptions> identityOptions)
 		{
 			_httpContextAccessor = httpContextAccessor;
 			_scopeManager = scopeManager;
 			_signInManager = signInManager;
 			_userManager = userManager;
+			_identityOptions = identityOptions;
 		}
 
 		public async Task<IActionResult> Authorize(OidcAuthorize request, CancellationToken cancellationToken)
@@ -161,8 +167,17 @@ namespace Montr.Idx.Impl.Services
 			return new SignOutResult(OpenIddictServerAspNetCoreDefaults.AuthenticationScheme);
 		}
 
-		private static IEnumerable<string> GetDestinations(Claim claim, ClaimsPrincipal principal)
+		private IEnumerable<string> GetDestinations(Claim claim, ClaimsPrincipal principal)
 		{
+			var identityOptions = _identityOptions.CurrentValue;
+
+			// Never include the security stamp in the access and identity tokens, as it's a secret value.
+			// "AspNet.Identity.SecurityStamp"
+			if (claim.Type == identityOptions.ClaimsIdentity.SecurityStampClaimType)
+			{
+				yield break;
+			}
+
 			// Note: by default, claims are NOT automatically included in the access and identity tokens.
 			// To allow OpenIddict to serialize them, you must attach them a destination, that specifies
 			// whether they should be included in access tokens, in identity tokens or in both.
@@ -193,11 +208,9 @@ namespace Montr.Idx.Impl.Services
 
 					yield break;
 
-				// Never include the security stamp in the access and identity tokens, as it's a secret value.
-				case "AspNet.Identity.SecurityStamp": yield break;
-
 				default:
 					yield return Destinations.AccessToken;
+
 					yield break;
 			}
 		}
