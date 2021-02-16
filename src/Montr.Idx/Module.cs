@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Montr.Core;
-using Montr.Idx.Services;
 
 namespace Montr.Idx
 {
@@ -10,11 +9,6 @@ namespace Montr.Idx
 	{
 		public void ConfigureServices(IConfiguration configuration, IServiceCollection services)
 		{
-			services.AddSingleton<ICurrentUserProvider, DefaultCurrentUserProvider>();
-
-			services
-				.AddAuthentication()
-				.AddCookie(); // hangfire will not work without cookie
 		}
 	}
 }

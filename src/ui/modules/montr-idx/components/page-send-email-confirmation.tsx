@@ -33,9 +33,9 @@ export default function SendEmailConfirmation() {
 
 		fetchData();
 
-		return async () => {
-			await metadataService.abort();
-			// await accountService.abort();
+		return () => {
+			metadataService.abort();
+			// accountService.abort();
 		};
 	}, []);
 

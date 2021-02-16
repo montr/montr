@@ -34,9 +34,9 @@ export default function Login() {
 
 		fetchData();
 
-		return async () => {
-			await metadataService.abort();
-			await accountService.abort();
+		return () => {
+			metadataService.abort();
+			accountService.abort();
 		};
 	}, []);
 

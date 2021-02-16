@@ -20,6 +20,8 @@ namespace Montr.Idx.Impl
 	{
 		public void ConfigureServices(IConfiguration configuration, IServiceCollection services)
 		{
+			services.AddSingleton<ICurrentUserProvider, DefaultCurrentUserProvider>();
+
 			services.AddTransient<IStartupTask, RegisterMessageTemplateStartupTask>();
 
 			services.AddTransient<IEmailConfirmationService, EmailConfirmationService>();
@@ -27,6 +29,10 @@ namespace Montr.Idx.Impl
 			services.AddTransient<IUserManager, DefaultUserManager>();
 			services.AddTransient<ISignInManager, DefaultSignInManager>();
 			services.AddTransient<IOidcServer, OpenIddictServer>();
+
+			services
+				.AddAuthentication()
+				.AddCookie();
 
 			// todo: move from impl to idx?
 			services.Configure<IdentityOptions>(options =>
@@ -77,6 +83,37 @@ namespace Montr.Idx.Impl
 					typeof(LinqToDB.Identity.IdentityUserToken<Guid>),
 					typeof(LinqToDB.Identity.IdentityRoleClaim<Guid>))
 				.AddDefaultTokenProviders();
+
+			// ConfigureApplicationCookie should be after AddIdentity
+			// https://github.com/dotnet/aspnetcore/issues/5828
+			services.ConfigureApplicationCookie(options =>
+			{
+				options.LoginPath = ClientRoutes.Login;
+				options.LogoutPath = ClientRoutes.Logout;
+				// options.AccessDeniedPath = "/account/access-denied";
+
+				/*options.Events = new CookieAuthenticationEvents
+				{
+					OnRedirectToLogin = (ctx) =>
+					{
+						if (ctx.Request.Path.StartsWithSegments("/api") && ctx.Response.StatusCode == 200)
+						{
+							ctx.Response.StatusCode = 401;
+						}
+
+						return Task.CompletedTask;
+					},
+					OnRedirectToAccessDenied = (ctx) =>
+					{
+						if (ctx.Request.Path.StartsWithSegments("/api") && ctx.Response.StatusCode == 200)
+						{
+							ctx.Response.StatusCode = 403;
+						}
+
+						return Task.CompletedTask;
+					}
+				};*/
+			});
 
 			services.AddOpenIddict()
 				.AddCore(options =>
