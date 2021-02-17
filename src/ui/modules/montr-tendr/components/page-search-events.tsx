@@ -37,7 +37,7 @@ export default class SearchEvents extends React.Component<Props, State> {
 	fetchConfigCodes = async () => {
 		const templates = await this._eventTemplateService.list();
 
-		this.setState({ configCodes: templates.rows });
+		this.setState({ configCodes: templates?.rows });
 	};
 
 	render = () => {

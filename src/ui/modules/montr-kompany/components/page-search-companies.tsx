@@ -3,21 +3,21 @@ import { Link } from "react-router-dom";
 import { Page, Toolbar, DataBreadcrumb, PageHeader, DataTable, ButtonAdd } from "@montr-core/components";
 import { Api, Views } from "../module";
 
-interface IProps {
+interface Props {
 }
 
-interface IState {
+interface State {
 }
 
-export default class PageSearchCompanies extends React.Component<IProps, IState> {
+export default class PageSearchCompanies extends React.Component<Props, State> {
 	render = () => {
 		return (
 			<Page title={<>
 				<Toolbar float="right">
-					<Link to="/companies/new"><ButtonAdd /></Link>
+					<Link to="/companies/new"><ButtonAdd type="primary" /></Link>
 				</Toolbar>
 
-				<DataBreadcrumb items={[]} />
+				<DataBreadcrumb items={[{ name: "Компании" }]} />
 				<PageHeader>Компании</PageHeader>
 			</>}>
 
