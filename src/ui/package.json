@@ -34,7 +34,7 @@
 		"@babel/plugin-transform-runtime": "^7.12.10",
 		"@babel/preset-env": "^7.12.11",
 		"@babel/preset-react": "^7.12.10",
-		"@babel/preset-typescript": "^7.12.7",
+		"@babel/preset-typescript": "^7.12.17",
 		"@types/lodash": "^4.14.168",
 		"@types/react": "^17.0.0",
 		"@types/react-dom": "^17.0.0",
