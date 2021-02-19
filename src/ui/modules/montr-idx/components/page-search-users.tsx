@@ -1,7 +1,7 @@
 import React from "react";
 import { Link } from "react-router-dom";
 import { Page, Toolbar, DataBreadcrumb, PageHeader, DataTable, ButtonAdd } from "@montr-core/components";
-import { Api, Views } from "../module";
+import { Api, Patterns, Views } from "../module";
 
 interface Props {
 }
@@ -14,7 +14,7 @@ export default class PageSearchUsers extends React.Component<Props, State> {
 		return (
 			<Page title={<>
 				<Toolbar float="right">
-					<Link to="/users/new"><ButtonAdd type="primary" /></Link>
+					<Link to={Patterns.addUser}><ButtonAdd type="primary" /></Link>
 				</Toolbar>
 
 				<DataBreadcrumb items={[{ name: "Пользователи" }]} />

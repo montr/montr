@@ -30,6 +30,7 @@ export const Patterns = {
 	profileExternalLoginLink: "/profile/external-login/link",
 
 	searchUsers: "/users",
+	addUser: "/users/new",
 };
 
 export const Views = {
