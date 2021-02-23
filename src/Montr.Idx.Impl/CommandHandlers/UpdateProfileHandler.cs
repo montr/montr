@@ -9,6 +9,7 @@ using Montr.Core.Services;
 using Montr.Data.Linq2Db;
 using Montr.Idx.Commands;
 using Montr.Idx.Impl.Entities;
+using Montr.Idx.Impl.Services;
 
 namespace Montr.Idx.Impl.CommandHandlers
 {
@@ -43,11 +44,23 @@ namespace Montr.Idx.Impl.CommandHandlers
 
 				using (var db = _dbContextFactory.Create())
 				{
-					affected = await db.GetTable<DbUser>()
+					user.LastName = request.LastName;
+					user.FirstName = request.FirstName;
+
+					var result = await _userManager.UpdateAsync(user);
+
+					if (result.Succeeded == false)
+					{
+						return result.ToApiResult();
+					}
+
+					affected = 1;
+
+					/*affected = await db.GetTable<DbUser>()
 						.Where(x => x.Id == user.Id)
 						.Set(x => x.LastName, request.LastName)
 						.Set(x => x.FirstName, request.FirstName)
-						.UpdateAsync(cancellationToken);
+						.UpdateAsync(cancellationToken);*/
 				}
 
 				scope.Commit();

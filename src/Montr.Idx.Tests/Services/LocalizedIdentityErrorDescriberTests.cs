@@ -27,7 +27,7 @@ namespace Montr.Idx.Tests.Services
 
 				var result = (IdentityError)method.Invoke(instance, args);
 
-				Console.WriteLine($"\"{typeof(IdentityError).Name}.{result.Code}\": \"{result.Description}\",");
+				Console.WriteLine($"\"{nameof(IdentityError)}.{result.Code}\": \"{result.Description}\",");
 			}
 		}
 	}

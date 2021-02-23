@@ -70,7 +70,7 @@ namespace Montr.Kompany.Impl.CommandHandlers
 					Email = request.AdminEmail
 				};
 
-				var userResult = await _userManager.CreateUser(user, request.AdminPassword, cancellationToken);
+				var userResult = await _userManager.Create(user, request.AdminPassword, cancellationToken);
 
 				if (userResult.Success == false) return userResult;
 

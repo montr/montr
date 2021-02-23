@@ -20,6 +20,8 @@ namespace Montr.Idx.Models
 
 		public string PhoneNumber { get; set; }
 
+		public string SecurityStamp { get; set; }
+
 		public string Url { get; set; }
 	}
 }

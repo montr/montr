@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Montr.Core.Models;
+using Montr.Idx.Commands;
 using Montr.Idx.Models;
 using Montr.Idx.Queries;
 using Montr.Idx.Services;
@@ -27,6 +28,36 @@ namespace Montr.Idx.Controllers
 			// request.CompanyUid = await _currentCompanyProvider.GetCompanyUid();
 			request.CurrentUserUid = _currentUserProvider.GetUserUid();
 
+			return await _mediator.Send(request);
+		}
+
+		[HttpPost]
+		public async Task<User> Create(CreateUser request)
+		{
+			return await _mediator.Send(request);
+		}
+
+		[HttpPost]
+		public async Task<User> Get(GetUser request)
+		{
+			return await _mediator.Send(request);
+		}
+
+		[HttpPost]
+		public async Task<ApiResult> Insert(InsertUser request)
+		{
+			return await _mediator.Send(request);
+		}
+
+		[HttpPost]
+		public async Task<ApiResult> Update(UpdateUser request)
+		{
+			return await _mediator.Send(request);
+		}
+
+		[HttpPost]
+		public async Task<ApiResult> Delete(DeleteUser request)
+		{
 			return await _mediator.Send(request);
 		}
 	}
