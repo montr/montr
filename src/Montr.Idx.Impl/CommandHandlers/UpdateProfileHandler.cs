@@ -1,12 +1,9 @@
-﻿using System.Linq;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
-using LinqToDB;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Montr.Core.Models;
 using Montr.Core.Services;
-using Montr.Data.Linq2Db;
 using Montr.Idx.Commands;
 using Montr.Idx.Impl.Entities;
 using Montr.Idx.Impl.Services;
@@ -16,16 +13,13 @@ namespace Montr.Idx.Impl.CommandHandlers
 	public class UpdateProfileHandler : IRequestHandler<UpdateProfile, ApiResult>
 	{
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
-		private readonly IDbContextFactory _dbContextFactory;
 		private readonly UserManager<DbUser> _userManager;
 
 		public UpdateProfileHandler(
 			IUnitOfWorkFactory unitOfWorkFactory,
-			IDbContextFactory dbContextFactory,
 			UserManager<DbUser> userManager)
 		{
 			_unitOfWorkFactory = unitOfWorkFactory;
-			_dbContextFactory = dbContextFactory;
 			_userManager = userManager;
 		}
 
@@ -40,32 +34,19 @@ namespace Montr.Idx.Impl.CommandHandlers
 
 			using (var scope = _unitOfWorkFactory.Create())
 			{
-				int affected;
+				user.LastName = request.LastName;
+				user.FirstName = request.FirstName;
 
-				using (var db = _dbContextFactory.Create())
+				var result = await _userManager.UpdateAsync(user);
+
+				if (result.Succeeded == false)
 				{
-					user.LastName = request.LastName;
-					user.FirstName = request.FirstName;
-
-					var result = await _userManager.UpdateAsync(user);
-
-					if (result.Succeeded == false)
-					{
-						return result.ToApiResult();
-					}
-
-					affected = 1;
-
-					/*affected = await db.GetTable<DbUser>()
-						.Where(x => x.Id == user.Id)
-						.Set(x => x.LastName, request.LastName)
-						.Set(x => x.FirstName, request.FirstName)
-						.UpdateAsync(cancellationToken);*/
+					return result.ToApiResult();
 				}
 
 				scope.Commit();
 
-				return new ApiResult { AffectedRows = affected };
+				return new ApiResult();
 			}
 		}
 	}

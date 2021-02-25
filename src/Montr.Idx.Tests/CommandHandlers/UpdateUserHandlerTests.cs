@@ -36,21 +36,17 @@ namespace Montr.Idx.Tests.CommandHandlers
 					UserName = "test@montr.net",
 					Email = "test@montr.net"
 				}, cancellationToken);
+
 				// ReSharper disable once PossibleInvalidOperationException
 				var user = await userManager.Get(createResult.Uid.Value, cancellationToken);
+
+				user.FirstName = "John";
+				user.LastName = "Smith";
 
 				// act
 				var request = new UpdateUser
 				{
-					Item = new User
-					{
-						Uid = user.Uid,
-						UserName = user.UserName,
-						Email = user.Email,
-						FirstName = "John",
-						LastName = "Smith",
-						SecurityStamp = user.SecurityStamp
-					}
+					Item = user
 				};
 
 				var result = await handler.Handle(request, cancellationToken);

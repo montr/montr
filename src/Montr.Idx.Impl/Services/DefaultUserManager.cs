@@ -66,7 +66,12 @@ namespace Montr.Idx.Impl.Services
 
 		public async Task<ApiResult> Update(User user, CancellationToken cancellationToken)
 		{
-			var dbUser = Map(user);
+			var dbUser = await _userManager.FindByIdAsync(user.Uid.ToString());
+
+			dbUser.ConcurrencyStamp = user.ConcurrencyStamp;
+
+			dbUser.LastName = user.LastName;
+			dbUser.FirstName = user.FirstName;
 
 			var identityResult =  await _userManager.UpdateAsync(dbUser);
 
@@ -98,16 +103,28 @@ namespace Montr.Idx.Impl.Services
 
 		private static DbUser Map(User user)
 		{
-			return new()
+			var result = new DbUser
 			{
-				Id = user.Uid ?? Guid.NewGuid(),
 				UserName = user.UserName,
 				FirstName = user.FirstName,
 				LastName = user.LastName,
 				Email = user.Email,
-				PhoneNumber = user.PhoneNumber,
-				SecurityStamp = user.SecurityStamp
+				PhoneNumber = user.PhoneNumber
 			};
+
+			if (user.Uid == null)
+			{
+				// for new user set only new id...
+				result.Id = Guid.NewGuid();
+			}
+			else
+			{
+				// ... for existing user set old id and concurrency stamp
+				result.Id = Guid.NewGuid();
+				result.ConcurrencyStamp = user.ConcurrencyStamp;
+			}
+
+			return result;
 		}
 
 		private static User Map(DbUser dbUser)
@@ -120,7 +137,7 @@ namespace Montr.Idx.Impl.Services
 				LastName = dbUser.LastName,
 				Email = dbUser.Email,
 				PhoneNumber = dbUser.PhoneNumber,
-				SecurityStamp = dbUser.SecurityStamp
+				ConcurrencyStamp = dbUser.ConcurrencyStamp
 			};
 		}
 	}
