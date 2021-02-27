@@ -87,7 +87,9 @@ namespace Montr.Idx.Impl.Services
 
 		public async Task<ApiResult> Delete(User user, CancellationToken cancellationToken)
 		{
-			var dbUser = Map(user);
+			var dbUser = await _userManager.FindByIdAsync(user.Uid.ToString());
+
+			dbUser.ConcurrencyStamp = user.ConcurrencyStamp;
 
 			var identityResult =  await _userManager.DeleteAsync(dbUser);
 

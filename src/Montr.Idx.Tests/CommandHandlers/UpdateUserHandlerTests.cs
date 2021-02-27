@@ -26,7 +26,7 @@ namespace Montr.Idx.Tests.CommandHandlers
 			var identityServiceFactory = new IdentityServiceFactory(dbConnectionFactory);
 			var userManager = new DefaultUserManager(new NullLogger<DefaultUserManager>(), identityServiceFactory.UserManager);
 
-			var handler = new UpdateUserHandler(userManager);
+			var handler = new UpdateUserHandler(unitOfWorkFactory, userManager);
 
 			using (var _ = unitOfWorkFactory.Create())
 			{
@@ -44,12 +44,43 @@ namespace Montr.Idx.Tests.CommandHandlers
 				user.LastName = "Smith";
 
 				// act
-				var request = new UpdateUser
-				{
-					Item = user
-				};
+				var result = await handler.Handle(new UpdateUser { Item = user }, cancellationToken);
 
-				var result = await handler.Handle(request, cancellationToken);
+				// assert
+				Assert.IsTrue(result.Success, string.Join(",", result.Errors.SelectMany(x => x.Messages)));
+			}
+		}
+	}
+	[TestClass]
+	public class DeleteUserHandlerTests
+	{
+		[TestMethod]
+		public async Task Handle_NormalValues_DeleteUser()
+		{
+			// arrange
+			var cancellationToken = new CancellationToken();
+			var unitOfWorkFactory = new TransactionScopeUnitOfWorkFactory();
+			var dbConnectionFactory = new DbConnectionFactory();
+
+			var identityServiceFactory = new IdentityServiceFactory(dbConnectionFactory);
+			var userManager = new DefaultUserManager(new NullLogger<DefaultUserManager>(), identityServiceFactory.UserManager);
+
+			var handler = new DeleteUserHandler(unitOfWorkFactory, userManager);
+
+			using (var _ = unitOfWorkFactory.Create())
+			{
+				// arrange
+				var createResult = await userManager.Create(new User
+				{
+					UserName = "test@montr.net",
+					Email = "test@montr.net"
+				}, cancellationToken);
+
+				// ReSharper disable once PossibleInvalidOperationException
+				var user = await userManager.Get(createResult.Uid.Value, cancellationToken);
+
+				// act
+				var result = await handler.Handle(new DeleteUser { Item = user }, cancellationToken);
 
 				// assert
 				Assert.IsTrue(result.Success, string.Join(",", result.Errors.SelectMany(x => x.Messages)));

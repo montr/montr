@@ -26,7 +26,7 @@ namespace Montr.Idx.Tests.CommandHandlers
 			var identityServiceFactory = new IdentityServiceFactory(dbConnectionFactory);
 			var userManager = new DefaultUserManager(new NullLogger<DefaultUserManager>(), identityServiceFactory.UserManager);
 
-			var handler = new InsertUserHandler(userManager);
+			var handler = new InsertUserHandler(unitOfWorkFactory, userManager);
 
 			using (var _ = unitOfWorkFactory.Create())
 			{
