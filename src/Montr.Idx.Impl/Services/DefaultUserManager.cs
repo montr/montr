@@ -70,8 +70,11 @@ namespace Montr.Idx.Impl.Services
 
 			dbUser.ConcurrencyStamp = user.ConcurrencyStamp;
 
+			dbUser.UserName = user.UserName;
 			dbUser.LastName = user.LastName;
 			dbUser.FirstName = user.FirstName;
+			dbUser.Email = user.Email;
+			dbUser.PhoneNumber = user.PhoneNumber;
 
 			var identityResult =  await _userManager.UpdateAsync(dbUser);
 

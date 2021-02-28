@@ -19,7 +19,7 @@ namespace Montr.MasterData.Services
 
 		public Task Run(CancellationToken cancellationToken)
 		{
-			_registrator.Register("ClassifierTree/Form", viewId => new DataView
+			_registrator.Register("ClassifierTree/Form", _ => new DataView
 			{
 				Fields = new List<FieldMetadata>
 				{
@@ -28,7 +28,7 @@ namespace Montr.MasterData.Services
 				}
 			});
 
-			_registrator.Register("ClassifierGroup/Form", viewId => new DataView
+			_registrator.Register("ClassifierGroup/Form", _ => new DataView
 			{
 				Fields = new List<FieldMetadata>
 				{
@@ -38,7 +38,7 @@ namespace Montr.MasterData.Services
 				}
 			});
 
-			_registrator.Register("ClassifierLink/Form", viewId => new DataView
+			_registrator.Register("ClassifierLink/Form", _ => new DataView
 			{
 				Fields = new List<FieldMetadata>
 				{
@@ -46,7 +46,7 @@ namespace Montr.MasterData.Services
 				}
 			});
 
-			_registrator.Register("ClassifierType", viewId => new DataView
+			_registrator.Register("ClassifierType", _ => new DataView
 			{
 				Fields = new List<FieldMetadata>
 				{
@@ -71,62 +71,62 @@ namespace Montr.MasterData.Services
 				}
 			});
 
-			_registrator.Register("ClassifierType/Grid/Hierarchy", viewId => new DataView
+			_registrator.Register("ClassifierType/Grid/Hierarchy", _ => new DataView
 			{
 				Columns = new List<DataColumn>
 				{
-					new DataColumn { Key = "name", Name = "Наименование", Sortable = true, Width = 400 },
+					new() { Key = "name", Name = "Наименование", Sortable = true, Width = 400 },
 					// new DataColumn { Key = "default", Name = "По умолчанию", Width = 10 },
-					new DataColumn { Key = "code", Name = "Код", Sortable = true, Width = 10 },
+					new() { Key = "code", Name = "Код", Sortable = true, Width = 10 },
 				}
 			});
 
-			_registrator.Register("ClassifierType/Grid/", viewId => new DataView
+			_registrator.Register("ClassifierType/Grid/", _ => new DataView
 			{
 				Columns = new List<DataColumn>
 				{
-					new DataColumn { Key = "name", Name = "Наименование", Sortable = true, Width = 100, UrlProperty = "url" },
-					new DataColumn { Key = "description", Name = "Описание", Width = 200 },
-					// new DataColumn { Key = "hierarchyType", Name = "Иерархия", Width = 10 }
-					new DataColumn { Key = "code", Name = "Код", Sortable = true, Width = 60, UrlProperty = "url" },
+					new() { Key = "name", Name = "Наименование", Sortable = true, Width = 70, UrlProperty = "url" },
+					new() { Key = "description", Name = "Описание", Width = 200 },
+					// new() { Key = "hierarchyType", Name = "Иерархия", Width = 10 }
+					new() { Key = "code", Name = "Код", Sortable = true, Width = 60, UrlProperty = "url" },
 				}
 			});
 
-			_registrator.Register("Classifier/Grid", viewId => new DataView
+			_registrator.Register("Classifier/Grid", _ => new DataView
 			{
 				Columns = new List<DataColumn>
 				{
-					new DataColumn { Key = "code", Name = "Код", Sortable = true, Width = 10, UrlProperty = "url" },
-					new DataColumn { Key = "name", Name = "Наименование", Sortable = true, Width = 400 },
-					new DataColumn { Key = "statusCode", Name = "Статус", Sortable = true, Width = 30 },
+					new() { Key = "code", Name = "Код", Sortable = true, Width = 10, UrlProperty = "url" },
+					new() { Key = "name", Name = "Наименование", Sortable = true, Width = 400 },
+					new() { Key = "statusCode", Name = "Статус", Sortable = true, Width = 30 },
 				}
 			});
 
-			_registrator.Register("ClassifierLink/Grid", viewId => new DataView
+			_registrator.Register("ClassifierLink/Grid", _ => new DataView
 			{
 				Columns = new List<DataColumn>
 				{
-					new DataColumn { Key = "hierarchy", Name = "Иерархия", Width = 300, Path = "tree.name" },
-					new DataColumn { Key = "groupCode", Name = "Код группы", Width = 10, Path = "group.code" },
-					new DataColumn { Key = "groupName", Name = "Группа", Width = 400, Path = "group.name" }
+					new() { Key = "hierarchy", Name = "Иерархия", Width = 300, Path = "tree.name" },
+					new() { Key = "groupCode", Name = "Код группы", Width = 10, Path = "group.code" },
+					new() { Key = "groupName", Name = "Группа", Width = 400, Path = "group.name" }
 				}
 			});
 
-			_registrator.Register("Numerator/Grid", viewId => new DataView
+			_registrator.Register("Numerator/Grid", _ => new DataView
 			{
 				Columns = new List<DataColumn>
 				{
-					new DataColumn { Key = "code", Name = "Код", Sortable = true, UrlProperty = "url", Width = 200 },
-					new DataColumn { Key = "name", Name = "Наименование", Sortable = true, UrlProperty = "url", Width = 200 },
-					new DataColumn { Key = "pattern", Name = "Формат номера", UrlProperty = "url", Width = 150 },
-					new DataColumn { Key = "entityTypeCode", Name = "Применимость", Sortable = true, Width = 30 },
-					new DataColumn { Key = "periodicity", Name = "Периодичность", Sortable = true, Width = 30 },
-					new DataColumn { Key = "isActive", Name = "Active", Width = 10, Type = BooleanField.TypeCode },
-					new DataColumn { Key = "isSystem", Name = "System", Width = 10, Type = BooleanField.TypeCode },
+					new() { Key = "code", Name = "Код", Sortable = true, UrlProperty = "url", Width = 200 },
+					new() { Key = "name", Name = "Наименование", Sortable = true, UrlProperty = "url", Width = 200 },
+					new() { Key = "pattern", Name = "Формат номера", UrlProperty = "url", Width = 150 },
+					new() { Key = "entityTypeCode", Name = "Применимость", Sortable = true, Width = 30 },
+					new() { Key = "periodicity", Name = "Периодичность", Sortable = true, Width = 30 },
+					new() { Key = "isActive", Name = "Active", Width = 10, Type = BooleanField.TypeCode },
+					new() { Key = "isSystem", Name = "System", Width = 10, Type = BooleanField.TypeCode },
 				}
 			});
 
-			_registrator.Register("Numerator/Form", viewId => new DataView
+			_registrator.Register("Numerator/Form", _ => new DataView
 			{
 				Fields = new List<FieldMetadata>
 				{
@@ -163,12 +163,12 @@ namespace Montr.MasterData.Services
 				}
 			});
 
-			_registrator.Register("NumeratorEntity/Grid", viewId => new DataView
+			_registrator.Register("NumeratorEntity/Grid", _ => new DataView
 			{
 				Columns = new List<DataColumn>
 				{
-					new DataColumn { Key = "entityName", Name = "Тип" },
-					new DataColumn { Key = "isAutoNumbering", Name = "Автонумерация", Type = BooleanField.TypeCode }
+					new() { Key = "entityName", Name = "Тип" },
+					new() { Key = "isAutoNumbering", Name = "Автонумерация", Type = BooleanField.TypeCode }
 				}
 			});
 

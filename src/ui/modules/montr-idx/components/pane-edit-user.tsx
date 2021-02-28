@@ -62,15 +62,20 @@ export class PaneEditUser extends React.Component<Props, State> {
         await this._formRef.current.submit();
     };
 
-    handleSubmit = async (values: IDataField): Promise<ApiResult> => {
-        const { uid, onSuccess } = this.props;
+    handleSubmit = async (values: User): Promise<ApiResult> => {
+        const { uid, onSuccess } = this.props,
+            { data } = this.state;
 
-        const item = { ...values } as User;
+        const item = {
+            uid,
+            concurrencyStamp: data.concurrencyStamp,
+            ...values
+        } as User;
 
         let result;
 
         if (uid) {
-            result = await this._userService.update({ item: { uid, ...item } });
+            result = await this._userService.update({ item });
         }
         else {
             result = await this._userService.insert({ item });

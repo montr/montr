@@ -118,9 +118,11 @@ namespace Montr.Metadata.Services
 			{
 				result.Fields = new List<FieldMetadata>
 				{
-					new TextField { Key = "email", Name = "Email", Required = true },
+					new TextField { Key = "userName", Name = "Username", Required = true },
 					new TextField { Key = "firstName", Name = "First Name", Required = true },
-					new TextField { Key = "lastName", Name = "Last Name", Required = true }
+					new TextField { Key = "lastName", Name = "Last Name", Required = true },
+					new TextField { Key = "email", Name = "Email", Required = true },
+					new TextField { Key = "phoneNumber", Name = "Phone", Required = true },
 				};
 			}
 
