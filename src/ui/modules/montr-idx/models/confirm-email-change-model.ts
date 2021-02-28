@@ -1,4 +1,4 @@
-export interface IConfirmEmailChangeModel {
+export interface ConfirmEmailChangeModel {
 	userId?: string;
 	email?: string;
 	code?: string;

@@ -7,6 +7,12 @@ import "./index.less";
 
 export const Api = {
 	metadataList: `${Constants.apiURL}/metadata/list`,
+	metadataView: `${Constants.apiURL}/metadata/view`,
+	metadataFieldTypes: `${Constants.apiURL}/metadata/fieldTypes`,
+	metadataGet: `${Constants.apiURL}/metadata/get`,
+	metadataInsert: `${Constants.apiURL}/metadata/insert`,
+	metadataUpdate: `${Constants.apiURL}/metadata/update`,
+	metadataDelete: `${Constants.apiURL}/metadata/delete`,
 
 	setupSave: `${Constants.apiURL}/setup/save`,
 
@@ -30,6 +36,7 @@ export const Patterns = {
 
 export const Views = {
 	metadataList: "Metadata/Grid",
+	metadataEdit: "Metadata/Edit",
 
 	setupForm: "Setup/Form",
 

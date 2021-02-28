@@ -7,19 +7,19 @@ import { OperationService } from "@montr-core/services";
 import { ProfileService } from "../services";
 import { Patterns } from "../module";
 
-interface IProps extends RouteComponentProps {
+interface Props extends RouteComponentProps {
 }
 
-interface IState {
+interface State {
 	loading: boolean;
 }
 
-export default class PaneExternalLoginLink extends React.Component<IProps, IState> {
+export default class PaneExternalLoginLink extends React.Component<Props, State> {
 
 	private _operation = new OperationService();
 	private _profileService = new ProfileService();
 
-	constructor(props: IProps) {
+	constructor(props: Props) {
 		super(props);
 
 		this.state = {

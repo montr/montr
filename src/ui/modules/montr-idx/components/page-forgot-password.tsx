@@ -3,15 +3,15 @@ import { useLocalStorage, Page, DataForm, Icon } from "@montr-core/components";
 import { IDataField, ApiResult } from "@montr-core/models";
 import { Spin } from "antd";
 import { MetadataService } from "@montr-core/services";
-import { ILoginModel } from "../models";
+import { LoginModel } from "../models";
 import { useTranslation } from "react-i18next";
 import { AccountService } from "../services/account-service";
 import { Views, Patterns, StorageNames } from "../module";
 import { Link } from "react-router-dom";
 
-interface IState {
+interface State {
 	loading: boolean;
-	data?: ILoginModel;
+	data?: LoginModel;
 	fields?: IDataField[];
 }
 
@@ -21,7 +21,7 @@ export default function ForgotPassword() {
 		accountService = new AccountService();
 
 	const { t } = useTranslation("idx"),
-		[state, setState] = React.useState<IState>({ loading: true }),
+		[state, setState] = React.useState<State>({ loading: true }),
 		[email, setEmail] = useLocalStorage(StorageNames.email, "");
 
 	React.useEffect(() => {
@@ -39,11 +39,11 @@ export default function ForgotPassword() {
 		};
 	}, []);
 
-	async function handleChange(values: ILoginModel) {
+	async function handleChange(values: LoginModel) {
 		setEmail(values.email);
 	};
 
-	async function handleSubmit(values: ILoginModel): Promise<ApiResult> {
+	async function handleSubmit(values: LoginModel): Promise<ApiResult> {
 		return await accountService.forgotPassword(values);
 	};
 

@@ -1,4 +1,4 @@
-export interface IExternalRegisterModel {
+export interface ExternalRegisterModel {
 	provider?: string;
 	returnUrl?: string;
 	email?: string;

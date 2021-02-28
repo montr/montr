@@ -12,3 +12,4 @@ export * from "./reset-password-model";
 export * from "./send-email-confirmation-model";
 export * from "./set-password-model";
 export * from "./user-login-info";
+export * from "./user";

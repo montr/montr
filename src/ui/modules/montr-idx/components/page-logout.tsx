@@ -4,18 +4,18 @@ import { Spin } from "antd";
 import { Translation } from "react-i18next";
 import { AccountService } from "../services/account-service";
 
-interface IProps {
+interface Props {
 }
 
-interface IState {
+interface State {
 	loading: boolean;
 }
 
-export default class Logout extends React.Component<IProps, IState> {
+export default class Logout extends React.Component<Props, State> {
 
 	private _accountService = new AccountService();
 
-	constructor(props: IProps) {
+	constructor(props: Props) {
 		super(props);
 
 		this.state = {

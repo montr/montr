@@ -1,9 +1,9 @@
 import * as React from "react";
+import { Translation, WithTranslation, withTranslation } from "react-i18next";
 import { Toolbar } from "./toolbar";
 import { IDataField, DataResult, Guid } from "../models";
 import { MetadataService, OperationService } from "../services";
 import { DataTable, DataTableUpdateToken, ButtonAdd, PaneEditMetadata, ButtonDelete } from ".";
-import { Translation, WithTranslation, withTranslation } from "react-i18next";
 import { Api, Views } from "../module";
 
 interface Props extends WithTranslation {

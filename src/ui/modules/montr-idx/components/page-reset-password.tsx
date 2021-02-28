@@ -6,27 +6,27 @@ import { Translation } from "react-i18next";
 import { AccountService } from "../services/account-service";
 import { Patterns, Views } from "../module";
 import { MetadataService } from "@montr-core/services";
-import { IResetPasswordModel } from "../models";
+import { ResetPasswordModel } from "../models";
 import { ApiResult, IDataField } from "@montr-core/models";
 
-interface IRouteProps {
+interface RouteProps {
 	code: string;
 }
 
-interface IProps extends RouteComponentProps<IRouteProps> {
+interface Props extends RouteComponentProps<RouteProps> {
 }
 
-interface IState {
+interface State {
 	loading: boolean;
 	fields?: IDataField[];
 }
 
-export default class ResetPassword extends React.Component<IProps, IState> {
+export default class ResetPassword extends React.Component<Props, State> {
 
 	private _metadataService = new MetadataService();
 	private _accountService = new AccountService();
 
-	constructor(props: IProps) {
+	constructor(props: Props) {
 		super(props);
 
 		this.state = {
@@ -49,7 +49,7 @@ export default class ResetPassword extends React.Component<IProps, IState> {
 		this.setState({ loading: false, fields: dataView.fields });
 	};
 
-	resetPassword = async (values: IResetPasswordModel): Promise<ApiResult> => {
+	resetPassword = async (values: ResetPasswordModel): Promise<ApiResult> => {
 		const { code } = this.props.match.params;
 
 		return await this._accountService.resetPassword({ code, ...values });

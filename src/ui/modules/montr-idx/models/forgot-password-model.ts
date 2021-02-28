@@ -1,3 +1,3 @@
-export interface IForgotPasswordModel {
+export interface ForgotPasswordModel {
 	email?: string;
 }

@@ -1,4 +1,4 @@
-export interface IProfileModel {
+export interface ProfileModel {
 	userName?: string;
 	hasPassword?: boolean;
 	isEmailConfirmed?: boolean;

@@ -3,7 +3,7 @@ import { Page, DataForm, Icon } from "@montr-core/components";
 import { IDataField, ApiResult } from "@montr-core/models";
 import { Spin, Divider } from "antd";
 import { MetadataService } from "@montr-core/services";
-import { IRegisterModel } from "../models";
+import { RegisterModel } from "../models";
 import { Translation } from "react-i18next";
 import { AccountService } from "../services/account-service";
 import { ExternalLoginForm } from ".";
@@ -15,7 +15,7 @@ interface Props {
 
 interface State {
 	loading: boolean;
-	data: IRegisterModel;
+	data: RegisterModel;
 	fields?: IDataField[];
 }
 
@@ -48,7 +48,7 @@ export default class Register extends React.Component<Props, State> {
 		this.setState({ loading: false, fields: dataView.fields });
 	};
 
-	save = async (values: IRegisterModel): Promise<ApiResult> => {
+	save = async (values: RegisterModel): Promise<ApiResult> => {
 		return await this._accountService.register(values);
 	};
 

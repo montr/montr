@@ -4,12 +4,12 @@ import { useTranslation } from "react-i18next";
 import { useLocalStorage, Page, DataForm, Icon } from "@montr-core/components";
 import { IDataField, ApiResult } from "@montr-core/models";
 import { MetadataService } from "@montr-core/services";
-import { ISendEmailConfirmationModel } from "../models";
+import { SendEmailConfirmationModel } from "../models";
 import { AccountService } from "../services/account-service";
 import { Views, Patterns, StorageNames } from "../module";
 import { Link } from "react-router-dom";
 
-interface IState {
+interface State {
 	loading: boolean;
 	fields?: IDataField[];
 }
@@ -19,7 +19,7 @@ export default function SendEmailConfirmation() {
 	const accountService = new AccountService();
 
 	const { t } = useTranslation("idx"),
-		[state, setState] = React.useState<IState>({ loading: true }),
+		[state, setState] = React.useState<State>({ loading: true }),
 		[email, setEmail] = useLocalStorage(StorageNames.email, "");
 
 	React.useEffect(() => {
@@ -39,11 +39,11 @@ export default function SendEmailConfirmation() {
 		};
 	}, []);
 
-	async function handleChange(values: ISendEmailConfirmationModel) {
+	async function handleChange(values: SendEmailConfirmationModel) {
 		setEmail(values.email);
 	};
 
-	async function handleSubmit(values: ISendEmailConfirmationModel): Promise<ApiResult> {
+	async function handleSubmit(values: SendEmailConfirmationModel): Promise<ApiResult> {
 		return await accountService.sendEmailConfirmation(values);
 	};
 

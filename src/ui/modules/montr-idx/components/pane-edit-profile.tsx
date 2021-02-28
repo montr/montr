@@ -1,28 +1,28 @@
 import React from "react";
 import { IDataField, ApiResult } from "@montr-core/models";
 import { MetadataService } from "@montr-core/services";
-import { IProfileModel } from "../models";
+import { ProfileModel } from "../models";
 import { ProfileService } from "../services";
 import { Views } from "../module";
 import { PageHeader, DataForm } from "@montr-core/components";
 import { Translation } from "react-i18next";
 import { Spin } from "antd";
 
-interface IProps {
+interface Props {
 }
 
-interface IState {
+interface State {
 	loading: boolean;
-	data: IProfileModel;
+	data: ProfileModel;
 	fields?: IDataField[];
 }
 
-export default class PaneEditProfile extends React.Component<IProps, IState> {
+export default class PaneEditProfile extends React.Component<Props, State> {
 
 	private _metadataService = new MetadataService();
 	private _profileService = new ProfileService();
 
-	constructor(props: IProps) {
+	constructor(props: Props) {
 		super(props);
 
 		this.state = {
@@ -48,7 +48,7 @@ export default class PaneEditProfile extends React.Component<IProps, IState> {
 		this.setState({ loading: false, data, fields: dataView.fields });
 	};
 
-	save = async (values: IProfileModel): Promise<ApiResult> => {
+	save = async (values: ProfileModel): Promise<ApiResult> => {
 		return await this._profileService.update(values);
 	};
 

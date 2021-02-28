@@ -2,28 +2,28 @@ import React from "react";
 import { Translation } from "react-i18next";
 import { PageHeader, Icon } from "@montr-core/components";
 import { OperationService } from "@montr-core/services";
-import { IProfileModel, IUserLoginInfo, IAuthScheme } from "../models";
+import { ProfileModel, UserLoginInfo, AuthScheme } from "../models";
 import { ProfileService, AccountService } from "../services";
 import { Spin, List, Button, Avatar } from "antd";
 import { Api } from "../module";
 
-interface IProps {
+interface Props {
 }
 
-interface IState {
+interface State {
 	loading: boolean;
-	profile: IProfileModel;
-	authSchemes: IAuthScheme[];
-	externalLogins: IUserLoginInfo[];
+	profile: ProfileModel;
+	authSchemes: AuthScheme[];
+	externalLogins: UserLoginInfo[];
 }
 
-export default class PaneExternalLogins extends React.Component<IProps, IState> {
+export default class PaneExternalLogins extends React.Component<Props, State> {
 
 	private _operation = new OperationService();
 	private _accountService = new AccountService();
 	private _profileService = new ProfileService();
 
-	constructor(props: IProps) {
+	constructor(props: Props) {
 		super(props);
 
 		this.state = {
@@ -52,7 +52,7 @@ export default class PaneExternalLogins extends React.Component<IProps, IState> 
 		this.setState({ loading: false, profile, authSchemes, externalLogins });
 	};
 
-	handleRemoveLogin = async (info: IUserLoginInfo) => {
+	handleRemoveLogin = async (info: UserLoginInfo) => {
 		await this._operation.execute(async () => {
 			const result = await this._profileService.removeLogin(info);
 			if (result.success) {

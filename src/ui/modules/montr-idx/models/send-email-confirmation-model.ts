@@ -1,3 +1,3 @@
-export interface ISendEmailConfirmationModel {
+export interface SendEmailConfirmationModel {
 	email?: string;
 }

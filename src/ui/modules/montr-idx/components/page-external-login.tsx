@@ -3,7 +3,7 @@ import { Page, DataForm, Icon } from "@montr-core/components";
 import { Spin } from "antd";
 import { Translation, Trans } from "react-i18next";
 import { AccountService } from "../services/account-service";
-import { IExternalRegisterModel } from "../models";
+import { ExternalRegisterModel } from "../models";
 import { MetadataService, NavigationService, OperationService } from "@montr-core/services";
 import { RouteComponentProps } from "react-router";
 import { Patterns, Views } from "../module";
@@ -11,23 +11,23 @@ import { IDataField, ApiResult } from "@montr-core/models";
 import { Constants } from "@montr-core/constants";
 import { Link } from "react-router-dom";
 
-interface IProps extends RouteComponentProps {
+interface Props extends RouteComponentProps {
 }
 
-interface IState {
+interface State {
 	loading: boolean;
-	data?: IExternalRegisterModel;
+	data?: ExternalRegisterModel;
 	fields?: IDataField[];
 }
 
-export default class ExternalLogin extends React.Component<IProps, IState> {
+export default class ExternalLogin extends React.Component<Props, State> {
 
 	private _operation = new OperationService();
 	private _navigation = new NavigationService();
 	private _metadataService = new MetadataService();
 	private _accountService = new AccountService();
 
-	constructor(props: IProps) {
+	constructor(props: Props) {
 		super(props);
 
 		this.state = {
@@ -66,7 +66,7 @@ export default class ExternalLogin extends React.Component<IProps, IState> {
 		});
 	};
 
-	handleSubmit = async (values: IExternalRegisterModel): Promise<ApiResult> => {
+	handleSubmit = async (values: ExternalRegisterModel): Promise<ApiResult> => {
 		const { data } = this.state;
 
 		return await this._accountService.externalRegister({

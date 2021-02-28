@@ -5,23 +5,23 @@ import { RouteComponentProps } from "react-router-dom";
 import { Translation } from "react-i18next";
 import { AccountService } from "../services/account-service";
 
-interface IRouteProps {
+interface RouteProps {
 	userId: string;
 	code: string;
 }
 
-interface IProps extends RouteComponentProps<IRouteProps> {
+interface Props extends RouteComponentProps<RouteProps> {
 }
 
-interface IState {
+interface State {
 	loading: boolean;
 }
 
-export default class ConfirmEmail extends React.Component<IProps, IState> {
+export default class ConfirmEmail extends React.Component<Props, State> {
 
 	private _accountService = new AccountService();
 
-	constructor(props: IProps) {
+	constructor(props: Props) {
 		super(props);
 
 		this.state = {

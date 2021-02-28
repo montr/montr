@@ -3,19 +3,19 @@ import { Translation } from "react-i18next";
 import { Page, Toolbar, DataBreadcrumb, DataMenu, RouteList } from "@montr-core/components";
 import { ProfileRoutes } from "../module";
 
-interface IProps {
+interface Props {
 }
 
-interface IState {
+interface State {
 	mode: "inline" | "horizontal";
 	selectedKey: string;
 }
 
-export default class Profile extends React.Component<IProps, IState> {
+export default class Profile extends React.Component<Props, State> {
 
 	private _main: HTMLDivElement | undefined = undefined;
 
-	constructor(props: IProps) {
+	constructor(props: Props) {
 		super(props);
 
 		this.state = {

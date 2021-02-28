@@ -1,11 +1,10 @@
 import React from "react";
-import { DataForm, ButtonSave, Icon } from ".";
+import { Spin, Button, Popover, Switch, List, Drawer } from "antd";
+import { FormInstance } from "antd/lib/form";
+import { DataForm, ButtonSave, Icon, Toolbar, ButtonCancel } from ".";
 import { MetadataService, DataHelper } from "../services";
 import { IDataField, ApiResult, Guid } from "../models";
-import { Spin, Button, Popover, Switch, List, Drawer } from "antd";
-import { Toolbar } from "./toolbar";
-import { ButtonCancel } from "./buttons";
-import { FormInstance } from "antd/lib/form";
+import { Views } from "../module";
 
 interface Props {
 	entityTypeCode: string;
@@ -57,7 +56,7 @@ export class PaneEditMetadata extends React.Component<Props, State> {
 			? await this._metadataService.get(entityTypeCode, entityUid, uid)
 			: { type: DefaultFieldType };
 
-		const dataView = await this._metadataService.load("Metadata/Edit");
+		const dataView = await this._metadataService.load(Views.metadataEdit);
 
 		this.setState({
 			loading: false,

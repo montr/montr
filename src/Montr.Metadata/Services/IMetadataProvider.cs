@@ -106,11 +106,21 @@ namespace Montr.Metadata.Services
 			{
 				result.Columns = new List<DataColumn>
 				{
-					new DataColumn { Key = "userName", Name = "Username", Sortable = true, Width = 400, UrlProperty = "url" },
-					new DataColumn { Key = "firstName", Name = "First Name", Sortable = true, Width = 400, UrlProperty = "url" },
-					new DataColumn { Key = "lastName", Name = "Last Name", Sortable = true, Width = 400, UrlProperty = "url" },
-					new DataColumn { Key = "email", Name = "Email", Sortable = true, Width = 400 },
-					new DataColumn { Key = "phoneNumber", Name = "Phone", Sortable = true, Width = 400 },
+					new DataColumn { Key = "userName", Name = "Username", Sortable = true, Width = 200, UrlProperty = "url" },
+					new DataColumn { Key = "firstName", Name = "First Name", Sortable = true, Width = 200, UrlProperty = "url" },
+					new DataColumn { Key = "lastName", Name = "Last Name", Sortable = true, Width = 200, UrlProperty = "url" },
+					new DataColumn { Key = "email", Name = "Email", Sortable = true, Width = 200 },
+					new DataColumn { Key = "phoneNumber", Name = "Phone", Sortable = true, Width = 200 },
+				};
+			}
+
+			if (viewId == "User/Edit")
+			{
+				result.Fields = new List<FieldMetadata>
+				{
+					new TextField { Key = "email", Name = "Email", Required = true },
+					new TextField { Key = "firstName", Name = "First Name", Required = true },
+					new TextField { Key = "lastName", Name = "Last Name", Required = true }
 				};
 			}
 
@@ -118,9 +128,9 @@ namespace Montr.Metadata.Services
 			{
 				result.Columns = new List<DataColumn>
 				{
-					new DataColumn { Key = "name", Name = "Наименование", Sortable = true, Width = 400, UrlProperty = "url" },
-					new DataColumn { Key = "configCode", Name = "ConfigCode", Sortable = true, Width = 200 },
-					new DataColumn { Key = "statusCode", Name = "StatusCode", Sortable = true, Width = 200 }
+					new DataColumn { Key = "name", Name = "Наименование", Sortable = true, Width = 200, UrlProperty = "url" },
+					new DataColumn { Key = "configCode", Name = "ConfigCode", Sortable = true, Width = 100 },
+					new DataColumn { Key = "statusCode", Name = "StatusCode", Sortable = true, Width = 100 }
 				};
 			}
 

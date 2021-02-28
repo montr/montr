@@ -1,3 +1,3 @@
-export interface IResetPasswordModel {
+export interface ResetPasswordModel {
 	code?: string;
 }

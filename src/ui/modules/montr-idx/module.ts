@@ -10,7 +10,12 @@ export const Api = {
 	authLinkLogin: `${Constants.apiURL}/authentication/linkLogin`,
 	authExternalLogin: `${Constants.apiURL}/authentication/externalLogin`,
 
+	userCreate: `${Constants.apiURL}/user/create`,
+	userGet: `${Constants.apiURL}/user/get`,
 	userList: `${Constants.apiURL}/user/list`,
+	userInsert: `${Constants.apiURL}/user/insert`,
+	userUpdate: `${Constants.apiURL}/user/update`,
+	userDelete: `${Constants.apiURL}/user/delete`,
 };
 
 export const Patterns = {
@@ -46,6 +51,7 @@ export const Views = {
 	formChangePassword: "ChangePassword/Form",
 	formSetPassword: "SetPassword/Form",
 
+	userEdit: "User/Edit",
 	gridSearchUsers: "UserSearch/Grid",
 };
 

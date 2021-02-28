@@ -5,12 +5,12 @@ import { useTranslation } from "react-i18next";
 import { useLocalStorage, Page, DataForm } from "@montr-core/components";
 import { IDataField, ApiResult } from "@montr-core/models";
 import { MetadataService, NavigationService } from "@montr-core/services";
-import { ILoginModel } from "../models";
+import { LoginModel } from "../models";
 import { AccountService } from "../services/account-service";
 import { ExternalLoginForm } from ".";
 import { Views, Patterns, StorageNames } from "../module";
 
-interface IState {
+interface State {
 	loading: boolean;
 	fields?: IDataField[];
 }
@@ -22,7 +22,7 @@ export default function Login() {
 		accountService = new AccountService();
 
 	const { t } = useTranslation("idx"),
-		[state, setState] = React.useState<IState>({ loading: true }),
+		[state, setState] = React.useState<State>({ loading: true }),
 		[email, setEmail] = useLocalStorage(StorageNames.email, "");
 
 	React.useEffect(() => {
@@ -40,11 +40,11 @@ export default function Login() {
 		};
 	}, []);
 
-	async function handleChange(values: ILoginModel) {
+	async function handleChange(values: LoginModel) {
 		setEmail(values.email);
 	};
 
-	async function handleSubmit(values: ILoginModel): Promise<ApiResult> {
+	async function handleSubmit(values: LoginModel): Promise<ApiResult> {
 		return await accountService.login({
 			returnUrl: navigation.getReturnUrlParameter() ?? "/",
 			...values
@@ -53,7 +53,7 @@ export default function Login() {
 
 	const { loading, fields } = state;
 
-	const data: ILoginModel = { email, rememberMe: true };
+	const data: LoginModel = { email, rememberMe: true };
 
 	return (
 		<Page title={t("page.login.title")}>

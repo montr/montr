@@ -1,5 +1,5 @@
 import React from "react";
-import { IAuthScheme } from "../models";
+import { AuthScheme } from "../models";
 import { Button, Spin, Avatar } from "antd";
 import { NavigationService } from "@montr-core/services";
 import { AccountService } from "../services/account-service";
@@ -8,20 +8,20 @@ import { Translation } from "react-i18next";
 import { Api } from "../module";
 import { Icon } from "@montr-core/components";
 
-interface IProps {
+interface Props {
 }
 
-interface IState {
+interface State {
 	loading: boolean;
-	authSchemes: IAuthScheme[];
+	authSchemes: AuthScheme[];
 }
 
-export class ExternalLoginForm extends React.Component<IProps, IState> {
+export class ExternalLoginForm extends React.Component<Props, State> {
 
 	private _navigation = new NavigationService();
 	private _accountService = new AccountService();
 
-	constructor(props: IProps) {
+	constructor(props: Props) {
 		super(props);
 
 		this.state = {

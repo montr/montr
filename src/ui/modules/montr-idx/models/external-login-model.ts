@@ -1,4 +1,4 @@
-export interface IExternalLoginModel {
+export interface ExternalLoginModel {
 	returnUrl?: string;
 	remoteError?: string;
 }

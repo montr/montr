@@ -3,31 +3,31 @@ import { Translation } from "react-i18next";
 import { Button, List, Tooltip } from "antd";
 import { PageHeader, Icon } from "@montr-core/components";
 import { OperationService } from "@montr-core/services";
-import { IProfileModel } from "../models";
+import { ProfileModel } from "../models";
 import { ModalChangePassword, ModalSetPassword, ModalChangeEmail } from "./";
 import { ProfileService, AccountService } from "../services";
 import { ModalChangePhone } from "./modal-change-phone";
 
 declare const ModalTypes: ["changePassword", "setPassword", "changeEmail", "changePhone"];
 
-interface IProps {
+interface Props {
 }
 
-interface IState {
+interface State {
 	loading: boolean;
-	data: IProfileModel;
+	data: ProfileModel;
 	displayModal: (typeof ModalTypes)[number] | boolean;
 	sendEmailConfirmationDisabled: boolean;
 	sendPhoneConfirmationDisabled: boolean;
 }
 
-export default class PaneSecurity extends React.Component<IProps, IState> {
+export default class PaneSecurity extends React.Component<Props, State> {
 
 	private _operation = new OperationService();
 	private _accountService = new AccountService();
 	private _profileService = new ProfileService();
 
-	constructor(props: IProps) {
+	constructor(props: Props) {
 		super(props);
 
 		this.state = {

@@ -5,29 +5,29 @@ import { IDataField, ApiResult } from "@montr-core/models";
 import { DataForm } from "@montr-core/components";
 import { MetadataService } from "@montr-core/services";
 import { ProfileService } from "../services";
-import { IProfileModel, IChangePasswordModel } from "../models";
+import { ProfileModel, ChangePasswordModel } from "../models";
 import { Views } from "../module";
 import { FormInstance } from "antd/lib/form";
 
-interface IProps {
+interface Props {
 	onSuccess?: () => void;
 	onCancel?: () => void;
 }
 
-interface IState {
+interface State {
 	loading: boolean;
-	data: IProfileModel;
+	data: ProfileModel;
 	fields?: IDataField[];
 }
 
-export class ModalChangePassword extends React.Component<IProps, IState> {
+export class ModalChangePassword extends React.Component<Props, State> {
 
 	private _metadataService = new MetadataService();
 	private _profileService = new ProfileService();
 
 	private _formRef = React.createRef<FormInstance>();
 
-	constructor(props: IProps) {
+	constructor(props: Props) {
 		super(props);
 
 		this.state = {
@@ -61,7 +61,7 @@ export class ModalChangePassword extends React.Component<IProps, IState> {
 		if (this.props.onCancel) this.props.onCancel();
 	};
 
-	handleSubmit = async (values: IChangePasswordModel): Promise<ApiResult> => {
+	handleSubmit = async (values: ChangePasswordModel): Promise<ApiResult> => {
 		const { onSuccess } = this.props;
 
 		const result = await this._profileService.changePassword(values);
