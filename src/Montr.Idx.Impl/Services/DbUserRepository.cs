@@ -58,7 +58,7 @@ namespace Montr.Idx.Impl.Services
 					LastName = x.LastName,
 					Email = x.Email,
 					PhoneNumber = x.PhoneNumber,
-					Url = $"/users/{x.Id}"
+					Url = $"/users/edit/{x.Id}"
 				})
 				.ToListAsync(cancellationToken);
 		}

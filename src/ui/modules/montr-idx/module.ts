@@ -36,6 +36,7 @@ export const Patterns = {
 
 	searchUsers: "/users",
 	addUser: "/users/new",
+	editUser: "/users/edit/:uid/:tabKey?",
 };
 
 export const Views = {
@@ -69,6 +70,7 @@ AppRouteRegistry.add([
 	{ path: Patterns.profile, component: React.lazy(() => import("./components/page-profile")) },
 
 	{ path: Patterns.searchUsers, exact: true, component: React.lazy(() => import("./components/page-search-users")) },
+	{ path: Patterns.editUser, exact: true, component: React.lazy(() => import("./components/page-edit-user")) }
 ]);
 
 export const ProfileRoutes = [
