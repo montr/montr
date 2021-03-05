@@ -60,7 +60,6 @@ class _EditEvent extends React.Component<Props, State> {
 
 		const data = await this._eventService.get(this.props.match.params.uid);
 
-
 		this.setState({ loading: false, configCodes: templates.rows, dataView, data });
 	};
 

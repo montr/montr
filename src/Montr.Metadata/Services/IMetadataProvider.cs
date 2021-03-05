@@ -124,6 +124,13 @@ namespace Montr.Metadata.Services
 					new TextField { Key = "email", Name = "Email", Required = true },
 					new TextField { Key = "phoneNumber", Name = "Phone", Required = true },
 				};
+
+				result.Panes = new List<DataPane>
+				{
+					new() { Key = "info", Name = "Информация", Icon = "profile", Component = "panes/private/EditUserPane" },
+					new() { Key = "roles", Name = "Roles", Icon = "solution" },
+					new() { Key = "history", Name = "История изменений", Icon = "eye" },
+				};
 			}
 
 			if (viewId == "CompanySearch/Grid")
