@@ -127,8 +127,8 @@ namespace Montr.Metadata.Services
 
 				result.Panes = new List<DataPane>
 				{
-					new() { Key = "info", Name = "Информация", Icon = "profile", Component = "panes/private/EditUserPane" },
-					new() { Key = "roles", Name = "Roles", Icon = "solution" },
+					new() { Key = "info", Name = "Информация", Icon = "profile", Component = "components/tab-edit-user" },
+					new() { Key = "roles", Name = "Roles", Icon = "solution", Component = "components/tab-edit-user-roles" },
 					new() { Key = "history", Name = "История изменений", Icon = "eye" },
 				};
 			}

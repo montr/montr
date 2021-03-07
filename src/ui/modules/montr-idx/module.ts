@@ -1,5 +1,5 @@
 import React from "react";
-import { AppRouteRegistry } from "@montr-core/services/";
+import { AppRouteRegistry, ComponentRegistry } from "@montr-core/services/";
 import { Layout, Constants } from "@montr-core/constants";
 
 export const StorageNames = {
@@ -79,3 +79,7 @@ export const ProfileRoutes = [
 	{ path: Patterns.profileExternalLogin, exact: true, component: React.lazy(() => import("./components/pane-external-logins")) },
 	{ path: Patterns.profileExternalLoginLink, exact: true, component: React.lazy(() => import("./components/pane-external-login-link")) },
 ];
+
+ComponentRegistry.add([
+	{ path: "components/tab-edit-user", component: React.lazy(() => import("./components/tab-edit-user")) }
+]);

@@ -76,9 +76,11 @@ export default class PageSearchUsers extends React.Component<Props, State> {
 					{showPane &&
 						<PaneEditUser
 							uid={editUid}
+							showControls={false}
 							onSuccess={this.handleSuccess}
 							onClose={this.closePane}
-						/>}
+						/>
+					}
 
 				</Page>
 			</>}</Translation>

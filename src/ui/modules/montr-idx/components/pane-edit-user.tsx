@@ -9,6 +9,7 @@ import { Views } from "../module";
 
 interface Props {
     uid?: Guid;
+    showControls?: boolean;
     onSuccess?: () => void;
     onClose?: () => void;
 }
@@ -89,7 +90,7 @@ export class PaneEditUser extends React.Component<Props, State> {
     };
 
     render = () => {
-        const { onClose } = this.props,
+        const { showControls, onClose } = this.props,
             { loading, fields, data } = this.state;
 
         return (<>
@@ -108,7 +109,7 @@ export class PaneEditUser extends React.Component<Props, State> {
 
                     <DataForm
                         formRef={this._formRef}
-                        showControls={false}
+                        showControls={showControls}
                         fields={fields}
                         data={data}
                         onSubmit={this.handleSubmit} />
