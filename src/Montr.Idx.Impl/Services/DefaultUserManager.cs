@@ -59,6 +59,7 @@ namespace Montr.Idx.Impl.Services
 				_logger.LogInformation("Created user {userName} with password.", dbUser.UserName);
 
 				result.Uid = dbUser.Id;
+				result.ConcurrencyStamp = dbUser.ConcurrencyStamp;
 			}
 
 			return result;
@@ -66,7 +67,9 @@ namespace Montr.Idx.Impl.Services
 
 		public async Task<ApiResult> Update(User user, CancellationToken cancellationToken)
 		{
-			var dbUser = await _userManager.FindByIdAsync(user.Uid.ToString());
+			var userId = user.Uid.ToString();
+
+			var dbUser = await _userManager.FindByIdAsync(userId);
 
 			dbUser.ConcurrencyStamp = user.ConcurrencyStamp;
 
@@ -83,6 +86,9 @@ namespace Montr.Idx.Impl.Services
 			if (result.Success)
 			{
 				_logger.LogInformation("Updated user {userName}.", dbUser.UserName);
+
+				result.Uid = dbUser.Id;
+				result.ConcurrencyStamp = dbUser.ConcurrencyStamp;
 			}
 
 			return result;
@@ -90,7 +96,9 @@ namespace Montr.Idx.Impl.Services
 
 		public async Task<ApiResult> Delete(User user, CancellationToken cancellationToken)
 		{
-			var dbUser = await _userManager.FindByIdAsync(user.Uid.ToString());
+			var userId = user.Uid.ToString();
+
+			var dbUser = await _userManager.FindByIdAsync(userId);
 
 			dbUser.ConcurrencyStamp = user.ConcurrencyStamp;
 
@@ -101,6 +109,8 @@ namespace Montr.Idx.Impl.Services
 			if (result.Success)
 			{
 				_logger.LogInformation("Deleted user {userName}.", dbUser.UserName);
+
+				result.Uid = dbUser.Id;
 			}
 
 			return result;

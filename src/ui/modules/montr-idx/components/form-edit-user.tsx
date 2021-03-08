@@ -71,17 +71,15 @@ export class FormEditUser extends React.Component<Props, State> {
             ...values
         } as User;
 
-        let result;
+        const result = (uid)
+            ? await this._userService.update({ item })
+            : await this._userService.insert({ item });
 
-        if (uid) {
-            result = await this._userService.update({ item });
-        }
-        else {
-            result = await this._userService.insert({ item });
-        }
+        if (result.success) {
 
-        if (result.success && onSuccess) {
-            onSuccess();
+            data.concurrencyStamp = result.concurrencyStamp;
+
+            if (onSuccess) onSuccess();
         }
 
         return result;

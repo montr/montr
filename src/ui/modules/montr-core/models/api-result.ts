@@ -5,6 +5,7 @@ export interface ApiResult<TData = any> {
 	message?: string;
 	uid?: Guid;
 	affectedRows?: number;
+	concurrencyStamp?: string;
 	errors?: ApiResultError[];
 	redirectUrl?: string;
 	data?: TData;

@@ -8,7 +8,7 @@ namespace Montr.Core.Models
 	{
 		public ApiResult()
 		{
-			Success = true;	
+			Success = true;
 		}
 
 		public bool Success { get; set; }
@@ -26,6 +26,8 @@ namespace Montr.Core.Models
 		public string RedirectUrl { get; set; }
 
 		public IList<ApiResultError> Errors { get; set; }
+
+		public string ConcurrencyStamp { get; set; }
 
 		// todo: add tests
 		public void AssertSuccess(Func<string> getMessage)
