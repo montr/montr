@@ -18,6 +18,17 @@ export class Guid {
 		return validRegex.test(str);
 	}
 
+	public static tryParse(value: string, callback: (uid: Guid) => void): boolean {
+		if (Guid.isValid(value)) {
+
+			callback(new Guid(value));
+
+			return true;
+		}
+
+		return false;
+	}
+
 	private value: string = Guid.empty;
 
 	constructor(value?: string) {
