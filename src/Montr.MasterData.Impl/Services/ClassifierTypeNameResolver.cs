@@ -22,6 +22,7 @@ namespace Montr.MasterData.Impl.Services
 
 			var entity = result?.Rows.SingleOrDefault();
 
-			return entity?.Name;		}
+			return entity?.Name;
+		}
 	}
 }

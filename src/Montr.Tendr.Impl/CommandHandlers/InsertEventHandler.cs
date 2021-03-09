@@ -18,21 +18,16 @@ namespace Montr.Tendr.Impl.CommandHandlers
 	{
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IDbContextFactory _dbContextFactory;
-		private readonly IDateTimeProvider _dateTimeProvider;
 
-		public InsertEventHandler(IUnitOfWorkFactory unitOfWorkFactory, IDbContextFactory dbContextFactory,
-			IDateTimeProvider dateTimeProvider)
+		public InsertEventHandler(IUnitOfWorkFactory unitOfWorkFactory, IDbContextFactory dbContextFactory)
 		{
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_dbContextFactory = dbContextFactory;
-			_dateTimeProvider = dateTimeProvider;
 		}
 
 		public async Task<ApiResult> Handle(InsertEvent request, CancellationToken cancellationToken)
 		{
 			var item = request.Item ?? throw new ArgumentNullException(nameof(request.Item));
-
-			var now = _dateTimeProvider.GetUtcNow();
 
 			using (var scope = _unitOfWorkFactory.Create())
 			{

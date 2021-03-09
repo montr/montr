@@ -201,13 +201,13 @@ namespace Montr.MasterData.Impl.Services
 
 		private class KeyBuilder
 		{
-			private readonly StringBuilder _builder = new StringBuilder();
+			private readonly StringBuilder _builder = new();
 
 			public void Append(string tag, string value)
 			{
-				if (_builder.Length > 0) _builder.Append("/");
+				if (_builder.Length > 0) _builder.Append('/');
 
-				_builder.Append("[").Append(tag).Append(":").Append(value).Append("]");
+				_builder.Append('[').Append(tag).Append(':').Append(value).Append(']');
 			}
 
 			public string Build()
