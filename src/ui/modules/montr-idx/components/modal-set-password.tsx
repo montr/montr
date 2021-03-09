@@ -6,7 +6,7 @@ import { DataForm } from "@montr-core/components";
 import { MetadataService } from "@montr-core/services";
 import { ProfileService } from "../services";
 import { ProfileModel, SetPasswordModel } from "../models";
-import { Views } from "../module";
+import { Locale, Views } from "../module";
 import { FormInstance } from "antd/lib/form";
 
 interface Props {
@@ -77,7 +77,7 @@ export class ModalSetPassword extends React.Component<Props, State> {
 		const { loading, fields, data } = this.state;
 
 		return (
-			<Translation ns="idx">
+			<Translation ns={Locale.Namespace}>
 				{(t) => <Modal visible={!loading} title={t("page.setPassword.title")}
 					onOk={this.onOk} onCancel={this.onCancel}
 					okText="Set password" /* width="640px" */>

@@ -1,7 +1,7 @@
 import React from "react";
 import { Translation } from "react-i18next";
 import { Page, Toolbar, DataBreadcrumb, DataMenu, RouteList } from "@montr-core/components";
-import { ProfileRoutes } from "../module";
+import { Locale, ProfileRoutes } from "../module";
 
 interface Props {
 }
@@ -60,8 +60,8 @@ export default class Profile extends React.Component<Props, State> {
 		const { mode } = this.state;
 
 		return (
-			<Translation ns="idx">
-				{() => <Page
+			<Translation ns={Locale.Namespace}>
+				{(t) => <Page
 					title={<>
 						<Toolbar float="right">
 						</Toolbar>

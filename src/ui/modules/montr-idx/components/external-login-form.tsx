@@ -5,7 +5,7 @@ import { NavigationService } from "@montr-core/services";
 import { AccountService } from "../services/account-service";
 import { Constants } from "@montr-core/constants";
 import { Translation } from "react-i18next";
-import { Api } from "../module";
+import { Api, Locale } from "../module";
 import { Icon } from "@montr-core/components";
 
 interface Props {
@@ -48,7 +48,7 @@ export class ExternalLoginForm extends React.Component<Props, State> {
 		const { loading, authSchemes } = this.state;
 
 		return (
-			<Translation ns="idx">
+			<Translation ns={Locale.Namespace}>
 				{(t) => <Spin spinning={loading}>
 
 					{/* {authSchemes.length == 3 && <p>{t("page.login.noExternalLogins")}</p>} */}

@@ -5,6 +5,7 @@ import { Page } from "@montr-core/components";
 import { RouteComponentProps } from "react-router-dom";
 import { Translation } from "react-i18next";
 import { AccountService } from "../services/account-service";
+import { Locale } from "../module";
 
 interface RouteProps {
 	userId: string;
@@ -57,7 +58,7 @@ export default class ConfirmEmailChange extends React.Component<Props, State> {
 		const { loading } = this.state;
 
 		return (
-			<Translation ns="idx">
+			<Translation ns={Locale.Namespace}>
 				{(t) => <Page title={t("page.confirmEmailChange.title")}>
 					<Spin spinning={loading}>
 

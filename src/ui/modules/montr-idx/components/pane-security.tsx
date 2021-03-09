@@ -4,9 +4,9 @@ import { Button, List, Tooltip } from "antd";
 import { PageHeader, Icon } from "@montr-core/components";
 import { OperationService } from "@montr-core/services";
 import { ProfileModel } from "../models";
-import { ModalChangePassword, ModalSetPassword, ModalChangeEmail } from "./";
+import { ModalChangePassword, ModalSetPassword, ModalChangeEmail, ModalChangePhone } from "./";
 import { ProfileService, AccountService } from "../services";
-import { ModalChangePhone } from "./modal-change-phone";
+import { Locale } from "../module";
 
 declare const ModalTypes: ["changePassword", "setPassword", "changeEmail", "changePhone"];
 
@@ -80,7 +80,7 @@ export default class PaneSecurity extends React.Component<Props, State> {
 			notConfirmed = <Tooltip title="Not confirmed">{Icon.QuestionCircle}</Tooltip>;
 
 		return (
-			<Translation ns="idx">
+			<Translation ns={Locale.Namespace}>
 				{(t) => <>
 					<PageHeader>{t("page.security.title")}</PageHeader>
 					<h3>{t("page.security.subtitle")}</h3>

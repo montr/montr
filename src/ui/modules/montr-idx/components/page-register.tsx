@@ -7,7 +7,7 @@ import { RegisterModel } from "../models";
 import { Translation } from "react-i18next";
 import { AccountService } from "../services/account-service";
 import { ExternalLoginForm } from ".";
-import { Views, Patterns } from "../module";
+import { Views, Patterns, Locale } from "../module";
 import { Link } from "react-router-dom";
 
 interface Props {
@@ -56,7 +56,7 @@ export default class Register extends React.Component<Props, State> {
 		const { loading, fields, data } = this.state;
 
 		return (
-			<Translation ns="idx">
+			<Translation ns={Locale.Namespace}>
 				{(t) => <Page title={t("page.register.title")}>
 
 					<p>{t("page.register.subtitle")}</p>

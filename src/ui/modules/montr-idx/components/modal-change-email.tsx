@@ -6,7 +6,7 @@ import { DataForm } from "@montr-core/components";
 import { MetadataService } from "@montr-core/services";
 import { ProfileService } from "../services";
 import { ProfileModel } from "../models";
-import { Views } from "../module";
+import { Locale, Views } from "../module";
 import { FormInstance } from "antd/lib/form";
 
 interface Props {
@@ -78,7 +78,7 @@ export class ModalChangeEmail extends React.Component<Props, State> {
 		const { loading, fields, data } = this.state;
 
 		return (
-			<Translation ns="idx">
+			<Translation ns={Locale.Namespace}>
 				{(t) => <Modal visible={!loading} title={t("page.changeEmail.title")}
 					onOk={this.onOk} onCancel={this.onCancel}
 					okText={t("button.updateEmail")} /* width="640px" */>

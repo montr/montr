@@ -2,6 +2,10 @@ import React from "react";
 import { AppRouteRegistry, ComponentRegistry } from "@montr-core/services/";
 import { Layout, Constants } from "@montr-core/constants";
 
+export const Locale = {
+	Namespace: "idx"
+};
+
 export const StorageNames = {
 	email: "email"
 };

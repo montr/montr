@@ -69,7 +69,7 @@ export class DataTable<TModel extends IIndexer> extends React.Component<Props<TM
 			const { updateToken } = this.props,
 				{ paging, selectedRowKeys } = this.state;
 
-			if (updateToken?.resetCurrentPage !== false) {
+			if (updateToken?.resetCurrentPage === true) {
 				paging.pageNo = 1;
 			}
 

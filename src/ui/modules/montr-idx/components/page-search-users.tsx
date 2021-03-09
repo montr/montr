@@ -2,7 +2,7 @@ import React from "react";
 import { Translation } from "react-i18next";
 import { Page, Toolbar, DataBreadcrumb, PageHeader, DataTable, ButtonAdd, DataTableUpdateToken } from "@montr-core/components";
 import { Guid } from "@montr-core/models";
-import { Api, Views } from "../module";
+import { Api, Locale, Views } from "../module";
 import { User } from "../models";
 import { PaneEditUser } from ".";
 
@@ -55,34 +55,36 @@ export default class PageSearchUsers extends React.Component<Props, State> {
 		const { showPane, editUid, selectedRowKeys, updateTableToken } = this.state;
 
 		return (
-			<Translation>{(t) => <>
-				<Page title={<>
-					<Toolbar float="right">
-						<ButtonAdd type="primary" onClick={this.showAddPane} />
-					</Toolbar>
+			<Translation ns={Locale.Namespace}>
+				{(t) => <>
+					<Page title={<>
+						<Toolbar float="right">
+							<ButtonAdd type="primary" onClick={this.showAddPane} />
+						</Toolbar>
 
-					<DataBreadcrumb items={[{ name: "Пользователи" }]} />
-					<PageHeader>Пользователи</PageHeader>
-				</>}>
+						<DataBreadcrumb items={[{ name: "Пользователи" }]} />
+						<PageHeader>Пользователи</PageHeader>
+					</>}>
 
-					<DataTable
-						rowKey="uid"
-						rowActions={[{ name: t("button.edit"), onClick: this.showEditPane }]}
-						viewId={Views.gridSearchUsers}
-						loadUrl={Api.userList}
-						updateToken={updateTableToken}
-					/>
-
-					{showPane &&
-						<PaneEditUser
-							uid={editUid}
-							onSuccess={this.handleSuccess}
-							onClose={this.closePane}
+						<DataTable
+							rowKey="uid"
+							rowActions={[{ name: t("button.edit"), onClick: this.showEditPane }]}
+							viewId={Views.gridSearchUsers}
+							loadUrl={Api.userList}
+							updateToken={updateTableToken}
 						/>
-					}
 
-				</Page>
-			</>}</Translation>
+						{showPane &&
+							<PaneEditUser
+								uid={editUid}
+								onSuccess={this.handleSuccess}
+								onClose={this.closePane}
+							/>
+						}
+
+					</Page>
+				</>}
+			</Translation>
 		);
 	};
 };

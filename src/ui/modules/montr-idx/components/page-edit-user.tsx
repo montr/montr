@@ -6,6 +6,7 @@ import { User } from "../models";
 import { MetadataService } from "@montr-core/services";
 import { DataTabs } from "@montr-core/components";
 import { UserService } from "../services";
+import { Locale } from "../module";
 
 interface RouteProps {
     uid?: string;
@@ -57,7 +58,7 @@ export default class PageEditUser extends React.Component<Props, State> {
     };
 
     render = () => {
-        const t = (key: string) => i18next.getFixedT(null, "idx")(key),
+        const t = (key: string) => i18next.getFixedT(null, Locale.Namespace)(key),
             { uid, tabKey } = this.props.match.params,
             { loading, data, dataView } = this.state;
 

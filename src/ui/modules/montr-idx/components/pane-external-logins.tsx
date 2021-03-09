@@ -5,7 +5,7 @@ import { OperationService } from "@montr-core/services";
 import { ProfileModel, UserLoginInfo, AuthScheme } from "../models";
 import { ProfileService, AccountService } from "../services";
 import { Spin, List, Button, Avatar } from "antd";
-import { Api } from "../module";
+import { Api, Locale } from "../module";
 
 interface Props {
 }
@@ -70,7 +70,7 @@ export default class PaneExternalLogins extends React.Component<Props, State> {
 			showRemoveButton = profile.hasPassword || externalLogins.length > 0;
 
 		return (
-			<Translation ns="idx">
+			<Translation ns={Locale.Namespace}>
 				{(t) => <>
 
 					<PageHeader>{t("page.externalLogins.title")}</PageHeader>

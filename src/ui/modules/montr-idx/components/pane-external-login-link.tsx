@@ -5,7 +5,7 @@ import { Translation } from "react-i18next";
 import { Page } from "@montr-core/components";
 import { OperationService } from "@montr-core/services";
 import { ProfileService } from "../services";
-import { Patterns } from "../module";
+import { Locale, Patterns } from "../module";
 
 interface Props extends RouteComponentProps {
 }
@@ -50,7 +50,7 @@ export default class PaneExternalLoginLink extends React.Component<Props, State>
 		const { loading } = this.state;
 
 		return (
-			<Translation ns="idx">
+			<Translation ns={Locale.Namespace}>
 				{(t) => <Page title={t("page.linkLogin.title")}>
 					<Spin spinning={loading}>
 

@@ -8,7 +8,7 @@ import { MetadataService, NavigationService } from "@montr-core/services";
 import { LoginModel } from "../models";
 import { AccountService } from "../services/account-service";
 import { ExternalLoginForm } from ".";
-import { Views, Patterns, StorageNames } from "../module";
+import { Views, Patterns, StorageNames, Locale } from "../module";
 
 interface State {
 	loading: boolean;
@@ -21,7 +21,7 @@ export default function Login() {
 		metadataService = new MetadataService(),
 		accountService = new AccountService();
 
-	const { t } = useTranslation("idx"),
+	const { t } = useTranslation(Locale.Namespace),
 		[state, setState] = React.useState<State>({ loading: true }),
 		[email, setEmail] = useLocalStorage(StorageNames.email, "");
 

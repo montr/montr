@@ -6,7 +6,7 @@ import { AccountService } from "../services/account-service";
 import { ExternalRegisterModel } from "../models";
 import { MetadataService, NavigationService, OperationService } from "@montr-core/services";
 import { RouteComponentProps } from "react-router";
-import { Patterns, Views } from "../module";
+import { Locale, Patterns, Views } from "../module";
 import { IDataField, ApiResult } from "@montr-core/models";
 import { Constants } from "@montr-core/constants";
 import { Link } from "react-router-dom";
@@ -79,13 +79,13 @@ export default class ExternalLogin extends React.Component<Props, State> {
 		const { loading, fields, data } = this.state;
 
 		return (
-			<Translation ns="idx">
+			<Translation ns={Locale.Namespace}>
 				{(t) => <Page title={t("page.externalLogin.title")}>
 					<Spin spinning={loading}>
 
 						{data && <>
 							<p>
-								<Trans ns="idx" i18nKey="page.externalLogin.subtitle" values={{ provider: data.provider }}>
+								<Trans ns={Locale.Namespace} i18nKey="page.externalLogin.subtitle" values={{ provider: data.provider }}>
 									<strong>{data.provider}</strong>
 								</Trans>
 							</p>

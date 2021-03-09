@@ -6,7 +6,7 @@ import { IDataField, ApiResult } from "@montr-core/models";
 import { MetadataService } from "@montr-core/services";
 import { SendEmailConfirmationModel } from "../models";
 import { AccountService } from "../services/account-service";
-import { Views, Patterns, StorageNames } from "../module";
+import { Views, Patterns, StorageNames, Locale } from "../module";
 import { Link } from "react-router-dom";
 
 interface State {
@@ -18,7 +18,7 @@ export default function SendEmailConfirmation() {
 
 	const accountService = new AccountService();
 
-	const { t } = useTranslation("idx"),
+	const { t } = useTranslation(Locale.Namespace),
 		[state, setState] = React.useState<State>({ loading: true }),
 		[email, setEmail] = useLocalStorage(StorageNames.email, "");
 

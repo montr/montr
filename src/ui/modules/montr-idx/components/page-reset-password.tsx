@@ -4,7 +4,7 @@ import { Spin, Button } from "antd";
 import { RouteComponentProps } from "react-router-dom";
 import { Translation } from "react-i18next";
 import { AccountService } from "../services/account-service";
-import { Patterns, Views } from "../module";
+import { Locale, Patterns, Views } from "../module";
 import { MetadataService } from "@montr-core/services";
 import { ResetPasswordModel } from "../models";
 import { ApiResult, IDataField } from "@montr-core/models";
@@ -63,7 +63,7 @@ export default class ResetPassword extends React.Component<Props, State> {
 		const { fields, loading } = this.state;
 
 		return (
-			<Translation ns="idx">
+			<Translation ns={Locale.Namespace}>
 				{(t) => <Page title={t("page.resetPassword.title")}>
 
 					<p>{t("page.resetPassword.subtitle")}</p>

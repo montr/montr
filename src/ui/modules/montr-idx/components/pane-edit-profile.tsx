@@ -3,7 +3,7 @@ import { IDataField, ApiResult } from "@montr-core/models";
 import { MetadataService } from "@montr-core/services";
 import { ProfileModel } from "../models";
 import { ProfileService } from "../services";
-import { Views } from "../module";
+import { Locale, Views } from "../module";
 import { PageHeader, DataForm } from "@montr-core/components";
 import { Translation } from "react-i18next";
 import { Spin } from "antd";
@@ -56,7 +56,7 @@ export default class PaneEditProfile extends React.Component<Props, State> {
 		const { loading, fields, data } = this.state;
 
 		return (
-			<Translation ns="idx">
+			<Translation ns={Locale.Namespace}>
 				{(t) => <>
 
 					<PageHeader>{t("page.profile.title")}</PageHeader>
