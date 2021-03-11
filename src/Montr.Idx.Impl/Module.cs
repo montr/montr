@@ -26,6 +26,7 @@ namespace Montr.Idx.Impl
 
 			services.AddTransient<IEmailConfirmationService, EmailConfirmationService>();
 			services.AddTransient<IRepository<User>, DbUserRepository>();
+			services.AddTransient<IRoleManager, DefaultRoleManager>();
 			services.AddTransient<IUserManager, DefaultUserManager>();
 			services.AddTransient<ISignInManager, DefaultSignInManager>();
 			services.AddTransient<IOidcServer, OpenIddictServer>();
