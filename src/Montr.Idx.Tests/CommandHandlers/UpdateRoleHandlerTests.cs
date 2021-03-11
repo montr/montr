@@ -13,10 +13,10 @@ using Montr.Idx.Tests.Services;
 namespace Montr.Idx.Tests.CommandHandlers
 {
 	[TestClass]
-	public class UpdateUserHandlerTests
+	public class UpdateRoleHandlerTests
 	{
 		[TestMethod]
-		public async Task Handle_NormalValues_UpdateUser()
+		public async Task Handle_NormalValues_UpdateRole()
 		{
 			// arrange
 			var cancellationToken = new CancellationToken();
@@ -24,27 +24,25 @@ namespace Montr.Idx.Tests.CommandHandlers
 			var dbConnectionFactory = new DbConnectionFactory();
 
 			var identityServiceFactory = new IdentityServiceFactory(dbConnectionFactory);
-			var userManager = new DefaultUserManager(new NullLogger<DefaultUserManager>(), identityServiceFactory.UserManager);
+			var roleManager = new DefaultRoleManager(new NullLogger<DefaultRoleManager>(), identityServiceFactory.RoleManager);
 
-			var handler = new UpdateUserHandler(unitOfWorkFactory, userManager);
+			var handler = new UpdateRoleHandler(unitOfWorkFactory, roleManager);
 
 			using (var _ = unitOfWorkFactory.Create())
 			{
 				// arrange
-				var createResult = await userManager.Create(new User
+				var createResult = await roleManager.Create(new Role
 				{
-					UserName = "test@montr.net",
-					Email = "test@montr.net"
+					Name = "test_role"
 				}, cancellationToken);
 
 				// ReSharper disable once PossibleInvalidOperationException
-				var user = await userManager.Get(createResult.Uid.Value, cancellationToken);
+				var role = await roleManager.Get(createResult.Uid.Value, cancellationToken);
 
-				user.FirstName = "John";
-				user.LastName = "Smith";
+				role.Name = "test_role_new";
 
 				// act
-				var result = await handler.Handle(new UpdateUser { Item = user }, cancellationToken);
+				var result = await handler.Handle(new UpdateRole { Item = role }, cancellationToken);
 
 				// assert
 				Assert.IsTrue(result.Success, string.Join(",", result.Errors.SelectMany(x => x.Messages)));
