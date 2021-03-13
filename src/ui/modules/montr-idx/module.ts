@@ -102,6 +102,6 @@ export const ProfileRoutes = [
 ];
 
 ComponentRegistry.add([
-	{ path: "components/tab-edit-user", component: React.lazy(() => import("./components/tab-edit-user")) },
+	{ path: "components/tab-edit-role", component: React.lazy(() => import("./components/tab-edit-role")) },
 	{ path: "components/tab-edit-user", component: React.lazy(() => import("./components/tab-edit-user")) },
 ]);
