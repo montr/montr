@@ -20,6 +20,13 @@ export const Api = {
 	userInsert: `${Constants.apiURL}/user/insert`,
 	userUpdate: `${Constants.apiURL}/user/update`,
 	userDelete: `${Constants.apiURL}/user/delete`,
+
+	roleCreate: `${Constants.apiURL}/role/create`,
+	roleGet: `${Constants.apiURL}/role/get`,
+	roleList: `${Constants.apiURL}/role/list`,
+	roleInsert: `${Constants.apiURL}/role/insert`,
+	roleUpdate: `${Constants.apiURL}/role/update`,
+	roleDelete: `${Constants.apiURL}/role/delete`,
 };
 
 export const Patterns = {
@@ -41,6 +48,10 @@ export const Patterns = {
 	searchUsers: "/users",
 	addUser: "/users/new",
 	editUser: "/users/edit/:uid/:tabKey?",
+
+	searchRoles: "/roles",
+	addRole: "/roles/new",
+	editRole: "/roles/edit/:uid/:tabKey?",
 };
 
 export const Views = {
@@ -56,8 +67,11 @@ export const Views = {
 	formChangePassword: "ChangePassword/Form",
 	formSetPassword: "SetPassword/Form",
 
-	userEdit: "User/Edit",
 	gridSearchUsers: "UserSearch/Grid",
+	userEdit: "User/Edit",
+
+	gridSearchRoles: "RoleSearch/Grid",
+	roleEdit: "Role/Edit",
 };
 
 AppRouteRegistry.add([
@@ -74,7 +88,10 @@ AppRouteRegistry.add([
 	{ path: Patterns.profile, component: React.lazy(() => import("./components/page-profile")) },
 
 	{ path: Patterns.searchUsers, exact: true, component: React.lazy(() => import("./components/page-search-users")) },
-	{ path: Patterns.editUser, exact: true, component: React.lazy(() => import("./components/page-edit-user")) }
+	{ path: Patterns.editUser, exact: true, component: React.lazy(() => import("./components/page-edit-user")) },
+
+	{ path: Patterns.searchRoles, exact: true, component: React.lazy(() => import("./components/page-search-roles")) },
+	{ path: Patterns.editRole, exact: true, component: React.lazy(() => import("./components/page-edit-role")) }
 ]);
 
 export const ProfileRoutes = [
@@ -85,5 +102,6 @@ export const ProfileRoutes = [
 ];
 
 ComponentRegistry.add([
-	{ path: "components/tab-edit-user", component: React.lazy(() => import("./components/tab-edit-user")) }
+	{ path: "components/tab-edit-user", component: React.lazy(() => import("./components/tab-edit-user")) },
+	{ path: "components/tab-edit-user", component: React.lazy(() => import("./components/tab-edit-user")) },
 ]);

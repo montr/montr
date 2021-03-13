@@ -2,10 +2,10 @@ import React from "react";
 import { RouteComponentProps } from "react-router";
 import i18next from "i18next";
 import { DataView, Guid } from "@montr-core/models";
-import { User } from "../models";
+import { Role } from "../models";
 import { MetadataService } from "@montr-core/services";
 import { DataTabs } from "@montr-core/components";
-import { UserService } from "../services";
+import { RoleService } from "../services";
 import { Locale, Views } from "../module";
 
 interface RouteProps {
@@ -18,14 +18,14 @@ interface Props extends RouteComponentProps<RouteProps> {
 
 interface State {
     loading: boolean;
-    data?: User;
-    dataView?: DataView<User>;
+    data?: Role;
+    dataView?: DataView<Role>;
 }
 
-export default class PageEditUser extends React.Component<Props, State> {
+export default class PageEditRole extends React.Component<Props, State> {
 
     private _metadataService = new MetadataService();
-    private _userService = new UserService();
+    private _roleService = new RoleService();
 
     constructor(props: Props) {
         super(props);
@@ -41,15 +41,15 @@ export default class PageEditUser extends React.Component<Props, State> {
 
     componentWillUnmount = async () => {
         await this._metadataService.abort();
-        await this._userService.abort();
+        await this._roleService.abort();
     };
 
     fetchData = async () => {
         Guid.tryParse(this.props.match.params.uid, async (uid) => {
             // todo: get metadata key from server
-            const dataView = await this._metadataService.load(Views.userEdit);
+            const dataView = await this._metadataService.load(Views.roleEdit);
 
-            const data = await this._userService.get(uid);
+            const data = await this._roleService.get(uid);
 
             this.setState({ loading: false, data, dataView });
         });

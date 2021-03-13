@@ -102,15 +102,37 @@ namespace Montr.Metadata.Services
 				result.Fields = fieldProvider.GetMetadata();
 			}
 
+			if (viewId == "RoleSearch/Grid")
+			{
+				result.Columns = new List<DataColumn>
+				{
+					new() { Key = "name", Name = "Name", Sortable = true, Width = 600, UrlProperty = "url" },
+				};
+			}
+
+			if (viewId == "Role/Edit")
+			{
+				result.Fields = new List<FieldMetadata>
+				{
+					new TextField { Key = "name", Name = "Name", Required = true },
+				};
+
+				result.Panes = new List<DataPane>
+				{
+					new() { Key = "info", Name = "Информация", Icon = "profile", Component = "components/tab-edit-role" },
+					new() { Key = "history", Name = "История изменений", Icon = "eye" },
+				};
+			}
+
 			if (viewId == "UserSearch/Grid")
 			{
 				result.Columns = new List<DataColumn>
 				{
-					new DataColumn { Key = "userName", Name = "Username", Sortable = true, Width = 200, UrlProperty = "url" },
-					new DataColumn { Key = "firstName", Name = "First Name", Sortable = true, Width = 200, UrlProperty = "url" },
-					new DataColumn { Key = "lastName", Name = "Last Name", Sortable = true, Width = 200, UrlProperty = "url" },
-					new DataColumn { Key = "email", Name = "Email", Sortable = true, Width = 200 },
-					new DataColumn { Key = "phoneNumber", Name = "Phone", Sortable = true, Width = 200 },
+					new() { Key = "userName", Name = "Username", Sortable = true, Width = 200, UrlProperty = "url" },
+					new() { Key = "firstName", Name = "First Name", Sortable = true, Width = 200, UrlProperty = "url" },
+					new() { Key = "lastName", Name = "Last Name", Sortable = true, Width = 200, UrlProperty = "url" },
+					new() { Key = "email", Name = "Email", Sortable = true, Width = 200 },
+					new() { Key = "phoneNumber", Name = "Phone", Sortable = true, Width = 200 },
 				};
 			}
 

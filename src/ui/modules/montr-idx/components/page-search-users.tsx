@@ -62,8 +62,8 @@ export default class PageSearchUsers extends React.Component<Props, State> {
 							<ButtonAdd type="primary" onClick={this.showAddPane} />
 						</Toolbar>
 
-						<DataBreadcrumb items={[{ name: "Пользователи" }]} />
-						<PageHeader>Пользователи</PageHeader>
+						<DataBreadcrumb items={[{ name: "Users" }]} />
+						<PageHeader>Users</PageHeader>
 					</>}>
 
 						<DataTable
