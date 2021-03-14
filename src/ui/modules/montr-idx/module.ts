@@ -20,6 +20,7 @@ export const Api = {
 	userInsert: `${Constants.apiURL}/user/insert`,
 	userUpdate: `${Constants.apiURL}/user/update`,
 	userDelete: `${Constants.apiURL}/user/delete`,
+	userRoleList: `${Constants.apiURL}/userRole/listRoles`,
 
 	roleCreate: `${Constants.apiURL}/role/create`,
 	roleGet: `${Constants.apiURL}/role/get`,
@@ -69,6 +70,7 @@ export const Views = {
 
 	gridSearchUsers: "UserSearch/Grid",
 	userEdit: "User/Edit",
+	userRolesGrid: "UserRoles/Grid",
 
 	gridSearchRoles: "RoleSearch/Grid",
 	roleEdit: "Role/Edit",
@@ -104,4 +106,5 @@ export const ProfileRoutes = [
 ComponentRegistry.add([
 	{ path: "components/tab-edit-role", component: React.lazy(() => import("./components/tab-edit-role")) },
 	{ path: "components/tab-edit-user", component: React.lazy(() => import("./components/tab-edit-user")) },
+	{ path: "components/tab-edit-user-roles", component: React.lazy(() => import("./components/tab-edit-user-roles")) },
 ]);

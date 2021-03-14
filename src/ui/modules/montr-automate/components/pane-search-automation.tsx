@@ -23,8 +23,8 @@ interface State {
 
 export default class PaneSearchAutomation extends React.Component<Props, State> {
 
-	private _operation = new OperationService();
-	private _automationService = new AutomationService();
+	operation = new OperationService();
+	automationService = new AutomationService();
 
 	constructor(props: Props) {
 		super(props);
@@ -33,11 +33,8 @@ export default class PaneSearchAutomation extends React.Component<Props, State> 
 		};
 	}
 
-	componentDidMount = async () => {
-	};
-
-	componentWillUnmount = async () => {
-		await this._automationService.abort();
+	componentWillUnmount = async (): Promise<void> => {
+		await this.automationService.abort();
 	};
 
 	onLoadTableData = async (loadUrl: string, postParams: any): Promise<DataResult<{}>> => {
@@ -45,7 +42,7 @@ export default class PaneSearchAutomation extends React.Component<Props, State> 
 
 		const params = { entityTypeCode, entityTypeUid, ...postParams };
 
-		return await this._automationService.post(loadUrl, params);
+		return await this.automationService.post(loadUrl, params);
 	};
 
 	onSelectionChange = async (selectedRowKeys: string[] | number[]) => {
@@ -82,11 +79,11 @@ export default class PaneSearchAutomation extends React.Component<Props, State> 
 
 		const t = (key: string) => i18next.t(key);
 
-		await this._operation.execute(async () => {
+		await this.operation.execute(async () => {
 			const { entityTypeCode, entityTypeUid } = this.props,
 				{ selectedRowKeys } = this.state;
 
-			const result = await this._automationService.delete({ entityTypeCode, entityTypeUid, uids: selectedRowKeys });
+			const result = await this.automationService.delete({ entityTypeCode, entityTypeUid, uids: selectedRowKeys });
 
 			if (result.success) {
 				this.refreshTable(false, true);

@@ -6,12 +6,9 @@ interface Props {
     data: Role;
 }
 
-interface State {
-}
+export default class TabEditRole extends React.Component<Props> {
 
-export default class TabEditRole extends React.Component<Props, State> {
-
-    render = () => {
+    render = (): React.ReactNode => {
 
         const { data } = this.props;
 

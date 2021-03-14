@@ -106,7 +106,7 @@ namespace Montr.Metadata.Services
 			{
 				result.Columns = new List<DataColumn>
 				{
-					new() { Key = "name", Name = "Name", Sortable = true, Width = 600, UrlProperty = "url" },
+					new() { Key = "name", Name = "Name", Sortable = true, Width = 1000, UrlProperty = "url" },
 				};
 			}
 
@@ -120,7 +120,15 @@ namespace Montr.Metadata.Services
 				result.Panes = new List<DataPane>
 				{
 					new() { Key = "info", Name = "Информация", Icon = "profile", Component = "components/tab-edit-role" },
-					new() { Key = "history", Name = "История изменений", Icon = "eye" },
+					new() { Key = "history", Name = "История изменений", Icon = "eye" }
+				};
+			}
+
+			if (viewId == "UserRoles/Grid")
+			{
+				result.Columns = new List<DataColumn>
+				{
+					new() { Key = "name", Name = "Name", Sortable = true, Width = 1000, UrlProperty = "url" }
 				};
 			}
 
@@ -132,7 +140,7 @@ namespace Montr.Metadata.Services
 					new() { Key = "firstName", Name = "First Name", Sortable = true, Width = 200, UrlProperty = "url" },
 					new() { Key = "lastName", Name = "Last Name", Sortable = true, Width = 200, UrlProperty = "url" },
 					new() { Key = "email", Name = "Email", Sortable = true, Width = 200 },
-					new() { Key = "phoneNumber", Name = "Phone", Sortable = true, Width = 200 },
+					new() { Key = "phoneNumber", Name = "Phone", Sortable = true, Width = 200 }
 				};
 			}
 
