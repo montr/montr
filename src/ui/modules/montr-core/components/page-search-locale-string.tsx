@@ -150,4 +150,4 @@ export default class PageSearchLocaleString extends React.Component<Props, State
 			</Translation>
 		);
 	};
-};
+}
