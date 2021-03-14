@@ -43,15 +43,15 @@ export abstract class DataFieldFactory<TField extends IDataField> {
 			DataHelper.indexer(data, field.key, formattedValue);
 		}
 
-		const fieldNode = (mode == "View")
+		const fieldNode = (mode == "view")
 			? this.createViewNode(field, data)
 			: this.createEditNode(field, data);
 
 		const itemLayout = (layout == null || layout == "horizontal")
-			? (mode != "View" && field.type == "boolean" ? FormDefaults.tailFormItemLayout : FormDefaults.formItemLayout)
+			? (mode != "view" && field.type == "boolean" ? FormDefaults.tailFormItemLayout : FormDefaults.formItemLayout)
 			: {};
 
-		if (mode == "View") {
+		if (mode == "view") {
 			return (
 				<Form.Item
 					key={field.key}

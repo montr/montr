@@ -13,13 +13,13 @@ interface Props {
 interface State {
 }
 
-// todo: create PaneEdit to remove PaneEditRole and PaneEditUser
+// todo: create PaneEdit to remove PaneEditRole and PaneEditUser. see also ModalChangeEmail
 export class PaneEditRole extends React.Component<Props, State> {
 
-    private _formRef = React.createRef<FormInstance>();
+    formRef = React.createRef<FormInstance>();
 
     handleSubmitClick = async (e: React.MouseEvent<any>) => {
-        await this._formRef.current.submit();
+        await this.formRef.current.submit();
     };
 
     render = () => {
@@ -40,7 +40,7 @@ export class PaneEditRole extends React.Component<Props, State> {
 
                 <FormEditRole
                     uid={uid}
-                    formRef={this._formRef}
+                    formRef={this.formRef}
                     showControls={false}
                     onSuccess={onSuccess}
                 />

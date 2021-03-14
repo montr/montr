@@ -8,11 +8,9 @@ import { OperationService, DataHelper } from "../services";
 import { FormDefaults, DataFieldFactory, ButtonSave, Toolbar } from ".";
 import { withTranslation, WithTranslation } from "react-i18next";
 
-declare const FormLayouts: ["horizontal", "inline", "vertical"];
-
 export interface DataFormOptions extends WithTranslation {
-	layout?: (typeof FormLayouts)[number];
-	mode?: "Edit" | "View";
+	mode?: "edit" | "view";
+	layout?: "horizontal" | "inline" | "vertical";
 	hideLabels?: boolean;
 }
 
@@ -35,26 +33,22 @@ interface State {
 
 class WrappedDataForm extends React.Component<Props, State> {
 
-	private _operation = new OperationService();
-	private _notificationService = new NotificationService();
+	state = {
+		loading: false,
+	};
 
-	private _isMounted: boolean = true;
-	private _formRef = React.createRef<FormInstance>();
+	operationService = new OperationService();
+	notificationService = new NotificationService();
 
-	constructor(props: Props) {
-		super(props);
-
-		this.state = {
-			loading: false,
-		};
-	}
+	isMounted: boolean = true;
+	formRef = React.createRef<FormInstance>();
 
 	componentWillUnmount = () => {
-		this._isMounted = false;
+		this.isMounted = false;
 	};
 
 	getFormRef = (): React.RefObject<FormInstance> => {
-		return (this.props.formRef ?? this._formRef);
+		return (this.props.formRef ?? this.formRef);
 	};
 
 	handleValuesChange = async (changedValues: Store, values: Store) => {
@@ -69,9 +63,9 @@ class WrappedDataForm extends React.Component<Props, State> {
 		const { t, onSubmit, successMessage, errorMessage } = this.props;
 
 		if (onSubmit) {
-			if (this._isMounted) this.setState({ loading: true });
+			if (this.isMounted) this.setState({ loading: true });
 
-			await this._operation.execute(async () => {
+			await this.operationService.execute(async () => {
 				return await onSubmit(values);
 			}, {
 				successMessage: successMessage || t("dataForm.submit.success"),
@@ -81,7 +75,7 @@ class WrappedDataForm extends React.Component<Props, State> {
 				}
 			});
 
-			if (this._isMounted) this.setState({ loading: false });
+			if (this.isMounted) this.setState({ loading: false });
 		}
 	};
 
@@ -120,49 +114,51 @@ class WrappedDataForm extends React.Component<Props, State> {
 
 			if (otherErrors.length > 0) {
 				// todo: show as alert before form
-				this._notificationService.error(otherErrors);
+				this.notificationService.error(otherErrors);
 			}
 		}
 	};
 
 	render = () => {
-		const { t, layout, data, fields, mode, showControls, submitButton, resetButton } = this.props,
+		const { mode = "edit", layout = "horizontal", showControls = true,
+			data, fields, submitButton, resetButton, t } = this.props,
 			{ loading } = this.state;
 
-		const itemLayout = (layout == null || layout == "horizontal") ? FormDefaults.tailFormItemLayout : null;
+		const itemLayout = layout == "horizontal" ? FormDefaults.tailFormItemLayout : null;
+
+		const showControlsItem = showControls && mode !== "view";
 
 		return (
 			<Spin spinning={loading}>
-				{fields &&
-					<Form
-						ref={this.getFormRef()}
-						autoComplete="off"
-						colon={false}
-						className={mode == "View" ? "data-form-mode-view" : undefined}
-						initialValues={data}
-						scrollToFirstError={true}
-						layout={layout || "horizontal"}
-						onValuesChange={this.handleValuesChange}
-						onFinish={this.handleSubmit}>
+				{fields && <Form
+					ref={this.getFormRef()}
+					autoComplete="off"
+					colon={false}
+					className={`data-form-mode-${mode}`}
+					initialValues={data}
+					scrollToFirstError={true}
+					layout={layout}
+					onValuesChange={this.handleValuesChange}
+					onFinish={this.handleSubmit}>
 
-						{fields.map(field => {
-							const factory = DataFieldFactory.get(field.type);
+					{fields.map(field => {
+						const factory = DataFieldFactory.get(field.type);
 
-							if (!factory) {
-								// todo: display default placeholder for not found field type
-								console.error(`Field type ${field.type} is not found.`);
-								return null;
-							}
+						if (!factory) {
+							// todo: display default placeholder for not found field type
+							console.error(`Field type ${field.type} is not found.`);
+							return null;
+						}
 
-							return factory.createFormItem(field, data, this.props);
-						})}
+						return factory.createFormItem(field, data, this.props);
+					})}
 
-						<Form.Item {...itemLayout} style={{ display: mode == "View" || showControls === false ? "none" : "block" }}>
-							<Toolbar>
-								<ButtonSave htmlType="submit">{submitButton}</ButtonSave>
-							</Toolbar>
-						</Form.Item>
-					</Form>}
+					{showControlsItem && <Form.Item {...itemLayout}>
+						<Toolbar>
+							<ButtonSave htmlType="submit">{submitButton}</ButtonSave>
+						</Toolbar>
+					</Form.Item>}
+				</Form>}
 			</Spin>
 		);
 	};
