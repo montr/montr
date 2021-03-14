@@ -1,7 +1,6 @@
 import * as React from "react";
 import { Link } from "react-router-dom";
 import { Table, Tag, Divider } from "antd";
-import { PaginationConfig } from "antd/lib/pagination";
 import { SorterResult, SortOrder, ColumnType, TablePaginationConfig } from "antd/lib/table/interface";
 import { Fetcher, NotificationService, MetadataService, DateHelper } from "../services";
 import { IIndexer, DataColumn, DataResult, IMenu, Paging } from "../models";
@@ -14,7 +13,7 @@ interface Props<TModel> {
 	viewId: string;
 	loadUrl: string; // todo: (?) add data[]
 	// todo: add type for post params
-	onLoadData?: (loadUrl: string, postParams: any) => Promise<DataResult<TModel> | undefined>;
+	onLoadData?: (loadUrl: string, postParams: unknown) => Promise<DataResult<TModel> | undefined>;
 	onSelectionChange?: (selectedRowKeys: string[] | number[], selectedRows: TModel[]) => void;
 	skipPaging?: boolean;
 	updateToken?: DataTableUpdateToken;
@@ -23,8 +22,8 @@ interface Props<TModel> {
 interface State<TModel> {
 	loading: boolean;
 	selectedRowKeys: string[] | number[];
-	error?: any;
-	columns: any[];
+	error?: unknown;
+	columns: ColumnType<TModel>[];
 	data: TModel[];
 	totalCount: number;
 	paging: Paging;
@@ -38,9 +37,9 @@ export interface DataTableUpdateToken {
 
 export class DataTable<TModel extends IIndexer> extends React.Component<Props<TModel>, State<TModel>> {
 
-	private _fetcher = new Fetcher();
-	private _metadataService = new MetadataService();
-	private _notification = new NotificationService();
+	fetcher = new Fetcher();
+	metadataService = new MetadataService();
+	notificationService = new NotificationService();
 
 	constructor(props: Props<TModel>) {
 		super(props);
@@ -59,11 +58,11 @@ export class DataTable<TModel extends IIndexer> extends React.Component<Props<TM
 		};
 	}
 
-	componentDidMount = async () => {
+	componentDidMount = async (): Promise<void> => {
 		await this.fetchMetadata();
 	};
 
-	componentDidUpdate = async (prevProps: Props<TModel>) => {
+	componentDidUpdate = async (prevProps: Props<TModel>): Promise<void> => {
 		if (this.props.updateToken !== prevProps.updateToken) {
 
 			const { updateToken } = this.props,
@@ -80,13 +79,13 @@ export class DataTable<TModel extends IIndexer> extends React.Component<Props<TM
 		}
 	};
 
-	componentWillUnmount = async () => {
-		await this._fetcher.abort();
-		await this._metadataService.abort();
+	componentWillUnmount = async (): Promise<void> => {
+		await this.fetcher.abort();
+		await this.metadataService.abort();
 	};
 
 	handleTableChange = async (pagination: TablePaginationConfig,
-		filters: Record<keyof TModel, string[]>, sorter: SorterResult<TModel>) => {
+		filters: Record<keyof TModel, string[]>, sorter: SorterResult<TModel>): Promise<void> => {
 
 		const { paging } = this.state;
 
@@ -108,59 +107,59 @@ export class DataTable<TModel extends IIndexer> extends React.Component<Props<TM
 		this.setState({ paging }, () => this.fetchData());
 	};
 
-	fetchMetadata = async () => {
+	fetchMetadata = async (): Promise<void> => {
 		const { viewId, rowActions } = this.props,
 			{ paging } = this.state;
 
-		const dataView = await this._metadataService.load(viewId);
+		const dataView = await this.metadataService.load(viewId);
 
 		if (!dataView.columns) throw new Error("Metadata columns is empty");
 
 		const columns = dataView.columns?.map((item: DataColumn): ColumnType<TModel> => {
 
-			var render;
+			let render;
 
 			if (item.urlProperty) {
-				render = (text: any, record: TModel, index: number): React.ReactNode => {
+				render = (text: unknown, record: TModel): React.ReactNode => {
 					const cellUrl: string = record[item.urlProperty];
 					return (cellUrl ? <Link to={cellUrl}>{text}</Link> : text);
 				};
 			}
 
 			if (item.type == "boolean") {
-				render = (text: any): React.ReactNode => {
+				render = (text: unknown): React.ReactNode => {
 					return text ? Icon.get("check") : null;
 				};
 			}
 
 			if (item.type == "date") {
-				render = (text: any): React.ReactNode => {
+				render = (text: string | Date): React.ReactNode => {
 					return DateHelper.toLocaleDateString(text);
 				};
 			}
 
 			if (item.type == "time") {
-				render = (text: any): React.ReactNode => {
+				render = (text: string | Date): React.ReactNode => {
 					return DateHelper.toLocaleTimeString(text);
 				};
 			}
 
 			if (item.type == "datetime") {
-				render = (text: any): React.ReactNode => {
+				render = (text: string | Date): React.ReactNode => {
 					return DateHelper.toLocaleDateTimeString(text);
 				};
 			}
 
 			// todo: add support of custom renderers
 			if (item.key == "configCode") {
-				render = (text: any): React.ReactNode => {
+				render = (text: unknown): React.ReactNode => {
 					return <Tag color="blue">{text}</Tag>;
 				};
 			}
 
 			// todo: add support of custom renderers
 			if (item.key == "statusCode") {
-				render = (text: any): React.ReactNode => {
+				render = (text: unknown): React.ReactNode => {
 					return <Tag color="green">{text}</Tag>;
 				};
 			}
@@ -189,7 +188,7 @@ export class DataTable<TModel extends IIndexer> extends React.Component<Props<TM
 				key: "$action",
 				title: "Действие",
 				width: 40,
-				render: (text: any, record: TModel, index: number) => (
+				render: (text: unknown, record: TModel, index: number) => (
 					<span>
 						{rowActions.map((action, i) => {
 							return (<React.Fragment key={`action-${i}`}>
@@ -219,7 +218,7 @@ export class DataTable<TModel extends IIndexer> extends React.Component<Props<TM
 		this.setState({ columns, paging }, () => this.fetchData());
 	};
 
-	fetchData = async () => {
+	fetchData = async (): Promise<void> => {
 
 		this.setState({ loading: true });
 
@@ -227,11 +226,11 @@ export class DataTable<TModel extends IIndexer> extends React.Component<Props<TM
 			{ paging } = this.state;
 
 		try {
-			let postParams: any = { ...paging };
+			const postParams: unknown = { ...paging };
 
 			const data: DataResult<TModel> = onLoadData
 				? await onLoadData(loadUrl, postParams)
-				: await this._fetcher.post(loadUrl, postParams);
+				: await this.fetcher.post(loadUrl, postParams);
 
 			if (data) {
 				this.setState({
@@ -251,12 +250,12 @@ export class DataTable<TModel extends IIndexer> extends React.Component<Props<TM
 		} catch (error) {
 			this.setState({ error, loading: false });
 			// todo: localize (?)
-			this._notification.error("Ошибка загрузки данных.", error.message);
+			this.notificationService.error("Ошибка загрузки данных.", error.message);
 			throw error;
 		}
 	};
 
-	onSelectionChange = async (selectedRowKeys: string[] | number[], selectedRows: TModel[]) => {
+	onSelectionChange = async (selectedRowKeys: string[] | number[], selectedRows: TModel[]): Promise<void> => {
 		this.setState({ selectedRowKeys });
 
 		if (this.props.onSelectionChange) {
@@ -264,7 +263,7 @@ export class DataTable<TModel extends IIndexer> extends React.Component<Props<TM
 		}
 	};
 
-	render() {
+	render = (): React.ReactNode => {
 		const { skipPaging } = this.props,
 			{ selectedRowKeys, paging, totalCount } = this.state;
 
@@ -305,5 +304,5 @@ export class DataTable<TModel extends IIndexer> extends React.Component<Props<TM
 			} */
 			/>
 		);
-	}
+	};
 }
