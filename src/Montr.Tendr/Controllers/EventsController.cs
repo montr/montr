@@ -31,6 +31,7 @@ namespace Montr.Tendr.Controllers
 		{
 			request.CompanyUid = await _currentCompanyProvider.GetCompanyUid();
 			request.UserUid = _currentUserProvider.GetUserUid();
+
 			request.IsTemplate = false;
 
 			return await _mediator.Send(request);

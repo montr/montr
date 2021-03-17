@@ -50,7 +50,6 @@ namespace Montr.MasterData.Tests.CommandHandlers
 				var result = await handler.Handle(new DeleteClassifierLink
 				{
 					UserUid = dbHelper.UserUid,
-					CompanyUid = dbHelper.CompanyUid,
 					TypeCode = dbHelper.TypeCode,
 					// ReSharper disable once PossibleInvalidOperationException
 					GroupUid = group2.Uid.Value,
@@ -102,7 +101,6 @@ namespace Montr.MasterData.Tests.CommandHandlers
 				var result = await handler.Handle(new DeleteClassifierLink
 				{
 					UserUid = generator.UserUid,
-					CompanyUid = generator.CompanyUid,
 					TypeCode = generator.TypeCode,
 					// ReSharper disable once PossibleInvalidOperationException
 					GroupUid = group1.Uid.Value,

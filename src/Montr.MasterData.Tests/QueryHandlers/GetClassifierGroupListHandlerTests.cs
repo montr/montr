@@ -178,7 +178,6 @@ namespace Montr.MasterData.Tests.QueryHandlers
 				// act
 				var command = new GetClassifierGroupList
 				{
-					CompanyUid = Constants.OperatorCompanyUid,
 					TypeCode = generator.TypeCode,
 					ParentUid = parentItem.Uid
 				};

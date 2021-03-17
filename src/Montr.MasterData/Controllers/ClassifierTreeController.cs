@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Montr.Core.Models;
 using Montr.Idx.Services;
-using Montr.Kompany.Services;
 using Montr.MasterData.Commands;
 using Montr.MasterData.Models;
 using Montr.MasterData.Queries;
@@ -15,21 +14,17 @@ namespace Montr.MasterData.Controllers
 	public class ClassifierTreeController : ControllerBase
 	{
 		private readonly IMediator _mediator;
-		private readonly ICurrentCompanyProvider _currentCompanyProvider;
 		private readonly ICurrentUserProvider _currentUserProvider;
 
-		public ClassifierTreeController(IMediator mediator,
-			ICurrentCompanyProvider currentCompanyProvider, ICurrentUserProvider currentUserProvider)
+		public ClassifierTreeController(IMediator mediator, ICurrentUserProvider currentUserProvider)
 		{
 			_mediator = mediator;
-			_currentCompanyProvider = currentCompanyProvider;
 			_currentUserProvider = currentUserProvider;
 		}
 
 		[HttpPost]
 		public async Task<SearchResult<ClassifierTree>> List(GetClassifierTreeList request)
 		{
-			request.CompanyUid = await _currentCompanyProvider.GetCompanyUid();
 			request.UserUid = _currentUserProvider.GetUserUid();
 
 			return await _mediator.Send(request);
@@ -38,7 +33,6 @@ namespace Montr.MasterData.Controllers
 		[HttpPost]
 		public async Task<ClassifierTree> Get(GetClassifierTree request)
 		{
-			request.CompanyUid = await _currentCompanyProvider.GetCompanyUid();
 			request.UserUid = _currentUserProvider.GetUserUid();
 
 			return await _mediator.Send(request);
@@ -47,7 +41,6 @@ namespace Montr.MasterData.Controllers
 		[HttpPost]
 		public async Task<ApiResult> Insert(InsertClassifierTree request)
 		{
-			request.CompanyUid = await _currentCompanyProvider.GetCompanyUid();
 			request.UserUid = _currentUserProvider.GetUserUid();
 
 			return await _mediator.Send(request);
@@ -56,7 +49,6 @@ namespace Montr.MasterData.Controllers
 		[HttpPost]
 		public async Task<ApiResult> Update(UpdateClassifierTree request)
 		{
-			request.CompanyUid = await _currentCompanyProvider.GetCompanyUid();
 			request.UserUid = _currentUserProvider.GetUserUid();
 
 			return await _mediator.Send(request);
@@ -65,7 +57,6 @@ namespace Montr.MasterData.Controllers
 		[HttpPost]
 		public async Task<ApiResult> Delete(DeleteClassifierTree request)
 		{
-			request.CompanyUid = await _currentCompanyProvider.GetCompanyUid();
 			request.UserUid = _currentUserProvider.GetUserUid();
 
 			return await _mediator.Send(request);

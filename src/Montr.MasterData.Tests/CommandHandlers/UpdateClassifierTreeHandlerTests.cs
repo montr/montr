@@ -36,7 +36,6 @@ namespace Montr.MasterData.Tests.CommandHandlers
 				var result = await handler.Handle(new UpdateClassifierTree
 				{
 					UserUid = generator.UserUid,
-					CompanyUid = generator.CompanyUid,
 					TypeCode = generator.TypeCode,
 					Item = new ClassifierTree
 					{
@@ -57,6 +56,6 @@ namespace Montr.MasterData.Tests.CommandHandlers
 			}
 		}
 
-		// todo: do not update default tree code (?) 
+		// todo: do not update default tree code (?)
 	}
 }

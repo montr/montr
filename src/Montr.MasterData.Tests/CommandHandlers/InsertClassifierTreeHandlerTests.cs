@@ -36,7 +36,6 @@ namespace Montr.MasterData.Tests.CommandHandlers
 				var result = await handler.Handle(new InsertClassifierTree
 				{
 					UserUid = generator.UserUid,
-					CompanyUid = generator.CompanyUid,
 					TypeCode = generator.TypeCode,
 					Item = new ClassifierTree
 					{

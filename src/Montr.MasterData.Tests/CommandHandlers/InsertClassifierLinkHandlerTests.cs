@@ -47,7 +47,6 @@ namespace Montr.MasterData.Tests.CommandHandlers
 				var result = await handler.Handle(new InsertClassifierLink
 				{
 					UserUid = generator.UserUid,
-					CompanyUid = generator.CompanyUid,
 					TypeCode = generator.TypeCode,
 					// ReSharper disable once PossibleInvalidOperationException
 					GroupUid = group2.Uid.Value,
@@ -101,7 +100,6 @@ namespace Montr.MasterData.Tests.CommandHandlers
 				var result = await handler.Handle(new InsertClassifierLink
 				{
 					UserUid = generator.UserUid,
-					CompanyUid = generator.CompanyUid,
 					TypeCode = generator.TypeCode,
 					// ReSharper disable once PossibleInvalidOperationException
 					GroupUid = group2.Uid.Value,

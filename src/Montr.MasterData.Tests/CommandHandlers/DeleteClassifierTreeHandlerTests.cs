@@ -40,7 +40,6 @@ namespace Montr.MasterData.Tests.CommandHandlers
 				var result = await handler.Handle(new DeleteClassifierTree
 				{
 					UserUid = generator.UserUid,
-					CompanyUid = generator.CompanyUid,
 					TypeCode = generator.TypeCode,
 					// ReSharper disable once PossibleInvalidOperationException
 					Uids = new [] { tree2.Uid.Value }

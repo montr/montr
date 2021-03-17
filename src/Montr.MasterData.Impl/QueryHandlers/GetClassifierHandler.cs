@@ -24,7 +24,6 @@ namespace Montr.MasterData.Impl.QueryHandlers
 
 			var result = await repository.Search(new ClassifierSearchRequest
 			{
-				CompanyUid = request.CompanyUid,
 				TypeCode = request.TypeCode,
 				Uid = request.Uid,
 				IncludeFields = true,

@@ -6,8 +6,6 @@ namespace Montr.MasterData.Queries
 {
 	public class GetClassifier : IRequest<Classifier>
 	{
-		public Guid CompanyUid { get; set; }
-
 		public Guid UserUid { get; set; }
 
 		public string TypeCode { get; set; }

@@ -4,7 +4,7 @@ using System.Diagnostics;
 namespace Montr.Idx.Models
 {
 	[DebuggerDisplay("{" + nameof(DebuggerDisplay) + ",nq}")]
-	public class Role
+	public class Role // : Classifier
 	{
 		private string DebuggerDisplay => $"{Name}";
 

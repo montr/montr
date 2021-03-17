@@ -86,7 +86,6 @@ namespace Montr.MasterData.Tests.CommandHandlers
 				var command = new InsertClassifier
 				{
 					UserUid = generator.UserUid,
-					CompanyUid = generator.CompanyUid,
 					Item = new Classifier
 					{
 						Type = generator.TypeCode,
@@ -153,7 +152,6 @@ namespace Montr.MasterData.Tests.CommandHandlers
 				var command = new InsertClassifier
 				{
 					UserUid = generator.UserUid,
-					CompanyUid = generator.CompanyUid,
 					Item = new Classifier
 					{
 						Type = generator.TypeCode,
@@ -207,7 +205,6 @@ namespace Montr.MasterData.Tests.CommandHandlers
 				var command = new UpdateClassifier
 				{
 					UserUid = generator.UserUid,
-					CompanyUid = generator.CompanyUid,
 					Item = new Classifier
 					{
 						// ReSharper disable once PossibleInvalidOperationException
@@ -267,7 +264,6 @@ namespace Montr.MasterData.Tests.CommandHandlers
 				var command = new DeleteClassifier
 				{
 					UserUid = generator.UserUid,
-					CompanyUid = generator.CompanyUid,
 					TypeCode = generator.TypeCode,
 					Uids = insertedIds.ToArray()
 				};
@@ -314,7 +310,6 @@ namespace Montr.MasterData.Tests.CommandHandlers
 					var insertResult = await insertHandler.Handle(new InsertClassifier
 					{
 						UserUid = generator.UserUid,
-						CompanyUid = generator.CompanyUid,
 						Item = new Numerator
 						{
 							Type = generator.TypeCode,
@@ -348,7 +343,6 @@ namespace Montr.MasterData.Tests.CommandHandlers
 					var updateCommand = new UpdateClassifier
 					{
 						UserUid = generator.UserUid,
-						CompanyUid = generator.CompanyUid,
 						Item = classifier
 					};
 
@@ -372,7 +366,6 @@ namespace Montr.MasterData.Tests.CommandHandlers
 				var command = new DeleteClassifier
 				{
 					UserUid = generator.UserUid,
-					CompanyUid = generator.CompanyUid,
 					TypeCode = generator.TypeCode,
 					Uids = insertedIds.ToArray()
 				};

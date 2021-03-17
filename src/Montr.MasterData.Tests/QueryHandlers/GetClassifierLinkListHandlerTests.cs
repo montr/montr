@@ -40,7 +40,6 @@ namespace Montr.MasterData.Tests.QueryHandlers
 				// act - search by group code
 				var result = await handler.Handle(new GetClassifierLinkList
 				{
-					CompanyUid = generator.CompanyUid,
 					UserUid = generator.UserUid,
 					TypeCode = generator.TypeCode,
 					GroupUid = group1.Uid
@@ -60,7 +59,6 @@ namespace Montr.MasterData.Tests.QueryHandlers
 				// act - search by item code
 				result = await handler.Handle(new GetClassifierLinkList
 				{
-					CompanyUid = generator.CompanyUid,
 					UserUid = generator.UserUid,
 					TypeCode = generator.TypeCode,
 					ItemUid = item1.Uid
@@ -76,7 +74,6 @@ namespace Montr.MasterData.Tests.QueryHandlers
 				// act - search by both group and item codes
 				result = await handler.Handle(new GetClassifierLinkList
 				{
-					CompanyUid = generator.CompanyUid,
 					UserUid = generator.UserUid,
 					TypeCode = generator.TypeCode,
 					GroupUid = group1.Uid,

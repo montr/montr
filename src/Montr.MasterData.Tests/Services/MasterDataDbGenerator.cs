@@ -101,7 +101,6 @@ namespace Montr.MasterData.Tests.Services
 		{
 			var result = await _insertClassifierTreeTypeHandler.Handle(new InsertClassifierTree
 			{
-				CompanyUid = CompanyUid,
 				UserUid = UserUid,
 				TypeCode = TypeCode,
 				Item = new ClassifierTree
@@ -121,7 +120,6 @@ namespace Montr.MasterData.Tests.Services
 		{
 			var result = await _getClassifierTreeListHandler.Handle(new GetClassifierTreeList
 			{
-				CompanyUid = CompanyUid,
 				UserUid = UserUid,
 				TypeCode = TypeCode,
 			}, cancellationToken);
@@ -177,7 +175,6 @@ namespace Montr.MasterData.Tests.Services
 		{
 			var result = await _insertClassifierGroupHandler.Handle(new InsertClassifierGroup
 			{
-				CompanyUid = CompanyUid,
 				UserUid = UserUid,
 				TypeCode = TypeCode,
 				TreeUid = treeUid,
@@ -210,7 +207,6 @@ namespace Montr.MasterData.Tests.Services
 
 			var result = await _updateClassifierGroupHandler.Handle(new UpdateClassifierGroup
 			{
-				CompanyUid = CompanyUid,
 				UserUid = UserUid,
 				TypeCode = TypeCode,
 				Item = item
@@ -231,7 +227,6 @@ namespace Montr.MasterData.Tests.Services
 
 			var result = await _deleteClassifierGroupHandler.Handle(new DeleteClassifierGroup
 			{
-				CompanyUid = CompanyUid,
 				UserUid = UserUid,
 				TypeCode = TypeCode,
 				Uid = group.Uid
@@ -248,7 +243,6 @@ namespace Montr.MasterData.Tests.Services
 			var result = await _insertClassifierHandler.Handle(new InsertClassifier
 			{
 				UserUid = UserUid,
-				CompanyUid = CompanyUid,
 				Item = new Classifier
 				{
 					Type = TypeCode,
@@ -269,7 +263,6 @@ namespace Montr.MasterData.Tests.Services
 			var result = await _insertClassifierLinkHandler.Handle(new InsertClassifierLink
 			{
 				UserUid = UserUid,
-				CompanyUid = CompanyUid,
 				TypeCode = TypeCode,
 				// ReSharper disable once PossibleInvalidOperationException
 				GroupUid = groupUid.Value,
@@ -287,7 +280,6 @@ namespace Montr.MasterData.Tests.Services
 		{
 			return await _getClassifierLinkListHandler.Handle(new GetClassifierLinkList
 			{
-				CompanyUid = CompanyUid,
 				UserUid = UserUid,
 				TypeCode = TypeCode,
 				GroupUid = groupUid,
