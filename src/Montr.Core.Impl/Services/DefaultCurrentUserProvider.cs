@@ -3,18 +3,10 @@ using System.ComponentModel;
 using System.Linq;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Http;
+using Montr.Core.Services;
 
-namespace Montr.Idx.Services
+namespace Montr.Core.Impl.Services
 {
-	public interface ICurrentUserProvider
-	{
-		T GetUserId<T>();
-
-		Guid GetUserUid();
-
-		ClaimsPrincipal GetUser(bool throwIfNotAuthenticated = true);
-	}
-
 	public class DefaultCurrentUserProvider : ICurrentUserProvider
 	{
 		private readonly IHttpContextAccessor _httpContextAccessor;

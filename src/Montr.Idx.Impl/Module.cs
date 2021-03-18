@@ -20,8 +20,6 @@ namespace Montr.Idx.Impl
 	{
 		public void ConfigureServices(IConfiguration configuration, IServiceCollection services)
 		{
-			services.AddSingleton<ICurrentUserProvider, DefaultCurrentUserProvider>();
-
 			services.AddTransient<IStartupTask, RegisterMessageTemplateStartupTask>();
 
 			services.AddTransient<IEmailConfirmationService, EmailConfirmationService>();

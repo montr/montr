@@ -3,7 +3,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Montr.Core.Models;
-using Montr.Idx.Services;
+using Montr.Core.Services;
 using Montr.Kompany.Commands;
 using Montr.Kompany.Models;
 using Montr.Kompany.Queries;

@@ -13,6 +13,7 @@ namespace Montr.Core.Impl
 		{
 			services.AddTransient<IStartupTask, ImportDefaultLocaleStringListStartupTask>();
 
+			services.AddSingleton<ICurrentUserProvider, DefaultCurrentUserProvider>();
 			services.AddSingleton<EmbeddedResourceProvider, EmbeddedResourceProvider>();
 			services.AddSingleton<LocaleStringSerializer, LocaleStringSerializer>();
 

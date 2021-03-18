@@ -2,8 +2,8 @@
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Montr.Core.Services;
 using Montr.Idx.Commands;
-using Montr.Idx.Services;
 
 namespace Montr.Idx.Controllers
 {

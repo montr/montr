@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
-using Montr.Idx.Services;
+using Montr.Core.Services;
 using Montr.Kompany.Queries;
 using Montr.Metadata.Models;
 
