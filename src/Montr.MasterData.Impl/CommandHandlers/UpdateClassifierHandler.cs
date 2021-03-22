@@ -11,10 +11,14 @@ namespace Montr.MasterData.Impl.CommandHandlers
 {
 	public class UpdateClassifierHandler : IRequestHandler<UpdateClassifier, ApiResult>
 	{
+		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly INamedServiceFactory<IClassifierRepository> _repositoryFactory;
 
-		public UpdateClassifierHandler(INamedServiceFactory<IClassifierRepository> repositoryFactory)
+		public UpdateClassifierHandler(
+			IUnitOfWorkFactory unitOfWorkFactory,
+			INamedServiceFactory<IClassifierRepository> repositoryFactory)
 		{
+			_unitOfWorkFactory = unitOfWorkFactory;
 			_repositoryFactory = repositoryFactory;
 		}
 
@@ -26,7 +30,14 @@ namespace Montr.MasterData.Impl.CommandHandlers
 
 			var classifierTypeProvider = _repositoryFactory.GetNamedOrDefaultService(item.Type);
 
-			return await classifierTypeProvider.Update(item, cancellationToken);
+			using (var scope = _unitOfWorkFactory.Create())
+			{
+				var result = await classifierTypeProvider.Update(item, cancellationToken);
+
+				if (result.Success) scope.Commit();
+
+				return result;
+			}
 		}
 	}
 }

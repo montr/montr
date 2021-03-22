@@ -23,14 +23,27 @@ namespace Montr.Idx.Impl.Services
 
 		public async Task<Role> Get(Guid roleUid, CancellationToken cancellationToken = default)
 		{
+			cancellationToken.ThrowIfCancellationRequested();
+
 			var dbRole = await _roleManager.FindByIdAsync(roleUid.ToString());
 
-			return Map(dbRole);
+			return new()
+			{
+				Uid = dbRole.Id,
+				Name = dbRole.Name,
+				ConcurrencyStamp = dbRole.ConcurrencyStamp
+			};
 		}
 
 		public async Task<ApiResult> Create(Role role, CancellationToken cancellationToken = default)
 		{
-			var dbRole = Map(role);
+			cancellationToken.ThrowIfCancellationRequested();
+
+			var dbRole = new DbRole
+			{
+				Id = role.Uid ?? throw new ArgumentException("Id of created role can not be empty as it referencing classifier.", nameof(role)),
+				Name = role.Name
+			};
 
 			var identityResult = await _roleManager.CreateAsync(dbRole);
 
@@ -38,7 +51,7 @@ namespace Montr.Idx.Impl.Services
 
 			if (result.Success)
 			{
-				_logger.LogInformation("Created role {name} with password.", dbRole.Name);
+				_logger.LogInformation("Created role {name}.", dbRole.Name);
 
 				result.Uid = dbRole.Id;
 				result.ConcurrencyStamp = dbRole.ConcurrencyStamp;
@@ -49,6 +62,8 @@ namespace Montr.Idx.Impl.Services
 
 		public async Task<ApiResult> Update(Role role, CancellationToken cancellationToken = default)
 		{
+			cancellationToken.ThrowIfCancellationRequested();
+
 			var roleId = role.Uid.ToString();
 
 			var dbRole = await _roleManager.FindByIdAsync(roleId);
@@ -74,6 +89,8 @@ namespace Montr.Idx.Impl.Services
 
 		public async Task<ApiResult> Delete(Role role, CancellationToken cancellationToken = default)
 		{
+			cancellationToken.ThrowIfCancellationRequested();
+
 			var roleId = role.Uid.ToString();
 
 			var dbRole = await _roleManager.FindByIdAsync(roleId);
@@ -92,38 +109,6 @@ namespace Montr.Idx.Impl.Services
 			}
 
 			return result;
-		}
-
-		private static DbRole Map(Role role)
-		{
-			var result = new DbRole
-			{
-				Name = role.Name,
-			};
-
-			if (role.Uid == null)
-			{
-				// for new item set only new id...
-				result.Id = Guid.NewGuid();
-			}
-			else
-			{
-				// ... for existing item set old id and concurrency stamp
-				result.Id = Guid.NewGuid();
-				result.ConcurrencyStamp = role.ConcurrencyStamp;
-			}
-
-			return result;
-		}
-
-		private static Role Map(DbRole dbRole)
-		{
-			return new()
-			{
-				Uid = dbRole.Id,
-				Name = dbRole.Name,
-				ConcurrencyStamp = dbRole.ConcurrencyStamp
-			};
 		}
 	}
 }

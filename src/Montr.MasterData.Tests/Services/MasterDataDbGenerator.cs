@@ -62,10 +62,10 @@ namespace Montr.MasterData.Tests.Services
 			var dbNumberGenerator = new DbNumberGenerator(dbContextFactory, null, dateTimeProvider, null);
 
 			var classifierRepositoryFactory = new ClassifierRepositoryFactory(new DbClassifierRepository<Classifier>(
-				unitOfWorkFactory, dbContextFactory, dateTimeProvider, _classifierTypeService, classifierTreeService,
+				dbContextFactory, _classifierTypeService, classifierTreeService,
 				classifierTypeMetadataService, dbFieldDataRepository, dbNumberGenerator));
 
-			_insertClassifierHandler = new InsertClassifierHandler(classifierRepositoryFactory);
+			_insertClassifierHandler = new InsertClassifierHandler(unitOfWorkFactory, classifierRepositoryFactory);
 			_updateClassifierGroupHandler = new UpdateClassifierGroupHandler(unitOfWorkFactory, dbContextFactory, _classifierTypeService);
 			_deleteClassifierGroupHandler = new DeleteClassifierGroupHandler(unitOfWorkFactory, dbContextFactory, _classifierTypeService);
 			_insertClassifierLinkHandler = new InsertClassifierLinkHandler(unitOfWorkFactory, dbContextFactory, _classifierTypeService);
@@ -321,7 +321,7 @@ namespace Montr.MasterData.Tests.Services
 
 			await _classifierTypeRegistrator.Register(numeratorType.Item, numeratorType.Fields, cancellationToken);
 
-			return await _classifierTypeService.Get(DbNumeratorRepository.TypeCode, cancellationToken);
+			return await _classifierTypeService.Get(Numerator.TypeCode, cancellationToken);
 		}
 
 		// todo: use numerator repository (?)

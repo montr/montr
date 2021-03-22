@@ -16,14 +16,20 @@ namespace Montr.MasterData.Impl.Services
 {
 	public class DbNumeratorRepository : DbClassifierRepository<Numerator>
 	{
-		public static readonly string TypeCode = nameof(Numerator).ToLower();
-
-		public DbNumeratorRepository(IUnitOfWorkFactory unitOfWorkFactory, IDbContextFactory dbContextFactory,
-			IDateTimeProvider dateTimeProvider, IClassifierTypeService classifierTypeService,
-			IClassifierTreeService classifierTreeService, IClassifierTypeMetadataService metadataService,
-			IFieldDataRepository fieldDataRepository, INumberGenerator numberGenerator)
-			: base(unitOfWorkFactory, dbContextFactory, dateTimeProvider, classifierTypeService, classifierTreeService,
-				metadataService, fieldDataRepository, numberGenerator)
+		public DbNumeratorRepository(
+			IDbContextFactory dbContextFactory,
+			IClassifierTypeService classifierTypeService,
+			IClassifierTreeService classifierTreeService,
+			IClassifierTypeMetadataService metadataService,
+			IFieldDataRepository fieldDataRepository,
+			INumberGenerator numberGenerator)
+			: base(
+				dbContextFactory,
+				classifierTypeService,
+				classifierTreeService,
+				metadataService,
+				fieldDataRepository,
+				numberGenerator)
 		{
 		}
 
@@ -97,7 +103,7 @@ namespace Montr.MasterData.Impl.Services
 		}
 
 		protected override async Task<ApiResult> InsertInternal(
-			DbContext db, ClassifierType type, Classifier item, CancellationToken cancellationToken)
+			DbContext db, ClassifierType type, Classifier item, CancellationToken cancellationToken = default)
 		{
 			var result = await base.InsertInternal(db, type, item, cancellationToken);
 
@@ -117,7 +123,7 @@ namespace Montr.MasterData.Impl.Services
 		}
 
 		protected override async Task<ApiResult> UpdateInternal(
-			DbContext db, ClassifierType type, ClassifierTree tree, Classifier item, CancellationToken cancellationToken)
+			DbContext db, ClassifierType type, ClassifierTree tree, Classifier item, CancellationToken cancellationToken = default)
 		{
 			var result = await base.UpdateInternal(db, type, tree, item, cancellationToken);
 
@@ -135,8 +141,8 @@ namespace Montr.MasterData.Impl.Services
 			return result;
 		}
 
-		protected override async Task<ApiResult> DeleteInternal(DbContext db, ClassifierType type,
-			DeleteClassifier request, CancellationToken cancellationToken)
+		protected override async Task<ApiResult> DeleteInternal(
+			DbContext db, ClassifierType type, DeleteClassifier request, CancellationToken cancellationToken = default)
 		{
 			await db.GetTable<DbNumeratorCounter>()
 				.Where(x => request.Uids.Contains(x.NumeratorUid))

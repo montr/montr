@@ -14,17 +14,17 @@ namespace Montr.MasterData.Services
 	{
 		Type ClassifierType { get; }
 
-		Task<SearchResult<Classifier>> Search(ClassifierSearchRequest request, CancellationToken cancellationToken);
+		Task<SearchResult<Classifier>> Search(ClassifierSearchRequest request, CancellationToken cancellationToken = default);
 
 		/// <summary>
 		/// Create classifier item with defaults to display to user before inserting to database.
 		/// </summary>
-		Task<Classifier> Create(ClassifierCreateRequest request, CancellationToken cancellationToken);
+		Task<Classifier> Create(ClassifierCreateRequest request, CancellationToken cancellationToken = default);
 
-		Task<ApiResult> Insert(Classifier item, CancellationToken cancellationToken);
+		Task<ApiResult> Insert(Classifier item, CancellationToken cancellationToken = default);
 
-		Task<ApiResult> Update(Classifier item, CancellationToken cancellationToken);
+		Task<ApiResult> Update(Classifier item, CancellationToken cancellationToken = default);
 
-		Task<ApiResult> Delete(DeleteClassifier request, CancellationToken cancellationToken);
+		Task<ApiResult> Delete(DeleteClassifier request, CancellationToken cancellationToken = default);
 	}
 }

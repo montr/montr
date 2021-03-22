@@ -20,10 +20,8 @@ namespace Montr.MasterData.Tests.Services
 	{
 		private static readonly string NumerableEntityTypeCode = "Numerable";
 
-		private static INamedServiceFactory<IClassifierRepository> CreateClassifierRepositoryFactory(
-			IUnitOfWorkFactory unitOfWorkFactory, IDbContextFactory dbContextFactory)
+		private static INamedServiceFactory<IClassifierRepository> CreateClassifierRepositoryFactory(IDbContextFactory dbContextFactory)
 		{
-			var dateTimeProvider = new DefaultDateTimeProvider();
 			var classifierTypeRepository = new DbClassifierTypeRepository(dbContextFactory);
 			var classifierTypeService = new DbClassifierTypeService(dbContextFactory, classifierTypeRepository);
 
@@ -33,21 +31,19 @@ namespace Montr.MasterData.Tests.Services
 
 			var metadataServiceMock = new Mock<IClassifierTypeMetadataService>();
 
-			var classifierRepository = new DbClassifierRepository<Classifier>(unitOfWorkFactory,
-				dbContextFactory, dateTimeProvider, classifierTypeService, null, metadataServiceMock.Object,
-				dbFieldDataRepository, null);
+			var classifierRepository = new DbClassifierRepository<Classifier>(dbContextFactory,
+				classifierTypeService, null, metadataServiceMock.Object, dbFieldDataRepository, null);
 
-			var numeratorRepository = new DbNumeratorRepository(unitOfWorkFactory,
-				dbContextFactory, dateTimeProvider, classifierTypeService, null, metadataServiceMock.Object,
-				dbFieldDataRepository, null);
+			var numeratorRepository = new DbNumeratorRepository(dbContextFactory,
+				classifierTypeService, null, metadataServiceMock.Object, dbFieldDataRepository, null);
 
 			var classifierRepositoryFactoryMock = new Mock<INamedServiceFactory<IClassifierRepository>>();
 
 			classifierRepositoryFactoryMock
-				.Setup(x => x.GetNamedOrDefaultService(It.Is<string>(name => name == DbNumeratorRepository.TypeCode)))
+				.Setup(x => x.GetNamedOrDefaultService(It.Is<string>(name => name == Numerator.TypeCode)))
 				.Returns(() => numeratorRepository);
 			classifierRepositoryFactoryMock
-				.Setup(x => x.GetNamedOrDefaultService(It.Is<string>(name => name != DbNumeratorRepository.TypeCode)))
+				.Setup(x => x.GetNamedOrDefaultService(It.Is<string>(name => name != Numerator.TypeCode)))
 				.Returns(() => classifierRepository);
 
 			return classifierRepositoryFactoryMock.Object;
@@ -63,7 +59,7 @@ namespace Montr.MasterData.Tests.Services
 			var dateTimeProvider = new DefaultDateTimeProvider();
 			var generator = new MasterDataDbGenerator(unitOfWorkFactory, dbContextFactory);
 			var numeratorTagProvider = new TestNumberTagResolver { EntityTypeCode = NumerableEntityTypeCode };
-			var classifierRepositoryFactory = CreateClassifierRepositoryFactory(unitOfWorkFactory, dbContextFactory);
+			var classifierRepositoryFactory = CreateClassifierRepositoryFactory(dbContextFactory);
 			var service = new DbNumberGenerator(dbContextFactory, classifierRepositoryFactory, dateTimeProvider, new INumberTagResolver[] { numeratorTagProvider });
 
 			using (var _ = unitOfWorkFactory.Create())
@@ -102,7 +98,7 @@ namespace Montr.MasterData.Tests.Services
 			var dateTimeProvider = new DefaultDateTimeProvider();
 			var generator = new MasterDataDbGenerator(unitOfWorkFactory, dbContextFactory);
 			var numeratorTagProvider = new TestNumberTagResolver { EntityTypeCode = NumerableEntityTypeCode };
-			var classifierRepositoryFactory = CreateClassifierRepositoryFactory(unitOfWorkFactory, dbContextFactory);
+			var classifierRepositoryFactory = CreateClassifierRepositoryFactory(dbContextFactory);
 			var service = new DbNumberGenerator(dbContextFactory, classifierRepositoryFactory, dateTimeProvider, new INumberTagResolver[] { numeratorTagProvider });
 
 			using (var _ = unitOfWorkFactory.Create())
@@ -142,7 +138,7 @@ namespace Montr.MasterData.Tests.Services
 			var dateTimeProvider = new DefaultDateTimeProvider();
 			var generator = new MasterDataDbGenerator(unitOfWorkFactory, dbContextFactory);
 			var numeratorTagProvider = new TestNumberTagResolver { EntityTypeCode = NumerableEntityTypeCode };
-			var classifierRepositoryFactory = CreateClassifierRepositoryFactory(unitOfWorkFactory, dbContextFactory);
+			var classifierRepositoryFactory = CreateClassifierRepositoryFactory(dbContextFactory);
 			var service = new DbNumberGenerator(dbContextFactory, classifierRepositoryFactory, dateTimeProvider, new INumberTagResolver[] { numeratorTagProvider });
 
 			using (var _ = unitOfWorkFactory.Create())
@@ -190,7 +186,7 @@ namespace Montr.MasterData.Tests.Services
 				EntityTypeCode = NumerableEntityTypeCode,
 				Values = new Dictionary<string, string>()
 			};
-			var classifierRepositoryFactory = CreateClassifierRepositoryFactory(unitOfWorkFactory, dbContextFactory);
+			var classifierRepositoryFactory = CreateClassifierRepositoryFactory(dbContextFactory);
 			var service = new DbNumberGenerator(dbContextFactory, classifierRepositoryFactory, dateTimeProvider, new INumberTagResolver[] { numeratorTagProvider });
 
 			using (var _ = unitOfWorkFactory.Create())
@@ -252,7 +248,7 @@ namespace Montr.MasterData.Tests.Services
 				EntityTypeCode = NumerableEntityTypeCode,
 				Values = new Dictionary<string, string>()
 			};
-			var classifierRepositoryFactory = CreateClassifierRepositoryFactory(unitOfWorkFactory, dbContextFactory);
+			var classifierRepositoryFactory = CreateClassifierRepositoryFactory(dbContextFactory);
 			var service = new DbNumberGenerator(dbContextFactory, classifierRepositoryFactory, dateTimeProvider, new INumberTagResolver[] { numeratorTagProvider });
 
 			using (var _ = unitOfWorkFactory.Create())

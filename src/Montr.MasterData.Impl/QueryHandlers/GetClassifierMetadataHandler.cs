@@ -114,7 +114,7 @@ namespace Montr.MasterData.Impl.QueryHandlers
 					{
 						Key = "numeratorUid",
 						Name = "Нумератор",
-						Props = { TypeCode = DbNumeratorRepository.TypeCode }
+						Props = { TypeCode = Numerator.TypeCode }
 					}
 				}
 			};

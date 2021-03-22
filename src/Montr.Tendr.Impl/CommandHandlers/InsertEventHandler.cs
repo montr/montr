@@ -74,7 +74,7 @@ namespace Montr.Tendr.Impl.CommandHandlers
 
 						if (invitations.Count > 0)
 						{
-							db.BulkCopy(invitations);
+							await db.BulkCopyAsync(invitations, cancellationToken);
 						}
 					}
 

@@ -43,8 +43,8 @@ namespace Montr.MasterData.Tests.QueryHandlers
 					new TextField { Key = "test3", Active = true, System = false }
 				});
 
-			var classifierRepository = new DbClassifierRepository<Classifier>(unitOfWorkFactory,
-				dbContextFactory, null, classifierTypeService, null, metadataServiceMock.Object, dbFieldDataRepository, null);
+			var classifierRepository = new DbClassifierRepository<Classifier>(
+				dbContextFactory, classifierTypeService, null, metadataServiceMock.Object, dbFieldDataRepository, null);
 
 			var classifierRepositoryFactoryMock = new Mock<INamedServiceFactory<IClassifierRepository>>();
 			classifierRepositoryFactoryMock.Setup(x => x.GetNamedOrDefaultService(It.IsAny<string>())).Returns(classifierRepository);

@@ -11,10 +11,14 @@ namespace Montr.MasterData.Impl.CommandHandlers
 {
 	public class InsertClassifierHandler : IRequestHandler<InsertClassifier, ApiResult>
 	{
+		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly INamedServiceFactory<IClassifierRepository> _repositoryFactory;
 
-		public InsertClassifierHandler(INamedServiceFactory<IClassifierRepository> repositoryFactory)
+		public InsertClassifierHandler(
+			IUnitOfWorkFactory unitOfWorkFactory,
+			INamedServiceFactory<IClassifierRepository> repositoryFactory)
 		{
+			_unitOfWorkFactory = unitOfWorkFactory;
 			_repositoryFactory = repositoryFactory;
 		}
 
@@ -26,7 +30,14 @@ namespace Montr.MasterData.Impl.CommandHandlers
 
 			var classifierTypeProvider = _repositoryFactory.GetNamedOrDefaultService(item.Type);
 
-			return await classifierTypeProvider.Insert(item, cancellationToken);
+			using (var scope = _unitOfWorkFactory.Create())
+			{
+				var result = await classifierTypeProvider.Insert(item, cancellationToken);
+
+				if (result.Success) scope.Commit();
+
+				return result;
+			}
 		}
 	}
 }

@@ -25,10 +25,8 @@ namespace Montr.MasterData.Tests.CommandHandlers
 	{
 		private static readonly string TypedClassifierTypeCode = "typed_test";
 
-		private static INamedServiceFactory<IClassifierRepository> CreateClassifierRepositoryFactory(
-			IUnitOfWorkFactory unitOfWorkFactory, IDbContextFactory dbContextFactory)
+		private static INamedServiceFactory<IClassifierRepository> CreateClassifierRepositoryFactory(IDbContextFactory dbContextFactory)
 		{
-			var dateTimeProvider = new DefaultDateTimeProvider();
 			var classifierTypeRepository = new DbClassifierTypeRepository(dbContextFactory);
 			var classifierTypeService = new DbClassifierTypeService(dbContextFactory, classifierTypeRepository);
 
@@ -46,13 +44,11 @@ namespace Montr.MasterData.Tests.CommandHandlers
 					new TextField { Key = "test3", Active = true, System = false }
 				});
 
-			var classifierRepository = new DbClassifierRepository<Classifier>(unitOfWorkFactory,
-				dbContextFactory, dateTimeProvider, classifierTypeService, null, metadataServiceMock.Object,
-				dbFieldDataRepository, null);
+			var classifierRepository = new DbClassifierRepository<Classifier>(dbContextFactory,
+				classifierTypeService, null, metadataServiceMock.Object, dbFieldDataRepository, null);
 
-			var numeratorRepository = new DbNumeratorRepository(unitOfWorkFactory,
-				dbContextFactory, dateTimeProvider, classifierTypeService, null, metadataServiceMock.Object,
-				dbFieldDataRepository, null);
+			var numeratorRepository = new DbNumeratorRepository(dbContextFactory,
+				classifierTypeService, null, metadataServiceMock.Object, dbFieldDataRepository, null);
 
 			var classifierRepositoryFactoryMock = new Mock<INamedServiceFactory<IClassifierRepository>>();
 
@@ -74,8 +70,8 @@ namespace Montr.MasterData.Tests.CommandHandlers
 			var unitOfWorkFactory = new TransactionScopeUnitOfWorkFactory();
 			var dbContextFactory = new DefaultDbContextFactory();
 			var generator = new MasterDataDbGenerator(unitOfWorkFactory, dbContextFactory);
-			var factory = CreateClassifierRepositoryFactory(unitOfWorkFactory, dbContextFactory);
-			var handler = new InsertClassifierHandler(factory);
+			var classifierRepositoryFactory = CreateClassifierRepositoryFactory(dbContextFactory);
+			var handler = new InsertClassifierHandler(unitOfWorkFactory, classifierRepositoryFactory);
 
 			using (var _ = unitOfWorkFactory.Create())
 			{
@@ -108,7 +104,7 @@ namespace Montr.MasterData.Tests.CommandHandlers
 				Assert.IsNotNull(result.Uid);
 				Assert.AreNotEqual(Guid.Empty, result.Uid);
 
-				var classifierResult = await factory.GetNamedOrDefaultService(generator.TypeCode)
+				var classifierResult = await classifierRepositoryFactory.GetNamedOrDefaultService(generator.TypeCode)
 					.Search(new ClassifierSearchRequest { TypeCode = generator.TypeCode, Uid = result.Uid, IncludeFields = true }, cancellationToken);
 
 				Assert.AreEqual(1, classifierResult.Rows.Count);
@@ -141,8 +137,8 @@ namespace Montr.MasterData.Tests.CommandHandlers
 			var unitOfWorkFactory = new TransactionScopeUnitOfWorkFactory();
 			var dbContextFactory = new DefaultDbContextFactory();
 			var generator = new MasterDataDbGenerator(unitOfWorkFactory, dbContextFactory);
-			var factory = CreateClassifierRepositoryFactory(unitOfWorkFactory, dbContextFactory);
-			var handler = new InsertClassifierHandler(factory);
+			var classifierRepositoryFactory = CreateClassifierRepositoryFactory(dbContextFactory);
+			var handler = new InsertClassifierHandler(unitOfWorkFactory, classifierRepositoryFactory);
 
 			using (var _ = unitOfWorkFactory.Create())
 			{
@@ -192,8 +188,8 @@ namespace Montr.MasterData.Tests.CommandHandlers
 			var unitOfWorkFactory = new TransactionScopeUnitOfWorkFactory();
 			var dbContextFactory = new DefaultDbContextFactory();
 			var generator = new MasterDataDbGenerator(unitOfWorkFactory, dbContextFactory);
-			var factory = CreateClassifierRepositoryFactory(unitOfWorkFactory, dbContextFactory);
-			var handler = new UpdateClassifierHandler(factory);
+			var classifierRepositoryFactory = CreateClassifierRepositoryFactory(dbContextFactory);
+			var handler = new UpdateClassifierHandler(unitOfWorkFactory, classifierRepositoryFactory);
 
 			using (var _ = unitOfWorkFactory.Create())
 			{
@@ -238,8 +234,8 @@ namespace Montr.MasterData.Tests.CommandHandlers
 			var unitOfWorkFactory = new TransactionScopeUnitOfWorkFactory();
 			var dbContextFactory = new DefaultDbContextFactory();
 			var generator = new MasterDataDbGenerator(unitOfWorkFactory, dbContextFactory);
-			var factory = CreateClassifierRepositoryFactory(unitOfWorkFactory, dbContextFactory);
-			var handler = new DeleteClassifierHandler(factory);
+			var classifierRepositoryFactory = CreateClassifierRepositoryFactory(dbContextFactory);
+			var handler = new DeleteClassifierHandler(unitOfWorkFactory, classifierRepositoryFactory);
 
 			using (var _ = unitOfWorkFactory.Create())
 			{
@@ -253,7 +249,7 @@ namespace Montr.MasterData.Tests.CommandHandlers
 					insertedIds.Add(insertItem.Uid.Value);
 				}
 
-				var searchResult = await factory.GetNamedOrDefaultService(generator.TypeCode)
+				var searchResult = await classifierRepositoryFactory.GetNamedOrDefaultService(generator.TypeCode)
 					.Search(new ClassifierSearchRequest { TypeCode = generator.TypeCode }, cancellationToken);
 
 				// assert
@@ -274,7 +270,7 @@ namespace Montr.MasterData.Tests.CommandHandlers
 				Assert.IsTrue(result.Success);
 				Assert.AreEqual(insertedIds.Count, result.AffectedRows);
 
-				searchResult = await factory.GetNamedOrDefaultService(generator.TypeCode)
+				searchResult = await classifierRepositoryFactory.GetNamedOrDefaultService(generator.TypeCode)
 					.Search(new ClassifierSearchRequest { TypeCode = generator.TypeCode }, cancellationToken);
 
 				// assert
@@ -291,10 +287,10 @@ namespace Montr.MasterData.Tests.CommandHandlers
 			var unitOfWorkFactory = new TransactionScopeUnitOfWorkFactory();
 			var dbContextFactory = new DefaultDbContextFactory();
 			var generator = new MasterDataDbGenerator(unitOfWorkFactory, dbContextFactory);
-			var factory = CreateClassifierRepositoryFactory(unitOfWorkFactory, dbContextFactory);
-			var insertHandler = new InsertClassifierHandler(factory);
-			var updateHandler = new UpdateClassifierHandler(factory);
-			var deleteHandler = new DeleteClassifierHandler(factory);
+			var classifierRepositoryFactory = CreateClassifierRepositoryFactory(dbContextFactory);
+			var insertHandler = new InsertClassifierHandler(unitOfWorkFactory, classifierRepositoryFactory);
+			var updateHandler = new UpdateClassifierHandler(unitOfWorkFactory, classifierRepositoryFactory);
+			var deleteHandler = new DeleteClassifierHandler(unitOfWorkFactory, classifierRepositoryFactory);
 
 			using (var _ = unitOfWorkFactory.Create())
 			{
@@ -327,7 +323,7 @@ namespace Montr.MasterData.Tests.CommandHandlers
 					insertedIds.Add(insertResult.Uid.Value);
 				}
 
-				var searchResult = await factory.GetNamedOrDefaultService(generator.TypeCode)
+				var searchResult = await classifierRepositoryFactory.GetNamedOrDefaultService(generator.TypeCode)
 					.Search(new ClassifierSearchRequest { TypeCode = generator.TypeCode }, cancellationToken);
 
 				// assert
@@ -352,7 +348,7 @@ namespace Montr.MasterData.Tests.CommandHandlers
 					Assert.AreEqual(true, updateResult.Success);
 				}
 
-				searchResult = await factory.GetNamedOrDefaultService(generator.TypeCode)
+				searchResult = await classifierRepositoryFactory.GetNamedOrDefaultService(generator.TypeCode)
 					.Search(new ClassifierSearchRequest { TypeCode = generator.TypeCode }, cancellationToken);
 
 				// assert
@@ -377,7 +373,7 @@ namespace Montr.MasterData.Tests.CommandHandlers
 				Assert.IsTrue(result.Success);
 				Assert.AreEqual(insertedIds.Count, result.AffectedRows);
 
-				searchResult = await factory.GetNamedOrDefaultService(generator.TypeCode)
+				searchResult = await classifierRepositoryFactory.GetNamedOrDefaultService(generator.TypeCode)
 					.Search(new ClassifierSearchRequest { TypeCode = generator.TypeCode }, cancellationToken);
 
 				// assert

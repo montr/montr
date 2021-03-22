@@ -11,10 +11,14 @@ namespace Montr.MasterData.Impl.CommandHandlers
 {
 	public class DeleteClassifierHandler : IRequestHandler<DeleteClassifier, ApiResult>
 	{
+		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly INamedServiceFactory<IClassifierRepository> _repositoryFactory;
 
-		public DeleteClassifierHandler(INamedServiceFactory<IClassifierRepository> repositoryFactory)
+		public DeleteClassifierHandler(
+			IUnitOfWorkFactory unitOfWorkFactory,
+			INamedServiceFactory<IClassifierRepository> repositoryFactory)
 		{
+			_unitOfWorkFactory = unitOfWorkFactory;
 			_repositoryFactory = repositoryFactory;
 		}
 
@@ -24,7 +28,14 @@ namespace Montr.MasterData.Impl.CommandHandlers
 
 			var classifierTypeProvider = _repositoryFactory.GetNamedOrDefaultService(request.TypeCode);
 
-			return await classifierTypeProvider.Delete(request, cancellationToken);
+			using (var scope = _unitOfWorkFactory.Create())
+			{
+				var result = await classifierTypeProvider.Delete(request, cancellationToken);
+
+				if (result.Success) scope.Commit();
+
+				return result;
+			}
 		}
 	}
 }

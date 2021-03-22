@@ -18,28 +18,18 @@ namespace Montr.MasterData.Impl.Services
 {
 	public class DbClassifierRepository<T> : IClassifierRepository where T : Classifier, new()
 	{
-		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IDbContextFactory _dbContextFactory;
-		private readonly IDateTimeProvider _dateTimeProvider;
 		private readonly IClassifierTypeService _classifierTypeService;
 		private readonly IClassifierTreeService _classifierTreeService;
 		private readonly IClassifierTypeMetadataService _metadataService;
 		private readonly IFieldDataRepository _fieldDataRepository;
 		private readonly INumberGenerator _numberGenerator;
 
-		public DbClassifierRepository(
-			IUnitOfWorkFactory unitOfWorkFactory,
-			IDbContextFactory dbContextFactory,
-			IDateTimeProvider dateTimeProvider,
-			IClassifierTypeService classifierTypeService,
-			IClassifierTreeService classifierTreeService,
-			IClassifierTypeMetadataService metadataService,
-			IFieldDataRepository fieldDataRepository,
-			INumberGenerator numberGenerator)
+		public DbClassifierRepository(IDbContextFactory dbContextFactory, IClassifierTypeService classifierTypeService,
+			IClassifierTreeService classifierTreeService, IClassifierTypeMetadataService metadataService,
+			IFieldDataRepository fieldDataRepository, INumberGenerator numberGenerator)
 		{
-			_unitOfWorkFactory = unitOfWorkFactory;
 			_dbContextFactory = dbContextFactory;
-			_dateTimeProvider = dateTimeProvider;
 			_classifierTypeService = classifierTypeService;
 			_classifierTreeService = classifierTreeService;
 			_metadataService = metadataService;
@@ -57,7 +47,7 @@ namespace Montr.MasterData.Impl.Services
 			{
 				var result = await SearchInternal(db, type, request, cancellationToken);
 
-				// search in data by Uid is not effective, but ok for small collections
+				// search in data by Uid is not effective - O(n), but ok for small collections
 				if (request.FocusUid.HasValue && result.Rows.Any(x => x.Uid == request.FocusUid) == false)
 				{
 					// todo: add test
@@ -265,31 +255,26 @@ namespace Montr.MasterData.Impl.Services
 
 			if (result.Success == false) return result;
 
-			using (var scope = _unitOfWorkFactory.Create())
+			ApiResult insertResult;
+
+			using (var db = _dbContextFactory.Create())
 			{
-				ApiResult insertResult;
+				insertResult = await InsertInternal(db, type, item, cancellationToken);
 
-				using (var db = _dbContextFactory.Create())
-				{
-					insertResult = await InsertInternal(db, type, item, cancellationToken);
-
-					if (insertResult.Success == false) return insertResult;
-				}
-
-				// insert fields
-				// todo: exclude db fields and sections
-				result = await _fieldDataRepository.Insert(manageFieldDataRequest, cancellationToken);
-
-				if (result.Success == false) return result;
-
-				scope.Commit();
-
-				return insertResult;
+				if (insertResult.Success == false) return insertResult;
 			}
+
+			// insert fields
+			// todo: exclude db fields and sections
+			result = await _fieldDataRepository.Insert(manageFieldDataRequest, cancellationToken);
+
+			if (result.Success == false) return result;
+
+			return insertResult;
 		}
 
-		protected virtual async Task<ApiResult> InsertInternal(
-			DbContext db, ClassifierType type, Classifier item, CancellationToken cancellationToken)
+		protected virtual async Task<ApiResult> InsertInternal(DbContext db,
+			ClassifierType type, Classifier item, CancellationToken cancellationToken = default)
 		{
 			var validator = new ClassifierValidator(db, type);
 
@@ -415,30 +400,25 @@ namespace Montr.MasterData.Impl.Services
 
 			if (result.Success == false) return result;
 
-			using (var scope = _unitOfWorkFactory.Create())
+			ApiResult updateResult;
+
+			using (var db = _dbContextFactory.Create())
 			{
-				ApiResult updateResult;
+				updateResult = await UpdateInternal(db, type, tree, item, cancellationToken);
 
-				using (var db = _dbContextFactory.Create())
-				{
-					updateResult = await UpdateInternal(db, type, tree, item, cancellationToken);
-
-					if (updateResult.Success == false) return updateResult;
-				}
-
-				// update fields
-				result = await _fieldDataRepository.Update(manageFieldDataRequest, cancellationToken);
-
-				if (result.Success == false) return result;
-
-				scope.Commit();
-
-				return updateResult;
+				if (updateResult.Success == false) return updateResult;
 			}
+
+			// update fields
+			result = await _fieldDataRepository.Update(manageFieldDataRequest, cancellationToken);
+
+			if (result.Success == false) return result;
+
+			return updateResult;
 		}
 
 		protected virtual async Task<ApiResult> UpdateInternal(
-			DbContext db, ClassifierType type, ClassifierTree  tree, Classifier item, CancellationToken cancellationToken)
+			DbContext db, ClassifierType type, ClassifierTree  tree, Classifier item, CancellationToken cancellationToken = default)
 		{
 			var validator = new ClassifierValidator(db, type);
 
@@ -500,38 +480,33 @@ namespace Montr.MasterData.Impl.Services
 			return new ApiResult();
 		}
 
-		public async Task<ApiResult> Delete(DeleteClassifier request, CancellationToken cancellationToken)
+		public virtual async Task<ApiResult> Delete(DeleteClassifier request, CancellationToken cancellationToken)
 		{
 			var type = await _classifierTypeService.Get(request.TypeCode, cancellationToken);
 
-			using (var scope = _unitOfWorkFactory.Create())
+			ApiResult deleteResult;
+
+			using (var db = _dbContextFactory.Create())
 			{
-				ApiResult deleteResult;
+				deleteResult = await DeleteInternal(db, type, request, cancellationToken);
 
-				using (var db = _dbContextFactory.Create())
-				{
-					deleteResult = await DeleteInternal(db, type, request, cancellationToken);
-
-					if (deleteResult.Success == false) return deleteResult;
-				}
-
-				// delete fields
-				var result = await _fieldDataRepository.Delete(new DeleteFieldDataRequest
-				{
-					EntityTypeCode = Classifier.TypeCode,
-					EntityUids = request.Uids
-				}, cancellationToken);
-
-				if (result.Success == false) return result;
-
-				scope.Commit();
-
-				return deleteResult;
+				if (deleteResult.Success == false) return deleteResult;
 			}
+
+			// delete fields
+			var result = await _fieldDataRepository.Delete(new DeleteFieldDataRequest
+			{
+				EntityTypeCode = Classifier.TypeCode,
+				EntityUids = request.Uids
+			}, cancellationToken);
+
+			if (result.Success == false) return result;
+
+			return deleteResult;
 		}
 
 		protected virtual async Task<ApiResult> DeleteInternal(
-			DbContext db, ClassifierType type, DeleteClassifier request, CancellationToken cancellationToken)
+			DbContext db, ClassifierType type, DeleteClassifier request, CancellationToken cancellationToken = default)
 		{
 			if (type.HierarchyType == HierarchyType.Groups)
 			{

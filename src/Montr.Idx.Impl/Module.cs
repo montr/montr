@@ -11,6 +11,7 @@ using Montr.Idx.Impl.Entities;
 using Montr.Idx.Impl.Services;
 using Montr.Idx.Models;
 using Montr.Idx.Services;
+using Montr.MasterData.Services;
 using static OpenIddict.Abstractions.OpenIddictConstants;
 
 namespace Montr.Idx.Impl
@@ -21,6 +22,7 @@ namespace Montr.Idx.Impl
 		public void ConfigureServices(IConfiguration configuration, IServiceCollection services)
 		{
 			services.AddTransient<IStartupTask, RegisterMessageTemplateStartupTask>();
+			services.AddTransient<IStartupTask, RegisterClassifierTypeStartupTask>();
 
 			services.AddTransient<IEmailConfirmationService, EmailConfirmationService>();
 			services.AddTransient<IRepository<Role>, DbRoleRepository>();
@@ -29,6 +31,8 @@ namespace Montr.Idx.Impl
 			services.AddTransient<IUserManager, DefaultUserManager>();
 			services.AddTransient<ISignInManager, DefaultSignInManager>();
 			services.AddTransient<IOidcServer, OpenIddictServer>();
+
+			services.AddNamedTransient<IClassifierRepository, DbRoleRepository2>(Role.TypeCode);
 
 			services
 				.AddAuthentication()

@@ -25,7 +25,7 @@ namespace Montr.Docs.Impl.CommandHandlers
 			{
 				var result = await _processService.Insert(request, cancellationToken);
 
-				scope.Commit();
+				if (result.Success) scope.Commit();
 
 				return result;
 			}

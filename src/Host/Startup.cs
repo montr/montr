@@ -171,28 +171,31 @@ namespace Host
 				_ => Logger.LogInformation("Configuration changed."), Environment);
 
 			// todo: try to remove hack to fill field type map
-			var fieldProviderRegistry = app.ApplicationServices.GetRequiredService<IFieldProviderRegistry>();
-			foreach (var fieldType in fieldProviderRegistry.GetFieldTypes())
+			using (var scope = app.ApplicationServices.CreateScope())
 			{
-				_fieldTypeMap[fieldType.Code] = fieldProviderRegistry.GetFieldTypeProvider(fieldType.Code).FieldType;
-			}
+				var fieldProviderRegistry = scope.ServiceProvider.GetRequiredService<IFieldProviderRegistry>();
+				foreach (var fieldType in fieldProviderRegistry.GetFieldTypes())
+				{
+					_fieldTypeMap[fieldType.Code] = fieldProviderRegistry.GetFieldTypeProvider(fieldType.Code).FieldType;
+				}
 
-			var conditionProviderFactory = app.ApplicationServices.GetRequiredService<INamedServiceFactory<IAutomationConditionProvider>>();
-			foreach (var name in conditionProviderFactory.GetNames())
-			{
-				_automateConditionTypeMap[name] = conditionProviderFactory.GetRequiredService(name).RuleType.Type;
-			}
+				var conditionProviderFactory = scope.ServiceProvider.GetRequiredService<INamedServiceFactory<IAutomationConditionProvider>>();
+				foreach (var name in conditionProviderFactory.GetNames())
+				{
+					_automateConditionTypeMap[name] = conditionProviderFactory.GetRequiredService(name).RuleType.Type;
+				}
 
-			var actionProviderFactory = app.ApplicationServices.GetRequiredService<INamedServiceFactory<IAutomationActionProvider>>();
-			foreach (var name in actionProviderFactory.GetNames())
-			{
-				_automateActionTypeMap[name] = actionProviderFactory.GetRequiredService(name).RuleType.Type;
-			}
+				var actionProviderFactory = scope.ServiceProvider.GetRequiredService<INamedServiceFactory<IAutomationActionProvider>>();
+				foreach (var name in actionProviderFactory.GetNames())
+				{
+					_automateActionTypeMap[name] = actionProviderFactory.GetRequiredService(name).RuleType.Type;
+				}
 
-			var classifierTypeFactory = app.ApplicationServices.GetRequiredService<INamedServiceFactory<IClassifierRepository>>();
-			foreach (var name in classifierTypeFactory.GetNames())
-			{
-				_classifierTypeMap[name] = classifierTypeFactory.GetRequiredService(name).ClassifierType;
+				var classifierTypeFactory = scope.ServiceProvider.GetRequiredService<INamedServiceFactory<IClassifierRepository>>();
+				foreach (var name in classifierTypeFactory.GetNames())
+				{
+					_classifierTypeMap[name] = classifierTypeFactory.GetRequiredService(name).ClassifierType;
+				}
 			}
 		}
 	}
