@@ -53,7 +53,11 @@ namespace Montr.Idx.Impl.Services
 
 			if (result.Success)
 			{
-				return await _roleManager.Update((Role) item, cancellationToken);
+				// todo: restore optimistic concurrency check (?)
+				// ReSharper disable once PossibleInvalidOperationException
+				var role = await _roleManager.Get(item.Uid.Value, cancellationToken);
+
+				return await _roleManager.Update(role, cancellationToken);
 			}
 
 			return result;

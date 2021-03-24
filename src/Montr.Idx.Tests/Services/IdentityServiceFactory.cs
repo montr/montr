@@ -9,6 +9,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using Montr.Idx.Impl.Entities;
+using Montr.Idx.Impl.Services;
 using Moq;
 
 namespace Montr.Idx.Tests.Services
@@ -21,7 +22,7 @@ namespace Montr.Idx.Tests.Services
 
 		public SignInManager<DbUser> SignInManager { get; }
 
-		public IdentityServiceFactory(IConnectionFactory connectionFactory)
+		public IdentityServiceFactory()
 		{
 			var dataProtectorTokenProvider = new DataProtectorTokenProvider<DbUser>(
 				new EphemeralDataProtectionProvider(new NullLoggerFactory()), null, new NullLogger<DataProtectorTokenProvider<DbUser>>());
@@ -68,6 +69,8 @@ namespace Montr.Idx.Tests.Services
 
 			var identityErrorDescriber = new IdentityErrorDescriber();
 			var lookupNormalizer = new UpperInvariantLookupNormalizer();
+
+			var connectionFactory = new DbConnectionFactory();
 
 			var userStore = new UserStore<Guid, DbUser, DbRole>(connectionFactory, identityErrorDescriber);
 			var roleStore = new RoleStore<Guid, DbRole>(connectionFactory, identityErrorDescriber);

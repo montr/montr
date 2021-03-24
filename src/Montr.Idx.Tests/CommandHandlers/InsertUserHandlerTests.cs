@@ -21,9 +21,8 @@ namespace Montr.Idx.Tests.CommandHandlers
 			// arrange
 			var cancellationToken = new CancellationToken();
 			var unitOfWorkFactory = new TransactionScopeUnitOfWorkFactory();
-			var dbConnectionFactory = new DbConnectionFactory();
 
-			var identityServiceFactory = new IdentityServiceFactory(dbConnectionFactory);
+			var identityServiceFactory = new IdentityServiceFactory();
 			var userManager = new DefaultUserManager(new NullLogger<DefaultUserManager>(), identityServiceFactory.UserManager);
 
 			var handler = new InsertUserHandler(unitOfWorkFactory, userManager);

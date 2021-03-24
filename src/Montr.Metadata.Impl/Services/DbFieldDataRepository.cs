@@ -112,7 +112,7 @@ namespace Montr.Metadata.Impl.Services
 
 			// todo: validate/insert/update system fields stored in FieldData
 			// todo: exclude db fields
-			foreach (var field in metadata /*.Where(x => x.System == false)*/)
+			foreach (var field in metadata.Where(x => x.System == false))
 			{
 				var fieldProvider = _fieldProviderRegistry.GetFieldTypeProvider(field.Type);
 
@@ -159,7 +159,7 @@ namespace Montr.Metadata.Impl.Services
 
 				// todo: validate/insert/update system fields stored in FieldData
 				// todo: exclude db fields
-				foreach (var field in metadata /*.Where(x => x.System == false)*/)
+				foreach (var field in metadata.Where(x => x.System == false))
 				{
 					var fieldProvider = _fieldProviderRegistry.GetFieldTypeProvider(field.Type);
 

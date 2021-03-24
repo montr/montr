@@ -23,7 +23,7 @@ namespace Montr.MasterData.Tests.CommandHandlers
 	[TestClass]
 	public class ClassifierHandlerTests
 	{
-		private static readonly string TypedClassifierTypeCode = "typed_test";
+		private static readonly string NumeratorTypeCode = "numerator_for_test";
 
 		private static INamedServiceFactory<IClassifierRepository> CreateClassifierRepositoryFactory(IDbContextFactory dbContextFactory)
 		{
@@ -53,10 +53,10 @@ namespace Montr.MasterData.Tests.CommandHandlers
 			var classifierRepositoryFactoryMock = new Mock<INamedServiceFactory<IClassifierRepository>>();
 
 			classifierRepositoryFactoryMock
-				.Setup(x => x.GetNamedOrDefaultService(It.Is<string>(name => name == TypedClassifierTypeCode)))
+				.Setup(x => x.GetNamedOrDefaultService(It.Is<string>(name => name == NumeratorTypeCode)))
 				.Returns(() => numeratorRepository);
 			classifierRepositoryFactoryMock
-				.Setup(x => x.GetNamedOrDefaultService(It.Is<string>(name => name != TypedClassifierTypeCode)))
+				.Setup(x => x.GetNamedOrDefaultService(It.Is<string>(name => name != NumeratorTypeCode)))
 				.Returns(() => classifierRepository);
 
 			return classifierRepositoryFactoryMock.Object;
@@ -295,7 +295,7 @@ namespace Montr.MasterData.Tests.CommandHandlers
 			using (var _ = unitOfWorkFactory.Create())
 			{
 				// arrange
-				generator.TypeCode = TypedClassifierTypeCode;
+				generator.TypeCode = NumeratorTypeCode;
 
 				await generator.InsertType(HierarchyType.None, cancellationToken);
 

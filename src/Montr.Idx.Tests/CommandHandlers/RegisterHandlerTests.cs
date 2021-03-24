@@ -23,7 +23,6 @@ namespace Montr.Idx.Tests.CommandHandlers
 			// arrange
 			var cancellationToken = new CancellationToken();
 			var unitOfWorkFactory = new TransactionScopeUnitOfWorkFactory();
-			var dbConnectionFactory = new DbConnectionFactory();
 
 			var appOptionsAccessorMock = new Mock<IOptionsMonitor<AppOptions>>();
 			appOptionsAccessorMock.Setup(x => x.CurrentValue).Returns(() => new AppOptions
@@ -32,7 +31,7 @@ namespace Montr.Idx.Tests.CommandHandlers
 			});
 			var appOptionsAccessor = appOptionsAccessorMock.Object;
 
-			var identityServiceFactory = new IdentityServiceFactory(dbConnectionFactory);
+			var identityServiceFactory = new IdentityServiceFactory();
 
 			var appUrlBuilder = new DefaultAppUrlBuilder(appOptionsAccessor);
 
