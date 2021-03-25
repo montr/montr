@@ -12,11 +12,11 @@ using Montr.Idx.Models;
 
 namespace Montr.Idx.Impl.Services
 {
-	public class DbUserRepository : IRepository<User>
+	public class DbUserRepository_remove : IRepository<User>
 	{
 		private readonly IDbContextFactory _dbContextFactory;
 
-		public DbUserRepository(IDbContextFactory dbContextFactory)
+		public DbUserRepository_remove(IDbContextFactory dbContextFactory)
 		{
 			_dbContextFactory = dbContextFactory;
 		}

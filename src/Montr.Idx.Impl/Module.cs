@@ -25,8 +25,8 @@ namespace Montr.Idx.Impl
 			services.AddTransient<IStartupTask, RegisterClassifierTypeStartupTask>();
 
 			services.AddTransient<IEmailConfirmationService, EmailConfirmationService>();
-			services.AddTransient<IRepository<Role>, DbRoleRepository>();
-			services.AddTransient<IRepository<User>, DbUserRepository>();
+			services.AddTransient<IRepository<Role>, DbRoleRepository_remove>();
+			services.AddTransient<IRepository<User>, DbUserRepository_remove>();
 			services.AddTransient<IRoleManager, DefaultRoleManager>();
 			services.AddTransient<IUserManager, DefaultUserManager>();
 			services.AddTransient<ISignInManager, DefaultSignInManager>();

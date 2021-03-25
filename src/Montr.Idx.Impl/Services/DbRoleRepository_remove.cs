@@ -12,11 +12,11 @@ using Montr.Idx.Models;
 
 namespace Montr.Idx.Impl.Services
 {
-	public class DbRoleRepository : IRepository<Role>
+	public class DbRoleRepository_remove : IRepository<Role>
 	{
 		private readonly IDbContextFactory _dbContextFactory;
 
-		public DbRoleRepository(IDbContextFactory dbContextFactory)
+		public DbRoleRepository_remove(IDbContextFactory dbContextFactory)
 		{
 			_dbContextFactory = dbContextFactory;
 		}
@@ -46,7 +46,7 @@ namespace Montr.Idx.Impl.Services
 				};
 			}
 		}
-		
+
 		private static async Task<IList<Role>> Materialize(IQueryable<DbRole> query, CancellationToken cancellationToken)
 		{
 			return await query
