@@ -32,7 +32,8 @@ namespace Montr.Idx.Impl
 			services.AddTransient<ISignInManager, DefaultSignInManager>();
 			services.AddTransient<IOidcServer, OpenIddictServer>();
 
-			services.AddNamedTransient<IClassifierRepository, DbRoleRepository2>(Role.TypeCode);
+			services.AddNamedTransient<IClassifierRepository, DbRoleRepository>(Role.TypeCode);
+			services.AddNamedTransient<IClassifierRepository, DbUserRepository>(User.TypeCode);
 
 			services
 				.AddAuthentication()

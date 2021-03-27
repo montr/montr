@@ -12,11 +12,11 @@ using Montr.Metadata.Services;
 
 namespace Montr.Idx.Impl.Services
 {
-	public class DbRoleRepository2 : DbClassifierRepository<Role>
+	public class DbRoleRepository : DbClassifierRepository<Role>
 	{
 		private readonly IRoleManager _roleManager;
 
-		public DbRoleRepository2(
+		public DbRoleRepository(
 			IDbContextFactory dbContextFactory,
 			IClassifierTypeService classifierTypeService,
 			IClassifierTreeService classifierTreeService,

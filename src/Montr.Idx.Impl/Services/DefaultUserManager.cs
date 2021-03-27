@@ -25,7 +25,16 @@ namespace Montr.Idx.Impl.Services
 		{
 			var dbUser = await _userManager.FindByIdAsync(userUid.ToString());
 
-			return Map(dbUser);
+			return new()
+			{
+				Uid = dbUser.Id,
+				UserName = dbUser.UserName,
+				FirstName = dbUser.FirstName,
+				LastName = dbUser.LastName,
+				Email = dbUser.Email,
+				PhoneNumber = dbUser.PhoneNumber,
+				ConcurrencyStamp = dbUser.ConcurrencyStamp
+			};
 		}
 
 		public async Task<ApiResult> Create(User user, CancellationToken cancellationToken)
@@ -118,41 +127,14 @@ namespace Montr.Idx.Impl.Services
 
 		private static DbUser Map(User user)
 		{
-			var result = new DbUser
+			return new()
 			{
+				Id = user.Uid ?? throw new ArgumentException("Id of created user can not be empty as it referencing classifier.", nameof(user)),
 				UserName = user.UserName,
 				FirstName = user.FirstName,
 				LastName = user.LastName,
 				Email = user.Email,
 				PhoneNumber = user.PhoneNumber
-			};
-
-			if (user.Uid == null)
-			{
-				// for new user set only new id...
-				result.Id = Guid.NewGuid();
-			}
-			else
-			{
-				// ... for existing user set old id and concurrency stamp
-				result.Id = Guid.NewGuid();
-				result.ConcurrencyStamp = user.ConcurrencyStamp;
-			}
-
-			return result;
-		}
-
-		private static User Map(DbUser dbUser)
-		{
-			return new()
-			{
-				Uid = dbUser.Id,
-				UserName = dbUser.UserName,
-				FirstName = dbUser.FirstName,
-				LastName = dbUser.LastName,
-				Email = dbUser.Email,
-				PhoneNumber = dbUser.PhoneNumber,
-				ConcurrencyStamp = dbUser.ConcurrencyStamp
 			};
 		}
 	}

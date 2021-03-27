@@ -1,14 +1,14 @@
-﻿using System;
-using System.Diagnostics;
+﻿using System.Diagnostics;
+using Montr.MasterData.Models;
 
 namespace Montr.Idx.Models
 {
 	[DebuggerDisplay("{" + nameof(DebuggerDisplay) + ",nq}")]
-	public class User
+	public class User : Classifier
 	{
-		private string DebuggerDisplay => $"{UserName}";
+		public new static readonly string TypeCode = nameof(User).ToLower();
 
-		public Guid? Uid { get; set; }
+		private string DebuggerDisplay => $"{UserName}";
 
 		public string UserName { get; set; }
 
@@ -21,7 +21,5 @@ namespace Montr.Idx.Models
 		public string PhoneNumber { get; set; }
 
 		public string ConcurrencyStamp { get; set; }
-
-		public string Url { get; set; }
 	}
 }
