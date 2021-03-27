@@ -6,6 +6,7 @@ using Montr.Automate.Services;
 using Montr.Core.Services;
 using Montr.Docs.Models;
 using Montr.Idx.Models;
+using Montr.MasterData.Services;
 
 namespace Montr.Docs.Impl.Services
 {
@@ -17,12 +18,13 @@ namespace Montr.Docs.Impl.Services
 		}
 
 		private readonly IAutomationContextProvider _automationContextProvider;
-		private readonly IRepository<User> _userRepository;
+		private readonly INamedServiceFactory<IClassifierRepository> _classifierRepositoryFactory;
 
-		public DocumentRecipientResolver(IAutomationContextProvider automationContextProvider, IRepository<User> userRepository)
+		public DocumentRecipientResolver(IAutomationContextProvider automationContextProvider,
+			INamedServiceFactory<IClassifierRepository> classifierRepositoryFactory)
 		{
 			_automationContextProvider = automationContextProvider;
-			_userRepository = userRepository;
+			_classifierRepositoryFactory = classifierRepositoryFactory;
 		}
 
 		public async Task<Recipient> Resolve(string recipient, AutomationContext context, CancellationToken cancellationToken)
@@ -33,12 +35,12 @@ namespace Montr.Docs.Impl.Services
 
 				if (document.CreatedBy != null)
 				{
-					var searchResult = await _userRepository.Search(
+					var userRepository = _classifierRepositoryFactory.GetNamedOrDefaultService(User.TypeCode);
+
+					var searchResult = await userRepository.Search(
 						new UserSearchRequest { UserName = document.CreatedBy }, cancellationToken);
 
-					var user = searchResult.Rows.SingleOrDefault();
-
-					if (user != null)
+					if (searchResult.Rows.SingleOrDefault() is User user)
 					{
 						return new Recipient { Email = user.Email };
 					}
