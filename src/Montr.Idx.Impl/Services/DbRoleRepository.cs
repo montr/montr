@@ -67,9 +67,9 @@ namespace Montr.Idx.Impl.Services
 		{
 			foreach (var uid in request.Uids)
 			{
-				var role = await _roleManager.Get(uid, cancellationToken);
+				var item = await _roleManager.Get(uid, cancellationToken);
 
-				var result = await _roleManager.Delete(role, cancellationToken);
+				var result = await _roleManager.Delete(item, cancellationToken);
 
 				if (result.Success == false) return result;
 			}

@@ -1,10 +1,15 @@
-﻿using System.Threading;
+﻿using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
+using LinqToDB;
 using Montr.Core.Models;
+using Montr.Core.Services;
 using Montr.Data.Linq2Db;
+using Montr.Idx.Impl.Entities;
 using Montr.Idx.Models;
 using Montr.Idx.Services;
 using Montr.MasterData.Commands;
+using Montr.MasterData.Impl.Entities;
 using Montr.MasterData.Impl.Services;
 using Montr.MasterData.Models;
 using Montr.MasterData.Services;
@@ -33,6 +38,56 @@ namespace Montr.Idx.Impl.Services
 				numberGenerator)
 		{
 			_userManager = userManager;
+		}
+
+		protected override async Task<SearchResult<Classifier>> SearchInternal(DbContext db,
+			ClassifierType type, ClassifierSearchRequest request, CancellationToken cancellationToken)
+		{
+			var classifiers = BuildQuery(db, type, request);
+
+			var users = db.GetTable<DbUser>().AsQueryable();
+
+			if (request is UserSearchRequest userRequest)
+			{
+				if (userRequest.UserName != null)
+				{
+					users = users.Where(x => x.UserName == userRequest.UserName);
+				}
+			}
+			var joined = from classifier in classifiers
+				join user in users on classifier.Uid equals user.Id
+				select new DbItem { Classifier = classifier, User = user };
+
+			// todo: fix paging - map column to expression
+			request.SortColumn ??= nameof(Classifier.Code);
+			request.SortColumn = nameof(DbItem.Classifier) + "." + request.SortColumn;
+
+			var data = await joined
+				.Apply(request, x => x.Classifier.Code)
+				.Select(x => Materialize(type, x))
+				.Cast<Classifier>()
+				.ToListAsync(cancellationToken);
+
+			return new SearchResult<Classifier>
+			{
+				TotalCount = joined.GetTotalCount(request),
+				Rows = data
+			};
+		}
+
+		private User Materialize(ClassifierType type, DbItem dbItem)
+		{
+			var item = base.Materialize(type, dbItem.Classifier);
+
+			var dbUser = dbItem.User;
+
+			item.UserName = dbUser.UserName;
+			item.FirstName = dbUser.FirstName;
+			item.LastName = dbUser.LastName;
+			item.PhoneNumber = dbUser.PhoneNumber;
+			item.Email = dbUser.Email;
+
+			return item;
 		}
 
 		public override async Task<ApiResult> Insert(Classifier item, CancellationToken cancellationToken)
@@ -67,14 +122,21 @@ namespace Montr.Idx.Impl.Services
 		{
 			foreach (var uid in request.Uids)
 			{
-				var role = await _userManager.Get(uid, cancellationToken);
+				var item = await _userManager.Get(uid, cancellationToken);
 
-				var result = await _userManager.Delete(role, cancellationToken);
+				var result = await _userManager.Delete(item, cancellationToken);
 
 				if (result.Success == false) return result;
 			}
 
 			return await base.Delete(request, cancellationToken);
+		}
+
+		private class DbItem
+		{
+			public DbClassifier Classifier { get; init; }
+
+			public DbUser User { get; init; }
 		}
 	}
 }
