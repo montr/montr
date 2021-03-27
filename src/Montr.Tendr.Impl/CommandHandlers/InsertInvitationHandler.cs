@@ -19,15 +19,15 @@ namespace Montr.Tendr.Impl.CommandHandlers
 	{
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IDbContextFactory _dbContextFactory;
-		private readonly IClassifierRepository _classifierRepository;
+		private readonly INamedServiceFactory<IClassifierRepository> _repositoryFactory;
 
 		// todo: use INamedServiceFactory<IClassifierRepository> repositoryFactory
 		public InsertInvitationHandler(IUnitOfWorkFactory unitOfWorkFactory, IDbContextFactory dbContextFactory,
-			IClassifierRepository classifierRepository)
+			INamedServiceFactory<IClassifierRepository> repositoryFactory)
 		{
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_dbContextFactory = dbContextFactory;
-			_classifierRepository = classifierRepository;
+			_repositoryFactory = repositoryFactory;
 		}
 
 		public async Task<ApiResult> Handle(InsertInvitation request, CancellationToken cancellationToken)
@@ -37,15 +37,18 @@ namespace Montr.Tendr.Impl.CommandHandlers
 
 			// todo: check company belongs to user
 			// todo: check event belongs to company
+			var typeCode = "counterparty"; // todo: use settings
 
 			var items = request.Items ?? throw new ArgumentNullException(nameof(request.Items));
 
+			var classifierRepository = _repositoryFactory.GetNamedOrDefaultService(typeCode);
+
 			using (var scope = _unitOfWorkFactory.Create())
 			{
-				var counterparties = (await _classifierRepository.Search(new ClassifierSearchRequest
+				var counterparties = (await classifierRepository.Search(new ClassifierSearchRequest
 				{
 					PageSize = 100, // todo: remove limit?
-					TypeCode = "counterparty", // todo: use settings
+					TypeCode = typeCode,
 					Uids = items.Select(x => x.CounterpartyUid).Distinct().ToArray()
 				}, cancellationToken)).Rows.Select(x => x.Uid).ToList();
 

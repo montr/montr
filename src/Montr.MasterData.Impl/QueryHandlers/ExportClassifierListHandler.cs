@@ -6,6 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using Montr.Core.Models;
+using Montr.Core.Services;
 using Montr.MasterData.Models;
 using Montr.MasterData.Queries;
 using Montr.MasterData.Services;
@@ -22,12 +23,11 @@ namespace Montr.MasterData.Impl.QueryHandlers
 		private static readonly int FirstDataRow = 3;
 		private static readonly int FirstDataCol = 1;
 
-		private readonly IClassifierRepository _repository;
+		private readonly INamedServiceFactory<IClassifierRepository> _repositoryFactory;
 
-		// todo: use INamedServiceFactory<IClassifierRepository> repositoryFactory
-		public ExportClassifierListHandler(IClassifierRepository repository)
+		public ExportClassifierListHandler(INamedServiceFactory<IClassifierRepository> repositoryFactory)
 		{
-			_repository = repository;
+			_repositoryFactory = repositoryFactory;
 		}
 
 		public async Task<FileResult> Handle(ExportClassifierList command, CancellationToken cancellationToken)
@@ -35,11 +35,13 @@ namespace Montr.MasterData.Impl.QueryHandlers
 			command.Request.PageNo = 1;
 			command.Request.PageSize = Paging.MaxPageSize;
 
-			var data = await _repository.Search(command.Request, cancellationToken);
+			var repository = _repositoryFactory.GetNamedOrDefaultService(command.Request.TypeCode);
+
+			var data = await repository.Search(command.Request, cancellationToken);
 
 			using (var package = new ExcelPackage())
 			{
-				var ws = package.Workbook.Worksheets.Add(command.Request.TypeCode ?? typeof(Classifier).Name);
+				var ws = package.Workbook.Worksheets.Add(command.Request.TypeCode ?? nameof(Classifier));
 
 				// header
 				var col = FirstDataCol;
@@ -69,12 +71,14 @@ namespace Montr.MasterData.Impl.QueryHandlers
 				{
 					col = FirstDataCol;
 
+					var entityType = entity.GetType();
+
 					foreach (var column in columns)
 					{
 						var cell = ws.Cells[row, col];
-						var value = entity.GetType()
-							.GetProperty(column.Code, BindingFlags.Instance | BindingFlags.Public | BindingFlags.IgnoreCase)
-							.GetMethod.Invoke(entity, null);
+
+						var property = entityType.GetProperty(column.Code, BindingFlags.Instance | BindingFlags.Public | BindingFlags.IgnoreCase);
+						var value = property?.GetMethod?.Invoke(entity, null);
 
 						/*string format;
 						if (IsExcelSupportedType(column, out format))
@@ -100,7 +104,7 @@ namespace Montr.MasterData.Impl.QueryHandlers
 				return new FileResult
 				{
 					ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-					FileName = $"{command.Request.TypeCode ?? typeof(Classifier).Name}-{DateTime.Now.ToString("u").Replace(':', '-').Replace(' ', '-')}.xlsx",
+					FileName = $"{command.Request.TypeCode ?? nameof(Classifier)}-{DateTime.Now.ToString("u").Replace(':', '-').Replace(' ', '-')}.xlsx",
 					Stream = new MemoryStream(package.GetAsByteArray())
 				};
 			}
