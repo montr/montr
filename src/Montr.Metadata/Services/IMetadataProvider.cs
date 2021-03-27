@@ -112,10 +112,10 @@ namespace Montr.Metadata.Services
 
 			if (viewId == "Role/Edit")
 			{
-				result.Fields = new List<FieldMetadata>
+				/*result.Fields = new List<FieldMetadata>
 				{
 					new TextField { Key = "name", Name = "Name", Required = true },
-				};
+				};*/
 
 				result.Panes = new List<DataPane>
 				{
@@ -146,14 +146,14 @@ namespace Montr.Metadata.Services
 
 			if (viewId == "User/Edit")
 			{
-				result.Fields = new List<FieldMetadata>
+				/*result.Fields = new List<FieldMetadata>
 				{
 					new TextField { Key = "userName", Name = "Username", Required = true },
 					new TextField { Key = "firstName", Name = "First Name", Required = true },
 					new TextField { Key = "lastName", Name = "Last Name", Required = true },
 					new TextField { Key = "email", Name = "Email", Required = true },
 					new TextField { Key = "phoneNumber", Name = "Phone", Required = true },
-				};
+				};*/
 
 				result.Panes = new List<DataPane>
 				{
