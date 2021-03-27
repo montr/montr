@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
-using LinqToDB.Async;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
@@ -91,7 +90,7 @@ namespace Montr.Idx.Impl.Services
 
             // Set the list of scopes granted to the client application.
             var scopes = oidcRequest.GetScopes();
-            var resources = await _scopeManager.ListResourcesAsync(scopes, cancellationToken).ToListAsync(cancellationToken);
+            var resources = await _scopeManager.ListResourcesAsync(scopes, cancellationToken).ToListAsync();
 
             principal.SetScopes(scopes);
             principal.SetResources(resources);
@@ -212,6 +211,31 @@ namespace Montr.Idx.Impl.Services
 					yield return Destinations.AccessToken;
 
 					yield break;
+			}
+		}
+	}
+
+	public static class AsyncEnumerableExtensions
+	{
+		public static Task<List<T>> ToListAsync<T>(this IAsyncEnumerable<T> source)
+		{
+			if (source == null)
+			{
+				throw new ArgumentNullException(nameof(source));
+			}
+
+			return ExecuteAsync();
+
+			async Task<List<T>> ExecuteAsync()
+			{
+				var list = new List<T>();
+
+				await foreach (var element in source)
+				{
+					list.Add(element);
+				}
+
+				return list;
 			}
 		}
 	}
