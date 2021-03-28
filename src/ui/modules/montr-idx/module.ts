@@ -14,20 +14,7 @@ export const Api = {
 	authLinkLogin: `${Constants.apiURL}/authentication/linkLogin`,
 	authExternalLogin: `${Constants.apiURL}/authentication/externalLogin`,
 
-	userCreate: `${Constants.apiURL}/user/create`,
-	userGet: `${Constants.apiURL}/user/get`,
-	userList: `${Constants.apiURL}/user/list`,
-	userInsert: `${Constants.apiURL}/user/insert`,
-	userUpdate: `${Constants.apiURL}/user/update`,
-	userDelete: `${Constants.apiURL}/user/delete`,
-	userRoleList: `${Constants.apiURL}/userRole/listRoles`,
-
-	roleCreate: `${Constants.apiURL}/role/create`,
-	roleGet: `${Constants.apiURL}/role/get`,
-	roleList: `${Constants.apiURL}/role/list`,
-	roleInsert: `${Constants.apiURL}/role/insert`,
-	roleUpdate: `${Constants.apiURL}/role/update`,
-	roleDelete: `${Constants.apiURL}/role/delete`,
+	userRoleList: `${Constants.apiURL}/userRole/listRoles`
 };
 
 export const Patterns = {
@@ -44,15 +31,7 @@ export const Patterns = {
 	profile: "/profile",
 	profileSecurity: "/profile/security",
 	profileExternalLogin: "/profile/external-login",
-	profileExternalLoginLink: "/profile/external-login/link",
-
-	searchUsers: "/users",
-	addUser: "/users/new",
-	editUser: "/users/edit/:uid/:tabKey?",
-
-	searchRoles: "/roles",
-	addRole: "/roles/new",
-	editRole: "/roles/edit/:uid/:tabKey?",
+	profileExternalLoginLink: "/profile/external-login/link"
 };
 
 export const Views = {
@@ -68,12 +47,7 @@ export const Views = {
 	formChangePassword: "ChangePassword/Form",
 	formSetPassword: "SetPassword/Form",
 
-	gridSearchUsers: "UserSearch/Grid",
-	userEdit: "User/Edit",
 	userRolesGrid: "UserRoles/Grid",
-
-	gridSearchRoles: "RoleSearch/Grid",
-	roleEdit: "Role/Edit",
 };
 
 AppRouteRegistry.add([
@@ -87,13 +61,7 @@ AppRouteRegistry.add([
 	{ path: Patterns.forgotPassword, layout: Layout.auth, exact: true, component: React.lazy(() => import("./components/page-forgot-password")) },
 	{ path: Patterns.resetPassword, layout: Layout.auth, exact: true, component: React.lazy(() => import("./components/page-reset-password")) },
 
-	{ path: Patterns.profile, component: React.lazy(() => import("./components/page-profile")) },
-
-	{ path: Patterns.searchUsers, exact: true, component: React.lazy(() => import("./components/page-search-users")) },
-	{ path: Patterns.editUser, exact: true, component: React.lazy(() => import("./components/page-edit-user")) },
-
-	{ path: Patterns.searchRoles, exact: true, component: React.lazy(() => import("./components/page-search-roles")) },
-	{ path: Patterns.editRole, exact: true, component: React.lazy(() => import("./components/page-edit-role")) }
+	{ path: Patterns.profile, component: React.lazy(() => import("./components/page-profile")) }
 ]);
 
 export const ProfileRoutes = [
@@ -104,7 +72,5 @@ export const ProfileRoutes = [
 ];
 
 ComponentRegistry.add([
-	{ path: "components/tab-edit-role", component: React.lazy(() => import("./components/tab-edit-role")) },
-	{ path: "components/tab-edit-user", component: React.lazy(() => import("./components/tab-edit-user")) },
 	{ path: "components/tab-edit-user-roles", component: React.lazy(() => import("./components/tab-edit-user-roles")) },
 ]);
