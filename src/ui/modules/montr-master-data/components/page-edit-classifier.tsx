@@ -3,7 +3,7 @@ import { DataTabs, Page, PageHeader } from "@montr-core/components";
 import { DataView } from "@montr-core/models";
 import { RouteComponentProps } from "react-router";
 import { Spin } from "antd";
-import { ClassifierService, ClassifierTypeService, ClassifierLinkService, ClassifierMetadataService } from "../services";
+import { ClassifierService, ClassifierTypeService, ClassifierMetadataService } from "../services";
 import { Classifier, ClassifierType } from "../models";
 import { ClassifierBreadcrumb } from ".";
 import { RouteBuilder, Views } from "../module";
@@ -30,7 +30,6 @@ export default class PageEditClassifier extends React.Component<Props, State> {
 	private _classifierMetadataService = new ClassifierMetadataService();
 	private _classifierTypeService = new ClassifierTypeService();
 	private _classifierService = new ClassifierService();
-	private _classifierLinkService = new ClassifierLinkService();
 
 	constructor(props: Props) {
 		super(props);
@@ -40,25 +39,24 @@ export default class PageEditClassifier extends React.Component<Props, State> {
 		};
 	}
 
-	componentDidMount = async () => {
+	componentDidMount = async (): Promise<void> => {
 		await this.fetchData();
 	};
 
-	componentDidUpdate = async (prevProps: Props) => {
+	componentDidUpdate = async (prevProps: Props): Promise<void> => {
 		if (this.props.match.params.typeCode !== prevProps.match.params.typeCode ||
 			this.props.match.params.uid !== prevProps.match.params.uid) {
 			await this.fetchData();
 		}
 	};
 
-	componentWillUnmount = async () => {
+	componentWillUnmount = async (): Promise<void> => {
 		await this._classifierMetadataService.abort();
 		await this._classifierTypeService.abort();
 		await this._classifierService.abort();
-		await this._classifierLinkService.abort();
 	};
 
-	fetchData = async () => {
+	fetchData = async (): Promise<void> => {
 		const { typeCode, uid, parentUid } = this.props.match.params;
 
 		const dataView = await this._classifierMetadataService.load(typeCode, Views.classifierTabs);
@@ -69,18 +67,10 @@ export default class PageEditClassifier extends React.Component<Props, State> {
 			? await this._classifierService.get(typeCode, uid)
 			: await this._classifierService.create(typeCode, parentUid);
 
-		if (uid && type.hierarchyType == "Groups") {
-			const links = await this._classifierLinkService.list({ typeCode: type.code, itemUid: uid });
-
-			const defaultLink = links.rows.find(x => x.tree.code == "default");
-
-			if (defaultLink) data.parentUid = defaultLink.group.uid;
-		}
-
 		this.setState({ loading: false, dataView, type, data });
 	};
 
-	handleDataChange = (data: Classifier) => {
+	handleDataChange = (data: Classifier): void => {
 		const { typeCode, uid } = this.props.match.params;
 
 		if (uid) {
@@ -93,7 +83,7 @@ export default class PageEditClassifier extends React.Component<Props, State> {
 		}
 	};
 
-	handleTabChange = (tabKey: string) => {
+	handleTabChange = (tabKey: string): void => {
 		const { typeCode, uid } = this.props.match.params;
 
 		const path = RouteBuilder.editClassifier(typeCode, uid, tabKey);
@@ -101,7 +91,7 @@ export default class PageEditClassifier extends React.Component<Props, State> {
 		this.props.history.replace(path);
 	};
 
-	render = () => {
+	render = (): React.ReactNode => {
 		const { tabKey } = this.props.match.params,
 			{ loading, dataView, type, data } = this.state;
 

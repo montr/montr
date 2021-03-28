@@ -1,5 +1,5 @@
 import * as React from "react";
-import { Page, PageHeader, Toolbar, DataTable, DataTableUpdateToken, ButtonAdd, ButtonDelete, ButtonExport, Icon } from "@montr-core/components";
+import { Page, PageHeader, Toolbar, DataTable, DataTableUpdateToken, ButtonAdd, ButtonDelete, ButtonExport, Icon, ButtonSelect } from "@montr-core/components";
 import { Link } from "react-router-dom";
 import { Button, Tree, Select, Radio, Layout, Modal, Spin } from "antd";
 import { TreeNodeNormal } from "antd/lib/tree/Tree";
@@ -9,13 +9,14 @@ import { Guid, DataResult } from "@montr-core/models";
 import { NotificationService } from "@montr-core/services";
 import { withCompanyContext, CompanyContextProps } from "@montr-kompany/components";
 import { ClassifierService, ClassifierTypeService, ClassifierGroupService, ClassifierTreeService } from "../services";
-import { ClassifierType, ClassifierGroup, ClassifierTree } from "../models";
-import { ClassifierBreadcrumb, ModalEditClassifierGroup } from "../components";
-import { RouteBuilder, Api, Views } from "../module";
+import { ClassifierType, ClassifierGroup, ClassifierTree, Classifier } from "../models";
+import { ClassifierBreadcrumb, ModalEditClassifierGroup, PaneEditClassifier } from "../components";
+import { RouteBuilder, Api, Views, Locale } from "../module";
+import { Translation } from "react-i18next";
 
 interface Props extends CompanyContextProps {
 	typeCode: string;
-	mode: "Page" | "Drawer";
+	mode: "page" | "drawer";
 	onSelect?: (keys: string[] | number[]) => Promise<void>;
 }
 
@@ -27,6 +28,8 @@ interface State {
 	selectedTree?: ClassifierTree,
 	selectedGroup?: ClassifierGroup;
 	groupEditData?: ClassifierGroup;
+	showEditPane?: boolean;
+	editUid?: Guid;
 	expandedKeys: string[];
 	selectedRowKeys: string[] | number[];
 	depth: string; // todo: make enum
@@ -42,12 +45,6 @@ interface ITreeNodeSelectEvent {
 	selected: boolean;
 	node: EventDataNode;
 	// selectedNodes: DataNode[];
-	nativeEvent: MouseEvent;
-}
-
-interface ITreeNodeExpandEvent {
-	node: EventDataNode;
-	expanded: boolean;
 	nativeEvent: MouseEvent;
 }
 
@@ -91,7 +88,7 @@ class _PaneSearchClassifier extends React.Component<Props, State> {
 			});
 
 			await this.loadClassifierType();
-			await this.refreshTable(true);
+			await this.refreshTable(true, true);
 		}
 	};
 
@@ -178,13 +175,14 @@ class _PaneSearchClassifier extends React.Component<Props, State> {
 	};
 
 	// todo: move button to separate class?
+	// todo: add delete operation confirm
 	delete = async () => {
 		const rowsAffected = await this._classifierService
 			.delete(this.props.typeCode, this.state.selectedRowKeys);
 
 		this._notificationService.success("Выбранные записи удалены. " + rowsAffected);
 
-		await this.refreshTable();
+		await this.refreshTable(false, true);
 	};
 
 	// todo: move button to separate class?
@@ -245,7 +243,7 @@ class _PaneSearchClassifier extends React.Component<Props, State> {
 		}, async () => await this.refreshTable());
 	};
 
-	onTreeExpand = (expandedKeys: string[], e: ITreeNodeExpandEvent /* AntTreeNodeExpandedEvent */) => {
+	onTreeExpand = (expandedKeys: string[]) => {
 		this.setState({ expandedKeys });
 	};
 
@@ -312,9 +310,12 @@ class _PaneSearchClassifier extends React.Component<Props, State> {
 		await this.refreshTable();
 	};
 
-	refreshTable = async (resetSelectedRows?: boolean) => {
+	refreshTable = (resetCurrentPage?: boolean, resetSelectedRows?: boolean): void => {
+		const { selectedRowKeys } = this.state;
+
 		this.setState({
-			updateTableToken: { date: new Date(), resetSelectedRows }
+			updateTableToken: { date: new Date(), resetCurrentPage, resetSelectedRows },
+			selectedRowKeys: resetSelectedRows ? [] : selectedRowKeys
 		});
 	};
 
@@ -357,6 +358,23 @@ class _PaneSearchClassifier extends React.Component<Props, State> {
 		return null;
 	};
 
+	showAddPane = () => {
+		this.setState({ showEditPane: true, editUid: null });
+	};
+
+	showEditPane = (data: Classifier) => {
+		this.setState({ showEditPane: true, editUid: data?.uid });
+	};
+
+	closeEditPane = () => {
+		this.setState({ showEditPane: false });
+	};
+
+	handleEditPaneSuccess = () => {
+		this.setState({ showEditPane: false });
+		this.refreshTable();
+	};
+
 	select = () => {
 		const { onSelect } = this.props,
 			{ selectedRowKeys } = this.state;
@@ -366,9 +384,10 @@ class _PaneSearchClassifier extends React.Component<Props, State> {
 		}
 	};
 
-	render() {
+	render = (): React.ReactNode => {
 		const { mode, currentCompany } = this.props,
-			{ types, type, trees, groups, selectedTree, selectedGroup, groupEditData, expandedKeys, updateTableToken } = this.state;
+			{ types, type, trees, groups, selectedTree, selectedGroup, groupEditData, expandedKeys, updateTableToken,
+				showEditPane, editUid } = this.state;
 
 		if (!currentCompany || !type) return null;
 
@@ -376,6 +395,8 @@ class _PaneSearchClassifier extends React.Component<Props, State> {
 		// 1. how tree looks - list or tree (?)
 		// 2. hide tree
 		// 3. show or hide groups in list
+
+		const selectedGroupUid = selectedGroup ? selectedGroup.uid : null;
 
 		let groupControls;
 		if (type.hierarchyType == "Groups") {
@@ -419,16 +440,17 @@ class _PaneSearchClassifier extends React.Component<Props, State> {
 			}
 		}
 
-		const table = (
+		const table = (<Translation ns={Locale.Namespace}>{(t) => <>
 			<DataTable
 				rowKey="uid"
 				viewId={Views.classifierList}
 				loadUrl={Api.classifierList}
 				onLoadData={this.onTableLoadData}
 				onSelectionChange={this.onTableSelectionChange}
+				rowActions={[{ name: t("button.edit"), onClick: this.showEditPane }]}
 				updateToken={updateTableToken}
 			/>
-		);
+		</>}</Translation>);
 
 		const content = (tree)
 			? (<>
@@ -445,9 +467,10 @@ class _PaneSearchClassifier extends React.Component<Props, State> {
 			<Page
 				title={<>
 					<Toolbar float="right">
-						<Link to={RouteBuilder.addClassifier(type.code, selectedGroup ? selectedGroup.uid : null)}>
+						{/* <Link to={RouteBuilder.addClassifier(type.code, selectedGroupUid)}>
 							<ButtonAdd type="primary" />
-						</Link>
+						</Link> */}
+						<ButtonAdd type="primary" onClick={this.showAddPane} />
 						<ButtonDelete onClick={this.delete} />
 						<ButtonExport onClick={this.export} />
 						<Link to={RouteBuilder.editClassifierType(type.uid)}>
@@ -455,13 +478,13 @@ class _PaneSearchClassifier extends React.Component<Props, State> {
 						</Link>
 					</Toolbar>
 
-					{mode == "Page" && <>
+					{mode == "page" && <>
 						<ClassifierBreadcrumb type={type} types={types} />
 						<PageHeader>{type.name}</PageHeader>
 					</>}
 
-					{mode == "Drawer" && <Toolbar clear>
-						<Button type="primary" icon={Icon.Select} onClick={this.select}>Выбрать</Button>
+					{mode == "drawer" && <Toolbar clear>
+						<ButtonSelect type="primary" onClick={this.select} />
 					</Toolbar>}
 
 				</>}>
@@ -499,9 +522,19 @@ class _PaneSearchClassifier extends React.Component<Props, State> {
 						onSuccess={this.onGroupModalSuccess}
 						onCancel={this.onGroupModalCancel} />}
 
+				{showEditPane &&
+					<PaneEditClassifier
+						type={type}
+						uid={editUid}
+						parentUid={selectedGroupUid}
+						onSuccess={this.handleEditPaneSuccess}
+						onClose={this.closeEditPane}
+					/>
+				}
+
 			</Page>
 		);
-	}
+	};
 }
 
 export const PaneSearchClassifier = withCompanyContext(_PaneSearchClassifier);

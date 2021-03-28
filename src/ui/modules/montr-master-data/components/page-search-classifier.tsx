@@ -9,13 +9,10 @@ interface RouteProps {
 interface Props extends RouteComponentProps<RouteProps> {
 }
 
-interface State {
-}
-
-export default class SearchClassifier extends React.Component<Props, State> {
-	render() {
+export default class SearchClassifier extends React.Component<Props> {
+	render(): React.ReactNode {
 		return (
-			<PaneSearchClassifier mode="Page" typeCode={this.props.match.params.typeCode} />
+			<PaneSearchClassifier mode="page" typeCode={this.props.match.params.typeCode} />
 		);
 	}
 }

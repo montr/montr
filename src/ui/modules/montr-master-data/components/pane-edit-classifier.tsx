@@ -2,29 +2,30 @@ import React from "react";
 import { Drawer, FormInstance } from "antd";
 import { Guid } from "@montr-core/models";
 import { ButtonCancel, ButtonSave, Toolbar } from "@montr-core/components";
-import { FormEditRole } from ".";
+import { ClassifierType } from "../models";
+import { FormEditClassifier } from ".";
 
 interface Props {
+    type: ClassifierType;
     uid?: Guid;
+    parentUid?: Guid;
     onSuccess?: () => void;
     onClose?: () => void;
 }
-
-// todo: create PaneEdit to remove PaneEditRole and PaneEditUser. see also ModalChangeEmail
-export class PaneEditRole extends React.Component<Props> {
+export class PaneEditClassifier extends React.Component<Props> {
 
     formRef = React.createRef<FormInstance>();
 
-    handleSubmitClick = async (e: React.MouseEvent<any>): Promise<void> => {
+    handleSubmitClick = async (): Promise<void> => {
         await this.formRef.current.submit();
     };
 
     render = (): React.ReactNode => {
-        const { uid, onSuccess, onClose } = this.props;
+        const { type, uid, parentUid, onSuccess, onClose } = this.props;
 
         return (
             <Drawer
-                title="Role"
+                title="Classifier"
                 closable={true}
                 onClose={onClose}
                 visible={true}
@@ -35,8 +36,10 @@ export class PaneEditRole extends React.Component<Props> {
                         <ButtonSave onClick={this.handleSubmitClick} />
                     </Toolbar>}>
 
-                <FormEditRole
+                <FormEditClassifier
+                    type={type}
                     uid={uid}
+                    parentUid={parentUid}
                     formRef={this.formRef}
                     hideButtons={true}
                     onSuccess={onSuccess}

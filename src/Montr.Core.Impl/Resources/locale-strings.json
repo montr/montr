@@ -13,6 +13,7 @@
       "button.remove": "Remove",
       "button.save": "Save",
       "button.search": "Search",
+      "button.select": "Select",
       "button.submit": "Submit",
       "confirm.title": "Confirm operation",
       "dataForm.rule.required": "The field «{{name}}» is required",
@@ -23,8 +24,8 @@
       "operation.error": "An error occurred while performing the operation.",
       "operation.executing": "Please wait until the operation is completed...",
       "operation.success": "The operation completed successfully.",
-      "page.setup.subtitle": "Congratulations, your system is up and running! Please answer some questions to initially configure your system.",
       "page.setup.initializedMessage": "Initial setup is completed. For additional system setup please use page Settings in personal cabinet.",
+      "page.setup.subtitle": "Congratulations, your system is up and running! Please answer some questions to initially configure your system.",
       "page.setup.title": "Setup"
     },
     "idx": {
@@ -104,6 +105,7 @@
       "button.remove": "Удалить",
       "button.save": "Сохранить",
       "button.search": "Искать",
+      "button.select": "Выбрать",
       "confirm.title": "Подтверждение операции",
       "dataForm.rule.required": "Поле «{{name}}» обязательно для заполнения",
       "dataForm.submit.error": "Ошибка при сохранении данных.",
@@ -113,8 +115,8 @@
       "operation.error": "Произошла ошибка при выполнении операции.",
       "operation.executing": "Пожалуйста подождите, операция выполняется...",
       "operation.success": "Операция выполнена успешно.",
-      "page.setup.subtitle": "Поздравляем, ваша система запущена и работает! Пожалуйста ответьте на несколько вопросов для первоначальной настройки системы.",
       "page.setup.initializedMessage": "Первоначальная настройка системы выполнена. Для дальнейшей настройки системы воспользуйтесь страницей Настройки в личном кабинете.",
+      "page.setup.subtitle": "Поздравляем, ваша система запущена и работает! Пожалуйста ответьте на несколько вопросов для первоначальной настройки системы.",
       "page.setup.title": "Настройка"
     },
     "idx": {

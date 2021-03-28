@@ -182,7 +182,7 @@ export default class TabEditInvitations extends React.Component<Props, State> {
 					width={1024}
 				>
 					<PaneSearchClassifier
-						mode="Drawer"
+						mode="drawer"
 						typeCode="counterparty"
 						onSelect={this.onSelect}
 					/>

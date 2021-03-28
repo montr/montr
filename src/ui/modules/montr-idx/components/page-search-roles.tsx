@@ -25,7 +25,7 @@ export default class PageSearcRoles extends React.Component<Props, State> {
         };
     }
 
-    refreshTable = async (resetCurrentPage?: boolean, resetSelectedRows?: boolean) => {
+    refreshTable = (resetCurrentPage?: boolean, resetSelectedRows?: boolean): void => {
         const { selectedRowKeys } = this.state;
 
         this.setState({
