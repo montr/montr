@@ -10,7 +10,7 @@ import { Views } from "../module";
 interface Props {
     uid?: Guid;
     data?: User;
-    showControls?: boolean;
+    hideButtons?: boolean;
     formRef?: React.RefObject<FormInstance>;
     onSuccess?: () => void;
     onClose?: () => void;
@@ -86,7 +86,7 @@ export class FormEditUser extends React.Component<Props, State> {
     };
 
     render = () => {
-        const { showControls, formRef } = this.props,
+        const { hideButtons, formRef } = this.props,
             { loading, fields, data } = this.state;
 
         return (
@@ -94,7 +94,7 @@ export class FormEditUser extends React.Component<Props, State> {
 
                 <DataForm
                     formRef={formRef}
-                    showControls={showControls}
+                    hideButtons={hideButtons}
                     fields={fields}
                     data={data}
                     onSubmit={this.handleSubmit} />

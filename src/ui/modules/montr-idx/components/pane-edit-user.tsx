@@ -40,7 +40,7 @@ export class PaneEditUser extends React.Component<Props, State> {
                 <FormEditUser
                     uid={uid}
                     formRef={this._formRef}
-                    showControls={false}
+                    hideButtons={true}
                     onSuccess={onSuccess}
                 />
 

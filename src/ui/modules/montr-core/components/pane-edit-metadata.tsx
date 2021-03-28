@@ -187,14 +187,14 @@ export class PaneEditMetadata extends React.Component<Props, State> {
 						</Toolbar>}>
 
 					<DataForm
-						showControls={false}
+						hideButtons={true}
 						fields={typeFields}
 						data={typeData}
 						onChange={this.handleTypeChange} />
 
 					<DataForm
 						formRef={this._formRef}
-						showControls={false}
+						hideButtons={true}
 						fields={visibleFields}
 						data={data}
 						onSubmit={this.handleSubmit} />

@@ -99,7 +99,7 @@ export class ModalEditClassifierLink extends React.Component<Props, State> {
 						formRef={this._formRef}
 						fields={fields}
 						data={data}
-						showControls={false}
+						hideButtons={true}
 						onSubmit={this.save}
 					/>
 				</Spin>

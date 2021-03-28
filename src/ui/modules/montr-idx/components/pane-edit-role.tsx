@@ -41,7 +41,7 @@ export class PaneEditRole extends React.Component<Props, State> {
                 <FormEditRole
                     uid={uid}
                     formRef={this.formRef}
-                    showControls={false}
+                    hideButtons={true}
                     onSuccess={onSuccess}
                 />
 

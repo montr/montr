@@ -17,7 +17,7 @@ export interface DataFormOptions extends WithTranslation {
 interface Props extends DataFormOptions {
 	fields?: IDataField[]; // todo: provide url to load fields or create wrapped component
 	data?: any; // IIndexer;
-	showControls?: boolean;
+	hideButtons?: boolean;
 	submitButton?: string;
 	resetButton?: string;
 	successMessage?: string;
@@ -40,7 +40,7 @@ class WrappedDataForm extends React.Component<Props, State> {
 	operationService = new OperationService();
 	notificationService = new NotificationService();
 
-	isMounted: boolean = true;
+	isMounted = true;
 	formRef = React.createRef<FormInstance>();
 
 	componentWillUnmount = () => {
@@ -120,13 +120,14 @@ class WrappedDataForm extends React.Component<Props, State> {
 	};
 
 	render = () => {
-		const { mode = "edit", layout = "horizontal", showControls = true,
+		const { mode = "edit", layout = "horizontal", hideButtons = false,
 			data, fields, submitButton, resetButton, t } = this.props,
 			{ loading } = this.state;
 
 		const itemLayout = layout == "horizontal" ? FormDefaults.tailFormItemLayout : null;
 
-		const showControlsItem = showControls && mode !== "view";
+		// submit button should be rendered as hidden to allow submit form by pressing enter in modals and side panes
+		const buttonsDisplay = (hideButtons || mode == "view") ? "none" : "block";
 
 		return (
 			<Spin spinning={loading}>
@@ -153,11 +154,11 @@ class WrappedDataForm extends React.Component<Props, State> {
 						return factory.createFormItem(field, data, this.props);
 					})}
 
-					{showControlsItem && <Form.Item {...itemLayout}>
+					<Form.Item {...itemLayout} style={{ display: buttonsDisplay }}>
 						<Toolbar>
 							<ButtonSave htmlType="submit">{submitButton}</ButtonSave>
 						</Toolbar>
-					</Form.Item>}
+					</Form.Item>
 				</Form>}
 			</Spin>
 		);

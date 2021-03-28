@@ -25,7 +25,7 @@ export default class PageSearchUsers extends React.Component<Props, State> {
 		};
 	}
 
-	refreshTable = async (resetCurrentPage?: boolean, resetSelectedRows?: boolean) => {
+	refreshTable = async (resetCurrentPage?: boolean, resetSelectedRows?: boolean): Promise<void> => {
 		const { selectedRowKeys } = this.state;
 
 		this.setState({

@@ -112,7 +112,7 @@ export class PaneEditAutomation extends React.Component<Props, State> {
 					<AutomationContextProvider entityTypeCode={entityTypeCode} entityTypeUid={entityTypeUid}>
 						<DataForm
 							formRef={this._formRef}
-							showControls={false}
+							hideButtons={true}
 							fields={fields}
 							data={data}
 							onSubmit={this.handleSubmit} />

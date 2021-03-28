@@ -87,7 +87,7 @@ export class ModalChangePhone extends React.Component<Props, State> {
 							formRef={this._formRef}
 							fields={fields}
 							data={data}
-							showControls={false}
+							hideButtons={true}
 							onSubmit={this.handleSubmit}
 						/>
 					</Spin>
