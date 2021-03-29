@@ -46,9 +46,9 @@ namespace Montr.Metadata.Services
 			{
 				result.Columns = new List<DataColumn>
 				{
-					new DataColumn { Key = "displayOrder", Name = "#", Width = 10, Sortable = true },
-					new DataColumn { Key = "code", Name = "Code", Width = 70, Sortable = true },
-					new DataColumn { Key = "name", Name = "Name", Width = 550, Sortable = true }
+					new() { Key = "displayOrder", Name = "#", Width = 10, Sortable = true },
+					new() { Key = "code", Name = "Code", Width = 70, Sortable = true },
+					new() { Key = "name", Name = "Name", Width = 550, Sortable = true }
 				};
 			}
 
@@ -66,14 +66,14 @@ namespace Montr.Metadata.Services
 			{
 				result.Columns = new List<DataColumn>
 				{
-					new DataColumn { Key = "displayOrder", Name = "#", Width = 10, Sortable = true },
-					new DataColumn { Key = "key", Name = "Key", Width = 100, Sortable = true },
-					new DataColumn { Key = "type", Name = "Type", Width = 70, /*Sortable = true*/ },
-					new DataColumn { Key = "name", Name = "Name", Width = 150, Sortable = true },
-					new DataColumn { Key = "description", Name = "Description", Width = 150 },
-					new DataColumn { Key = "active", Name = "Active", Width = 10, Sortable = true, Type = BooleanField.TypeCode },
-					new DataColumn { Key = "system", Name = "System", Width = 10, Sortable = true, Type = BooleanField.TypeCode },
-					new DataColumn { Key = "required", Name = "Required", Width = 10, Sortable = true, Type = BooleanField.TypeCode },
+					new() { Key = "displayOrder", Name = "#", Width = 10, Sortable = true },
+					new() { Key = "key", Name = "Key", Width = 100, Sortable = true },
+					new() { Key = "type", Name = "Type", Width = 70, /*Sortable = true*/ },
+					new() { Key = "name", Name = "Name", Width = 150, Sortable = true },
+					new() { Key = "description", Name = "Description", Width = 150 },
+					new() { Key = "active", Name = "Active", Width = 10, Sortable = true, Type = BooleanField.TypeCode },
+					new() { Key = "system", Name = "System", Width = 10, Sortable = true, Type = BooleanField.TypeCode },
+					new() { Key = "required", Name = "Required", Width = 10, Sortable = true, Type = BooleanField.TypeCode },
 				};
 			}
 
@@ -102,28 +102,6 @@ namespace Montr.Metadata.Services
 				result.Fields = fieldProvider.GetMetadata();
 			}
 
-			if (viewId == "RoleSearch/Grid")
-			{
-				result.Columns = new List<DataColumn>
-				{
-					new() { Key = "name", Name = "Name", Sortable = true, Width = 1000, UrlProperty = "url" },
-				};
-			}
-
-			if (viewId == "Role/Edit")
-			{
-				/*result.Fields = new List<FieldMetadata>
-				{
-					new TextField { Key = "name", Name = "Name", Required = true },
-				};*/
-
-				result.Panes = new List<DataPane>
-				{
-					new() { Key = "info", Name = "Информация", Icon = "profile", Component = "components/tab-edit-role" },
-					new() { Key = "history", Name = "История изменений", Icon = "eye" }
-				};
-			}
-
 			if (viewId == "UserRoles/Grid")
 			{
 				result.Columns = new List<DataColumn>
@@ -132,44 +110,13 @@ namespace Montr.Metadata.Services
 				};
 			}
 
-			if (viewId == "UserSearch/Grid")
-			{
-				result.Columns = new List<DataColumn>
-				{
-					new() { Key = "userName", Name = "Username", Sortable = true, Width = 200, UrlProperty = "url" },
-					new() { Key = "firstName", Name = "First Name", Sortable = true, Width = 200, UrlProperty = "url" },
-					new() { Key = "lastName", Name = "Last Name", Sortable = true, Width = 200, UrlProperty = "url" },
-					new() { Key = "email", Name = "Email", Sortable = true, Width = 200 },
-					new() { Key = "phoneNumber", Name = "Phone", Sortable = true, Width = 200 }
-				};
-			}
-
-			if (viewId == "User/Edit")
-			{
-				/*result.Fields = new List<FieldMetadata>
-				{
-					new TextField { Key = "userName", Name = "Username", Required = true },
-					new TextField { Key = "firstName", Name = "First Name", Required = true },
-					new TextField { Key = "lastName", Name = "Last Name", Required = true },
-					new TextField { Key = "email", Name = "Email", Required = true },
-					new TextField { Key = "phoneNumber", Name = "Phone", Required = true },
-				};*/
-
-				result.Panes = new List<DataPane>
-				{
-					new() { Key = "info", Name = "Информация", Icon = "profile", Component = "components/tab-edit-user" },
-					new() { Key = "roles", Name = "Roles", Icon = "solution", Component = "components/tab-edit-user-roles" },
-					new() { Key = "history", Name = "История изменений", Icon = "eye" },
-				};
-			}
-
 			if (viewId == "CompanySearch/Grid")
 			{
 				result.Columns = new List<DataColumn>
 				{
-					new DataColumn { Key = "name", Name = "Наименование", Sortable = true, Width = 200, UrlProperty = "url" },
-					new DataColumn { Key = "configCode", Name = "ConfigCode", Sortable = true, Width = 100 },
-					new DataColumn { Key = "statusCode", Name = "StatusCode", Sortable = true, Width = 100 }
+					new() { Key = "name", Name = "Наименование", Sortable = true, Width = 200, UrlProperty = "url" },
+					new() { Key = "configCode", Name = "ConfigCode", Sortable = true, Width = 100 },
+					new() { Key = "statusCode", Name = "StatusCode", Sortable = true, Width = 100 }
 				};
 			}
 
@@ -178,10 +125,10 @@ namespace Montr.Metadata.Services
 			{
 				result.Columns = new List<DataColumn>
 				{
-					new DataColumn { Key = "locale", Name = "Язык", Width = 20, Sortable = true },
-					new DataColumn { Key = "module", Name = "Модуль", Width = 60, Sortable = true },
-					new DataColumn { Key = "key", Name = "Ключ", Width = 100, Sortable = true },
-					new DataColumn { Key = "value", Name = "Значение", Width = 200 }
+					new() { Key = "locale", Name = "Язык", Width = 20, Sortable = true },
+					new() { Key = "module", Name = "Модуль", Width = 60, Sortable = true },
+					new() { Key = "key", Name = "Ключ", Width = 100, Sortable = true },
+					new() { Key = "value", Name = "Значение", Width = 200 }
 				};
 			}
 
@@ -288,12 +235,12 @@ namespace Montr.Metadata.Services
 			{
 				result.Columns = new List<DataColumn>
 				{
-					new DataColumn { Key = "documentNumber", Name = "Номер", Sortable = true, UrlProperty = "url", Width = 50 },
-					new DataColumn { Key = "documentDate", Name = "Дата", Type = "datetime", Sortable = true, UrlProperty = "url", Width = 100 },
-					new DataColumn { Key = "direction", Name = "Направление", Width = 30 },
-					new DataColumn { Key = "name", Name = "Наименование", Width = 250 },
-					new DataColumn { Key = "configCode", Name = "Тип", Sortable = true, Width = 100 },
-					new DataColumn { Key = "statusCode", Name = "Статус", Sortable = true, Width = 100 },
+					new() { Key = "documentNumber", Name = "Номер", Sortable = true, UrlProperty = "url", Width = 50 },
+					new() { Key = "documentDate", Name = "Дата", Type = "datetime", Sortable = true, UrlProperty = "url", Width = 100 },
+					new() { Key = "direction", Name = "Направление", Width = 30 },
+					new() { Key = "name", Name = "Наименование", Width = 250 },
+					new() { Key = "configCode", Name = "Тип", Sortable = true, Width = 100 },
+					new() { Key = "statusCode", Name = "Статус", Sortable = true, Width = 100 },
 				};
 			}
 
@@ -301,19 +248,19 @@ namespace Montr.Metadata.Services
 			{
 				result.Panes = new List<DataPane>
 				{
-					new DataPane { Key = "common", Name = "Информация" },
-					new DataPane { Key = "statuses", Name = "Statuses", Component = "panes/PaneSearchEntityStatuses" },
-					new DataPane { Key = "fields", Name = "Анкета", Component = "panes/PaneSearchMetadata" },
-					new DataPane { Key = "automation", Name = "Automations", Component = "panes/PaneSearchAutomation" }
+					new() { Key = "common", Name = "Информация" },
+					new() { Key = "statuses", Name = "Statuses", Component = "panes/PaneSearchEntityStatuses" },
+					new() { Key = "fields", Name = "Анкета", Component = "panes/PaneSearchMetadata" },
+					new() { Key = "automation", Name = "Automations", Component = "panes/PaneSearchAutomation" }
 				};
 			}
 
-			if (viewId == "Process/List")
+			/*if (viewId == "Process/List")
 			{
 				result.Columns = new List<DataColumn>
 				{
-					new DataColumn { Key = "code", Name = "Code", Sortable = true, UrlProperty = "url", Width = 100 },
-					new DataColumn { Key = "name", Name = "Name", Sortable = true, UrlProperty = "url", Width = 400 }
+					new() { Key = "code", Name = "Code", Sortable = true, UrlProperty = "url", Width = 100 },
+					new() { Key = "name", Name = "Name", Sortable = true, UrlProperty = "url", Width = 400 }
 				};
 			}
 
@@ -321,20 +268,21 @@ namespace Montr.Metadata.Services
 			{
 				result.Panes = new List<DataPane>
 				{
-					new DataPane { Key = "fields", Name = "Поля", Component = "panes/PaneSearchMetadata" },
+					new() { Key = "fields", Name = "Поля", Component = "panes/PaneSearchMetadata" },
 				};
-			}
+			}*/
 
 			// Events
 			if (viewId == "PrivateEventSearch/Grid")
 			{
 				result.Columns = new List<DataColumn>
 				{
-					new DataColumn { Key = "id", Name = "Номер", Sortable = true, Width = 10,
+					new()
+					{ Key = "id", Name = "Номер", Sortable = true, Width = 10,
 						UrlProperty = "url", DefaultSortOrder = SortOrder.Descending },
-					new DataColumn { Key = "configCode", Name = "Тип", Width = 25 },
-					new DataColumn { Key = "statusCode", Name = "Статус", Width = 25 /*, Align = DataColumnAlign.Center */ },
-					new DataColumn { Key = "name", Name = "Наименование", Sortable = true, Width = 400, UrlProperty = "url" },
+					new() { Key = "configCode", Name = "Тип", Width = 25 },
+					new() { Key = "statusCode", Name = "Статус", Width = 25 /*, Align = DataColumnAlign.Center */ },
+					new() { Key = "name", Name = "Наименование", Sortable = true, Width = 400, UrlProperty = "url" },
 					// new DataColumn { Key = "description", Name = "Описание", Width = 300 },
 				};
 			}
@@ -343,17 +291,17 @@ namespace Montr.Metadata.Services
 			{
 				result.Panes = new List<DataPane>
 				{
-					new DataPane { Key = "info", Name = "Информация", Icon = "profile", Component = "panes/private/EditEventPane" },
-					new DataPane { Key = "invitations", Name = "Приглашения (😎)", Icon = "solution", Component = "panes/private/InvitationPane" },
-					new DataPane { Key = "proposals", Name = "Предложения", Icon = "solution" },
-					new DataPane { Key = "questions", Name = "Разъяснения", Icon = "solution" },
-					new DataPane { Key = "team", Name = "Команда", Icon = "team" },
-					new DataPane { Key = "items", Name = "Позиции", Icon = "table" },
-					new DataPane { Key = "history", Name = "История изменений", Icon = "eye" },
-					new DataPane { Key = "5", Name = "Тендерная комиссия (команда?)" },
-					new DataPane { Key = "6", Name = "Критерии оценки (анкета?)" },
-					new DataPane { Key = "7", Name = "Документы (поле?)" },
-					new DataPane { Key = "8", Name = "Контактные лица (поле?)" },
+					new() { Key = "info", Name = "Информация", Icon = "profile", Component = "panes/private/EditEventPane" },
+					new() { Key = "invitations", Name = "Приглашения (😎)", Icon = "solution", Component = "panes/private/InvitationPane" },
+					new() { Key = "proposals", Name = "Предложения", Icon = "solution" },
+					new() { Key = "questions", Name = "Разъяснения", Icon = "solution" },
+					new() { Key = "team", Name = "Команда", Icon = "team" },
+					new() { Key = "items", Name = "Позиции", Icon = "table" },
+					new() { Key = "history", Name = "История изменений", Icon = "eye" },
+					new() { Key = "5", Name = "Тендерная комиссия (команда?)" },
+					new() { Key = "6", Name = "Критерии оценки (анкета?)" },
+					new() { Key = "7", Name = "Документы (поле?)" },
+					new() { Key = "8", Name = "Контактные лица (поле?)" },
 				};
 			}
 
@@ -361,14 +309,14 @@ namespace Montr.Metadata.Services
 			{
 				result.Columns = new List<DataColumn>
 				{
-					new DataColumn { Key = "counterpartyName", Name = "Контрагент", Sortable = true, Width = 400 },
-					new DataColumn { Key = "statusCode", Name = "Статус", Width = 100 },
-					new DataColumn { Key = "user", Name = "Контактное лицо", Width = 100 },
-					new DataColumn { Key = "email", Name = "Email", Width = 100 },
-					new DataColumn { Key = "phone", Name = "Телефон", Width = 100 },
-					new DataColumn { Key = "createDate", Name = "Дата создания", Width = 100 },
-					new DataColumn { Key = "inviteDate", Name = "Дата приглашения", Width = 100 },
-					new DataColumn { Key = "lastAccessDate", Name = "Дата последнего доступа", Width = 100 },
+					new() { Key = "counterpartyName", Name = "Контрагент", Sortable = true, Width = 400 },
+					new() { Key = "statusCode", Name = "Статус", Width = 100 },
+					new() { Key = "user", Name = "Контактное лицо", Width = 100 },
+					new() { Key = "email", Name = "Email", Width = 100 },
+					new() { Key = "phone", Name = "Телефон", Width = 100 },
+					new() { Key = "createDate", Name = "Дата создания", Width = 100 },
+					new() { Key = "inviteDate", Name = "Дата приглашения", Width = 100 },
+					new() { Key = "lastAccessDate", Name = "Дата последнего доступа", Width = 100 },
 				};
 			}
 

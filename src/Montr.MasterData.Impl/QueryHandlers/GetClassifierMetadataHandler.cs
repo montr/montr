@@ -56,11 +56,11 @@ namespace Montr.MasterData.Impl.QueryHandlers
 			{
 				Panes = new List<DataPane>
 				{
-					new DataPane { Key = "info", Name = "Информация", Component = "panes/TabEditClassifierType" },
-					new DataPane { Key = "hierarchy", Name = "Иерархия", Component = "panes/TabEditClassifierTypeHierarchy" },
-					new DataPane { Key = "fields", Name = "Поля", Component = "panes/PaneSearchMetadata" },
-					new DataPane { Key = "numeration", Name = "Нумерация", Component = "panes/PaneEditNumeration" },
-					new DataPane { Key = "history", Name = "История изменений" }
+					new() { Key = "info", Name = "Информация", Icon = "profile", Component = "panes/TabEditClassifierType" },
+					new() { Key = "hierarchy", Name = "Иерархия", Component = "panes/TabEditClassifierTypeHierarchy" },
+					new() { Key = "fields", Name = "Поля", Component = "panes/PaneSearchMetadata" },
+					new() { Key = "numeration", Name = "Нумерация", Component = "panes/PaneEditNumeration" },
+					new() { Key = "history", Name = "История изменений", Icon = "eye" }
 				}
 			};
 		}
@@ -69,10 +69,10 @@ namespace Montr.MasterData.Impl.QueryHandlers
 		{
 			var panes = new List<DataPane>
 			{
-				new DataPane { Key = "info", Name = "Информация", Component = "panes/TabEditClassifier" },
-				new DataPane { Key = "hierarchy", Name = "Иерархия", Component = "panes/TabEditClassifierHierarchy" },
-				new DataPane { Key = "dependencies", Name = "Зависимости" },
-				new DataPane { Key = "history", Name = "История изменений" }
+				new() { Key = "info", Name = "Информация", Icon = "profile", Component = "panes/TabEditClassifier" },
+				new() { Key = "hierarchy", Name = "Иерархия", Component = "panes/TabEditClassifierHierarchy" },
+				new() { Key = "dependencies", Name = "Зависимости" },
+				new() { Key = "history", Name = "История изменений", Icon = "eye" }
 			};
 
 			// todo: register different tabs for different classifiers on startup
@@ -86,6 +86,12 @@ namespace Montr.MasterData.Impl.QueryHandlers
 			{
 				panes.Insert(panes.FindIndex(x => x.Key == "info") + 1,
 					new DataPane { Key = "usage", Name = "Использование", Component = "panes/TabEditNumeratorEntities" });
+			}
+
+			if (type.Code == "user")
+			{
+				panes.Insert(panes.FindIndex(x => x.Key == "info") + 1,
+					new DataPane { Key = "roles", Name = "Roles", Icon = "solution", Component = "components/tab-edit-user-roles" });
 			}
 
 			// todo: move to own module
