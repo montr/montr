@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
@@ -21,8 +22,10 @@ namespace Montr.Idx.Impl.Services
 			_userManager = userManager;
 		}
 
-		public async Task<User> Get(Guid userUid, CancellationToken cancellationToken)
+		public async Task<User> Get(Guid userUid, CancellationToken cancellationToken = default)
 		{
+			cancellationToken.ThrowIfCancellationRequested();
+
 			var dbUser = await _userManager.FindByIdAsync(userUid.ToString());
 
 			return new()
@@ -37,8 +40,10 @@ namespace Montr.Idx.Impl.Services
 			};
 		}
 
-		public async Task<ApiResult> Create(User user, CancellationToken cancellationToken)
+		public async Task<ApiResult> Create(User user, CancellationToken cancellationToken = default)
 		{
+			cancellationToken.ThrowIfCancellationRequested();
+
 			var dbUser = Map(user);
 
 			var identityResult =  await _userManager.CreateAsync(dbUser);
@@ -55,8 +60,10 @@ namespace Montr.Idx.Impl.Services
 			return result;
 		}
 
-		public async Task<ApiResult> Create(User user, string password, CancellationToken cancellationToken)
+		public async Task<ApiResult> Create(User user, string password, CancellationToken cancellationToken = default)
 		{
+			cancellationToken.ThrowIfCancellationRequested();
+
 			var dbUser = Map(user);
 
 			var identityResult = await _userManager.CreateAsync(dbUser, password);
@@ -74,11 +81,11 @@ namespace Montr.Idx.Impl.Services
 			return result;
 		}
 
-		public async Task<ApiResult> Update(User user, CancellationToken cancellationToken)
+		public async Task<ApiResult> Update(User user, CancellationToken cancellationToken = default)
 		{
-			var userId = user.Uid.ToString();
+			cancellationToken.ThrowIfCancellationRequested();
 
-			var dbUser = await _userManager.FindByIdAsync(userId);
+			var dbUser = await _userManager.FindByIdAsync(user.Uid.ToString());
 
 			dbUser.ConcurrencyStamp = user.ConcurrencyStamp;
 
@@ -103,11 +110,11 @@ namespace Montr.Idx.Impl.Services
 			return result;
 		}
 
-		public async Task<ApiResult> Delete(User user, CancellationToken cancellationToken)
+		public async Task<ApiResult> Delete(User user, CancellationToken cancellationToken = default)
 		{
-			var userId = user.Uid.ToString();
+			cancellationToken.ThrowIfCancellationRequested();
 
-			var dbUser = await _userManager.FindByIdAsync(userId);
+			var dbUser = await _userManager.FindByIdAsync(user.Uid.ToString());
 
 			dbUser.ConcurrencyStamp = user.ConcurrencyStamp;
 
@@ -118,6 +125,46 @@ namespace Montr.Idx.Impl.Services
 			if (result.Success)
 			{
 				_logger.LogInformation("Deleted user {userName}.", dbUser.UserName);
+
+				result.Uid = dbUser.Id;
+			}
+
+			return result;
+		}
+
+		public async Task<ApiResult> AddRoles(Guid userUid, IList<string> roles, CancellationToken cancellationToken = default)
+		{
+			cancellationToken.ThrowIfCancellationRequested();
+
+			var dbUser = await _userManager.FindByIdAsync(userUid.ToString());
+
+			var identityResult =  await _userManager.AddToRolesAsync(dbUser, roles);
+
+			var result = identityResult.ToApiResult();
+
+			if (result.Success)
+			{
+				_logger.LogInformation("Added user {userName} to roles {roles}.", dbUser.UserName, roles);
+
+				result.Uid = dbUser.Id;
+			}
+
+			return result;
+		}
+
+		public async Task<ApiResult> RemoveRoles(Guid userUid, IList<string> roles, CancellationToken cancellationToken = default)
+		{
+			cancellationToken.ThrowIfCancellationRequested();
+
+			var dbUser = await _userManager.FindByIdAsync(userUid.ToString());
+
+			var identityResult =  await _userManager.RemoveFromRolesAsync(dbUser, roles);
+
+			var result = identityResult.ToApiResult();
+
+			if (result.Success)
+			{
+				_logger.LogInformation("Removed user {userName} from roles {roles}.", dbUser.UserName, roles);
 
 				result.Uid = dbUser.Id;
 			}

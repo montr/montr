@@ -48,6 +48,7 @@ namespace Montr.Idx.Tests.CommandHandlers
 				});
 
 			var identityServiceFactory = new IdentityServiceFactory();
+
 			var roleManager = new DefaultRoleManager(new NullLogger<DefaultRoleManager>(), identityServiceFactory.RoleManager);
 			var userManager = new DefaultUserManager(new NullLogger<DefaultUserManager>(), identityServiceFactory.UserManager);
 

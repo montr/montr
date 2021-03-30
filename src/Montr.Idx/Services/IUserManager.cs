@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Montr.Core.Models;
@@ -17,5 +18,9 @@ namespace Montr.Idx.Services
 		Task<ApiResult> Update(User user, CancellationToken cancellationToken = default);
 
 		Task<ApiResult> Delete(User user, CancellationToken cancellationToken = default);
+
+		Task<ApiResult> AddRoles(Guid userUid, IList<string> roles, CancellationToken cancellationToken = default);
+
+		Task<ApiResult> RemoveRoles(Guid userUid, IList<string> roles, CancellationToken cancellationToken = default);
 	}
 }
