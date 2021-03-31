@@ -1,8 +1,8 @@
 import * as React from "react";
-import { Button, Drawer, Alert } from "antd";
+import { Button, Alert } from "antd";
 import { PaneProps, Guid, DataResult, IMenu } from "@montr-core/models";
 import { DataTable, Toolbar, DataTableUpdateToken, ButtonAdd, ButtonDelete, Icon } from "@montr-core/components";
-import { PaneSearchClassifier } from "@montr-master-data/components";
+import { PaneSelectClassifier } from "@montr-master-data/components";
 import { ModalEditInvitation } from "../components";
 import { IEvent, Invitation } from "../models";
 import { InvitationService } from "../services";
@@ -33,7 +33,7 @@ export default class TabEditInvitations extends React.Component<Props, State> {
 		};
 	}
 
-	componentWillUnmount = async () => {
+	componentWillUnmount = async (): Promise<void> => {
 		await this._invitationService.abort();
 	};
 
@@ -53,11 +53,11 @@ export default class TabEditInvitations extends React.Component<Props, State> {
 		return undefined;
 	};
 
-	onSelectionChange = async (selectedRowKeys: string[] | number[]) => {
+	onSelectionChange = async (selectedRowKeys: string[] | number[]): Promise<void> => {
 		this.setState({ selectedRowKeys });
 	};
 
-	refreshTable = async (resetSelectedRows?: boolean) => {
+	refreshTable = async (resetSelectedRows?: boolean): Promise<void> => {
 		const { selectedRowKeys } = this.state;
 
 		this.setState({
@@ -66,15 +66,15 @@ export default class TabEditInvitations extends React.Component<Props, State> {
 		});
 	};
 
-	showAddDrawer = () => {
+	showAddDrawer = async (): Promise<void> => {
 		this.setState({ showDrawer: true });
 	};
 
-	onCloseDrawer = async () => {
+	onCloseDrawer = async (): Promise<void> => {
 		this.setState({ showDrawer: false });
 	};
 
-	onSelect = async (keys: string[]) => {
+	onSelect = async (keys: string[]): Promise<void> => {
 		const { data } = this.props;
 
 		if (data.uid) {
@@ -91,25 +91,25 @@ export default class TabEditInvitations extends React.Component<Props, State> {
 		await this.refreshTable();
 	};
 
-	showAddModal = () => {
+	showAddModal = async (): Promise<void> => {
 		this.setState({ editData: {} });
 	};
 
-	showEditModal = (data: Invitation) => {
+	showEditModal = async (data: Invitation): Promise<void> => {
 		this.setState({ editData: data });
 	};
 
-	onModalSuccess = async (data: Invitation) => {
+	onModalSuccess = async (data: Invitation): Promise<void> => {
 		this.setState({ editData: undefined });
 
 		await this.refreshTable();
 	};
 
-	onModalCancel = () => {
+	onModalCancel = async (): Promise<void> => {
 		this.setState({ editData: undefined });
 	};
 
-	delete = async () => {
+	delete = async (): Promise<void> => {
 		const { selectedRowKeys } = this.state;
 
 		if (selectedRowKeys) {
@@ -127,7 +127,7 @@ export default class TabEditInvitations extends React.Component<Props, State> {
 		}
 	};
 
-	render() {
+	render = (): React.ReactNode => {
 		const { data } = this.props,
 			{ selectedRowKeys, updateTableToken, editData, showDrawer } = this.state;
 
@@ -173,20 +173,12 @@ export default class TabEditInvitations extends React.Component<Props, State> {
 					onCancel={this.onModalCancel}
 				/>}
 
-			{showDrawer &&
-				<Drawer
-					// title="Контрагенты"
-					closable={false}
-					onClose={this.onCloseDrawer}
-					visible={true}
-					width={1024}
-				>
-					<PaneSearchClassifier
-						mode="drawer"
-						typeCode="counterparty"
-						onSelect={this.onSelect}
-					/>
-				</Drawer>}
+			{showDrawer && <PaneSelectClassifier
+				typeCode="counterparty"
+				onSelect={this.onSelect}
+				onClose={this.onCloseDrawer}
+			/>}
+
 		</>;
-	}
+	};
 }

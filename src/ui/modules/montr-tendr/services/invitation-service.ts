@@ -3,12 +3,12 @@ import { Fetcher } from "@montr-core/services";
 import { ApiResult, Guid } from "@montr-core/models";
 import { Invitation } from "../models";
 
-interface IInsertInvitationRequest {
+interface InsertInvitationRequest {
 	eventUid: Guid;
 	items: Invitation[];
 }
 
-interface IUpdateInvitationRequest {
+interface UpdateInvitationRequest {
 	eventUid: Guid;
 	item: Invitation;
 }
@@ -19,11 +19,11 @@ export class InvitationService extends Fetcher {
 		return this.post(`${Constants.apiURL}/invitation/get`, { uid });
 	};
 
-	insert = async (request: IInsertInvitationRequest): Promise<ApiResult> => {
+	insert = async (request: InsertInvitationRequest): Promise<ApiResult> => {
 		return this.post(`${Constants.apiURL}/invitation/insert`, request);
 	};
 
-	update = async (request: IUpdateInvitationRequest): Promise<ApiResult> => {
+	update = async (request: UpdateInvitationRequest): Promise<ApiResult> => {
 		return this.post(`${Constants.apiURL}/invitation/update`, request);
 	};
 

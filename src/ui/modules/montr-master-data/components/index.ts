@@ -9,3 +9,4 @@ export * from "./modal-edit-classifier-link";
 export * from "./modal-edit-classifier-tree";
 export * from "./pane-edit-classifier";
 export * from "./pane-search-classifier";
+export * from "./pane-select-classifier";
