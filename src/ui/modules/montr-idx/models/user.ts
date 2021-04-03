@@ -1,7 +1,6 @@
-import { Guid } from "@montr-core/models";
+import { Classifier } from "@montr-master-data/models";
 
-export interface User {
-    uid: Guid;
+export interface User extends Classifier {
     userName: string;
     lastName: string;
     firstName: string;

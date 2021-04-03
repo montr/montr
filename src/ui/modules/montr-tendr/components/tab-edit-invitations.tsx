@@ -22,8 +22,8 @@ interface State {
 
 export default class TabEditInvitations extends React.Component<Props, State> {
 
-	private _operation = new OperationService();
-	private _invitationService = new InvitationService();
+	private operation = new OperationService();
+	private invitationService = new InvitationService();
 
 	constructor(props: Props) {
 		super(props);
@@ -34,7 +34,7 @@ export default class TabEditInvitations extends React.Component<Props, State> {
 	}
 
 	componentWillUnmount = async (): Promise<void> => {
-		await this._invitationService.abort();
+		await this.invitationService.abort();
 	};
 
 	onLoadTableData = async (loadUrl: string, postParams: any): Promise<DataResult<{}> | undefined> => {
@@ -47,7 +47,7 @@ export default class TabEditInvitations extends React.Component<Props, State> {
 				...postParams
 			};
 
-			return await this._invitationService.post(loadUrl, params);
+			return await this.invitationService.post(loadUrl, params);
 		}
 
 		return undefined;
@@ -78,7 +78,7 @@ export default class TabEditInvitations extends React.Component<Props, State> {
 		const { data } = this.props;
 
 		if (data.uid) {
-			const result = await this._invitationService.insert({
+			const result = await this.invitationService.insert({
 				eventUid: data.uid,
 				items: keys.map(x => {
 					return { counterpartyUid: new Guid(x) };
@@ -113,8 +113,8 @@ export default class TabEditInvitations extends React.Component<Props, State> {
 		const { selectedRowKeys } = this.state;
 
 		if (selectedRowKeys) {
-			await this._operation.execute(async () => {
-				const result = await this._invitationService.delete(selectedRowKeys);
+			await this.operation.execute(async () => {
+				const result = await this.invitationService.delete(selectedRowKeys);
 				if (result.success) {
 					this.refreshTable(true);
 				}

@@ -4,7 +4,7 @@ import { PaneSearchClassifier } from ".";
 
 interface Props {
     typeCode: string;
-    onSelect?: (keys: string[] | number[]) => Promise<void>;
+    onSelect?: (keys: string[] | number[], rows: any[]) => Promise<void>;
     onClose?: () => void;
 }
 

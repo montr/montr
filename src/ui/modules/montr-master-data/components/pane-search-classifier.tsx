@@ -17,7 +17,7 @@ import { Translation } from "react-i18next";
 interface Props extends CompanyContextProps {
 	typeCode: string;
 	mode: "page" | "drawer";
-	onSelect?: (keys: string[] | number[]) => Promise<void>;
+	onSelect?: (keys: string[] | number[], rows: any[]) => Promise<void>;
 }
 
 interface State {
@@ -32,6 +32,7 @@ interface State {
 	editUid?: Guid;
 	expandedKeys: string[];
 	selectedRowKeys: string[] | number[];
+	selectedRows: any[];
 	depth: string; // todo: make enum
 	updateTableToken: DataTableUpdateToken;
 }
@@ -63,6 +64,7 @@ class _PaneSearchClassifier extends React.Component<Props, State> {
 			types: [],
 			expandedKeys: [],
 			selectedRowKeys: [],
+			selectedRows: [],
 			depth: "0",
 			updateTableToken: { date: new Date() }
 		};
@@ -191,8 +193,8 @@ class _PaneSearchClassifier extends React.Component<Props, State> {
 		await this._classifierService.export({ typeCode: this.props.typeCode });
 	};
 
-	onTableSelectionChange = async (selectedRowKeys: string[] | number[]) => {
-		this.setState({ selectedRowKeys });
+	onTableSelectionChange = async (selectedRowKeys: string[] | number[], selectedRows: any[]) => {
+		this.setState({ selectedRowKeys, selectedRows });
 	};
 
 	onTreeSelect = async (value: string) => {
@@ -377,10 +379,10 @@ class _PaneSearchClassifier extends React.Component<Props, State> {
 
 	select = () => {
 		const { onSelect } = this.props,
-			{ selectedRowKeys } = this.state;
+			{ selectedRowKeys, selectedRows } = this.state;
 
 		if (onSelect) {
-			onSelect(selectedRowKeys);
+			onSelect(selectedRowKeys, selectedRows);
 		}
 	};
 

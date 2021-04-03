@@ -13,10 +13,10 @@ interface OperationExecuteOptions {
 
 export class OperationService {
 
-	private _navigation = new NavigationService();
-	private _notification = new NotificationService();
+	private readonly navigation = new NavigationService();
+	private readonly notification = new NotificationService();
 
-	execute = async (operation: () => Promise<ApiResult>, options?: OperationExecuteOptions): Promise<void> => {
+	execute = async (operation: () => Promise<ApiResult>, options?: OperationExecuteOptions): Promise<ApiResult> => {
 
 		const t = (key: string) => i18next.t(key);
 
@@ -28,7 +28,7 @@ export class OperationService {
 			else if (result?.errors) {
 				result.errors.forEach(x => {
 					x.messages.forEach(e => {
-						this._notification.error(e);
+						this.notification.error(e);
 					});
 				});
 			}
@@ -36,29 +36,29 @@ export class OperationService {
 
 		const executeInternal = async (): Promise<ApiResult> => {
 
-			const message = this._notification.loading(t("operation.executing"));
+			const message = this.notification.loading(t("operation.executing"));
 
 			try {
 				const result = await operation();
 
 				if (result && result.success) {
-					this._notification.success(result.message ?? options?.successMessage ?? t("operation.success"));
+					this.notification.success(result.message ?? options?.successMessage ?? t("operation.success"));
 				}
 				else {
 					// todo: do not show common error if options.showFieldErrors passed
-					this._notification.error(result?.message ?? options?.errorMessage ?? t("operation.error"));
+					this.notification.error(result?.message ?? options?.errorMessage ?? t("operation.error"));
 
 					showFieldErrors(result);
 				}
 
 				if (result && result.redirectUrl) {
-					this._navigation.navigate(result.redirectUrl);
+					this.navigation.navigate(result.redirectUrl);
 				}
 
 				return result;
 			}
 			catch (error) {
-				this._notification.error(options?.errorMessage ?? t("operation.error"), error.message);
+				this.notification.error(options?.errorMessage ?? t("operation.error"), error.message);
 
 				if (error.response?.status == 400) {
 					const result = this.convertToApiResult(<ValidationProblemDetails>error.response.data);
@@ -72,20 +72,20 @@ export class OperationService {
 		};
 
 		if (options?.showConfirm) {
-			this._notification.confirm(
+			this.notification.confirm(
 				options.confirmTitle ?? t("operation.confirm.title"),
 				options.confirmContent,
 				async () => {
-					await executeInternal();
+					return await executeInternal();
 				}
 			);
 		}
 		else {
-			await executeInternal();
+			return await executeInternal();
 		}
 	};
 
-	convertToApiResult = (details: ValidationProblemDetails): ApiResult => {
+	private convertToApiResult = (details: ValidationProblemDetails): ApiResult => {
 
 		const errors: ApiResultError[] = [];
 

@@ -1,7 +1,5 @@
-import { Guid } from "@montr-core/models";
+import { Classifier } from "@montr-master-data/models";
 
-export interface Role {
-    uid: Guid;
-    name: string;
+export interface Role extends Classifier {
     concurrencyStamp: string;
 }
