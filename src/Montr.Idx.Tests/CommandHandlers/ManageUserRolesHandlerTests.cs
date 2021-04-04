@@ -26,8 +26,8 @@ namespace Montr.Idx.Tests.CommandHandlers
 			var roleManager = new DefaultRoleManager(new NullLogger<DefaultRoleManager>(), identityServiceFactory.RoleManager);
 			var userManager = new DefaultUserManager(new NullLogger<DefaultUserManager>(), identityServiceFactory.UserManager);
 
-			var addHandler = new AddUserRolesHandler(userManager);
-			var removeHandler = new RemoveUserRolesHandler(userManager);
+			var addHandler = new AddUserRolesHandler(unitOfWorkFactory, userManager);
+			var removeHandler = new RemoveUserRolesHandler(unitOfWorkFactory, userManager);
 
 			var roles = new[] { "test_role_1", "test_role_2", "test_role_3" };
 

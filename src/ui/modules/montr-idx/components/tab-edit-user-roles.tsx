@@ -1,6 +1,6 @@
 import React from "react";
 import { Button } from "antd";
-import { DataTable, DataTableUpdateToken, Icon, Toolbar } from "@montr-core/components";
+import { ButtonAdd, ButtonDelete, DataTable, DataTableUpdateToken, Icon, Toolbar } from "@montr-core/components";
 import { DataResult } from "@montr-core/models";
 import { OperationService } from "@montr-core/services";
 import { PaneSelectClassifier } from "@montr-master-data/components";
@@ -15,6 +15,7 @@ interface Props {
 interface State {
     showDrawer?: boolean;
     selectedRowKeys?: string[] | number[];
+    selectedRows?: Role[];
     updateTableToken: DataTableUpdateToken;
 }
 
@@ -33,6 +34,10 @@ export default class TabEditUserRoles extends React.Component<Props, State> {
 
     componentWillUnmount = async (): Promise<void> => {
         await this.userRoleService.abort();
+    };
+
+    onSelectionChange = async (selectedRowKeys: string[], selectedRows: Role[]): Promise<void> => {
+        this.setState({ selectedRowKeys, selectedRows });
     };
 
     refreshTable = (resetCurrentPage?: boolean, resetSelectedRows?: boolean): void => {
@@ -81,13 +86,38 @@ export default class TabEditUserRoles extends React.Component<Props, State> {
         this.setState({ showDrawer: false });
     };
 
+    deleteSelectedRows = async (): Promise<void> => {
+        const { data } = this.props,
+            { selectedRows } = this.state;
+
+        if (selectedRows) {
+            await this.operation.execute(async () => {
+                const result = await this.userRoleService.removeRoles({
+                    userUid: data.uid,
+                    roles: selectedRows.map(x => {
+                        return x.name;
+                    })
+                });
+                if (result.success) {
+                    this.refreshTable(true);
+                }
+                return result;
+
+            }, {
+                showConfirm: true,
+                confirmTitle: "Вы действительно хотите удалить выбранные записи?"
+            });
+        }
+    };
+
     render = (): React.ReactNode => {
 
-        const { showDrawer, updateTableToken } = this.state;
+        const { selectedRowKeys, showDrawer, updateTableToken } = this.state;
 
         return (<>
             <Toolbar clear>
-                <Button icon={Icon.Plus} onClick={this.showAddDrawer} type="primary">Добавить</Button>
+                <ButtonAdd onClick={this.showAddDrawer} type="primary" />
+                <ButtonDelete onClick={this.deleteSelectedRows} disabled={!selectedRowKeys?.length} />
             </Toolbar>
 
             <DataTable
@@ -95,6 +125,7 @@ export default class TabEditUserRoles extends React.Component<Props, State> {
                 viewId={Views.userRolesGrid}
                 loadUrl={Api.userRoleList}
                 onLoadData={this.onLoadTableData}
+                onSelectionChange={this.onSelectionChange}
                 updateToken={updateTableToken}
             />
 

@@ -1,10 +1,11 @@
-import { Drawer } from "antd";
 import React from "react";
+import { Drawer } from "antd";
+import { Classifier } from "../models";
 import { PaneSearchClassifier } from ".";
 
 interface Props {
     typeCode: string;
-    onSelect?: (keys: string[] | number[], rows: any[]) => Promise<void>;
+    onSelect?: (keys: string[] | number[], rows: Classifier[]) => Promise<void>;
     onClose?: () => void;
 }
 

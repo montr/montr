@@ -32,7 +32,7 @@ interface State {
 	editUid?: Guid;
 	expandedKeys: string[];
 	selectedRowKeys: string[] | number[];
-	selectedRows: any[];
+	selectedRows: Classifier[];
 	depth: string; // todo: make enum
 	updateTableToken: DataTableUpdateToken;
 }

@@ -1,14 +1,23 @@
 import React from "react";
 import { generatePath } from "react-router";
 import { AppRouteRegistry, ComponentRegistry } from "@montr-core/services/";
-import { Layout } from "@montr-core/constants";
+import { Constants, Layout } from "@montr-core/constants";
+
+
+export const Api = {
+	eventInvitationList: `${Constants.apiURL}/invitation/list/`
+};
 
 export const Patterns = {
 	editEvent: "/events/edit/:uid/:tabKey?",
 };
 
+export const Views = {
+	eventInvitationList: "Event/Invitation/List"
+};
+
 export const RouteBuilder = {
-	editEvent: (uid: string, tabKey?: string) => {
+	editEvent: (uid: string, tabKey?: string): string => {
 		return generatePath(Patterns.editEvent, { uid, tabKey });
 	},
 };
