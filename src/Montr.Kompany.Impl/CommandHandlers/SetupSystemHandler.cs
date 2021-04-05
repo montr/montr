@@ -10,6 +10,7 @@ using Montr.Idx.Models;
 using Montr.Idx.Services;
 using Montr.Kompany.Commands;
 using Montr.Kompany.Models;
+using Montr.MasterData.Services;
 
 namespace Montr.Kompany.Impl.CommandHandlers
 {
@@ -18,7 +19,7 @@ namespace Montr.Kompany.Impl.CommandHandlers
 		private readonly ILogger<SetupSystemHandler> _logger;
 		private readonly IOptionsMonitor<AppOptions> _optionsMonitor;
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
-		private readonly IUserManager _userManager;
+		private readonly INamedServiceFactory<IClassifierRepository> _classifierRepositoryFactory;
 		private readonly ISignInManager _signInManager;
 		private readonly ISettingsRepository _settingsRepository;
 		private readonly IAppUrlBuilder _appUrlBuilder;
@@ -28,7 +29,7 @@ namespace Montr.Kompany.Impl.CommandHandlers
 		public SetupSystemHandler(ILogger<SetupSystemHandler> logger,
 			IOptionsMonitor<AppOptions> optionsMonitor,
 			IUnitOfWorkFactory unitOfWorkFactory,
-			IUserManager userManager,
+			INamedServiceFactory<IClassifierRepository> classifierRepositoryFactory,
 			ISignInManager signInManager,
 			ISettingsRepository settingsRepository,
 			IAppUrlBuilder appUrlBuilder,
@@ -38,7 +39,7 @@ namespace Montr.Kompany.Impl.CommandHandlers
 			_logger = logger;
 			_optionsMonitor = optionsMonitor;
 			_unitOfWorkFactory = unitOfWorkFactory;
-			_userManager = userManager;
+			_classifierRepositoryFactory = classifierRepositoryFactory;
 			_signInManager = signInManager;
 			_settingsRepository = settingsRepository;
 
@@ -66,11 +67,15 @@ namespace Montr.Kompany.Impl.CommandHandlers
 
 				var user = new User
 				{
+					Name = request.AdminEmail,
 					UserName = request.AdminEmail,
+					Password = request.AdminPassword,
 					Email = request.AdminEmail
 				};
 
-				var userResult = await _userManager.Create(user, request.AdminPassword, cancellationToken);
+				var userRepository = _classifierRepositoryFactory.GetRequiredService(User.TypeCode);
+
+				var userResult = await userRepository.Insert(user, cancellationToken);
 
 				if (userResult.Success == false) return userResult;
 

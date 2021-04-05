@@ -10,6 +10,11 @@ namespace Montr.Idx.Models
 
 		private string DebuggerDisplay => $"{Name}";
 
+		public Role()
+		{
+			Type = TypeCode;
+		}
+
 		public string ConcurrencyStamp { get; set; }
 	}
 }

@@ -54,7 +54,7 @@ namespace Montr.Idx.Impl.QueryHandlers
 				Uid = x.Id,
 				Name = x.Name,
 				ConcurrencyStamp = x.ConcurrencyStamp,
-				Url = $"/roles/edit/{x.Id}"
+				Url = $"/classifiers/role/edit/{x.Id}"
 			}).ToListAsync(cancellationToken);
 		}
 	}

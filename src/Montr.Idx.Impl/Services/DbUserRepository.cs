@@ -110,9 +110,9 @@ namespace Montr.Idx.Impl.Services
 			{
 				// todo: restore optimistic concurrency check (?)
 				// ReSharper disable once PossibleInvalidOperationException
-				var role = await _userManager.Get(item.Uid.Value, cancellationToken);
+				var user = await _userManager.Get(item.Uid.Value, cancellationToken);
 
-				return await _userManager.Update(role, cancellationToken);
+				return await _userManager.Update(user, cancellationToken);
 			}
 
 			return result;

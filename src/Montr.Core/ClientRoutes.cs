@@ -2,6 +2,6 @@
 {
 	public class ClientRoutes
 	{
-		public static readonly string Dashboard = "/dashboard";
+		public static readonly string Dashboard = "/dashboard/";
 	}
 }

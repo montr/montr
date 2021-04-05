@@ -9,12 +9,12 @@ interface Props<TModel> {
     panes?: DataPane<TModel>[],
     onTabChange?: (tabKey: string) => void,
     disabled?: (pane: DataPane<TModel>, index: number) => boolean,
-    tabProps?: any; // todo: add types for classifiers, documents
+    tabProps?: unknown; // todo: add types for classifiers, documents
 }
 
 export class DataTabs<TModel> extends React.Component<Props<TModel>> {
 
-    render = () => {
+    render = (): React.ReactNode => {
         const { tabKey, panes, onTabChange, disabled, tabProps } = this.props;
 
         return (<>

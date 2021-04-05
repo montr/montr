@@ -121,8 +121,8 @@ export class DataTable<TModel extends IIndexer> extends React.Component<Props<TM
 
 			if (item.urlProperty) {
 				render = (text: unknown, record: TModel): React.ReactNode => {
-					const cellUrl: string = record[item.urlProperty];
-					return (cellUrl ? <Link to={cellUrl}>{text}</Link> : text);
+					const url: string = record[item.urlProperty];
+					return (url ? <Link to={url}>{text}</Link> : text);
 				};
 			}
 

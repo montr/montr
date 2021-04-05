@@ -44,38 +44,31 @@ namespace Montr.Idx.Impl.Services
 		{
 			cancellationToken.ThrowIfCancellationRequested();
 
-			var dbUser = Map(user);
+			var dbUser = new DbUser
+			{
+				Id = user.Uid ?? throw new ArgumentException("Id of created user can not be empty as it referencing classifier.", nameof(user)),
+				UserName = user.UserName,
+				FirstName = user.FirstName,
+				LastName = user.LastName,
+				Email = user.Email,
+				PhoneNumber = user.PhoneNumber
+			};
 
-			var identityResult =  await _userManager.CreateAsync(dbUser);
+			var identityResult = user.Password == null
+				? await _userManager.CreateAsync(dbUser)
+				: await _userManager.CreateAsync(dbUser, user.Password);
 
 			var result = identityResult.ToApiResult();
 
 			if (result.Success)
 			{
-				_logger.LogInformation("Created user {userName} without password.", dbUser.UserName);
+				var message = user.Password == null
+					? "Created user {userName} without password."
+					: "Created user {userName} with password.";
+
+				_logger.LogInformation(message, dbUser.UserName);
 
 				result.Uid = dbUser.Id;
-			}
-
-			return result;
-		}
-
-		public async Task<ApiResult> Create(User user, string password, CancellationToken cancellationToken = default)
-		{
-			cancellationToken.ThrowIfCancellationRequested();
-
-			var dbUser = Map(user);
-
-			var identityResult = await _userManager.CreateAsync(dbUser, password);
-
-			var result = identityResult.ToApiResult();
-
-			if (result.Success)
-			{
-				_logger.LogInformation("Created user {userName} with password.", dbUser.UserName);
-
-				result.Uid = dbUser.Id;
-				result.ConcurrencyStamp = dbUser.ConcurrencyStamp;
 			}
 
 			return result;
@@ -170,19 +163,6 @@ namespace Montr.Idx.Impl.Services
 			}
 
 			return result;
-		}
-
-		private static DbUser Map(User user)
-		{
-			return new()
-			{
-				Id = user.Uid ?? throw new ArgumentException("Id of created user can not be empty as it referencing classifier.", nameof(user)),
-				UserName = user.UserName,
-				FirstName = user.FirstName,
-				LastName = user.LastName,
-				Email = user.Email,
-				PhoneNumber = user.PhoneNumber
-			};
 		}
 	}
 }

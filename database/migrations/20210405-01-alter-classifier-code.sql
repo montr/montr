@@ -1,0 +1,1 @@
+ALTER TABLE montr.classifier ALTER COLUMN code DROP NOT NULL;

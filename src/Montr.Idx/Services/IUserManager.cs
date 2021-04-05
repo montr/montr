@@ -13,8 +13,6 @@ namespace Montr.Idx.Services
 
 		Task<ApiResult> Create(User user, CancellationToken cancellationToken = default);
 
-		Task<ApiResult> Create(User user, string password, CancellationToken cancellationToken = default);
-
 		Task<ApiResult> Update(User user, CancellationToken cancellationToken = default);
 
 		Task<ApiResult> Delete(User user, CancellationToken cancellationToken = default);
