@@ -39,20 +39,23 @@ namespace Montr.MasterData.Impl.CommandHandlers
 
 		private async Task ValidateDuplicateCode(Classifier item, CancellationToken cancellationToken)
 		{
-			var duplicate = await _db.GetTable<DbClassifier>()
-				.Where(x => x.TypeUid == _type.Uid && x.Uid != item.Uid && x.Code == item.Code)
-				.FirstOrDefaultAsync(cancellationToken);
-
-			if (duplicate != null)
+			if (item.Code != null)
 			{
-				Errors.Add(new ApiResultError
+				var duplicate = await _db.GetTable<DbClassifier>()
+					.Where(x => x.TypeUid == _type.Uid && x.Uid != item.Uid && x.Code == item.Code)
+					.FirstOrDefaultAsync(cancellationToken);
+
+				if (duplicate != null)
 				{
-					Key = "code",
-					Messages = new[]
+					Errors.Add(new ApiResultError
 					{
-						$"Код «{duplicate.Code}» уже используется в элементе «{duplicate.Name}»."
-					}
-				});
+						Key = "code",
+						Messages = new[]
+						{
+							$"Код «{duplicate.Code}» уже используется в элементе «{duplicate.Name}»."
+						}
+					});
+				}
 			}
 		}
 	}

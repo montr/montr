@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Montr.Core.Services;
+using Montr.Data.Linq2Db;
 using Montr.Idx.Commands;
 using Montr.Idx.Impl.CommandHandlers;
 using Montr.Idx.Impl.Services;
@@ -21,9 +23,14 @@ namespace Montr.Idx.Tests.CommandHandlers
 			// arrange
 			var cancellationToken = new CancellationToken();
 			var unitOfWorkFactory = new TransactionScopeUnitOfWorkFactory();
+			var dbContextFactory = new DefaultDbContextFactory();
 
 			var identityServiceFactory = new IdentityServiceFactory();
-			var roleManager = new DefaultRoleManager(new NullLogger<DefaultRoleManager>(), identityServiceFactory.RoleManager);
+			var classifierRepositoryFactory = new ClassifierRepositoryFactoryBuilder(dbContextFactory).Build();
+
+			var roleRepository = classifierRepositoryFactory.GetNamedOrDefaultService(ClassifierRepositoryFactoryBuilder.RoleTypeCode);
+			var userRepository = classifierRepositoryFactory.GetNamedOrDefaultService(ClassifierRepositoryFactoryBuilder.UserTypeCode);
+
 			var userManager = new DefaultUserManager(new NullLogger<DefaultUserManager>(), identityServiceFactory.UserManager);
 
 			var addHandler = new AddUserRolesHandler(unitOfWorkFactory, userManager);
@@ -36,25 +43,25 @@ namespace Montr.Idx.Tests.CommandHandlers
 				// arrange
 				foreach (var name in roles)
 				{
-					var role = await roleManager.Create(new Role { Uid = Guid.NewGuid(), Name = name }, cancellationToken);
-					Assert.IsTrue(role.Success);
+					var role = await roleRepository.Insert(new Role { Uid = Guid.NewGuid(), Name = name }, cancellationToken);
+					Assert.IsTrue(role.Success, string.Join(",", role.Errors.SelectMany(x => x.Messages)));
 				}
 
 				// var dbRoles = identityServiceFactory.RoleManager.Roles.ToList();
 
-				var user = await userManager.Create(new User { Uid = Guid.NewGuid(), UserName = "test_user" }, cancellationToken);
-				Assert.IsTrue(user.Success);
+				var user = await userRepository.Insert(new User { Uid = Guid.NewGuid(), UserName = "test_user" }, cancellationToken);
+				Assert.IsTrue(user.Success, string.Join(",", user.Errors.SelectMany(x => x.Messages)));
 
 				// ReSharper disable once PossibleInvalidOperationException
 				var userUid = user.Uid.Value;
 
 				// act - add roles
 				var addResult = await addHandler.Handle(new AddUserRoles { UserUid = userUid, Roles = roles }, cancellationToken);
-				Assert.IsTrue(addResult.Success);
+				Assert.IsTrue(addResult.Success, string.Join(",", user.Errors.SelectMany(x => x.Messages)));
 
 				// act - remove roles
 				var removeResult = await removeHandler.Handle(new RemoveUserRoles { UserUid = userUid, Roles = roles }, cancellationToken);
-				Assert.IsTrue(removeResult.Success);
+				Assert.IsTrue(removeResult.Success, string.Join(",", user.Errors.SelectMany(x => x.Messages)));
 			}
 		}
 	}
