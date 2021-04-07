@@ -11,7 +11,7 @@
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="5.0.0" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="5.0.2" />
     <PackageReference Include="OpenIddict.AspNetCore" Version="3.0.2" />
-    <PackageReference Include="OpenIddict.EntityFrameworkCore" Version="3.0.2" />
+    <PackageReference Include="OpenIddict.EntityFrameworkCore" Version="3.0.3" />
   </ItemGroup>
 
   <ItemGroup>
