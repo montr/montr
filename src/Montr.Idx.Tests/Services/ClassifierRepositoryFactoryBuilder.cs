@@ -15,10 +15,11 @@ namespace Montr.Idx.Tests.Services
 {
 	public class ClassifierRepositoryFactoryBuilder
 	{
-		public static readonly string RoleTypeCode = "role_for_test";
-		public static readonly string UserTypeCode = "user_for_test";
-
 		private readonly IDbContextFactory _dbContextFactory;
+
+		public string RoleTypeCode { get; set; } = "role_for_test";
+
+		public string UserTypeCode { get; set; } = "user_for_test";
 
 		public ClassifierRepositoryFactoryBuilder(IDbContextFactory dbContextFactory)
 		{

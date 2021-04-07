@@ -6,9 +6,11 @@ using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Montr.Core;
 using Montr.Core.Services;
+using Montr.Data.Linq2Db;
 using Montr.Idx.Commands;
 using Montr.Idx.Impl.CommandHandlers;
 using Montr.Idx.Impl.Services;
+using Montr.Idx.Models;
 using Montr.Idx.Tests.Services;
 using Moq;
 
@@ -23,17 +25,17 @@ namespace Montr.Idx.Tests.CommandHandlers
 			// arrange
 			var cancellationToken = new CancellationToken();
 			var unitOfWorkFactory = new TransactionScopeUnitOfWorkFactory();
+			var dbContextFactory = new DefaultDbContextFactory();
 
 			var appOptionsAccessorMock = new Mock<IOptionsMonitor<AppOptions>>();
-			appOptionsAccessorMock.Setup(x => x.CurrentValue).Returns(() => new AppOptions
-			{
-				AppUrl = "https://app.montr.net"
-			});
+			appOptionsAccessorMock.Setup(x => x.CurrentValue)
+				.Returns(() => new AppOptions { AppUrl = "https://app.montr.net" });
 			var appOptionsAccessor = appOptionsAccessorMock.Object;
 
 			var identityServiceFactory = new IdentityServiceFactory();
 
-			var appUrlBuilder = new DefaultAppUrlBuilder(appOptionsAccessor);
+			var classifierRepositoryFactoryBuilder = new ClassifierRepositoryFactoryBuilder(dbContextFactory) { UserTypeCode = User.TypeCode };
+			var classifierRepositoryFactory = classifierRepositoryFactoryBuilder.Build();
 
 			// todo: test EmailConfirmationService
 			/*
@@ -42,9 +44,10 @@ namespace Montr.Idx.Tests.CommandHandlers
 			var emailConfirmationService = new EmailConfirmationService(userManager, appUrlBuilder, new Mock<IEmailSender>().Object, templateRenderer);
 			*/
 
+			var appUrlBuilder = new DefaultAppUrlBuilder(appOptionsAccessor);
 			var emailConfirmationServiceMock = new Mock<IEmailConfirmationService>();
 
-			var handler = new RegisterHandler(new Mock<ILogger<RegisterHandler>>().Object,
+			var handler = new RegisterHandler(new Mock<ILogger<RegisterHandler>>().Object, classifierRepositoryFactory,
 				identityServiceFactory.UserManager, identityServiceFactory.SignInManager, appUrlBuilder, emailConfirmationServiceMock.Object);
 
 			using (var _ = unitOfWorkFactory.Create())

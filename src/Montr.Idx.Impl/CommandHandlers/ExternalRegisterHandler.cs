@@ -34,6 +34,7 @@ namespace Montr.Idx.Impl.CommandHandlers
 		{
 			// Get the information about the user from the external login provider
 			var info = await _signInManager.GetExternalLoginInfoAsync();
+
 			if (info == null)
 			{
 				// return RedirectToPage("./Login", new { ReturnUrl = returnUrl });
@@ -49,6 +50,7 @@ namespace Montr.Idx.Impl.CommandHandlers
 				Email = request.Email
 			};
 
+			// todo: use user repository
 			var identityResult = await _userManager.CreateAsync(user);
 
 			if (identityResult.Succeeded)

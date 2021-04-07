@@ -26,10 +26,11 @@ namespace Montr.Idx.Tests.CommandHandlers
 			var dbContextFactory = new DefaultDbContextFactory();
 
 			var identityServiceFactory = new IdentityServiceFactory();
-			var classifierRepositoryFactory = new ClassifierRepositoryFactoryBuilder(dbContextFactory).Build();
+			var classifierRepositoryFactoryBuilder = new ClassifierRepositoryFactoryBuilder(dbContextFactory);
+			var classifierRepositoryFactory = classifierRepositoryFactoryBuilder.Build();
 
-			var roleRepository = classifierRepositoryFactory.GetNamedOrDefaultService(ClassifierRepositoryFactoryBuilder.RoleTypeCode);
-			var userRepository = classifierRepositoryFactory.GetNamedOrDefaultService(ClassifierRepositoryFactoryBuilder.UserTypeCode);
+			var roleRepository = classifierRepositoryFactory.GetNamedOrDefaultService(classifierRepositoryFactoryBuilder.RoleTypeCode);
+			var userRepository = classifierRepositoryFactory.GetNamedOrDefaultService(classifierRepositoryFactoryBuilder.UserTypeCode);
 
 			var userManager = new DefaultUserManager(new NullLogger<DefaultUserManager>(), identityServiceFactory.UserManager);
 

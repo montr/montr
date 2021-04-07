@@ -26,7 +26,8 @@ namespace Montr.Idx.Tests.CommandHandlers
 			var unitOfWorkFactory = new TransactionScopeUnitOfWorkFactory();
 			var dbContextFactory = new DefaultDbContextFactory();
 			var generator = new MasterDataDbGenerator(unitOfWorkFactory, dbContextFactory);
-			var classifierRepositoryFactory = new ClassifierRepositoryFactoryBuilder(dbContextFactory).Build();
+			var classifierRepositoryFactoryBuilder = new ClassifierRepositoryFactoryBuilder(dbContextFactory);
+			var classifierRepositoryFactory = classifierRepositoryFactoryBuilder.Build();
 			var insertHandler = new InsertClassifierHandler(unitOfWorkFactory, classifierRepositoryFactory);
 			var updateHandler = new UpdateClassifierHandler(unitOfWorkFactory, classifierRepositoryFactory);
 			var deleteHandler = new DeleteClassifierHandler(unitOfWorkFactory, classifierRepositoryFactory);
@@ -34,7 +35,7 @@ namespace Montr.Idx.Tests.CommandHandlers
 			using (var _ = unitOfWorkFactory.Create())
 			{
 				// arrange
-				generator.TypeCode = ClassifierRepositoryFactoryBuilder.RoleTypeCode;
+				generator.TypeCode = classifierRepositoryFactoryBuilder.RoleTypeCode;
 
 				await generator.InsertType(HierarchyType.None, cancellationToken);
 
@@ -125,7 +126,8 @@ namespace Montr.Idx.Tests.CommandHandlers
 			var unitOfWorkFactory = new TransactionScopeUnitOfWorkFactory();
 			var dbContextFactory = new DefaultDbContextFactory();
 			var generator = new MasterDataDbGenerator(unitOfWorkFactory, dbContextFactory);
-			var classifierRepositoryFactory = new ClassifierRepositoryFactoryBuilder(dbContextFactory).Build();
+			var classifierRepositoryFactoryBuilder = new ClassifierRepositoryFactoryBuilder(dbContextFactory);
+			var classifierRepositoryFactory = classifierRepositoryFactoryBuilder.Build();
 			var insertHandler = new InsertClassifierHandler(unitOfWorkFactory, classifierRepositoryFactory);
 			var updateHandler = new UpdateClassifierHandler(unitOfWorkFactory, classifierRepositoryFactory);
 			var deleteHandler = new DeleteClassifierHandler(unitOfWorkFactory, classifierRepositoryFactory);
@@ -133,7 +135,7 @@ namespace Montr.Idx.Tests.CommandHandlers
 			using (var _ = unitOfWorkFactory.Create())
 			{
 				// arrange
-				generator.TypeCode = ClassifierRepositoryFactoryBuilder.UserTypeCode;
+				generator.TypeCode = classifierRepositoryFactoryBuilder.UserTypeCode;
 
 				await generator.InsertType(HierarchyType.None, cancellationToken);
 
