@@ -1,32 +1,37 @@
-﻿using System;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using Montr.Core.Models;
+using Montr.Core.Services;
 using Montr.Idx.Commands;
 using Montr.Idx.Impl.Entities;
 using Montr.Idx.Impl.Services;
+using Montr.Idx.Models;
+using Montr.MasterData.Services;
 
 namespace Montr.Idx.Impl.CommandHandlers
 {
 	public class ExternalRegisterHandler : IRequestHandler<ExternalRegister, ApiResult>
 	{
 		private readonly ILogger<ExternalRegisterHandler> _logger;
+		private readonly INamedServiceFactory<IClassifierRepository> _classifierRepositoryFactory;
 		private readonly SignInManager<DbUser> _signInManager;
 		private readonly UserManager<DbUser> _userManager;
 		private readonly IEmailConfirmationService _emailConfirmationService;
 
 		public ExternalRegisterHandler(
 			ILogger<ExternalRegisterHandler> logger,
-			SignInManager<DbUser> signInManager,
+			INamedServiceFactory<IClassifierRepository> classifierRepositoryFactory,
 			UserManager<DbUser> userManager,
+			SignInManager<DbUser> signInManager,
 			IEmailConfirmationService emailConfirmationService)
 		{
 			_logger = logger;
-			_signInManager = signInManager;
+			_classifierRepositoryFactory = classifierRepositoryFactory;
 			_userManager = userManager;
+			_signInManager = signInManager;
 			_emailConfirmationService = emailConfirmationService;
 		}
 
@@ -41,36 +46,40 @@ namespace Montr.Idx.Impl.CommandHandlers
 				return new ApiResult { Success = false, Message = "Error loading external login information during confirmation." };
 			}
 
-			var user = new DbUser
+			var user = new User
 			{
-				Id = Guid.NewGuid(),
+				Name = request.Email,
 				UserName = request.Email,
 				FirstName = request.FirstName,
 				LastName = request.LastName,
 				Email = request.Email
 			};
 
-			// todo: use user repository
-			var identityResult = await _userManager.CreateAsync(user);
+			var userRepository = _classifierRepositoryFactory.GetNamedOrDefaultService(User.TypeCode);
 
-			if (identityResult.Succeeded)
+			var result = await userRepository.Insert(user, cancellationToken);
+
+			if (result.Success)
 			{
-				identityResult = await _userManager.AddLoginAsync(user, info);
+				// todo: remove reload user
+				var dbUser = await _userManager.FindByIdAsync(result.Uid.ToString());
+
+				var identityResult = await _userManager.AddLoginAsync(dbUser, info);
 
 				if (identityResult.Succeeded)
 				{
-					await _signInManager.SignInAsync(user, isPersistent: false);
+					await _signInManager.SignInAsync(dbUser, isPersistent: false);
 
 					_logger.LogInformation("User created an account using {Name} provider.", info.LoginProvider);
 
-					await _emailConfirmationService.SendConfirmEmailMessage(user, cancellationToken);
+					await _emailConfirmationService.SendConfirmEmailMessage(dbUser, cancellationToken);
 
 					// todo: check redirect is local
 					return new ApiResult { RedirectUrl = request.ReturnUrl };
 				}
 			}
 
-			return identityResult.ToApiResult();
+			return result;
 		}
 	}
 }

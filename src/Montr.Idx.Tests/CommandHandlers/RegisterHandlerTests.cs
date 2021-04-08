@@ -52,8 +52,6 @@ namespace Montr.Idx.Tests.CommandHandlers
 
 			using (var _ = unitOfWorkFactory.Create())
 			{
-				// arrange
-
 				// act
 				var command = new Register
 				{
