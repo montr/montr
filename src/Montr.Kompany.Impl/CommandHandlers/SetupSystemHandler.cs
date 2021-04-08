@@ -42,7 +42,6 @@ namespace Montr.Kompany.Impl.CommandHandlers
 			_classifierRepositoryFactory = classifierRepositoryFactory;
 			_signInManager = signInManager;
 			_settingsRepository = settingsRepository;
-
 			_appUrlBuilder = appUrlBuilder;
 			_localizer = localizer;
 			_mediator = mediator;

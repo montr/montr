@@ -1,9 +1,12 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Logging;
 using Montr.Core.Models;
 using Montr.Data.Linq2Db;
+using Montr.Idx.Impl.Entities;
 using Montr.Idx.Models;
-using Montr.Idx.Services;
 using Montr.MasterData.Commands;
 using Montr.MasterData.Impl.Services;
 using Montr.MasterData.Models;
@@ -14,16 +17,18 @@ namespace Montr.Idx.Impl.Services
 {
 	public class DbRoleRepository : DbClassifierRepository<Role>
 	{
-		private readonly IRoleManager _roleManager;
+		private readonly ILogger<DbRoleRepository> _logger;
+		private readonly RoleManager<DbRole> _roleManager;
 
 		public DbRoleRepository(
+			ILogger<DbRoleRepository> logger,
 			IDbContextFactory dbContextFactory,
 			IClassifierTypeService classifierTypeService,
 			IClassifierTreeService classifierTreeService,
 			IClassifierTypeMetadataService metadataService,
 			IFieldDataRepository fieldDataRepository,
 			INumberGenerator numberGenerator,
-			IRoleManager roleManager)
+			RoleManager<DbRole> roleManager)
 			: base(
 				dbContextFactory,
 				classifierTypeService,
@@ -32,6 +37,7 @@ namespace Montr.Idx.Impl.Services
 				fieldDataRepository,
 				numberGenerator)
 		{
+			_logger = logger;
 			_roleManager = roleManager;
 		}
 
@@ -41,7 +47,25 @@ namespace Montr.Idx.Impl.Services
 
 			if (result.Success)
 			{
-				return await _roleManager.Create((Role) item, cancellationToken);
+				var role = (Role) item;
+
+				var dbRole = new DbRole
+				{
+					Id = role.Uid ?? throw new ArgumentException("Id of created role can not be empty as it referencing classifier.", nameof(role)),
+					Name = role.Name
+				};
+
+				var identityResult = await _roleManager.CreateAsync(dbRole);
+
+				result = identityResult.ToApiResult();
+
+				if (result.Success)
+				{
+					_logger.LogInformation("Created role {name}.", dbRole.Name);
+
+					result.Uid = dbRole.Id;
+					result.ConcurrencyStamp = dbRole.ConcurrencyStamp;
+				}
 			}
 
 			return result;
@@ -53,11 +77,28 @@ namespace Montr.Idx.Impl.Services
 
 			if (result.Success)
 			{
-				// todo: restore optimistic concurrency check (?)
-				// ReSharper disable once PossibleInvalidOperationException
-				var role = await _roleManager.Get(item.Uid.Value, cancellationToken);
+				var role = (Role) item;
 
-				return await _roleManager.Update(role, cancellationToken);
+				var roleId = role.Uid.ToString();
+
+				var dbRole = await _roleManager.FindByIdAsync(roleId);
+
+				// todo: restore optimistic concurrency check (?)
+				// dbRole.ConcurrencyStamp = role.ConcurrencyStamp;
+
+				dbRole.Name = role.Name;
+
+				var identityResult =  await _roleManager.UpdateAsync(dbRole);
+
+				result = identityResult.ToApiResult();
+
+				if (result.Success)
+				{
+					_logger.LogInformation("Updated role {name}.", dbRole.Name);
+
+					result.Uid = dbRole.Id;
+					result.ConcurrencyStamp = dbRole.ConcurrencyStamp;
+				}
 			}
 
 			return result;
@@ -67,11 +108,16 @@ namespace Montr.Idx.Impl.Services
 		{
 			foreach (var uid in request.Uids)
 			{
-				var item = await _roleManager.Get(uid, cancellationToken);
+				var dbRole = await _roleManager.FindByIdAsync(uid.ToString());
 
-				var result = await _roleManager.Delete(item, cancellationToken);
+				// todo: restore optimistic concurrency check (?)
+				// dbRole.ConcurrencyStamp = role.ConcurrencyStamp;
 
-				if (result.Success == false) return result;
+				var identityResult =  await _roleManager.DeleteAsync(dbRole);
+
+				if (identityResult.Succeeded == false) return identityResult.ToApiResult();
+
+				_logger.LogInformation("Deleted role {name}.", dbRole.Name);
 			}
 
 			return await base.Delete(request, cancellationToken);

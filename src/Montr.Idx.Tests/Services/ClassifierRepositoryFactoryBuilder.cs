@@ -47,14 +47,11 @@ namespace Montr.Idx.Tests.Services
 
 			var identityServiceFactory = new IdentityServiceFactory();
 
-			var roleManager = new DefaultRoleManager(new NullLogger<DefaultRoleManager>(), identityServiceFactory.RoleManager);
-			var userManager = new DefaultUserManager(new NullLogger<DefaultUserManager>(), identityServiceFactory.UserManager);
+			var roleRepository = new DbRoleRepository(new NullLogger<DbRoleRepository>(), _dbContextFactory,
+				classifierTypeService, null, metadataServiceMock.Object, dbFieldDataRepository, null, identityServiceFactory.RoleManager);
 
-			var roleRepository = new DbRoleRepository(_dbContextFactory,
-				classifierTypeService, null, metadataServiceMock.Object, dbFieldDataRepository, null, roleManager);
-
-			var userRepository = new DbUserRepository(_dbContextFactory,
-				classifierTypeService, null, metadataServiceMock.Object, dbFieldDataRepository, null, userManager);
+			var userRepository = new DbUserRepository(new NullLogger<DbUserRepository>(), _dbContextFactory,
+				classifierTypeService, null, metadataServiceMock.Object, dbFieldDataRepository, null, identityServiceFactory.UserManager);
 
 			var classifierRepositoryFactoryMock = new Mock<INamedServiceFactory<IClassifierRepository>>();
 

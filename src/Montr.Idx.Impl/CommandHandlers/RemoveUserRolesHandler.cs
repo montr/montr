@@ -1,20 +1,26 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Logging;
 using Montr.Core.Models;
 using Montr.Core.Services;
 using Montr.Idx.Commands;
-using Montr.Idx.Services;
+using Montr.Idx.Impl.Entities;
+using Montr.Idx.Impl.Services;
 
 namespace Montr.Idx.Impl.CommandHandlers
 {
 	public class RemoveUserRolesHandler : IRequestHandler<RemoveUserRoles, ApiResult>
 	{
+		private readonly ILogger<RemoveUserRolesHandler> _logger;
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
-		private readonly IUserManager _userManager;
+		private readonly UserManager<DbUser> _userManager;
 
-		public RemoveUserRolesHandler(IUnitOfWorkFactory unitOfWorkFactory, IUserManager userManager)
+		public RemoveUserRolesHandler(ILogger<RemoveUserRolesHandler> logger,
+			IUnitOfWorkFactory unitOfWorkFactory, UserManager<DbUser> userManager)
 		{
+			_logger = logger;
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_userManager = userManager;
 		}
@@ -25,10 +31,16 @@ namespace Montr.Idx.Impl.CommandHandlers
 
 			using (var scope = _unitOfWorkFactory.Create())
 			{
-				var result = await _userManager.RemoveRoles(request.UserUid, request.Roles, cancellationToken);
+				var dbUser = await _userManager.FindByIdAsync(request.UserUid.ToString());
+
+				var identityResult =  await _userManager.RemoveFromRolesAsync(dbUser, request.Roles);
+
+				var result = identityResult.ToApiResult();
 
 				if (result.Success)
 				{
+					_logger.LogInformation("Removed user {userName} from roles {roles}.", dbUser.UserName, request.Roles);
+
 					scope.Commit();
 				}
 

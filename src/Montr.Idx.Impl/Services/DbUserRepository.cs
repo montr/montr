@@ -1,13 +1,15 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using LinqToDB;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.Extensions.Logging;
 using Montr.Core.Models;
 using Montr.Core.Services;
 using Montr.Data.Linq2Db;
 using Montr.Idx.Impl.Entities;
 using Montr.Idx.Models;
-using Montr.Idx.Services;
 using Montr.MasterData.Commands;
 using Montr.MasterData.Impl.Entities;
 using Montr.MasterData.Impl.Services;
@@ -19,16 +21,18 @@ namespace Montr.Idx.Impl.Services
 {
 	public class DbUserRepository : DbClassifierRepository<User>
 	{
-		private readonly IUserManager _userManager;
+		private readonly ILogger<DbUserRepository> _logger;
+		private readonly UserManager<DbUser> _userManager;
 
 		public DbUserRepository(
+			ILogger<DbUserRepository> logger,
 			IDbContextFactory dbContextFactory,
 			IClassifierTypeService classifierTypeService,
 			IClassifierTreeService classifierTreeService,
 			IClassifierTypeMetadataService metadataService,
 			IFieldDataRepository fieldDataRepository,
 			INumberGenerator numberGenerator,
-			IUserManager userManager)
+			UserManager<DbUser> userManager)
 			: base(
 				dbContextFactory,
 				classifierTypeService,
@@ -37,6 +41,7 @@ namespace Montr.Idx.Impl.Services
 				fieldDataRepository,
 				numberGenerator)
 		{
+			_logger = logger;
 			_userManager = userManager;
 		}
 
@@ -96,7 +101,34 @@ namespace Montr.Idx.Impl.Services
 
 			if (result.Success)
 			{
-				return await _userManager.Create((User) item, cancellationToken);
+				var user = (User) item;
+
+				var dbUser = new DbUser
+				{
+					Id = user.Uid ?? throw new ArgumentException("Id of created user can not be empty as it referencing classifier.", nameof(user)),
+					UserName = user.UserName,
+					FirstName = user.FirstName,
+					LastName = user.LastName,
+					Email = user.Email,
+					PhoneNumber = user.PhoneNumber
+				};
+
+				var identityResult = user.Password == null
+					? await _userManager.CreateAsync(dbUser)
+					: await _userManager.CreateAsync(dbUser, user.Password);
+
+				result = identityResult.ToApiResult();
+
+				if (result.Success)
+				{
+					var message = user.Password == null
+						? "Created user {userName} without password."
+						: "Created user {userName} with password.";
+
+					_logger.LogInformation(message, dbUser.UserName);
+
+					result.Uid = dbUser.Id;
+				}
 			}
 
 			return result;
@@ -108,11 +140,30 @@ namespace Montr.Idx.Impl.Services
 
 			if (result.Success)
 			{
-				// todo: restore optimistic concurrency check (?)
-				// ReSharper disable once PossibleInvalidOperationException
-				var user = await _userManager.Get(item.Uid.Value, cancellationToken);
+				var user = (User) item;
 
-				return await _userManager.Update(user, cancellationToken);
+				var dbUser = await _userManager.FindByIdAsync(item.Uid.ToString());
+
+				// todo: restore optimistic concurrency check (?)
+				// dbUser.ConcurrencyStamp = user.ConcurrencyStamp;
+
+				dbUser.UserName = user.UserName;
+				dbUser.LastName = user.LastName;
+				dbUser.FirstName = user.FirstName;
+				dbUser.Email = user.Email;
+				dbUser.PhoneNumber = user.PhoneNumber;
+
+				var identityResult =  await _userManager.UpdateAsync(dbUser);
+
+				result = identityResult.ToApiResult();
+
+				if (result.Success)
+				{
+					_logger.LogInformation("Updated user {userName}.", dbUser.UserName);
+
+					result.Uid = dbUser.Id;
+					result.ConcurrencyStamp = dbUser.ConcurrencyStamp;
+				}
 			}
 
 			return result;
@@ -122,11 +173,16 @@ namespace Montr.Idx.Impl.Services
 		{
 			foreach (var uid in request.Uids)
 			{
-				var item = await _userManager.Get(uid, cancellationToken);
+				var dbUser = await _userManager.FindByIdAsync(uid.ToString());
 
-				var result = await _userManager.Delete(item, cancellationToken);
+				// todo: restore optimistic concurrency check (?)
+				// dbUser.ConcurrencyStamp = user.ConcurrencyStamp;
 
-				if (result.Success == false) return result;
+				var result = await _userManager.DeleteAsync(dbUser);
+
+				if (result.Succeeded == false) return result.ToApiResult();
+
+				_logger.LogInformation("Deleted user {userName}.", dbUser.UserName);
 			}
 
 			return await base.Delete(request, cancellationToken);

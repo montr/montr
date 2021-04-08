@@ -8,7 +8,6 @@ using Montr.Core.Services;
 using Montr.Data.Linq2Db;
 using Montr.Idx.Commands;
 using Montr.Idx.Impl.CommandHandlers;
-using Montr.Idx.Impl.Services;
 using Montr.Idx.Models;
 using Montr.Idx.Tests.Services;
 
@@ -32,10 +31,8 @@ namespace Montr.Idx.Tests.CommandHandlers
 			var roleRepository = classifierRepositoryFactory.GetNamedOrDefaultService(classifierRepositoryFactoryBuilder.RoleTypeCode);
 			var userRepository = classifierRepositoryFactory.GetNamedOrDefaultService(classifierRepositoryFactoryBuilder.UserTypeCode);
 
-			var userManager = new DefaultUserManager(new NullLogger<DefaultUserManager>(), identityServiceFactory.UserManager);
-
-			var addHandler = new AddUserRolesHandler(unitOfWorkFactory, userManager);
-			var removeHandler = new RemoveUserRolesHandler(unitOfWorkFactory, userManager);
+			var addHandler = new AddUserRolesHandler(new NullLogger<AddUserRolesHandler>(), unitOfWorkFactory, identityServiceFactory.UserManager);
+			var removeHandler = new RemoveUserRolesHandler(new NullLogger<RemoveUserRolesHandler>(), unitOfWorkFactory, identityServiceFactory.UserManager);
 
 			var roles = new[] { "test_role_1", "test_role_2", "test_role_3" };
 
