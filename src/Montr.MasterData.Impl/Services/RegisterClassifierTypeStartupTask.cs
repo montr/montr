@@ -33,7 +33,7 @@ namespace Montr.MasterData.Impl.Services
 
 		public static RegisterClassifierType GetNumeratorType()
 		{
-			return new RegisterClassifierType
+			return new()
 			{
 				Item = new ClassifierType
 				{

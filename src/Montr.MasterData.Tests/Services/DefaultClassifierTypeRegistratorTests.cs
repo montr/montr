@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Montr.Core.Services;
 using Montr.Data.Linq2Db;
@@ -11,7 +11,6 @@ using Montr.MasterData.Impl.Services;
 using Montr.MasterData.Models;
 using Montr.Metadata.Impl.Services;
 using Montr.Metadata.Models;
-using Moq;
 
 namespace Montr.MasterData.Tests.Services
 {
@@ -28,8 +27,9 @@ namespace Montr.MasterData.Tests.Services
 			var classifierTypeRepository = new DbClassifierTypeRepository(dbContextFactory);
 			var classifierTypeService = new DbClassifierTypeService(dbContextFactory, classifierTypeRepository);
 			var dbFieldMetadataService = new DbFieldMetadataService(dbContextFactory, new NewtonsoftJsonSerializer());
+
 			var handler = new DefaultClassifierTypeRegistrator(
-				new Mock<ILogger<DefaultClassifierTypeRegistrator>>().Object,
+				new NullLogger<DefaultClassifierTypeRegistrator>(),
 				unitOfWorkFactory, classifierTypeService, dbFieldMetadataService);
 
 			using (var _ = unitOfWorkFactory.Create())

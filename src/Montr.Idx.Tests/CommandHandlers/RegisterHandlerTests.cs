@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Montr.Core;
@@ -47,11 +47,15 @@ namespace Montr.Idx.Tests.CommandHandlers
 			var appUrlBuilder = new DefaultAppUrlBuilder(appOptionsAccessor);
 			var emailConfirmationServiceMock = new Mock<IEmailConfirmationService>();
 
-			var handler = new RegisterHandler(new Mock<ILogger<RegisterHandler>>().Object, classifierRepositoryFactory,
+			var generator = new IdxDbGenerator(unitOfWorkFactory, dbContextFactory);
+
+			var handler = new RegisterHandler(new NullLogger<RegisterHandler>(), classifierRepositoryFactory,
 				identityServiceFactory.UserManager, identityServiceFactory.SignInManager, appUrlBuilder, emailConfirmationServiceMock.Object);
 
 			using (var _ = unitOfWorkFactory.Create())
 			{
+				await generator.EnsureUserTypeRegistered(cancellationToken);
+
 				// act
 				var command = new Register
 				{

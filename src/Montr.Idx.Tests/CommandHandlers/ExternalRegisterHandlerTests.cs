@@ -1,6 +1,6 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Montr.Core.Services;
 using Montr.Data.Linq2Db;
@@ -32,7 +32,7 @@ namespace Montr.Idx.Tests.CommandHandlers
 			// todo: test EmailConfirmationService
 			var emailConfirmationServiceMock = new Mock<IEmailConfirmationService>();
 
-			var handler = new ExternalRegisterHandler(new Mock<ILogger<ExternalRegisterHandler>>().Object, classifierRepositoryFactory,
+			var handler = new ExternalRegisterHandler(new NullLogger<ExternalRegisterHandler>(), classifierRepositoryFactory,
 				identityServiceFactory.UserManager, identityServiceFactory.SignInManager, emailConfirmationServiceMock.Object);
 
 			using (var _ = unitOfWorkFactory.Create())

@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using LinqToDB;
-using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Montr.Core.Models;
 using Montr.Core.Services;
@@ -19,7 +19,6 @@ using Montr.MasterData.Models;
 using Montr.MasterData.Queries;
 using Montr.MasterData.Services;
 using Montr.Metadata.Impl.Services;
-using Moq;
 
 namespace Montr.MasterData.Tests.Services
 {
@@ -54,7 +53,7 @@ namespace Montr.MasterData.Tests.Services
 			_insertClassifierTypeHandler = new InsertClassifierTypeHandler(unitOfWorkFactory, _classifierTypeService);
 			_insertClassifierGroupHandler = new InsertClassifierGroupHandler(unitOfWorkFactory, dbContextFactory, _classifierTypeService);
 
-			_classifierTypeRegistrator = new DefaultClassifierTypeRegistrator(new Mock<ILogger<DefaultClassifierTypeRegistrator>>().Object,
+			_classifierTypeRegistrator = new DefaultClassifierTypeRegistrator(new NullLogger<DefaultClassifierTypeRegistrator>(),
 				unitOfWorkFactory, _classifierTypeService, new DbFieldMetadataService(dbContextFactory, new NewtonsoftJsonSerializer()));
 
 			var classifierTypeMetadataService = new ClassifierTypeMetadataService(dbFieldMetadataRepository);
@@ -317,9 +316,9 @@ namespace Montr.MasterData.Tests.Services
 
 		public async Task<ClassifierType> EnsureNumeratorTypeRegistered(CancellationToken cancellationToken)
 		{
-			var numeratorType = RegisterClassifierTypeStartupTask.GetNumeratorType();
+			var type = RegisterClassifierTypeStartupTask.GetNumeratorType();
 
-			await _classifierTypeRegistrator.Register(numeratorType.Item, numeratorType.Fields, cancellationToken);
+			await _classifierTypeRegistrator.Register(type.Item, type.Fields, cancellationToken);
 
 			return await _classifierTypeService.Get(Numerator.TypeCode, cancellationToken);
 		}

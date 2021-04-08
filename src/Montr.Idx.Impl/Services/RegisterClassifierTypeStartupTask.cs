@@ -45,7 +45,12 @@ namespace Montr.Idx.Impl.Services
 				}
 			};
 
-			yield return new RegisterClassifierType
+			yield return GetUserType();
+		}
+
+		public static RegisterClassifierType GetUserType()
+		{
+			return new()
 			{
 				Item = new ClassifierType
 				{
