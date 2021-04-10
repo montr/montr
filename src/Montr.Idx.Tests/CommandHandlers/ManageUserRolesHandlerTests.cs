@@ -10,6 +10,7 @@ using Montr.Idx.Commands;
 using Montr.Idx.Impl.CommandHandlers;
 using Montr.Idx.Models;
 using Montr.Idx.Tests.Services;
+using Montr.MasterData.Tests.Services;
 
 namespace Montr.Idx.Tests.CommandHandlers
 {
@@ -31,6 +32,8 @@ namespace Montr.Idx.Tests.CommandHandlers
 			var roleRepository = classifierRepositoryFactory.GetNamedOrDefaultService(classifierRepositoryFactoryBuilder.RoleTypeCode);
 			var userRepository = classifierRepositoryFactory.GetNamedOrDefaultService(classifierRepositoryFactoryBuilder.UserTypeCode);
 
+			var generator = new MasterDataDbGenerator(unitOfWorkFactory, dbContextFactory);
+
 			var addHandler = new AddUserRolesHandler(new NullLogger<AddUserRolesHandler>(), unitOfWorkFactory, identityServiceFactory.UserManager);
 			var removeHandler = new RemoveUserRolesHandler(new NullLogger<RemoveUserRolesHandler>(), unitOfWorkFactory, identityServiceFactory.UserManager);
 
@@ -38,6 +41,9 @@ namespace Montr.Idx.Tests.CommandHandlers
 
 			using (var _ = unitOfWorkFactory.Create())
 			{
+				await generator.EnsureClassifierTypeRegistered(Role.GetDefaultMetadata(), cancellationToken);
+				await generator.EnsureClassifierTypeRegistered(User.GetDefaultMetadata(), cancellationToken);
+
 				// arrange
 				foreach (var name in roles)
 				{
