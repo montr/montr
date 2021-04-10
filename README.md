@@ -1,6 +1,6 @@
 # [Montr](https://montr.net/) &middot; [![GitHub Actions status](https://github.com/montr/montr/workflows/build/badge.svg)](https://github.com/montr/montr) [![GitHub license](https://img.shields.io/badge/license-GPL3.0-blue.svg)](https://github.com/montr/montr/blob/master/LICENSE) [![FOSSA Status](https://app.fossa.com/api/projects/git%2Bgithub.com%2Fmontr%2Fmontr.svg?type=shield)](https://app.fossa.com/projects/git%2Bgithub.com%2Fmontr%2Fmontr?ref=badge_shield)
 
-R&D of B2B applications
+R&D of B2B automation applications
 
 * SSO
 * MDM
