@@ -314,19 +314,17 @@ namespace Montr.MasterData.Tests.Services
 			}
 		}
 
-		public async Task<ClassifierType> EnsureNumeratorTypeRegistered(CancellationToken cancellationToken)
+		public async Task<ClassifierType> EnsureClassifierTypeRegistered(RegisterClassifierType type, CancellationToken cancellationToken)
 		{
-			var type = RegisterClassifierTypeStartupTask.GetNumeratorType();
-
 			await _classifierTypeRegistrator.Register(type.Item, type.Fields, cancellationToken);
 
-			return await _classifierTypeService.Get(Numerator.TypeCode, cancellationToken);
+			return await _classifierTypeService.Get(type.Item.Code, cancellationToken);
 		}
 
 		// todo: use numerator repository (?)
 		public async Task<ApiResult> InsertNumerator(Numerator numerator, GenerateNumberRequest request, CancellationToken cancellationToken)
 		{
-			var type = await EnsureNumeratorTypeRegistered(cancellationToken);
+			var type = await EnsureClassifierTypeRegistered(Numerator.GetDefaultMetadata(), cancellationToken);
 
 			var numeratorUid = Guid.NewGuid();
 

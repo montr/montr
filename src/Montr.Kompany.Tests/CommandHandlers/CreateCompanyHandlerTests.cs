@@ -110,7 +110,7 @@ namespace Montr.Kompany.Tests.CommandHandlers
 
 			using (var _ = unitOfWorkFactory.Create())
 			{
-				await generator.EnsureNumeratorTypeRegistered(cancellationToken);
+				await generator.EnsureClassifierTypeRegistered(Numerator.GetDefaultMetadata(), cancellationToken);
 
 				await registerDocumentTypeHandler.Handle(new RegisterDocumentType
 				{

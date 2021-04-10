@@ -8,6 +8,7 @@ using Montr.Metadata.Services;
 
 namespace Montr.MasterData.Services
 {
+	// todo: move to impl
 	public class RegisterClassifierMetadataStartupTask : IStartupTask
 	{
 		private readonly IMetadataRegistrator _registrator;

@@ -12,6 +12,8 @@ using Montr.Idx.Impl.CommandHandlers;
 using Montr.Idx.Impl.Services;
 using Montr.Idx.Models;
 using Montr.Idx.Tests.Services;
+using Montr.MasterData.Models;
+using Montr.MasterData.Tests.Services;
 using Moq;
 
 namespace Montr.Idx.Tests.CommandHandlers
@@ -47,14 +49,15 @@ namespace Montr.Idx.Tests.CommandHandlers
 			var appUrlBuilder = new DefaultAppUrlBuilder(appOptionsAccessor);
 			var emailConfirmationServiceMock = new Mock<IEmailConfirmationService>();
 
-			var generator = new IdxDbGenerator(unitOfWorkFactory, dbContextFactory);
+			var generator = new MasterDataDbGenerator(unitOfWorkFactory, dbContextFactory);
 
 			var handler = new RegisterHandler(new NullLogger<RegisterHandler>(), classifierRepositoryFactory,
 				identityServiceFactory.UserManager, identityServiceFactory.SignInManager, appUrlBuilder, emailConfirmationServiceMock.Object);
 
 			using (var _ = unitOfWorkFactory.Create())
 			{
-				await generator.EnsureUserTypeRegistered(cancellationToken);
+				await generator.EnsureClassifierTypeRegistered(Numerator.GetDefaultMetadata(), cancellationToken);
+				await generator.EnsureClassifierTypeRegistered(User.GetDefaultMetadata(), cancellationToken);
 
 				// act
 				var command = new Register
