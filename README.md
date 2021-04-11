@@ -26,7 +26,6 @@ These instructions will get you a copy of the project up and running on your loc
 2. Create database `montr` (or choose your database name) in PostgreSQL.
 3. Copy sample `secrets.json` from `templates/secrets.json` to `Microsoft/UserSecrets/1f5f8818-a536-4818-b963-2d3ef5dcef03` directory.
    * Specify choosen database name and other connection string parameters in `Default` and `Migration` connections of `ConnectionStrings` section in `secrets.json`.
-   * Specify default administrator email and password in `Montr.Idx.IdxOptions` section.
 4. Run dotnet to watch backend sources changes in `./src/Host`. During first startup database structure (tables etc.) and default data (users etc.) will be created.
 ```bash
 dotnet watch run
@@ -40,6 +39,7 @@ npm install
 npm start
 ```
 7. Open http://127.0.0.1:5000 or https://127.0.0.1:5001 in browser.
+	* Specify default administrator email and password on opened Setup page.
 
 ### License
 
