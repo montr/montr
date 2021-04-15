@@ -12,9 +12,9 @@ namespace Montr.Docs.Controllers
 	[Authorize, ApiController, Route("api/[controller]/[action]")]
 	public class ProcessStepController : ControllerBase
 	{
-		private readonly IMediator _mediator;
+		private readonly ISender _mediator;
 
-		public ProcessStepController(IMediator mediator)
+		public ProcessStepController(ISender mediator)
 		{
 			_mediator = mediator;
 		}

@@ -14,11 +14,11 @@ namespace Montr.Tendr.Controllers
 	[Authorize, ApiController, Route("api/[controller]/[action]")]
 	public class InvitationController
 	{
-		private readonly IMediator _mediator;
+		private readonly ISender _mediator;
 		private readonly ICurrentCompanyProvider _currentCompanyProvider;
 		private readonly ICurrentUserProvider _currentUserProvider;
 
-		public InvitationController(IMediator mediator,
+		public InvitationController(ISender mediator,
 			ICurrentCompanyProvider currentCompanyProvider, ICurrentUserProvider currentUserProvider)
 		{
 			_mediator = mediator;

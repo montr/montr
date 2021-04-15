@@ -10,12 +10,12 @@ using Montr.Core.Models;
 
 namespace Montr.Automate.Controllers
 {
-	[Authorize, ApiController, Route("api/[controller]/[action]")]
+	[Authorize(), ApiController, Route("api/[controller]/[action]")]
 	public class AutomationController : ControllerBase
 	{
-		private readonly IMediator _mediator;
+		private readonly ISender _mediator;
 
-		public AutomationController(IMediator mediator)
+		public AutomationController(ISender mediator)
 		{
 			_mediator = mediator;
 		}

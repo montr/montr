@@ -11,9 +11,9 @@ namespace Montr.Core.Controllers
 	[Authorize, ApiController, Route("api/[controller]/[action]")]
 	public class EntityStatusController : ControllerBase
 	{
-		private readonly IMediator _mediator;
+		private readonly ISender _mediator;
 
-		public EntityStatusController(IMediator mediator)
+		public EntityStatusController(ISender mediator)
 		{
 			_mediator = mediator;
 		}

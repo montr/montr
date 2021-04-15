@@ -10,7 +10,7 @@ namespace Montr.Kompany.Impl.Services
 {
 	public class RegisterDocumentTypeStartupTask : AbstractRegisterDocumentTypeStartupTask
 	{
-		public RegisterDocumentTypeStartupTask(ILogger<RegisterDocumentTypeStartupTask> logger, IMediator mediator) : base(logger, mediator)
+		public RegisterDocumentTypeStartupTask(ILogger<RegisterDocumentTypeStartupTask> logger, ISender mediator) : base(logger, mediator)
 		{
 		}
 

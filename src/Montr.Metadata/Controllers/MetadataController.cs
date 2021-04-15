@@ -12,9 +12,9 @@ namespace Montr.Metadata.Controllers
 	[/* Authorize, */ ApiController, Route("api/[controller]/[action]")]
 	public class MetadataController : ControllerBase
 	{
-		private readonly IMediator _mediator;
+		private readonly ISender _mediator;
 
-		public MetadataController(IMediator mediator)
+		public MetadataController(ISender mediator)
 		{
 			_mediator = mediator;
 		}

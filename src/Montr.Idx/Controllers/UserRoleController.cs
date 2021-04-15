@@ -12,9 +12,9 @@ namespace Montr.Idx.Controllers
 	[Authorize, ApiController, Route("api/[controller]/[action]")]
 	public class UserRoleController : ControllerBase
 	{
-		private readonly IMediator _mediator;
+		private readonly ISender _mediator;
 
-		public UserRoleController(IMediator mediator)
+		public UserRoleController(ISender mediator)
 		{
 			_mediator = mediator;
 		}

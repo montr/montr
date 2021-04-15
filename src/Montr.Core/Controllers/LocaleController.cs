@@ -11,9 +11,9 @@ namespace Montr.Core.Controllers
 	[/*Authorize,*/ ApiController, Route("api/[controller]/[action]")]
 	public class LocaleController : ControllerBase
 	{
-		private readonly IMediator _mediator;
+		private readonly ISender _mediator;
 
-		public LocaleController(IMediator mediator)
+		public LocaleController(ISender mediator)
 		{
 			_mediator = mediator;
 		}

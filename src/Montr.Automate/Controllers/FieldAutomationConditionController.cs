@@ -11,13 +11,13 @@ namespace Montr.Automate.Controllers
 	[Authorize, ApiController, Route("api/[controller]/[action]")]
 	public class FieldAutomationConditionController : ControllerBase
 	{
-		private readonly IMediator _mediator;
+		private readonly ISender _mediator;
 
-		public FieldAutomationConditionController(IMediator mediator)
+		public FieldAutomationConditionController(ISender mediator)
 		{
 			_mediator = mediator;
 		}
-		
+
 		[HttpPost]
 		public async Task<IList<FieldMetadata>> Fields(GetFieldAutomationConditionFieldList request)
 		{

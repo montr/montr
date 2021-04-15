@@ -12,9 +12,9 @@ namespace Montr.MasterData.Controllers
 	[Authorize, ApiController, Route("api/[controller]/[action]")]
 	public class NumeratorEntityController : ControllerBase
 	{
-		private readonly IMediator _mediator;
+		private readonly ISender _mediator;
 
-		public NumeratorEntityController(IMediator mediator)
+		public NumeratorEntityController(ISender mediator)
 		{
 			_mediator = mediator;
 		}

@@ -11,9 +11,9 @@ namespace Montr.Docs.Services
 	public abstract class AbstractRegisterDocumentTypeStartupTask : IStartupTask
 	{
 		private readonly ILogger _logger;
-		private readonly IMediator _mediator;
+		private readonly ISender _mediator;
 
-		protected AbstractRegisterDocumentTypeStartupTask(ILogger logger, IMediator mediator)
+		protected AbstractRegisterDocumentTypeStartupTask(ILogger logger, ISender mediator)
 		{
 			_logger = logger;
 			_mediator = mediator;

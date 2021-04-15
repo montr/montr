@@ -11,9 +11,9 @@ namespace Montr.Docs.Controllers
 	[Authorize, ApiController, Route("api/[controller]/[action]")]
 	public class DocumentController : ControllerBase
 	{
-		private readonly IMediator _mediator;
+		private readonly ISender _mediator;
 
-		public DocumentController(IMediator mediator)
+		public DocumentController(ISender mediator)
 		{
 			_mediator = mediator;
 		}

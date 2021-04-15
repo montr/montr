@@ -13,10 +13,10 @@ namespace Montr.MasterData.Controllers
 	[Authorize, ApiController, Route("api/[controller]/[action]")]
 	public class ClassifierTreeController : ControllerBase
 	{
-		private readonly IMediator _mediator;
+		private readonly ISender _mediator;
 		private readonly ICurrentUserProvider _currentUserProvider;
 
-		public ClassifierTreeController(IMediator mediator, ICurrentUserProvider currentUserProvider)
+		public ClassifierTreeController(ISender mediator, ICurrentUserProvider currentUserProvider)
 		{
 			_mediator = mediator;
 			_currentUserProvider = currentUserProvider;

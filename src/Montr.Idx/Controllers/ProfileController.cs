@@ -14,10 +14,10 @@ namespace Montr.Idx.Controllers
 	[Authorize, ApiController, Route("api/[controller]/[action]")]
 	public class ProfileController : ControllerBase
 	{
-		private readonly IMediator _mediator;
+		private readonly ISender _mediator;
 		private readonly ICurrentUserProvider _currentUserProvider;
 
-		public ProfileController(IMediator mediator, ICurrentUserProvider currentUserProvider)
+		public ProfileController(ISender mediator, ICurrentUserProvider currentUserProvider)
 		{
 			_mediator = mediator;
 			_currentUserProvider = currentUserProvider;

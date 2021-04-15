@@ -13,10 +13,10 @@ namespace Montr.Idx.Controllers
 	[ApiController, Route("api/[controller]/[action]")]
 	public class AccountController : ControllerBase
 	{
-		private readonly IMediator _mediator;
+		private readonly ISender _mediator;
 		private readonly ICurrentUserProvider _currentUserProvider;
 
-		public AccountController(IMediator mediator, ICurrentUserProvider currentUserProvider)
+		public AccountController(ISender mediator, ICurrentUserProvider currentUserProvider)
 		{
 			_mediator = mediator;
 			_currentUserProvider = currentUserProvider;
