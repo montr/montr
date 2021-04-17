@@ -30,9 +30,6 @@ class WrappedPaneSearchMetadata extends React.Component<Props, State> {
 		};
 	}
 
-	componentDidMount = async () => {
-	};
-
 	componentWillUnmount = async () => {
 		await this._metadataService.abort();
 	};
@@ -76,23 +73,18 @@ class WrappedPaneSearchMetadata extends React.Component<Props, State> {
 	};
 
 	delete = async () => {
-		const { t } = this.props;
 
-		await this._operation.execute(async () => {
+		const result = await this._operation.confirmDelete(async () => {
 			const { entityTypeCode, entityUid } = this.props,
 				{ selectedRowKeys } = this.state;
 
-			const result = await this._metadataService.delete({ entityTypeCode, entityUid, uids: selectedRowKeys });
-
-			if (result.success) {
-				this.refreshTable(false, true);
-			}
-
-			return result;
-		}, {
-			showConfirm: true,
-			confirmTitle: t("operation.confirm.delete.title")
+			return await this._metadataService.delete({ entityTypeCode, entityUid, uids: selectedRowKeys });
 		});
+
+		if (result.success) {
+			this.refreshTable(false, true);
+		}
+
 	};
 
 	render = () => {

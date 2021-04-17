@@ -1,10 +1,10 @@
 import * as React from "react";
 import i18next from "i18next";
-import { Button, Modal, message, Tag, Spin } from "antd";
-import { ApiResult, DataView } from "@montr-core/models";
+import { Button, Tag, Spin } from "antd";
+import { DataView } from "@montr-core/models";
 import { EventService, EventTemplateService } from "../services";
 import { Page, PaneComponent, Toolbar, PageHeader, DataBreadcrumb, DataTabs } from "@montr-core/components";
-import { MetadataService } from "@montr-core/services";
+import { MetadataService, OperationService } from "@montr-core/services";
 import { IEvent } from "../models";
 import { RouteBuilder } from "../module";
 import { RouteComponentProps } from "react-router";
@@ -26,9 +26,10 @@ interface State {
 
 class _EditEvent extends React.Component<Props, State> {
 
-	private _metadataService = new MetadataService();
-	private _eventTemplateService = new EventTemplateService();
-	private _eventService = new EventService();
+	private readonly operation = new OperationService();
+	private readonly metadataService = new MetadataService();
+	private readonly eventTemplateService = new EventTemplateService();
+	private readonly eventService = new EventService();
 
 	private _refsByKey: Map<string, any> = new Map<string, React.RefObject<any>>();
 
@@ -42,23 +43,23 @@ class _EditEvent extends React.Component<Props, State> {
 		};
 	}
 
-	componentDidMount = async () => {
+	componentDidMount = async (): Promise<void> => {
 		await this.fetchData();
 	};
 
-	componentWillUnmount = async () => {
-		await this._metadataService.abort();
-		await this._eventTemplateService.abort();
-		await this._eventService.abort();
+	componentWillUnmount = async (): Promise<void> => {
+		await this.metadataService.abort();
+		await this.eventTemplateService.abort();
+		await this.eventService.abort();
 	};
 
-	fetchData = async () => {
-		const templates = await this._eventTemplateService.list();
+	fetchData = async (): Promise<void> => {
+		const templates = await this.eventTemplateService.list();
 
 		// todo: get metadata key from server
-		const dataView = await this._metadataService.load("PrivateEvent/Edit");
+		const dataView = await this.metadataService.load("PrivateEvent/Edit");
 
-		const data = await this._eventService.get(this.props.match.params.uid);
+		const data = await this.eventService.get(this.props.match.params.uid);
 
 		this.setState({ loading: false, configCodes: templates.rows, dataView, data });
 	};
@@ -90,7 +91,7 @@ class _EditEvent extends React.Component<Props, State> {
 		return ref;
 	}
 
-	handleSave() {
+	handleSave(): void {
 		this._refsByKey.forEach((ref) => {
 			(ref.current as PaneComponent).save();
 		});
@@ -98,44 +99,32 @@ class _EditEvent extends React.Component<Props, State> {
 		this.fetchData();
 	}
 
-	handlePublish() {
+	handlePublish = async (): Promise<void> => {
 		const t = (key: string) => i18next.getFixedT(null, "tendr")(key);
 
-		Modal.confirm({
-			title: t("confirm.title"),
-			content: t("publish.confirm.content"),
-			onOk: () => {
-				this._eventService
-					.publish(this.props.match.params.uid)
-					.then((result: ApiResult) => {
-						message.success(t("operation.success"));
-						this.fetchData();
-					})
-					.catch(error => {
-						message.error(t("operation.error"));
-					});
-			}
-		});
-	}
+		const result = await this.operation.confirm(async () => {
+			return await this.eventService.publish(this.props.match.params.uid);
+		}, t("publish.confirm.content"));
 
-	handleCancel() {
+		if (result.success) {
+			this.fetchData();
+		}
+	};
+
+	handleCancel = async (): Promise<void> => {
+
 		const t = (key: string) => i18next.getFixedT(null, "tendr")(key);
 
-		Modal.confirm({
-			title: t("confirm.title"),
-			content: t("cancel.confirm.content"),
-			onOk: () => {
-				this._eventService
-					.cancel(this.props.match.params.uid)
-					.then((result: ApiResult) => {
-						message.success(t("operation.success"));
-						this.fetchData();
-					});
-			}
-		});
-	}
+		const result = await this.operation.confirm(async () => {
+			return await this.eventService.cancel(this.props.match.params.uid);
+		}, t("cancel.confirm.content"));
 
-	handleTabChange = (tabKey: string) => {
+		if (result.success) {
+			this.fetchData();
+		}
+	};
+
+	handleTabChange = (tabKey: string): void => {
 		const { uid } = this.props.match.params;
 
 		const path = RouteBuilder.editEvent(uid, tabKey);
@@ -143,7 +132,7 @@ class _EditEvent extends React.Component<Props, State> {
 		this.props.history.replace(path);
 	};
 
-	render = () => {
+	render = (): React.ReactNode => {
 		const t = (key: string) => i18next.getFixedT(null, "tendr")(key),
 			{ tabKey } = this.props.match.params,
 			{ loading, data, dataView } = this.state;

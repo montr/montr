@@ -20,9 +20,9 @@ interface State {
 
 class WrappedPaneSearchEntityStatuses extends React.Component<Props, State> {
 
-	private _operation = new OperationService();
-	private _metadataService = new MetadataService();
-	private _entityStatusService = new EntityStatusService();
+	private readonly operation = new OperationService();
+	private readonly metadataService = new MetadataService();
+	private readonly entityStatusService = new EntityStatusService();
 
 	constructor(props: Props) {
 		super(props);
@@ -31,12 +31,9 @@ class WrappedPaneSearchEntityStatuses extends React.Component<Props, State> {
 		};
 	}
 
-	componentDidMount = async () => {
-	};
-
 	componentWillUnmount = async () => {
-		await this._metadataService.abort();
-		await this._entityStatusService.abort();
+		await this.metadataService.abort();
+		await this.entityStatusService.abort();
 	};
 
 	onLoadTableData = async (loadUrl: string, postParams: any): Promise<DataResult<{}>> => {
@@ -44,7 +41,7 @@ class WrappedPaneSearchEntityStatuses extends React.Component<Props, State> {
 
 		const params = { entityTypeCode, entityUid, ...postParams };
 
-		return await this._metadataService.post(loadUrl, params);
+		return await this.metadataService.post(loadUrl, params);
 	};
 
 	onSelectionChange = async (selectedRowKeys: string[] | number[]) => {
@@ -74,23 +71,16 @@ class WrappedPaneSearchEntityStatuses extends React.Component<Props, State> {
 	};
 
 	delete = async () => {
-		const { t } = this.props;
-
-		await this._operation.execute(async () => {
+		const result = await this.operation.confirmDelete(async () => {
 			const { entityTypeCode, entityUid } = this.props,
 				{ selectedRowKeys } = this.state;
 
-			const result = await this._entityStatusService.delete({ entityTypeCode, entityUid, uids: selectedRowKeys });
-
-			if (result.success) {
-				this.refreshTable(false, true);
-			}
-
-			return result;
-		}, {
-			showConfirm: true,
-			confirmTitle: t("operation.confirm.delete.title")
+			return await this.entityStatusService.delete({ entityTypeCode, entityUid, uids: selectedRowKeys });
 		});
+
+		if (result.success) {
+			this.refreshTable(false, true);
+		}
 	};
 
 	onModalEditSuccess = async (data: EntityStatus) => {

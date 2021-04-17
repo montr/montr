@@ -7,33 +7,33 @@ declare type OnClose = () => void;
 
 export class NotificationService {
 
-	static initialize() {
+	static initialize(): void {
 		notification.config({
 			placement: "bottomRight"
 		});
 	}
 
-	public info = (content: Content, duration?: Duration, onClose?: OnClose) => {
-		message.info(content, duration, onClose);
+	public info = (content: Content, duration?: Duration, onClose?: OnClose): MessageType => {
+		return message.info(content, duration, onClose);
 	};
 
-	public success = (content: Content, duration?: Duration, onClose?: OnClose) => {
-		message.success(content, duration, onClose);
+	public success = (content: Content, duration?: Duration, onClose?: OnClose): MessageType => {
+		return message.success(content, duration, onClose);
 	};
 
-	public error = (message: React.ReactNode, description?: React.ReactNode) => {
+	public error = (message: React.ReactNode, description?: React.ReactNode): void => {
 		notification.error({ message, description });
 	};
 
-	public warning = (content: Content, duration?: Duration, onClose?: OnClose) => {
-		message.warning(content, duration, onClose);
+	public warning = (content: Content, duration?: Duration, onClose?: OnClose): MessageType => {
+		return message.warning(content, duration, onClose);
 	};
 
 	public loading = (content: Content, duration?: Duration, onClose?: OnClose): MessageType => {
 		return message.loading(content, duration, onClose);
 	};
 
-	public confirm = (title: Content, content: Content, onOk?: (...args: any[]) => any, onCancel?: (...args: any[]) => any) => {
+	public confirm = (title: Content, content: Content, onOk?: (...args: any[]) => any, onCancel?: (...args: any[]) => any): void => {
 		Modal.confirm({ title, content, onOk, onCancel });
 	};
 }

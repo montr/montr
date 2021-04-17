@@ -59,7 +59,7 @@ class WrappedDataForm extends React.Component<Props, State> {
 		}
 	};
 
-	handleSubmit = async (values: any /* IIndexer */) => {
+	handleSubmit = async (values: unknown /* IIndexer */) => {
 		const { t, onSubmit, successMessage, errorMessage } = this.props;
 
 		if (onSubmit) {

@@ -1,6 +1,5 @@
 import React from "react";
-import { Button } from "antd";
-import { ButtonAdd, ButtonDelete, DataTable, DataTableUpdateToken, Icon, Toolbar } from "@montr-core/components";
+import { ButtonAdd, ButtonDelete, DataTable, DataTableUpdateToken, Toolbar } from "@montr-core/components";
 import { DataResult } from "@montr-core/models";
 import { OperationService } from "@montr-core/services";
 import { PaneSelectClassifier } from "@montr-master-data/components";
@@ -21,8 +20,8 @@ interface State {
 
 export default class TabEditUserRoles extends React.Component<Props, State> {
 
-    private operation = new OperationService();
-    private userRoleService = new UserRoleService();
+    private readonly operation = new OperationService();
+    private readonly userRoleService = new UserRoleService();
 
     constructor(props: Props) {
         super(props);
@@ -57,16 +56,14 @@ export default class TabEditUserRoles extends React.Component<Props, State> {
         return await this.userRoleService.post(loadUrl, params);
     };
 
-    onSelect = async (keys: string[], rows: Role[]): Promise<void> => {
+    onSelect = async (_keys: string[], rows: Role[]): Promise<void> => {
         const { data } = this.props;
 
         if (data.uid) {
             const result = await this.operation.execute(async () => {
                 return await this.userRoleService.addRoles({
                     userUid: data.uid,
-                    roles: rows.map(x => {
-                        return x.name;
-                    })
+                    roles: rows.map(x => x.name)
                 });
             });
 
@@ -91,7 +88,7 @@ export default class TabEditUserRoles extends React.Component<Props, State> {
             { selectedRows } = this.state;
 
         if (selectedRows) {
-            await this.operation.execute(async () => {
+            await this.operation.confirmDelete(async () => {
                 const result = await this.userRoleService.removeRoles({
                     userUid: data.uid,
                     roles: selectedRows.map(x => {
@@ -99,13 +96,10 @@ export default class TabEditUserRoles extends React.Component<Props, State> {
                     })
                 });
                 if (result.success) {
-                    this.refreshTable(true);
+                    this.refreshTable(true, true);
                 }
                 return result;
 
-            }, {
-                showConfirm: true,
-                confirmTitle: "Вы действительно хотите удалить выбранные записи?"
             });
         }
     };

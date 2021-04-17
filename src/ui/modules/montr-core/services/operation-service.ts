@@ -67,14 +67,14 @@ export class OperationService {
 				}
 			}
 			finally {
-				message.then();
+				message();
 			}
 		};
 
 		if (options?.showConfirm) {
 			this.notification.confirm(
 				options.confirmTitle ?? t("operation.confirm.title"),
-				options.confirmContent,
+				options.confirmContent ?? t("operation.confirm.content"),
 				async () => {
 					return await executeInternal();
 				}
@@ -83,6 +83,14 @@ export class OperationService {
 		else {
 			return await executeInternal();
 		}
+	};
+
+	confirm = async (operation: () => Promise<ApiResult>, message: string): Promise<ApiResult> => {
+		return this.execute(operation, { showConfirm: true, confirmContent: message });
+	};
+
+	confirmDelete = async (operation: () => Promise<ApiResult>): Promise<ApiResult> => {
+		return this.confirm(operation, i18next.t("operation.confirm.deleteSelected.content"));
 	};
 
 	private convertToApiResult = (details: ValidationProblemDetails): ApiResult => {

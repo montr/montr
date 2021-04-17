@@ -49,20 +49,13 @@ class WrappedSearchClassifierType extends React.Component<Props, State> {
 	};
 
 	delete = async () => {
-		const { t } = this.props;
-
-		await this._operation.execute(async () => {
-			const result = await this._classifierTypeService.delete(this.state.selectedRowKeys);
-
-			if (result.success) {
-				this.refreshTable(true);
-			}
-
-			return result;
-		}, {
-			showConfirm: true,
-			confirmTitle: t("operation.confirm.delete.title")
+		const result = await this._operation.confirmDelete(async () => {
+			return await this._classifierTypeService.delete(this.state.selectedRowKeys);
 		});
+
+		if (result.success) {
+			this.refreshTable(true);
+		}
 	};
 
 	refreshTable = async (resetSelectedRows?: boolean) => {

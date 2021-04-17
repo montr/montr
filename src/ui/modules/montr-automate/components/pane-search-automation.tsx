@@ -4,7 +4,6 @@ import { DataTableUpdateToken, Toolbar, ButtonAdd, ButtonDelete, DataTable } fro
 import { Guid, DataResult } from "@montr-core/models";
 import { OperationService } from "@montr-core/services";
 import { Constants } from "@montr-core/.";
-import i18next from "i18next";
 import { AutomationService } from "../services/automation-service";
 import { Automation } from "../models/automation";
 import { PaneEditAutomation } from "./pane-edit-automation";
@@ -45,11 +44,11 @@ export default class PaneSearchAutomation extends React.Component<Props, State> 
 		return await this.automationService.post(loadUrl, params);
 	};
 
-	onSelectionChange = async (selectedRowKeys: string[] | number[]) => {
+	onSelectionChange = async (selectedRowKeys: string[] | number[]): Promise<void> => {
 		this.setState({ selectedRowKeys });
 	};
 
-	refreshTable = async (resetCurrentPage?: boolean, resetSelectedRows?: boolean) => {
+	refreshTable = async (resetCurrentPage?: boolean, resetSelectedRows?: boolean): Promise<void> => {
 		const { selectedRowKeys } = this.state;
 
 		this.setState({
@@ -58,45 +57,38 @@ export default class PaneSearchAutomation extends React.Component<Props, State> 
 		});
 	};
 
-	showAddPane = () => {
+	showAddPane = (): void => {
 		this.setState({ showPane: true, editUid: null });
 	};
 
-	showEditPane = (data: Automation) => {
+	showEditPane = (data: Automation): void => {
 		this.setState({ showPane: true, editUid: data?.uid });
 	};
 
-	closePane = () => {
+	closePane = (): void => {
 		this.setState({ showPane: false });
 	};
 
-	handleSuccess = () => {
+	handleSuccess = (): void => {
 		this.setState({ showPane: false });
 		this.refreshTable(false);
 	};
 
-	delete = async () => {
+	delete = async (): Promise<void> => {
 
-		const t = (key: string) => i18next.t(key);
-
-		await this.operation.execute(async () => {
+		const result = await this.operation.confirmDelete(async () => {
 			const { entityTypeCode, entityTypeUid } = this.props,
 				{ selectedRowKeys } = this.state;
 
-			const result = await this.automationService.delete({ entityTypeCode, entityTypeUid, uids: selectedRowKeys });
-
-			if (result.success) {
-				this.refreshTable(false, true);
-			}
-
-			return result;
-		}, {
-			showConfirm: true,
-			confirmTitle: t("operation.confirm.delete.title")
+			return await this.automationService.delete({ entityTypeCode, entityTypeUid, uids: selectedRowKeys });
 		});
+
+		if (result.success) {
+			this.refreshTable(false, true);
+		}
 	};
 
-	render = () => {
+	render = (): React.ReactNode => {
 		const { entityTypeCode, entityTypeUid } = this.props,
 			{ showPane, editUid, selectedRowKeys, updateTableToken } = this.state;
 
