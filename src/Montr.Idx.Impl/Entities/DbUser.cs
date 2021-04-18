@@ -10,10 +10,10 @@ namespace Montr.Idx.Impl.Entities
 		[Column("id"), PrimaryKey, /*Identity,*/ NotNull]
 		public override Guid Id { get; set; }
 
-		[Column("user_name")]
+		[Column("user_name", Length = 128)]
 		public override string UserName { get; set; }
 
-		[Column("normalized_user_name")]
+		[Column("normalized_user_name", Length = 128)]
 		public override string NormalizedUserName { get; set; }
 
 		[Column("first_name")]
@@ -22,16 +22,16 @@ namespace Montr.Idx.Impl.Entities
 		[Column("last_name")]
 		public string LastName { get; set; }
 
-		[Column("email")]
+		[Column("email", Length = 128)]
 		public override string Email { get; set; }
 
-		[Column("normalized_email")]
+		[Column("normalized_email", Length = 128)]
 		public override string NormalizedEmail { get; set; }
 
 		[Column("email_confirmed"), NotNull]
 		public override bool EmailConfirmed { get; set; }
 
-		[Column("phone_number")]
+		[Column("phone_number", Length = 12)]
 		public override string PhoneNumber { get; set; }
 
 		[Column("phone_number_confirmed"), NotNull]
@@ -55,7 +55,7 @@ namespace Montr.Idx.Impl.Entities
 		[Column("access_failed_count"), NotNull]
 		public override int AccessFailedCount { get; set; }
 
-		[Column("concurrency_stamp"), NotNull]
+		[Column("concurrency_stamp", Length = 36), NotNull]
 		public override string ConcurrencyStamp { get; set; } = Guid.NewGuid().ToString();
 
 		/*[Column("created_at"), NotNull]

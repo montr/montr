@@ -10,13 +10,13 @@ namespace Montr.Idx.Impl.Entities
 		[Column("id"), PrimaryKey, /*Identity,*/ NotNull]
 		public override Guid Id { get; set; }
 
-		[Column("name")]
+		[Column("name", Length = 128)]
 		public override string Name { get; set; }
 
-		[Column("normalized_name")]
+		[Column("normalized_name", Length = 128)]
 		public override string NormalizedName { get; set; }
 
-		[Column("concurrency_stamp"), NotNull]
+		[Column("concurrency_stamp", Length = 36), NotNull]
 		public override string ConcurrencyStamp { get; set; } = Guid.NewGuid().ToString();
 	}
 }

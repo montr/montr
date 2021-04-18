@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Identity;
 using Montr.Core.Services;
 
-namespace Montr.Idx.Services
+namespace Montr.Idx.Impl.Services
 {
 	public class LocalizedIdentityErrorDescriber : IdentityErrorDescriber
 	{
