@@ -6,6 +6,7 @@
 		public const string OpenIdServerAuthenticationScheme = "OpenIddict.Server.AspNetCore";
 	}
 
+	// todo: move to impl?
 	public static class ClientRoutes
 	{
 		public static readonly string Login = "/account/login";

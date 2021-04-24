@@ -9,6 +9,7 @@ using static OpenIddict.Abstractions.OpenIddictConstants;
 
 namespace Montr.Idx.Impl
 {
+	// todo: remove after implementing ui for oidc clients
 	public class Worker : IHostedService
 	{
 		private readonly IServiceProvider _serviceProvider;
@@ -50,22 +51,22 @@ namespace Montr.Idx.Impl
 					},
 					Permissions =
 					{
-						Permissions.Endpoints.Authorization,
-						Permissions.Endpoints.Token,
-						Permissions.Endpoints.Logout,
+						OpenIddictConstants.Permissions.Endpoints.Authorization,
+						OpenIddictConstants.Permissions.Endpoints.Token,
+						OpenIddictConstants.Permissions.Endpoints.Logout,
 
-						Permissions.GrantTypes.Implicit,
-						Permissions.GrantTypes.AuthorizationCode,
-						Permissions.GrantTypes.RefreshToken,
+						OpenIddictConstants.Permissions.GrantTypes.Implicit,
+						OpenIddictConstants.Permissions.GrantTypes.AuthorizationCode,
+						OpenIddictConstants.Permissions.GrantTypes.RefreshToken,
 
-						Permissions.ResponseTypes.Code,
-						Permissions.ResponseTypes.IdToken,
-						Permissions.ResponseTypes.IdTokenToken,
-						Permissions.ResponseTypes.Token,
+						OpenIddictConstants.Permissions.ResponseTypes.Code,
+						OpenIddictConstants.Permissions.ResponseTypes.IdToken,
+						OpenIddictConstants.Permissions.ResponseTypes.IdTokenToken,
+						OpenIddictConstants.Permissions.ResponseTypes.Token,
 
-						Permissions.Scopes.Email,
-						Permissions.Scopes.Profile,
-						Permissions.Scopes.Roles
+						OpenIddictConstants.Permissions.Scopes.Email,
+						OpenIddictConstants.Permissions.Scopes.Profile,
+						OpenIddictConstants.Permissions.Scopes.Roles
 					},
 					/*Requirements =
 					{

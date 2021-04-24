@@ -186,7 +186,7 @@ namespace Montr.Idx.Impl.Services
 				case Claims.Name:
 					yield return Destinations.AccessToken;
 
-					if (principal.HasScope(Permissions.Scopes.Profile))
+					if (principal.HasScope(OpenIddictConstants.Permissions.Scopes.Profile))
 						yield return Destinations.IdentityToken;
 
 					yield break;
@@ -194,7 +194,7 @@ namespace Montr.Idx.Impl.Services
 				case Claims.Email:
 					yield return Destinations.AccessToken;
 
-					if (principal.HasScope(Permissions.Scopes.Email))
+					if (principal.HasScope(OpenIddictConstants.Permissions.Scopes.Email))
 						yield return Destinations.IdentityToken;
 
 					yield break;
@@ -202,7 +202,7 @@ namespace Montr.Idx.Impl.Services
 				case Claims.Role:
 					yield return Destinations.AccessToken;
 
-					if (principal.HasScope(Permissions.Scopes.Roles))
+					if (principal.HasScope(OpenIddictConstants.Permissions.Scopes.Roles))
 						yield return Destinations.IdentityToken;
 
 					yield break;

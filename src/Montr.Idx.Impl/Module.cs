@@ -1,5 +1,6 @@
 ﻿using System;
 using LinqToDB.Mapping;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -30,6 +31,10 @@ namespace Montr.Idx.Impl
 
 			services.AddNamedTransient<IClassifierRepository, DbRoleRepository>(Role.TypeCode);
 			services.AddNamedTransient<IClassifierRepository, DbUserRepository>(User.TypeCode);
+
+			services.AddScoped<IAuthorizationHandler, UserPermissionAuthorizationHandler>();
+
+			services.AddSingleton<IAuthorizationPolicyProvider, AuthorizationPolicyProvider>();
 
 			services
 				.AddAuthentication()
@@ -164,6 +169,8 @@ namespace Montr.Idx.Impl
 					// Register the ASP.NET Core host.
 					options.UseAspNetCore();
 				});
+
+			services.AddAuthorization();
 
 			// Register the worker responsible of seeding the database with the sample clients.
 			// Note: in a real world application, this step should be part of a setup script.

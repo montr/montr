@@ -19,19 +19,19 @@ namespace Montr.Idx.Controllers
 			_mediator = mediator;
 		}
 
-		[HttpPost]
+		[HttpPost, Permission(Permissions.ViewUserRoles)]
 		public async Task<SearchResult<Role>> ListRoles(GetUserRoles request)
 		{
 			return await _mediator.Send(request);
 		}
 
-		[HttpPost]
+		[HttpPost, Permission(Permissions.ManageUserRoles)]
 		public async Task<ApiResult> AddRoles(AddUserRoles request)
 		{
 			return await _mediator.Send(request);
 		}
 
-		[HttpPost]
+		[HttpPost, Permission(Permissions.ManageUserRoles)]
 		public async Task<ApiResult> RemoveRoles(RemoveUserRoles request)
 		{
 			return await _mediator.Send(request);
