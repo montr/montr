@@ -32,9 +32,9 @@ namespace Montr.Idx.Impl
 			services.AddNamedTransient<IClassifierRepository, DbRoleRepository>(Role.TypeCode);
 			services.AddNamedTransient<IClassifierRepository, DbUserRepository>(User.TypeCode);
 
-			services.AddScoped<IAuthorizationHandler, UserPermissionAuthorizationHandler>();
+			services.AddTransient<IPermissionProvider, PermissionProvider>();
 
-			services.AddSingleton<IAuthorizationPolicyProvider, AuthorizationPolicyProvider>();
+			services.AddScoped<IAuthorizationHandler, UserPermissionAuthorizationHandler>();
 
 			services
 				.AddAuthentication()

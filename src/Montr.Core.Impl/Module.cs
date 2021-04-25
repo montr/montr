@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Montr.Core.Impl.Services;
 using Montr.Core.Models;
@@ -24,6 +25,9 @@ namespace Montr.Core.Impl
 
 			services.AddSingleton<IRepository<EntityStatus>, DbEntityStatusRepository>();
 			services.AddSingleton<IEntityStatusProvider, DefaultEntityStatusProvider>();
+
+			services.AddSingleton<IPermissionResolver, DefaultPermissionResolver>();
+			services.AddSingleton<IAuthorizationPolicyProvider, AuthorizationPolicyProvider>();
 		}
 	}
 }

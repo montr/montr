@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Authorization;
 
-namespace Montr.Idx.Models
+namespace Montr.Core.Models
 {
 	[DebuggerDisplay("{" + nameof(DebuggerDisplay) + ",nq}")]
 	public class PermissionRequirement : IAuthorizationRequirement

@@ -2,9 +2,8 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Options;
 using Montr.Core.Models;
-using Montr.Idx.Models;
 
-namespace Montr.Idx.Impl.Services
+namespace Montr.Core.Impl.Services
 {
 	public class AuthorizationPolicyProvider : DefaultAuthorizationPolicyProvider
 	{
@@ -19,12 +18,10 @@ namespace Montr.Idx.Impl.Services
 		{
 			var policy = await base.GetPolicyAsync(policyName);
 
-			if (policy == null && policyName.StartsWith(Permission.PolicyPrefix))
+			if (policy == null && PermissionPolicy.TryGetPermissionName(policyName, out var permissionName))
 			{
-				var permission = policyName[Permission.PolicyPrefix.Length..];
-
 				policy = new AuthorizationPolicyBuilder()
-					.AddRequirements(new PermissionRequirement(permission))
+					.AddRequirements(new PermissionRequirement(permissionName))
 					.Build();
 
 				_options.AddPolicy(policyName, policy);

@@ -14,12 +14,7 @@ namespace Montr.Core.Models
 
 		public PermissionAttribute(Type permission)
 		{
-			Policy = Permission.PolicyPrefix + permission.FullName;
-		}
-
-		public PermissionAttribute(string permission)
-		{
-			Policy = Permission.PolicyPrefix + permission;
+			Policy = PermissionPolicy.BuildPolicyName(permission);
 		}
 	}
 }
