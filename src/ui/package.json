@@ -11,7 +11,7 @@
 		"test": "echo \"Error: no test specified\" && exit 1"
 	},
 	"author": "",
-	"license": "GPL-3.0",
+	"license": "AGPL-3.0",
 	"private": true,
 	"dependencies": {
 		"antd": "^4.15.3",
