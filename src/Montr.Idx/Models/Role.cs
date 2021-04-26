@@ -26,22 +26,15 @@ namespace Montr.Idx.Models
 			{
 				Item = new ClassifierType
 				{
-					Code = Role.TypeCode,
+					Code = TypeCode,
 					Name = "Роли",
 					HierarchyType = HierarchyType.Groups,
 					IsSystem = true
 				},
 				Fields = new List<FieldMetadata>
 				{
-					new TextField
-					{
-						Key = "code", Name = "Код", Required = true, Active = true, DisplayOrder = 10, System = true
-					},
-					new TextAreaField
-					{
-						Key = "name", Name = "Наименование", Required = true, Active = true, DisplayOrder = 20,
-						System = true, Props = new TextAreaField.Properties { Rows = 10 }
-					},
+					new TextField { Key = "code", Name = "Код", Required = true, Active = true, DisplayOrder = 10, System = true },
+					new TextAreaField { Key = "name", Name = "Наименование", Required = true, Active = true, DisplayOrder = 20, System = true, Props = new TextAreaField.Properties { Rows = 10 } }
 				}
 			};
 		}

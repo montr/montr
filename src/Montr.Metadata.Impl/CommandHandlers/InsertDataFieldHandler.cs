@@ -32,7 +32,7 @@ namespace Montr.Metadata.Impl.CommandHandlers
 				{
 					EntityTypeCode = request.EntityTypeCode,
 					EntityUid = request.EntityUid,
-					Item = item
+					Items = new[] { item }
 				}, cancellationToken);
 
 				if (result.Success) scope.Commit();

@@ -5,7 +5,10 @@ using MediatR;
 using Montr.Core.Models;
 using Montr.Core.Services;
 using Montr.MasterData.Commands;
+using Montr.MasterData.Models;
 using Montr.MasterData.Services;
+using Montr.Metadata.Models;
+using Montr.Metadata.Services;
 
 namespace Montr.MasterData.Impl.CommandHandlers
 {
@@ -13,12 +16,14 @@ namespace Montr.MasterData.Impl.CommandHandlers
 	{
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IClassifierTypeService _classifierTypeService;
+		private readonly IFieldMetadataService _metadataService;
 
 		public InsertClassifierTypeHandler(IUnitOfWorkFactory unitOfWorkFactory,
-			IClassifierTypeService classifierTypeService)
+			IClassifierTypeService classifierTypeService, IFieldMetadataService metadataService)
 		{
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_classifierTypeService = classifierTypeService;
+			_metadataService = metadataService;
 		}
 
 		public async Task<ApiResult> Handle(InsertClassifierType request, CancellationToken cancellationToken)
@@ -29,11 +34,21 @@ namespace Montr.MasterData.Impl.CommandHandlers
 
 			using (var scope = _unitOfWorkFactory.Create())
 			{
-				var result = await _classifierTypeService.Insert(item, cancellationToken);
+				var insertTypeResult = await _classifierTypeService.Insert(item, cancellationToken);
 
-				if (result.Success) scope.Commit();
+				if (insertTypeResult.Success == false) return insertTypeResult;
 
-				return result;
+				var insertFieldResult = await _metadataService.Insert(new ManageFieldMetadataRequest
+				{
+					EntityTypeCode = ClassifierType.TypeCode,
+					// ReSharper disable once PossibleInvalidOperationException
+					EntityUid = insertTypeResult.Uid.Value,
+					Items = ClassifierMetadata.GetDefaultFields()
+				}, cancellationToken);
+
+				if (insertFieldResult.Success) scope.Commit();
+
+				return insertTypeResult;
 			}
 		}
 	}

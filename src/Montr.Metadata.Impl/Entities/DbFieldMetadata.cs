@@ -6,7 +6,7 @@ namespace Montr.Metadata.Impl.Entities
 	[Table(Schema = "montr", Name = "field_metadata")]
 	public class DbFieldMetadata
 	{
-		[Column(Name = "uid"), DataType(DataType.Guid), NotNull, PrimaryKey, Identity]
+		[Column(Name = "uid"), DataType(DataType.Guid), NotNull, PrimaryKey]
 		public System.Guid Uid { get; set; }
 
 		[Column(Name = "entity_type_code", Length = 32), DataType(DataType.VarChar), NotNull]
@@ -37,16 +37,16 @@ namespace Montr.Metadata.Impl.Entities
 		public bool IsReadonly { get; set; }
 
 		[Column(Name = "created_by"), DataType(DataType.Guid)]
-		public System.Guid CreatedBy { get; set; }
+		public System.Guid? CreatedBy { get; set; }
 
 		[Column(Name = "created_at_utc"), DataType(DataType.DateTime2)]
-		public System.DateTime CreatedAtUtc { get; set; }
+		public System.DateTime? CreatedAtUtc { get; set; }
 
 		[Column(Name = "modified_by"), DataType(DataType.Guid)]
-		public System.Guid ModifiedBy { get; set; }
+		public System.Guid? ModifiedBy { get; set; }
 
 		[Column(Name = "modified_at_utc"), DataType(DataType.DateTime2)]
-		public System.DateTime ModifiedAtUtc { get; set; }
+		public System.DateTime? ModifiedAtUtc { get; set; }
 
 		[Column(Name = "name", Length = 128), DataType(DataType.VarChar)]
 		public string Name { get; set; }

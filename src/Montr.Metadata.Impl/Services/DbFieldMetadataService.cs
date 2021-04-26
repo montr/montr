@@ -1,7 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using LinqToDB;
+using LinqToDB.Data;
 using Montr.Core.Models;
 using Montr.Core.Services;
 using Montr.Data.Linq2Db;
@@ -14,45 +15,59 @@ namespace Montr.Metadata.Impl.Services
 	public class DbFieldMetadataService : IFieldMetadataService
 	{
 		private readonly IDbContextFactory _dbContextFactory;
+		private readonly IDateTimeProvider _dateTimeProvider;
 		private readonly IJsonSerializer _jsonSerializer;
 
-		public DbFieldMetadataService(IDbContextFactory dbContextFactory, IJsonSerializer jsonSerializer)
+		public DbFieldMetadataService(IDbContextFactory dbContextFactory, IDateTimeProvider dateTimeProvider, IJsonSerializer jsonSerializer)
 		{
 			_dbContextFactory = dbContextFactory;
+			_dateTimeProvider = dateTimeProvider;
 			_jsonSerializer = jsonSerializer;
 		}
 
 		public async Task<ApiResult> Insert(ManageFieldMetadataRequest request, CancellationToken cancellationToken)
 		{
-			var item = request.Item ?? throw new ArgumentNullException(nameof(request.Item));
+			var items = request.Items ?? throw new ArgumentNullException(nameof(request.Items));
 
-			var properties = item.GetProperties();
+			var dbItems = new List<DbFieldMetadata>();
 
-			var extra = properties != null ? _jsonSerializer.Serialize(properties) : null;
+			foreach (var item in items)
+			{
+				var properties = item.GetProperties();
 
-			var itemUid = Guid.NewGuid();
+				var extra = properties != null ? _jsonSerializer.Serialize(properties) : null;
+
+				dbItems.Add(new DbFieldMetadata
+				{
+					Uid = Guid.NewGuid(),
+					EntityTypeCode = request.EntityTypeCode,
+					EntityUid = request.EntityUid,
+					Type = item.Type,
+					Key = item.Key,
+					Name = item.Name,
+					Description = item.Description,
+					Placeholder = item.Placeholder,
+					Icon = item.Icon,
+					IsActive = true,
+					IsSystem = item.System,
+					IsReadonly = item.Readonly,
+					IsRequired = item.Required,
+					DisplayOrder = item.DisplayOrder,
+					CreatedAtUtc = _dateTimeProvider.GetUtcNow(),
+					Props = extra
+				});
+			}
 
 			using (var db = _dbContextFactory.Create())
 			{
-				await db.GetTable<DbFieldMetadata>()
-					.Value(x => x.Uid, itemUid)
-					.Value(x => x.EntityTypeCode, request.EntityTypeCode)
-					.Value(x => x.EntityUid, request.EntityUid)
-					.Value(x => x.Type, item.Type)
-					.Value(x => x.Key, item.Key)
-					.Value(x => x.Name, item.Name)
-					.Value(x => x.Description, item.Description)
-					.Value(x => x.Placeholder, item.Placeholder)
-					.Value(x => x.Icon, item.Icon)
-					.Value(x => x.IsActive, true)
-					.Value(x => x.IsSystem, item.System)
-					.Value(x => x.IsReadonly, item.Readonly)
-					.Value(x => x.IsRequired, item.Required)
-					.Value(x => x.DisplayOrder, item.DisplayOrder)
-					.Value(x => x.Props, extra)
-					.InsertAsync(cancellationToken);
+				var rowsCopied = await db.GetTable<DbFieldMetadata>()
+					.BulkCopyAsync(dbItems, cancellationToken);
 
-				return new ApiResult { Uid = itemUid };
+				return new ApiResult
+				{
+					AffectedRows = rowsCopied.RowsCopied,
+					Uid = dbItems.Count == 1 ? dbItems[0].Uid : null
+				};
 			}
 		}
 	}

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Montr.Metadata.Models
 {
@@ -8,6 +9,6 @@ namespace Montr.Metadata.Models
 
 		public Guid EntityUid { get; set; }
 
-		public FieldMetadata Item { get; set; }
+		public IEnumerable<FieldMetadata> Items { get; set; }
 	}
 }

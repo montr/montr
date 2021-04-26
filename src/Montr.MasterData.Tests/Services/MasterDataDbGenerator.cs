@@ -42,19 +42,23 @@ namespace Montr.MasterData.Tests.Services
 			_dbContextFactory = dbContextFactory;
 
 			var dateTimeProvider = new DefaultDateTimeProvider();
+			var jsonSerializer = new NewtonsoftJsonSerializer();
+
 			var classifierTreeRepository = new DbClassifierTreeRepository(dbContextFactory);
 			var classifierTypeRepository = new DbClassifierTypeRepository(dbContextFactory);
-			var dbFieldMetadataRepository = new DbFieldMetadataRepository(dbContextFactory, null, new NewtonsoftJsonSerializer());
+
+			var dbFieldMetadataRepository = new DbFieldMetadataRepository(dbContextFactory, null, jsonSerializer);
 			var dbFieldDataRepository = new DbFieldDataRepository(dbContextFactory, null);
+			var dbFieldMetadataService = new DbFieldMetadataService(dbContextFactory, dateTimeProvider, jsonSerializer);
 
 			_classifierTypeService = new DbClassifierTypeService(dbContextFactory, classifierTypeRepository);
 			_getClassifierTreeListHandler = new GetClassifierTreeListHandler(classifierTreeRepository);
 			_insertClassifierTreeTypeHandler = new InsertClassifierTreeHandler(unitOfWorkFactory, dbContextFactory, _classifierTypeService);
-			_insertClassifierTypeHandler = new InsertClassifierTypeHandler(unitOfWorkFactory, _classifierTypeService);
+			_insertClassifierTypeHandler = new InsertClassifierTypeHandler(unitOfWorkFactory, _classifierTypeService, dbFieldMetadataService);
 			_insertClassifierGroupHandler = new InsertClassifierGroupHandler(unitOfWorkFactory, dbContextFactory, _classifierTypeService);
 
 			_classifierTypeRegistrator = new DefaultClassifierTypeRegistrator(new NullLogger<DefaultClassifierTypeRegistrator>(),
-				unitOfWorkFactory, _classifierTypeService, new DbFieldMetadataService(dbContextFactory, new NewtonsoftJsonSerializer()));
+				unitOfWorkFactory, _classifierTypeService, dbFieldMetadataService);
 
 			var classifierTypeMetadataService = new ClassifierTypeMetadataService(dbFieldMetadataRepository);
 			var classifierTreeService = new DefaultClassifierTreeService(classifierTreeRepository);

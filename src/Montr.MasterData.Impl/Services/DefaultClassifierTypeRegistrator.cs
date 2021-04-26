@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -42,7 +43,7 @@ namespace Montr.MasterData.Impl.Services
 				return new ApiResult { AffectedRows = 0 };
 			}
 
-			// todo: register numerator
+			// todo: register numerator (get default from settings)
 
 			using (var scope = _unitOfWorkFactory.Create())
 			{
@@ -53,20 +54,15 @@ namespace Montr.MasterData.Impl.Services
 				// todo: throw if empty fields or get default fields?
 				if (fields != null)
 				{
-					// ReSharper disable once PossibleInvalidOperationException
-					var entityUid = insertTypeResult.Uid.Value;
-
-					foreach (var metadata in fields)
+					var insertFieldResult = await _metadataService.Insert(new ManageFieldMetadataRequest
 					{
-						var insertFieldResult = await _metadataService.Insert(new ManageFieldMetadataRequest
-						{
-							EntityTypeCode = ClassifierType.TypeCode,
-							EntityUid = entityUid,
-							Item = metadata
-						}, cancellationToken);
+						EntityTypeCode = ClassifierType.TypeCode,
+						// ReSharper disable once PossibleInvalidOperationException
+						EntityUid = insertTypeResult.Uid.Value,
+						Items = fields
+					}, cancellationToken);
 
-						insertFieldResult.AssertSuccess(() => $"Failed to register classifier type \"{item.Code}\"");
-					}
+					insertFieldResult.AssertSuccess(() => $"Failed to register classifier type \"{item.Code}\"");
 				}
 
 				scope.Commit();
