@@ -19,6 +19,7 @@ using Montr.MasterData.Models;
 using Montr.MasterData.Queries;
 using Montr.MasterData.Services;
 using Montr.Metadata.Impl.Services;
+using Montr.Metadata.Models;
 
 namespace Montr.MasterData.Tests.Services
 {
@@ -47,8 +48,12 @@ namespace Montr.MasterData.Tests.Services
 			var classifierTreeRepository = new DbClassifierTreeRepository(dbContextFactory);
 			var classifierTypeRepository = new DbClassifierTypeRepository(dbContextFactory);
 
-			var dbFieldMetadataRepository = new DbFieldMetadataRepository(dbContextFactory, null, jsonSerializer);
-			var dbFieldDataRepository = new DbFieldDataRepository(dbContextFactory, null);
+			var fieldProviderRegistry = new DefaultFieldProviderRegistry();
+			fieldProviderRegistry.AddFieldType(typeof(TextField));
+			fieldProviderRegistry.AddFieldType(typeof(TextAreaField));
+
+			var dbFieldMetadataRepository = new DbFieldMetadataRepository(dbContextFactory, fieldProviderRegistry, jsonSerializer);
+			var dbFieldDataRepository = new DbFieldDataRepository(dbContextFactory, fieldProviderRegistry);
 			var dbFieldMetadataService = new DbFieldMetadataService(dbContextFactory, dateTimeProvider, jsonSerializer);
 
 			_classifierTypeService = new DbClassifierTypeService(dbContextFactory, classifierTypeRepository);

@@ -32,6 +32,8 @@ namespace Montr.MasterData.Tests.QueryHandlers
 
 			var fieldProviderRegistry = new DefaultFieldProviderRegistry();
 			fieldProviderRegistry.AddFieldType(typeof(TextField));
+			fieldProviderRegistry.AddFieldType(typeof(TextAreaField));
+
 			var dbFieldDataRepository = new DbFieldDataRepository(dbContextFactory, fieldProviderRegistry);
 
 			var metadataServiceMock = new Mock<IClassifierTypeMetadataService>();
