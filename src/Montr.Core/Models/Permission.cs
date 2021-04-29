@@ -4,6 +4,8 @@ namespace Montr.Core.Models
 {
 	public class Permission
 	{
+		public static readonly string TypeCode = nameof(Permission).ToLower();
+
 		public const string ClaimType = nameof(Permission);
 
 		public string Name { get; }

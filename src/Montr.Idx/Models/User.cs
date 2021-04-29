@@ -39,7 +39,7 @@ namespace Montr.Idx.Models
 				Item = new ClassifierType
 				{
 					Code = TypeCode,
-					Name = "Пользователи",
+					Name = "Users",
 					HierarchyType = HierarchyType.Groups,
 					IsSystem = true
 				},

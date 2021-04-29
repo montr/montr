@@ -38,7 +38,7 @@ namespace Montr.MasterData.Impl.Services
 					all = all.Where(x => x.Uid == request.Uid);
 				}
 
-				var paged = all.Apply(request, x => x.Code);
+				var paged = all.Apply(request, x => x.Name);
 
 				var data = await paged
 					.Select(x => new ClassifierType

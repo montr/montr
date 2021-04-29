@@ -75,8 +75,7 @@ namespace Host
 			_modules = services.AddModules(Configuration, Logger);
 			var assemblies = _modules.Select(x => x.GetType().Assembly).ToArray();
 
-			var mvcBuilder = services.AddMvc()
-				.SetCompatibilityVersion(CompatibilityVersion.Version_3_0);
+			var mvcBuilder = services.AddMvc();
 
 			services
 				.AddControllers(_ =>
