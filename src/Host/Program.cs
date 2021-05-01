@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System.Reflection;
+﻿using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
 using Host.Services;
@@ -7,7 +6,6 @@ using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Logging;
 using Montr.Core;
 using Montr.Core.Impl.Services;
 using Montr.Core.Services;
@@ -41,34 +39,7 @@ namespace Host
 
 			var host = hostBuilder.Build();
 
-			using (var scope = host.Services.CreateScope())
-			{
-				var logger = scope.ServiceProvider.GetService<ILogger<Program>>();
-
-				var modules = host.Services.GetServices<IModule>().ToArray();
-
-				foreach (var module in modules)
-				{
-					if (module is IStartupTask startupTask)
-					{
-						logger.LogInformation("Running {module} startup task", module);
-
-						await startupTask.Run(CancellationToken.None);
-					}
-				}
-
-				// todo: run startup tasks from modules or sort IStartupTask's by module initialization order
-				var tasks = scope.ServiceProvider.GetServices<IStartupTask>().ToArray();
-
-				foreach (var task in tasks)
-				{
-					logger.LogInformation("Running {task} startup task", task);
-
-					await task.Run(CancellationToken.None);
-				}
-			}
-
-			await host.RunAsync();
+			await host.Run(CancellationToken.None);
 		}
 
 		// todo: run migration in production in separate process before application

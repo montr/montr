@@ -7,7 +7,6 @@ using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -73,6 +72,7 @@ namespace Host
 			});
 
 			_modules = services.AddModules(Configuration, Logger);
+
 			var assemblies = _modules.Select(x => x.GetType().Assembly).ToArray();
 
 			var mvcBuilder = services.AddMvc();
