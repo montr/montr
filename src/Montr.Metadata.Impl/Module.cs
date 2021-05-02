@@ -33,7 +33,7 @@ namespace Montr.Metadata.Impl
 				options.Registry.AddFieldType(typeof(NumberField));
 				options.Registry.AddFieldType(typeof(DecimalField));
 				options.Registry.AddFieldType(typeof(DateField));
-				// options.Registry.AddFieldType(typeof(TimeField)); commented, problems with utc time without date
+				// options.Registry.AddFieldType(typeof(TimeField)); // commented, problems with utc time without date
 				options.Registry.AddFieldType(typeof(SelectField));
 				options.Registry.AddFieldType(typeof(DesignSelectOptionsField));
 				options.Registry.AddFieldType(typeof(FileField));

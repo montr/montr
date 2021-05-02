@@ -22,6 +22,8 @@ namespace Montr.Idx.Impl.Services
 
 		public async Task Run(CancellationToken cancellationToken)
 		{
+			cancellationToken.ThrowIfCancellationRequested();
+
 			foreach (var command in GetCommands())
 			{
 				await _classifierTypeRegistrator.Register(command.Item, command.Fields, cancellationToken);

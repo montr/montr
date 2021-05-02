@@ -8,20 +8,20 @@ namespace Montr.Core.Models
 
 		public const string ClaimType = nameof(Permission);
 
-		public string Name { get; }
+		public string Code { get; }
 
-		public static string GetName(Type permission)
+		public static string GetCode(Type permission)
 		{
 			return permission.FullName;
 		}
 
-		public Permission(Type permission) : this(GetName(permission))
+		public Permission(Type permission) : this(GetCode(permission))
 		{
 		}
 
-		public Permission(string name)
+		public Permission(string code)
 		{
-			Name = name;
+			Code = code;
 		}
 	}
 }

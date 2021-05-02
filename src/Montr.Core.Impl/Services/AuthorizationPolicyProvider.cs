@@ -18,10 +18,10 @@ namespace Montr.Core.Impl.Services
 		{
 			var policy = await base.GetPolicyAsync(policyName);
 
-			if (policy == null && PermissionPolicy.TryGetPermissionName(policyName, out var permissionName))
+			if (policy == null && PermissionPolicy.TryGetPermission(policyName, out var permission))
 			{
 				policy = new AuthorizationPolicyBuilder()
-					.AddRequirements(new PermissionRequirement(permissionName))
+					.AddRequirements(new PermissionRequirement(permission))
 					.Build();
 
 				_options.AddPolicy(policyName, policy);

@@ -37,9 +37,7 @@ namespace Montr.Core.Impl.Services
 
 				// todo: run startup tasks from modules or sort IStartupTask's by module initialization order
 				// fixme: startup tasks already ordered, because they are registered in ordered modules
-				var tasks = scope.ServiceProvider.GetServices<IStartupTask>().ToArray();
-
-				foreach (var task in tasks)
+				foreach (var task in scope.ServiceProvider.GetServices<IStartupTask>())
 				{
 					logger.LogInformation("Running {task} startup task", task);
 

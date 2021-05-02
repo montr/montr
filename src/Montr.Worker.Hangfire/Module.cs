@@ -41,11 +41,11 @@ namespace Montr.Worker.Hangfire
 				AppPath = "/dashboard",
 				Authorization = new [] { new DashboardAuthorizationFilter() },
 				// IsReadOnlyFunc = (context) => true,
-				DisplayNameFunc = (context, job) => FormatJobName(job)
+				DisplayNameFunc = FormatJobName
 			});
 		}
 
-		private static string FormatJobName(Job job)
+		private static string FormatJobName(DashboardContext context, Job job)
 		{
 			var result = new StringBuilder();
 
@@ -61,7 +61,7 @@ namespace Montr.Worker.Hangfire
 			return result.ToString();
 		}
 
-		// todo: replace with real auth
+		// todo: replace with real auth with permissions
 		public class DashboardAuthorizationFilter : IDashboardAuthorizationFilter
 		{
 			public bool Authorize(DashboardContext context)
@@ -69,7 +69,7 @@ namespace Montr.Worker.Hangfire
 				var httpContext = context.GetHttpContext();
 
 				// Allow all authenticated users to see the Dashboard (potentially dangerous).
-				return httpContext.User.Identity.IsAuthenticated;
+				return httpContext?.User.Identity?.IsAuthenticated == true;
 			}
 		}
 	}

@@ -8,18 +8,18 @@ namespace Montr.Core.Models
 
 		public static string BuildPolicyName(Type permission)
 		{
-			return Prefix + Permission.GetName(permission);
+			return Prefix + Permission.GetCode(permission);
 		}
 
-		public static bool TryGetPermissionName(string policyName, out string permissionName)
+		public static bool TryGetPermission(string policyName, out string permission)
 		{
 			if (policyName?.StartsWith(Prefix, StringComparison.OrdinalIgnoreCase) == true)
 			{
-				permissionName = policyName[Prefix.Length..];
+				permission = policyName[Prefix.Length..];
 				return true;
 			}
 
-			permissionName = null;
+			permission = null;
 			return false;
 		}
 	}

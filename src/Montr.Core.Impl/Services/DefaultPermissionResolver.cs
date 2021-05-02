@@ -16,7 +16,7 @@ namespace Montr.Core.Impl.Services
 			{
 				foreach (var permission in provider.GetPermissions())
 				{
-					_permissionByName[permission.Name] = permission;
+					_permissionByName[permission.Code] = permission;
 				}
 			}
 		}

@@ -29,6 +29,7 @@ namespace Montr.MasterData.Models
 		[Required]
 		public string Name { get; set; }
 
+		// todo: the same as StatesCode.Active ?
 		public bool IsActive { get; set; }
 
 		public bool IsSystem { get; set; }

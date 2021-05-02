@@ -22,8 +22,9 @@ namespace Montr.Idx.Impl
 	{
 		public void ConfigureServices(IConfiguration configuration, IServiceCollection services)
 		{
-			services.AddTransient<IStartupTask, RegisterMessageTemplateStartupTask>();
 			services.AddTransient<IStartupTask, RegisterClassifierTypeStartupTask>();
+			services.AddTransient<IStartupTask, RegisterMessageTemplateStartupTask>();
+			services.AddTransient<IStartupTask, RegisterPrivilegesStartupTask>();
 
 			services.AddTransient<IEmailConfirmationService, EmailConfirmationService>();
 			services.AddTransient<ISignInManager, DefaultSignInManager>();
