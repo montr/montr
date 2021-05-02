@@ -39,7 +39,7 @@ namespace Host
 
 			var host = hostBuilder.Build();
 
-			await host.Run(CancellationToken.None);
+			await host.RunAsync();
 		}
 
 		// todo: run migration in production in separate process before application

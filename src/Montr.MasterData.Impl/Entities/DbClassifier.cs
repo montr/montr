@@ -17,16 +17,16 @@ namespace Montr.MasterData.Impl.Entities
 		[Column(Name = "type_uid"), DataType(DataType.Guid), NotNull]
 		public Guid TypeUid { get; set; }
 
-		[Column(Name = "status_code"), DataType(DataType.VarChar), NotNull]
+		[Column(Name = "status_code", Length = 16), DataType(DataType.VarChar), NotNull]
 		public string StatusCode { get; set; }
 
 		[Column(Name = "parent_uid"), DataType(DataType.Guid), Nullable]
 		public Guid? ParentUid { get; set; }
 
-		[Column(Name = "code"), DataType(DataType.VarChar), NotNull]
+		[Column(Name = "code", Length = 512), DataType(DataType.VarChar), NotNull]
 		public string Code { get; set; }
 
-		[Column(Name = "name"), DataType(DataType.VarChar), Nullable]
+		[Column(Name = "name", Length = 2048), DataType(DataType.VarChar), Nullable]
 		public string Name { get; set; }
 
 		[Column(Name = "is_active"), DataType(DataType.Boolean), NotNull]

@@ -58,7 +58,6 @@ namespace Montr.Idx.Impl.Services
 				{
 					Type = Permission.TypeCode,
 					Code = permission.Code,
-					IsActive = true,
 					IsSystem = true,
 					StatusCode = ClassifierStatusCode.Active
 				}, cancellationToken);

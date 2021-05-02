@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading;
+using System.Threading.Tasks;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Montr.Core.Services;
 
 namespace Montr.Core.Impl.Services
 {
-	public static class ModularityServiceCollectionExtensions
+	public static class ModularServiceExtensions
 	{
 		public static ICollection<IModule> AddModules(this IServiceCollection services, IConfiguration configuration, ILogger logger)
 		{
@@ -46,6 +49,31 @@ namespace Montr.Core.Impl.Services
 			}
 
 			return result.AsReadOnly();
+		}
+
+		public static async Task RunStartupTasks(this IServiceProvider services, ILogger logger, CancellationToken cancellationToken = default)
+		{
+			using (var scope = services.CreateScope())
+			{
+				foreach (var module in scope.ServiceProvider.GetServices<IModule>())
+				{
+					if (module is IStartupTask startupTask)
+					{
+						logger.LogInformation("Running {module} startup task", module);
+
+						await startupTask.Run(cancellationToken);
+					}
+				}
+
+				// todo: run startup tasks from modules or sort IStartupTask's by module initialization order
+				// fixme: startup tasks already ordered, because they are registered in ordered modules
+				foreach (var task in scope.ServiceProvider.GetServices<IStartupTask>())
+				{
+					logger.LogInformation("Running {task} startup task", task);
+
+					await task.Run(cancellationToken);
+				}
+			}
 		}
 	}
 }
