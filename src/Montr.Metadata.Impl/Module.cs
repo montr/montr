@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Montr.Core;
 using Montr.Core.Services;
 using Montr.Metadata.Impl.Services;
@@ -14,12 +16,17 @@ namespace Montr.Metadata.Impl
 	{
 		public void ConfigureServices(IConfiguration configuration, IServiceCollection services)
 		{
+			services.AddSingleton<IStartupTask, FieldMetadataJsonOptionsInitializer>();
+
 			services.AddSingleton<IFieldProviderRegistry, DefaultFieldProviderRegistry>();
 			services.AddSingleton<IRepository<FieldMetadata>, DbFieldMetadataRepository>();
 			services.AddSingleton<IFieldMetadataService, DbFieldMetadataService>();
 			services.AddSingleton<IFieldDataRepository, DbFieldDataRepository>();
 			services.AddSingleton<IMetadataProvider, DefaultMetadataProvider>();
 			services.AddSingleton<IMetadataRegistrator, DefaultMetadataRegistrator>();
+
+			services.AddSingleton<JsonTypeProvider<FieldMetadata>>();
+			services.AddSingleton<IConfigureOptions<MvcNewtonsoftJsonOptions>, FieldMetadataJsonOptionsConfigurator>();
 		}
 
 		public void Configure(IApplicationBuilder app)

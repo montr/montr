@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Text.Json.Serialization;
 using MediatR;
@@ -12,15 +10,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Primitives;
-using Montr.Automate.Models;
-using Montr.Automate.Services;
 using Montr.Core;
 using Montr.Core.Impl.Services;
 using Montr.Core.Services;
-using Montr.MasterData.Models;
-using Montr.MasterData.Services;
 using Montr.Metadata.Models;
-using Montr.Metadata.Services;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 
@@ -29,10 +22,6 @@ namespace Host
 	public class Startup
 	{
 		private ICollection<IModule> _modules;
-		private IDictionary<string, Type> _classifierTypeMap;
-		private IDictionary<string, Type> _fieldTypeMap;
-		private IDictionary<string, Type> _automateConditionTypeMap;
-		private IDictionary<string, Type> _automateActionTypeMap;
 
 		public Startup(ILoggerFactory loggerFactory, IWebHostEnvironment environment, IConfiguration configuration)
 		{
@@ -116,21 +105,10 @@ namespace Host
 			}
 			else
 			{
-				// todo: use event (?)
-				_fieldTypeMap = new ConcurrentDictionary<string, Type>();
-				_automateConditionTypeMap = new ConcurrentDictionary<string, Type>();
-				_automateActionTypeMap = new ConcurrentDictionary<string, Type>();
-				_classifierTypeMap = new ConcurrentDictionary<string, Type>(StringComparer.OrdinalIgnoreCase);
-
 				mvcBuilder.AddNewtonsoftJson(options =>
 				{
 					// options.SerializerSettings.DefaultValueHandling = DefaultValueHandling.Ignore; // do not use - zeros in numbers ignored also
-
 					options.SerializerSettings.Converters.Add(new StringEnumConverter());
-					options.SerializerSettings.Converters.Add(new PolymorphicNewtonsoftJsonConverter<FieldMetadata>(x => x.Type, _fieldTypeMap));
-					options.SerializerSettings.Converters.Add(new PolymorphicNewtonsoftJsonConverter<AutomationCondition>(x => x.Type, _automateConditionTypeMap));
-					options.SerializerSettings.Converters.Add(new PolymorphicNewtonsoftJsonConverter<AutomationAction>(x => x.Type, _automateActionTypeMap));
-					options.SerializerSettings.Converters.Add(new PolymorphicNewtonsoftJsonConverterWithPopulate<Classifier>(x => x.Type, _classifierTypeMap));
 					options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
 				});
 			}
@@ -174,34 +152,6 @@ namespace Host
 
 			ChangeToken.OnChange(() => Configuration.GetReloadToken(),
 				_ => Logger.LogInformation("Configuration changed."), Environment);
-
-			// todo: try to remove hack to fill field type map
-			using (var scope = app.ApplicationServices.CreateScope())
-			{
-				var fieldProviderRegistry = scope.ServiceProvider.GetRequiredService<IFieldProviderRegistry>();
-				foreach (var fieldType in fieldProviderRegistry.GetFieldTypes())
-				{
-					_fieldTypeMap[fieldType.Code] = fieldProviderRegistry.GetFieldTypeProvider(fieldType.Code).FieldType;
-				}
-
-				var conditionProviderFactory = scope.ServiceProvider.GetRequiredService<INamedServiceFactory<IAutomationConditionProvider>>();
-				foreach (var name in conditionProviderFactory.GetNames())
-				{
-					_automateConditionTypeMap[name] = conditionProviderFactory.GetRequiredService(name).RuleType.Type;
-				}
-
-				var actionProviderFactory = scope.ServiceProvider.GetRequiredService<INamedServiceFactory<IAutomationActionProvider>>();
-				foreach (var name in actionProviderFactory.GetNames())
-				{
-					_automateActionTypeMap[name] = actionProviderFactory.GetRequiredService(name).RuleType.Type;
-				}
-
-				var classifierTypeFactory = scope.ServiceProvider.GetRequiredService<INamedServiceFactory<IClassifierRepository>>();
-				foreach (var name in classifierTypeFactory.GetNames())
-				{
-					_classifierTypeMap[name] = classifierTypeFactory.GetRequiredService(name).ClassifierType;
-				}
-			}
 		}
 	}
 }

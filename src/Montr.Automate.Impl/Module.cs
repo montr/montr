@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Montr.Automate.Impl.Models;
 using Montr.Automate.Impl.Services;
 using Montr.Automate.Models;
@@ -16,6 +18,8 @@ namespace Montr.Automate.Impl
 	{
 		public void ConfigureServices(IConfiguration configuration, IServiceCollection services)
 		{
+			services.AddSingleton<IStartupTask, AutomationJsonOptionsInitializer>();
+
 			services.AddSingleton<IAutomationProviderRegistry, DefaultAutomationProviderRegistry>();
 			services.AddSingleton<IAutomationService, DefaultAutomationService>();
 			services.AddSingleton<IAutomationRunner, DefaultAutomationRunner>();
@@ -27,6 +31,11 @@ namespace Montr.Automate.Impl
 			services.AddNamedTransient<IAutomationConditionProvider, FieldAutomationConditionProvider>(FieldAutomationCondition.TypeCode);
 			services.AddNamedTransient<IAutomationActionProvider, SetFieldAutomationActionProvider>(SetFieldAutomationAction.TypeCode);
 			services.AddNamedTransient<IAutomationActionProvider, NotifyByEmailAutomationActionProvider>(NotifyByEmailAutomationAction.TypeCode);
+
+			services.AddSingleton<JsonTypeProvider<AutomationCondition>>();
+			services.AddSingleton<JsonTypeProvider<AutomationAction>>();
+			services.AddSingleton<IConfigureOptions<MvcNewtonsoftJsonOptions>, AutomationJsonOptionsConfigurator>();
+
 		}
 
 		public void Configure(IApplicationBuilder app)

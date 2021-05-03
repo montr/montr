@@ -1,6 +1,8 @@
 ﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Montr.Core;
 using Montr.Core.Services;
 using Montr.MasterData.Impl.Services;
@@ -16,6 +18,7 @@ namespace Montr.MasterData.Impl
 		public void ConfigureServices(IConfiguration configuration, IServiceCollection services)
 		{
 			services.AddTransient<IStartupTask, RegisterClassifierTypeStartupTask>();
+			services.AddSingleton<IStartupTask, ClassifierJsonOptionsInitializer>();
 
 			services.AddTransient<INumberGenerator, DbNumberGenerator>();
 
@@ -34,6 +37,9 @@ namespace Montr.MasterData.Impl
 			services.AddTransient<IClassifierTreeService, DefaultClassifierTreeService>();
 
 			services.AddTransient<INumberGenerator, DbNumberGenerator>();
+
+			services.AddSingleton<JsonTypeProvider<Classifier>>();
+			services.AddSingleton<IConfigureOptions<MvcNewtonsoftJsonOptions>, ClassifierJsonOptionsConfigurator>();
 		}
 
 		public void Configure(IApplicationBuilder app)
