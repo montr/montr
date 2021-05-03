@@ -1,14 +1,14 @@
 import React from "react";
-import { ButtonAdd, ButtonDelete, DataTable, DataTableUpdateToken, Toolbar } from "@montr-core/components";
 import { DataResult } from "@montr-core/models";
 import { OperationService } from "@montr-core/services";
+import { ButtonAdd, ButtonDelete, DataTable, DataTableUpdateToken, Toolbar } from "@montr-core/components";
 import { PaneSelectClassifier } from "@montr-master-data/components";
-import { Role, User } from "../models";
+import { Role } from "../models";
 import { Api, Views } from "../module";
-import { UserRoleService } from "../services";
+import { RolePermissionService } from "@montr-idx/services";
 
 interface Props {
-    data: User;
+    data: Role;
 }
 
 interface State {
@@ -18,10 +18,10 @@ interface State {
     updateTableToken: DataTableUpdateToken;
 }
 
-export default class TabEditUserRoles extends React.Component<Props, State> {
+export default class TabEditRolePermissions extends React.Component<Props, State> {
 
     private readonly operation = new OperationService();
-    private readonly userRoleService = new UserRoleService();
+    private readonly userPermissionService = new RolePermissionService();
 
     constructor(props: Props) {
         super(props);
@@ -32,7 +32,7 @@ export default class TabEditUserRoles extends React.Component<Props, State> {
     }
 
     componentWillUnmount = async (): Promise<void> => {
-        await this.userRoleService.abort();
+        await this.userPermissionService.abort();
     };
 
     onSelectionChange = async (selectedRowKeys: string[], selectedRows: Role[]): Promise<void> => {
@@ -53,7 +53,7 @@ export default class TabEditUserRoles extends React.Component<Props, State> {
 
         const params = { userUid: data?.uid, ...postParams };
 
-        return await this.userRoleService.post(loadUrl, params);
+        return await this.userPermissionService.post(loadUrl, params);
     };
 
     onSelect = async (_keys: string[], rows: Role[]): Promise<void> => {
@@ -61,9 +61,9 @@ export default class TabEditUserRoles extends React.Component<Props, State> {
 
         if (data.uid) {
             const result = await this.operation.execute(async () => {
-                return await this.userRoleService.addRoles({
-                    userUid: data.uid,
-                    roles: rows.map(x => x.name)
+                return await this.userPermissionService.add({
+                    roleUid: data.uid,
+                    permissions: rows.map(x => x.code)
                 });
             });
 
@@ -88,11 +88,9 @@ export default class TabEditUserRoles extends React.Component<Props, State> {
 
         if (selectedRows) {
             const result = await this.operation.confirmDelete(async () => {
-                return await this.userRoleService.removeRoles({
-                    userUid: data.uid,
-                    roles: selectedRows.map(x => {
-                        return x.name;
-                    })
+                return await this.userPermissionService.remove({
+                    roleUid: data.uid,
+                    permissions: selectedRows.map(x => x.code)
                 });
             });
 
@@ -114,15 +112,15 @@ export default class TabEditUserRoles extends React.Component<Props, State> {
 
             <DataTable
                 rowKey="uid"
-                viewId={Views.userRolesGrid}
-                loadUrl={Api.userRoleList}
+                viewId={Views.rolePermissionsGrid}
+                loadUrl={Api.rolePermissionList}
                 onLoadData={this.onLoadTableData}
                 onSelectionChange={this.onSelectionChange}
                 updateToken={updateTableToken}
             />
 
             {showDrawer && <PaneSelectClassifier
-                typeCode="role"
+                typeCode="permission"
                 onSelect={this.onSelect}
                 onClose={this.onCloseDrawer}
             />}

@@ -11,7 +11,10 @@ namespace Montr.Idx.Impl.Services
 			return new[]
 			{
 				new Permission(typeof(Permissions.ViewUserRoles)),
-				new Permission(typeof(Permissions.ManageUserRoles))
+				new Permission(typeof(Permissions.ManageUserRoles)),
+
+				new Permission(typeof(Permissions.ViewRolePermissions)),
+				new Permission(typeof(Permissions.ManageRolePermissions))
 			};
 		}
 	}

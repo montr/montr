@@ -87,6 +87,12 @@ namespace Montr.MasterData.Impl.QueryHandlers
 					new DataPane { Key = "usage", Name = "Использование", Component = "panes/TabEditNumeratorEntities" });
 			}
 
+			if (type.Code == "role")
+			{
+				panes.Insert(panes.FindIndex(x => x.Key == "info") + 1,
+					new DataPane { Key = "permissions", Name = "Permissions", Component = "components/tab-edit-role-permissions" });
+			}
+
 			if (type.Code == "user")
 			{
 				panes.Insert(panes.FindIndex(x => x.Key == "info") + 1,

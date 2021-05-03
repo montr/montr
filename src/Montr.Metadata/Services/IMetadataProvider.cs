@@ -110,6 +110,14 @@ namespace Montr.Metadata.Services
 				};
 			}
 
+			if (viewId == "RolePermissions/Grid")
+			{
+				result.Columns = new List<DataColumn>
+				{
+					new() { Key = "name", Name = "Name", Sortable = true, Width = 1000, UrlProperty = "url" }
+				};
+			}
+
 			if (viewId == "CompanySearch/Grid")
 			{
 				result.Columns = new List<DataColumn>

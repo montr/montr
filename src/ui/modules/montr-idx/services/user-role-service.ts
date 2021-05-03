@@ -1,6 +1,6 @@
-import { Constants } from "@montr-core/.";
 import { ApiResult, Guid } from "@montr-core/models";
 import { Fetcher } from "@montr-core/services";
+import { Api } from "../module";
 
 interface ManageUserRoles {
     userUid: Guid;
@@ -10,11 +10,11 @@ interface ManageUserRoles {
 export class UserRoleService extends Fetcher {
 
     addRoles = async (request: ManageUserRoles): Promise<ApiResult> => {
-        return this.post(`${Constants.apiURL}/userRole/addRoles`, request);
+        return this.post(Api.userRoleAddRoles, request);
     };
 
     removeRoles = async (request: ManageUserRoles): Promise<ApiResult> => {
-        return this.post(`${Constants.apiURL}/userRole/removeRoles`, request);
+        return this.post(Api.userRoleRemoveRoles, request);
     };
 
 }

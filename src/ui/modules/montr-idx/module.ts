@@ -14,7 +14,13 @@ export const Api = {
 	authLinkLogin: `${Constants.apiURL}/authentication/linkLogin`,
 	authExternalLogin: `${Constants.apiURL}/authentication/externalLogin`,
 
-	userRoleList: `${Constants.apiURL}/userRole/listRoles`
+	rolePermissionList: `${Constants.apiURL}/rolePermission/list`,
+	rolePermissionAdd: `${Constants.apiURL}/rolePermission/add`,
+	rolePermissionRemove: `${Constants.apiURL}/rolePermission/remove`,
+
+	userRoleList: `${Constants.apiURL}/userRole/listRoles`,
+	userRoleAddRoles: `${Constants.apiURL}/userRole/addRoles`,
+	userRoleRemoveRoles: `${Constants.apiURL}/userRole/removeRoles`,
 };
 
 export const Patterns = {
@@ -47,6 +53,8 @@ export const Views = {
 	formChangePassword: "ChangePassword/Form",
 	formSetPassword: "SetPassword/Form",
 
+	rolePermissionsGrid: "RolePermissions/Grid",
+
 	userRolesGrid: "UserRoles/Grid",
 };
 
@@ -72,5 +80,6 @@ export const ProfileRoutes = [
 ];
 
 ComponentRegistry.add([
+	{ path: "components/tab-edit-role-permissions", component: React.lazy(() => import("./components/tab-edit-role-permissions")) },
 	{ path: "components/tab-edit-user-roles", component: React.lazy(() => import("./components/tab-edit-user-roles")) },
 ]);
