@@ -114,7 +114,7 @@ namespace Montr.Metadata.Services
 			{
 				result.Columns = new List<DataColumn>
 				{
-					new() { Key = "name", Name = "Name", Sortable = true, Width = 1000, UrlProperty = "url" }
+					new() { Key = "code", Name = "Code", Width = 1000, UrlProperty = "url" }
 				};
 			}
 

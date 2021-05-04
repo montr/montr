@@ -51,7 +51,7 @@ export default class TabEditRolePermissions extends React.Component<Props, State
     onLoadTableData = async (loadUrl: string, postParams: any): Promise<DataResult<Role>> => {
         const { data } = this.props;
 
-        const params = { userUid: data?.uid, ...postParams };
+        const params = { roleUid: data?.uid, ...postParams };
 
         return await this.userPermissionService.post(loadUrl, params);
     };
@@ -111,7 +111,7 @@ export default class TabEditRolePermissions extends React.Component<Props, State
             </Toolbar>
 
             <DataTable
-                rowKey="uid"
+                rowKey="code"
                 viewId={Views.rolePermissionsGrid}
                 loadUrl={Api.rolePermissionList}
                 onLoadData={this.onLoadTableData}

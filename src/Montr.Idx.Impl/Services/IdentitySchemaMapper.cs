@@ -7,13 +7,10 @@ namespace Montr.Idx.Impl.Services
 	{
 		public static void MapSchema(MappingSchema mappingSchema)
 		{
-			// https://github.com/linq2db/linq2db/issues/286
-			// https://github.com/linq2db/t4models
-
 			mappingSchema.GetFluentMappingBuilder()
 
 				.Entity<LinqToDB.Identity.IdentityRoleClaim<Guid>>().HasSchemaName("montr").HasTableName("role_claim")
-				.Property(x => x.Id).HasColumnName("id").IsPrimaryKey()
+				.Property(x => x.Id).HasColumnName("id").IsPrimaryKey().IsIdentity()
 				.Property(x => x.RoleId).HasColumnName("role_id").IsNullable(false)
 				.Property(x => x.ClaimType).HasColumnName("claim_type").IsNullable(false)
 				.Property(x => x.ClaimValue).HasColumnName("claim_value").IsNullable(false)
