@@ -14,7 +14,7 @@ using Montr.Idx.Impl.Services;
 
 namespace Montr.Idx.Impl.CommandHandlers
 {
-	public class AddRolePermissionsHandler : IRequestHandler<AddRolePermissions, ApiResult>
+	public class AddRolePermissionsHandler : IRequestHandler<ManageRolePermissions, ApiResult>
 	{
 		private readonly ILogger<AddRolePermissionsHandler> _logger;
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
@@ -28,7 +28,7 @@ namespace Montr.Idx.Impl.CommandHandlers
 			_roleManager = roleManager;
 		}
 
-		public async Task<ApiResult> Handle(AddRolePermissions request, CancellationToken cancellationToken)
+		public async Task<ApiResult> Handle(ManageRolePermissions request, CancellationToken cancellationToken)
 		{
 			cancellationToken.ThrowIfCancellationRequested();
 

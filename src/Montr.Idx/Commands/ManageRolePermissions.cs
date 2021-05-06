@@ -5,7 +5,7 @@ using Montr.Core.Models;
 
 namespace Montr.Idx.Commands
 {
-	public class AddRolePermissions : IRequest<ApiResult>
+	public class ManageRolePermissions : IRequest<ApiResult>
 	{
 		public Guid RoleUid { get; set; }
 
