@@ -61,9 +61,9 @@ export default class TabEditRolePermissions extends React.Component<Props, State
 
         if (data.uid) {
             const result = await this.operation.execute(async () => {
-                return await this.userPermissionService.add({
+                return await this.userPermissionService.update({
                     roleUid: data.uid,
-                    permissions: rows.map(x => x.code)
+                    addPermissions: rows.map(x => x.code)
                 });
             });
 
@@ -88,11 +88,13 @@ export default class TabEditRolePermissions extends React.Component<Props, State
 
         if (selectedRows) {
             const result = await this.operation.confirmDelete(async () => {
-                return await this.userPermissionService.remove({
+                return await this.userPermissionService.update({
                     roleUid: data.uid,
-                    permissions: selectedRows.map(x => x.code)
+                    removePermissions: selectedRows.map(x => x.code)
                 });
             });
+
+            console.log(result);
 
             if (result.success) {
                 this.refreshTable(true, true);

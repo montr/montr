@@ -4,17 +4,14 @@ import { Api } from "../module";
 
 interface ManageRolePermissions {
     roleUid: Guid;
-    permissions: string[];
+    addPermissions?: string[];
+    removePermissions?: string[];
 }
 
 export class RolePermissionService extends Fetcher {
 
-    add = async (request: ManageRolePermissions): Promise<ApiResult> => {
-        return this.post(Api.rolePermissionAdd, request);
-    };
-
-    remove = async (request: ManageRolePermissions): Promise<ApiResult> => {
-        return this.post(Api.rolePermissionRemove, request);
+    update = async (request: ManageRolePermissions): Promise<ApiResult> => {
+        return this.post(Api.rolePermissionUpdate, request);
     };
 
 }

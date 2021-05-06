@@ -9,6 +9,8 @@ namespace Montr.Idx.Commands
 	{
 		public Guid RoleUid { get; set; }
 
-		public IList<string> Permissions { get; set; }
+		public IList<string> AddPermissions { get; set; }
+
+		public IList<string> RemovePermissions { get; set; }
 	}
 }

@@ -15,8 +15,7 @@ export const Api = {
 	authExternalLogin: `${Constants.apiURL}/authentication/externalLogin`,
 
 	rolePermissionList: `${Constants.apiURL}/rolePermission/list`,
-	rolePermissionAdd: `${Constants.apiURL}/rolePermission/add`,
-	rolePermissionRemove: `${Constants.apiURL}/rolePermission/remove`,
+	rolePermissionUpdate: `${Constants.apiURL}/rolePermission/update`,
 
 	userRoleList: `${Constants.apiURL}/userRole/listRoles`,
 	userRoleAddRoles: `${Constants.apiURL}/userRole/addRoles`,

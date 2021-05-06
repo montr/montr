@@ -25,13 +25,7 @@ namespace Montr.Idx.Controllers
 		}
 
 		[HttpPost/*, Permission(typeof(Permissions.ManageRolePermissions))*/]
-		public async Task<ApiResult> Add(ManageRolePermissions request)
-		{
-			return await _mediator.Send(request);
-		}
-
-		[HttpPost/*, Permission(typeof(Permissions.ManageRolePermissions))*/]
-		public async Task<ApiResult> Remove(RemoveRolePermissions request)
+		public async Task<ApiResult> Update(ManageRolePermissions request)
 		{
 			return await _mediator.Send(request);
 		}
