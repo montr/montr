@@ -86,11 +86,11 @@ export class OperationService {
 	};
 
 	confirm = async (operation: () => Promise<ApiResult>, message: string): Promise<ApiResult> => {
-		return this.execute(operation, { showConfirm: true, confirmContent: message });
+		return await this.execute(operation, { showConfirm: true, confirmContent: message });
 	};
 
 	confirmDelete = async (operation: () => Promise<ApiResult>): Promise<ApiResult> => {
-		return this.confirm(operation, i18next.t("operation.confirm.deleteSelected.content"));
+		return await this.confirm(operation, i18next.t("operation.confirm.deleteSelected.content"));
 	};
 
 	private convertToApiResult = (details: ValidationProblemDetails): ApiResult => {

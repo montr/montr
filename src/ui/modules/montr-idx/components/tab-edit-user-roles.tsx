@@ -87,18 +87,18 @@ export default class TabEditUserRoles extends React.Component<Props, State> {
             { selectedRows } = this.state;
 
         if (selectedRows) {
-            const result = await this.operation.confirmDelete(async () => {
-                return await this.userRoleService.removeRoles({
+            await this.operation.confirmDelete(async () => {
+                const result = await this.userRoleService.removeRoles({
                     userUid: data.uid,
-                    roles: selectedRows.map(x => {
-                        return x.name;
-                    })
+                    roles: selectedRows.map(x => x.name)
                 });
-            });
 
-            if (result.success) {
-                this.refreshTable(true, true);
-            }
+                if (result.success) {
+                    this.refreshTable(true, true);
+                }
+
+                return result;
+            });
         }
     };
 

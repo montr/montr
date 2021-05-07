@@ -4,8 +4,8 @@ import { Api } from "../module";
 
 interface ManageRolePermissions {
     roleUid: Guid;
-    addPermissions?: string[];
-    removePermissions?: string[];
+    add?: string[];
+    remove?: string[];
 }
 
 export class RolePermissionService extends Fetcher {

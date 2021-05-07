@@ -121,13 +121,15 @@ export default class TabEditInvitations extends React.Component<Props, State> {
 		const { selectedRowKeys } = this.state;
 
 		if (selectedRowKeys) {
-			const result = await this.operation.confirmDelete(async () => {
-				return await this.invitationService.delete(selectedRowKeys);
-			});
+			await this.operation.confirmDelete(async () => {
+				const result = await this.invitationService.delete(selectedRowKeys);
 
-			if (result.success) {
-				this.refreshTable(true);
-			}
+				if (result.success) {
+					this.refreshTable(true);
+				}
+
+				return result;
+			});
 		}
 	};
 

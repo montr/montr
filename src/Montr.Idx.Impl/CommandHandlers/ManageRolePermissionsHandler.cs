@@ -40,12 +40,12 @@ namespace Montr.Idx.Impl.CommandHandlers
 				.Where(x => x.Type == Permission.ClaimType)
 				.Select(x => x.Value);
 
-			var addPermissions = request.AddPermissions?
+			var addPermissions = request.Add?
 				.Where(x => existingClaims.Contains(x, StringComparer.OrdinalIgnoreCase) == false)
 				.ToList();
 
-			var removePermissions = request.RemovePermissions != null
-				? existingClaims.Where(x => request.RemovePermissions.Contains(x, StringComparer.OrdinalIgnoreCase))
+			var removePermissions = request.Remove != null
+				? existingClaims.Where(x => request.Remove.Contains(x, StringComparer.OrdinalIgnoreCase))
 					.ToList() : null;
 
 			using (var scope = _unitOfWorkFactory.Create())

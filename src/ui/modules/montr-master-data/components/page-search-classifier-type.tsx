@@ -21,8 +21,8 @@ interface State {
 
 class WrappedSearchClassifierType extends React.Component<Props, State> {
 
-	private _operation = new OperationService();
-	private _classifierTypeService = new ClassifierTypeService();
+	private operation = new OperationService();
+	private classifierTypeService = new ClassifierTypeService();
 
 	constructor(props: Props) {
 		super(props);
@@ -41,7 +41,7 @@ class WrappedSearchClassifierType extends React.Component<Props, State> {
 	};
 
 	componentWillUnmount = async () => {
-		await this._classifierTypeService.abort();
+		await this.classifierTypeService.abort();
 	};
 
 	onSelectionChange = async (selectedRowKeys: string[] | number[]) => {
@@ -49,13 +49,15 @@ class WrappedSearchClassifierType extends React.Component<Props, State> {
 	};
 
 	delete = async () => {
-		const result = await this._operation.confirmDelete(async () => {
-			return await this._classifierTypeService.delete(this.state.selectedRowKeys);
-		});
+		await this.operation.confirmDelete(async () => {
+			const result = await this.classifierTypeService.delete(this.state.selectedRowKeys);
 
-		if (result.success) {
-			this.refreshTable(true);
-		}
+			if (result.success) {
+				this.refreshTable(true);
+			}
+
+			return result;
+		});
 	};
 
 	refreshTable = async (resetSelectedRows?: boolean) => {

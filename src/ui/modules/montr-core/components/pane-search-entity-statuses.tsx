@@ -71,16 +71,18 @@ class WrappedPaneSearchEntityStatuses extends React.Component<Props, State> {
 	};
 
 	delete = async () => {
-		const result = await this.operation.confirmDelete(async () => {
+		await this.operation.confirmDelete(async () => {
 			const { entityTypeCode, entityUid } = this.props,
 				{ selectedRowKeys } = this.state;
 
-			return await this.entityStatusService.delete({ entityTypeCode, entityUid, uids: selectedRowKeys });
-		});
+			const result = await this.entityStatusService.delete({ entityTypeCode, entityUid, uids: selectedRowKeys });
 
-		if (result.success) {
-			this.refreshTable(false, true);
-		}
+			if (result.success) {
+				this.refreshTable(false, true);
+			}
+
+			return result;
+		});
 	};
 
 	onModalEditSuccess = async (data: EntityStatus) => {

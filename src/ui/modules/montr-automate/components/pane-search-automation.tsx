@@ -75,17 +75,18 @@ export default class PaneSearchAutomation extends React.Component<Props, State> 
 	};
 
 	delete = async (): Promise<void> => {
-
-		const result = await this.operation.confirmDelete(async () => {
+		await this.operation.confirmDelete(async () => {
 			const { entityTypeCode, entityTypeUid } = this.props,
 				{ selectedRowKeys } = this.state;
 
-			return await this.automationService.delete({ entityTypeCode, entityTypeUid, uids: selectedRowKeys });
-		});
+			const result = await this.automationService.delete({ entityTypeCode, entityTypeUid, uids: selectedRowKeys });
 
-		if (result.success) {
-			this.refreshTable(false, true);
-		}
+			if (result.success) {
+				this.refreshTable(false, true);
+			}
+
+			return result;
+		});
 	};
 
 	render = (): React.ReactNode => {

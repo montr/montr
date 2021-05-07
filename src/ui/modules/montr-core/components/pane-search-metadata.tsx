@@ -20,8 +20,8 @@ interface State {
 
 class WrappedPaneSearchMetadata extends React.Component<Props, State> {
 
-	private _operation = new OperationService();
-	private _metadataService = new MetadataService();
+	private operation = new OperationService();
+	private metadataService = new MetadataService();
 
 	constructor(props: Props) {
 		super(props);
@@ -31,7 +31,7 @@ class WrappedPaneSearchMetadata extends React.Component<Props, State> {
 	}
 
 	componentWillUnmount = async () => {
-		await this._metadataService.abort();
+		await this.metadataService.abort();
 	};
 
 	onLoadTableData = async (loadUrl: string, postParams: any): Promise<DataResult<{}>> => {
@@ -39,7 +39,7 @@ class WrappedPaneSearchMetadata extends React.Component<Props, State> {
 
 		const params = { entityTypeCode, entityUid, ...postParams };
 
-		return await this._metadataService.post(loadUrl, params);
+		return await this.metadataService.post(loadUrl, params);
 	};
 
 	onSelectionChange = async (selectedRowKeys: string[] | number[]) => {
@@ -73,18 +73,18 @@ class WrappedPaneSearchMetadata extends React.Component<Props, State> {
 	};
 
 	delete = async () => {
-
-		const result = await this._operation.confirmDelete(async () => {
+		await this.operation.confirmDelete(async () => {
 			const { entityTypeCode, entityUid } = this.props,
 				{ selectedRowKeys } = this.state;
 
-			return await this._metadataService.delete({ entityTypeCode, entityUid, uids: selectedRowKeys });
+			const result = await this.metadataService.delete({ entityTypeCode, entityUid, uids: selectedRowKeys });
+
+			if (result.success) {
+				this.refreshTable(false, true);
+			}
+
+			return result;
 		});
-
-		if (result.success) {
-			this.refreshTable(false, true);
-		}
-
 	};
 
 	render = () => {
