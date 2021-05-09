@@ -82,13 +82,14 @@ namespace Montr.Kompany.Impl.CommandHandlers
 
 				if (signInResult.Success == false) return signInResult;
 
+				var userUid = userResult.Uid;
+
 				_logger.LogInformation($"Creating default company {request.CompanyName}", request.CompanyName);
 
 				// todo: create company without mediator and company request
 				var companyResult = await _mediator.Send(new CreateCompany
 				{
-					// ReSharper disable once PossibleInvalidOperationException
-					UserUid = userResult.Uid.Value,
+					UserUid = userUid,
 					Item = new Company
 					{
 						Name = request.CompanyName,
@@ -98,8 +99,11 @@ namespace Montr.Kompany.Impl.CommandHandlers
 
 				if (companyResult.Success == false) return companyResult;
 
+				_logger.LogInformation($"Updating application initialization options", request.CompanyName);
+
 				await _settingsRepository.GetSettings<AppOptions>()
 					.Set(x => x.State, AppState.Initialized)
+					.Set(x => x.SuperAdministratorUid, userUid)
 					.Update(cancellationToken);
 
 				scope.Commit();

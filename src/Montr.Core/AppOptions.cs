@@ -1,4 +1,6 @@
-﻿namespace Montr.Core
+﻿using System;
+
+namespace Montr.Core
 {
 	public class AppOptions
 	{
@@ -13,6 +15,8 @@
 		public string CookieDomain { get; set; }
 
 		public AppState State { get; set; }
+
+		public Guid? SuperAdministratorUid { get; set; }
 	}
 
 	public enum AppState : byte
