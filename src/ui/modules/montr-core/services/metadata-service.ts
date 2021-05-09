@@ -1,5 +1,4 @@
 import { Fetcher } from "./fetcher";
-import { Constants } from "..";
 import { DataView, IDataField, ApiResult, Guid, IFieldType } from "../models";
 import { Api } from "../module";
 

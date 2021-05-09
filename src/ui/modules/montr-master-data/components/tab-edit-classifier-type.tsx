@@ -31,16 +31,16 @@ export default class TabEditClassifierType extends React.Component<Props, State>
 		};
 	}
 
-	componentDidMount = async () => {
+	componentDidMount = async (): Promise<void> => {
 		await this.fetchData();
 	};
 
-	componentWillUnmount = async () => {
+	componentWillUnmount = async (): Promise<void> => {
 		await this._metadataService.abort();
 		await this._classifierTypeService.abort();
 	};
 
-	fetchData = async () => {
+	fetchData = async (): Promise<void> => {
 		const dataView = await this._metadataService.load(Views.classifierTypeForm);
 
 		this.setState({ loading: false, fields: dataView.fields });
@@ -72,7 +72,7 @@ export default class TabEditClassifierType extends React.Component<Props, State>
 		}
 	};
 
-	render() {
+	render = (): React.ReactNode => {
 		const { data } = this.props,
 			{ loading, redirect, fields } = this.state;
 
@@ -86,5 +86,5 @@ export default class TabEditClassifierType extends React.Component<Props, State>
 				<DataForm fields={fields} data={data} onSubmit={this.save} />
 			</Spin>
 		);
-	}
+	};
 }

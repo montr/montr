@@ -18,7 +18,7 @@ interface State {
 
 export class ClassifierView extends React.Component<Props, State> {
 
-	static getDerivedStateFromProps(nextProps: any) {
+	static getDerivedStateFromProps(nextProps: any): void {
 		// Should be a controlled component.
 		if ("value" in nextProps) {
 			return nextProps.value ?? null;
@@ -36,11 +36,11 @@ export class ClassifierView extends React.Component<Props, State> {
 		};
 	}
 
-	componentDidMount = async () => {
+	componentDidMount = async (): Promise<void> => {
 		await this.fetchData();
 	};
 
-	fetchData = async () => {
+	fetchData = async (): Promise<void> => {
 		const { field, data } = this.props;
 
 		const value = DataHelper.indexer(data, field.key, undefined);
@@ -50,7 +50,7 @@ export class ClassifierView extends React.Component<Props, State> {
 		this.setState({ loading: false, item });
 	};
 
-	render = () => {
+	render = (): React.ReactNode => {
 		const { item } = this.state;
 
 		return (item) ? item.name : <EmptyFieldView />;

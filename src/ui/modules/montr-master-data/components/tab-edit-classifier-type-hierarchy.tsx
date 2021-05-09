@@ -28,23 +28,23 @@ export default class TabEditClassifierTypeHierarchy extends React.Component<Prop
 		};
 	}
 
-	componentDidUpdate = async (prevProps: Props) => {
+	componentDidUpdate = async (prevProps: Props): Promise<void> => {
 		if (this.props.data !== prevProps.data) {
 			await this.refreshTable();
 		}
 	};
 
-	componentWillUnmount = async () => {
+	componentWillUnmount = async (): Promise<void> => {
 		await this._classifierTreeService.abort();
 	};
 
-	refreshTable = async (resetSelectedRows?: boolean) => {
+	refreshTable = async (resetSelectedRows?: boolean): Promise<void> => {
 		this.setState({
 			updateTableToken: { date: new Date(), resetSelectedRows }
 		});
 	};
 
-	onLoadTableData = async (loadUrl: string, postParams: any): Promise<DataResult<{}>> => {
+	onLoadTableData = async (loadUrl: string, postParams: any): Promise<DataResult<unknown>> => {
 		const { data: type } = this.props;
 
 		if (type.code) {
@@ -60,15 +60,15 @@ export default class TabEditClassifierTypeHierarchy extends React.Component<Prop
 		return null;
 	};
 
-	showAddGroupModal = () => {
+	showAddGroupModal = (): void => {
 		this.setState({ editData: {} });
 	};
 
-	showEditModal = (data: ClassifierTree) => {
+	showEditModal = (data: ClassifierTree): void => {
 		this.setState({ editData: data });
 	};
 
-	showDeleteConfirm = (data: ClassifierTree) => {
+	showDeleteConfirm = (data: ClassifierTree): void => {
 		Modal.confirm({
 			title: "Вы действительно хотите удалить выбранную иерархию?",
 			content: "Наверняка что-то случится с группами и элементами классификатора...",
@@ -82,17 +82,17 @@ export default class TabEditClassifierTypeHierarchy extends React.Component<Prop
 		});
 	};
 
-	onGroupModalSuccess = async (data: ClassifierTree) => {
+	onGroupModalSuccess = async (data: ClassifierTree): Promise<void> => {
 		this.setState({ editData: null });
 
 		await this.refreshTable();
 	};
 
-	onGroupModalCancel = () => {
+	onGroupModalCancel = (): void => {
 		this.setState({ editData: null });
 	};
 
-	render() {
+	render = (): React.ReactNode => {
 		const { data: type } = this.props,
 			{ editData: groupEditData, updateTableToken } = this.state;
 
@@ -129,5 +129,5 @@ export default class TabEditClassifierTypeHierarchy extends React.Component<Prop
 					/>}
 			</>)}
 		</>);
-	}
+	};
 }

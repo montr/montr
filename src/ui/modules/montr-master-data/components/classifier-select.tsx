@@ -8,13 +8,13 @@ import { Link } from "react-router-dom";
 import { Icon } from "@montr-core/components";
 // import { debounce } from "lodash";
 
-interface IProps {
+interface Props {
 	value?: string;
 	field: IClassifierField;
 	onChange?: (value: any) => void;
 }
 
-interface IState {
+interface State {
 	loading: boolean;
 	fetching: boolean;
 	items?: Classifier[];
@@ -29,9 +29,9 @@ interface IState {
 // http://ant.design/components/form/?locale=en-US#components-form-demo-customized-form-controls
 // https://github.com/ant-design/ant-design/blob/master/components/form/demo/customized-form-controls.md
 // todo: rewrite to functional component (see link above)
-export class ClassifierSelect extends React.Component<IProps, IState> {
+export class ClassifierSelect extends React.Component<Props, State> {
 
-	static getDerivedStateFromProps(nextProps: any) {
+	static getDerivedStateFromProps(nextProps: any): void {
 		// Should be a controlled component.
 		if ("value" in nextProps) {
 			return nextProps.value ?? null;
@@ -41,7 +41,7 @@ export class ClassifierSelect extends React.Component<IProps, IState> {
 
 	private _classifierService = new ClassifierService();
 
-	constructor(props: IProps) {
+	constructor(props: Props) {
 		super(props);
 
 		// this.lastFetchId = 0;
@@ -56,21 +56,21 @@ export class ClassifierSelect extends React.Component<IProps, IState> {
 		// this.onSearch = debounce(this.onSearch, 800);
 	}
 
-	componentDidMount = async () => {
+	componentDidMount = async (): Promise<void> => {
 		await this.fetchData();
 	};
 
-	componentDidUpdate = async (prevProps: IProps) => {
+	componentDidUpdate = async (prevProps: Props): Promise<void> => {
 		if (this.props.value !== prevProps.value) {
 			// await this.fetchData();
 		}
 	};
 
-	componentWillUnmount = async () => {
+	componentWillUnmount = async (): Promise<void> => {
 		await this._classifierService.abort();
 	};
 
-	fetchData = async () => {
+	fetchData = async (): Promise<void> => {
 		const { field } = this.props,
 			{ value } = this.state;
 
@@ -81,7 +81,7 @@ export class ClassifierSelect extends React.Component<IProps, IState> {
 		this.setState({ loading: false, items: data.rows });
 	};
 
-	handleChange = (value: any/* , label: any, extra: any */) => {
+	handleChange = (value: any/* , label: any, extra: any */): void => {
 		const { onChange } = this.props;
 
 		this.setState({
@@ -95,7 +95,7 @@ export class ClassifierSelect extends React.Component<IProps, IState> {
 		}
 	};
 
-	onSearch = async (value: string) => {
+	onSearch = async (value: string): Promise<void> => {
 		const { field } = this.props;
 
 		this.setState({ items: [], fetching: true });
@@ -107,7 +107,7 @@ export class ClassifierSelect extends React.Component<IProps, IState> {
 		this.setState({ items: data.rows, fetching: false });
 	};
 
-	render() {
+	render = (): React.ReactNode => {
 		const { value, field } = this.props,
 			{ loading, fetching, items } = this.state;
 
@@ -142,5 +142,5 @@ export class ClassifierSelect extends React.Component<IProps, IState> {
 			)}>
 			{options}
 		</Select>);
-	}
+	};
 }

@@ -1,10 +1,9 @@
 import { ApiResult, DataResult } from "@montr-core/models";
 import { Fetcher } from "@montr-core/services";
-import { Constants } from "@montr-core/.";
 import { Company } from "../models";
 import { Api } from "../module";
 
-interface ICreateCompanyRequest {
+interface CreateCompanyRequest {
 	item: Company;
 }
 
@@ -14,7 +13,7 @@ export class CompanyService extends Fetcher {
 		return await this.post(Api.companyList);
 	};
 
-	create = async (request: ICreateCompanyRequest): Promise<ApiResult> => {
+	create = async (request: CreateCompanyRequest): Promise<ApiResult> => {
 		return await this.post(Api.companyCreate, request);
 	};
 }

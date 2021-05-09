@@ -36,22 +36,22 @@ export default class EditClassifierType extends React.Component<Props, State> {
 		};
 	}
 
-	componentDidMount = async () => {
+	componentDidMount = async (): Promise<void> => {
 		await this.fetchData();
 	};
 
-	componentDidUpdate = async (prevProps: Props) => {
+	componentDidUpdate = async (prevProps: Props): Promise<void> => {
 		if (this.props.match.params.uid !== prevProps.match.params.uid) {
 			await this.fetchData();
 		}
 	};
 
-	componentWillUnmount = async () => {
+	componentWillUnmount = async (): Promise<void> => {
 		await this._classifierMetadataService.abort();
 		await this._classifierTypeService.abort();
 	};
 
-	fetchData = async () => {
+	fetchData = async (): Promise<void> => {
 		const { uid } = this.props.match.params;
 
 		const dataView = await this._classifierMetadataService.load(null, Views.classifierTypeTabs);
@@ -66,11 +66,11 @@ export default class EditClassifierType extends React.Component<Props, State> {
 		this.setState({ loading: false, dataView, data, types: types.rows });
 	};
 
-	handleDataChange = (data: ClassifierType) => {
+	handleDataChange = (data: ClassifierType): void => {
 		this.setState({ data });
 	};
 
-	handleTabChange = (tabKey: string) => {
+	handleTabChange = (tabKey: string): void => {
 		const { uid } = this.props.match.params;
 
 		const path = RouteBuilder.editClassifierType(uid, tabKey);
@@ -78,7 +78,7 @@ export default class EditClassifierType extends React.Component<Props, State> {
 		this.props.history.replace(path);
 	};
 
-	render = () => {
+	render = (): React.ReactNode => {
 		const { uid, tabKey } = this.props.match.params,
 			{ loading, dataView, data, types } = this.state;
 

@@ -3,7 +3,7 @@ import { Form, Space, Select } from "antd";
 import { FieldAutomationCondition } from "../models";
 import { AutomationItemProps, withAutomationContext } from ".";
 import { FieldAutomationConditionService } from "@montr-automate/services";
-import { Guid, IDataField } from "@montr-core/models";
+import { IDataField } from "@montr-core/models";
 import { AutomationContextProps } from "./automation-context";
 
 interface Props extends AutomationItemProps, AutomationContextProps {

@@ -10,7 +10,7 @@ interface Props {
 }
 
 export class ClassifierBreadcrumb extends React.Component<Props> {
-	public render() {
+	render = (): React.ReactNode => {
 		const { type, types, item } = this.props;
 
 		// todo: localize
@@ -38,5 +38,5 @@ export class ClassifierBreadcrumb extends React.Component<Props> {
 		return (
 			<DataBreadcrumb items={items} />
 		);
-	}
+	};
 }

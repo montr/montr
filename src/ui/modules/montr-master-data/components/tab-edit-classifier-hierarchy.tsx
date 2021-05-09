@@ -30,24 +30,24 @@ export default class TabEditClassifierHierarchy extends React.Component<Props, S
 		};
 	}
 
-	componentDidUpdate = async (prevProps: Props) => {
+	componentDidUpdate = async (prevProps: Props): Promise<void> => {
 		if (this.props.type !== prevProps.type ||
 			this.props.data !== prevProps.data) {
 			await this.refreshTable();
 		}
 	};
 
-	componentWillUnmount = async () => {
+	componentWillUnmount = async (): Promise<void> => {
 		await this._classifierLinkService.abort();
 	};
 
-	refreshTable = async (resetSelectedRows?: boolean) => {
+	refreshTable = async (resetSelectedRows?: boolean): Promise<void> => {
 		this.setState({
 			updateTableToken: { date: new Date(), resetSelectedRows }
 		});
 	};
 
-	onLoadTableData = async (loadUrl: string, postParams: any): Promise<DataResult<{}>> => {
+	onLoadTableData = async (loadUrl: string, postParams: any): Promise<DataResult<unknown>> => {
 		const { type, data } = this.props;
 
 		if (type.code) {
@@ -64,11 +64,11 @@ export default class TabEditClassifierHierarchy extends React.Component<Props, S
 		return null;
 	};
 
-	showAddLinkModal = () => {
+	showAddLinkModal = (): void => {
 		this.setState({ modalData: {} });
 	};
 
-	showDeleteLinkConfirm = (data: ClassifierLink) => {
+	showDeleteLinkConfirm = (data: ClassifierLink): void => {
 		Modal.confirm({
 			title: "Вы действительно хотите удалить связь с выбранной группой?",
 			content: "При удалении связи с группой иерархии по-умолчанию, элемент будет привязан к корню иерархии по-умолчанию.",
@@ -82,17 +82,17 @@ export default class TabEditClassifierHierarchy extends React.Component<Props, S
 		});
 	};
 
-	onModalSuccess = async (data: ClassifierLink) => {
+	onModalSuccess = async (data: ClassifierLink): Promise<void> => {
 		this.setState({ modalData: null });
 
 		await this.refreshTable();
 	};
 
-	onModalCancel = () => {
+	onModalCancel = (): void => {
 		this.setState({ modalData: null });
 	};
 
-	render() {
+	render = (): React.ReactNode => {
 		const { type, data } = this.props,
 			{ modalData, updateTableToken } = this.state;
 
@@ -129,5 +129,5 @@ export default class TabEditClassifierHierarchy extends React.Component<Props, S
 					/>}
 			</>)}
 		</>);
-	}
+	};
 }

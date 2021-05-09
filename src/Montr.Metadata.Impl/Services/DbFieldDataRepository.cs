@@ -38,7 +38,6 @@ namespace Montr.Metadata.Impl.Services
 					.Where(x => x.EntityTypeCode == request.EntityTypeCode && request.EntityUids.Contains(x.EntityUid))
 					.AsEnumerable()
 					.GroupBy(x => x.EntityUid)
-					.Select(x => x)
 					.ToList();
 
 				var result = new SearchResult<FieldData>

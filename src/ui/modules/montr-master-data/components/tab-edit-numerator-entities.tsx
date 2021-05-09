@@ -27,11 +27,11 @@ export default class TabEditNumeratorEntities extends React.Component<Props, Sta
 		};
 	}
 
-	componentWillUnmount = async () => {
+	componentWillUnmount = async (): Promise<void> => {
 		await this._numeratorService.abort();
 	};
 
-	onLoadTableData = async (loadUrl: string, postParams: any): Promise<DataResult<{}>> => {
+	onLoadTableData = async (loadUrl: string, postParams: any): Promise<DataResult<unknown>> => {
 		const { data } = this.props;
 
 		const params = { numeratorUid: data.uid, ...postParams };
@@ -39,7 +39,7 @@ export default class TabEditNumeratorEntities extends React.Component<Props, Sta
 		return await this._numeratorService.post(loadUrl, params);
 	};
 
-	refreshTable = async (resetSelectedRows?: boolean) => {
+	refreshTable = async (resetSelectedRows?: boolean): Promise<void> => {
 		const { selectedRowKeys } = this.state;
 
 		this.setState({
@@ -48,7 +48,7 @@ export default class TabEditNumeratorEntities extends React.Component<Props, Sta
 		});
 	};
 
-	render = () => {
+	render = (): React.ReactNode => {
 		const { updateTableToken } = this.state;
 
 		return (

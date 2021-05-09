@@ -6,14 +6,14 @@ import { ClassifierGroupService, ClassifierTreeService, ClassifierTypeService } 
 import { ClassifierGroup, ClassifierTree, ClassifierType, IClassifierGroupField } from "../models";
 import { Icon } from "@montr-core/components";
 
-interface IProps {
+interface Props {
 	// mode: "Tree" | "Group";
 	value?: string;
 	field: IClassifierGroupField;
 	onChange?: (value: any) => void;
 }
 
-interface IState {
+interface State {
 	loading: boolean;
 	value: string;
 	type?: ClassifierType;
@@ -25,7 +25,7 @@ interface IState {
 // http://ant.design/components/form/?locale=en-US#components-form-demo-customized-form-controls
 // https://github.com/ant-design/ant-design/blob/master/components/form/demo/customized-form-controls.md
 // todo: rewrite to functional component (see link above)
-export class ClassifierGroupSelect extends React.Component<IProps, IState> {
+export class ClassifierGroupSelect extends React.Component<Props, State> {
 
 	/* static getDerivedStateFromProps(nextProps: any) {
 		// Should be a controlled component.
@@ -40,7 +40,7 @@ export class ClassifierGroupSelect extends React.Component<IProps, IState> {
 	private _classifierTreeService = new ClassifierTreeService();
 	private _classifierGroupService = new ClassifierGroupService();
 
-	constructor(props: IProps) {
+	constructor(props: Props) {
 		super(props);
 
 		this.state = {
@@ -50,23 +50,23 @@ export class ClassifierGroupSelect extends React.Component<IProps, IState> {
 		};
 	}
 
-	componentDidMount = async () => {
+	componentDidMount = async (): Promise<void> => {
 		await this.fetchData();
 	};
 
-	componentDidUpdate = async (prevProps: IProps) => {
+	componentDidUpdate = async (prevProps: Props): Promise<void> => {
 		if (this.props.value !== prevProps.value) {
 			// await this.fetchData();
 		}
 	};
 
-	componentWillUnmount = async () => {
+	componentWillUnmount = async (): Promise<void> => {
 		await this._classifierTypeService.abort();
 		await this._classifierTreeService.abort();
 		await this._classifierGroupService.abort();
 	};
 
-	fetchData = async () => {
+	fetchData = async (): Promise<void> => {
 		const { field } = this.props,
 			{ value, expanded } = this.state;
 
@@ -105,7 +105,7 @@ export class ClassifierGroupSelect extends React.Component<IProps, IState> {
 		this.setState({ loading: false, type, trees, groups, expanded });
 	};
 
-	async collectExpanded(groups: ClassifierGroup[], expanded?: Guid[]) {
+	async collectExpanded(groups: ClassifierGroup[], expanded?: Guid[]): Promise<void> {
 		groups && groups.forEach(group => {
 			if (group.children) {
 
@@ -116,7 +116,7 @@ export class ClassifierGroupSelect extends React.Component<IProps, IState> {
 		});
 	}
 
-	handleChange = (value: any, label: any, extra: any) => {
+	handleChange = (value: any, label: any, extra: any): void => {
 		const { onChange } = this.props;
 
 		if (onChange) {
@@ -124,7 +124,7 @@ export class ClassifierGroupSelect extends React.Component<IProps, IState> {
 		}
 	};
 
-	onSearch = (value: string) => {
+	onSearch = (value: string): void => {
 		// console.log("onSearch", value);
 	};
 
@@ -203,7 +203,7 @@ export class ClassifierGroupSelect extends React.Component<IProps, IState> {
 		}
 	}
 
-	render() {
+	render = (): React.ReactNode => {
 		const { value, field } = this.props,
 			{ loading, expanded, trees, groups } = this.state;
 
@@ -229,5 +229,5 @@ export class ClassifierGroupSelect extends React.Component<IProps, IState> {
 				/>}
 			</Spin>
 		);
-	}
+	};
 }

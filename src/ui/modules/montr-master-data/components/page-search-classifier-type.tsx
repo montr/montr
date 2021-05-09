@@ -66,7 +66,7 @@ class WrappedSearchClassifierType extends React.Component<Props, State> {
 		});
 	};
 
-	render = () => {
+	render = (): React.ReactNode => {
 		const { updateTableToken } = this.state;
 
 		const rowActions: IMenu[] = [

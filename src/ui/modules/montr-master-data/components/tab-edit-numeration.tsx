@@ -30,16 +30,16 @@ export default class TabEditNumeration extends React.Component<Props, State> {
         };
     }
 
-    componentDidMount = async () => {
+    componentDidMount = async (): Promise<void> => {
         await this.fetchData();
     };
 
-    componentWillUnmount = async () => {
+    componentWillUnmount = async (): Promise<void> => {
         await this._classifierMetadataService.abort();
         await this._numeratorEntityService.abort();
     };
 
-    fetchData = async () => {
+    fetchData = async (): Promise<void> => {
 
         const { entityTypeCode, entityUid } = this.props;
 
@@ -66,7 +66,7 @@ export default class TabEditNumeration extends React.Component<Props, State> {
         return result;
     };
 
-    render() {
+    render = (): React.ReactNode => {
         const { loading, fields, data } = this.state;
 
         return (
@@ -74,5 +74,5 @@ export default class TabEditNumeration extends React.Component<Props, State> {
                 <DataForm fields={fields} data={data} onSubmit={this.save} />
             </Spin>
         );
-    }
+    };
 }

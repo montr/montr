@@ -36,16 +36,16 @@ export class ModalEditClassifierLink extends React.Component<Props, State> {
 		};
 	}
 
-	componentDidMount = async () => {
+	componentDidMount = async (): Promise<void> => {
 		await this.fetchData();
 	};
 
-	componentWillUnmount = async () => {
+	componentWillUnmount = async (): Promise<void> => {
 		await this._metadataService.abort();
 		await this._classifierLinkService.abort();
 	};
 
-	fetchData = async () => {
+	fetchData = async (): Promise<void> => {
 		const { typeCode } = this.props;
 
 		try {
@@ -67,11 +67,11 @@ export class ModalEditClassifierLink extends React.Component<Props, State> {
 		}
 	};
 
-	onOk = async (e: React.MouseEvent<any>) => {
+	onOk = async (e: React.MouseEvent<any>): Promise<void> => {
 		await this._formRef.current.submit();
 	};
 
-	onCancel = () => {
+	onCancel = (): void => {
 		if (this.props.onCancel) this.props.onCancel();
 	};
 
@@ -87,7 +87,7 @@ export class ModalEditClassifierLink extends React.Component<Props, State> {
 		return result;
 	};
 
-	render = () => {
+	render = (): React.ReactNode => {
 		const { loading, fields, data } = this.state;
 
 		return (

@@ -26,21 +26,21 @@ export class ClassifierTypeSelect extends React.Component<Props, State> {
 		};
 	}
 
-	componentDidMount = async () => {
+	componentDidMount = async (): Promise<void> => {
 		await this.fetchData();
 	};
 
-	componentWillUnmount = async () => {
+	componentWillUnmount = async (): Promise<void> => {
 		await this._classifierTypeService.abort();
 	};
 
-	fetchData = async () => {
+	fetchData = async (): Promise<void> => {
 		const types = await this._classifierTypeService.list({ skipPaging: true });
 
 		this.setState({ loading: false, types: types.rows });
 	};
 
-	handleChange = (value: any) => {
+	handleChange = (value: any): void => {
 		const { onChange } = this.props;
 
 		if (onChange) {
@@ -48,7 +48,7 @@ export class ClassifierTypeSelect extends React.Component<Props, State> {
 		}
 	};
 
-	render = () => {
+	render = (): React.ReactNode => {
 		const { value } = this.props,
 			{ loading, types } = this.state;
 
