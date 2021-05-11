@@ -36,6 +36,7 @@ namespace Montr.Idx.Impl
 			services.AddTransient<IPermissionProvider, PermissionProvider>();
 
 			services.AddScoped<IAuthorizationHandler, UserPermissionAuthorizationHandler>();
+			services.AddScoped<IAuthorizationHandler, SuperAdministratorAuthorizationHandler>();
 
 			services
 				.AddAuthentication()

@@ -1,7 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Montr.Core.Models;
-using Montr.Idx.Models;
 
 namespace Montr.Idx.Impl.Services
 {
