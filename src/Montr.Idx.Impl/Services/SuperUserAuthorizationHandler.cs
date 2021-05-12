@@ -9,11 +9,11 @@ using OpenIddict.Abstractions;
 
 namespace Montr.Idx.Impl.Services
 {
-	public class SuperAdministratorAuthorizationHandler : IAuthorizationHandler
+	public class SuperUserAuthorizationHandler : IAuthorizationHandler
 	{
 		private readonly IOptionsMonitor<AppOptions> _optionsMonitor;
 
-		public SuperAdministratorAuthorizationHandler(IOptionsMonitor<AppOptions> optionsMonitor)
+		public SuperUserAuthorizationHandler(IOptionsMonitor<AppOptions> optionsMonitor)
 		{
 			_optionsMonitor = optionsMonitor;
 		}
@@ -26,8 +26,8 @@ namespace Montr.Idx.Impl.Services
 
 			var appOptions = _optionsMonitor.CurrentValue;
 
-			if (appOptions.SuperAdministratorUid.HasValue && string.Equals(userId,
-				appOptions.SuperAdministratorUid.ToString(), StringComparison.OrdinalIgnoreCase))
+			if (appOptions.SuperUserId.HasValue && string.Equals(userId,
+				appOptions.SuperUserId.ToString(), StringComparison.OrdinalIgnoreCase))
 			{
 				foreach (var requirement in context.Requirements.OfType<PermissionRequirement>())
 				{

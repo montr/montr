@@ -103,7 +103,7 @@ namespace Montr.Kompany.Impl.CommandHandlers
 
 				await _settingsRepository.GetSettings<AppOptions>()
 					.Set(x => x.State, AppState.Initialized)
-					.Set(x => x.SuperAdministratorUid, userUid)
+					.Set(x => x.SuperUserId, userUid)
 					.Update(cancellationToken);
 
 				scope.Commit();
