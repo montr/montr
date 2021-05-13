@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Montr.Core.Models
 {
@@ -23,5 +24,12 @@ namespace Montr.Core.Models
 		{
 			Code = code;
 		}
+	}
+
+	public class RoleTemplate
+	{
+		public string RoleCode { get; set; }
+
+		public IEnumerable<Permission> Permissions { get; set; }
 	}
 }

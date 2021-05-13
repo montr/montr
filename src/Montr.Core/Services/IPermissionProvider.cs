@@ -6,5 +6,7 @@ namespace Montr.Core.Services
 	public interface IPermissionProvider
 	{
 		IEnumerable<Permission> GetPermissions();
+
+		IEnumerable<RoleTemplate> GetRoleTemplates();
 	}
 }

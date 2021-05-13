@@ -99,7 +99,7 @@ namespace Montr.Kompany.Impl.CommandHandlers
 
 				if (companyResult.Success == false) return companyResult;
 
-				_logger.LogInformation($"Updating application initialization options", request.CompanyName);
+				_logger.LogInformation("Updating application initialization options");
 
 				await _settingsRepository.GetSettings<AppOptions>()
 					.Set(x => x.State, AppState.Initialized)

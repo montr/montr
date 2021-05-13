@@ -17,5 +17,17 @@ namespace Montr.Idx.Impl.Services
 				new Permission(typeof(Permissions.ManageRolePermissions))
 			};
 		}
+
+		public IEnumerable<RoleTemplate> GetRoleTemplates()
+		{
+			return new[]
+			{
+				new RoleTemplate
+				{
+					RoleCode = "Administrator",
+					Permissions = GetPermissions()
+				}
+			};
+		}
 	}
 }
