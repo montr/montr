@@ -46,7 +46,7 @@ namespace Montr.Idx.Impl.CommandHandlers
 
 			if (result.Succeeded)
 			{
-				_logger.LogInformation("{Name} logged in with {LoginProvider} provider.", info.Principal.Identity.Name, info.LoginProvider);
+				_logger.LogInformation("{Name} logged in with {LoginProvider} provider.", info.Principal?.Identity?.Name, info.LoginProvider);
 
 				// todo: check redirect is local
 				return new ApiResult<ExternalRegisterModel> { RedirectUrl = request.ReturnUrl };

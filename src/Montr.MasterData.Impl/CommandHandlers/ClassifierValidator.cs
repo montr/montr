@@ -52,7 +52,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 						Key = "code",
 						Messages = new[]
 						{
-							$"Код «{duplicate.Code}» уже используется в элементе «{duplicate.Name}»."
+							$"Code «{duplicate.Code}» is already used in item \"{duplicate.Name}\""
 						}
 					});
 				}

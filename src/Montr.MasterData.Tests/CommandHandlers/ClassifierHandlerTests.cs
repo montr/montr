@@ -175,8 +175,7 @@ namespace Montr.MasterData.Tests.CommandHandlers
 				Assert.AreEqual(1, result.Errors.Count);
 				Assert.AreEqual("code", result.Errors[0].Key);
 				// todo: use error codes?
-				Assert.AreEqual("Код «001» уже используется в элементе «Test Classifier».",
-					result.Errors[0].Messages[0]);
+				Assert.AreEqual("Code «001» is already used in item \"Test Classifier\"", result.Errors[0].Messages[0]);
 			}
 		}
 
