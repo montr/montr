@@ -17,7 +17,7 @@ export class ClassifierService extends Fetcher {
 		return this.post(Api.classifierList, request);
 	};
 
-	export = async (request: IClassifierSearchRequest): Promise<any> => {
+	export = async (request: IClassifierSearchRequest): Promise<void> => {
 		return this.download(Api.classifierExport, request);
 	};
 
@@ -37,7 +37,7 @@ export class ClassifierService extends Fetcher {
 		return this.post(Api.classifierUpdate, { item: { type: typeCode, ...item } });
 	};
 
-	delete = async (typeCode: string, uids: string[] | number[]): Promise<number> => {
+	delete = async (typeCode: string, uids: string[] | number[]): Promise<ApiResult> => {
 		return this.post(Api.classifierDelete, { typeCode, uids });
 	};
 }

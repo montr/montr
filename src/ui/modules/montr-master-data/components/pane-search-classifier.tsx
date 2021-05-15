@@ -6,7 +6,7 @@ import { TreeNodeNormal } from "antd/lib/tree/Tree";
 import { EventDataNode } from "rc-tree/lib/interface";
 import { RadioChangeEvent } from "antd/lib/radio";
 import { Guid, DataResult } from "@montr-core/models";
-import { NotificationService } from "@montr-core/services";
+import { OperationService } from "@montr-core/services";
 import { withCompanyContext, CompanyContextProps } from "@montr-kompany/components";
 import { ClassifierService, ClassifierTypeService, ClassifierGroupService, ClassifierTreeService } from "../services";
 import { ClassifierType, ClassifierGroup, ClassifierTree, Classifier } from "../models";
@@ -51,11 +51,11 @@ interface ITreeNodeSelectEvent {
 
 class _PaneSearchClassifier extends React.Component<Props, State> {
 
-	_classifierTypeService = new ClassifierTypeService();
-	_classifierTreeService = new ClassifierTreeService();
-	_classifierGroupService = new ClassifierGroupService();
-	_classifierService = new ClassifierService();
-	_notificationService = new NotificationService();
+	private readonly operation = new OperationService();
+	private readonly classifierTypeService = new ClassifierTypeService();
+	private readonly classifierTreeService = new ClassifierTreeService();
+	private readonly classifierGroupService = new ClassifierGroupService();
+	private readonly classifierService = new ClassifierService();
 
 	constructor(props: Props) {
 		super(props);
@@ -95,14 +95,14 @@ class _PaneSearchClassifier extends React.Component<Props, State> {
 	};
 
 	componentWillUnmount = async () => {
-		await this._classifierTypeService.abort();
-		await this._classifierTreeService.abort();
-		await this._classifierGroupService.abort();
-		await this._classifierService.abort();
+		await this.classifierTypeService.abort();
+		await this.classifierTreeService.abort();
+		await this.classifierGroupService.abort();
+		await this.classifierService.abort();
 	};
 
 	loadClassifierTypes = async () => {
-		const types = (await this._classifierTypeService.list({ skipPaging: true })).rows;
+		const types = (await this.classifierTypeService.list({ skipPaging: true })).rows;
 
 		this.setState({ types });
 
@@ -112,7 +112,7 @@ class _PaneSearchClassifier extends React.Component<Props, State> {
 	loadClassifierType = async () => {
 		const { typeCode } = this.props;
 
-		const type = await this._classifierTypeService.get({ typeCode });
+		const type = await this.classifierTypeService.get({ typeCode });
 
 		this.setState({ type });
 
@@ -127,7 +127,7 @@ class _PaneSearchClassifier extends React.Component<Props, State> {
 				selectedTree: ClassifierTree;
 
 			if (type.hierarchyType == "Groups") {
-				trees = (await this._classifierTreeService.list({ typeCode: type.code })).rows;
+				trees = (await this.classifierTreeService.list({ typeCode: type.code })).rows;
 
 				if (trees && trees.length > 0) {
 					selectedTree = trees.find(x => x.code == "default");
@@ -165,7 +165,7 @@ class _PaneSearchClassifier extends React.Component<Props, State> {
 	};
 
 	fetchClassifierGroups = async (typeCode: string, treeUid?: Guid, parentUid?: Guid, focusUid?: Guid, expandSingleChild?: boolean): Promise<ClassifierGroup[]> => {
-		const result = await this._classifierGroupService.list({
+		const result = await this.classifierGroupService.list({
 			typeCode,
 			treeUid,
 			parentUid,
@@ -177,20 +177,23 @@ class _PaneSearchClassifier extends React.Component<Props, State> {
 	};
 
 	// todo: move button to separate class?
-	// todo: add delete operation confirm
 	delete = async () => {
-		const rowsAffected = await this._classifierService
-			.delete(this.props.typeCode, this.state.selectedRowKeys);
+		await this.operation.confirmDelete(async () => {
+			const result = await this.classifierService
+				.delete(this.props.typeCode, this.state.selectedRowKeys);
 
-		this._notificationService.success("Выбранные записи удалены. " + rowsAffected);
+			if (result.success) {
+				await this.refreshTable(false, true);
+			}
 
-		await this.refreshTable(false, true);
+			return result;
+		});
 	};
 
 	// todo: move button to separate class?
 	export = async () => {
 		// todo: show export dialog: all pages, current page, export format
-		await this._classifierService.export({ typeCode: this.props.typeCode });
+		await this.classifierService.export({ typeCode: this.props.typeCode });
 	};
 
 	onTableSelectionChange = async (selectedRowKeys: string[] | number[], selectedRows: any[]) => {
@@ -299,7 +302,7 @@ class _PaneSearchClassifier extends React.Component<Props, State> {
 	deleteSelectedGroup = async () => {
 		const { type, selectedGroup } = this.state;
 
-		await this._classifierGroupService.delete(type.code, selectedGroup.uid);
+		await this.classifierGroupService.delete(type.code, selectedGroup.uid);
 
 		this.setState({ selectedGroup: null });
 
@@ -354,7 +357,7 @@ class _PaneSearchClassifier extends React.Component<Props, State> {
 				...postParams
 			};
 
-			return await this._classifierService.post(loadUrl, params);
+			return await this.classifierService.post(loadUrl, params);
 		}
 
 		return null;
@@ -388,7 +391,8 @@ class _PaneSearchClassifier extends React.Component<Props, State> {
 
 	render = (): React.ReactNode => {
 		const { mode, currentCompany } = this.props,
-			{ types, type, trees, groups, selectedTree, selectedGroup, groupEditData, expandedKeys, updateTableToken,
+			{ types, type, trees, groups, selectedTree, selectedGroup, groupEditData, expandedKeys,
+				updateTableToken, selectedRowKeys,
 				showEditPane, editUid } = this.state;
 
 		if (!currentCompany || !type) return null;
@@ -473,7 +477,7 @@ class _PaneSearchClassifier extends React.Component<Props, State> {
 							<ButtonAdd type="primary" />
 						</Link> */}
 						<ButtonAdd type="primary" onClick={this.showAddPane} />
-						<ButtonDelete onClick={this.delete} />
+						<ButtonDelete onClick={this.delete} disabled={!selectedRowKeys?.length} />
 						<ButtonExport onClick={this.export} />
 						<Link to={RouteBuilder.editClassifierType(type.uid)}>
 							<Button icon={Icon.Setting}> Настроить</Button>

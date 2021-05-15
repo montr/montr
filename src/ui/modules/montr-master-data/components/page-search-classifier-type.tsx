@@ -67,7 +67,7 @@ class WrappedSearchClassifierType extends React.Component<Props, State> {
 	};
 
 	render = (): React.ReactNode => {
-		const { updateTableToken } = this.state;
+		const { updateTableToken, selectedRowKeys } = this.state;
 
 		const rowActions: IMenu[] = [
 			{ name: "Настроить", route: (item: ClassifierGroup) => RouteBuilder.editClassifierType(item.uid) }
@@ -81,7 +81,7 @@ class WrappedSearchClassifierType extends React.Component<Props, State> {
 							<Link to={`/classifiers/add`}>
 								<ButtonAdd type="primary" />
 							</Link>
-							<ButtonDelete onClick={this.delete} />
+							<ButtonDelete onClick={this.delete} disabled={!selectedRowKeys?.length} />
 						</Toolbar>
 
 						<ClassifierBreadcrumb />
