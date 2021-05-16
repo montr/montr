@@ -3,20 +3,17 @@ import { Translation } from "react-i18next";
 import { Page, Toolbar, DataBreadcrumb, DataMenu, RouteList } from "@montr-core/components";
 import { Locale, ProfileRoutes } from "../module";
 
-interface Props {
-}
-
 interface State {
 	mode: "inline" | "horizontal";
 	selectedKey: string;
 }
 
-export default class Profile extends React.Component<Props, State> {
+export default class PageProfile extends React.Component<null, State> {
 
-	private _main: HTMLDivElement | undefined = undefined;
+	private main: HTMLDivElement | undefined = undefined;
 
-	constructor(props: Props) {
-		super(props);
+	constructor() {
+		super(null);
 
 		this.state = {
 			mode: "inline",
@@ -24,25 +21,25 @@ export default class Profile extends React.Component<Props, State> {
 		};
 	}
 
-	componentDidMount = async () => {
+	componentDidMount = async (): Promise<void> => {
 		// todo: fix lot of state changes and network operations, move to menu?
 		/* window.addEventListener("resize", this.resize);
 		this.resize(); */
 	};
 
-	componentWillUnmount = async () => {
+	componentWillUnmount = async (): Promise<void> => {
 		// window.removeEventListener("resize", this.resize);
 	};
 
-	resize = () => {
-		if (!this._main) return;
+	resize = (): void => {
+		if (!this.main) return;
 
 		requestAnimationFrame(() => {
-			if (!this._main) return;
+			if (!this.main) return;
 
 			let mode: "inline" | "horizontal" = "inline";
 
-			const { offsetWidth } = this._main;
+			const { offsetWidth } = this.main;
 
 			if (offsetWidth < 641 && offsetWidth > 400) {
 				mode = "horizontal";
@@ -56,7 +53,7 @@ export default class Profile extends React.Component<Props, State> {
 		});
 	};
 
-	render = () => {
+	render = (): React.ReactNode => {
 		const { mode } = this.state;
 
 		return (
@@ -71,7 +68,7 @@ export default class Profile extends React.Component<Props, State> {
 
 					{/* todo: good names & create components */}
 					<div className="grid-content">
-						<div className="page-with-menu" ref={ref => { if (ref) { this._main = ref; } }}>
+						<div className="page-with-menu" ref={ref => { if (ref) { this.main = ref; } }}>
 							<div className="menu">
 								<DataMenu menuId="ProfileMenu" mode={mode} />
 							</div>

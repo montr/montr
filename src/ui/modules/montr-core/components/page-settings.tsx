@@ -1,34 +1,36 @@
 import React from "react";
-import { Page, Toolbar, PageHeader, DataBreadcrumb } from "./";
+import { Translation } from "react-i18next";
+import { DataBreadcrumb, DataMenu, Page, PageHeader, Toolbar } from ".";
 
-interface Props {
-}
+export default class PageSettings extends React.Component {
 
-interface State {
-}
+	private main: HTMLDivElement | undefined = undefined;
 
-export default class PageSettings extends React.Component<Props, State> {
-	constructor(props: Props) {
-		super(props);
-
-		this.state = {
-		};
-	}
-
-	render = () => {
-
+	render = (): React.ReactNode => {
 		return (
-			<Page
-				title={<>
-					<Toolbar float="right">
-					</Toolbar>
+			<Translation>
+				{(t) => <Page
+					title={<>
+						<Toolbar float="right">
+						</Toolbar>
 
-					<DataBreadcrumb items={[{ name: "Настройки" }]} />
-					<PageHeader>Настройки</PageHeader>
-				</>}>
+						<DataBreadcrumb items={[{ name: "Settings" }]} />
+						<PageHeader>Settings</PageHeader>
+					</>}>
 
-
-			</Page>
+					{/* todo: good names & create components */}
+					<div className="grid-content">
+						<div className="page-with-menu" ref={ref => { if (ref) { this.main = ref; } }}>
+							<div className="menu">
+								<DataMenu menuId="SettingsMenu" />
+							</div>
+							<div className="content">
+								{/* <RouteList routes={SettingsRoutes} /> */}
+							</div>
+						</div>
+					</div>
+				</Page>}
+			</Translation>
 		);
 	};
 }

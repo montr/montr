@@ -8,22 +8,19 @@ import { PageHeader, DataForm } from "@montr-core/components";
 import { Translation } from "react-i18next";
 import { Spin } from "antd";
 
-interface Props {
-}
-
 interface State {
 	loading: boolean;
 	data: ProfileModel;
 	fields?: IDataField[];
 }
 
-export default class PaneEditProfile extends React.Component<Props, State> {
+export default class PaneEditProfile extends React.Component<null, State> {
 
-	private _metadataService = new MetadataService();
-	private _profileService = new ProfileService();
+	private readonly metadataService = new MetadataService();
+	private readonly profileService = new ProfileService();
 
-	constructor(props: Props) {
-		super(props);
+	constructor() {
+		super(null);
 
 		this.state = {
 			loading: true,
@@ -31,28 +28,28 @@ export default class PaneEditProfile extends React.Component<Props, State> {
 		};
 	}
 
-	componentDidMount = async () => {
+	componentDidMount = async (): Promise<void> => {
 		await this.fetchData();
 	};
 
-	componentWillUnmount = async () => {
-		await this._metadataService.abort();
-		await this._profileService.abort();
+	componentWillUnmount = async (): Promise<void> => {
+		await this.metadataService.abort();
+		await this.profileService.abort();
 	};
 
-	fetchData = async () => {
-		const data = await this._profileService.get();
+	fetchData = async (): Promise<void> => {
+		const data = await this.profileService.get();
 
-		const dataView = await this._metadataService.load(Views.formUpdateProfile);
+		const dataView = await this.metadataService.load(Views.formUpdateProfile);
 
 		this.setState({ loading: false, data, fields: dataView.fields });
 	};
 
 	save = async (values: ProfileModel): Promise<ApiResult> => {
-		return await this._profileService.update(values);
+		return await this.profileService.update(values);
 	};
 
-	render = () => {
+	render = (): React.ReactNode => {
 		const { loading, fields, data } = this.state;
 
 		return (

@@ -21,8 +21,8 @@ interface State {
 
 export class DataMenu extends React.Component<Props, State> {
 
-	private _navigation = new NavigationService();
-	private _contentService = new ContentService();
+	private readonly navigation = new NavigationService();
+	private readonly contentService = new ContentService();
 
 	constructor(props: Props) {
 		super(props);
@@ -31,11 +31,11 @@ export class DataMenu extends React.Component<Props, State> {
 		};
 	}
 
-	componentDidMount = async () => {
+	componentDidMount = async (): Promise<void> => {
 		const { menuId } = this.props;
 
-		const menu = await this._contentService.getMenu(menuId),
-			path = this._navigation.getPathname(),
+		const menu = await this.contentService.getMenu(menuId),
+			path = this.navigation.getPathname(),
 			openKeys: string[] = [],
 			selectedKeys: string[] = [];
 
@@ -87,8 +87,8 @@ export class DataMenu extends React.Component<Props, State> {
 		return false;
 	};
 
-	componentWillUnmount = async () => {
-		await this._contentService.abort();
+	componentWillUnmount = async (): Promise<void> => {
+		await this.contentService.abort();
 	};
 
 	getItemRoute = (item: IMenu): string => {
@@ -99,7 +99,7 @@ export class DataMenu extends React.Component<Props, State> {
 		return item.route();
 	};
 
-	buildItems = (menu: IMenu) => {
+	buildItems = (menu: IMenu): React.ReactElement[] => {
 		return menu && menu.items && menu.items.map((item) => {
 
 			if (item.items) {
@@ -137,7 +137,7 @@ export class DataMenu extends React.Component<Props, State> {
 		});
 	};
 
-	render() {
+	render = (): React.ReactNode => {
 
 		const { menuId, head, tail, ...props } = this.props;
 		const { menu, openKeys, selectedKeys } = this.state;
@@ -156,5 +156,5 @@ export class DataMenu extends React.Component<Props, State> {
 
 			</Menu>}
 		</>);
-	}
+	};
 }

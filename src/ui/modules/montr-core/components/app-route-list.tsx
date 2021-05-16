@@ -6,12 +6,12 @@ import { IRoute } from "../models";
 
 interface Props {
 	routes: IRoute[];
-	layoutRegistry: (key: string) => React.ComponentType<any>;
+	layoutRegistry: (key: string) => React.ComponentType<unknown>;
 	defaultLayout: string;
 	errorLayout: string;
 }
 
-export const AppRouteList = ({ routes, layoutRegistry, defaultLayout, errorLayout }: Props) => (
+export const AppRouteList = ({ routes, layoutRegistry, defaultLayout, errorLayout }: Props): React.ReactElement => (
 	<BrowserRouter>
 		<AppSetupRedirect>
 			<Switch>
@@ -28,13 +28,13 @@ interface RouteListProps {
 	routes: IRoute[];
 }
 
-export const RouteList = ({ routes }: RouteListProps) => (
+export const RouteList = ({ routes }: RouteListProps): React.ReactElement => (
 	<Switch>
 		{routes.map(({ ...props }, _do_not_use_) => {
 			return <Route key={0} {...props} />;
 		})}
-		<Route>
+		{/* <Route>
 			<h1>404</h1>
-		</Route>
+		</Route> */}
 	</Switch>
 );

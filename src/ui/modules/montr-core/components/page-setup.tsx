@@ -7,37 +7,34 @@ import { DataForm, Page } from ".";
 import { Views } from "../module";
 import { Constants } from "..";
 
-interface Props {
-}
-
 interface State {
     loading: boolean;
     fields?: IDataField[];
 }
 
-export default class PageSetup extends React.Component<Props, State> {
+export default class PageSetup extends React.Component<null, State> {
 
     private _metadataService = new MetadataService();
     private _setupService = new SetupService();
 
-    constructor(props: Props) {
-        super(props);
+    constructor() {
+        super(null);
 
         this.state = {
             loading: true
         };
     }
 
-    componentDidMount = async () => {
+    componentDidMount = async (): Promise<void> => {
         await this.fetchData();
     };
 
-    componentWillUnmount = async () => {
+    componentWillUnmount = async (): Promise<void> => {
         await this._metadataService.abort();
         await this._setupService.abort();
     };
 
-    fetchData = async () => {
+    fetchData = async (): Promise<void> => {
         const dataView = await this._metadataService.load(Views.setupForm);
 
         this.setState({ loading: false, fields: dataView.fields });
@@ -47,7 +44,7 @@ export default class PageSetup extends React.Component<Props, State> {
         return await this._setupService.save(values);
     };
 
-    render = () => {
+    render = (): React.ReactNode => {
         const { loading, fields } = this.state,
             appState = Constants.appState,
             data = {};

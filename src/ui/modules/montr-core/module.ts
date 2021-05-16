@@ -6,6 +6,8 @@ import "./i18n";
 import "./index.less";
 
 export const Api = {
+	contentMenu: `${Constants.apiURL}/content/menu`,
+
 	metadataList: `${Constants.apiURL}/metadata/list`,
 	metadataView: `${Constants.apiURL}/metadata/view`,
 	metadataFieldTypes: `${Constants.apiURL}/metadata/fieldTypes`,
