@@ -48,7 +48,7 @@
 		"copy-webpack-plugin": "^8.1.1",
 		"css-loader": "^5.2.4",
 		"eslint": "^7.26.0",
-		"fork-ts-checker-webpack-plugin": "^6.2.9",
+		"fork-ts-checker-webpack-plugin": "^6.2.10",
 		"hard-source-webpack-plugin": "^0.13.1",
 		"kind-of": ">=6.0.3",
 		"less": "^4.1.1",
@@ -57,7 +57,7 @@
 		"source-map-loader": "^2.0.2",
 		"style-loader": "^2.0.0",
 		"typescript": "^4.2.4",
-		"webpack": "^5.37.0",
+		"webpack": "^5.37.1",
 		"webpack-bundle-analyzer": "^4.4.2",
 		"webpack-cli": "^4.7.0",
 		"webpack-merge": "^5.7.3"
