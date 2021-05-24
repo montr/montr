@@ -64,7 +64,6 @@ namespace Montr.Core
 			services.AddSingleton<IAppUrlBuilder, DefaultAppUrlBuilder>();
 			services.AddSingleton<IDateTimeProvider, DefaultDateTimeProvider>();
 			services.AddSingleton<IUnitOfWorkFactory, TransactionScopeUnitOfWorkFactory>();
-			services.AddSingleton<IContentProvider, DefaultContentProvider>();
 
 			services.AddTransient<ICache, CombinedCache>();
 			services.AddTransient<ILocalizer, DefaultLocalizer>();
