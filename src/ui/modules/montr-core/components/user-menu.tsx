@@ -16,13 +16,13 @@ class _UserMenu extends React.Component<MenuProps & UserContextProps & Props> {
 
 	render = () => {
 
-		let { strongTitle, user, login, logout, head, tail, ...props } = this.props;
+		const { strongTitle, user, login, logout, head, tail, ...props } = this.props;
 
 		if (user) {
 
 			const userTitle = user.profile.name ?? user.profile.email;
 
-			let title = (strongTitle)
+			const title = (strongTitle)
 				? (<span>
 					{/* <Icon type="user" /> */}
 					<div style={{ lineHeight: '14px' }}>&#xA0;</div>

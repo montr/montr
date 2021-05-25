@@ -8,7 +8,7 @@ class WrappedCompanyMenu extends React.Component<MenuItemProps & CompanyContextP
 
 	render() {
 
-		const { currentCompany, companyList, registerCompany, manageCompany, switchCompany, onMouseEnter, onSelect, ...props } = this.props;
+		const { currentCompany, companyList, registerCompany, manageCompany, switchCompany, onMouseEnter, ...props } = this.props;
 
 		if (currentCompany) {
 			return <>
