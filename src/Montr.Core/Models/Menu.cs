@@ -28,5 +28,7 @@ namespace Montr.Core.Models
 		public static readonly string SettingsMenu = "SettingsMenu";
 
 		public static readonly string SideMenu = "SideMenu";
+
+		public static readonly string AdminMenu = "AdminMenu";
 	}
 }

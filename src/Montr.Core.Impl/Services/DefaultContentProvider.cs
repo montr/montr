@@ -53,7 +53,7 @@ namespace Montr.Core.Impl.Services
 
 					new Menu
 					{
-						Id = "m.3",
+						Id = MenuCode.AdminMenu,
 						Name = "Администрирование",
 						Icon = "setting",
 						Items = new[]
@@ -62,8 +62,7 @@ namespace Montr.Core.Impl.Services
 							// new Menu { Id = "integrations", Name = "Интеграции", Route = "/integrations/" },
 							new Menu { Id = "classifiers", Name = "Классификаторы", Route = "/classifiers/" },
 							new Menu { Id = "settings", Name = "Настройки", Route = "/settings/" },
-							new Menu { Id = "locales", Name = "Локализация", Route = "/locales/" },
-							new Menu { Id = "hangfire", Name = "Hangfire Dashboard", Url = "/hangfire/" }
+							new Menu { Id = "locales", Name = "Локализация", Route = "/locales/" }
 						}
 					},
 

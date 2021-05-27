@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Montr.Core;
+using Montr.Core.Services;
 using Montr.Worker.Hangfire.Services;
 using Montr.Worker.Services;
 using Newtonsoft.Json;
@@ -19,6 +20,8 @@ namespace Montr.Worker.Hangfire
 	{
 		public void ConfigureServices(IConfiguration configuration, IServiceCollection services)
 		{
+			services.AddSingleton<IContentProvider, ContentProvider>();
+
 			services.AddHangfire(config =>
 			{
 				config.UsePostgreSqlStorage(
