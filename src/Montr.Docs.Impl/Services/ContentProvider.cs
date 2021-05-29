@@ -2,17 +2,17 @@
 using Montr.Core.Models;
 using Montr.Core.Services;
 
-namespace Montr.Worker.Hangfire.Services
+namespace Montr.Docs.Impl.Services
 {
 	public class ContentProvider : IContentProvider
 	{
 		public IList<Menu> GetMenuItems(string menuId)
 		{
-			if (menuId == MenuCode.AdminMenu)
+			if (menuId == MenuCode.SideMenu)
 			{
 				return new[]
 				{
-					new Menu { Id = "hangfire", Name = "Hangfire Dashboard", Url = "/hangfire/" }
+					new Menu { Id = "documents", Name = "Документы", Icon = "container", Route = "/documents/" },
 				};
 			}
 

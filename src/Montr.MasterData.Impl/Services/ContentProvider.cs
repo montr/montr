@@ -2,7 +2,7 @@
 using Montr.Core.Models;
 using Montr.Core.Services;
 
-namespace Montr.Worker.Hangfire.Services
+namespace Montr.MasterData.Impl.Services
 {
 	public class ContentProvider : IContentProvider
 	{
@@ -12,7 +12,8 @@ namespace Montr.Worker.Hangfire.Services
 			{
 				return new[]
 				{
-					new Menu { Id = "hangfire", Name = "Hangfire Dashboard", Url = "/hangfire/" }
+					new Menu { Id = "companies", Name = "Компании", Route = "/companies/" },
+					new Menu { Id = "classifiers", Name = "Классификаторы", Route = "/classifiers/" }
 				};
 			}
 

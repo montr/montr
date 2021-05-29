@@ -20,6 +20,8 @@ namespace Montr.MasterData.Impl
 			services.AddTransient<IStartupTask, RegisterClassifierTypeStartupTask>();
 			services.AddSingleton<IStartupTask, ClassifierJsonOptionsInitializer>();
 
+			services.AddSingleton<IContentProvider, ContentProvider>();
+
 			services.AddTransient<INumberGenerator, DbNumberGenerator>();
 
 			services.AddTransient<IClassifierRepository, DbClassifierRepository<Classifier>>();

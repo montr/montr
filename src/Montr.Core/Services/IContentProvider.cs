@@ -9,6 +9,6 @@ namespace Montr.Core.Services
 		/// Get children items for specified menu item.
 		/// </summary>
 		/// <param name="menuId"></param>
-		IEnumerable<Menu> GetMenuItems(string menuId);
+		IList<Menu> GetMenuItems(string menuId);
 	}
 }

@@ -50,7 +50,7 @@ namespace Montr.Core.Impl.Services
 						{
 							var children = Rebuild(item.Id);
 
-							if (children != null && children.Count > 0)
+							if (children?.Count > 0)
 							{
 								if (item.Items == null)
 								{
