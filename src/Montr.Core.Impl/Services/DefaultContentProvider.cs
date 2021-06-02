@@ -32,8 +32,8 @@ namespace Montr.Core.Impl.Services
 			{
 				return new[]
 				{
-					new Menu { Id = "m.0", Name = "Панель управления", Icon = "dashboard", Route = "/dashboard/" },
-					new Menu { Id = "reports", Name = "Отчеты", Icon = "bar-chart", Route = "/reports/" },
+					new Menu { Name = "Панель управления", Icon = "dashboard", Route = "/dashboard/" },
+					new Menu { Name = "Отчеты", Icon = "bar-chart", Route = "/reports/" },
 
 					new Menu
 					{
@@ -44,12 +44,12 @@ namespace Montr.Core.Impl.Services
 						Items = new[]
 						{
 							// new Menu { Id = "integrations", Name = "Интеграции", Route = "/integrations/" },
-							new Menu { Id = "settings", Name = "Настройки", Route = "/settings/" },
-							new Menu { Id = "locales", Name = "Локализация", Route = "/locales/" }
+							new Menu { Name = "Настройки", Route = "/settings/" },
+							new Menu { Name = "Локализация", Route = "/locales/" }
 						}
 					},
 
-					new Menu { Id = "promo", Name = "Промо", Icon = "global", Position = 200, Route = "/" }
+					new Menu { Name = "Промо", Icon = "global", Position = 200, Route = "/" }
 				};
 			}
 

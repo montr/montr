@@ -31,7 +31,7 @@ class _UserMenu extends React.Component<MenuProps & UserContextProps & Props> {
 				</span>) : userTitle;
 
 			return (
-				<Menu.SubMenu {...props} className="user-menu" title={title}>
+				<Menu.SubMenu key="user:menu" {...props} className="user-menu" title={title}>
 
 					{head}
 
@@ -49,7 +49,7 @@ class _UserMenu extends React.Component<MenuProps & UserContextProps & Props> {
 		}
 
 		return (
-			<Menu.SubMenu {...props} title={
+			<Menu.SubMenu key="user:login" {...props} title={
 				<span>{Icon.get("login")}<a onClick={login}>Войти</a></span>
 			} />
 		);

@@ -99,25 +99,27 @@ export class DataMenu extends React.Component<Props, State> {
 		return item.route();
 	};
 
-	buildItems = (menu: IMenu): React.ReactElement[] => {
-		return menu && menu.items && menu.items.map((item) => {
+	buildItems = (menu: IMenu, keyPrefix = ""): React.ReactElement[] => {
+		return menu?.items?.map((item, index) => {
 
-			if (item.items) {
+			const key = item.id ?? keyPrefix + "_" + index;
+
+			if (item.items?.length > 0) {
 				return (
-					<Menu.SubMenu key={item.id} title={
+					<Menu.SubMenu key={key} title={
 						<span>
 							{item.icon && Icon.get(item.icon)}
 							<span>{item.name}</span>
 						</span>
 					}>
-						{this.buildItems(item)}
+						{this.buildItems(item, key + "_")}
 					</Menu.SubMenu>
 				);
 			}
 
 			if (item.route) {
 				return (
-					<Menu.Item key={item.id}>
+					<Menu.Item key={key}>
 						<Link to={this.getItemRoute(item)}>
 							{item.icon && Icon.get(item.icon)}
 							<span className="nav-text">{item.name}</span>
@@ -127,7 +129,7 @@ export class DataMenu extends React.Component<Props, State> {
 			}
 
 			return (
-				<Menu.Item key={item.id}>
+				<Menu.Item key={key}>
 					<a href={item.url}>
 						{item.icon && Icon.get(item.icon)}
 						<span className="nav-text">{item.name}</span>
@@ -139,8 +141,8 @@ export class DataMenu extends React.Component<Props, State> {
 
 	render = (): React.ReactNode => {
 
-		const { menuId, head, tail, ...props } = this.props;
-		const { menu, openKeys, selectedKeys } = this.state;
+		const { menuId: _, head, tail, ...props } = this.props,
+			{ menu, openKeys, selectedKeys } = this.state;
 
 		return (<>
 			{menu && <Menu
