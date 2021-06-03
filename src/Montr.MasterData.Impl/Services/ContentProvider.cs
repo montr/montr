@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Montr.Core.Models;
 using Montr.Core.Services;
+using Montr.MasterData.Queries;
 
 namespace Montr.MasterData.Impl.Services
 {
@@ -13,7 +14,11 @@ namespace Montr.MasterData.Impl.Services
 				return new[]
 				{
 					new Menu { Id = "companies", Name = "Компании", Route = "/companies/" },
-					new Menu { Id = "classifiers", Name = "Классификаторы", Route = "/classifiers/" }
+					new Menu
+					{
+						Id = "classifiers", Name = "Классификаторы", Route = "/classifiers/",
+						Permission = Permission.GetCode(typeof(GetClassifierTypeList))
+					}
 				};
 			}
 

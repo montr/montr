@@ -21,6 +21,7 @@ namespace Montr.MasterData.Impl
 			services.AddSingleton<IStartupTask, ClassifierJsonOptionsInitializer>();
 
 			services.AddSingleton<IContentProvider, ContentProvider>();
+			services.AddTransient<IPermissionProvider, PermissionProvider>();
 
 			services.AddTransient<INumberGenerator, DbNumberGenerator>();
 

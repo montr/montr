@@ -22,7 +22,7 @@ namespace Montr.MasterData.Controllers
 			_currentUserProvider = currentUserProvider;
 		}
 
-		[HttpPost]
+		[HttpPost, Permission(typeof(GetClassifierTypeList))]
 		public async Task<SearchResult<ClassifierType>> List(GetClassifierTypeList request)
 		{
 			request.UserUid = _currentUserProvider.GetUserUid();

@@ -16,6 +16,8 @@ namespace Montr.Core.Models
 
 		public string Route { get; set; }
 
+		public string Permission { get; set; }
+
 		public IList<Menu> Items { get; set; }
 	}
 

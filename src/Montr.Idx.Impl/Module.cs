@@ -27,6 +27,7 @@ namespace Montr.Idx.Impl
 			services.AddTransient<IStartupTask, RegisterPermissionsStartupTask>();
 
 			services.AddSingleton<IContentProvider, ContentProvider>();
+			services.AddTransient<IPermissionProvider, PermissionProvider>();
 
 			services.AddTransient<IEmailConfirmationService, EmailConfirmationService>();
 			services.AddTransient<ISignInManager, DefaultSignInManager>();
@@ -34,8 +35,6 @@ namespace Montr.Idx.Impl
 
 			services.AddNamedTransient<IClassifierRepository, DbRoleRepository>(Role.TypeCode);
 			services.AddNamedTransient<IClassifierRepository, DbUserRepository>(User.TypeCode);
-
-			services.AddTransient<IPermissionProvider, PermissionProvider>();
 
 			services.AddScoped<IAuthorizationHandler, UserPermissionAuthorizationHandler>();
 			services.AddScoped<IAuthorizationHandler, SuperUserAuthorizationHandler>();

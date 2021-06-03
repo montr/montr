@@ -19,6 +19,8 @@ namespace Montr.Core.Controllers
 		[HttpPost]
 		public async Task<ActionResult<Menu>> Menu(GetMenu request)
 		{
+			request.Principal = User;
+
 			return await _mediator.Send(request);
 		}
 	}
