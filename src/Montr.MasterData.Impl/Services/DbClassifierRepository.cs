@@ -39,6 +39,20 @@ namespace Montr.MasterData.Impl.Services
 
 		public Type ClassifierType => typeof(T);
 
+		public async Task<Classifier> Get(string typeCode, Guid uid, CancellationToken cancellationToken = default)
+		{
+			var result = await Search(new ClassifierSearchRequest
+			{
+				TypeCode = typeCode,
+				Uid = uid,
+				PageNo = 0,
+				PageSize = 1,
+				SkipPaging = true
+			}, cancellationToken);
+
+			return result.Rows.SingleOrDefault();
+		}
+
 		public async Task<SearchResult<Classifier>> Search(ClassifierSearchRequest request, CancellationToken cancellationToken)
 		{
 			var type = await _classifierTypeService.Get(request.TypeCode, cancellationToken);
@@ -194,7 +208,7 @@ namespace Montr.MasterData.Impl.Services
 
 		protected T Materialize(ClassifierType type, DbClassifier dbItem)
 		{
-			return new()
+			return new T
 			{
 				Type = type.Code,
 				Uid = dbItem.Uid,

@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Montr.Core.Services;
+using Montr.MasterData.Services;
 using Montr.Messages.Models;
 using Montr.Messages.Services;
 using Stubble.Core.Builders;
@@ -11,19 +11,18 @@ namespace Montr.Messages.Impl.Services
 {
 	public class MustacheTemplateRenderer : ITemplateRenderer
 	{
-		private readonly IRepository<MessageTemplate> _repository;
+		private readonly INamedServiceFactory<IClassifierRepository> _classifierRepositoryFactory;
 
-		public MustacheTemplateRenderer(IRepository<MessageTemplate> repository)
+		public MustacheTemplateRenderer(INamedServiceFactory<IClassifierRepository> classifierRepositoryFactory)
 		{
-			_repository = repository;
+			_classifierRepositoryFactory = classifierRepositoryFactory;
 		}
 
 		public async Task<Message> Render<TModel>(Guid templateUid, TModel data, CancellationToken cancellationToken)
 		{
-			var templateSearchResult = await _repository
-				.Search(new MessageTemplateSearchRequest { Uid = templateUid }, cancellationToken);
+			var repository = _classifierRepositoryFactory.GetNamedOrDefaultService(MessageTemplate.TypeCode);
 
-			var template = templateSearchResult.Rows.SingleOrDefault();
+			var template = (MessageTemplate)await repository.Get(MessageTemplate.TypeCode, templateUid, cancellationToken);
 
 			if (template == null)
 			{

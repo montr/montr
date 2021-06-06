@@ -2,6 +2,7 @@
 using Microsoft.Extensions.DependencyInjection;
 using Montr.Core;
 using Montr.Core.Services;
+using Montr.MasterData.Services;
 using Montr.Messages.Impl.Services;
 using Montr.Messages.Models;
 using Montr.Messages.Services;
@@ -13,8 +14,10 @@ namespace Montr.Messages.Impl
 	{
 		public void ConfigureServices(IConfiguration configuration, IServiceCollection services)
 		{
-			services.AddSingleton<IRepository<MessageTemplate>, DbMessageTemplateRepository>();
-			services.AddSingleton<IMessageTemplateService, DbMessageTemplateService>();
+			services.AddTransient<IStartupTask, RegisterClassifierTypeStartupTask>();
+
+			services.AddNamedTransient<IClassifierRepository, DbMessageTemplateRepository>(MessageTemplate.TypeCode);
+
 			services.AddSingleton<IEmailSender, MailKitEmailSender>();
 			services.AddSingleton<ITemplateRenderer, MustacheTemplateRenderer>();
 

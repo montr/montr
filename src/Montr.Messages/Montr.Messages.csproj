@@ -11,14 +11,11 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Montr.Core\Montr.Core.csproj" />
+    <ProjectReference Include="..\Montr.MasterData\Montr.MasterData.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <Compile Remove="Services\AbstractRegisterMessageTemplateStartupTask.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Commands" />
   </ItemGroup>
 
 </Project>

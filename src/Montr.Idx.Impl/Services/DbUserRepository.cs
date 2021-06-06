@@ -59,6 +59,7 @@ namespace Montr.Idx.Impl.Services
 					users = users.Where(x => x.UserName == userRequest.UserName);
 				}
 			}
+
 			var joined = from classifier in classifiers
 				join user in users on classifier.Uid equals user.Id
 				select new DbItem { Classifier = classifier, User = user };

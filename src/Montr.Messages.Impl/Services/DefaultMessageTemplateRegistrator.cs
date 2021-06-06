@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Montr.Core.Models;
 using Montr.Core.Services;
+using Montr.MasterData.Services;
 using Montr.Messages.Models;
 using Montr.Messages.Services;
 
@@ -11,43 +12,39 @@ namespace Montr.Messages.Impl.Services
 	public class DefaultMessageTemplateRegistrator : IMessageTemplateRegistrator
 	{
 		private readonly ILogger<DefaultMessageTemplateRegistrator> _logger;
-		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
-		private readonly IMessageTemplateService _messageTemplateService;
+		private readonly INamedServiceFactory<IClassifierRepository> _classifierRepositoryFactory;
 
 		public DefaultMessageTemplateRegistrator(
 			ILogger<DefaultMessageTemplateRegistrator> logger,
-			IUnitOfWorkFactory unitOfWorkFactory,
-			IMessageTemplateService messageTemplateService)
+			INamedServiceFactory<IClassifierRepository> classifierRepositoryFactory)
 		{
 			_logger = logger;
-			_unitOfWorkFactory = unitOfWorkFactory;
-			_messageTemplateService = messageTemplateService;
+			_classifierRepositoryFactory = classifierRepositoryFactory;
 		}
 
 		public async Task<ApiResult> Register(MessageTemplate item, CancellationToken cancellationToken)
 		{
-			// todo: use codes
-			var type = await _messageTemplateService.TryGet(item.Uid, cancellationToken);
+			var repository = _classifierRepositoryFactory.GetNamedOrDefaultService(MessageTemplate.TypeCode);
 
-			if (type != null)
+			// todo: use codes (?)
+			var template = item.Uid.HasValue
+				? (MessageTemplate)await repository.Get(MessageTemplate.TypeCode, item.Uid.Value, cancellationToken)
+				: null;
+
+			if (template != null)
 			{
 				_logger.LogDebug("Message template {code} already registered.", item.Uid);
 
 				return new ApiResult { Success = false };
 			}
 
-			using (var scope = _unitOfWorkFactory.Create())
-			{
-				var insertTypeResult = await _messageTemplateService.Insert(item, cancellationToken);
+			var result = await repository.Insert(item, cancellationToken);
 
-				insertTypeResult.AssertSuccess(() => $"Failed to register message template \"{item.Uid}\"");
+			result.AssertSuccess(() => $"Failed to register message template \"{item.Uid}\"");
 
-				scope.Commit();
+			_logger.LogInformation("Message template {code} successfully registered.", item.Uid);
 
-				_logger.LogInformation("Message template {code} successfully registered.", item.Uid);
-
-				return insertTypeResult;
-			}
+			return result;
 		}
 	}
 }
