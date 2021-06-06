@@ -24,8 +24,6 @@ namespace Montr.MasterData.Impl.QueryHandlers
 
 		public async Task<ClassifierGroup> Handle(GetClassifierGroup request, CancellationToken cancellationToken)
 		{
-			if (request.UserUid == Guid.Empty) throw new InvalidOperationException("User is required.");
-
 			var typeCode = request.TypeCode ?? throw new ArgumentNullException(nameof(request.TypeCode));
 
 			var type = await _classifierTypeService.Get(typeCode, cancellationToken);

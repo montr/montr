@@ -128,7 +128,6 @@ namespace Montr.MasterData.Tests.Services
 		{
 			var result = await _getClassifierTreeListHandler.Handle(new GetClassifierTreeList
 			{
-				UserUid = UserUid,
 				TypeCode = TypeCode,
 			}, cancellationToken);
 
@@ -288,7 +287,6 @@ namespace Montr.MasterData.Tests.Services
 		{
 			return await _getClassifierLinkListHandler.Handle(new GetClassifierLinkList
 			{
-				UserUid = UserUid,
 				TypeCode = TypeCode,
 				GroupUid = groupUid,
 				ItemUid = itemUid

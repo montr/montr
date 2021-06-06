@@ -33,7 +33,6 @@ namespace Montr.MasterData.Tests.QueryHandlers
 				// act
 				var result = await handler.Handle(new GetClassifierTreeList
 				{
-					UserUid = generator.UserUid,
 					TypeCode = generator.TypeCode
 				}, cancellationToken);
 

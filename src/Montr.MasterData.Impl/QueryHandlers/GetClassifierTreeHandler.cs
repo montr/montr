@@ -21,7 +21,6 @@ namespace Montr.MasterData.Impl.QueryHandlers
 		{
 			var request = new ClassifierTreeSearchRequest
 			{
-				UserUid = command.UserUid,
 				TypeCode = command.TypeCode,
 				Uid = command.Uid
 			};

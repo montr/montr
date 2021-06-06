@@ -6,6 +6,7 @@ using Montr.Core.Models;
 using Montr.Core.Services;
 using Montr.MasterData.Commands;
 using Montr.MasterData.Models;
+using Montr.MasterData.Permissions;
 using Montr.MasterData.Queries;
 
 namespace Montr.MasterData.Controllers
@@ -22,15 +23,13 @@ namespace Montr.MasterData.Controllers
 			_currentUserProvider = currentUserProvider;
 		}
 
-		[HttpPost]
+		[HttpPost, Permission(typeof(ViewClassifiers))]
 		public async Task<SearchResult<ClassifierLink>> List(GetClassifierLinkList request)
 		{
-			request.UserUid = _currentUserProvider.GetUserUid();
-
 			return await _mediator.Send(request);
 		}
 
-		[HttpPost]
+		[HttpPost, Permission(typeof(ManageClassifiers))]
 		public async Task<ApiResult> Insert(InsertClassifierLink request)
 		{
 			request.UserUid = _currentUserProvider.GetUserUid();
@@ -38,7 +37,7 @@ namespace Montr.MasterData.Controllers
 			return await _mediator.Send(request);
 		}
 
-		[HttpPost]
+		[HttpPost, Permission(typeof(ManageClassifiers))]
 		public async Task<ApiResult> Delete(DeleteClassifierLink request)
 		{
 			request.UserUid = _currentUserProvider.GetUserUid();

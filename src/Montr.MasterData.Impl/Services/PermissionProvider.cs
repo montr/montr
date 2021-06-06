@@ -10,7 +10,11 @@ namespace Montr.MasterData.Impl.Services
 		{
 			return new[]
 			{
-				new Permission(typeof(Queries.GetClassifierTypeList)),
+				new Permission(typeof(Permissions.ViewClassifierTypes)),
+				new Permission(typeof(Permissions.ManageClassifierTypes)),
+
+				new Permission(typeof(Permissions.ViewClassifiers)),
+				new Permission(typeof(Permissions.ManageClassifiers))
 			};
 		}
 

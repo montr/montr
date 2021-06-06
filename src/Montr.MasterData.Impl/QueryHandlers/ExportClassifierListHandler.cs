@@ -32,16 +32,16 @@ namespace Montr.MasterData.Impl.QueryHandlers
 
 		public async Task<FileResult> Handle(ExportClassifierList command, CancellationToken cancellationToken)
 		{
-			command.Request.PageNo = 1;
-			command.Request.PageSize = Paging.MaxPageSize;
+			command.PageNo = 1;
+			command.PageSize = Paging.MaxPageSize;
 
-			var repository = _repositoryFactory.GetNamedOrDefaultService(command.Request.TypeCode);
+			var repository = _repositoryFactory.GetNamedOrDefaultService(command.TypeCode);
 
-			var data = await repository.Search(command.Request, cancellationToken);
+			var data = await repository.Search(command, cancellationToken);
 
 			using (var package = new ExcelPackage())
 			{
-				var ws = package.Workbook.Worksheets.Add(command.Request.TypeCode ?? nameof(Classifier));
+				var ws = package.Workbook.Worksheets.Add(command.TypeCode ?? nameof(Classifier));
 
 				// header
 				var col = FirstDataCol;
@@ -104,7 +104,7 @@ namespace Montr.MasterData.Impl.QueryHandlers
 				return new FileResult
 				{
 					ContentType = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
-					FileName = $"{command.Request.TypeCode ?? nameof(Classifier)}-{DateTime.Now.ToString("u").Replace(':', '-').Replace(' ', '-')}.xlsx",
+					FileName = $"{command.TypeCode ?? nameof(Classifier)}-{DateTime.Now.ToString("u").Replace(':', '-').Replace(' ', '-')}.xlsx",
 					Stream = new MemoryStream(package.GetAsByteArray())
 				};
 			}

@@ -71,11 +71,7 @@ namespace Montr.MasterData.Tests.QueryHandlers
 				// act
 				var command = new ExportClassifierList
 				{
-					Request = new ClassifierSearchRequest
-					{
-						UserUid = Guid.NewGuid(),
-						TypeCode = generator.TypeCode
-					}
+					TypeCode = generator.TypeCode
 				};
 
 				var result = await handler.Handle(command, cancellationToken);

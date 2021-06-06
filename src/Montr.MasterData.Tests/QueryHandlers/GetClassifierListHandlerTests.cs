@@ -64,7 +64,6 @@ namespace Montr.MasterData.Tests.QueryHandlers
 				// act
 				var command = new GetClassifierList
 				{
-					UserUid = Guid.NewGuid(),
 					TypeCode = generator.TypeCode
 				};
 
