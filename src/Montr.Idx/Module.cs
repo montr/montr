@@ -1,6 +1,8 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Montr.Core;
+using Montr.Core.Services;
+using Montr.Idx.Services;
 
 namespace Montr.Idx
 {
@@ -9,6 +11,7 @@ namespace Montr.Idx
 	{
 		public void ConfigureServices(IConfiguration configuration, IServiceCollection services)
 		{
+			services.AddTransient<IStartupTask, RegisterClassifierTypeStartupTask>();
 		}
 	}
 }

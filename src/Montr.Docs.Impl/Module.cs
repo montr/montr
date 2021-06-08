@@ -15,8 +15,6 @@ namespace Montr.Docs.Impl
 	{
 		public void ConfigureServices(IConfiguration configuration, IServiceCollection services)
 		{
-			services.AddTransient<IStartupTask, RegisterClassifierTypeStartupTask>();
-
 			services.AddSingleton<IContentProvider, ContentProvider>();
 
 			services.AddSingleton<IProcessService, DefaultProcessService>();

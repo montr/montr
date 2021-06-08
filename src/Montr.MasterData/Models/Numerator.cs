@@ -39,7 +39,7 @@ namespace Montr.MasterData.Models
 				Item = new ClassifierType
 				{
 					Code = TypeCode,
-					Name = "Нумераторы",
+					Name = "Numerators",
 					HierarchyType = HierarchyType.Groups,
 					IsSystem = true
 				},

@@ -1,12 +1,15 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Montr.Core.Models;
 using Montr.Core.Services;
+using Montr.Idx.Models;
 using Montr.MasterData.Commands;
 using Montr.MasterData.Models;
 using Montr.MasterData.Services;
 
-namespace Montr.MasterData.Impl.Services
+namespace Montr.Idx.Services
 {
 	public class RegisterClassifierTypeStartupTask : IStartupTask
 	{
@@ -19,15 +22,31 @@ namespace Montr.MasterData.Impl.Services
 
 		public async Task Run(CancellationToken cancellationToken)
 		{
+			cancellationToken.ThrowIfCancellationRequested();
+
 			foreach (var command in GetCommands())
 			{
 				await _classifierTypeRegistrator.Register(command.Item, command.Fields, cancellationToken);
 			}
 		}
 
-		protected  static IEnumerable<RegisterClassifierType> GetCommands()
+		protected static IEnumerable<RegisterClassifierType> GetCommands()
 		{
-			yield return Numerator.GetDefaultMetadata();
+			yield return Role.GetDefaultMetadata();
+
+			yield return User.GetDefaultMetadata();
+
+			yield return new RegisterClassifierType
+			{
+				Item = new ClassifierType
+				{
+					Code = Permission.TypeCode,
+					Name = "Permissions",
+					HierarchyType = HierarchyType.Groups,
+					IsSystem = true
+				},
+				Fields = ClassifierMetadata.GetDefaultFields().ToList()
+			};
 		}
 	}
 }

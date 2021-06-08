@@ -14,8 +14,6 @@ namespace Montr.Messages.Impl
 	{
 		public void ConfigureServices(IConfiguration configuration, IServiceCollection services)
 		{
-			services.AddTransient<IStartupTask, RegisterClassifierTypeStartupTask>();
-
 			services.AddNamedTransient<IClassifierRepository, DbMessageTemplateRepository>(MessageTemplate.TypeCode);
 
 			services.AddSingleton<IEmailSender, MailKitEmailSender>();

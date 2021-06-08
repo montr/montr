@@ -7,7 +7,7 @@ using Montr.MasterData.Models;
 using Montr.MasterData.Services;
 using Montr.Metadata.Models;
 
-namespace Montr.Docs.Impl.Services
+namespace Montr.Docs.Services
 {
 	public class RegisterClassifierTypeStartupTask : IStartupTask
 	{
@@ -33,8 +33,7 @@ namespace Montr.Docs.Impl.Services
 				Item = new ClassifierType
 				{
 					Code = "questionnaire",
-					Name = "Questionnaire",
-					Description = "Анкеты",
+					Name = "Questionnaires",
 					HierarchyType = HierarchyType.Groups,
 					IsSystem = true
 				},
@@ -50,8 +49,7 @@ namespace Montr.Docs.Impl.Services
 				Item = new ClassifierType
 				{
 					Code = "process",
-					Name = "Process",
-					Description = "Процессы",
+					Name = "Processes",
 					HierarchyType = HierarchyType.Groups,
 					IsSystem = true
 				},

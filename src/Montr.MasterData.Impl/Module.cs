@@ -17,7 +17,6 @@ namespace Montr.MasterData.Impl
 	{
 		public void ConfigureServices(IConfiguration configuration, IServiceCollection services)
 		{
-			services.AddTransient<IStartupTask, RegisterClassifierTypeStartupTask>();
 			services.AddSingleton<IStartupTask, ClassifierJsonOptionsInitializer>();
 
 			services.AddSingleton<IContentProvider, ContentProvider>();
