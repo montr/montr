@@ -114,6 +114,7 @@ namespace Host
 			}
 		}
 
+		// ReSharper disable once UnusedMember.Global
 		public void Configure(IApplicationBuilder app, IHostApplicationLifetime appLifetime)
 		{
 			appLifetime.ApplicationStarted.Register(async () =>

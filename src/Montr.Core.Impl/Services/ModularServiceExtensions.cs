@@ -55,11 +55,13 @@ namespace Montr.Core.Impl.Services
 		{
 			using (var scope = services.CreateScope())
 			{
+				// todo: IStartupTask of modules should be run right after modules -
+				// - so either modules or startup tasks should left, remove other
 				foreach (var module in scope.ServiceProvider.GetServices<IModule>())
 				{
 					if (module is IStartupTask startupTask)
 					{
-						logger.LogInformation("Running {module} startup task", module);
+						logger.LogInformation("Running startup module {module}", module);
 
 						await startupTask.Run(cancellationToken);
 					}
@@ -69,7 +71,7 @@ namespace Montr.Core.Impl.Services
 				// fixme: startup tasks already ordered, because they are registered in ordered modules
 				foreach (var task in scope.ServiceProvider.GetServices<IStartupTask>())
 				{
-					logger.LogInformation("Running {task} startup task", task);
+					logger.LogInformation("Running startup task {task}", task);
 
 					await task.Run(cancellationToken);
 				}
