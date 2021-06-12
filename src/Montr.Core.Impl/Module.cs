@@ -32,6 +32,8 @@ namespace Montr.Core.Impl
 
 			services.AddSingleton<IPermissionResolver, DefaultPermissionResolver>();
 			services.AddSingleton<IAuthorizationPolicyProvider, AuthorizationPolicyProvider>();
+
+			services.AddTransient<IRecipeExecutor, DefaultRecipeExecutor>();
 		}
 	}
 }
