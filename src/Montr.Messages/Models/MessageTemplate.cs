@@ -35,8 +35,8 @@ namespace Montr.Messages.Models
 				},
 				Fields = new List<FieldMetadata>
 				{
-					new TextField { Key = "code", Name = "Code", Required = true, Active = true, DisplayOrder = 10, System = true },
-					new TextAreaField { Key = "name", Name = "Name", Required = true, Active = true, DisplayOrder = 20, System = true, Props = new TextAreaField.Properties { Rows = 5 } },
+					new TextField { Key = "code", Name = "Code", Required = true, DisplayOrder = 10, System = true },
+					new TextAreaField { Key = "name", Name = "Name", Required = true, DisplayOrder = 20, System = true, Props = new TextAreaField.Properties { Rows = 5 } },
 					new TextField { Key = "subject", Name = "Subject", DisplayOrder = 30, System = true },
 					// todo: make markdown/html editor control
 					new TextAreaField { Key = "body", Name = "Body", DisplayOrder = 40, System = true, Props = new TextAreaField.Properties { Rows = 40 } }

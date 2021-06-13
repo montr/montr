@@ -5,6 +5,11 @@ namespace Montr.Metadata.Models
 {
 	public abstract class FieldMetadata
 	{
+		protected FieldMetadata()
+		{
+			Active = true;
+		}
+
 		public abstract string Type { get; }
 
 		public Guid? Uid { get; set; }

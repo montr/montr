@@ -1,0 +1,19 @@
+{
+	"Steps": [
+	  {
+		"Name": "RegisterClassifierType",
+		"Item": {
+		  "Code": "message_template",
+		  "Name": "Message templates",
+		  "HierarchyType": "Groups",
+		  "IsSystem": true
+		},
+		"Fields": [
+		  { "Type": "text", "Key": "code", "Name": "Code", "Required": true, "System": true },
+		  { "Type": "textarea", "Key": "name", "Name": "Name", "Required": true, "System": true, "Props": { "Rows": 5 } },
+		  { "Type": "text", "Key": "subject", "Name": "Subject", "System": true },
+		  { "Type": "textarea", "Key": "body", "Name": "Body", "System": true, "Props": { "Rows": 20 } }
+		]
+	  }
+  ]
+}
