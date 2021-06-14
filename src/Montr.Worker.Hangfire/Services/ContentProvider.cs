@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Montr.Core.Models;
 using Montr.Core.Services;
+using Montr.Worker.Permissions;
 
 namespace Montr.Worker.Hangfire.Services
 {
@@ -12,7 +13,11 @@ namespace Montr.Worker.Hangfire.Services
 			{
 				return new[]
 				{
-					new Menu { Id = "hangfire", Name = "Hangfire Dashboard", Url = "/hangfire/" }
+					new Menu
+					{
+						Id = "hangfire", Name = "Hangfire Dashboard", Url = "/hangfire/",
+						Permission = Permission.GetCode(typeof(ViewDashboard))
+					}
 				};
 			}
 

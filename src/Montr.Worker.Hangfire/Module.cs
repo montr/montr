@@ -4,10 +4,12 @@ using Hangfire;
 using Hangfire.Common;
 using Hangfire.Dashboard;
 using Hangfire.PostgreSql;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Montr.Core;
+using Montr.Core.Models;
 using Montr.Core.Services;
 using Montr.Worker.Hangfire.Services;
 using Montr.Worker.Services;
@@ -41,7 +43,7 @@ namespace Montr.Worker.Hangfire
 
 			app.UseHangfireDashboard(options: new DashboardOptions
 			{
-				AppPath = "/dashboard",
+				AppPath = ClientRoutes.Dashboard,
 				Authorization = new [] { new DashboardAuthorizationFilter() },
 				// IsReadOnlyFunc = (context) => true,
 				DisplayNameFunc = FormatJobName
@@ -64,15 +66,18 @@ namespace Montr.Worker.Hangfire
 			return result.ToString();
 		}
 
-		// todo: replace with real auth with permissions
 		public class DashboardAuthorizationFilter : IDashboardAuthorizationFilter
 		{
 			public bool Authorize(DashboardContext context)
 			{
 				var httpContext = context.GetHttpContext();
 
-				// Allow all authenticated users to see the Dashboard (potentially dangerous).
-				return httpContext?.User.Identity?.IsAuthenticated == true;
+				var authorizationService = httpContext.RequestServices.GetService<IAuthorizationService>();
+
+				var authResult = authorizationService.AuthorizePermission(httpContext.User,
+					Permission.GetCode(typeof(Permissions.ViewDashboard))).ConfigureAwait(false).GetAwaiter().GetResult();
+
+				return authResult?.Succeeded == true;
 			}
 		}
 	}

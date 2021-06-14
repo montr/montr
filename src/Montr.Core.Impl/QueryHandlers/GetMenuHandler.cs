@@ -58,8 +58,7 @@ namespace Montr.Core.Impl.QueryHandlers
 		{
 			if (item?.Permission == null) return null;
 
-			var authResult = await _authorizationService.AuthorizeAsync(
-				principal, null, new[] { new PermissionRequirement(item.Permission) });
+			var authResult = await _authorizationService.AuthorizePermission(principal, item.Permission);
 
 			return authResult.Succeeded;
 		}
