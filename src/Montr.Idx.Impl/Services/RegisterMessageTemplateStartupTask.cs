@@ -32,6 +32,9 @@ namespace Montr.Idx.Impl.Services
 			yield return new MessageTemplate
 			{
 				Uid = EmailConfirmationService.TemplateUid,
+				Code = MessageTemplateCodes.EmailConfirmation,
+				Name = "Email confirmation",
+				IsSystem = true,
 				Subject = "📧 Confirm your email",
 				Body = @"
 ### Hello!
@@ -43,7 +46,10 @@ Please confirm your account by clicking here <{{CallbackUrl}}>.
 			yield return new MessageTemplate
 			{
 				Uid = ForgotPasswordHandler.TemplateUid,
-				Subject = "❗ Reset Password",
+				Code = MessageTemplateCodes.PasswordReset,
+				Name = "Password reset",
+				IsSystem = true,
+				Subject = "❗ Reset password",
 				Body = @"
 ### Hello!
 

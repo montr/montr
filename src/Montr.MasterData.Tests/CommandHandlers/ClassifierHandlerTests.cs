@@ -142,7 +142,7 @@ namespace Montr.MasterData.Tests.CommandHandlers
 
 			using (var _ = unitOfWorkFactory.Create())
 			{
-				// arrange
+				// arrange - 1st item
 				await generator.InsertType(HierarchyType.None, cancellationToken);
 
 				var command = new InsertClassifier
@@ -164,6 +164,9 @@ namespace Montr.MasterData.Tests.CommandHandlers
 				Assert.IsTrue(result.Success);
 				Assert.IsNotNull(result.Uid);
 				Assert.AreNotEqual(Guid.Empty, result.Uid);
+
+				// arrange - 2nd item
+				command.Item.Uid = Guid.NewGuid();
 
 				// act
 				result = await handler.Handle(command, cancellationToken);

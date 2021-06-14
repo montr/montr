@@ -77,7 +77,7 @@ namespace Montr.Messages.Impl.Services
 
 				await db.GetTable<DbMessageTemplate>()
 					.Value(x => x.Uid, item.Uid)
-					.Value(x => x.Subject, template.StatusCode)
+					.Value(x => x.Subject, template.Subject)
 					.Value(x => x.Body, template.Body)
 					.InsertAsync(cancellationToken);
 			}

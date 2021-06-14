@@ -5,6 +5,7 @@ using Montr.Core.Services;
 using Montr.Messages.Models;
 using Montr.Messages.Services;
 using Montr.Tendr.Impl.CommandHandlers;
+using Montr.Tendr.Models;
 
 namespace Montr.Tendr.Impl.Services
 {
@@ -30,6 +31,9 @@ namespace Montr.Tendr.Impl.Services
 			yield return new MessageTemplate
 			{
 				Uid = SendInvitationsHandler.TemplateUid,
+				Code = MessageTemplateCodes.EventInvitation,
+				Name = "Event invitation",
+				IsSystem = true,
 				Subject = "🔥 Персональное приглашение на Запрос предложений № {{EventNo}}",
 				Body = @"
 ![](https://dev.montr.net/favicon.ico)

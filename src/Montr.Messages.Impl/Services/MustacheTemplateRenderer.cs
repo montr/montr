@@ -36,10 +36,10 @@ namespace Montr.Messages.Impl.Services
 		{
 			var stubble = new StubbleBuilder().Build();
 
-			var renderedSubject = await stubble.RenderAsync(subject, data);
-			var renderedBody = await stubble.RenderAsync(body, data);
+			var renderedSubject = subject != null ? await stubble.RenderAsync(subject, data) : null;
+			var renderedBody = body != null ? await stubble.RenderAsync(body, data) : null;
 
-			var renderedHtmlBody = Markdig.Markdown.ToHtml(renderedBody);
+			var renderedHtmlBody = renderedBody != null ? Markdig.Markdown.ToHtml(renderedBody) : null;
 
 			return new Message
 			{

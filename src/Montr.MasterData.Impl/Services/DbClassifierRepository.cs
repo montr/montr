@@ -251,7 +251,7 @@ namespace Montr.MasterData.Impl.Services
 		{
 			var type = await _classifierTypeService.Get(item.Type, cancellationToken);
 
-			item.Uid = Guid.NewGuid();
+			item.Uid ??= Guid.NewGuid();
 
 			// todo: validate fields
 			// todo: move to ClassifierValidator (?)
