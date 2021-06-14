@@ -97,8 +97,8 @@ namespace Montr.MasterData.Services
 			{
 				Columns = new List<DataColumn>
 				{
-					new() { Key = "code", Name = "Код", Sortable = true, Width = 10, UrlProperty = "url" },
 					new() { Key = "name", Name = "Наименование", Sortable = true, Width = 400, UrlProperty = "url" },
+					new() { Key = "code", Name = "Код", Sortable = true, Width = 10, UrlProperty = "url" },
 					new() { Key = "statusCode", Name = "Статус", Sortable = true, Width = 30 },
 				}
 			});

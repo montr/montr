@@ -29,13 +29,8 @@ namespace Montr.Docs.Impl.Services
 
 		public async Task Create(Document document, CancellationToken cancellationToken)
 		{
-			if (document.Uid == Guid.Empty)
-				document.Uid = Guid.NewGuid();
-
-			if (document.StatusCode == null)
-			{
-				document.StatusCode = DocumentStatusCode.Draft;
-			}
+			document.Uid ??= Guid.NewGuid();
+			document.StatusCode ??= DocumentStatusCode.Draft;
 
 			using (var db = _dbContextFactory.Create())
 			{
@@ -51,19 +46,18 @@ namespace Montr.Docs.Impl.Services
 					.InsertAsync(cancellationToken);
 			}
 
-			if (document.StatusCode != DocumentStatusCode.Draft)
+			/*if (document.StatusCode != DocumentStatusCode.Draft)
 			{
 				await _mediator.Publish(new EntityStatusChanged<Document>
 				{
 					Entity = document,
 					StatusCode = DocumentStatusCode.Draft
 				}, cancellationToken);
-			}
+			}*/
 
-			// todo: generate number, on publish(?)
 			if (document.StatusCode == DocumentStatusCode.Published)
 			{
-				document.DocumentNumber = await _numberGenerator
+				var documentNumber = await _numberGenerator
 					.GenerateNumber(new GenerateNumberRequest
 					{
 						EntityTypeCode = DocumentType.EntityTypeCode,
@@ -71,12 +65,17 @@ namespace Montr.Docs.Impl.Services
 						EntityUid = document.Uid
 					}, cancellationToken);
 
-				using (var db = _dbContextFactory.Create())
+				if (documentNumber != null)
 				{
-					await db.GetTable<DbDocument>()
-						.Where(x => x.Uid == document.Uid)
-						.Set(x => x.DocumentNumber, document.DocumentNumber)
-						.UpdateAsync(cancellationToken);
+					document.DocumentNumber = documentNumber;
+
+					using (var db = _dbContextFactory.Create())
+					{
+						await db.GetTable<DbDocument>()
+							.Where(x => x.Uid == document.Uid)
+							.Set(x => x.DocumentNumber, documentNumber)
+							.UpdateAsync(cancellationToken);
+					}
 				}
 			}
 

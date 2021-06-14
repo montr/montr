@@ -50,24 +50,26 @@ namespace Montr.Docs.Impl.Services
 				{
 					foreach (var item in data)
 					{
-						// todo: load metadata once for each document type
-						var metadata = await _fieldMetadataRepository.Search(new MetadataSearchRequest
+						if (item.Uid.HasValue)
 						{
-							EntityTypeCode = DocumentType.EntityTypeCode,
-							EntityUid = item.DocumentTypeUid,
-							IsActive = true,
-							SkipPaging = true
-						}, cancellationToken);
+							// todo: load metadata once for each document type
+							var metadata = await _fieldMetadataRepository.Search(new MetadataSearchRequest
+							{
+								EntityTypeCode = DocumentType.EntityTypeCode,
+								EntityUid = item.DocumentTypeUid,
+								IsActive = true,
+								SkipPaging = true
+							}, cancellationToken);
 
-						var fields = await _fieldDataRepository.Search(new FieldDataSearchRequest
-						{
-							Metadata = metadata.Rows,
-							EntityTypeCode = Document.TypeCode,
-							// ReSharper disable once PossibleInvalidOperationException
-							EntityUids = new[] { item.Uid.Value }
-						}, cancellationToken);
+							var fields = await _fieldDataRepository.Search(new FieldDataSearchRequest
+							{
+								Metadata = metadata.Rows,
+								EntityTypeCode = Document.TypeCode,
+								EntityUids = new[] { item.Uid.Value }
+							}, cancellationToken);
 
-						item.Fields = fields.Rows.SingleOrDefault();
+							item.Fields = fields.Rows.SingleOrDefault();
+						}
 					}
 				}
 
