@@ -10,7 +10,6 @@ using Montr.Core;
 using Montr.Core.Services;
 using Montr.Idx.Impl.Entities;
 using Montr.Idx.Impl.Services;
-using Montr.Idx.Models;
 using Montr.Idx.Services;
 using Montr.MasterData.Services;
 using static OpenIddict.Abstractions.OpenIddictConstants;
@@ -32,8 +31,8 @@ namespace Montr.Idx.Impl
 			services.AddTransient<ISignInManager, DefaultSignInManager>();
 			services.AddTransient<IOidcServer, OpenIddictServer>();
 
-			services.AddNamedTransient<IClassifierRepository, DbRoleRepository>(Role.TypeCode);
-			services.AddNamedTransient<IClassifierRepository, DbUserRepository>(User.TypeCode);
+			services.AddNamedTransient<IClassifierRepository, DbRoleRepository>(ClassifierTypeCode.Role);
+			services.AddNamedTransient<IClassifierRepository, DbUserRepository>(ClassifierTypeCode.User);
 
 			services.AddScoped<IAuthorizationHandler, UserPermissionAuthorizationHandler>();
 			services.AddScoped<IAuthorizationHandler, SuperUserAuthorizationHandler>();

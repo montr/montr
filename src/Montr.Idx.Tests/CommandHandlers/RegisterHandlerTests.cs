@@ -36,7 +36,7 @@ namespace Montr.Idx.Tests.CommandHandlers
 
 			var identityServiceFactory = new IdentityServiceFactory();
 
-			var classifierRepositoryFactoryBuilder = new ClassifierRepositoryFactoryBuilder(dbContextFactory) { UserTypeCode = User.TypeCode };
+			var classifierRepositoryFactoryBuilder = new ClassifierRepositoryFactoryBuilder(dbContextFactory) { UserTypeCode = ClassifierTypeCode.User };
 			var classifierRepositoryFactory = classifierRepositoryFactoryBuilder.Build();
 
 			// todo: test EmailConfirmationService

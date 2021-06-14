@@ -35,7 +35,7 @@ namespace Montr.Docs.Impl.Services
 
 				if (document.CreatedBy != null)
 				{
-					var userRepository = _classifierRepositoryFactory.GetNamedOrDefaultService(User.TypeCode);
+					var userRepository = _classifierRepositoryFactory.GetNamedOrDefaultService(Idx.ClassifierTypeCode.User);
 
 					var searchResult = await userRepository.Search(
 						new UserSearchRequest { UserName = document.CreatedBy }, cancellationToken);

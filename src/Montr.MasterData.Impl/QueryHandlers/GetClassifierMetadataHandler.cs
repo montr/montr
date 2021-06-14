@@ -125,7 +125,7 @@ namespace Montr.MasterData.Impl.QueryHandlers
 					{
 						Key = "numeratorUid",
 						Name = "Нумератор",
-						Props = { TypeCode = Numerator.TypeCode }
+						Props = { TypeCode = ClassifierTypeCode.Numerator }
 					}
 				}
 			};

@@ -40,7 +40,7 @@ namespace Montr.Idx.Services
 			{
 				Item = new ClassifierType
 				{
-					Code = Permission.TypeCode,
+					Code = ClassifierTypeCode.Permission,
 					Name = "Permissions",
 					HierarchyType = HierarchyType.Groups,
 					IsSystem = true

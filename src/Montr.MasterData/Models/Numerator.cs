@@ -11,11 +11,14 @@ namespace Montr.MasterData.Models
 	{
 		private string DebuggerDisplay => $"{Name} - {Pattern}";
 
-		public new static readonly string TypeCode = nameof(Numerator).ToLower();
-
 		public static readonly StringComparer TagComparer = StringComparer.OrdinalIgnoreCase;
 
 		public static readonly string DefaultPattern = "{Number}";
+
+		public Numerator()
+		{
+			Type = ClassifierTypeCode.Numerator;
+		}
 
 		/// <summary>
 		/// DocumentType or ClassifierType
@@ -38,7 +41,7 @@ namespace Montr.MasterData.Models
 			{
 				Item = new ClassifierType
 				{
-					Code = TypeCode,
+					Code = ClassifierTypeCode.Numerator,
 					Name = "Numerators",
 					HierarchyType = HierarchyType.Groups,
 					IsSystem = true

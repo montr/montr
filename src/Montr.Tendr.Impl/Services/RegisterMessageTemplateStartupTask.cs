@@ -31,7 +31,7 @@ namespace Montr.Tendr.Impl.Services
 			yield return new MessageTemplate
 			{
 				Uid = SendInvitationsHandler.TemplateUid,
-				Code = MessageTemplateCodes.EventInvitation,
+				Code = MessageTemplateCode.EventInvitation,
 				Name = "Event invitation",
 				IsSystem = true,
 				Subject = "🔥 Персональное приглашение на Запрос предложений № {{EventNo}}",

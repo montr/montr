@@ -6,11 +6,13 @@ using Microsoft.Extensions.Options;
 using Montr.Core;
 using Montr.Core.Models;
 using Montr.Core.Services;
+using Montr.Idx;
 using Montr.Idx.Models;
 using Montr.Idx.Services;
 using Montr.Kompany.Commands;
 using Montr.Kompany.Models;
 using Montr.MasterData.Services;
+using ClientRoutes = Montr.Core.ClientRoutes;
 
 namespace Montr.Kompany.Impl.CommandHandlers
 {
@@ -72,7 +74,7 @@ namespace Montr.Kompany.Impl.CommandHandlers
 					Email = request.AdminEmail
 				};
 
-				var userRepository = _classifierRepositoryFactory.GetRequiredService(User.TypeCode);
+				var userRepository = _classifierRepositoryFactory.GetRequiredService(ClassifierTypeCode.User);
 
 				var userResult = await userRepository.Insert(user, cancellationToken);
 

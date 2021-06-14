@@ -40,10 +40,10 @@ namespace Montr.MasterData.Tests.Services
 			var classifierRepositoryFactoryMock = new Mock<INamedServiceFactory<IClassifierRepository>>();
 
 			classifierRepositoryFactoryMock
-				.Setup(x => x.GetNamedOrDefaultService(It.Is<string>(name => name == Numerator.TypeCode)))
+				.Setup(x => x.GetNamedOrDefaultService(It.Is<string>(name => name == ClassifierTypeCode.Numerator)))
 				.Returns(() => numeratorRepository);
 			classifierRepositoryFactoryMock
-				.Setup(x => x.GetNamedOrDefaultService(It.Is<string>(name => name != Numerator.TypeCode)))
+				.Setup(x => x.GetNamedOrDefaultService(It.Is<string>(name => name != ClassifierTypeCode.Numerator)))
 				.Returns(() => classifierRepository);
 
 			return classifierRepositoryFactoryMock.Object;

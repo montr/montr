@@ -1,6 +1,6 @@
 ﻿namespace Montr.Tendr
 {
-	public class MessageTemplateCodes
+	public class MessageTemplateCode
 	{
 		public static readonly string EventInvitation = "event_invitation";
 	}

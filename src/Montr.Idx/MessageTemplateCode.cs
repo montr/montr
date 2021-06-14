@@ -1,6 +1,6 @@
 ﻿namespace Montr.Idx
 {
-	public class MessageTemplateCodes
+	public class MessageTemplateCode
 	{
 		public static readonly string EmailConfirmation = "email_confirmation";
 

@@ -41,12 +41,12 @@ namespace Montr.Idx.Impl.Services
 		{
 			cancellationToken.ThrowIfCancellationRequested();
 
-			var repository = _classifierRepositoryFactory.GetNamedOrDefaultService(Permission.TypeCode);
+			var repository = _classifierRepositoryFactory.GetNamedOrDefaultService(ClassifierTypeCode.Permission);
 
 			var existingPermissions =
 				(await repository.Search(new ClassifierSearchRequest
 				{
-					TypeCode = Permission.TypeCode,
+					TypeCode = ClassifierTypeCode.Permission,
 					SkipPaging = true
 				}, cancellationToken)).Rows.ToDictionary(x => x.Code, StringComparer.OrdinalIgnoreCase);
 
@@ -70,7 +70,7 @@ namespace Montr.Idx.Impl.Services
 			{
 				await repository.Insert(new Classifier
 				{
-					Type = Permission.TypeCode,
+					Type = ClassifierTypeCode.Permission,
 					Code = permission.Code,
 					IsSystem = true,
 					StatusCode = ClassifierStatusCode.Active
@@ -82,7 +82,7 @@ namespace Montr.Idx.Impl.Services
 		{
 			cancellationToken.ThrowIfCancellationRequested();
 
-			var repository = _classifierRepositoryFactory.GetNamedOrDefaultService(Role.TypeCode);
+			var repository = _classifierRepositoryFactory.GetNamedOrDefaultService(ClassifierTypeCode.Role);
 
 			foreach (var provider in _permissionProviders)
 			{
@@ -94,7 +94,7 @@ namespace Montr.Idx.Impl.Services
 					{
 						var result = await repository.Insert(new Role
 						{
-							Type = Role.TypeCode,
+							Type = ClassifierTypeCode.Role,
 							Code = roleTemplate.RoleCode,
 							Name = roleTemplate.RoleCode,
 							IsSystem = true,

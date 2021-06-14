@@ -51,7 +51,7 @@ namespace Montr.Idx.Impl.CommandHandlers
 				Password = request.Password
 			};
 
-			var userRepository = _classifierRepositoryFactory.GetNamedOrDefaultService(User.TypeCode);
+			var userRepository = _classifierRepositoryFactory.GetNamedOrDefaultService(ClassifierTypeCode.User);
 
 			var result = await userRepository.Insert(user, cancellationToken);
 

@@ -24,11 +24,11 @@ namespace Montr.Messages.Impl.Services
 
 		public async Task<ApiResult> Register(MessageTemplate item, CancellationToken cancellationToken)
 		{
-			var repository = _classifierRepositoryFactory.GetNamedOrDefaultService(MessageTemplate.TypeCode);
+			var repository = _classifierRepositoryFactory.GetNamedOrDefaultService(ClassifierTypeCode.MessageTemplate);
 
 			// todo: use codes (?)
 			var template = item.Uid.HasValue
-				? (MessageTemplate)await repository.Get(MessageTemplate.TypeCode, item.Uid.Value, cancellationToken)
+				? (MessageTemplate)await repository.Get(ClassifierTypeCode.MessageTemplate, item.Uid.Value, cancellationToken)
 				: null;
 
 			if (template != null)

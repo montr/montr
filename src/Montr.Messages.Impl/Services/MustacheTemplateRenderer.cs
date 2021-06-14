@@ -20,9 +20,9 @@ namespace Montr.Messages.Impl.Services
 
 		public async Task<Message> Render<TModel>(Guid templateUid, TModel data, CancellationToken cancellationToken)
 		{
-			var repository = _classifierRepositoryFactory.GetNamedOrDefaultService(MessageTemplate.TypeCode);
+			var repository = _classifierRepositoryFactory.GetNamedOrDefaultService(ClassifierTypeCode.MessageTemplate);
 
-			var template = (MessageTemplate)await repository.Get(MessageTemplate.TypeCode, templateUid, cancellationToken);
+			var template = (MessageTemplate)await repository.Get(ClassifierTypeCode.MessageTemplate, templateUid, cancellationToken);
 
 			if (template == null)
 			{

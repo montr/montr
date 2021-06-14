@@ -1,22 +1,18 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using System.Linq;
 using Montr.MasterData.Commands;
 using Montr.MasterData.Models;
-using Montr.Metadata.Models;
 
 namespace Montr.Idx.Models
 {
 	[DebuggerDisplay("{" + nameof(DebuggerDisplay) + ",nq}")]
 	public class Role : Classifier
 	{
-		public new static readonly string TypeCode = nameof(Role).ToLower();
-
 		private string DebuggerDisplay => $"{Name}";
 
 		public Role()
 		{
-			Type = TypeCode;
+			Type = ClassifierTypeCode.Role;
 		}
 
 		public string ConcurrencyStamp { get; set; }
@@ -27,7 +23,7 @@ namespace Montr.Idx.Models
 			{
 				Item = new ClassifierType
 				{
-					Code = TypeCode,
+					Code = ClassifierTypeCode.Role,
 					Name = "Roles",
 					HierarchyType = HierarchyType.Groups,
 					IsSystem = true

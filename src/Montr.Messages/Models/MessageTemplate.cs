@@ -9,11 +9,9 @@ namespace Montr.Messages.Models
 	[DebuggerDisplay("{" + nameof(DebuggerDisplay) + ",nq}")]
 	public class MessageTemplate : Classifier
 	{
-		public new static readonly string TypeCode = "message_template";
-
 		public MessageTemplate()
 		{
-			Type = TypeCode;
+			Type = ClassifierTypeCode.MessageTemplate;
 		}
 
 		private string DebuggerDisplay => $"{Code}";
@@ -28,7 +26,7 @@ namespace Montr.Messages.Models
 			{
 				Item = new ClassifierType
 				{
-					Code = TypeCode,
+					Code = ClassifierTypeCode.MessageTemplate,
 					Name = "Message templates",
 					HierarchyType = HierarchyType.Groups,
 					IsSystem = true

@@ -4,7 +4,6 @@ using Montr.Core;
 using Montr.Core.Services;
 using Montr.MasterData.Services;
 using Montr.Messages.Impl.Services;
-using Montr.Messages.Models;
 using Montr.Messages.Services;
 
 namespace Montr.Messages.Impl
@@ -14,7 +13,7 @@ namespace Montr.Messages.Impl
 	{
 		public void ConfigureServices(IConfiguration configuration, IServiceCollection services)
 		{
-			services.AddNamedTransient<IClassifierRepository, DbMessageTemplateRepository>(MessageTemplate.TypeCode);
+			services.AddNamedTransient<IClassifierRepository, DbMessageTemplateRepository>(ClassifierTypeCode.MessageTemplate);
 
 			services.AddSingleton<IEmailSender, MailKitEmailSender>();
 			services.AddSingleton<ITemplateRenderer, MustacheTemplateRenderer>();

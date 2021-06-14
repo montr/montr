@@ -9,13 +9,11 @@ namespace Montr.Idx.Models
 	[DebuggerDisplay("{" + nameof(DebuggerDisplay) + ",nq}")]
 	public class User : Classifier
 	{
-		public new static readonly string TypeCode = nameof(User).ToLower();
-
 		private string DebuggerDisplay => $"{UserName}";
 
 		public User()
 		{
-			Type = TypeCode;
+			Type = ClassifierTypeCode.User;
 		}
 
 		public string UserName { get; set; }
@@ -38,7 +36,7 @@ namespace Montr.Idx.Models
 			{
 				Item = new ClassifierType
 				{
-					Code = TypeCode,
+					Code = ClassifierTypeCode.User,
 					Name = "Users",
 					HierarchyType = HierarchyType.Groups,
 					IsSystem = true

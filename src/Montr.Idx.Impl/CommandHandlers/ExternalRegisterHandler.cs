@@ -55,7 +55,7 @@ namespace Montr.Idx.Impl.CommandHandlers
 				Email = request.Email
 			};
 
-			var userRepository = _classifierRepositoryFactory.GetNamedOrDefaultService(User.TypeCode);
+			var userRepository = _classifierRepositoryFactory.GetNamedOrDefaultService(ClassifierTypeCode.User);
 
 			var result = await userRepository.Insert(user, cancellationToken);
 

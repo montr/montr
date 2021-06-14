@@ -18,6 +18,7 @@ using Montr.Docs.Models;
 using Montr.Kompany.Commands;
 using Montr.Kompany.Impl.CommandHandlers;
 using Montr.Kompany.Models;
+using Montr.MasterData;
 using Montr.MasterData.Impl.Services;
 using Montr.MasterData.Models;
 using Montr.MasterData.Services;
@@ -53,10 +54,10 @@ namespace Montr.Kompany.Tests.CommandHandlers
 			var classifierRepositoryFactoryMock = new Mock<INamedServiceFactory<IClassifierRepository>>();
 
 			classifierRepositoryFactoryMock
-				.Setup(x => x.GetNamedOrDefaultService(It.Is<string>(name => name == Numerator.TypeCode)))
+				.Setup(x => x.GetNamedOrDefaultService(It.Is<string>(name => name == ClassifierTypeCode.Numerator)))
 				.Returns(() => numeratorRepository);
 			classifierRepositoryFactoryMock
-				.Setup(x => x.GetNamedOrDefaultService(It.Is<string>(name => name != Numerator.TypeCode)))
+				.Setup(x => x.GetNamedOrDefaultService(It.Is<string>(name => name != ClassifierTypeCode.Numerator)))
 				.Returns(() => classifierRepository);
 
 			return classifierRepositoryFactoryMock.Object;

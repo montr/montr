@@ -32,7 +32,7 @@ namespace Montr.Docs.Services
 			{
 				Item = new ClassifierType
 				{
-					Code = "questionnaire",
+					Code = ClassifierTypeCode.Questionnaire,
 					Name = "Questionnaires",
 					HierarchyType = HierarchyType.Groups,
 					IsSystem = true
