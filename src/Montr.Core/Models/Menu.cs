@@ -19,6 +19,20 @@ namespace Montr.Core.Models
 		public string Permission { get; set; }
 
 		public IList<Menu> Items { get; set; }
+
+		public Menu Clone()
+		{
+			return new Menu()
+			{
+				Id = Id,
+				Name = Name,
+				Icon = Icon,
+				Position = Position,
+				Url = Url,
+				Route = Route,
+				Permission = Permission
+			};
+		}
 	}
 
 	public class MenuCode

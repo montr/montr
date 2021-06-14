@@ -40,9 +40,11 @@ namespace Montr.Core.Impl.QueryHandlers
 				{
 					if (await Authorize(item, principal) != false)
 					{
-						result.Add(item);
+						var authorizedItem = item.Clone();
 
-						item.Items = await GetAuthorizedItems(item.Items, principal);
+						result.Add(authorizedItem);
+
+						authorizedItem.Items = await GetAuthorizedItems(item.Items, principal);
 					}
 				}
 
