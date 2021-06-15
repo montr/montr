@@ -34,7 +34,7 @@ namespace Montr.Kompany.Impl.QueryHandlers
 			var metadata = await _metadataRepository.Search(new MetadataSearchRequest
 			{
 				EntityTypeCode = DocumentType.EntityTypeCode,
-				EntityUid = documentType.Uid,
+				EntityUid = documentType.Uid.Value,
 				IsActive = true,
 				SkipPaging = true
 			}, cancellationToken);

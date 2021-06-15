@@ -57,7 +57,6 @@ namespace Montr.Docs.Impl.Services
 				Uid = x.Uid,
 				Code = x.Code,
 				Name = x.Name,
-				Description = x.Description,
 				Url = "/documentTypes/view/" + x.Uid
 			}).ToListAsync(cancellationToken);
 		}

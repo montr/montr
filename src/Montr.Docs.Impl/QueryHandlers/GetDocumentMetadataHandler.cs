@@ -35,7 +35,7 @@ namespace Montr.Docs.Impl.QueryHandlers
 
 				var type = await _documentTypeService.Get(typeCode, cancellationToken);
 
-				documentTypeUid = type.Uid;
+				documentTypeUid = type.Uid.Value;
 			}
 			else
 			{

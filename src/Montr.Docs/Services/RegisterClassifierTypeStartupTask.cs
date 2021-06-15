@@ -32,15 +32,15 @@ namespace Montr.Docs.Services
 			{
 				Item = new ClassifierType
 				{
-					Code = ClassifierTypeCode.Questionnaire,
-					Name = "Questionnaires",
+					Code = ClassifierTypeCode.DocumentType,
+					Name = "Document types",
 					HierarchyType = HierarchyType.Groups,
 					IsSystem = true
 				},
 				Fields = new List<FieldMetadata>
 				{
-					new TextField { Key = "code", Name = "Код", Required = true, Active = true, DisplayOrder = 10, System = true },
-					new TextAreaField { Key = "name", Name = "Наименование", Required = true, Active = true, DisplayOrder = 20, System = true, Props = new TextAreaField.Properties { Rows = 10 } },
+					new TextField { Key = "code", Name = "Код", Required = true, DisplayOrder = 10, System = true },
+					new TextAreaField { Key = "name", Name = "Наименование", Required = true, DisplayOrder = 20, System = true, Props = new TextAreaField.Properties { Rows = 2 } },
 				}
 			};
 
@@ -48,15 +48,31 @@ namespace Montr.Docs.Services
 			{
 				Item = new ClassifierType
 				{
-					Code = "process",
+					Code = ClassifierTypeCode.Questionnaire,
+					Name = "Questionnaires",
+					HierarchyType = HierarchyType.Groups,
+					IsSystem = true
+				},
+				Fields = new List<FieldMetadata>
+				{
+					new TextField { Key = "code", Name = "Код", Required = true, DisplayOrder = 10, System = true },
+					new TextAreaField { Key = "name", Name = "Наименование", Required = true, DisplayOrder = 20, System = true, Props = new TextAreaField.Properties { Rows = 2 } },
+				}
+			};
+
+			yield return new RegisterClassifierType
+			{
+				Item = new ClassifierType
+				{
+					Code = ClassifierTypeCode.Process,
 					Name = "Processes",
 					HierarchyType = HierarchyType.Groups,
 					IsSystem = true
 				},
 				Fields = new List<FieldMetadata>
 				{
-					new TextField { Key = "code", Name = "Код", Required = true, Active = true, DisplayOrder = 10, System = true },
-					new TextAreaField { Key = "name", Name = "Наименование", Required = true, Active = true, DisplayOrder = 20, System = true, Props = new TextAreaField.Properties { Rows = 10 } },
+					new TextField { Key = "code", Name = "Код", Required = true, DisplayOrder = 10, System = true },
+					new TextAreaField { Key = "name", Name = "Наименование", Required = true, DisplayOrder = 20, System = true, Props = new TextAreaField.Properties { Rows = 2 } },
 				}
 			};
 		}

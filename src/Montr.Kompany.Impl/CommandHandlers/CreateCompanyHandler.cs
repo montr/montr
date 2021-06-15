@@ -62,7 +62,7 @@ namespace Montr.Kompany.Impl.CommandHandlers
 			var metadata = await _fieldMetadataRepository.Search(new MetadataSearchRequest
 			{
 				EntityTypeCode = DocumentType.EntityTypeCode,
-				EntityUid = documentType.Uid,
+				EntityUid = documentType.Uid.Value,
 				// todo: check flags
 				// IsSystem = false,
 				IsActive = true,
@@ -113,7 +113,7 @@ namespace Montr.Kompany.Impl.CommandHandlers
 				var document = new Document
 				{
 					Uid = documentUid,
-					DocumentTypeUid = documentType.Uid,
+					DocumentTypeUid = documentType.Uid.Value,
 					CompanyUid = companyUid,
 					StatusCode = DocumentStatusCode.Published,
 					Direction = DocumentDirection.Outgoing,
@@ -138,7 +138,7 @@ namespace Montr.Kompany.Impl.CommandHandlers
 				_jobManager.Enqueue<ISender>(x => x.Send(new RunAutomations
 				{
 					EntityTypeCode = DocumentType.EntityTypeCode,
-					EntityTypeUid = documentType.Uid,
+					EntityTypeUid = documentType.Uid.Value,
 					EntityUid = documentUid
 				}, cancellationToken));
 
