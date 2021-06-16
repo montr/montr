@@ -1,5 +1,4 @@
-﻿using System;
-using System.Text;
+﻿using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
@@ -21,8 +20,6 @@ namespace Montr.Idx.Impl.Services
 
 	public class EmailConfirmationService : IEmailConfirmationService
 	{
-		public static readonly Guid TemplateUid = Guid.Parse("CEEF2983-C083-448F-88B1-2DA6E6CB41A4");
-
 		private readonly UserManager<DbUser> _userManager;
 		private readonly IAppUrlBuilder _appUrlBuilder;
 		private readonly IEmailSender _emailSender;
@@ -51,7 +48,7 @@ namespace Montr.Idx.Impl.Services
 				CallbackUrl = _appUrlBuilder.Build($"{ClientRoutes.ConfirmEmail}/{user.Id}/{code}")
 			};
 
-			var message = await _templateRenderer.Render(TemplateUid, messageModel, cancellationToken);
+			var message = await _templateRenderer.Render(MessageTemplateCode.EmailConfirmation, messageModel, cancellationToken);
 
 			await _emailSender.Send(user.Email, message.Subject, message.Body, cancellationToken);
 		}
@@ -67,7 +64,7 @@ namespace Montr.Idx.Impl.Services
 				CallbackUrl = _appUrlBuilder.Build($"{ClientRoutes.ConfirmEmailChange}/{user.Id}/{newEmail}/{code}")
 			};
 
-			var message = await _templateRenderer.Render(TemplateUid, messageModel, cancellationToken);
+			var message = await _templateRenderer.Render(MessageTemplateCode.EmailConfirmation, messageModel, cancellationToken);
 
 			await _emailSender.Send(newEmail, message.Subject, message.Body, cancellationToken);
 		}

@@ -11,6 +11,7 @@
 	<ItemGroup>
 	  <ProjectReference Include="..\Montr.Core\Montr.Core.csproj" />
 	  <ProjectReference Include="..\Montr.MasterData\Montr.MasterData.csproj" />
+	  <ProjectReference Include="..\Montr.Messages\Montr.Messages.csproj" />
 	</ItemGroup>
 
 </Project>

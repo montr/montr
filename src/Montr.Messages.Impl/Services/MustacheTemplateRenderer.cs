@@ -18,15 +18,15 @@ namespace Montr.Messages.Impl.Services
 			_classifierRepositoryFactory = classifierRepositoryFactory;
 		}
 
-		public async Task<Message> Render<TModel>(Guid templateUid, TModel data, CancellationToken cancellationToken)
+		public async Task<Message> Render<TModel>(string templateCode, TModel data, CancellationToken cancellationToken)
 		{
 			var repository = _classifierRepositoryFactory.GetNamedOrDefaultService(ClassifierTypeCode.MessageTemplate);
 
-			var template = (MessageTemplate)await repository.Get(ClassifierTypeCode.MessageTemplate, templateUid, cancellationToken);
+			var template = (MessageTemplate)await repository.Get(ClassifierTypeCode.MessageTemplate, templateCode, cancellationToken);
 
 			if (template == null)
 			{
-				throw new InvalidOperationException($"Template {templateUid} not found.");
+				throw new InvalidOperationException($"Template {templateCode} not found.");
 			}
 
 			return await Render(template.Subject, template.Body, data, cancellationToken);

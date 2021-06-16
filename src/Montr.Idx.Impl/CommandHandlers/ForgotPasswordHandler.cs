@@ -1,5 +1,4 @@
-﻿using System;
-using System.Text;
+﻿using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
@@ -17,8 +16,6 @@ namespace Montr.Idx.Impl.CommandHandlers
 {
 	public class ForgotPasswordHandler : IRequestHandler<ForgotPassword, ApiResult>
 	{
-		public static readonly Guid TemplateUid = Guid.Parse("34ED7F4F-7C6F-44A4-8FA6-2C6F38AB69E0");
-
 		private readonly ILogger<ForgotPasswordHandler> _logger;
 		private readonly UserManager<DbUser> _userManager;
 		private readonly IAppUrlBuilder _appUrlBuilder;
@@ -54,7 +51,7 @@ namespace Montr.Idx.Impl.CommandHandlers
 					CallbackUrl = _appUrlBuilder.Build($"{ClientRoutes.ResetPassword}/{code}")
 				};
 
-				var message = await _templateRenderer.Render(TemplateUid, messageModel, cancellationToken);
+				var message = await _templateRenderer.Render(MessageTemplateCode.PasswordReset, messageModel, cancellationToken);
 
 				await _emailSender.Send(user.Email, message.Subject, message.Body, cancellationToken);
 			}

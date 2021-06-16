@@ -2,11 +2,10 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Montr.Core.Services;
-using Montr.Idx.Impl.CommandHandlers;
 using Montr.MasterData.Services;
 using Montr.Messages.Models;
 
-namespace Montr.Idx.Impl.Services
+namespace Montr.Idx.Services
 {
 	public class RegisterMessageTemplateStartupTask : IStartupTask
 	{
@@ -31,7 +30,6 @@ namespace Montr.Idx.Impl.Services
 		{
 			yield return new MessageTemplate
 			{
-				Uid = EmailConfirmationService.TemplateUid, // todo: remove
 				Code = MessageTemplateCode.EmailConfirmation,
 				Name = "Email confirmation",
 				IsSystem = true,
@@ -45,7 +43,6 @@ Please confirm your account by clicking here <{{CallbackUrl}}>.
 
 			yield return new MessageTemplate
 			{
-				Uid = ForgotPasswordHandler.TemplateUid, // todo: remove
 				Code = MessageTemplateCode.PasswordReset,
 				Name = "Password reset",
 				IsSystem = true,

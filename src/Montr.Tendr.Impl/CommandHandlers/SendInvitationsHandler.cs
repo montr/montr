@@ -19,9 +19,6 @@ namespace Montr.Tendr.Impl.CommandHandlers
 {
 	public class SendInvitationsHandler : IRequestHandler<SendInvitations, ApiResult>
 	{
-		// todo: remove hardcoded template uids
-		public static readonly Guid TemplateUid = Guid.Parse("4d3c920c-abfc-4f21-b900-6afb894413dd");
-
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IDbContextFactory _dbContextFactory;
 		private readonly IAppUrlBuilder _appUrlBuilder;
@@ -71,7 +68,7 @@ namespace Montr.Tendr.Impl.CommandHandlers
 			// todo: use transaction
 			foreach (var invitation in invitations)
 			{
-				var message = await _templateRenderer.Render(TemplateUid, invitation, cancellationToken);
+				var message = await _templateRenderer.Render(MessageTemplateCode.EventInvitation, invitation, cancellationToken);
 
 				// todo: send as separate task
 				await _emailSender.Send(invitation.Email, message.Subject, message.Body, cancellationToken);

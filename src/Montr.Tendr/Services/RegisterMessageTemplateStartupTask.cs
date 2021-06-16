@@ -4,9 +4,8 @@ using System.Threading.Tasks;
 using Montr.Core.Services;
 using Montr.MasterData.Services;
 using Montr.Messages.Models;
-using Montr.Tendr.Impl.CommandHandlers;
 
-namespace Montr.Tendr.Impl.Services
+namespace Montr.Tendr.Services
 {
 	public class RegisterMessageTemplateStartupTask : IStartupTask
 	{
@@ -29,7 +28,6 @@ namespace Montr.Tendr.Impl.Services
 		{
 			yield return new MessageTemplate
 			{
-				Uid = SendInvitationsHandler.TemplateUid, // todo: remove
 				Code = MessageTemplateCode.EventInvitation,
 				Name = "Event invitation",
 				IsSystem = true,

@@ -11,8 +11,6 @@ namespace Montr.Tendr.Impl
 	{
 		public void ConfigureServices(IConfiguration configuration, IServiceCollection services)
 		{
-			services.AddTransient<IStartupTask, RegisterMessageTemplateStartupTask>();
-
 			services.AddSingleton<IContentProvider, ContentProvider>();
 		}
 	}

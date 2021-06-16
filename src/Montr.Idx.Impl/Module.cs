@@ -21,7 +21,6 @@ namespace Montr.Idx.Impl
 	{
 		public void ConfigureServices(IConfiguration configuration, IServiceCollection services)
 		{
-			services.AddTransient<IStartupTask, RegisterMessageTemplateStartupTask>();
 			services.AddTransient<IStartupTask, RegisterPermissionsStartupTask>();
 
 			services.AddSingleton<IContentProvider, ContentProvider>();
