@@ -1,12 +1,10 @@
 ﻿using System;
 using Montr.Core.Models;
+using Montr.MasterData.Models;
 
 namespace Montr.Docs.Models
 {
-	public class DocumentTypeSearchRequest : SearchRequest
+	public class DocumentTypeSearchRequest : ClassifierSearchRequest
 	{
-		public Guid? Uid { get; set; }
-
-		public string Code { get; set; }
 	}
 }

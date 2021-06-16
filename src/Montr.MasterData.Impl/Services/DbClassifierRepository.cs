@@ -195,6 +195,11 @@ namespace Montr.MasterData.Impl.Services
 				query = query.Where(x => request.Uids.Contains(x.Uid));
 			}
 
+			if (request.Code != null)
+			{
+				query = query.Where(x => x.Code == request.Code);
+			}
+
 			if (request.SearchTerm != null)
 			{
 				query = query.Where(x => SqlExpr.ILike(x.Name, "%" + request.SearchTerm + "%"));

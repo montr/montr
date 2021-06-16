@@ -23,6 +23,8 @@ namespace Montr.MasterData.Models
 
 		public Guid? Uid { get; set; }
 
+		public string Code { get; set; }
+
 		public bool IncludeFields { get; set; }
 	}
 }
