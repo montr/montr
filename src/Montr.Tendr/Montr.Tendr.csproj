@@ -14,4 +14,8 @@
     <ProjectReference Include="..\Montr.MasterData\Montr.MasterData.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Services" />
+  </ItemGroup>
+
 </Project>

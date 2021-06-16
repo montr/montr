@@ -53,6 +53,20 @@ namespace Montr.MasterData.Impl.Services
 			return result.Rows.SingleOrDefault();
 		}
 
+		public async Task<Classifier> Get(string typeCode, string code, CancellationToken cancellationToken = default)
+		{
+			var result = await Search(new ClassifierSearchRequest
+			{
+				TypeCode = typeCode,
+				Code = code,
+				PageNo = 0,
+				PageSize = 1,
+				SkipPaging = true
+			}, cancellationToken);
+
+			return result.Rows.SingleOrDefault();
+		}
+
 		public async Task<SearchResult<Classifier>> Search(ClassifierSearchRequest request, CancellationToken cancellationToken)
 		{
 			var type = await _classifierTypeService.Get(request.TypeCode, cancellationToken);

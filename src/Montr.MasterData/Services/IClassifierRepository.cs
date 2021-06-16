@@ -16,6 +16,8 @@ namespace Montr.MasterData.Services
 
 		Task<Classifier> Get(string typeCode, Guid uid, CancellationToken cancellationToken = default);
 
+		Task<Classifier> Get(string typeCode, string code, CancellationToken cancellationToken = default);
+
 		Task<SearchResult<Classifier>> Search(ClassifierSearchRequest request, CancellationToken cancellationToken = default);
 
 		/// <summary>

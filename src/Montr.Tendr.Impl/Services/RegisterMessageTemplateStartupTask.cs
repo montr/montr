@@ -2,18 +2,17 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Montr.Core.Services;
+using Montr.MasterData.Services;
 using Montr.Messages.Models;
-using Montr.Messages.Services;
 using Montr.Tendr.Impl.CommandHandlers;
-using Montr.Tendr.Models;
 
 namespace Montr.Tendr.Impl.Services
 {
 	public class RegisterMessageTemplateStartupTask : IStartupTask
 	{
-		private readonly IMessageTemplateRegistrator _registrator;
+		private readonly IClassifierRegistrator _registrator;
 
-		public RegisterMessageTemplateStartupTask(IMessageTemplateRegistrator registrator)
+		public RegisterMessageTemplateStartupTask(IClassifierRegistrator registrator)
 		{
 			_registrator = registrator;
 		}
@@ -26,11 +25,11 @@ namespace Montr.Tendr.Impl.Services
 			}
 		}
 
-		protected IEnumerable<MessageTemplate> GetMessageTemplates()
+		protected static IEnumerable<MessageTemplate> GetMessageTemplates()
 		{
 			yield return new MessageTemplate
 			{
-				Uid = SendInvitationsHandler.TemplateUid,
+				Uid = SendInvitationsHandler.TemplateUid, // todo: remove
 				Code = MessageTemplateCode.EventInvitation,
 				Name = "Event invitation",
 				IsSystem = true,
