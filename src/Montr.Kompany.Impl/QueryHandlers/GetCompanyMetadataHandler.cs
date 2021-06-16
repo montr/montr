@@ -5,31 +5,33 @@ using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using Montr.Core.Services;
+using Montr.Docs;
 using Montr.Docs.Models;
-using Montr.Docs.Services;
 using Montr.Kompany.Models;
 using Montr.Kompany.Queries;
+using Montr.MasterData.Services;
 using Montr.Metadata.Models;
 
 namespace Montr.Kompany.Impl.QueryHandlers
 {
-	// todo: why named GetCompanyMetadata, if returns metadata of registration document?
+	// todo: why named GetCompanyMetadata, if returns metadata of "company registration request" document?
 	public class GetCompanyMetadataHandler : IRequestHandler<GetCompanyMetadata, DataView>
 	{
-		private readonly IDocumentTypeService _documentTypeService;
+		private readonly INamedServiceFactory<IClassifierRepository> _classifierRepositoryFactory;
 		private readonly IRepository<FieldMetadata> _metadataRepository;
 
 		public GetCompanyMetadataHandler(
-			IDocumentTypeService documentTypeService,
+			INamedServiceFactory<IClassifierRepository> classifierRepositoryFactory,
 			IRepository<FieldMetadata> metadataRepository)
 		{
-			_documentTypeService = documentTypeService;
+			_classifierRepositoryFactory = classifierRepositoryFactory;
 			_metadataRepository = metadataRepository;
 		}
 
 		public async Task<DataView> Handle(GetCompanyMetadata request, CancellationToken cancellationToken)
 		{
-			var documentType = await _documentTypeService.Get(DocumentTypes.CompanyRegistrationRequest, cancellationToken);
+			var classifierRepository = _classifierRepositoryFactory.GetNamedOrDefaultService(ClassifierTypeCode.DocumentType);
+			var documentType = await classifierRepository.Get(ClassifierTypeCode.DocumentType, DocumentTypes.CompanyRegistrationRequest, cancellationToken);
 
 			var metadata = await _metadataRepository.Search(new MetadataSearchRequest
 			{

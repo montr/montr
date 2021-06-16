@@ -4,7 +4,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Montr.Core.Services;
 using Montr.Docs.Models;
-using Montr.Docs.Services;
 using Montr.MasterData.Models;
 using Montr.MasterData.Services;
 
@@ -20,12 +19,12 @@ namespace Montr.Docs.Impl.Services
 		}
 
 		private readonly IRepository<Document> _repository;
-		private readonly IDocumentTypeService _documentTypeService;
+		private readonly INamedServiceFactory<IClassifierRepository> _classifierRepositoryFactory;
 
-		public DocumentNumberTagResolver(IRepository<Document> repository, IDocumentTypeService documentTypeService)
+		public DocumentNumberTagResolver(IRepository<Document> repository, INamedServiceFactory<IClassifierRepository> classifierRepositoryFactory)
 		{
 			_repository = repository;
-			_documentTypeService = documentTypeService;
+			_classifierRepositoryFactory = classifierRepositoryFactory;
 		}
 
 		public bool Supports(GenerateNumberRequest request, out string[] supportedTags)
@@ -64,12 +63,17 @@ namespace Montr.Docs.Impl.Services
 						// todo: read document type and company number tags from separate table (service)
 						if (tag == SupportedTags.DocumentType)
 						{
-							documentType ??= await _documentTypeService.Get(document.DocumentTypeUid, cancellationToken);
+							if (documentType == null)
+							{
+								var classifierRepository = _classifierRepositoryFactory.GetNamedOrDefaultService(ClassifierTypeCode.DocumentType);
+								documentType = (DocumentType)await classifierRepository.Get(ClassifierTypeCode.DocumentType, document.DocumentTypeUid, cancellationToken);
+							}
 
 							result.Values[tag] = "CRR"; // documentType.Code;
 						}
 						else if (tag == SupportedTags.Company)
 						{
+							// todo: resolve tag
 						}
 					}
 

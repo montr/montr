@@ -5,19 +5,19 @@ using System.Threading;
 using System.Threading.Tasks;
 using LinqToDB;
 using MediatR;
+using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Montr.Core.Impl.Services;
 using Montr.Core.Models;
 using Montr.Core.Services;
 using Montr.Data.Linq2Db;
-using Montr.Docs.Commands;
-using Montr.Docs.Impl.CommandHandlers;
 using Montr.Docs.Impl.Entities;
 using Montr.Docs.Impl.Services;
 using Montr.Docs.Models;
 using Montr.Kompany.Commands;
 using Montr.Kompany.Impl.CommandHandlers;
 using Montr.Kompany.Models;
+using Montr.Kompany.Registration.Services;
 using Montr.MasterData;
 using Montr.MasterData.Impl.Services;
 using Montr.MasterData.Models;
@@ -41,15 +41,20 @@ namespace Montr.Kompany.Tests.CommandHandlers
 
 			var fieldProviderRegistry = new DefaultFieldProviderRegistry();
 			fieldProviderRegistry.AddFieldType(typeof(TextField));
+			fieldProviderRegistry.AddFieldType(typeof(TextAreaField));
 			var dbFieldDataRepository = new DbFieldDataRepository(dbContextFactory, fieldProviderRegistry);
 
-			var metadataServiceMock = new Mock<IClassifierTypeMetadataService>();
+			var metadataService = new ClassifierTypeMetadataService(new DbFieldMetadataRepository(
+				dbContextFactory, fieldProviderRegistry, new NewtonsoftJsonSerializer()));
 
 			var classifierRepository = new DbClassifierRepository<Classifier>(dbContextFactory,
-				classifierTypeService, null, metadataServiceMock.Object, dbFieldDataRepository, null);
+				classifierTypeService, null, metadataService, dbFieldDataRepository, null);
 
 			var numeratorRepository = new DbNumeratorRepository(dbContextFactory,
-				classifierTypeService, null, metadataServiceMock.Object, dbFieldDataRepository, null);
+				classifierTypeService, null, metadataService, dbFieldDataRepository, null);
+
+			var documentTypeRepository = new DbDocumentTypeRepository(dbContextFactory,
+				classifierTypeService, null, metadataService, dbFieldDataRepository, null);
 
 			var classifierRepositoryFactoryMock = new Mock<INamedServiceFactory<IClassifierRepository>>();
 
@@ -57,7 +62,10 @@ namespace Montr.Kompany.Tests.CommandHandlers
 				.Setup(x => x.GetNamedOrDefaultService(It.Is<string>(name => name == ClassifierTypeCode.Numerator)))
 				.Returns(() => numeratorRepository);
 			classifierRepositoryFactoryMock
-				.Setup(x => x.GetNamedOrDefaultService(It.Is<string>(name => name != ClassifierTypeCode.Numerator)))
+				.Setup(x => x.GetNamedOrDefaultService(It.Is<string>(name => name == Docs.ClassifierTypeCode.DocumentType)))
+				.Returns(() => documentTypeRepository);
+			classifierRepositoryFactoryMock
+				.Setup(x => x.GetNamedOrDefaultService(It.Is<string>(name => name != ClassifierTypeCode.Numerator &&  name != Docs.ClassifierTypeCode.DocumentType)))
 				.Returns(() => classifierRepository);
 
 			return classifierRepositoryFactoryMock.Object;
@@ -80,13 +88,11 @@ namespace Montr.Kompany.Tests.CommandHandlers
 			// var dbFieldMetadataRepository = new DbFieldMetadataRepository(dbContextFactory, fieldProviderRegistry, new NewtonsoftJsonSerializer());
 			var dbFieldDataRepository = new DbFieldDataRepository(dbContextFactory, fieldProviderRegistry);
 			var classifierRepositoryFactory = CreateClassifierRepositoryFactory(dbContextFactory);
-			var dbNumberGenerator = new DbNumberGenerator(dbContextFactory, classifierRepositoryFactory, dateTimeProvider, new INumberTagResolver[0]);
-			var dbDocumentTypeRepository = new DbDocumentTypeRepository(dbContextFactory);
-			var dbDocumentTypeService = new DbDocumentTypeService(dbContextFactory, dbDocumentTypeRepository);
+			var dbNumberGenerator = new DbNumberGenerator(dbContextFactory, classifierRepositoryFactory, dateTimeProvider, Array.Empty<INumberTagResolver>());
 			var dbDocumentService = new DbDocumentService(dbContextFactory, dbNumberGenerator, mediatorMock.Object);
 			var jsonSerializer = new DefaultJsonSerializer();
 			var auditLogService = new DbAuditLogService(dbContextFactory, jsonSerializer);
-			var registerDocumentTypeHandler = new RegisterDocumentTypeHandler(unitOfWorkFactory, dbDocumentTypeService);
+			var classifierRegistrator = new DefaultClassifierRegistrator(NullLogger<DefaultClassifierRegistrator>.Instance, classifierRepositoryFactory);
 
 			var metadataRepositoryMock = new Mock<IRepository<FieldMetadata>>();
 			metadataRepositoryMock
@@ -107,20 +113,17 @@ namespace Montr.Kompany.Tests.CommandHandlers
 
 			var handler = new CreateCompanyHandler(unitOfWorkFactory,
 				dbContextFactory, dateTimeProvider, metadataRepositoryMock.Object,
-				dbFieldDataRepository, dbDocumentTypeService, dbDocumentService, auditLogService, backgroundJobManagerMock.Object);
+				dbFieldDataRepository, classifierRepositoryFactory, dbDocumentService, auditLogService, backgroundJobManagerMock.Object);
 
 			using (var _ = unitOfWorkFactory.Create())
 			{
 				await generator.EnsureClassifierTypeRegistered(Numerator.GetDefaultMetadata(), cancellationToken);
+				await generator.EnsureClassifierTypeRegistered(DocumentType.GetDefaultMetadata(), cancellationToken);
 
-				await registerDocumentTypeHandler.Handle(new RegisterDocumentType
+				foreach (var classifier in RegisterClassifiersStartupTask.GetClassifiers())
 				{
-					Item = new DocumentType
-					{
-						Code = DocumentTypes.CompanyRegistrationRequest,
-						Name = "Company Registration Request"
-					}
-				}, cancellationToken);
+					await classifierRegistrator.Register(classifier, cancellationToken);
+				}
 
 				// act
 				var company = new Company

@@ -6,7 +6,7 @@ using Montr.Metadata.Models;
 
 namespace Montr.Docs.Commands
 {
-	public class RegisterDocumentType: IRequest<ApiResult>
+	public class RegisterDocumentType : IRequest<ApiResult>
 	{
 		public DocumentType Item { get; set; }
 

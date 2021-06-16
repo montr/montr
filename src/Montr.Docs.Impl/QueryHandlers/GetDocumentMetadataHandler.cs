@@ -7,21 +7,21 @@ using MediatR;
 using Montr.Core.Services;
 using Montr.Docs.Models;
 using Montr.Docs.Queries;
-using Montr.Docs.Services;
+using Montr.MasterData.Services;
 using Montr.Metadata.Models;
 
 namespace Montr.Docs.Impl.QueryHandlers
 {
 	public class GetDocumentMetadataHandler : IRequestHandler<GetDocumentMetadata, DataView>
 	{
-		private readonly IDocumentTypeService _documentTypeService;
+		private readonly INamedServiceFactory<IClassifierRepository> _classifierRepositoryFactory;
 		private readonly IRepository<FieldMetadata> _metadataRepository;
 
 		public GetDocumentMetadataHandler(
-			IDocumentTypeService documentTypeService,
+			INamedServiceFactory<IClassifierRepository> classifierRepositoryFactory,
 			IRepository<FieldMetadata> metadataRepository)
 		{
-			_documentTypeService = documentTypeService;
+			_classifierRepositoryFactory = classifierRepositoryFactory;
 			_metadataRepository = metadataRepository;
 		}
 
@@ -29,13 +29,15 @@ namespace Montr.Docs.Impl.QueryHandlers
 		{
 			Guid documentTypeUid;
 
+			// todo: why request by DocumentTypeUid or by TypeCode ?
 			if (request.DocumentTypeUid == null)
 			{
 				var typeCode = request.TypeCode ?? throw new ArgumentNullException(nameof(request.TypeCode));
 
-				var type = await _documentTypeService.Get(typeCode, cancellationToken);
+				var classifierRepository = _classifierRepositoryFactory.GetNamedOrDefaultService(ClassifierTypeCode.DocumentType);
+				var documentType = await classifierRepository.Get(ClassifierTypeCode.DocumentType, typeCode, cancellationToken);
 
-				documentTypeUid = type.Uid.Value;
+				documentTypeUid = documentType.Uid.Value;
 			}
 			else
 			{

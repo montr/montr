@@ -12,6 +12,7 @@ using Montr.Docs.Services;
 using Montr.Kompany.Commands;
 using Montr.Kompany.Impl.Entities;
 using Montr.Kompany.Models;
+using Montr.MasterData.Services;
 using Montr.Metadata.Models;
 using Montr.Metadata.Services;
 using Montr.Worker.Services;
@@ -25,22 +26,22 @@ namespace Montr.Kompany.Impl.CommandHandlers
 		private readonly IDateTimeProvider _dateTimeProvider;
 		private readonly IRepository<FieldMetadata> _fieldMetadataRepository;
 		private readonly IFieldDataRepository _fieldDataRepository;
-		private readonly IDocumentTypeService _documentTypeRepository;
+		private readonly INamedServiceFactory<IClassifierRepository> _classifierRepositoryFactory;
 		private readonly IDocumentService _documentRepository;
 		private readonly IAuditLogService _auditLogService;
 		private readonly IBackgroundJobManager _jobManager;
 
 		public CreateCompanyHandler(IUnitOfWorkFactory unitOfWorkFactory, IDbContextFactory dbContextFactory,
 			IDateTimeProvider dateTimeProvider, IRepository<FieldMetadata> fieldMetadataRepository, IFieldDataRepository fieldDataRepository,
-			IDocumentTypeService documentTypeRepository, IDocumentService documentRepository, IAuditLogService auditLogService,
-			IBackgroundJobManager jobManager)
+			INamedServiceFactory<IClassifierRepository> classifierRepositoryFactory, IDocumentService documentRepository,
+			IAuditLogService auditLogService, IBackgroundJobManager jobManager)
 		{
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_dbContextFactory = dbContextFactory;
 			_dateTimeProvider = dateTimeProvider;
 			_fieldMetadataRepository = fieldMetadataRepository;
 			_fieldDataRepository = fieldDataRepository;
-			_documentTypeRepository = documentTypeRepository;
+			_classifierRepositoryFactory = classifierRepositoryFactory;
 			_documentRepository = documentRepository;
 			_auditLogService = auditLogService;
 			_jobManager = jobManager;
@@ -56,7 +57,8 @@ namespace Montr.Kompany.Impl.CommandHandlers
 			var companyUid = Guid.NewGuid();
 			var documentUid = Guid.NewGuid();
 
-			var documentType = await _documentTypeRepository.Get(DocumentTypes.CompanyRegistrationRequest, cancellationToken);
+			var documentTypeRepository = _classifierRepositoryFactory.GetNamedOrDefaultService(Docs.ClassifierTypeCode.DocumentType);
+			var documentType = await documentTypeRepository.Get(Docs.ClassifierTypeCode.DocumentType, DocumentTypes.CompanyRegistrationRequest, cancellationToken);
 
 			// todo: validate fields
 			var metadata = await _fieldMetadataRepository.Search(new MetadataSearchRequest
