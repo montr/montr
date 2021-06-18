@@ -52,7 +52,7 @@
 		"hard-source-webpack-plugin": "^0.13.1",
 		"kind-of": ">=6.0.3",
 		"less": "^4.1.1",
-		"less-loader": "^9.1.0",
+		"less-loader": "^10.0.0",
 		"minimist": ">=0.2.1",
 		"source-map-loader": "^3.0.0",
 		"style-loader": "^2.0.0",
