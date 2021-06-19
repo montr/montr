@@ -22,11 +22,11 @@ interface State {
 
 export class ModalEditInvitation extends React.Component<Props, State> {
 
-	private _notificationService = new NotificationService();
-	private _metadataService = new MetadataService();
-	private _invitationService = new InvitationService();
+	private readonly notificationService = new NotificationService();
+	private readonly metadataService = new MetadataService();
+	private readonly invitationService = new InvitationService();
 
-	private _formRef = React.createRef<FormInstance>();
+	private readonly formRef = React.createRef<FormInstance>();
 
 	constructor(props: Props) {
 		super(props);
@@ -37,28 +37,28 @@ export class ModalEditInvitation extends React.Component<Props, State> {
 		};
 	}
 
-	componentDidMount = async () => {
+	componentDidMount = async (): Promise<void> => {
 		await this.fetchData();
 	};
 
-	componentWillUnmount = async () => {
-		await this._metadataService.abort();
-		await this._invitationService.abort();
+	componentWillUnmount = async (): Promise<void> => {
+		await this.metadataService.abort();
+		await this.invitationService.abort();
 	};
 
-	fetchData = async () => {
+	fetchData = async (): Promise<void> => {
 		const { uid } = this.props;
 
 		try {
 
-			const dataView = await this._metadataService.load(`Event/Invitation/Form`);
+			const dataView = await this.metadataService.load(`Event/Invitation/Form`);
 
 			const fields = dataView.fields;
 
 			let data;
 
 			if (uid) {
-				data = await this._invitationService.get(uid);
+				data = await this.invitationService.get(uid);
 			}
 			else {
 				// todo: load defaults from server
@@ -68,20 +68,20 @@ export class ModalEditInvitation extends React.Component<Props, State> {
 			this.setState({ loading: false, fields, data });
 
 		} catch (error) {
-			this._notificationService.error("Ошибка при загрузке данных", error.message);
+			this.notificationService.error("Ошибка при загрузке данных", error.message);
 			// todo: why call onCancel()?
 			this.onCancel();
 		}
 	};
 
-	onOk = async (e: React.MouseEvent<any>) => {
-		const form = this._formRef.current;
+	onOk = async (): Promise<void> => {
+		const form = this.formRef.current;
 		if (form) {
 			await form.submit();
 		}
 	};
 
-	onCancel = () => {
+	onCancel = async (): Promise<void> => {
 		if (this.props.onCancel) this.props.onCancel();
 	};
 
@@ -94,11 +94,11 @@ export class ModalEditInvitation extends React.Component<Props, State> {
 		if (uid) {
 			data = { uid: uid, ...values };
 
-			result = await this._invitationService.update({ eventUid, item: data });
+			result = await this.invitationService.update({ eventUid, item: data });
 		}
 		else {
 			const insertResult =
-				await this._invitationService.insert({ eventUid, items: [values] });
+				await this.invitationService.insert({ eventUid, items: [values] });
 
 			data = { uid: insertResult.uid, ...values };
 
@@ -112,7 +112,7 @@ export class ModalEditInvitation extends React.Component<Props, State> {
 		return result;
 	};
 
-	render = () => {
+	render = (): React.ReactNode => {
 		const { loading, fields, data } = this.state;
 
 		return (
@@ -125,7 +125,7 @@ export class ModalEditInvitation extends React.Component<Props, State> {
 				width="640px">
 				<Spin spinning={loading}>
 					<DataForm
-						formRef={this._formRef}
+						formRef={this.formRef}
 						fields={fields}
 						data={data}
 						hideButtons={true}

@@ -3,6 +3,9 @@ import { generatePath } from "react-router";
 import { AppRouteRegistry, ComponentRegistry } from "@montr-core/services/";
 import { Constants, Layout } from "@montr-core/constants";
 
+export const Locale = {
+	Namespace: "tendr"
+};
 
 export const Api = {
 	eventInvitationList: `${Constants.apiURL}/invitation/list/`

@@ -7,30 +7,30 @@ import { IEvent } from "../models";
 import { ApiResult, Guid, IMenu } from "@montr-core/models";
 import { RouteBuilder } from "../module";
 
-interface IProps {
+interface Props {
 }
 
-interface IState {
+interface State {
 	newUid?: Guid;
 }
 
-export default class SelectEventTemplate extends React.Component<IProps, IState> {
+export default class SelectEventTemplate extends React.Component<Props, State> {
 
-	private _eventService = new EventService();
+	private readonly eventService = new EventService();
 
-	constructor(props: IProps) {
+	constructor(props: Props) {
 		super(props);
 
 		this.state = {
 		};
 	}
 
-	componentWillUnmount = async () => {
-		await this._eventService.abort();
+	componentWillUnmount = async (): Promise<void> => {
+		await this.eventService.abort();
 	};
 
-	handleSelect = async (data: IEvent) => {
-		const result: ApiResult = await this._eventService.insert({
+	handleSelect = async (data: IEvent): Promise<void> => {
+		const result: ApiResult = await this.eventService.insert({
 			templateUid: data.uid,
 			configCode: data.configCode
 		});
@@ -38,7 +38,7 @@ export default class SelectEventTemplate extends React.Component<IProps, IState>
 		this.setState({ newUid: result.uid });
 	};
 
-	render = () => {
+	render = (): React.ReactNode => {
 		const { newUid } = this.state;
 
 		if (newUid) {

@@ -14,8 +14,8 @@ interface State {
 
 export default class SearchEvents extends React.Component<Props, State> {
 
-	_eventService = new EventService();
-	_eventTemplateService = new EventTemplateService();
+	private readonly eventService = new EventService();
+	private readonly eventTemplateService = new EventTemplateService();
 
 	constructor(props: Props) {
 		super(props);
@@ -25,22 +25,22 @@ export default class SearchEvents extends React.Component<Props, State> {
 		};
 	}
 
-	componentDidMount() {
-		this.fetchConfigCodes();
-	}
-
-	componentWillUnmount = async () => {
-		await this._eventTemplateService.abort();
-		await this._eventService.abort();
+	componentDidMount = async (): Promise<void> => {
+		await this.fetchConfigCodes();
 	};
 
-	fetchConfigCodes = async () => {
-		const templates = await this._eventTemplateService.list();
+	componentWillUnmount = async (): Promise<void> => {
+		await this.eventTemplateService.abort();
+		await this.eventService.abort();
+	};
+
+	fetchConfigCodes = async (): Promise<void> => {
+		const templates = await this.eventTemplateService.list();
 
 		this.setState({ configCodes: templates?.rows });
 	};
 
-	render = () => {
+	render = (): React.ReactNode => {
 		const { configCodes } = this.state;
 
 		return (
@@ -74,7 +74,7 @@ export default class SearchEvents extends React.Component<Props, State> {
 				<DataTable
 					rowKey="uid"
 					viewId="PrivateEventSearch/Grid"
-					loadUrl={this._eventService.getLoadUrl()} />
+					loadUrl={this.eventService.getLoadUrl()} />
 
 			</Page>
 		);

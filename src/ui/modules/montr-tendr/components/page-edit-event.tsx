@@ -6,7 +6,7 @@ import { EventService, EventTemplateService } from "../services";
 import { Page, PaneComponent, Toolbar, PageHeader, DataBreadcrumb, DataTabs } from "@montr-core/components";
 import { MetadataService, OperationService } from "@montr-core/services";
 import { IEvent } from "../models";
-import { RouteBuilder } from "../module";
+import { Locale, RouteBuilder } from "../module";
 import { RouteComponentProps } from "react-router";
 
 interface RouteProps {
@@ -100,7 +100,7 @@ class _EditEvent extends React.Component<Props, State> {
 	}
 
 	handlePublish = async (): Promise<void> => {
-		const t = (key: string) => i18next.getFixedT(null, "tendr")(key);
+		const t = (key: string) => i18next.getFixedT(null, Locale.Namespace)(key);
 
 		const result = await this.operation.confirm(async () => {
 			return await this.eventService.publish(this.props.match.params.uid);
@@ -113,7 +113,7 @@ class _EditEvent extends React.Component<Props, State> {
 
 	handleCancel = async (): Promise<void> => {
 
-		const t = (key: string) => i18next.getFixedT(null, "tendr")(key);
+		const t = (key: string) => i18next.getFixedT(null, Locale.Namespace)(key);
 
 		const result = await this.operation.confirm(async () => {
 			return await this.eventService.cancel(this.props.match.params.uid);
@@ -133,7 +133,7 @@ class _EditEvent extends React.Component<Props, State> {
 	};
 
 	render = (): React.ReactNode => {
-		const t = (key: string) => i18next.getFixedT(null, "tendr")(key),
+		const t = (key: string) => i18next.getFixedT(null, Locale.Namespace)(key),
 			{ tabKey } = this.props.match.params,
 			{ loading, data, dataView } = this.state;
 

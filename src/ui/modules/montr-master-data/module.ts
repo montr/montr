@@ -55,14 +55,14 @@ export const Patterns = {
 };
 
 export const RouteBuilder = {
-	editClassifierType: (uid: Guid | string, tabKey?: string) => {
+	editClassifierType: (uid: Guid | string, tabKey?: string): string => {
 		return generatePath(Patterns.editClassifierType, { uid: uid.toString(), tabKey });
 	},
 
-	addClassifier: (typeCode: string, parentUid: Guid | string) => {
+	addClassifier: (typeCode: string, parentUid: Guid | string): string => {
 		return generatePath(Patterns.addClassifier, { typeCode, parentUid: parentUid ? parentUid.toString() : null });
 	},
-	editClassifier: (typeCode: string, uid: Guid | string, tabKey?: string) => {
+	editClassifier: (typeCode: string, uid: Guid | string, tabKey?: string): string => {
 		return generatePath(Patterns.editClassifier, { typeCode, uid: uid.toString(), tabKey });
 	},
 };

@@ -5,21 +5,22 @@ import { DataForm } from "@montr-core/components";
 import { IEvent } from "../models";
 import { FormInstance } from "antd/lib/form";
 
-interface IProps {
+interface Props {
 	data: IEvent;
 	formRef?: React.RefObject<FormInstance>;
 }
 
-interface IState {
+interface State {
 	loading: boolean;
 	fields?: IDataField[];
 }
 
-class EventForm extends React.Component<IProps, IState> {
-	_metadataService = new EventMetadataService();
-	_eventService = new EventService();
+class EventForm extends React.Component<Props, State> {
 
-	constructor(props: IProps) {
+	private readonly metadataService = new EventMetadataService();
+	private readonly eventService = new EventService();
+
+	constructor(props: Props) {
 		super(props);
 
 		this.state = {
@@ -27,26 +28,26 @@ class EventForm extends React.Component<IProps, IState> {
 		};
 	}
 
-	componentDidMount = async () => {
+	componentDidMount = async (): Promise<void> => {
 		await this.fetchData();
 	};
 
-	componentWillUnmount = async () => {
-		await this._metadataService.abort();
-		await this._eventService.abort();
+	componentWillUnmount = async (): Promise<void> => {
+		await this.metadataService.abort();
+		await this.eventService.abort();
 	};
 
-	fetchData = async () => {
-		const dataView = await this._metadataService.load(`Event/Edit`);
+	fetchData = async (): Promise<void> => {
+		const dataView = await this.metadataService.load(`Event/Edit`);
 
 		this.setState({ loading: false, fields: dataView.fields });
 	};
 
 	save = async (values: IEvent): Promise<ApiResult> => {
-		return await this._eventService.update({ uid: this.props.data.uid, ...values });
+		return await this.eventService.update({ uid: this.props.data.uid, ...values });
 	};
 
-	render = () => {
+	render = (): React.ReactNode => {
 
 		const { data, formRef } = this.props,
 			{ loading, fields } = this.state;
@@ -61,28 +62,25 @@ class EventForm extends React.Component<IProps, IState> {
 	};
 }
 
-interface IEditEventPaneProps extends PaneProps<IEvent> {
+interface EditEventPaneProps extends PaneProps<IEvent> {
 	data: IEvent;
 }
 
-interface IEditEventTabState {
-}
-
 // todo: remove
-export default class TabEditEvent extends React.Component<IEditEventPaneProps, IEditEventTabState> {
+export default class TabEditEvent extends React.Component<EditEventPaneProps> {
 
-	private _formRef = React.createRef<FormInstance>();
+	private readonly formRef = React.createRef<FormInstance>();
 
-	save() {
-		const form = this._formRef.current;
+	save(): void {
+		const form = this.formRef.current;
 		if (form) {
 			form.submit();
 		}
 	}
 
-	render() {
+	render(): React.ReactNode {
 		return (
-			<EventForm data={this.props.data} formRef={this._formRef} />
+			<EventForm data={this.props.data} formRef={this.formRef} />
 		);
 	}
 }
