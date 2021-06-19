@@ -1,29 +1,42 @@
-﻿using System.Diagnostics;
+﻿using System.Collections.Generic;
+using System.Diagnostics;
+using Montr.MasterData.Commands;
+using Montr.MasterData.Models;
 using Montr.Metadata.Models;
 
 namespace Montr.Kompany.Models
 {
 	[DebuggerDisplay("{" + nameof(DebuggerDisplay) + ",nq}")]
-	public class Company : IFieldDataContainer
+	public class Company : Classifier
 	{
+		public Company()
+		{
+			Type = ClassifierTypeCode.Company;
+		}
+
 		private string DebuggerDisplay => $"{ConfigCode}, {Name}";
 
-		public static readonly string EntityTypeCode = typeof(Company).Name;
-
-		public System.Guid? Uid { get; set; }
-
-		// public long Id { get; set; }
+		public static readonly string EntityTypeCode = nameof(Company);
 
 		public string ConfigCode { get; set; }
 
-		public string StatusCode { get; set; }
-
-		public string Name { get; set; }
-
-		// public string Description { get; set; }
-
-		// public string Url { get; set; }
-
-		public FieldData Fields { get; set; }
+		public static RegisterClassifierType GetDefaultMetadata()
+		{
+			return new RegisterClassifierType
+			{
+				Item = new ClassifierType
+				{
+					Code = ClassifierTypeCode.Company,
+					Name = "Companies",
+					HierarchyType = HierarchyType.Groups,
+					IsSystem = true
+				},
+				Fields = new List<FieldMetadata>
+				{
+					new TextField { Key = "code", Name = "Code", DisplayOrder = 10, System = true },
+					new TextAreaField { Key = "name", Name = "Name", Required = true, DisplayOrder = 20, System = true, Props = new TextAreaField.Properties { Rows = 2 } },
+				}
+			};
+		}
 	}
 }

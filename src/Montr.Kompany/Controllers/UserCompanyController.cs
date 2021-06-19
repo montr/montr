@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -11,19 +12,19 @@ using Montr.Kompany.Queries;
 namespace Montr.Kompany.Controllers
 {
 	[ApiController, Route("api/[controller]/[action]")]
-	public class CompanyController : ControllerBase
+	public class UserCompanyController : ControllerBase
 	{
 		private readonly ISender _mediator;
 		private readonly ICurrentUserProvider _currentUserProvider;
 
-		public CompanyController(ISender mediator, ICurrentUserProvider currentUserProvider)
+		public UserCompanyController(ISender mediator, ICurrentUserProvider currentUserProvider)
 		{
 			_mediator = mediator;
 			_currentUserProvider = currentUserProvider;
 		}
 
 		[HttpPost]
-		public async Task<SearchResult<Company>> List(GetCompanyList request)
+		public async Task<ICollection<Company>> List(GetUserCompanyList request)
 		{
 			// todo: remove hack
 			if (_currentUserProvider.GetUser(false) != null)

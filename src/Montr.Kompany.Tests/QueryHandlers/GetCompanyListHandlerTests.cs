@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Montr.Data.Linq2Db;
 using Montr.Kompany.Impl.QueryHandlers;
-using Montr.Kompany.Impl.Services;
 using Montr.Kompany.Queries;
 
 namespace Montr.Kompany.Tests.QueryHandlers
@@ -17,11 +16,10 @@ namespace Montr.Kompany.Tests.QueryHandlers
 		{
 			// arrange
 			var dbContextFactory = new DefaultDbContextFactory();
-			var dbCompanyRepository = new DbCompanyRepository(dbContextFactory);
-			var handler = new GetCompanyListHandler(dbCompanyRepository);
+			var handler = new GetCompanyListHandler(dbContextFactory);
 
 			// act
-			var command = new GetCompanyList
+			var command = new GetUserCompanyList
 			{
 				UserUid = Guid.NewGuid()
 			};
@@ -30,7 +28,7 @@ namespace Montr.Kompany.Tests.QueryHandlers
 
 			// assert
 			Assert.IsNotNull(result);
-			Assert.IsNotNull(result.Rows);
+			Assert.IsTrue(result.Count > 0);
 		}
 	}
 }

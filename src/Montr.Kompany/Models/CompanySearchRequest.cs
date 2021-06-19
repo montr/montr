@@ -1,10 +1,9 @@
-﻿using System;
-using Montr.Core.Models;
+﻿using Montr.MasterData.Models;
 
 namespace Montr.Kompany.Models
 {
-	public class CompanySearchRequest : SearchRequest
+	public class CompanySearchRequest : ClassifierSearchRequest
 	{
-		public Guid? UserUid { get; set; }
+		public string ConfigCode { get; set; }
 	}
 }

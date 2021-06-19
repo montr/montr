@@ -3,8 +3,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Montr.Core;
 using Montr.Core.Services;
 using Montr.Kompany.Impl.Services;
-using Montr.Kompany.Models;
 using Montr.Kompany.Services;
+using Montr.MasterData.Services;
 
 namespace Montr.Kompany.Impl
 {
@@ -13,7 +13,7 @@ namespace Montr.Kompany.Impl
 	{
 		public void ConfigureServices(IConfiguration configuration, IServiceCollection services)
 		{
-			services.AddTransient<IRepository<Company>, DbCompanyRepository>();
+			services.AddNamedTransient<IClassifierRepository, DbCompanyRepository>(ClassifierTypeCode.Company);
 
 			services.AddSingleton<ICurrentCompanyProvider, DefaultCurrentCompanyProvider>();
 		}

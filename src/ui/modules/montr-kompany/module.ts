@@ -1,14 +1,13 @@
-import React from "react";
 import { Constants } from "@montr-core/constants";
 import { AppRouteRegistry } from "@montr-core/services";
 
 export const Api = {
-	companyList: `${Constants.apiURL}/company/list`,
-	companyCreate: `${Constants.apiURL}/company/create`,
+	companyList: `${Constants.apiURL}/userCompany/list`,
+	companyCreate: `${Constants.apiURL}/userCompany/create`,
 };
 
 export const Patterns = {
-	searchUsers: "/companies",
+	// searchCompanies: "/companies",
 };
 
 export const Views = {
@@ -16,5 +15,5 @@ export const Views = {
 };
 
 AppRouteRegistry.add([
-	{ path: Patterns.searchUsers, exact: true, component: React.lazy(() => import("./components/page-search-companies")) },
+	// { path: Patterns.searchCompanies, exact: true, component: React.lazy(() => import("./components/page-search-companies")) },
 ]);

@@ -1,7 +1,7 @@
 import * as React from "react";
 import Cookies from "universal-cookie";
 import { Company } from "../models";
-import { CompanyService, } from "../services";
+import { UserCompanyService, } from "../services";
 import { CompanyContextProps, CompanyContext } from "./";
 import { Constants } from "@montr-core/.";
 import { Guid } from "@montr-core/models";
@@ -13,15 +13,15 @@ interface State {
 	companyList: Company[];
 }
 
-export class CompanyContextProvider extends React.Component<any, State> {
+export class CompanyContextProvider extends React.Component<unknown, State> {
 
-	private _cookies = new Cookies();
-	private _navigation = new NavigationService();
-	private _notification = new NotificationService();
-	private _authService = new AuthService();
-	private _companyService = new CompanyService();
+	private readonly cookies = new Cookies();
+	private readonly navigation = new NavigationService();
+	private readonly notification = new NotificationService();
+	private readonly authService = new AuthService();
+	private readonly userCompanyService = new UserCompanyService();
 
-	constructor(props: any) {
+	constructor(props: unknown) {
 		super(props);
 
 		this.state = {
@@ -29,39 +29,39 @@ export class CompanyContextProvider extends React.Component<any, State> {
 		};
 	}
 
-	componentDidMount = async () => {
-		this._authService.userManager.events.addUserLoaded(this.onUserLoaded);
-		this._authService.userManager.events.addUserUnloaded(this.onUserUnloaded);
+	componentDidMount = async (): Promise<void> => {
+		this.authService.userManager.events.addUserLoaded(this.onUserLoaded);
+		this.authService.userManager.events.addUserUnloaded(this.onUserUnloaded);
 
 		await this.switchCompany();
 	};
 
-	componentWillUnmount = async () => {
-		this._authService.userManager.events.removeUserLoaded(this.onUserLoaded);
-		this._authService.userManager.events.removeUserUnloaded(this.onUserUnloaded);
+	componentWillUnmount = async (): Promise<void> => {
+		this.authService.userManager.events.removeUserLoaded(this.onUserLoaded);
+		this.authService.userManager.events.removeUserUnloaded(this.onUserUnloaded);
 
-		await this._companyService.abort();
+		await this.userCompanyService.abort();
 	};
 
-	onUserLoaded = async (user: User) => {
+	onUserLoaded = async (user: User): Promise<void> => {
 		await this.switchCompany();
 	};
 
-	onUserUnloaded = async () => {
+	onUserUnloaded = async (): Promise<void> => {
 		await this.switchCompany();
 	};
 
 	registerCompany = (): void => {
-		const returnUrl = encodeURI(this._navigation.getUrl());
-		this._navigation.navigate(
+		const returnUrl = encodeURI(this.navigation.getUrl());
+		this.navigation.navigate(
 			`${Constants.publicURL}/register/company/?${Constants.returnUrlParam}=${returnUrl}`);
 	};
 
 	manageCompany = (): void => {
-		this._navigation.navigate(`${Constants.publicURL}/manage/`);
+		this.navigation.navigate(`${Constants.publicURL}/manage/`);
 	};
 
-	switchCompany = async (companyUid?: Guid) => {
+	switchCompany = async (companyUid?: Guid): Promise<void> => {
 
 		await this.loadCompanyList();
 
@@ -84,18 +84,18 @@ export class CompanyContextProvider extends React.Component<any, State> {
 		}
 	};
 
-	loadCompanyList = async () => {
+	loadCompanyList = async (): Promise<void> => {
 		try {
-			const result = await this._companyService.list();
+			const result = await this.userCompanyService.list();
 
-			this.setState({ companyList: result.rows });
+			this.setState({ companyList: result });
 		} catch (error) {
-			this._notification.error(`Ошибка при загрузке списка организаций`, error.message);
+			this.notification.error(`Ошибка при загрузке списка организаций`, error.message);
 		}
 	};
 
 	getCookieCompanyUid = (): Guid => {
-		var storageValue = this._cookies.get(Constants.cookieName);
+		const storageValue = this.cookies.get(Constants.cookieName);
 
 		if (Guid.isValid(storageValue)) {
 			return new Guid(storageValue);
@@ -105,12 +105,12 @@ export class CompanyContextProvider extends React.Component<any, State> {
 	};
 
 	setCookieCompanyUid = (companyUid: Guid): void => {
-		this._cookies.set(Constants.cookieName, companyUid.toString(), {
+		this.cookies.set(Constants.cookieName, companyUid.toString(), {
 			domain: Constants.cookieDomain, path: "/"
 		});
 	};
 
-	render = () => {
+	render = (): React.ReactNode => {
 		const { currentCompany, companyList } = this.state;
 
 		const context: CompanyContextProps = {

@@ -5,7 +5,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using Montr.Core.Services;
-using Montr.Docs;
 using Montr.Docs.Models;
 using Montr.Kompany.Models;
 using Montr.Kompany.Queries;
@@ -30,8 +29,9 @@ namespace Montr.Kompany.Impl.QueryHandlers
 
 		public async Task<DataView> Handle(GetCompanyMetadata request, CancellationToken cancellationToken)
 		{
-			var classifierRepository = _classifierRepositoryFactory.GetNamedOrDefaultService(ClassifierTypeCode.DocumentType);
-			var documentType = await classifierRepository.Get(ClassifierTypeCode.DocumentType, DocumentTypes.CompanyRegistrationRequest, cancellationToken);
+			var classifierRepository = _classifierRepositoryFactory.GetNamedOrDefaultService(Docs.ClassifierTypeCode.DocumentType);
+
+			var documentType = await classifierRepository.Get(Docs.ClassifierTypeCode.DocumentType, DocumentTypes.CompanyRegistrationRequest, cancellationToken);
 
 			var metadata = await _metadataRepository.Search(new MetadataSearchRequest
 			{

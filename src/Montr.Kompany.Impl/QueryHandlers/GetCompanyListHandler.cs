@@ -1,25 +1,48 @@
-﻿using System.Threading;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
+using LinqToDB;
 using MediatR;
-using Montr.Core.Models;
-using Montr.Core.Services;
+using Montr.Data.Linq2Db;
+using Montr.Kompany.Impl.Entities;
 using Montr.Kompany.Models;
 using Montr.Kompany.Queries;
+using Montr.MasterData.Impl.Entities;
 
 namespace Montr.Kompany.Impl.QueryHandlers
 {
-	public class GetCompanyListHandler : IRequestHandler<GetCompanyList, SearchResult<Company>>
+	public class GetCompanyListHandler : IRequestHandler<GetUserCompanyList, ICollection<Company>>
 	{
-		private readonly IRepository<Company> _repository;
+		private readonly IDbContextFactory _dbContextFactory;
 
-		public GetCompanyListHandler(IRepository<Company> repository)
+		public GetCompanyListHandler(IDbContextFactory dbContextFactory)
 		{
-			_repository = repository;
+			_dbContextFactory = dbContextFactory;
 		}
 
-		public async Task<SearchResult<Company>> Handle(GetCompanyList request, CancellationToken cancellationToken)
+		public async Task<ICollection<Company>> Handle(GetUserCompanyList request, CancellationToken cancellationToken)
 		{
-			return await _repository.Search(request, cancellationToken);
+			var userUid = request.UserUid;
+
+			using (var db = _dbContextFactory.Create())
+			{
+				var query = from company in db.GetTable<DbCompany>()
+					join c in db.GetTable<DbClassifier>() on company.Uid equals c.Uid
+					join cu in db.GetTable<DbCompanyUser>()
+						on company.Uid equals cu.CompanyUid
+					orderby c.Name
+					where cu.UserUid == userUid
+					select c;
+
+				var result = await query.Select(x => new Company
+				{
+					Uid = x.Uid,
+					Name = x.Name
+				}).ToListAsync(cancellationToken);
+
+				return result;
+			}
 		}
 	}
 }

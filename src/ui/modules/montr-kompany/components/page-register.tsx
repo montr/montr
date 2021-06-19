@@ -1,6 +1,6 @@
 import * as React from "react";
 import { Form, Input, Checkbox, Button, Radio, Modal, message, Spin } from "antd";
-import { CompanyService, CompanyMetadataService } from "../services";
+import { UserCompanyService, CompanyMetadataService } from "../services";
 import { Company } from "../models";
 import { RadioChangeEvent } from "antd/lib/radio/interface";
 import { NavigationService } from "@montr-core/services";
@@ -20,9 +20,9 @@ interface State {
 
 class _RegistrationForm extends React.Component<Props, State> {
 
-	private _navigation = new NavigationService();
-	private _companyService = new CompanyService();
-	private _formRef = React.createRef<FormInstance>();
+	private readonly navigation = new NavigationService();
+	private readonly userCmpanyService = new UserCompanyService();
+	private readonly formRef = React.createRef<FormInstance>();
 
 	constructor(props: Props) {
 		super(props);
@@ -34,23 +34,23 @@ class _RegistrationForm extends React.Component<Props, State> {
 	}
 
 	componentWillUnmount = async () => {
-		await this._companyService.abort();
+		await this.userCmpanyService.abort();
 	};
 
 	handleSubmit = async (values: Company) => {
 		const { manageCompany, switchCompany } = this.props;
 
-		const result = await this._companyService.create({ item: values });
+		const result = await this.userCmpanyService.create({ item: values });
 
 		if (result.success) {
 			await switchCompany(result.uid);
 
 			message.info(`Организация успешно зарегистрирована.`);
 
-			const returnUrl = this._navigation.getUrlParameter(Constants.returnUrlParam);
+			const returnUrl = this.navigation.getUrlParameter(Constants.returnUrlParam);
 
 			if (returnUrl) {
-				this._navigation.navigate(returnUrl);
+				this.navigation.navigate(returnUrl);
 			}
 			else {
 				manageCompany();
@@ -68,9 +68,9 @@ class _RegistrationForm extends React.Component<Props, State> {
 	};
 
 	clearFormErrors = () => {
-		const values = this._formRef.current.getFieldsValue();
-		this._formRef.current.resetFields();
-		this._formRef.current.setFieldsValue(values);
+		const values = this.formRef.current.getFieldsValue();
+		this.formRef.current.resetFields();
+		this.formRef.current.setFieldsValue(values);
 	};
 
 	onChange = (e: RadioChangeEvent) => {
@@ -174,7 +174,7 @@ interface IRState {
 class _PageCompanyRegistration extends React.Component<IRProps, IRState> {
 
 	private _navigation = new NavigationService();
-	private _companyService = new CompanyService();
+	private _companyService = new UserCompanyService();
 	private _metadataService = new CompanyMetadataService();
 
 	constructor(props: IRProps) {

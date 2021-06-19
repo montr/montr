@@ -49,6 +49,7 @@ namespace Montr.Tendr.Impl.CommandHandlers
 				invitations = await (
 					from e in db.GetTable<DbEvent>()
 					join k in db.GetTable<DbCompany>() on e.CompanyUid equals k.Uid
+					join kc in db.GetTable<DbClassifier>() on k.Uid equals kc.Uid
 					join i in db.GetTable<DbInvitation>() on e.Uid equals i.EventUid
 					join c in db.GetTable<DbClassifier>() on i.CounterpartyUid equals c.Uid
 					where e.Uid == request.EventUid && i.Email != null
@@ -59,7 +60,7 @@ namespace Montr.Tendr.Impl.CommandHandlers
 						// todo: use IAppUrlBuilder
 						// todo: use client routes
 						EventUrl = "https://app.montr.io:5001/events/edit/" + e.Uid,
-						CompanyName = k.Name,
+						CompanyName = kc.Name,
 						CounterpartyName = c.Name,
 						Email = i.Email
 					}).ToListAsync(cancellationToken);

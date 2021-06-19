@@ -21,13 +21,13 @@ namespace Montr.Docs.Services
 
 		public async Task Run(CancellationToken cancellationToken)
 		{
-			foreach (var command in GetCommands())
+			foreach (var classifierType in GetClassifierTypes())
 			{
-				await _classifierTypeRegistrator.Register(command.Item, command.Fields, cancellationToken);
+				await _classifierTypeRegistrator.Register(classifierType.Item, classifierType.Fields, cancellationToken);
 			}
 		}
 
-		protected static IEnumerable<RegisterClassifierType> GetCommands()
+		protected static IEnumerable<RegisterClassifierType> GetClassifierTypes()
 		{
 			yield return DocumentType.GetDefaultMetadata();
 

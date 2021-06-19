@@ -54,11 +54,14 @@ namespace Montr.Kompany.Impl.CommandHandlers
 
 			var now = _dateTimeProvider.GetUtcNow();
 
-			var companyUid = Guid.NewGuid();
+			company.Uid ??= Guid.NewGuid();
+
 			var documentUid = Guid.NewGuid();
 
 			var documentTypeRepository = _classifierRepositoryFactory.GetNamedOrDefaultService(Docs.ClassifierTypeCode.DocumentType);
 			var documentType = await documentTypeRepository.Get(Docs.ClassifierTypeCode.DocumentType, DocumentTypes.CompanyRegistrationRequest, cancellationToken);
+
+			var companyRepository = _classifierRepositoryFactory.GetNamedOrDefaultService(ClassifierTypeCode.Company);
 
 			// todo: validate fields
 			var metadata = await _fieldMetadataRepository.Search(new MetadataSearchRequest
@@ -90,17 +93,13 @@ namespace Montr.Kompany.Impl.CommandHandlers
 				{
 					// todo: валидация и ограничения
 
-					// company + todo: creation date
-					await db.GetTable<DbCompany>()
-						.Value(x => x.Uid, companyUid)
-						.Value(x => x.ConfigCode, company.ConfigCode ?? CompanyConfigCode.Company)
-						.Value(x => x.StatusCode, CompanyStatusCode.Draft)
-						.Value(x => x.Name, company.Name)
-						.InsertAsync(cancellationToken);
+					var companyResult = await companyRepository.Insert(company, cancellationToken);
+
+					companyResult.AssertSuccess(() => $"Failed to register company {company}");
 
 					// user in company
 					await db.GetTable<DbCompanyUser>()
-						.Value(x => x.CompanyUid, companyUid)
+						.Value(x => x.CompanyUid, company.Uid)
 						.Value(x => x.UserUid, userUid)
 						.InsertAsync(cancellationToken);
 				}
@@ -116,7 +115,7 @@ namespace Montr.Kompany.Impl.CommandHandlers
 				{
 					Uid = documentUid,
 					DocumentTypeUid = documentType.Uid.Value,
-					CompanyUid = companyUid,
+					CompanyUid = company.Uid.Value,
 					StatusCode = DocumentStatusCode.Published,
 					Direction = DocumentDirection.Outgoing,
 					DocumentDate = now,
@@ -129,8 +128,8 @@ namespace Montr.Kompany.Impl.CommandHandlers
 				await _auditLogService.Save(new AuditEvent
 				{
 					EntityTypeCode = Company.EntityTypeCode,
-					EntityUid = companyUid,
-					CompanyUid = companyUid,
+					EntityUid = company.Uid.Value,
+					CompanyUid = company.Uid.Value,
 					UserUid = userUid,
 					CreatedAtUtc = now,
 					MessageCode = ExpressionHelper.GetFullName<CreateCompany.Resources>(x => x.CompanyCreated)
@@ -146,7 +145,7 @@ namespace Montr.Kompany.Impl.CommandHandlers
 
 				scope.Commit();
 
-				return new ApiResult { Uid = companyUid };
+				return new ApiResult { Uid = company.Uid };
 			}
 		}
 	}
