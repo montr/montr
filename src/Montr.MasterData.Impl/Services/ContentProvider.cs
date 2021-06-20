@@ -13,7 +13,6 @@ namespace Montr.MasterData.Impl.Services
 			{
 				return new[]
 				{
-					new Menu { Id = "companies", Name = "Компании", Route = "/companies/" },
 					new Menu
 					{
 						Id = "classifiers", Name = "Классификаторы", Route = "/classifiers/",

@@ -16,6 +16,7 @@ using Montr.Docs.Impl.Services;
 using Montr.Docs.Models;
 using Montr.Kompany.Commands;
 using Montr.Kompany.Impl.CommandHandlers;
+using Montr.Kompany.Impl.Services;
 using Montr.Kompany.Models;
 using Montr.Kompany.Registration.Services;
 using Montr.MasterData.Impl.Services;
@@ -55,6 +56,9 @@ namespace Montr.Kompany.Tests.CommandHandlers
 			var documentTypeRepository = new DbDocumentTypeRepository(dbContextFactory,
 				classifierTypeService, null, metadataService, dbFieldDataRepository, null);
 
+			var companyRepository = new DbCompanyRepository(dbContextFactory,
+				classifierTypeService, null, metadataService, dbFieldDataRepository, null);
+
 			var classifierRepositoryFactoryMock = new Mock<INamedServiceFactory<IClassifierRepository>>();
 
 			classifierRepositoryFactoryMock
@@ -64,7 +68,13 @@ namespace Montr.Kompany.Tests.CommandHandlers
 				.Setup(x => x.GetNamedOrDefaultService(It.Is<string>(name => name == Docs.ClassifierTypeCode.DocumentType)))
 				.Returns(() => documentTypeRepository);
 			classifierRepositoryFactoryMock
-				.Setup(x => x.GetNamedOrDefaultService(It.Is<string>(name => name != MasterData.ClassifierTypeCode.Numerator &&  name != Docs.ClassifierTypeCode.DocumentType)))
+				.Setup(x => x.GetNamedOrDefaultService(It.Is<string>(name => name == ClassifierTypeCode.Company)))
+				.Returns(() => companyRepository);
+			classifierRepositoryFactoryMock
+				.Setup(x => x.GetNamedOrDefaultService(It.Is<string>(name =>
+					name != MasterData.ClassifierTypeCode.Numerator &&
+					name != Docs.ClassifierTypeCode.DocumentType &&
+					name != ClassifierTypeCode.Company)))
 				.Returns(() => classifierRepository);
 
 			return classifierRepositoryFactoryMock.Object;
@@ -118,7 +128,9 @@ namespace Montr.Kompany.Tests.CommandHandlers
 			{
 				await generator.EnsureClassifierTypeRegistered(Numerator.GetDefaultMetadata(), cancellationToken);
 				await generator.EnsureClassifierTypeRegistered(DocumentType.GetDefaultMetadata(), cancellationToken);
+				await generator.EnsureClassifierTypeRegistered(Company.GetDefaultMetadata(), cancellationToken);
 
+				// register required document types
 				foreach (var classifier in RegisterClassifiersStartupTask.GetClassifiers())
 				{
 					await classifierRegistrator.Register(classifier, cancellationToken);

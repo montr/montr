@@ -12,11 +12,11 @@ using Montr.MasterData.Impl.Entities;
 
 namespace Montr.Kompany.Impl.QueryHandlers
 {
-	public class GetCompanyListHandler : IRequestHandler<GetUserCompanyList, ICollection<Company>>
+	public class GetUserCompanyListHandler : IRequestHandler<GetUserCompanyList, ICollection<Company>>
 	{
 		private readonly IDbContextFactory _dbContextFactory;
 
-		public GetCompanyListHandler(IDbContextFactory dbContextFactory)
+		public GetUserCompanyListHandler(IDbContextFactory dbContextFactory)
 		{
 			_dbContextFactory = dbContextFactory;
 		}

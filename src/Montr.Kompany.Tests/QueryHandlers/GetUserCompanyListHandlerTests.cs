@@ -9,14 +9,14 @@ using Montr.Kompany.Queries;
 namespace Montr.Kompany.Tests.QueryHandlers
 {
 	[TestClass]
-	public class GetCompanyListHandlerTests
+	public class GetUserCompanyListHandlerTests
 	{
 		[TestMethod]
-		public async Task GetCompanyList_Should_ReturnCompanyList()
+		public async Task GetUserCompanyList_Should_ReturnCompanyList()
 		{
 			// arrange
 			var dbContextFactory = new DefaultDbContextFactory();
-			var handler = new GetCompanyListHandler(dbContextFactory);
+			var handler = new GetUserCompanyListHandler(dbContextFactory);
 
 			// act
 			var command = new GetUserCompanyList
@@ -28,7 +28,7 @@ namespace Montr.Kompany.Tests.QueryHandlers
 
 			// assert
 			Assert.IsNotNull(result);
-			Assert.IsTrue(result.Count > 0);
+			Assert.IsTrue(result.Count > 0); // todo - fixit - add user with one or more companies
 		}
 	}
 }

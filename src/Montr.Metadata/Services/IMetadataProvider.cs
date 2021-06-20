@@ -252,34 +252,6 @@ namespace Montr.Metadata.Services
 				};
 			}
 
-			if (viewId == "DocumentType/Tabs")
-			{
-				result.Panes = new List<DataPane>
-				{
-					new() { Key = "common", Name = "Информация" },
-					new() { Key = "statuses", Name = "Statuses", Component = "panes/PaneSearchEntityStatuses" },
-					new() { Key = "fields", Name = "Анкета", Component = "panes/PaneSearchMetadata" },
-					new() { Key = "automation", Name = "Automations", Component = "panes/PaneSearchAutomation" }
-				};
-			}
-
-			/*if (viewId == "Process/List")
-			{
-				result.Columns = new List<DataColumn>
-				{
-					new() { Key = "code", Name = "Code", Sortable = true, UrlProperty = "url", Width = 100 },
-					new() { Key = "name", Name = "Name", Sortable = true, UrlProperty = "url", Width = 400 }
-				};
-			}
-
-			if (viewId == "Process/Tabs")
-			{
-				result.Panes = new List<DataPane>
-				{
-					new() { Key = "fields", Name = "Поля", Component = "panes/PaneSearchMetadata" },
-				};
-			}*/
-
 			// Events
 			if (viewId == "PrivateEventSearch/Grid")
 			{
