@@ -7,7 +7,7 @@ namespace Montr.Automate.Models
 	{
 		public string EntityTypeCode { get; set; }
 
-		public Guid EntityTypeUid { get; set; }
+		public Guid EntityUid { get; set; }
 
 		public bool IncludeRules { get; set; }
 

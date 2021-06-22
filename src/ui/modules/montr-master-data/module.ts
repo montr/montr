@@ -12,6 +12,10 @@ import("./components").then(x => {
 	DataFieldFactory.register("select-classifier-type", new x.SelectClassifierTypeFieldFactory());
 });
 
+export const EntityTypeCode = {
+	classifier: "classifier"
+};
+
 export const Locale = {
 	Namespace: "master-data"
 };

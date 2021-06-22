@@ -63,7 +63,7 @@ namespace Montr.Automate.Tests.Services
 			return await _getAutomationHandler.Handle(new GetAutomation
 			{
 				EntityTypeCode = EntityTypeCode,
-				EntityTypeUid = EntityTypeUid,
+				EntityUid = EntityTypeUid,
 				Uid = uid
 			}, cancellationToken);
 		}

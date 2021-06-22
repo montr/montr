@@ -6,7 +6,7 @@ import { Spin } from "antd";
 import { ClassifierService, ClassifierTypeService, ClassifierMetadataService } from "../services";
 import { Classifier, ClassifierType } from "../models";
 import { ClassifierBreadcrumb } from ".";
-import { RouteBuilder, Views } from "../module";
+import { EntityTypeCode, RouteBuilder, Views } from "../module";
 
 interface RouteProps {
 	typeCode: string;
@@ -111,7 +111,7 @@ export default class PageEditClassifier extends React.Component<Props, State> {
 							type,
 							data,
 							onDataChange: this.handleDataChange,
-							entityTypeCode: `Classifier`,
+							entityTypeCode: EntityTypeCode.classifier,
 							entityUid: data?.uid
 						}}
 					/>

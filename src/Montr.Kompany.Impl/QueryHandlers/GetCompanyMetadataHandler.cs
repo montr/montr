@@ -5,15 +5,17 @@ using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using Montr.Core.Services;
-using Montr.Docs.Models;
 using Montr.Kompany.Models;
 using Montr.Kompany.Queries;
+using Montr.MasterData;
+using Montr.MasterData.Models;
 using Montr.MasterData.Services;
 using Montr.Metadata.Models;
 
 namespace Montr.Kompany.Impl.QueryHandlers
 {
 	// todo: why named GetCompanyMetadata, if returns metadata of "company registration request" document?
+	// fixme: rename to GetClassifierMetadataProvider (?)
 	public class GetCompanyMetadataHandler : IRequestHandler<GetCompanyMetadata, DataView>
 	{
 		private readonly INamedServiceFactory<IClassifierRepository> _classifierRepositoryFactory;
@@ -35,7 +37,7 @@ namespace Montr.Kompany.Impl.QueryHandlers
 
 			var metadata = await _metadataRepository.Search(new MetadataSearchRequest
 			{
-				EntityTypeCode = DocumentType.EntityTypeCode,
+				EntityTypeCode = EntityTypeCode.Classifier,
 				EntityUid = documentType.Uid.Value,
 				IsActive = true,
 				SkipPaging = true
@@ -50,7 +52,7 @@ namespace Montr.Kompany.Impl.QueryHandlers
 
 			foreach (var field in result.Fields)
 			{
-				if (dbFields.Contains(field.Key, StringComparer.InvariantCultureIgnoreCase) == false)
+				if (dbFields.Contains(field.Key, StringComparer.OrdinalIgnoreCase) == false)
 				{
 					field.Key = FieldKey.FormatFullKey(field.Key);
 				}

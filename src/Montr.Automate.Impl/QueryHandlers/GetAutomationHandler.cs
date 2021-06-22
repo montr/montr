@@ -22,7 +22,7 @@ namespace Montr.Automate.Impl.QueryHandlers
 			var result = await _repository.Search(new AutomationSearchRequest
 			{
 				EntityTypeCode = request.EntityTypeCode,
-				EntityTypeUid = request.EntityTypeUid,
+				EntityUid = request.EntityUid,
 				Uid = request.Uid,
 				IncludeRules = true
 			}, cancellationToken);

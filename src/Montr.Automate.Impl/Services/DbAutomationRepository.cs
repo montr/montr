@@ -41,7 +41,7 @@ namespace Montr.Automate.Impl.Services
 			{
 				var query = db.GetTable<DbAutomation>()
 					.Where(x => x.EntityTypeCode == request.EntityTypeCode &&
-								x.EntityTypeUid == request.EntityTypeUid);
+								x.EntityTypeUid == request.EntityUid);
 
 				if (request.Uid != null)
 				{
@@ -160,6 +160,7 @@ namespace Montr.Automate.Impl.Services
 			return result;
 		}
 
+		// todo: move to recipes
 		public Task<SearchResult<Automation>> _Search(SearchRequest searchRequest, CancellationToken cancellationToken)
 		{
 			var request = (AutomationSearchRequest)searchRequest ?? throw new ArgumentNullException(nameof(searchRequest));
@@ -167,7 +168,7 @@ namespace Montr.Automate.Impl.Services
 			var result = new SearchResult<Automation>();
 
 			if (request.EntityTypeCode == "DocumentType" &&
-				request.EntityTypeUid == Guid.Parse("ab770d9f-f723-4468-8807-5df0f6637cca"))
+				request.EntityUid == Guid.Parse("ab770d9f-f723-4468-8807-5df0f6637cca"))
 			{
 				result.Rows = new[]
 				{
