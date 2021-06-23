@@ -14,7 +14,7 @@
 	"license": "AGPL-3.0",
 	"private": true,
 	"dependencies": {
-		"antd": "^4.16.3",
+		"antd": "^4.16.5",
 		"axios": "^0.21.1",
 		"i18next": "^20.3.2",
 		"i18next-browser-languagedetector": "^6.1.2",
