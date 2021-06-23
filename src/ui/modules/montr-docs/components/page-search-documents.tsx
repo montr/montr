@@ -2,13 +2,13 @@ import React from "react";
 import { Page, PageHeader, DataTable } from "@montr-core/components";
 import { Views, Api } from "../module";
 
-interface IProps {
+interface Props {
 }
 
-interface IState {
+interface State {
 }
 
-export default class PageSearchDocuments extends React.Component<IProps, IState> {
+export default class PageSearchDocuments extends React.Component<Props, State> {
 	render = () => {
 		return (
 			<Page

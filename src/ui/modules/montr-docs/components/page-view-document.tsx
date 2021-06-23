@@ -6,8 +6,6 @@ import { DocumentService } from "../services";
 import { RouteBuilder } from "../module";
 import { TabViewDocumentFields } from "./tab-view-document-fields";
 import { DateHelper } from "@montr-core/services";
-import { Icon } from "@montr-core/components";
-import { Link } from "react-router-dom";
 
 interface RouteProps {
 	uid?: string;
@@ -80,10 +78,7 @@ export default class PageViewDocument extends React.Component<Props, State> {
 					tags={<Tag color="green">{data.statusCode}</Tag>}
 					extra={[
 						<Button key="1" type="primary">Допустить</Button>,
-						<Button key="2">Отклонить</Button>,
-						<Link key="3" to={RouteBuilder.editDocumentType(data.documentTypeUid)}>
-							<Button icon={Icon.Setting}> Настроить</Button>
-						</Link>,
+						<Button key="2">Отклонить</Button>
 					]}>
 					<Descriptions size="small" column={1}>
 						<Descriptions.Item label="Name">{data.name}</Descriptions.Item>
