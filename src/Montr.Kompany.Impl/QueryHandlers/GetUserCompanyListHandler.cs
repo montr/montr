@@ -28,12 +28,11 @@ namespace Montr.Kompany.Impl.QueryHandlers
 			using (var db = _dbContextFactory.Create())
 			{
 				var query = from company in db.GetTable<DbCompany>()
-					join c in db.GetTable<DbClassifier>() on company.Uid equals c.Uid
-					join cu in db.GetTable<DbCompanyUser>()
-						on company.Uid equals cu.CompanyUid
-					orderby c.Name
-					where cu.UserUid == userUid
-					select c;
+					join classifier in db.GetTable<DbClassifier>() on company.Uid equals classifier.Uid
+					join companyUser in db.GetTable<DbCompanyUser>() on company.Uid equals companyUser.CompanyUid
+					orderby classifier.Name
+					where companyUser.UserUid == userUid
+					select classifier;
 
 				var result = await query.Select(x => new Company
 				{

@@ -79,11 +79,11 @@ namespace Montr.Kompany.Impl.Services
 
 			if (result.Success)
 			{
-				var numerator = (Company)item;
+				var company = (Company)item;
 
 				await db.GetTable<DbCompany>()
 					.Value(x => x.Uid, item.Uid)
-					.Value(x => x.ConfigCode, numerator.ConfigCode)
+					.Value(x => x.ConfigCode, company.ConfigCode)
 					.InsertAsync(cancellationToken);
 			}
 
@@ -97,11 +97,11 @@ namespace Montr.Kompany.Impl.Services
 
 			if (result.Success)
 			{
-				var numerator = (Company)item;
+				var company = (Company)item;
 
 				await db.GetTable<DbCompany>()
 					.Where(x => x.Uid == item.Uid)
-					.Set(x => x.ConfigCode, numerator.ConfigCode)
+					.Set(x => x.ConfigCode, company.ConfigCode)
 					.UpdateAsync(cancellationToken);
 			}
 
