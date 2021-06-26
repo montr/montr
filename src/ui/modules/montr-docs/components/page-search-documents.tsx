@@ -9,7 +9,7 @@ interface State {
 }
 
 export default class PageSearchDocuments extends React.Component<Props, State> {
-	render = () => {
+	render = (): React.ReactNode => {
 		return (
 			<Page
 				title={<>
