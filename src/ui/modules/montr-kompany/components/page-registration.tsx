@@ -22,7 +22,7 @@ const RegisterUser = (props: UserContextProps) => {
 		<p>
 			Зарегистрируйте пользователя пройдя по <Link to={Patterns.accountRegister}> ссылке</Link>.<br />
 			Если вы уже зарегистрированы, войдите в систему пройдя по <a onClick={login}> ссылке</a >.
-		</p >
+		</p>
 	);
 };
 

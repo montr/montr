@@ -1,4 +1,5 @@
-import { Constants } from "@montr-core/constants";
+import React from "react";
+import { Constants, Layout } from "@montr-core/constants";
 import { AppRouteRegistry } from "@montr-core/services";
 
 export const Api = {
@@ -7,13 +8,14 @@ export const Api = {
 };
 
 export const Patterns = {
-	// searchCompanies: "/companies",
+	registration: "/register/",
+	registerCompany: "/register/company/"
 };
 
 export const Views = {
-	gridSearchCompanies: "CompanySearch/Grid",
 };
 
 AppRouteRegistry.add([
-	// { path: Patterns.searchCompanies, exact: true, component: React.lazy(() => import("./components/page-search-companies")) },
+	{ path: Patterns.registration, layout: Layout.public, exact: true, component: React.lazy(() => import("./components/page-registration")) },
+	{ path: Patterns.registerCompany, layout: Layout.public, exact: true, component: React.lazy(() => import("./components/page-register-company")) },
 ]);

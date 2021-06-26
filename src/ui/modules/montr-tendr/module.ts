@@ -1,7 +1,7 @@
 import React from "react";
 import { generatePath } from "react-router";
 import { AppRouteRegistry, ComponentRegistry } from "@montr-core/services/";
-import { Constants, Layout } from "@montr-core/constants";
+import { Constants } from "@montr-core/constants";
 
 export const Locale = {
 	Namespace: "tendr"
@@ -12,6 +12,8 @@ export const Api = {
 };
 
 export const Patterns = {
+	searchEvents: "/events/",
+	addEvent: "/events/new",
 	editEvent: "/events/edit/:uid/:tabKey?",
 };
 
@@ -26,10 +28,8 @@ export const RouteBuilder = {
 };
 
 AppRouteRegistry.add([
-	{ path: "/register/", layout: Layout.public, exact: true, component: React.lazy(() => import("./components/page-registration")) },
-	{ path: "/register/company/", layout: Layout.public, exact: true, component: React.lazy(() => import("@montr-kompany/components/page-register")) },
-	{ path: "/events/", exact: true, component: React.lazy(() => import("./components/page-search-events")) },
-	{ path: "/events/new", exact: true, component: React.lazy(() => import("./components/page-select-event-template")) },
+	{ path: Patterns.searchEvents, exact: true, component: React.lazy(() => import("./components/page-search-events")) },
+	{ path: Patterns.addEvent, exact: true, component: React.lazy(() => import("./components/page-select-event-template")) },
 	{ path: Patterns.editEvent, exact: true, component: React.lazy(() => import("./components/page-edit-event")) }
 ]);
 
