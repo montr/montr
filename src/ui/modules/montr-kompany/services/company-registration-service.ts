@@ -1,16 +1,20 @@
-import { ApiResult } from "@montr-core/models";
+import { ApiResult, Guid } from "@montr-core/models";
 import { Fetcher } from "@montr-core/services";
 import { IDocument } from "@montr-docs/models";
 import { Api } from "../module";
 
-export class CompanyRegistrationService extends Fetcher {
+export class CompanyRegistrationRequestService extends Fetcher {
 
-    listRequests = async (): Promise<IDocument[]> => {
+    search = async (): Promise<IDocument[]> => {
         return await this.post(Api.companyRegistrationRequestList);
     };
 
-    createRequest = async (): Promise<ApiResult> => {
+    create = async (): Promise<ApiResult> => {
         return await this.post(Api.companyRegistrationRequestCreate);
+    };
+
+    delete = async (uid: string | Guid): Promise<ApiResult> => {
+        return await this.post(Api.companyRegistrationRequestDelete, { uid });
     };
 
 }

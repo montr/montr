@@ -89,7 +89,7 @@ namespace Montr.Docs.Impl.Services
 				CompanyUid = x.CompanyUid,
 				DocumentTypeUid = x.DocumentTypeUid,
 				StatusCode = x.StatusCode,
-				Direction = Enum.Parse<DocumentDirection>(x.Direction),
+				Direction = Enum.Parse<DocumentDirection>(x.Direction, true),
 				DocumentNumber = x.DocumentNumber,
 				DocumentDate = x.DocumentDate,
 				Name = x.Name,

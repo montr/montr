@@ -1,10 +1,12 @@
 import React from "react";
+import { Redirect } from "react-router";
 import { UserContextProps, withUserContext } from "@montr-core/components";
 import { IDocument } from "@montr-docs/models";
 import { CompanyContextProps, withCompanyContext } from ".";
-import { CompanyRegistrationService } from "../services";
+import { CompanyRegistrationRequestService } from "../services";
 import { Button, List, Spin, Tag } from "antd";
 import { OperationService } from "@montr-core/services";
+import { RouteBuilder } from "@montr-docs/module";
 
 interface Props extends UserContextProps, CompanyContextProps {
 }
@@ -12,12 +14,13 @@ interface Props extends UserContextProps, CompanyContextProps {
 interface State {
     loading: boolean;
     documents: IDocument[];
+    redirectTo?: string;
 }
 
 class _StepRegisterCompany extends React.Component<Props, State> {
 
     private readonly operation = new OperationService();
-    private readonly companyRegistrationService = new CompanyRegistrationService();
+    private readonly companyRegistrationRequestService = new CompanyRegistrationRequestService();
 
     constructor(props: Props) {
         super(props);
@@ -33,36 +36,81 @@ class _StepRegisterCompany extends React.Component<Props, State> {
     };
 
     componentWillUnmount = async (): Promise<void> => {
-        await this.companyRegistrationService.abort();
+        await this.companyRegistrationRequestService.abort();
     };
 
     fetchData = async (): Promise<void> => {
 
-        const documents = await this.companyRegistrationService.listRequests();
+        const documents = await this.companyRegistrationRequestService.search();
 
         this.setState({ loading: false, documents });
     };
 
     createRequest = async () => {
-        const result = await this.companyRegistrationService.createRequest();
+        const result = await this.operation.execute(() => {
+            return this.companyRegistrationRequestService.create();
+        });
+
+        if (result.success) {
+            this.setState({ redirectTo: RouteBuilder.editDocument(result.uid) });
+        }
+    };
+
+    openRequest = async (item: IDocument) => {
+        const redirectTo = item.statusCode == "draft"
+            ? RouteBuilder.editDocument(item.uid)
+            : RouteBuilder.viewDocument(item.uid);
+
+        this.setState({ redirectTo });
+    };
+
+    deleteRequest = async (item: IDocument) => {
+        const result = await this.operation.confirmDelete(() => {
+            return this.companyRegistrationRequestService.delete(item.uid);
+        });
+
+        if (result.success) {
+            this.setState({ loading: true });
+
+            await this.fetchData();
+        }
     };
 
     render = (): React.ReactNode => {
         const { user, currentCompany: company, registerCompany } = this.props,
-            { loading, documents } = this.state;
+            { redirectTo, loading, documents } = this.state;
+
+        if (redirectTo) {
+            return <Redirect to={redirectTo} push={true} />;
+        }
 
         return (
             <Spin spinning={loading}>
 
                 <List
                     size="small"
-                    loading={loading}
                     dataSource={documents}
                     renderItem={item => {
 
+                        const actions = [];
+
+                        if (item.statusCode == "draft") {
+                            actions.push(<a onClick={() => this.openRequest(item)}>Edit</a>);
+                            actions.push(<a onClick={() => this.deleteRequest(item)}>Delete</a>);
+                        } else {
+                            actions.push(<a onClick={() => this.openRequest(item)}>View</a>);
+                        }
+
+                        const tagColor = item.statusCode != "draft" ? "green" : undefined;
+
                         return (
-                            <List.Item actions={[]}>
-                                <List.Item.Meta description={<>{item.documentDate} <Tag>{item.statusCode}</Tag></>} />
+                            <List.Item actions={actions}>
+                                <List.Item.Meta
+                                    title={'Company Registration Request'}
+                                    description={<>
+                                        Document Date: {item.documentDate}
+                                        <Tag color={tagColor}>{item.statusCode}</Tag>
+                                    </>} />
                             </List.Item>
                         );
                     }}

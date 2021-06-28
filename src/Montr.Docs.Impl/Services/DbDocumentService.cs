@@ -42,7 +42,7 @@ namespace Montr.Docs.Impl.Services
 				}
 
 				var data = await query
-					.Apply(request, x => x.DocumentNumber)
+					.Apply(request, x => x.DocumentDate, SortOrder.Descending)
 					.Select(x => Materialize(x))
 					.ToListAsync(cancellationToken);
 

@@ -13,11 +13,11 @@ export class NavigationService {
 		return window.location.pathname;
 	}
 
-	public getReturnUrlParameter = () => {
+	public getReturnUrlParameter = (): string => {
 		return this.getUrlParameter(Constants.returnUrlParam);
 	};
 
-	public getUrlParameter = (name: string) => {
+	public getUrlParameter = (name: string): string => {
 		/* name = name.replace(/[\[]/, '\\[').replace(/[\]]/, '\\]');
 		var regex = new RegExp('[\\?&]' + name + '=([^&#]*)');
 		var results = regex.exec(window.location.search);

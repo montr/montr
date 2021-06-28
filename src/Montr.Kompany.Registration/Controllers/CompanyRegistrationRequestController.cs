@@ -11,25 +11,25 @@ using Montr.Kompany.Registration.Queries;
 namespace Montr.Kompany.Registration.Controllers
 {
 	[ApiController, Route("api/[controller]/[action]")]
-	public class CompanyRegistrationController : ControllerBase
+	public class CompanyRegistrationRequestController : ControllerBase
 	{
 		private readonly ISender _mediator;
 		private readonly ICurrentUserProvider _currentUserProvider;
 
-		public CompanyRegistrationController(ISender mediator, ICurrentUserProvider currentUserProvider)
+		public CompanyRegistrationRequestController(ISender mediator, ICurrentUserProvider currentUserProvider)
 		{
 			_mediator = mediator;
 			_currentUserProvider = currentUserProvider;
 		}
 
-		public async Task<ICollection<Document>> Requests(GetCompanyRegistrationRequestList request)
+		public async Task<ICollection<Document>> Search(GetCompanyRegistrationRequestList request)
 		{
 			request.UserUid = _currentUserProvider.GetUserUid();
 
 			return await _mediator.Send(request);
 		}
 
-		public async Task<ApiResult> CreateRequest()
+		public async Task<ApiResult> Create()
 		{
 			return await _mediator.Send(new CreateCompanyRegistrationRequest
 			{
