@@ -6,12 +6,7 @@
 
     <ItemGroup>
       <ProjectReference Include="..\Montr.Core\Montr.Core.csproj" />
-      <ProjectReference Include="..\Montr.Docs\Montr.Docs.csproj" />
-      <ProjectReference Include="..\Montr.MasterData\Montr.MasterData.csproj" />
-    </ItemGroup>
-
-    <ItemGroup>
-      <Folder Include="Models" />
+      <ProjectReference Include="..\Montr.Kompany.Registration\Montr.Kompany.Registration.csproj" />
     </ItemGroup>
 
 </Project>

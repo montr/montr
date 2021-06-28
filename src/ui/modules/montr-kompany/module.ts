@@ -3,6 +3,9 @@ import { Constants, Layout } from "@montr-core/constants";
 import { AppRouteRegistry } from "@montr-core/services";
 
 export const Api = {
+	companyRegistrationRequestList: `${Constants.apiURL}/companyRegistration/requests`,
+	companyRegistrationRequestCreate: `${Constants.apiURL}/companyRegistration/createRequest`,
+
 	companyList: `${Constants.apiURL}/userCompany/list`,
 	companyCreate: `${Constants.apiURL}/userCompany/create`,
 };

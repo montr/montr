@@ -1,11 +1,14 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
+using Montr.Core.Models;
 using Montr.Docs.Models;
 
 namespace Montr.Docs.Services
 {
 	public interface IDocumentService
 	{
-		Task Create(Document document, CancellationToken cancellationToken);
+		Task<SearchResult<Document>> Search(DocumentSearchRequest request, CancellationToken cancellationToken);
+
+		Task<ApiResult> Create(Document document, CancellationToken cancellationToken);
 	}
 }

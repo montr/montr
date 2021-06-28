@@ -56,6 +56,7 @@ namespace Montr.Idx.Impl.Services
 			{
 				if (userRequest.UserName != null)
 				{
+					// todo: use normalized username or use user manager
 					users = users.Where(x => x.UserName == userRequest.UserName);
 				}
 			}

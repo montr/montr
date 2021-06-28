@@ -29,6 +29,7 @@ namespace Montr.Kompany.Registration.Services
 		}
 
 		// todo: register document types numerators
+		// todo: move to recipes
 		public static IEnumerable<Classifier> GetClassifiers()
 		{
 			yield return new DocumentType

@@ -13,7 +13,7 @@ namespace Montr.Docs.Models
 
 		public Guid? Uid { get; set; }
 
-		public Guid CompanyUid { get; set; }
+		public Guid? CompanyUid { get; set; }
 
 		public Guid DocumentTypeUid { get; set; }
 
@@ -29,11 +29,11 @@ namespace Montr.Docs.Models
 
 		public DateTime? CreatedAtUtc { get; set; }
 
-		public string CreatedBy { get; set; }
+		public Guid? CreatedBy { get; set; }
 
 		public DateTime? ModifiedAtUtc { get; set; }
 
-		public string ModifiedBy { get; set; }
+		public Guid? ModifiedBy { get; set; }
 
 		public string Url { get; set; }
 

@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using LinqToDB;
 using MediatR;
 using Montr.Core.Events;
+using Montr.Core.Models;
+using Montr.Core.Services;
 using Montr.Data.Linq2Db;
 using Montr.Docs.Impl.Entities;
 using Montr.Docs.Models;
@@ -27,8 +29,55 @@ namespace Montr.Docs.Impl.Services
 			_mediator = mediator;
 		}
 
-		public async Task Create(Document document, CancellationToken cancellationToken)
+		public async Task<SearchResult<Document>> Search(DocumentSearchRequest request, CancellationToken cancellationToken)
 		{
+			using (var db = _dbContextFactory.Create())
+			{
+				var query = db.GetTable<DbDocument>().AsQueryable();
+
+				if (request.UserUid.HasValue)
+				{
+					// todo: add index
+					query = query.Where(x => x.CreatedBy == request.UserUid);
+				}
+
+				var data = await query
+					.Apply(request, x => x.DocumentNumber)
+					.Select(x => Materialize(x))
+					.ToListAsync(cancellationToken);
+
+				return new SearchResult<Document>
+				{
+					TotalCount = query.GetTotalCount(request),
+					Rows = data
+				};
+			}
+		}
+
+		protected virtual Document Materialize(DbDocument dbItem)
+		{
+			return new Document
+			{
+				Uid = dbItem.Uid,
+				DocumentTypeUid = dbItem.DocumentTypeUid,
+				StatusCode = dbItem.StatusCode,
+				Direction = Enum.Parse<DocumentDirection>(dbItem.Direction, true),
+				DocumentDate = dbItem.DocumentDate,
+				DocumentNumber = dbItem.DocumentNumber,
+				CompanyUid = dbItem.CompanyUid,
+				Name = dbItem.Name,
+				CreatedAtUtc = dbItem.CreatedAtUtc,
+				CreatedBy = dbItem.CreatedBy,
+				ModifiedAtUtc = dbItem.ModifiedAtUtc,
+				ModifiedBy = dbItem.ModifiedBy,
+				Url = $"/documents/edit/{dbItem.Uid}"
+			};
+		}
+
+		public async Task<ApiResult> Create(Document document, CancellationToken cancellationToken)
+		{
+			if (document.DocumentDate == DateTime.MinValue) throw new InvalidOperationException("Invalid document date (cannot be min datetime)");
+
 			document.Uid ??= Guid.NewGuid();
 			document.StatusCode ??= DocumentStatusCode.Draft;
 
@@ -36,12 +85,15 @@ namespace Montr.Docs.Impl.Services
 			{
 				await db.GetTable<DbDocument>()
 					.Value(x => x.Uid, document.Uid)
-					.Value(x => x.CompanyUid, document.CompanyUid)
 					.Value(x => x.DocumentTypeUid, document.DocumentTypeUid)
 					.Value(x => x.StatusCode, document.StatusCode)
-					.Value(x => x.Direction, document.Direction.ToString())
+					.Value(x => x.Direction, document.Direction.ToString().ToLowerInvariant())
 					.Value(x => x.DocumentNumber, document.DocumentNumber)
 					.Value(x => x.DocumentDate, document.DocumentDate)
+					.Value(x => x.CompanyUid, document.CompanyUid)
+					.Value(x => x.Name, document.Name)
+					.Value(x => x.CreatedAtUtc, document.CreatedAtUtc)
+					.Value(x => x.CreatedBy, document.CreatedBy)
 					.Value(x => x.Name, document.Name)
 					.InsertAsync(cancellationToken);
 			}
@@ -84,6 +136,8 @@ namespace Montr.Docs.Impl.Services
 				Entity = document,
 				StatusCode = document.StatusCode
 			}, cancellationToken);
+
+			return new ApiResult { Uid = document.Uid };
 		}
 	}
 }
