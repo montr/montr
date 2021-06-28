@@ -1,5 +1,6 @@
 ﻿using System.Text;
 using System.Threading;
+using System.Threading.Tasks;
 using Hangfire;
 using Hangfire.Common;
 using Hangfire.Dashboard;
@@ -44,7 +45,7 @@ namespace Montr.Worker.Hangfire
 			app.UseHangfireDashboard(options: new DashboardOptions
 			{
 				AppPath = ClientRoutes.Dashboard,
-				Authorization = new [] { new DashboardAuthorizationFilter() },
+				AsyncAuthorization = new [] { new DashboardAuthorizationFilter() },
 				// IsReadOnlyFunc = (context) => true,
 				DisplayNameFunc = FormatJobName
 			});
@@ -66,16 +67,16 @@ namespace Montr.Worker.Hangfire
 			return result.ToString();
 		}
 
-		public class DashboardAuthorizationFilter : IDashboardAuthorizationFilter
+		public class DashboardAuthorizationFilter : IDashboardAsyncAuthorizationFilter
 		{
-			public bool Authorize(DashboardContext context)
+			public async Task<bool> AuthorizeAsync(DashboardContext context)
 			{
 				var httpContext = context.GetHttpContext();
 
 				var authorizationService = httpContext.RequestServices.GetService<IAuthorizationService>();
 
-				var authResult = authorizationService.AuthorizePermission(httpContext.User,
-					Permission.GetCode(typeof(Permissions.ViewDashboard))).ConfigureAwait(false).GetAwaiter().GetResult();
+				var authResult = await authorizationService
+					.AuthorizePermission(httpContext.User, Permission.GetCode(typeof(Permissions.ViewDashboard)));
 
 				return authResult?.Succeeded == true;
 			}
