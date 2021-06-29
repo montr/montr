@@ -13,13 +13,18 @@ namespace Montr.Kompany.Registration.Impl.CommandHandlers
 {
 	public class CreateCompanyRegistrationRequestHandler : IRequestHandler<CreateCompanyRegistrationRequest, ApiResult>
 	{
+		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IDateTimeProvider _dateTimeProvider;
 		private readonly INamedServiceFactory<IClassifierRepository> _classifierRepositoryFactory;
 		private readonly IDocumentService _documentService;
 
-		public CreateCompanyRegistrationRequestHandler(IDateTimeProvider dateTimeProvider,
-			INamedServiceFactory<IClassifierRepository> classifierRepositoryFactory, IDocumentService documentService)
+		public CreateCompanyRegistrationRequestHandler(
+			IUnitOfWorkFactory unitOfWorkFactory,
+			IDateTimeProvider dateTimeProvider,
+			INamedServiceFactory<IClassifierRepository> classifierRepositoryFactory,
+			IDocumentService documentService)
 		{
+			_unitOfWorkFactory = unitOfWorkFactory;
 			_dateTimeProvider = dateTimeProvider;
 			_classifierRepositoryFactory = classifierRepositoryFactory;
 			_documentService = documentService;
@@ -43,9 +48,14 @@ namespace Montr.Kompany.Registration.Impl.CommandHandlers
 				CreatedBy = request.UserUid
 			};
 
-			var result = await _documentService.Create(document, cancellationToken);
+			using (var scope = _unitOfWorkFactory.Create())
+			{
+				var result = await _documentService.Create(document, cancellationToken);
 
-			return result;
+				if (result.Success) scope.Commit();
+
+				return result;
+			}
 		}
 	}
 }

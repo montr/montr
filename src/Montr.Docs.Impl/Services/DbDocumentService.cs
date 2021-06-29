@@ -8,6 +8,7 @@ using Montr.Core.Events;
 using Montr.Core.Models;
 using Montr.Core.Services;
 using Montr.Data.Linq2Db;
+using Montr.Docs.Commands;
 using Montr.Docs.Impl.Entities;
 using Montr.Docs.Models;
 using Montr.Docs.Services;
@@ -138,6 +139,30 @@ namespace Montr.Docs.Impl.Services
 			}, cancellationToken);
 
 			return new ApiResult { Uid = document.Uid };
+		}
+
+		public virtual async Task<ApiResult> Delete(DeleteDocument request, CancellationToken cancellationToken)
+		{
+			ApiResult result;
+
+			using (var db = _dbContextFactory.Create())
+			{
+				result = await DeleteInternal(db, request, cancellationToken);
+
+				if (result.Success == false) return result;
+			}
+
+			return result;
+		}
+
+		protected virtual async Task<ApiResult> DeleteInternal(
+			DbContext db, DeleteDocument request, CancellationToken cancellationToken = default)
+		{
+			var affected = await db.GetTable<DbDocument>()
+				.Where(x => request.Uids.Contains(x.Uid))
+				.DeleteAsync(cancellationToken);
+
+			return new ApiResult { AffectedRows = affected };
 		}
 	}
 }

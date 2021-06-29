@@ -1,10 +1,10 @@
 import React from "react";
 import { Redirect } from "react-router";
-import { UserContextProps, withUserContext } from "@montr-core/components";
+import { ButtonCreate, ButtonDelete, UserContextProps, withUserContext } from "@montr-core/components";
 import { IDocument } from "@montr-docs/models";
 import { CompanyContextProps, withCompanyContext } from ".";
 import { CompanyRegistrationRequestService } from "../services";
-import { Button, List, Spin, Tag } from "antd";
+import { Button, List, Space, Spin, Tag, Typography } from "antd";
 import { OperationService } from "@montr-core/services";
 import { RouteBuilder } from "@montr-docs/module";
 
@@ -65,15 +65,17 @@ class _StepRegisterCompany extends React.Component<Props, State> {
     };
 
     deleteRequest = async (item: IDocument) => {
-        const result = await this.operation.confirmDelete(() => {
-            return this.companyRegistrationRequestService.delete(item.uid);
+        await this.operation.confirmDelete(async () => {
+            const result = await this.companyRegistrationRequestService.delete(item.uid);
+
+            if (result.success) {
+                this.setState({ loading: true });
+
+                await this.fetchData();
+            }
+
+            return result;
         });
-
-        if (result.success) {
-            this.setState({ loading: true });
-
-            await this.fetchData();
-        }
     };
 
     render = (): React.ReactNode => {
@@ -95,28 +97,29 @@ class _StepRegisterCompany extends React.Component<Props, State> {
                         const actions = [];
 
                         if (item.statusCode == "draft") {
-                            actions.push(<a onClick={() => this.openRequest(item)}>Edit</a>);
-                            actions.push(<a onClick={() => this.deleteRequest(item)}>Delete</a>);
+                            actions.push(<ButtonDelete type="link" onClick={() => this.deleteRequest(item)} />);
+                            actions.push(<Button onClick={() => this.openRequest(item)}>Edit</Button>);
                         } else {
-                            actions.push(<a onClick={() => this.openRequest(item)}>View</a>);
+                            actions.push(<Button onClick={() => this.openRequest(item)}>View</Button>);
                         }
-
-                        const tagColor = item.statusCode != "draft" ? "green" : undefined;
 
                         return (
                             <List.Item actions={actions}>
                                 <List.Item.Meta
-                                    title={'Company Registration Request'}
-                                    description={<>
-                                        Document Date: {item.documentDate}
-                                        <Tag color={tagColor}>{item.statusCode}</Tag>
-                                    </>} />
+                                    description={
+                                        <Space>
+                                            Number: <Typography.Text>{item.documentNumber || "n/a"}</Typography.Text>
+                                            Date: <Typography.Text>{item.documentDate}</Typography.Text>
+
+                                            <Tag color={item.statusCode != "draft" ? "green" : undefined}>{item.statusCode}</Tag>
+                                        </Space>}
+                                />
                             </List.Item>
                         );
                     }}
                 />
 
-                <Button onClick={this.createRequest}>Create company registration request</Button>
+                <ButtonCreate onClick={this.createRequest}>Create company registration request</ButtonCreate>
 
             </Spin>
         );

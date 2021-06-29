@@ -29,12 +29,18 @@ namespace Montr.Kompany.Registration.Controllers
 			return await _mediator.Send(request);
 		}
 
-		public async Task<ApiResult> Create()
+		public async Task<ApiResult> Create(CreateCompanyRegistrationRequest request)
 		{
-			return await _mediator.Send(new CreateCompanyRegistrationRequest
-			{
-				UserUid = _currentUserProvider.GetUserUid()
-			});
+			request.UserUid = _currentUserProvider.GetUserUid();
+
+			return await _mediator.Send(request);
+		}
+
+		public async Task<ApiResult> Delete(DeleteCompanyRegistrationRequest request)
+		{
+			request.UserUid = _currentUserProvider.GetUserUid();
+
+			return await _mediator.Send(request);
 		}
 	}
 }
