@@ -1,7 +1,7 @@
 DROP TABLE montr."document";
 
 CREATE TABLE montr."document" (
-	uid uuid NOT NULL DEFAULT uuid_generate_v1(),
+	uid uuid NOT NULL,
 	document_type_uid uuid NOT NULL,
 	document_date_utc timestamptz NOT NULL,
 	status_code varchar(16) NOT NULL,
