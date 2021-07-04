@@ -8,7 +8,7 @@ using Montr.Core.Queries;
 
 namespace Montr.Core.Controllers
 {
-	[/*Authorize,*/ ApiController, Route("api/[controller]/[action]")]
+	[ApiController, Route("api/[controller]/[action]")]
 	public class LocaleController : ControllerBase
 	{
 		private readonly ISender _mediator;
@@ -24,13 +24,13 @@ namespace Montr.Core.Controllers
 			return await _mediator.Send(new GetAllLocaleStrings { Locale = locale, Module = module });
 		}
 
-		[HttpPost]
+		[HttpPost, Permission(typeof(Permissions.ViewLocales))]
 		public async Task<SearchResult<LocaleString>> List(GetLocaleStringList request)
 		{
 			return await _mediator.Send(request);
 		}
 
-		[HttpPost]
+		[HttpPost, Permission(typeof(Permissions.ViewLocales))]
 		public async Task<FileStreamResult> Export(ExportLocaleStringList request)
 		{
 			var result = await _mediator.Send(request);
@@ -38,7 +38,7 @@ namespace Montr.Core.Controllers
 			return File(result.Stream, result.ContentType, result.FileName);
 		}
 
-		[HttpPost]
+		[HttpPost, Permission(typeof(Permissions.ManageLocales))]
 		public async Task<ApiResult> Import([FromForm]ImportLocaleStringList request)
 		{
 			return await _mediator.Send(request);

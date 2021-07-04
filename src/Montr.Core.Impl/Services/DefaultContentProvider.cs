@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using Montr.Core.Models;
+using Montr.Core.Permissions;
 using Montr.Core.Services;
 
 namespace Montr.Core.Impl.Services
@@ -44,8 +45,8 @@ namespace Montr.Core.Impl.Services
 						Items = new[]
 						{
 							// new Menu { Id = "integrations", Name = "Интеграции", Route = "/integrations/" },
-							new Menu { Name = "Настройки", Route = "/settings/" },
-							new Menu { Name = "Локализация", Route = "/locales/" }
+							new Menu { Name = "Настройки", Route = "/settings/", Permission = Permission.GetCode(typeof(ManageSettings)) },
+							new Menu { Name = "Локализация", Route = "/locales/", Permission = Permission.GetCode(typeof(ViewLocales)) }
 						}
 					},
 

@@ -17,6 +17,7 @@ namespace Montr.Core.Impl
 
 			services.AddSingleton<IContentService, DefaultContentService>();
 			services.AddSingleton<IContentProvider, DefaultContentProvider>();
+			services.AddTransient<IPermissionProvider, PermissionProvider>();
 
 			services.AddSingleton<ICurrentUserProvider, DefaultCurrentUserProvider>();
 			services.AddSingleton<EmbeddedResourceProvider, EmbeddedResourceProvider>();

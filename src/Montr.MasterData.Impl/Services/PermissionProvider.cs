@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Montr.Core;
 using Montr.Core.Models;
 using Montr.Core.Services;
 
@@ -24,7 +25,7 @@ namespace Montr.MasterData.Impl.Services
 			{
 				new RoleTemplate
 				{
-					RoleCode = "Administrator",
+					RoleCode = DefaultRoleCode.Administrator,
 					Permissions = GetPermissions()
 				}
 			};
