@@ -12,7 +12,6 @@ namespace Montr.Core.Impl
 	{
 		public void ConfigureServices(IConfiguration configuration, IServiceCollection services)
 		{
-			services.AddTransient<IStartupTask, BuildContentStartupTask>();
 			services.AddTransient<IStartupTask, ImportDefaultLocaleStringListStartupTask>();
 
 			services.AddSingleton<IContentService, DefaultContentService>();

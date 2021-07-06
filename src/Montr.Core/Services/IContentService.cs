@@ -5,10 +5,10 @@ namespace Montr.Core.Services
 	public interface IContentService
 	{
 		/// <summary>
-		/// Rebuild content (menu items) from all registered <see cref="IContentProvider"/>
+		/// Get menu by id. All configured menu items returned, authorization checks should be performed.
 		/// </summary>
-		void Rebuild();
-
+		/// <param name="menuId"></param>
+		/// <returns></returns>
 		Menu GetMenu(string menuId);
 	}
 }

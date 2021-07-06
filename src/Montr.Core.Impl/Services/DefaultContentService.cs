@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using Montr.Core.Models;
@@ -10,25 +11,11 @@ namespace Montr.Core.Impl.Services
 	{
 		private readonly IEnumerable<IContentProvider> _providers;
 
-		private readonly IDictionary<string, Menu> _menus = new Dictionary<string, Menu>(StringComparer.OrdinalIgnoreCase);
+		private readonly ConcurrentDictionary<string, Menu> _menus = new(StringComparer.OrdinalIgnoreCase);
 
 		public DefaultContentService(IEnumerable<IContentProvider> providers)
 		{
 			_providers = providers;
-		}
-
-		public void Rebuild()
-		{
-			var menus = new[] { MenuCode.TopMenu, MenuCode.ProfileMenu, MenuCode.SettingsMenu, MenuCode.SideMenu };
-
-			foreach (var menuId in menus)
-			{
-				_menus[menuId] = new Menu
-				{
-					Id = menuId,
-					Items = Rebuild(menuId)
-				};
-			}
 		}
 
 		// todo: refactor, check cyclic menus
@@ -78,7 +65,7 @@ namespace Montr.Core.Impl.Services
 
 		public Menu GetMenu(string menuId)
 		{
-			return _menus.TryGetValue(menuId, out var menu) ? menu : null;
+			return _menus.GetOrAdd(menuId, x => new Menu { Id = x, Items = Rebuild(x) });
 		}
 	}
 }

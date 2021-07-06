@@ -25,14 +25,14 @@ namespace Montr.Core.Impl.QueryHandlers
 		{
 			var menu = _contentService.GetMenu(request.MenuId);
 
-			var result = await GetAuthorizedItems(menu.Items, request.Principal);
+			var result = await GetAuthorizedItems(menu?.Items, request.Principal);
 
-			return new Menu { Items = result };
+			return new Menu { Id = request.MenuId, Items = result };
 		}
 
 		private async Task<IList<Menu>> GetAuthorizedItems(IList<Menu> items, ClaimsPrincipal principal)
 		{
-			if (items != null)
+			if (items?.Count > 0)
 			{
 				var result = new List<Menu>();
 
@@ -40,11 +40,15 @@ namespace Montr.Core.Impl.QueryHandlers
 				{
 					if (await Authorize(item, principal) != false)
 					{
+						var children = item.Items;
+						var authorizedChildren = await GetAuthorizedItems(children, principal);
+
+						// if exists any children and all children not authorized - hide parent menu item
+						if (children?.Count > 0 && authorizedChildren?.Count == 0) continue;
+
 						var authorizedItem = item.Clone();
-
+						authorizedItem.Items = authorizedChildren;
 						result.Add(authorizedItem);
-
-						authorizedItem.Items = await GetAuthorizedItems(item.Items, principal);
 					}
 				}
 
@@ -60,7 +64,7 @@ namespace Montr.Core.Impl.QueryHandlers
 
 			var authResult = await _authorizationService.AuthorizePermission(principal, item.Permission);
 
-			return authResult.Succeeded;
+			return authResult?.Succeeded;
 		}
 	}
 }

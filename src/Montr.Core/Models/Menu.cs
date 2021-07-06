@@ -1,9 +1,13 @@
 ﻿using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Montr.Core.Models
 {
+	[DebuggerDisplay("{" + nameof(DebuggerDisplay) + ",nq}")]
 	public class Menu
 	{
+		private string DebuggerDisplay => $"[{Id}] {Name}";
+
 		public string Id { get; set; }
 
 		public string Name { get; set; }

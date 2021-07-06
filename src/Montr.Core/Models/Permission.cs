@@ -1,10 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Montr.Core.Models
 {
+	[DebuggerDisplay("{" + nameof(DebuggerDisplay) + ",nq}")]
 	public class Permission
 	{
+		private string DebuggerDisplay => $"{Code}";
+
 		public const string ClaimType = nameof(Permission);
 
 		public string Code { get; }
