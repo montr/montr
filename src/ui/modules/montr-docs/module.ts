@@ -15,6 +15,10 @@ export const Patterns = {
 	editDocument: "/documents/edit/:uid/:tabKey?"
 };
 
+export const ClassifierTypeCode = {
+	documentType: "document_type"
+};
+
 export const Views = {
 	documentList: "Document/List"
 };

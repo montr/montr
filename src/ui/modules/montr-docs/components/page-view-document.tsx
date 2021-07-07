@@ -1,11 +1,14 @@
 import React from "react";
 import { RouteComponentProps } from "react-router";
-import { Spin, Tabs, PageHeader, Button, Tag, Descriptions } from "antd";
+import { Spin, Tabs, PageHeader, Button, Descriptions } from "antd";
 import { IDocument } from "../models";
 import { DocumentService } from "../services";
-import { RouteBuilder } from "../module";
+import { ClassifierTypeCode, RouteBuilder } from "../module";
 import { TabViewDocumentFields } from "./tab-view-document-fields";
 import { DateHelper } from "@montr-core/services";
+import { ClassifierService } from "@montr-master-data/services";
+import { Classifier } from "@montr-master-data/models";
+import { StatusTag } from "@montr-core/components";
 
 interface RouteProps {
 	uid?: string;
@@ -17,42 +20,46 @@ interface Props extends RouteComponentProps<RouteProps> {
 
 interface State {
 	loading: boolean;
-	data?: IDocument;
+	document?: IDocument;
+	documentType?: Classifier;
 }
 
 export default class PageViewDocument extends React.Component<Props, State> {
 
-	private _documentService = new DocumentService();
+	private readonly documentService = new DocumentService();
+	private readonly classifierService = new ClassifierService();
 
 	constructor(props: Props) {
 		super(props);
 
 		this.state = {
 			loading: true,
-			data: {}
+			document: {},
+			documentType: {}
 		};
 	}
 
-	componentDidMount = async () => {
+	componentDidMount = async (): Promise<void> => {
 		await this.fetchData();
 	};
 
-	componentWillUnmount = async () => {
-		await this._documentService.abort();
+	componentWillUnmount = async (): Promise<void> => {
+		await this.documentService.abort();
+		await this.classifierService.abort();
 	};
 
-	fetchData = async () => {
+	fetchData = async (): Promise<void> => {
 		const { uid } = this.props.match.params;
 
-		const data = (uid)
-			? await this._documentService.get(uid)
-			// todo: load defaults from server
-			: {};
+		const document = await this.documentService.get(uid);
 
-		this.setState({ loading: false, data });
+		const documentType = await this.classifierService
+			.get(ClassifierTypeCode.documentType, document.documentTypeUid);
+
+		this.setState({ loading: false, document, documentType });
 	};
 
-	handleTabChange = (tabKey: string) => {
+	handleTabChange = (tabKey: string): void => {
 		const { uid } = this.props.match.params;
 
 		const path = RouteBuilder.viewDocument(uid, tabKey);
@@ -60,30 +67,31 @@ export default class PageViewDocument extends React.Component<Props, State> {
 		this.props.history.replace(path);
 	};
 
-	render = () => {
-		const { uid, tabKey } = this.props.match.params,
-			{ loading, data } = this.state;
+	render = (): React.ReactNode => {
+		const { tabKey } = this.props.match.params,
+			{ loading, document, documentType } = this.state;
 
-		if (!data || !data.documentTypeUid) return null;
+		if (!document || !document.documentTypeUid) return null;
 
-		const documentDate = DateHelper.toLocaleDateTimeString(data.documentDate);
+		const documentDate = DateHelper.toLocaleDateTimeString(document.documentDate);
 
 		return (
-			/* todo: load subtitle */
 			<Spin spinning={loading}>
 				<PageHeader
 					onBack={() => window.history.back()}
-					title={`${data.documentNumber} от ${documentDate}`}
-					subTitle="Заявка на регистрацию"
-					tags={<Tag color="green">{data.statusCode}</Tag>}
+					title={`${document.documentNumber || ''} — ${documentDate}`}
+					subTitle={documentType.name}
+					tags={<StatusTag statusCode={document.statusCode} />}
 					extra={[
-						<Button key="1" type="primary">Допустить</Button>,
-						<Button key="2">Отклонить</Button>
+						<Button key="1" type="primary">Publish</Button>,
+						<Button key="2">Accept</Button>,
+						<Button key="3">Reject</Button>
 					]}>
 					<Descriptions size="small" column={1}>
-						<Descriptions.Item label="Name">{data.name}</Descriptions.Item>
-						<Descriptions.Item label="Number">{data.documentNumber}</Descriptions.Item>
-						<Descriptions.Item label="Date">{DateHelper.toLocaleDateTimeString(data.documentDate)}</Descriptions.Item>
+						<Descriptions.Item label="Uid">{document.uid}</Descriptions.Item>
+						<Descriptions.Item label="Name">{document.name}</Descriptions.Item>
+						<Descriptions.Item label="Number">{document.documentNumber}</Descriptions.Item>
+						<Descriptions.Item label="Date">{documentDate}</Descriptions.Item>
 					</Descriptions>
 				</PageHeader>
 
@@ -91,7 +99,7 @@ export default class PageViewDocument extends React.Component<Props, State> {
 					<Tabs.TabPane key="common" tab="Информация">
 					</Tabs.TabPane>
 					<Tabs.TabPane key="fields" tab="Анкета">
-						<TabViewDocumentFields data={data} />
+						<TabViewDocumentFields data={document} />
 					</Tabs.TabPane>
 				</Tabs>
 			</Spin>

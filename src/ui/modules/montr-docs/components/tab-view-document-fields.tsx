@@ -26,21 +26,21 @@ export class TabViewDocumentFields extends React.Component<Props, State> {
 		};
 	}
 
-	componentDidMount = async () => {
+	componentDidMount = async (): Promise<void> => {
 		await this.fetchData();
 	};
 
-	componentDidUpdate = async (prevProps: Props) => {
+	componentDidUpdate = async (prevProps: Props): Promise<void> => {
 		if (this.props.data !== prevProps.data) {
 			await this.fetchData();
 		}
 	};
 
-	componentWillUnmount = async () => {
+	componentWillUnmount = async (): Promise<void> => {
 		await this._documentMetadataService.abort();
 	};
 
-	fetchData = async () => {
+	fetchData = async (): Promise<void> => {
 		const { data } = this.props;
 
 		if (data.documentTypeUid) {
@@ -50,7 +50,7 @@ export class TabViewDocumentFields extends React.Component<Props, State> {
 		}
 	};
 
-	render = () => {
+	render = (): React.ReactNode => {
 		const { data } = this.props,
 			{ fields, loading } = this.state;
 

@@ -5,7 +5,7 @@ import { SorterResult, SortOrder, ColumnType, TablePaginationConfig } from "antd
 import { Fetcher, NotificationService, MetadataService, DateHelper } from "../services";
 import { IIndexer, DataColumn, DataResult, IMenu, Paging } from "../models";
 import { Constants } from "..";
-import { Icon } from ".";
+import { Icon, StatusTag } from ".";
 
 interface Props<TModel> {
 	rowKey?: string | ((record: TModel, index: number) => string);
@@ -159,8 +159,8 @@ export class DataTable<TModel extends IIndexer> extends React.Component<Props<TM
 
 			// todo: add support of custom renderers
 			if (item.key == "statusCode") {
-				render = (text: unknown): React.ReactNode => {
-					return <Tag color="green">{text}</Tag>;
+				render = (text: string): React.ReactNode => {
+					return <StatusTag statusCode={text} />;
 				};
 			}
 

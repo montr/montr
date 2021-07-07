@@ -26,6 +26,7 @@ export * from "./pane-component";
 export * from "./pane-edit-metadata";
 export * from "./pane-search-entity-statuses";
 export * from "./pane-search-metadata";
+export * from "./status-tag";
 export * from "./suspense-fallback";
 export * from "./toolbar";
 export * from "./use-local-storage";

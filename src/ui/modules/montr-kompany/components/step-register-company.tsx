@@ -1,10 +1,10 @@
 import React from "react";
 import { Redirect } from "react-router";
-import { ButtonCreate, ButtonDelete, UserContextProps, withUserContext } from "@montr-core/components";
+import { ButtonCreate, ButtonDelete, StatusTag, UserContextProps, withUserContext } from "@montr-core/components";
 import { IDocument } from "@montr-docs/models";
 import { CompanyContextProps, withCompanyContext } from ".";
 import { CompanyRegistrationRequestService } from "../services";
-import { Button, List, Space, Spin, Tag, Typography } from "antd";
+import { Button, List, Space, Spin, Typography } from "antd";
 import { OperationService } from "@montr-core/services";
 import { RouteBuilder } from "@montr-docs/module";
 
@@ -111,7 +111,7 @@ class _StepRegisterCompany extends React.Component<Props, State> {
                                             Number: <Typography.Text>{item.documentNumber || "n/a"}</Typography.Text>
                                             Date: <Typography.Text>{item.documentDate}</Typography.Text>
 
-                                            <Tag color={item.statusCode != "draft" ? "green" : undefined}>{item.statusCode}</Tag>
+                                            <StatusTag statusCode={item.statusCode} />
                                         </Space>}
                                 />
                             </List.Item>
