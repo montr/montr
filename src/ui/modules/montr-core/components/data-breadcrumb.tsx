@@ -18,7 +18,7 @@ export class DataBreadcrumb extends React.Component<Props> {
 		return item.route();
 	};
 
-	getItem = (value: IMenu, index: number) => {
+	getItem = (value: IMenu, index: number): React.ReactNode => {
 
 		if (value.items) {
 
@@ -52,7 +52,7 @@ export class DataBreadcrumb extends React.Component<Props> {
 		);
 	};
 
-	render = () => {
+	render = (): React.ReactNode => {
 		return (
 			<Breadcrumb>
 				<Breadcrumb.Item>{Icon.Home}</Breadcrumb.Item>

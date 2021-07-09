@@ -8,7 +8,7 @@ import { TabViewDocumentFields } from "./tab-view-document-fields";
 import { DateHelper } from "@montr-core/services";
 import { ClassifierService } from "@montr-master-data/services";
 import { Classifier } from "@montr-master-data/models";
-import { StatusTag } from "@montr-core/components";
+import { DataBreadcrumb, StatusTag } from "@montr-core/components";
 
 interface RouteProps {
 	uid?: string;
@@ -82,10 +82,10 @@ export default class PageViewDocument extends React.Component<Props, State> {
 					title={`${document.documentNumber || ''} — ${documentDate}`}
 					subTitle={documentType.name}
 					tags={<StatusTag statusCode={document.statusCode} />}
+					breadcrumb={<DataBreadcrumb items={[{ name: "Documents" }]} />}
 					extra={[
+						<Button key="2">Accept or Reject</Button>,
 						<Button key="1" type="primary">Publish</Button>,
-						<Button key="2">Accept</Button>,
-						<Button key="3">Reject</Button>
 					]}>
 					<Descriptions size="small" column={1}>
 						<Descriptions.Item label="Uid">{document.uid}</Descriptions.Item>

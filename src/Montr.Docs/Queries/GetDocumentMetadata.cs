@@ -6,8 +6,6 @@ namespace Montr.Docs.Queries
 {
 	public class GetDocumentMetadata: IRequest<DataView>
 	{
-		public string TypeCode { get; set; }
-
 		public Guid? DocumentTypeUid { get; set; }
 	}
 }

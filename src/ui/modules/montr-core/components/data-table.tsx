@@ -151,13 +151,6 @@ export class DataTable<TModel extends IIndexer> extends React.Component<Props<TM
 			}
 
 			// todo: add support of custom renderers
-			if (item.key == "configCode") {
-				render = (text: unknown): React.ReactNode => {
-					return <Tag color="blue">{text}</Tag>;
-				};
-			}
-
-			// todo: add support of custom renderers
 			if (item.key == "statusCode") {
 				render = (text: string): React.ReactNode => {
 					return <StatusTag statusCode={text} />;

@@ -58,8 +58,8 @@ class _StepRegisterCompany extends React.Component<Props, State> {
 
     openRequest = async (item: IDocument) => {
         const redirectTo = item.statusCode == "draft"
-            ? RouteBuilder.editDocument(item.uid)
-            : RouteBuilder.viewDocument(item.uid);
+            ? RouteBuilder.editDocument(item.uid, "fields")
+            : RouteBuilder.viewDocument(item.uid, "fields");
 
         this.setState({ redirectTo });
     };
