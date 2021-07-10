@@ -1,6 +1,6 @@
 import React from "react";
 import { RouteComponentProps } from "react-router";
-import { Spin, Tabs, PageHeader, Button, Descriptions } from "antd";
+import { Spin, Tabs, PageHeader, Button } from "antd";
 import { IDocument } from "../models";
 import { DocumentService } from "../services";
 import { ClassifierTypeCode, RouteBuilder } from "../module";
@@ -9,6 +9,7 @@ import { DateHelper } from "@montr-core/services";
 import { ClassifierService } from "@montr-master-data/services";
 import { Classifier } from "@montr-master-data/models";
 import { DataBreadcrumb, StatusTag } from "@montr-core/components";
+import { DocumentSignificantInfo } from ".";
 
 interface RouteProps {
 	uid?: string;
@@ -87,12 +88,7 @@ export default class PageViewDocument extends React.Component<Props, State> {
 						<Button key="2">Accept or Reject</Button>,
 						<Button key="1" type="primary">Publish</Button>,
 					]}>
-					<Descriptions size="small" column={1}>
-						<Descriptions.Item label="Uid">{document.uid}</Descriptions.Item>
-						<Descriptions.Item label="Name">{document.name}</Descriptions.Item>
-						<Descriptions.Item label="Number">{document.documentNumber}</Descriptions.Item>
-						<Descriptions.Item label="Date">{documentDate}</Descriptions.Item>
-					</Descriptions>
+					<DocumentSignificantInfo document={document} />
 				</PageHeader>
 
 				<Tabs size="small" defaultActiveKey={tabKey} onChange={this.handleTabChange}>

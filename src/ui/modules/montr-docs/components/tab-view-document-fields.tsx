@@ -44,7 +44,7 @@ export class TabViewDocumentFields extends React.Component<Props, State> {
 		const { data } = this.props;
 
 		if (data.documentTypeUid) {
-			const dataView = await this._documentMetadataService.load(data.documentTypeUid);
+			const dataView = await this._documentMetadataService.view(data.documentTypeUid);
 
 			this.setState({ loading: false, fields: dataView.fields });
 		}

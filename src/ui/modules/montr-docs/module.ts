@@ -5,6 +5,8 @@ import { AppRouteRegistry, ComponentRegistry } from "@montr-core/services";
 import { Constants } from "@montr-core/.";
 
 export const Api = {
+	documentMetadataView: `${Constants.apiURL}/documentMetadata/view`,
+
 	documentList: `${Constants.apiURL}/document/list`,
 	documentGet: `${Constants.apiURL}/document/get`,
 };

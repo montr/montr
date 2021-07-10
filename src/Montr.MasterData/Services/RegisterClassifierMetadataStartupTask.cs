@@ -164,7 +164,7 @@ namespace Montr.MasterData.Services
 				}
 			});
 
-			_registrator.Register("NumeratorEntity/Grid", _ => new DataView
+			_registrator.Register(ViewCode.NumeratorEntityGrid, _ => new DataView
 			{
 				Columns = new List<DataColumn>
 				{

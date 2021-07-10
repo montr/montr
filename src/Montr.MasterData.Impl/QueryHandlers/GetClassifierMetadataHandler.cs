@@ -27,12 +27,12 @@ namespace Montr.MasterData.Impl.QueryHandlers
 
 		public async Task<DataView> Handle(GetClassifierMetadata request, CancellationToken cancellationToken)
 		{
-			if (request.ViewId == "ClassifierType/Tabs")
+			if (request.ViewId == ViewCode.ClassifierTypeTabs)
 			{
 				return GetClassifierTypeTabs();
 			}
 
-			if (request.ViewId == "NumeratorEntity/Form")
+			if (request.ViewId == ViewCode.NumeratorEntityForm)
 			{
 				return GetNumeratorEntityForm();
 			}
@@ -41,7 +41,7 @@ namespace Montr.MasterData.Impl.QueryHandlers
 
 			var type = await _classifierTypeService.Get(typeCode, cancellationToken);
 
-			if (request.ViewId == "Classifier/Tabs")
+			if (request.ViewId == ViewCode.ClassifierTabs)
 			{
 				return GetClassifierTabs(type);
 			}
@@ -81,7 +81,7 @@ namespace Montr.MasterData.Impl.QueryHandlers
 					new DataPane { Key = "questionnaire", Name = "Вопросы", Component = "panes/PaneSearchMetadata" });
 			}
 
-			if (type.Code == "numerator")
+			if (type.Code == ClassifierTypeCode.Numerator)
 			{
 				panes.Insert(panes.FindIndex(x => x.Key == "info") + 1,
 					new DataPane { Key = "usage", Name = "Использование", Component = "panes/TabEditNumeratorEntities" });

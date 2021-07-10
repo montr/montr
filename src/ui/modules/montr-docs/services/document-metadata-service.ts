@@ -1,13 +1,13 @@
 import { Fetcher } from "@montr-core/services";
 import { DataView, Guid } from "@montr-core/models";
-import { Constants } from "@montr-core/.";
+import { Api } from "../module";
 
 export class DocumentMetadataService extends Fetcher {
 
-	load = async<TEntity>(documentTypeUid: Guid): Promise<DataView<TEntity>> => {
+	view = async<TEntity>(documentTypeUid: Guid): Promise<DataView<TEntity>> => {
 
 		const data: DataView<TEntity> =
-			await this.post(`${Constants.apiURL}/DocumentMetadata/View`, { documentTypeUid });
+			await this.post(Api.documentMetadataView, { documentTypeUid });
 
 		return data;
 	};
