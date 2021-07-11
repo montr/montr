@@ -6,7 +6,7 @@ import { IDocument } from "@montr-docs/models";
 import { DocumentMetadataService } from "@montr-docs/services";
 
 interface Props {
-	data: IDocument;
+	document: IDocument;
 }
 
 interface State {
@@ -14,7 +14,7 @@ interface State {
 	fields?: IDataField[];
 }
 
-export class TabViewDocumentFields extends React.Component<Props, State> {
+export default class PaneViewDocumentForm extends React.Component<Props, State> {
 
 	private _documentMetadataService = new DocumentMetadataService();
 
@@ -31,7 +31,7 @@ export class TabViewDocumentFields extends React.Component<Props, State> {
 	};
 
 	componentDidUpdate = async (prevProps: Props): Promise<void> => {
-		if (this.props.data !== prevProps.data) {
+		if (this.props.document !== prevProps.document) {
 			await this.fetchData();
 		}
 	};
@@ -41,22 +41,22 @@ export class TabViewDocumentFields extends React.Component<Props, State> {
 	};
 
 	fetchData = async (): Promise<void> => {
-		const { data } = this.props;
+		const { document } = this.props;
 
-		if (data.documentTypeUid) {
-			const dataView = await this._documentMetadataService.view(data.documentTypeUid);
+		if (document.documentTypeUid) {
+			const dataView = await this._documentMetadataService.view(document.documentTypeUid, null);
 
 			this.setState({ loading: false, fields: dataView.fields });
 		}
 	};
 
 	render = (): React.ReactNode => {
-		const { data } = this.props,
+		const { document } = this.props,
 			{ fields, loading } = this.state;
 
 		return (
 			<Spin spinning={loading}>
-				<DataForm mode="view" fields={fields} data={data} />
+				<DataForm mode="view" fields={fields} data={document} />
 			</Spin>
 		);
 	};

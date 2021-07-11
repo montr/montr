@@ -19,8 +19,8 @@ interface State {
 
 export default class TabEditNumeration extends React.Component<Props, State> {
 
-    private _classifierMetadataService = new ClassifierMetadataService();
-    private _numeratorEntityService = new NumeratorEntityService();
+    private readonly classifierMetadataService = new ClassifierMetadataService();
+    private readonly numeratorEntityService = new NumeratorEntityService();
 
     constructor(props: Props) {
         super(props);
@@ -35,8 +35,8 @@ export default class TabEditNumeration extends React.Component<Props, State> {
     };
 
     componentWillUnmount = async (): Promise<void> => {
-        await this._classifierMetadataService.abort();
-        await this._numeratorEntityService.abort();
+        await this.classifierMetadataService.abort();
+        await this.numeratorEntityService.abort();
     };
 
     fetchData = async (): Promise<void> => {
@@ -44,9 +44,9 @@ export default class TabEditNumeration extends React.Component<Props, State> {
         const { entityTypeCode, entityUid } = this.props;
 
         // todo: load metadata from common service
-        const dataView = await this._classifierMetadataService.load(null, Views.numeratorEntityForm);
+        const dataView = await this.classifierMetadataService.view(null, Views.numeratorEntityForm);
 
-        const data: NumeratorEntity = await this._numeratorEntityService.get(entityTypeCode, entityUid);
+        const data: NumeratorEntity = await this.numeratorEntityService.get(entityTypeCode, entityUid);
 
         this.setState({ loading: false, fields: dataView.fields, data });
     };
@@ -61,7 +61,7 @@ export default class TabEditNumeration extends React.Component<Props, State> {
             ...values
         };
 
-        const result = await this._numeratorEntityService.save(updated);
+        const result = await this.numeratorEntityService.save(updated);
 
         return result;
     };

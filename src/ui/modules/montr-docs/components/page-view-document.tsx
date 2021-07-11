@@ -1,14 +1,14 @@
 import React from "react";
 import { RouteComponentProps } from "react-router";
-import { Spin, Tabs, PageHeader, Button } from "antd";
-import { IDocument } from "../models";
-import { DocumentService } from "../services";
-import { ClassifierTypeCode, RouteBuilder } from "../module";
-import { TabViewDocumentFields } from "./tab-view-document-fields";
-import { DateHelper } from "@montr-core/services";
+import { Spin, PageHeader, Button } from "antd";
+import { DataView } from "@montr-core/models";
 import { ClassifierService } from "@montr-master-data/services";
 import { Classifier } from "@montr-master-data/models";
-import { DataBreadcrumb, StatusTag } from "@montr-core/components";
+import { DataBreadcrumb, DataTabs, StatusTag } from "@montr-core/components";
+import { IDocument } from "../models";
+import { DocumentMetadataService, DocumentService } from "../services";
+import { ClassifierTypeCode, EntityTypeCode, RouteBuilder, Views } from "../module";
+
 import { DocumentSignificantInfo } from ".";
 
 interface RouteProps {
@@ -23,10 +23,12 @@ interface State {
 	loading: boolean;
 	document?: IDocument;
 	documentType?: Classifier;
+	dataView?: DataView<Classifier>;
 }
 
 export default class PageViewDocument extends React.Component<Props, State> {
 
+	private readonly documentMetadataService = new DocumentMetadataService();
 	private readonly documentService = new DocumentService();
 	private readonly classifierService = new ClassifierService();
 
@@ -45,6 +47,7 @@ export default class PageViewDocument extends React.Component<Props, State> {
 	};
 
 	componentWillUnmount = async (): Promise<void> => {
+		await this.documentMetadataService.abort();
 		await this.documentService.abort();
 		await this.classifierService.abort();
 	};
@@ -57,7 +60,17 @@ export default class PageViewDocument extends React.Component<Props, State> {
 		const documentType = await this.classifierService
 			.get(ClassifierTypeCode.documentType, document.documentTypeUid);
 
-		this.setState({ loading: false, document, documentType });
+		const dataView = await this.documentMetadataService.view(documentType.uid, Views.documentTabs);
+
+		this.setState({ loading: false, document, documentType, dataView });
+	};
+
+	handleDataChange = (document: IDocument): void => {
+		const { uid } = this.props.match.params;
+
+		if (uid) {
+			this.setState({ document });
+		}
 	};
 
 	handleTabChange = (tabKey: string): void => {
@@ -70,18 +83,16 @@ export default class PageViewDocument extends React.Component<Props, State> {
 
 	render = (): React.ReactNode => {
 		const { tabKey } = this.props.match.params,
-			{ loading, document, documentType } = this.state;
+			{ loading, document, documentType, dataView } = this.state;
 
 		if (!document || !document.documentTypeUid) return null;
-
-		const documentDate = DateHelper.toLocaleDateTimeString(document.documentDate);
 
 		return (
 			<Spin spinning={loading}>
 				<PageHeader
 					onBack={() => window.history.back()}
-					title={`${document.documentNumber || ''} — ${documentDate}`}
-					subTitle={documentType.name}
+					title={documentType.name}
+					subTitle={document.uid}
 					tags={<StatusTag statusCode={document.statusCode} />}
 					breadcrumb={<DataBreadcrumb items={[{ name: "Documents" }]} />}
 					extra={[
@@ -91,13 +102,20 @@ export default class PageViewDocument extends React.Component<Props, State> {
 					<DocumentSignificantInfo document={document} />
 				</PageHeader>
 
-				<Tabs size="small" defaultActiveKey={tabKey} onChange={this.handleTabChange}>
-					<Tabs.TabPane key="common" tab="Информация">
-					</Tabs.TabPane>
-					<Tabs.TabPane key="fields" tab="Анкета">
-						<TabViewDocumentFields data={document} />
-					</Tabs.TabPane>
-				</Tabs>
+				<DataTabs
+					tabKey={tabKey}
+					panes={dataView?.panes}
+					onTabChange={this.handleTabChange}
+					disabled={(_, index) => index > 0 && !document?.uid}
+					tabProps={{
+						document,
+						documentType,
+						onDataChange: this.handleDataChange,
+						entityTypeCode: EntityTypeCode.document,
+						entityUid: document?.uid
+					}}
+				/>
+
 			</Spin>
 		);
 	};

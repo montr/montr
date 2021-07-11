@@ -17,12 +17,18 @@ export const Patterns = {
 	editDocument: "/documents/edit/:uid/:tabKey?"
 };
 
+export const EntityTypeCode = {
+	document: "document"
+};
+
 export const ClassifierTypeCode = {
 	documentType: "document_type"
 };
 
 export const Views = {
-	documentList: "Document/List"
+	documentList: "Document/List",
+
+	documentTabs: "document_tabs"
 };
 
 export const RouteBuilder = {
@@ -41,5 +47,6 @@ AppRouteRegistry.add([
 ]);
 
 ComponentRegistry.add([
+	{ path: "pane_view_document_form", component: React.lazy(() => import("./components/pane-view-document-form")) },
 	{ path: "panes/PaneProcessStepList", component: React.lazy(() => import("./components/pane-prosess-step-list")) }
 ]);

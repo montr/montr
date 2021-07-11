@@ -23,6 +23,22 @@ namespace Montr.Docs.Impl.QueryHandlers
 
 		public async Task<DataView> Handle(GetDocumentMetadata request, CancellationToken cancellationToken)
 		{
+			var result = new DataView();
+
+			if (request.ViewId == ViewCode.DocumentTabs)
+			{
+				result.Panes = GetDocumentTabs();
+			}
+			else
+			{
+				result.Fields = await GetDocumentFormMetadata(request, cancellationToken);
+			}
+
+			return result;
+		}
+
+		private async Task<IList<FieldMetadata>> GetDocumentFormMetadata(GetDocumentMetadata request, CancellationToken cancellationToken)
+		{
 			var documentTypeUid = request.DocumentTypeUid ?? throw new ArgumentNullException(
 				nameof(request), $"{nameof(request.DocumentTypeUid)} is required to get document metadata.");
 
@@ -35,6 +51,7 @@ namespace Montr.Docs.Impl.QueryHandlers
 				SkipPaging = true
 			}, cancellationToken);
 
+			// todo: remove for form
 			var dbFields = new List<string>
 			{
 				nameof(Document.DocumentDate),
@@ -42,9 +59,9 @@ namespace Montr.Docs.Impl.QueryHandlers
 				nameof(Document.Name)
 			};
 
-			var result = new DataView { Fields = metadata.Rows };
+			var result = metadata.Rows;
 
-			foreach (var field in result.Fields)
+			foreach (var field in result)
 			{
 				if (dbFields.Contains(field.Key, StringComparer.InvariantCultureIgnoreCase) == false)
 				{
@@ -53,6 +70,15 @@ namespace Montr.Docs.Impl.QueryHandlers
 			}
 
 			return result;
+		}
+
+		private static DataPane[] GetDocumentTabs()
+		{
+			return new DataPane[]
+			{
+				new() { Key = "form", Name = "Questionnaire", Component = "pane_view_document_form" },
+				new() { Key = "history", Name = "History", Icon = "eye" }
+			};
 		}
 	}
 }

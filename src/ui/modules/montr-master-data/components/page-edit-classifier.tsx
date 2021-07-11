@@ -27,9 +27,9 @@ interface State {
 
 export default class PageEditClassifier extends React.Component<Props, State> {
 
-	private _classifierMetadataService = new ClassifierMetadataService();
-	private _classifierTypeService = new ClassifierTypeService();
-	private _classifierService = new ClassifierService();
+	private readonly classifierMetadataService = new ClassifierMetadataService();
+	private readonly classifierTypeService = new ClassifierTypeService();
+	private readonly classifierService = new ClassifierService();
 
 	constructor(props: Props) {
 		super(props);
@@ -51,21 +51,21 @@ export default class PageEditClassifier extends React.Component<Props, State> {
 	};
 
 	componentWillUnmount = async (): Promise<void> => {
-		await this._classifierMetadataService.abort();
-		await this._classifierTypeService.abort();
-		await this._classifierService.abort();
+		await this.classifierMetadataService.abort();
+		await this.classifierTypeService.abort();
+		await this.classifierService.abort();
 	};
 
 	fetchData = async (): Promise<void> => {
 		const { typeCode, uid, parentUid } = this.props.match.params;
 
-		const dataView = await this._classifierMetadataService.load(typeCode, Views.classifierTabs);
+		const dataView = await this.classifierMetadataService.view(typeCode, Views.classifierTabs);
 
-		const type = await this._classifierTypeService.get({ typeCode });
+		const type = await this.classifierTypeService.get({ typeCode });
 
 		const data = (uid)
-			? await this._classifierService.get(typeCode, uid)
-			: await this._classifierService.create(typeCode, parentUid);
+			? await this.classifierService.get(typeCode, uid)
+			: await this.classifierService.create(typeCode, parentUid);
 
 		this.setState({ loading: false, dataView, type, data });
 	};

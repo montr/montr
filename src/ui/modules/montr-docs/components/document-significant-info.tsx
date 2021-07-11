@@ -12,8 +12,6 @@ export class DocumentSignificantInfo extends React.Component<Props> {
         const { document } = this.props;
 
         return <Descriptions size="small" column={1}>
-            <Descriptions.Item label="Uid">{document.uid}</Descriptions.Item>
-            <Descriptions.Item label="Name">{document.name}</Descriptions.Item>
             <Descriptions.Item label="Number">{document.documentNumber}</Descriptions.Item>
             <Descriptions.Item label="Date">{DateHelper.toLocaleDateTimeString(document.documentDate)}</Descriptions.Item>
         </Descriptions>;

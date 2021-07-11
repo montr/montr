@@ -4,10 +4,10 @@ import { Api } from "../module";
 
 export class DocumentMetadataService extends Fetcher {
 
-	view = async<TEntity>(documentTypeUid: Guid): Promise<DataView<TEntity>> => {
+	view = async<TEntity>(documentTypeUid: Guid, viewId: string): Promise<DataView<TEntity>> => {
 
 		const data: DataView<TEntity> =
-			await this.post(Api.documentMetadataView, { documentTypeUid });
+			await this.post(Api.documentMetadataView, { documentTypeUid, viewId });
 
 		return data;
 	};

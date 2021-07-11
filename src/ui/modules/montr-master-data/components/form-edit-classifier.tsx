@@ -24,9 +24,9 @@ interface State {
 
 export class FormEditClassifier extends React.Component<Props, State> {
 
-    private _classifierMetadataService = new ClassifierMetadataService();
-    private _classifierService = new ClassifierService();
-    private _classifierLinkService = new ClassifierLinkService();
+    private readonly classifierMetadataService = new ClassifierMetadataService();
+    private readonly classifierService = new ClassifierService();
+    private readonly classifierLinkService = new ClassifierLinkService();
 
     constructor(props: Props) {
         super(props);
@@ -47,8 +47,8 @@ export class FormEditClassifier extends React.Component<Props, State> {
     };
 
     componentWillUnmount = async (): Promise<void> => {
-        await this._classifierMetadataService.abort();
-        await this._classifierService.abort();
+        await this.classifierMetadataService.abort();
+        await this.classifierService.abort();
     };
 
     fetchData = async (): Promise<void> => {
@@ -56,7 +56,7 @@ export class FormEditClassifier extends React.Component<Props, State> {
 
         if (type) {
 
-            const dataView = await this._classifierMetadataService.load(type.code, Views.classifierForm);
+            const dataView = await this.classifierMetadataService.view(type.code, Views.classifierForm);
 
             /* const fields = dataView.fields;
 
@@ -68,8 +68,8 @@ export class FormEditClassifier extends React.Component<Props, State> {
             } */
 
             const data = this.props.data ?? ((uid)
-                ? await this._classifierService.get(type.code, uid)
-                : await this._classifierService.create(type.code, parentUid)
+                ? await this.classifierService.get(type.code, uid)
+                : await this.classifierService.create(type.code, parentUid)
             );
 
             // ParentUid of classifier in default hierarchy is not loaded with classifier info,
@@ -78,7 +78,7 @@ export class FormEditClassifier extends React.Component<Props, State> {
             // only classifier fields should be displayed in classifier edit form (without ParentUid field) 
             if (uid && type.hierarchyType == "Groups") {
 
-                const links = await this._classifierLinkService.list({ typeCode: type.code, itemUid: uid });
+                const links = await this.classifierLinkService.list({ typeCode: type.code, itemUid: uid });
 
                 const defaultLink = links.rows.find(x => x.tree.code == "default");
 
@@ -100,8 +100,8 @@ export class FormEditClassifier extends React.Component<Props, State> {
         } as Classifier;
 
         const result = (uid)
-            ? await this._classifierService.update(type.code, item)
-            : await this._classifierService.insert(type.code, item);
+            ? await this.classifierService.update(type.code, item)
+            : await this.classifierService.insert(type.code, item);
 
         if (result.success) {
 

@@ -25,8 +25,8 @@ interface State {
 
 export default class EditClassifierType extends React.Component<Props, State> {
 
-	private _classifierMetadataService = new ClassifierMetadataService();
-	private _classifierTypeService = new ClassifierTypeService();
+	private readonly classifierMetadataService = new ClassifierMetadataService();
+	private readonly classifierTypeService = new ClassifierTypeService();
 
 	constructor(props: Props) {
 		super(props);
@@ -47,19 +47,19 @@ export default class EditClassifierType extends React.Component<Props, State> {
 	};
 
 	componentWillUnmount = async (): Promise<void> => {
-		await this._classifierMetadataService.abort();
-		await this._classifierTypeService.abort();
+		await this.classifierMetadataService.abort();
+		await this.classifierTypeService.abort();
 	};
 
 	fetchData = async (): Promise<void> => {
 		const { uid } = this.props.match.params;
 
-		const dataView = await this._classifierMetadataService.load(null, Views.classifierTypeTabs);
+		const dataView = await this.classifierMetadataService.view(null, Views.classifierTypeTabs);
 
-		const types = await this._classifierTypeService.list({ skipPaging: true });
+		const types = await this.classifierTypeService.list({ skipPaging: true });
 
 		const data: ClassifierType = (uid)
-			? await this._classifierTypeService.get({ uid })
+			? await this.classifierTypeService.get({ uid })
 			// todo: load defaults from server
 			: { name: "", hierarchyType: "None" };
 

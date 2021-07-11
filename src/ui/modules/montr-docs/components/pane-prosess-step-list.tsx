@@ -9,7 +9,7 @@ interface State {
 
 export default class PaneProcessStepList extends React.Component<Props, State> {
 
-    render = () => {
+    render = (): React.ReactNode => {
         return <h1>PaneProcessStepList</h1>;
     };
 }

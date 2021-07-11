@@ -4,7 +4,7 @@ import { Api } from "../module";
 
 export class ClassifierMetadataService extends Fetcher {
 
-	load = async<TEntity>(typeCode: string, viewId: string): Promise<DataView<TEntity>> => {
+	view = async<TEntity>(typeCode: string, viewId: string): Promise<DataView<TEntity>> => {
 
 		const data: DataView<TEntity> =
 			await this.post(Api.classifierMetadataView, { typeCode, viewId });
