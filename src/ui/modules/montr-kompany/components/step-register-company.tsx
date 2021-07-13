@@ -57,9 +57,11 @@ class _StepRegisterCompany extends React.Component<Props, State> {
     };
 
     openRequest = async (item: IDocument) => {
+        const tabKey = "form";
+
         const redirectTo = item.statusCode == "draft"
-            ? RouteBuilder.editDocument(item.uid, "fields")
-            : RouteBuilder.viewDocument(item.uid, "fields");
+            ? RouteBuilder.editDocument(item.uid, tabKey)
+            : RouteBuilder.viewDocument(item.uid, tabKey);
 
         this.setState({ redirectTo });
     };

@@ -1,6 +1,6 @@
-import React from "react";
-import { Descriptions } from "antd";
 import { DateHelper } from "@montr-core/services";
+import { Descriptions } from "antd";
+import React from "react";
 import { IDocument } from "../models";
 
 interface Props {

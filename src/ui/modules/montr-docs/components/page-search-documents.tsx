@@ -1,18 +1,14 @@
+import { DataTable, Page, PageHeader } from "@montr-core/components";
 import React from "react";
-import { Page, PageHeader, DataTable } from "@montr-core/components";
-import { Views, Api } from "../module";
+import { DocumentBreadcrumb } from ".";
+import { Api, Views } from "../module";
 
-interface Props {
-}
-
-interface State {
-}
-
-export default class PageSearchDocuments extends React.Component<Props, State> {
+export default class PageSearchDocuments extends React.Component {
 	render = (): React.ReactNode => {
 		return (
 			<Page
 				title={<>
+					<DocumentBreadcrumb />
 					<PageHeader>Documents</PageHeader>
 				</>}>
 

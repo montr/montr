@@ -34,11 +34,16 @@ namespace Montr.Docs.Impl.Services
 		{
 			using (var db = _dbContextFactory.Create())
 			{
+				// todo: add indexes
 				var query = db.GetTable<DbDocument>().AsQueryable();
+
+				if (request.Uid.HasValue)
+				{
+					query = query.Where(x => x.Uid == request.Uid);
+				}
 
 				if (request.UserUid.HasValue)
 				{
-					// todo: add index
 					query = query.Where(x => x.CreatedBy == request.UserUid);
 				}
 

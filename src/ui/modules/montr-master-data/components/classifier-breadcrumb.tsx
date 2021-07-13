@@ -1,7 +1,8 @@
-import * as React from "react";
 import { DataBreadcrumb } from "@montr-core/components";
 import { IMenu } from "@montr-core/models";
-import { ClassifierType, Classifier } from "../models";
+import * as React from "react";
+import { Classifier, ClassifierType } from "../models";
+import { Patterns, RouteBuilder } from "../module";
 
 interface Props {
 	type?: ClassifierType;
@@ -14,17 +15,16 @@ export class ClassifierBreadcrumb extends React.Component<Props> {
 		const { type, types, item } = this.props;
 
 		// todo: localize
-		// todo: here and below use routes class
 		const items: IMenu[] = [
-			{ name: "Классификаторы", route: `/classifiers/` }
+			{ name: "Classifiers", route: Patterns.searchClassifierType }
 		];
 
 		if (type) {
-			const typeItem: IMenu = { name: type.name, route: `/classifiers/${type.code}` };
+			const typeItem: IMenu = { name: type.name, route: RouteBuilder.searchClassifier(type.code) };
 
 			if (types) {
 				typeItem.items = types.map(x => {
-					return { name: x.name, route: `/classifiers/${x.code}` };
+					return { name: x.name, route: RouteBuilder.searchClassifier(x.code) };
 				});
 			}
 

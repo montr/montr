@@ -63,6 +63,9 @@ export const RouteBuilder = {
 		return generatePath(Patterns.editClassifierType, { uid: uid.toString(), tabKey });
 	},
 
+	searchClassifier: (typeCode: string): string => {
+		return generatePath(Patterns.searchClassifier, { typeCode });
+	},
 	addClassifier: (typeCode: string, parentUid: Guid | string): string => {
 		return generatePath(Patterns.addClassifier, { typeCode, parentUid: parentUid ? parentUid.toString() : null });
 	},

@@ -1,15 +1,15 @@
+import { DataTabs, StatusTag } from "@montr-core/components";
+import { DataView } from "@montr-core/models";
+import { DateHelper } from "@montr-core/services";
+import { Classifier } from "@montr-master-data/models";
+import { ClassifierService } from "@montr-master-data/services";
+import { Button, PageHeader, Spin } from "antd";
 import React from "react";
 import { RouteComponentProps } from "react-router";
-import { Spin, PageHeader, Button } from "antd";
-import { DataView } from "@montr-core/models";
-import { ClassifierService } from "@montr-master-data/services";
-import { Classifier } from "@montr-master-data/models";
-import { DataBreadcrumb, DataTabs, StatusTag } from "@montr-core/components";
+import { DocumentBreadcrumb } from ".";
 import { IDocument } from "../models";
-import { DocumentMetadataService, DocumentService } from "../services";
 import { ClassifierTypeCode, EntityTypeCode, RouteBuilder, Views } from "../module";
-
-import { DocumentSignificantInfo } from ".";
+import { DocumentMetadataService, DocumentService } from "../services";
 
 interface RouteProps {
 	uid?: string;
@@ -60,7 +60,7 @@ export default class PageViewDocument extends React.Component<Props, State> {
 		const documentType = await this.classifierService
 			.get(ClassifierTypeCode.documentType, document.documentTypeUid);
 
-		const dataView = await this.documentMetadataService.view(documentType.uid, Views.documentTabs);
+		const dataView = await this.documentMetadataService.view(document.uid, Views.documentTabs);
 
 		this.setState({ loading: false, document, documentType, dataView });
 	};
@@ -87,19 +87,21 @@ export default class PageViewDocument extends React.Component<Props, State> {
 
 		if (!document || !document.documentTypeUid) return null;
 
+		const pageTitle = `${documentType.name} — ${document.documentNumber} — ${DateHelper.toLocaleDateString(document.documentDate)}`;
+
 		return (
 			<Spin spinning={loading}>
 				<PageHeader
 					onBack={() => window.history.back()}
-					title={documentType.name}
+					title={pageTitle}
 					subTitle={document.uid}
 					tags={<StatusTag statusCode={document.statusCode} />}
-					breadcrumb={<DataBreadcrumb items={[{ name: "Documents" }]} />}
+					breadcrumb={<DocumentBreadcrumb />}
 					extra={[
 						<Button key="2">Accept or Reject</Button>,
 						<Button key="1" type="primary">Publish</Button>,
 					]}>
-					<DocumentSignificantInfo document={document} />
+					{/* <DocumentSignificantInfo document={document} /> */}
 				</PageHeader>
 
 				<DataTabs

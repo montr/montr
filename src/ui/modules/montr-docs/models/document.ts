@@ -1,7 +1,7 @@
 import { Guid, IIndexer } from "@montr-core/models";
 
 export interface IDocument extends IIndexer {
-	uid?: Guid | string;
+	uid?: Guid;
 	companyUid?: Guid;
 	documentTypeUid?: Guid;
 	configCode?: string;

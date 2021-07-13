@@ -1,9 +1,9 @@
-import React from "react";
-import { IDataField } from "@montr-core/models";
 import { DataForm } from "@montr-core/components";
-import { Spin } from "antd";
+import { IDataField } from "@montr-core/models";
 import { IDocument } from "@montr-docs/models";
 import { DocumentMetadataService } from "@montr-docs/services";
+import { Spin } from "antd";
+import React from "react";
 
 interface Props {
 	document: IDocument;
@@ -43,8 +43,8 @@ export default class PaneViewDocumentForm extends React.Component<Props, State> 
 	fetchData = async (): Promise<void> => {
 		const { document } = this.props;
 
-		if (document.documentTypeUid) {
-			const dataView = await this._documentMetadataService.view(document.documentTypeUid, null);
+		if (document.uid) {
+			const dataView = await this._documentMetadataService.view(document.uid, null);
 
 			this.setState({ loading: false, fields: dataView.fields });
 		}
