@@ -9,5 +9,7 @@
 		public string Icon { get; set; }
 
 		public string Component { get; set; }
+
+		public object Props { get; set; }
 	}
 }

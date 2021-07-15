@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -26,29 +25,29 @@ namespace Montr.Docs.Impl.QueryHandlers
 
 		public async Task<DataView> Handle(GetDocumentMetadata request, CancellationToken cancellationToken)
 		{
+			var document = (await _documentService.Search(new DocumentSearchRequest
+			{
+				UserUid = request.UserUid,
+				Uid = request.DocumentUid,
+				SkipPaging = true
+			}, cancellationToken)).Rows.Single();
+
 			var result = new DataView();
 
 			if (request.ViewId == ViewCode.DocumentTabs)
 			{
-				result.Panes = GetDocumentTabs();
+				result.Panes = GetDocumentTabs(document);
 			}
 			else
 			{
-				result.Fields = await GetDocumentFormMetadata(request, cancellationToken);
+				result.Fields = await GetDocumentFormMetadata(document, cancellationToken);
 			}
 
 			return result;
 		}
 
-		private async Task<IList<FieldMetadata>> GetDocumentFormMetadata(GetDocumentMetadata request, CancellationToken cancellationToken)
+		private async Task<IList<FieldMetadata>> GetDocumentFormMetadata(Document document, CancellationToken cancellationToken)
 		{
-			var document = (await _documentService.Search(new DocumentSearchRequest
-			{
-				Uid = request.DocumentUid,
-				UserUid = request.UserUid,
-				SkipPaging = true
-			}, cancellationToken)).Rows.Single();
-
 			// todo: separate document type metadata and document type (company registration request) form
 			var metadata = await _metadataRepository.Search(new MetadataSearchRequest
 			{
@@ -58,15 +57,15 @@ namespace Montr.Docs.Impl.QueryHandlers
 				SkipPaging = true
 			}, cancellationToken);
 
-			// todo: remove for form
-			var dbFields = new List<string>
+			var result = metadata.Rows;
+
+			// todo: remove for form - system fields required only for custom fields
+			/*var dbFields = new List<string>
 			{
 				nameof(Document.DocumentDate),
 				nameof(Document.DocumentNumber),
 				nameof(Document.Name)
 			};
-
-			var result = metadata.Rows;
 
 			foreach (var field in result)
 			{
@@ -74,16 +73,19 @@ namespace Montr.Docs.Impl.QueryHandlers
 				{
 					field.Key = FieldKey.FormatFullKey(field.Key);
 				}
-			}
+			}*/
 
 			return result;
 		}
 
-		private static DataPane[] GetDocumentTabs()
+		private static DataPane[] GetDocumentTabs(Document document)
 		{
+			// todo: create class for each component type
+			var formProps = document.StatusCode == "draft" ? new { mode = "edit" } : new { mode = "view" };
+
 			return new DataPane[]
 			{
-				new() { Key = "form", Name = "Form", Component = "pane_view_document_form" },
+				new() { Key = "form", Name = "Form", Component = "pane_view_document_form", Props = formProps },
 				new() { Key = "history", Name = "History", Icon = "eye" }
 			};
 		}

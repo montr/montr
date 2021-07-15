@@ -7,6 +7,7 @@ import React from "react";
 
 interface Props {
 	document: IDocument;
+	mode?: "edit" | "view";
 }
 
 interface State {
@@ -51,12 +52,12 @@ export default class PaneViewDocumentForm extends React.Component<Props, State> 
 	};
 
 	render = (): React.ReactNode => {
-		const { document } = this.props,
+		const { document, mode } = this.props,
 			{ fields, loading } = this.state;
 
 		return (
 			<Spin spinning={loading}>
-				<DataForm mode="view" fields={fields} data={document} />
+				<DataForm mode={mode} fields={fields} data={document} />
 			</Spin>
 		);
 	};

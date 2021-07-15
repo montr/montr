@@ -1,12 +1,12 @@
-import * as React from "react";
 import { Form, Spin } from "antd";
 import { FormInstance } from "antd/lib/form";
 import { FieldData, Store } from "rc-field-form/lib/interface";
-import { IDataField, ApiResult, IIndexer } from "../models";
-import { NotificationService } from "../services/notification-service";
-import { OperationService, DataHelper } from "../services";
-import { FormDefaults, DataFieldFactory, ButtonSave, Toolbar } from ".";
+import * as React from "react";
 import { withTranslation, WithTranslation } from "react-i18next";
+import { ButtonSave, DataFieldFactory, FormDefaults, Toolbar } from ".";
+import { ApiResult, IDataField, IIndexer } from "../models";
+import { DataHelper, OperationService } from "../services";
+import { NotificationService } from "../services/notification-service";
 
 export interface DataFormOptions extends WithTranslation {
 	mode?: "edit" | "view";
@@ -16,14 +16,14 @@ export interface DataFormOptions extends WithTranslation {
 
 interface Props extends DataFormOptions {
 	fields?: IDataField[]; // todo: provide url to load fields or create wrapped component
-	data?: any; // IIndexer;
+	data?: unknown; // IIndexer;
 	hideButtons?: boolean;
 	submitButton?: string;
 	resetButton?: string;
 	successMessage?: string;
 	errorMessage?: string;
 	onChange?: (values: IIndexer, changedValues: IIndexer) => void;
-	onSubmit?: (values: any /* IIndexer */) => Promise<ApiResult>;
+	onSubmit?: (values: unknown /* IIndexer */) => Promise<ApiResult>;
 	formRef?: React.RefObject<FormInstance>;
 }
 
@@ -37,8 +37,8 @@ class WrappedDataForm extends React.Component<Props, State> {
 		loading: false,
 	};
 
-	operationService = new OperationService();
-	notificationService = new NotificationService();
+	private readonly operationService = new OperationService();
+	private readonly notificationService = new NotificationService();
 
 	isMounted = true;
 	formRef = React.createRef<FormInstance>();
@@ -79,7 +79,7 @@ class WrappedDataForm extends React.Component<Props, State> {
 		}
 	};
 
-	setFieldErrors = async (result: ApiResult, values: any /* IIndexer */) => {
+	setFieldErrors = async (result: ApiResult, values: unknown /* IIndexer */) => {
 		const { fields } = this.props;
 
 		const form = this.getFormRef().current;

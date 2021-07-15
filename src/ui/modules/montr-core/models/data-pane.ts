@@ -3,6 +3,7 @@ export interface DataPane<TEntity> {
 	name?: string;
 	icon?: string;
 	component?: string;
+	props?: any;
 }
 
 export interface PaneProps<TEntity> {

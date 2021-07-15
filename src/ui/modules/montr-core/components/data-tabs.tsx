@@ -1,15 +1,15 @@
-import React from "react";
 import { Tabs } from "antd";
+import React from "react";
+import { Icon } from ".";
 import { DataPane } from "../models";
 import { ComponentRegistry } from "../services";
-import { Icon } from ".";
 
 interface Props<TModel> {
     tabKey?: string;
     panes?: DataPane<TModel>[],
     onTabChange?: (tabKey: string) => void,
     disabled?: (pane: DataPane<TModel>, index: number) => boolean,
-    tabProps?: unknown; // todo: add types for classifiers, documents
+    tabProps?: any; // todo: add types for classifiers, documents
 }
 
 export class DataTabs<TModel> extends React.Component<Props<TModel>> {
@@ -28,7 +28,7 @@ export class DataTabs<TModel> extends React.Component<Props<TModel>> {
                             const componentClass = ComponentRegistry.getComponent(pane.component);
 
                             if (componentClass) {
-                                component = React.createElement(componentClass, tabProps);
+                                component = React.createElement(componentClass, { ...tabProps, ...pane.props });
                             } else {
                                 console.error(`Tab component ${pane.component} is not found.`);
                             }
