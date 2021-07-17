@@ -13,6 +13,7 @@ namespace Montr.MasterData
 		{
 			services.AddTransient<IStartupTask, RegisterClassifierMetadataStartupTask>();
 			services.AddTransient<IStartupTask, RegisterClassifierTypeStartupTask>();
+			services.AddTransient<IStartupTask, ConfigurationStartupTask>();
 		}
 	}
 }

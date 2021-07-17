@@ -1,12 +1,12 @@
+import { DataTabs, Page, PageHeader } from "@montr-core/components";
+import { DataView } from "@montr-core/models";
+import { Spin } from "antd";
 import * as React from "react";
 import { RouteComponentProps } from "react-router";
-import { Spin } from "antd";
-import { DataView } from "@montr-core/models";
-import { DataTabs, Page, PageHeader } from "@montr-core/components";
-import { ClassifierMetadataService, ClassifierTypeService } from "../services";
-import { ClassifierType } from "../models";
 import { ClassifierBreadcrumb } from ".";
+import { ClassifierType } from "../models";
 import { RouteBuilder, Views } from "../module";
+import { ClassifierMetadataService, ClassifierTypeService } from "../services";
 
 interface RouteProps {
 	uid?: string;
@@ -54,14 +54,14 @@ export default class EditClassifierType extends React.Component<Props, State> {
 	fetchData = async (): Promise<void> => {
 		const { uid } = this.props.match.params;
 
-		const dataView = await this.classifierMetadataService.view(null, Views.classifierTypeTabs);
-
 		const types = await this.classifierTypeService.list({ skipPaging: true });
 
 		const data: ClassifierType = (uid)
 			? await this.classifierTypeService.get({ uid })
 			// todo: load defaults from server
 			: { name: "", hierarchyType: "None" };
+
+		const dataView = await this.classifierMetadataService.view(data.code, Views.classifierTypeTabs);
 
 		this.setState({ loading: false, dataView, data, types: types.rows });
 	};

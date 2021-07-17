@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -15,13 +16,16 @@ namespace Montr.MasterData.Impl.QueryHandlers
 	public class GetClassifierMetadataHandler : IRequestHandler<GetClassifierMetadata, DataView>
 	{
 		private readonly IClassifierTypeService _classifierTypeService;
+		private readonly IConfigurationManager _configurationManager;
 		private readonly IRepository<FieldMetadata> _metadataRepository;
 
 		public GetClassifierMetadataHandler(
 			IClassifierTypeService classifierTypeService,
+			IConfigurationManager configurationManager,
 			IRepository<FieldMetadata> metadataRepository)
 		{
 			_classifierTypeService = classifierTypeService;
+			_configurationManager = configurationManager;
 			_metadataRepository = metadataRepository;
 		}
 
@@ -29,7 +33,17 @@ namespace Montr.MasterData.Impl.QueryHandlers
 		{
 			if (request.ViewId == ViewCode.ClassifierTypeTabs)
 			{
-				return GetClassifierTypeTabs();
+				var entity = request.TypeCode != null
+					? await GetClassifierType(request, cancellationToken)
+					: new ClassifierType(); // for new classifier types
+
+				// todo: authorize before sort
+				var items = _configurationManager.GetItems<ClassifierType, DataPane>(entity);
+
+				return new DataView
+				{
+					Panes = items.OrderBy(x => x.DisplayOrder).ToImmutableList()
+				};
 			}
 
 			if (request.ViewId == ViewCode.NumeratorEntityForm)
@@ -37,31 +51,21 @@ namespace Montr.MasterData.Impl.QueryHandlers
 				return GetNumeratorEntityForm();
 			}
 
-			var typeCode = request.TypeCode ?? throw new ArgumentNullException(nameof(request.TypeCode));
-
-			var type = await _classifierTypeService.Get(typeCode, cancellationToken);
+			var classifierType = await GetClassifierType(request, cancellationToken);
 
 			if (request.ViewId == ViewCode.ClassifierTabs)
 			{
-				return GetClassifierTabs(type);
+				return GetClassifierTabs(classifierType);
 			}
 
-			return await GetClassifierForm(type, cancellationToken);
+			return await GetClassifierForm(classifierType, cancellationToken);
 		}
 
-		private static DataView GetClassifierTypeTabs()
+		private async Task<ClassifierType> GetClassifierType(GetClassifierMetadata request, CancellationToken cancellationToken)
 		{
-			return new()
-			{
-				Panes = new List<DataPane>
-				{
-					new() { Key = "info", Name = "Информация", Icon = "profile", Component = "panes/TabEditClassifierType" },
-					new() { Key = "hierarchy", Name = "Иерархия", Component = "panes/TabEditClassifierTypeHierarchy" },
-					new() { Key = "fields", Name = "Поля", Component = "panes/PaneSearchMetadata" },
-					new() { Key = "numeration", Name = "Нумерация", Component = "panes/PaneEditNumeration" },
-					new() { Key = "history", Name = "История изменений", Icon = "eye" }
-				}
-			};
+			var typeCode = request.TypeCode ?? throw new ArgumentNullException(nameof(request.TypeCode));
+
+			return await _classifierTypeService.Get(typeCode, cancellationToken);
 		}
 
 		private static DataView GetClassifierTabs(ClassifierType type)
