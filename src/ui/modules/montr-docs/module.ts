@@ -1,8 +1,8 @@
-import React from "react";
-import { generatePath } from "react-router";
+import { Constants } from "@montr-core/.";
 import { Guid } from "@montr-core/models";
 import { AppRouteRegistry, ComponentRegistry } from "@montr-core/services";
-import { Constants } from "@montr-core/.";
+import React from "react";
+import { generatePath } from "react-router";
 
 export const Api = {
 	documentMetadataView: `${Constants.apiURL}/documentMetadata/view`,
@@ -14,7 +14,6 @@ export const Api = {
 export const Patterns = {
 	searchDocuments: "/documents/",
 	viewDocument: "/documents/view/:uid/:tabKey?",
-	editDocument: "/documents/edit/:uid/:tabKey?"
 };
 
 export const EntityTypeCode = {
@@ -34,16 +33,12 @@ export const Views = {
 export const RouteBuilder = {
 	viewDocument: (uid: Guid | string, tabKey?: string): string => {
 		return generatePath(Patterns.viewDocument, { uid: uid.toString(), tabKey });
-	},
-	editDocument: (uid: Guid | string, tabKey?: string): string => {
-		return generatePath(Patterns.editDocument, { uid: uid.toString(), tabKey });
-	},
+	}
 };
 
 AppRouteRegistry.add([
 	{ path: Patterns.searchDocuments, exact: true, component: React.lazy(() => import("./components/page-search-documents")) },
 	{ path: Patterns.viewDocument, exact: true, component: React.lazy(() => import("./components/page-view-document")) },
-	{ path: Patterns.editDocument, exact: true, component: React.lazy(() => import("./components/page-view-document")) },
 ]);
 
 ComponentRegistry.add([

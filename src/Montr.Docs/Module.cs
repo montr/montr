@@ -12,6 +12,7 @@ namespace Montr.Docs
 		public void ConfigureServices(IConfiguration configuration, IServiceCollection services)
 		{
 			services.AddTransient<IStartupTask, RegisterClassifierTypeStartupTask>();
+			services.AddTransient<IStartupTask, ConfigurationStartupTask>();
 		}
 	}
 }

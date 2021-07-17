@@ -1,12 +1,12 @@
+import { ButtonCreate, ButtonDelete, StatusTag, UserContextProps, withUserContext } from "@montr-core/components";
+import { OperationService } from "@montr-core/services";
+import { IDocument } from "@montr-docs/models";
+import { RouteBuilder } from "@montr-docs/module";
+import { Button, List, Space, Spin, Typography } from "antd";
 import React from "react";
 import { Redirect } from "react-router";
-import { ButtonCreate, ButtonDelete, StatusTag, UserContextProps, withUserContext } from "@montr-core/components";
-import { IDocument } from "@montr-docs/models";
 import { CompanyContextProps, withCompanyContext } from ".";
 import { CompanyRegistrationRequestService } from "../services";
-import { Button, List, Space, Spin, Typography } from "antd";
-import { OperationService } from "@montr-core/services";
-import { RouteBuilder } from "@montr-docs/module";
 
 interface Props extends UserContextProps, CompanyContextProps {
 }
@@ -52,18 +52,12 @@ class _StepRegisterCompany extends React.Component<Props, State> {
         });
 
         if (result.success) {
-            this.setState({ redirectTo: RouteBuilder.editDocument(result.uid) });
+            this.openRequest({ uid: result.uid });
         }
     };
 
     openRequest = async (item: IDocument) => {
-        const tabKey = "form";
-
-        const redirectTo = item.statusCode == "draft"
-            ? RouteBuilder.editDocument(item.uid, tabKey)
-            : RouteBuilder.viewDocument(item.uid, tabKey);
-
-        this.setState({ redirectTo });
+        this.setState({ redirectTo: RouteBuilder.viewDocument(item.uid) });
     };
 
     deleteRequest = async (item: IDocument) => {

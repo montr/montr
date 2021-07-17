@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Collections.Immutable;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -15,11 +16,16 @@ namespace Montr.Docs.Impl.QueryHandlers
 	public class GetDocumentMetadataHandler : IRequestHandler<GetDocumentMetadata, DataView>
 	{
 		private readonly IDocumentService _documentService;
+		private readonly IConfigurationManager _configurationManager;
 		private readonly IRepository<FieldMetadata> _metadataRepository;
 
-		public GetDocumentMetadataHandler(IDocumentService documentService, IRepository<FieldMetadata> metadataRepository)
+		public GetDocumentMetadataHandler(
+			IDocumentService documentService,
+			IConfigurationManager configurationManager,
+			IRepository<FieldMetadata> metadataRepository)
 		{
 			_documentService = documentService;
+			_configurationManager = configurationManager;
 			_metadataRepository = metadataRepository;
 		}
 
@@ -36,7 +42,10 @@ namespace Montr.Docs.Impl.QueryHandlers
 
 			if (request.ViewId == ViewCode.DocumentTabs)
 			{
-				result.Panes = GetDocumentTabs(document);
+				// todo: authorize before sort
+				var items = _configurationManager.GetItems<Document, DataPane>(document);
+
+				result.Panes = items.OrderBy(x => x.DisplayOrder).ToImmutableList();
 			}
 			else
 			{
@@ -76,18 +85,6 @@ namespace Montr.Docs.Impl.QueryHandlers
 			}*/
 
 			return result;
-		}
-
-		private static DataPane[] GetDocumentTabs(Document document)
-		{
-			// todo: create class for each component type
-			var formProps = document.StatusCode == "draft" ? new { mode = "edit" } : new { mode = "view" };
-
-			return new DataPane[]
-			{
-				new() { Key = "form", Name = "Form", Component = "pane_view_document_form", Props = formProps },
-				new() { Key = "history", Name = "History", Icon = "eye" }
-			};
 		}
 	}
 }

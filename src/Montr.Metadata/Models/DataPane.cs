@@ -1,7 +1,11 @@
-﻿namespace Montr.Metadata.Models
+﻿using Montr.Core.Services;
+
+namespace Montr.Metadata.Models
 {
-	public class DataPane
+	public class DataPane : IConfigurationItem
 	{
+		public int DisplayOrder { get; set; }
+
 		public string Key { get; set; }
 
 		public string Name { get; set; }
