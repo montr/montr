@@ -1,29 +1,39 @@
 ﻿using System.Collections.Generic;
+using System.Collections.Immutable;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
-using Montr.Core.Models;
-using Montr.MasterData.Services;
+using Montr.Core.Services;
 using Montr.Metadata.Models;
-using Montr.Metadata.Services;
+using Montr.Tendr.Models;
 using Montr.Tendr.Queries;
 
 namespace Montr.Tendr.Impl.QueryHandlers
 {
 	public class GetEventMetadataHandler : IRequestHandler<GetEventMetadata, DataView>
 	{
-		private readonly IClassifierTypeService _classifierTypeService;
-		private readonly IMetadataProvider _metadataProvider;
+		private readonly IConfigurationManager _configurationManager;
 
-		public GetEventMetadataHandler(IClassifierTypeService classifierTypeService, IMetadataProvider metadataProvider)
+		public GetEventMetadataHandler(IConfigurationManager configurationManager)
 		{
-			_classifierTypeService = classifierTypeService;
-			_metadataProvider = metadataProvider;
+			_configurationManager = configurationManager;
 		}
 
 		public async Task<DataView> Handle(GetEventMetadata request, CancellationToken cancellationToken)
 		{
 			var result = new DataView { Id = request.ViewId };
+
+			if (request.ViewId == "PrivateEvent/Edit")
+			{
+				// todo: preload event from service
+				var @event = new Event { Uid = request.EventUid };
+
+				// todo: authorize before sort
+				var items = _configurationManager.GetItems<Event, DataPane>(@event);
+
+				result.Panes = items.OrderBy(x => x.DisplayOrder).ToImmutableList();
+			}
 
 			if (request.ViewId == "Event/Edit")
 			{

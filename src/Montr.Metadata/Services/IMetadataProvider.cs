@@ -267,24 +267,6 @@ namespace Montr.Metadata.Services
 				};
 			}
 
-			if (viewId == "PrivateEvent/Edit")
-			{
-				result.Panes = new List<DataPane>
-				{
-					new() { Key = "info", Name = "Информация", Icon = "profile", Component = "panes/private/EditEventPane" },
-					new() { Key = "invitations", Name = "Приглашения (😎)", Icon = "solution", Component = "panes/private/InvitationPane" },
-					new() { Key = "proposals", Name = "Предложения", Icon = "solution" },
-					new() { Key = "questions", Name = "Разъяснения", Icon = "solution" },
-					new() { Key = "team", Name = "Команда", Icon = "team" },
-					new() { Key = "items", Name = "Позиции", Icon = "table" },
-					new() { Key = "history", Name = "История изменений", Icon = "eye" },
-					new() { Key = "5", Name = "Тендерная комиссия (команда?)" },
-					new() { Key = "6", Name = "Критерии оценки (анкета?)" },
-					new() { Key = "7", Name = "Документы (поле?)" },
-					new() { Key = "8", Name = "Контактные лица (поле?)" },
-				};
-			}
-
 			if (viewId == "Event/Invitation/List")
 			{
 				result.Columns = new List<DataColumn>

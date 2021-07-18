@@ -12,6 +12,7 @@ namespace Montr.Tendr
 		public void ConfigureServices(IConfiguration configuration, IServiceCollection services)
 		{
 			services.AddTransient<IStartupTask, RegisterMessageTemplateStartupTask>();
+			services.AddTransient<IStartupTask, ConfigurationStartupTask>();
 		}
 	}
 }

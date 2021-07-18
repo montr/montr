@@ -1,16 +1,13 @@
 ﻿using System;
 using MediatR;
-using Montr.Core.Models;
 using Montr.Metadata.Models;
 
 namespace Montr.Tendr.Queries
 {
-	public class GetEventMetadata : IRequest<DataView>
+	public class GetEventMetadata : MetadataRequest, IRequest<DataView>
 	{
-		public Guid CompanyUid { get; set; }
-
 		public Guid UserUid { get; set; }
 
-		public string ViewId { get; set; }
+		public Guid EventUid { get; set; }
 	}
 }
