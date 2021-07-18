@@ -55,7 +55,16 @@ namespace Montr.MasterData.Impl.QueryHandlers
 
 			if (request.ViewId == ViewCode.ClassifierTabs)
 			{
-				return GetClassifierTabs(classifierType);
+				// todo: preload item from service
+				var classifier = new Classifier { Type = classifierType.Code };
+
+				// todo: authorize before sort
+				var items = _configurationManager.GetItems<Classifier, DataPane>(classifier);
+
+				return new DataView
+				{
+					Panes = items.OrderBy(x => x.DisplayOrder).ToImmutableList()
+				};
 			}
 
 			return await GetClassifierForm(classifierType, cancellationToken);
@@ -66,62 +75,6 @@ namespace Montr.MasterData.Impl.QueryHandlers
 			var typeCode = request.TypeCode ?? throw new ArgumentNullException(nameof(request.TypeCode));
 
 			return await _classifierTypeService.Get(typeCode, cancellationToken);
-		}
-
-		private static DataView GetClassifierTabs(ClassifierType type)
-		{
-			var panes = new List<DataPane>
-			{
-				new() { Key = "info", Name = "Информация", Icon = "profile", Component = "panes/TabEditClassifier" },
-				new() { Key = "hierarchy", Name = "Иерархия", Component = "panes/TabEditClassifierHierarchy" },
-				new() { Key = "dependencies", Name = "Зависимости" },
-				new() { Key = "history", Name = "История изменений", Icon = "eye" }
-			};
-
-			// todo: register different tabs for different classifiers on startup
-			if (type.Code == "questionnaire")
-			{
-				panes.Insert(panes.FindIndex(x => x.Key == "info") + 1,
-					new DataPane { Key = "questionnaire", Name = "Вопросы", Component = "panes/PaneSearchMetadata" });
-			}
-
-			if (type.Code == ClassifierTypeCode.Numerator)
-			{
-				panes.Insert(panes.FindIndex(x => x.Key == "info") + 1,
-					new DataPane { Key = "usage", Name = "Использование", Component = "panes/TabEditNumeratorEntities" });
-			}
-
-			if (type.Code == "role")
-			{
-				panes.Insert(panes.FindIndex(x => x.Key == "info") + 1,
-					new DataPane { Key = "permissions", Name = "Permissions", Component = "components/tab-edit-role-permissions" });
-			}
-
-			if (type.Code == "user")
-			{
-				panes.Insert(panes.FindIndex(x => x.Key == "info") + 1,
-					new DataPane { Key = "roles", Name = "Roles", Icon = "solution", Component = "components/tab-edit-user-roles" });
-			}
-
-			// todo: move to own module
-			if (type.Code == "process")
-			{
-				panes.Insert(panes.FindIndex(x => x.Key == "info") + 1,
-					new DataPane { Key = "steps", Name = "Шаги", Component = "panes/PaneProcessStepList" });
-			}
-
-			if (type.Code == "document_type")
-			{
-				var index = panes.FindIndex(x => x.Key == "info");
-
-				panes.Insert(++index, new DataPane { Key = "fields", Name = "Анкета", Component = "panes/PaneSearchMetadata" });
-
-				// todo: move to processes (?)
-				panes.Insert(++index, new DataPane { Key = "statuses", Name = "Statuses", Component = "panes/PaneSearchEntityStatuses" });
-				panes.Insert(++index, new DataPane { Key = "automation", Name = "Automations", Component = "panes/PaneSearchAutomation" });
-			}
-
-			return new DataView { Panes = panes };
 		}
 
 		private DataView GetNumeratorEntityForm()

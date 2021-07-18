@@ -13,6 +13,7 @@ namespace Montr.Idx
 		{
 			services.AddTransient<IStartupTask, RegisterClassifierTypeStartupTask>();
 			services.AddTransient<IStartupTask, RegisterMessageTemplateStartupTask>();
+			services.AddTransient<IStartupTask, ConfigurationStartupTask>();
 		}
 	}
 }

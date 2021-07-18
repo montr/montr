@@ -27,6 +27,18 @@ namespace Montr.MasterData.Services
 					.Add(new DataPane { Key = "history", Name = "History", Icon = "eye" });
 			});
 
+			_configurationManager.Configure<Classifier>(config =>
+			{
+				config
+					.Add(new DataPane { Key = "info", Name = "Информация", DisplayOrder = 10, Icon = "profile", Component = "panes/TabEditClassifier" })
+					.Add(new DataPane { Key = "hierarchy", Name = "Иерархия", DisplayOrder = 20, Component = "panes/TabEditClassifierHierarchy" })
+					.Add(new DataPane { Key = "dependencies", Name = "Зависимости", DisplayOrder = 30 })
+					.Add(new DataPane { Key = "history", Name = "История изменений", DisplayOrder = 40, Icon = "eye" });
+
+				config.When(classifier => classifier.Type == ClassifierTypeCode.Numerator)
+					.Add(new DataPane { Key = "usage", Name = "Использование", DisplayOrder = 15, Component = "panes/TabEditNumeratorEntities" });
+			});
+
 			return Task.CompletedTask;
 		}
 	}
