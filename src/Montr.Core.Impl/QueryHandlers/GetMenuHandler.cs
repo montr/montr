@@ -30,7 +30,7 @@ namespace Montr.Core.Impl.QueryHandlers
 			return new Menu { Id = request.MenuId, Items = result };
 		}
 
-		private async Task<IList<Menu>> GetAuthorizedItems(IList<Menu> items, ClaimsPrincipal principal)
+		private async Task<IList<Menu>> GetAuthorizedItems(ICollection<Menu> items, ClaimsPrincipal principal)
 		{
 			if (items?.Count > 0)
 			{

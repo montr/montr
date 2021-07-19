@@ -23,6 +23,7 @@ namespace Montr.Tendr.Controllers
 		[HttpPost]
 		public async Task<DataView> View(GetEventMetadata request)
 		{
+			request.Principal = User;
 			request.UserUid = _currentUserProvider.GetUserUid();
 
 			return await _mediator.Send(request);

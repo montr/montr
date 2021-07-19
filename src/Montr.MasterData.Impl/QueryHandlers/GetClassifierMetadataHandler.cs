@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -16,16 +15,16 @@ namespace Montr.MasterData.Impl.QueryHandlers
 	public class GetClassifierMetadataHandler : IRequestHandler<GetClassifierMetadata, DataView>
 	{
 		private readonly IClassifierTypeService _classifierTypeService;
-		private readonly IConfigurationManager _configurationManager;
+		private readonly IConfigurationService _configurationService;
 		private readonly IRepository<FieldMetadata> _metadataRepository;
 
 		public GetClassifierMetadataHandler(
 			IClassifierTypeService classifierTypeService,
-			IConfigurationManager configurationManager,
+			IConfigurationService configurationService,
 			IRepository<FieldMetadata> metadataRepository)
 		{
 			_classifierTypeService = classifierTypeService;
-			_configurationManager = configurationManager;
+			_configurationService = configurationService;
 			_metadataRepository = metadataRepository;
 		}
 
@@ -37,12 +36,9 @@ namespace Montr.MasterData.Impl.QueryHandlers
 					? await GetClassifierType(request, cancellationToken)
 					: new ClassifierType(); // for new classifier types
 
-				// todo: authorize before sort
-				var items = _configurationManager.GetItems<ClassifierType, DataPane>(entity);
-
 				return new DataView
 				{
-					Panes = items.OrderBy(x => x.DisplayOrder).ToImmutableList()
+					Panes = await _configurationService.GetItems<ClassifierType, DataPane>(entity, request.Principal)
 				};
 			}
 
@@ -58,12 +54,9 @@ namespace Montr.MasterData.Impl.QueryHandlers
 				// todo: preload item from service
 				var classifier = new Classifier { Type = classifierType.Code };
 
-				// todo: authorize before sort
-				var items = _configurationManager.GetItems<Classifier, DataPane>(classifier);
-
 				return new DataView
 				{
-					Panes = items.OrderBy(x => x.DisplayOrder).ToImmutableList()
+					Panes = await _configurationService.GetItems<Classifier, DataPane>(classifier, request.Principal)
 				};
 			}
 

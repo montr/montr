@@ -22,6 +22,8 @@ namespace Montr.MasterData.Controllers
 		[HttpPost, Permission(typeof(ViewClassifiers))]
 		public async Task<DataView> View(GetClassifierMetadata request)
 		{
+			request.Principal = User;
+
 			return await _mediator.Send(request);
 		}
 	}

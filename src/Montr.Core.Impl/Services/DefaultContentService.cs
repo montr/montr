@@ -7,6 +7,9 @@ using Montr.Core.Services;
 
 namespace Montr.Core.Impl.Services
 {
+	/// <summary>
+	/// Used to collect content items (menus etc.) from registered content providers.
+	/// </summary>
 	public class DefaultContentService : IContentService
 	{
 		private readonly IEnumerable<IContentProvider> _providers;

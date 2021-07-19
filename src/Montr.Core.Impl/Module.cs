@@ -14,6 +14,7 @@ namespace Montr.Core.Impl
 		{
 			services.AddTransient<IStartupTask, ImportDefaultLocaleStringListStartupTask>();
 
+			services.AddSingleton<IConfigurationManager, DefaultConfigurationManager>();
 			services.AddSingleton<IContentService, DefaultContentService>();
 			services.AddSingleton<IContentProvider, DefaultContentProvider>();
 			services.AddTransient<IPermissionProvider, PermissionProvider>();
@@ -33,6 +34,7 @@ namespace Montr.Core.Impl
 			services.AddSingleton<IPermissionResolver, DefaultPermissionResolver>();
 			services.AddSingleton<IAuthorizationPolicyProvider, AuthorizationPolicyProvider>();
 
+			services.AddTransient<IConfigurationService, DefaultConfigurationService>();
 			services.AddTransient<IRecipeExecutor, DefaultRecipeExecutor>();
 		}
 	}

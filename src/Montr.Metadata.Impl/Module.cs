@@ -18,7 +18,6 @@ namespace Montr.Metadata.Impl
 		{
 			services.AddSingleton<IStartupTask, FieldMetadataJsonOptionsInitializer>();
 
-			services.AddSingleton<IConfigurationManager, DefaultConfigurationManager>();
 			services.AddSingleton<IFieldProviderRegistry, DefaultFieldProviderRegistry>();
 			services.AddSingleton<IRepository<FieldMetadata>, DbFieldMetadataRepository>();
 			services.AddSingleton<IFieldMetadataService, DbFieldMetadataService>();

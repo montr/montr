@@ -1,6 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Collections.Immutable;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
@@ -13,11 +11,11 @@ namespace Montr.Tendr.Impl.QueryHandlers
 {
 	public class GetEventMetadataHandler : IRequestHandler<GetEventMetadata, DataView>
 	{
-		private readonly IConfigurationManager _configurationManager;
+		private readonly IConfigurationService _configurationService;
 
-		public GetEventMetadataHandler(IConfigurationManager configurationManager)
+		public GetEventMetadataHandler(IConfigurationService configurationService)
 		{
-			_configurationManager = configurationManager;
+			_configurationService = configurationService;
 		}
 
 		public async Task<DataView> Handle(GetEventMetadata request, CancellationToken cancellationToken)
@@ -29,10 +27,7 @@ namespace Montr.Tendr.Impl.QueryHandlers
 				// todo: preload event from service
 				var @event = new Event { Uid = request.EventUid };
 
-				// todo: authorize before sort
-				var items = _configurationManager.GetItems<Event, DataPane>(@event);
-
-				result.Panes = items.OrderBy(x => x.DisplayOrder).ToImmutableList();
+				result.Panes = await _configurationService.GetItems<Event, DataPane>(@event, request.Principal);
 			}
 
 			if (request.ViewId == "Event/Edit")

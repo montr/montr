@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Collections.Immutable;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -16,16 +15,16 @@ namespace Montr.Docs.Impl.QueryHandlers
 	public class GetDocumentMetadataHandler : IRequestHandler<GetDocumentMetadata, DataView>
 	{
 		private readonly IDocumentService _documentService;
-		private readonly IConfigurationManager _configurationManager;
+		private readonly IConfigurationService _configurationService;
 		private readonly IRepository<FieldMetadata> _metadataRepository;
 
 		public GetDocumentMetadataHandler(
 			IDocumentService documentService,
-			IConfigurationManager configurationManager,
+			IConfigurationService configurationService,
 			IRepository<FieldMetadata> metadataRepository)
 		{
 			_documentService = documentService;
-			_configurationManager = configurationManager;
+			_configurationService = configurationService;
 			_metadataRepository = metadataRepository;
 		}
 
@@ -42,10 +41,7 @@ namespace Montr.Docs.Impl.QueryHandlers
 
 			if (request.ViewId == ViewCode.DocumentTabs)
 			{
-				// todo: authorize before sort
-				var items = _configurationManager.GetItems<Document, DataPane>(document);
-
-				result.Panes = items.OrderBy(x => x.DisplayOrder).ToImmutableList();
+				result.Panes = await _configurationService.GetItems<Document, DataPane>(document, request.Principal);
 			}
 			else
 			{

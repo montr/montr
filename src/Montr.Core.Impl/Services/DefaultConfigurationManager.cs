@@ -3,7 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using Montr.Core.Services;
 
-namespace Montr.Metadata.Impl.Services
+namespace Montr.Core.Impl.Services
 {
 	public class DefaultConfigurationManager : IConfigurationManager
 	{

@@ -38,6 +38,8 @@ namespace Montr.Core.Services
 
 	public interface IConfigurationItem
 	{
+		string Permission { get; }
+
 		int DisplayOrder { get; }
 	}
 }

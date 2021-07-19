@@ -4,6 +4,8 @@ namespace Montr.Metadata.Models
 {
 	public class DataPane : IConfigurationItem
 	{
+		public string Permission { get; set; }
+
 		public int DisplayOrder { get; set; }
 
 		public string Key { get; set; }
