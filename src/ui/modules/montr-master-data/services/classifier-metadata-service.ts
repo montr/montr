@@ -1,5 +1,5 @@
-import { Fetcher } from "@montr-core/services";
 import { DataView } from "@montr-core/models";
+import { Fetcher } from "@montr-core/services";
 import { Api } from "../module";
 
 export class ClassifierMetadataService extends Fetcher {

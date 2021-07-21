@@ -42,8 +42,6 @@ namespace Montr.MasterData.Controllers
 		[HttpPost, Permission(typeof(ManageClassifiers))]
 		public async Task<Classifier> Create(CreateClassifier request)
 		{
-			request.UserUid = _currentUserProvider.GetUserUid();
-
 			return await _mediator.Send(request);
 		}
 

@@ -89,7 +89,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 						_tree = new DbClassifierTree
 						{
 							Uid = Guid.NewGuid(),
-							TypeUid = _type.Uid,
+							TypeUid = _type.Uid.Value,
 							Code = ClassifierTree.DefaultCode,
 							Name = _type.Name
 						};
@@ -155,7 +155,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 					items[item.Code] = new DbClassifier
 					{
 						Uid = itemUid,
-						TypeUid = _type.Uid,
+						TypeUid = _type.Uid.Value,
 						StatusCode = item.StatusCode,
 						Code = item.Code,
 						Name = item.Name,
@@ -312,7 +312,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 								_existingItems.Add(item.Code, new DbClassifier
 								{
 									Uid = itemUid,
-									TypeUid = _type.Uid,
+									TypeUid = _type.Uid.Value,
 									StatusCode = item.StatusCode,
 									Code = item.Code,
 									Name = item.Name,

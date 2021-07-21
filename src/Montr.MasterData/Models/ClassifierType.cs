@@ -10,7 +10,7 @@ namespace Montr.MasterData.Models
 
 		public static readonly string TypeCode = nameof(ClassifierType);
 
-		public Guid Uid { get; set; }
+		public Guid? Uid { get; set; }
 
 		public string Code { get; set; }
 

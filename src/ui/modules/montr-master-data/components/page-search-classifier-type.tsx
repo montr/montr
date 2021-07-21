@@ -1,15 +1,15 @@
+import { Constants } from "@montr-core/.";
+import { ButtonAdd, ButtonDelete, DataTable, DataTableUpdateToken, Page, PageHeader, Toolbar } from "@montr-core/components";
+import { IMenu } from "@montr-core/models";
+import { OperationService } from "@montr-core/services";
+import { CompanyContextProps, withCompanyContext } from "@montr-kompany/components";
 import * as React from "react";
 import { Translation, withTranslation, WithTranslation } from "react-i18next";
-import { Page, PageHeader, Toolbar, DataTable, DataTableUpdateToken, ButtonAdd, ButtonDelete } from "@montr-core/components";
-import { Constants } from "@montr-core/.";
-import { withCompanyContext, CompanyContextProps } from "@montr-kompany/components";
-import { ClassifierBreadcrumb } from ".";
 import { Link } from "react-router-dom";
-import { ClassifierTypeService } from "../services";
-import { OperationService } from "@montr-core/services";
-import { IMenu } from "@montr-core/models";
+import { ClassifierBreadcrumb } from ".";
 import { ClassifierGroup } from "../models";
-import { RouteBuilder, Locale } from "../module";
+import { Locale, RouteBuilder } from "../module";
+import { ClassifierTypeService } from "../services";
 
 interface Props extends CompanyContextProps, WithTranslation {
 }
@@ -53,16 +53,19 @@ class WrappedSearchClassifierType extends React.Component<Props, State> {
 			const result = await this.classifierTypeService.delete(this.state.selectedRowKeys);
 
 			if (result.success) {
-				this.refreshTable(true);
+				await this.refreshTable(true, true);
 			}
 
 			return result;
 		});
 	};
 
-	refreshTable = async (resetSelectedRows?: boolean) => {
+	refreshTable = async (resetCurrentPage?: boolean, resetSelectedRows?: boolean) => {
+		const { selectedRowKeys } = this.state;
+
 		this.setState({
-			updateTableToken: { date: new Date(), resetSelectedRows }
+			updateTableToken: { date: new Date(), resetCurrentPage, resetSelectedRows },
+			selectedRowKeys: resetSelectedRows ? [] : selectedRowKeys
 		});
 	};
 

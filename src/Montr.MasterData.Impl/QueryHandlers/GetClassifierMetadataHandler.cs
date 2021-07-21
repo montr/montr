@@ -30,24 +30,14 @@ namespace Montr.MasterData.Impl.QueryHandlers
 
 		public async Task<DataView> Handle(GetClassifierMetadata request, CancellationToken cancellationToken)
 		{
-			if (request.ViewId == ViewCode.ClassifierTypeTabs)
-			{
-				var entity = request.TypeCode != null
-					? await GetClassifierType(request, cancellationToken)
-					: new ClassifierType(); // for new classifier types
-
-				return new DataView
-				{
-					Panes = await _configurationService.GetItems<ClassifierType, DataPane>(entity, request.Principal)
-				};
-			}
-
 			if (request.ViewId == ViewCode.NumeratorEntityForm)
 			{
 				return GetNumeratorEntityForm();
 			}
 
-			var classifierType = await GetClassifierType(request, cancellationToken);
+			var typeCode = request.TypeCode ?? throw new ArgumentNullException(nameof(request.TypeCode));
+
+			var classifierType = await _classifierTypeService.Get(typeCode, cancellationToken);
 
 			if (request.ViewId == ViewCode.ClassifierTabs)
 			{
@@ -61,13 +51,6 @@ namespace Montr.MasterData.Impl.QueryHandlers
 			}
 
 			return await GetClassifierForm(classifierType, cancellationToken);
-		}
-
-		private async Task<ClassifierType> GetClassifierType(GetClassifierMetadata request, CancellationToken cancellationToken)
-		{
-			var typeCode = request.TypeCode ?? throw new ArgumentNullException(nameof(request.TypeCode));
-
-			return await _classifierTypeService.Get(typeCode, cancellationToken);
 		}
 
 		private DataView GetNumeratorEntityForm()
@@ -94,15 +77,17 @@ namespace Montr.MasterData.Impl.QueryHandlers
 
 		private async Task<DataView> GetClassifierForm(ClassifierType type, CancellationToken cancellationToken)
 		{
+			// todo: move to IClassifierTypeMetadataService,
 			var metadata = await _metadataRepository.Search(new MetadataSearchRequest
 			{
 				EntityTypeCode = ClassifierType.TypeCode,
-				EntityUid = type.Uid,
+				EntityUid = type.Uid.Value,
 				IsActive = true
 			}, cancellationToken);
 
 			var result = new DataView { Fields = metadata.Rows };
 
+			// todo: check system fields as properties of DbClassifier
 			foreach (var field in result.Fields)
 			{
 				if (field.System == false)

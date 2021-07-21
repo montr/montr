@@ -6,7 +6,7 @@ import { RouteComponentProps } from "react-router";
 import { ClassifierBreadcrumb } from ".";
 import { ClassifierType } from "../models";
 import { RouteBuilder, Views } from "../module";
-import { ClassifierMetadataService, ClassifierTypeService } from "../services";
+import { ClassifierTypeService } from "../services";
 
 interface RouteProps {
 	uid?: string;
@@ -25,7 +25,6 @@ interface State {
 
 export default class EditClassifierType extends React.Component<Props, State> {
 
-	private readonly classifierMetadataService = new ClassifierMetadataService();
 	private readonly classifierTypeService = new ClassifierTypeService();
 
 	constructor(props: Props) {
@@ -47,7 +46,6 @@ export default class EditClassifierType extends React.Component<Props, State> {
 	};
 
 	componentWillUnmount = async (): Promise<void> => {
-		await this.classifierMetadataService.abort();
 		await this.classifierTypeService.abort();
 	};
 
@@ -58,10 +56,9 @@ export default class EditClassifierType extends React.Component<Props, State> {
 
 		const data: ClassifierType = (uid)
 			? await this.classifierTypeService.get({ uid })
-			// todo: load defaults from server
-			: { name: "", hierarchyType: "None" };
+			: await this.classifierTypeService.create();
 
-		const dataView = await this.classifierMetadataService.view(data.code, Views.classifierTypeTabs);
+		const dataView = await this.classifierTypeService.metadata(data.code, Views.classifierTypeTabs);
 
 		this.setState({ loading: false, dataView, data, types: types.rows });
 	};

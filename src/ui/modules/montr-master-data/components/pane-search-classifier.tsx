@@ -1,18 +1,18 @@
-import * as React from "react";
-import { Page, PageHeader, Toolbar, DataTable, DataTableUpdateToken, ButtonAdd, ButtonDelete, ButtonExport, Icon, ButtonSelect } from "@montr-core/components";
-import { Link } from "react-router-dom";
-import { Button, Tree, Select, Radio, Layout, Modal, Spin } from "antd";
+import { ButtonAdd, ButtonDelete, ButtonExport, ButtonSelect, DataTable, DataTableUpdateToken, Icon, Page, PageHeader, Toolbar } from "@montr-core/components";
+import { DataResult, Guid } from "@montr-core/models";
+import { OperationService } from "@montr-core/services";
+import { CompanyContextProps, withCompanyContext } from "@montr-kompany/components";
+import { Button, Layout, Modal, Radio, Select, Spin, Tree } from "antd";
+import { RadioChangeEvent } from "antd/lib/radio";
 import { TreeNodeNormal } from "antd/lib/tree/Tree";
 import { EventDataNode } from "rc-tree/lib/interface";
-import { RadioChangeEvent } from "antd/lib/radio";
-import { Guid, DataResult } from "@montr-core/models";
-import { OperationService } from "@montr-core/services";
-import { withCompanyContext, CompanyContextProps } from "@montr-kompany/components";
-import { ClassifierService, ClassifierTypeService, ClassifierGroupService, ClassifierTreeService } from "../services";
-import { ClassifierType, ClassifierGroup, ClassifierTree, Classifier } from "../models";
-import { ClassifierBreadcrumb, ModalEditClassifierGroup, PaneEditClassifier } from "../components";
-import { RouteBuilder, Api, Views, Locale } from "../module";
+import * as React from "react";
 import { Translation } from "react-i18next";
+import { Link } from "react-router-dom";
+import { ClassifierBreadcrumb, ModalEditClassifierGroup, PaneEditClassifier } from "../components";
+import { Classifier, ClassifierGroup, ClassifierTree, ClassifierType } from "../models";
+import { Api, Locale, RouteBuilder, Views } from "../module";
+import { ClassifierGroupService, ClassifierService, ClassifierTreeService, ClassifierTypeService } from "../services";
 
 interface Props extends CompanyContextProps {
 	typeCode: string;
@@ -183,7 +183,7 @@ class _PaneSearchClassifier extends React.Component<Props, State> {
 				.delete(this.props.typeCode, this.state.selectedRowKeys);
 
 			if (result.success) {
-				await this.refreshTable(false, true);
+				await this.refreshTable(true, true);
 			}
 
 			return result;

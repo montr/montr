@@ -6,6 +6,5 @@ namespace Montr.MasterData.Commands
 {
 	public class CreateClassifier : ClassifierCreateRequest, IRequest<Classifier>
 	{
-		public Guid UserUid { get; set; }
 	}
 }

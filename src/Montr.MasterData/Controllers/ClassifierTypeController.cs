@@ -8,6 +8,7 @@ using Montr.MasterData.Commands;
 using Montr.MasterData.Models;
 using Montr.MasterData.Permissions;
 using Montr.MasterData.Queries;
+using Montr.Metadata.Models;
 
 namespace Montr.MasterData.Controllers
 {
@@ -24,6 +25,12 @@ namespace Montr.MasterData.Controllers
 		}
 
 		[HttpPost, Permission(typeof(ViewClassifierTypes))]
+		public async Task<DataView> Metadata(GetClassifierTypeMetadata request)
+		{
+			return await _mediator.Send(request);
+		}
+
+		[HttpPost, Permission(typeof(ViewClassifierTypes))]
 		public async Task<SearchResult<ClassifierType>> List(GetClassifierTypeList request)
 		{
 			return await _mediator.Send(request);
@@ -31,6 +38,12 @@ namespace Montr.MasterData.Controllers
 
 		[HttpPost, Permission(typeof(ViewClassifierTypes))]
 		public async Task<ClassifierType> Get(GetClassifierType request)
+		{
+			return await _mediator.Send(request);
+		}
+
+		[HttpPost, Permission(typeof(ManageClassifierTypes))]
+		public async Task<ClassifierType> Create(CreateClassifierType request)
 		{
 			return await _mediator.Send(request);
 		}
