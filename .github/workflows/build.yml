@@ -46,7 +46,7 @@ jobs:
       - run: dotnet test ./src/Montr.Kompany.Tests
       #- run: dotnet test ./src/Montr.Tendr.Tests
 
-      - uses: actions/setup-node@v2.2.0
+      - uses: actions/setup-node@v2.3.0
         with:
           node-version: '12.x'
 
