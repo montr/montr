@@ -16,7 +16,7 @@
 	"dependencies": {
 		"antd": "^4.16.7",
 		"axios": "^0.21.1",
-		"i18next": "^20.3.3",
+		"i18next": "^20.3.4",
 		"i18next-browser-languagedetector": "^6.1.2",
 		"i18next-xhr-backend": "^3.2.2",
 		"oidc-client": "^1.11.5",
