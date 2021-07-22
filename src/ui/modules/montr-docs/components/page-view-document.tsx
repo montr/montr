@@ -9,7 +9,7 @@ import { RouteComponentProps } from "react-router";
 import { DocumentBreadcrumb } from ".";
 import { IDocument } from "../models";
 import { ClassifierTypeCode, EntityTypeCode, RouteBuilder, Views } from "../module";
-import { DocumentMetadataService, DocumentService } from "../services";
+import { DocumentService } from "../services";
 
 interface RouteProps {
 	uid?: string;
@@ -28,7 +28,6 @@ interface State {
 
 export default class PageViewDocument extends React.Component<Props, State> {
 
-	private readonly documentMetadataService = new DocumentMetadataService();
 	private readonly documentService = new DocumentService();
 	private readonly classifierService = new ClassifierService();
 
@@ -47,7 +46,6 @@ export default class PageViewDocument extends React.Component<Props, State> {
 	};
 
 	componentWillUnmount = async (): Promise<void> => {
-		await this.documentMetadataService.abort();
 		await this.documentService.abort();
 		await this.classifierService.abort();
 	};
@@ -60,7 +58,7 @@ export default class PageViewDocument extends React.Component<Props, State> {
 		const documentType = await this.classifierService
 			.get(ClassifierTypeCode.documentType, document.documentTypeUid);
 
-		const dataView = await this.documentMetadataService.view(document.uid, Views.documentTabs);
+		const dataView = await this.documentService.metadata(document.uid, Views.documentTabs);
 
 		this.setState({ loading: false, document, documentType, dataView });
 	};

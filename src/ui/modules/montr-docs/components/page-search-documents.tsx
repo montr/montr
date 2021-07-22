@@ -22,3 +22,4 @@ export default class PageSearchDocuments extends React.Component {
 		);
 	};
 }
+

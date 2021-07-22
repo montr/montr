@@ -1,9 +1,10 @@
 import { DataForm } from "@montr-core/components";
 import { IDataField } from "@montr-core/models";
-import { IDocument } from "@montr-docs/models";
-import { DocumentMetadataService } from "@montr-docs/services";
 import { Spin } from "antd";
 import React from "react";
+import { IDocument } from "../models";
+import { Views } from "../module";
+import { DocumentService } from "../services";
 
 interface Props {
 	document: IDocument;
@@ -17,7 +18,7 @@ interface State {
 
 export default class PaneViewDocumentForm extends React.Component<Props, State> {
 
-	private _documentMetadataService = new DocumentMetadataService();
+	private readonly documentService = new DocumentService();
 
 	constructor(props: Props) {
 		super(props);
@@ -38,14 +39,14 @@ export default class PaneViewDocumentForm extends React.Component<Props, State> 
 	};
 
 	componentWillUnmount = async (): Promise<void> => {
-		await this._documentMetadataService.abort();
+		await this.documentService.abort();
 	};
 
 	fetchData = async (): Promise<void> => {
 		const { document } = this.props;
 
 		if (document.uid) {
-			const dataView = await this._documentMetadataService.view(document.uid, null);
+			const dataView = await this.documentService.metadata(document.uid, Views.documentForm);
 
 			this.setState({ loading: false, fields: dataView.fields });
 		}

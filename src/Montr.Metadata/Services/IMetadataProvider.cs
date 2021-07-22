@@ -237,21 +237,6 @@ namespace Montr.Metadata.Services
 				};
 			}
 
-			// Documents & Processes
-
-			if (viewId == "Document/List")
-			{
-				result.Columns = new List<DataColumn>
-				{
-					new() { Key = "documentNumber", Name = "Номер", Sortable = true, UrlProperty = "url", Width = 50 },
-					new() { Key = "documentDate", Name = "Дата", Type = "datetime", Sortable = true, UrlProperty = "url", Width = 100 },
-					new() { Key = "direction", Name = "Направление", UrlProperty = "url", Width = 30 },
-					new() { Key = "name", Name = "Наименование", Width = 250 },
-					new() { Key = "configCode", Name = "Тип", Sortable = true, Width = 100 },
-					new() { Key = "statusCode", Name = "Статус", Sortable = true, Width = 100 },
-				};
-			}
-
 			// Events
 			if (viewId == "PrivateEventSearch/Grid")
 			{

@@ -1,6 +1,6 @@
-import { Fetcher } from "./fetcher";
-import { DataView, IDataField, ApiResult, Guid, IFieldType } from "../models";
+import { ApiResult, DataView, Guid, IDataField, IFieldType } from "../models";
 import { Api } from "../module";
+import { Fetcher } from "./fetcher";
 
 interface ManageFieldDataRequest {
 	entityTypeCode: string;
@@ -17,11 +17,7 @@ interface DeleteFieldDataRequest {
 export class MetadataService extends Fetcher {
 
 	load = async<TEntity>(viewId: string): Promise<DataView<TEntity>> => {
-
-		const data: DataView<TEntity> =
-			await this.post(Api.metadataView, { viewId: viewId });
-
-		return data;
+		return await this.post(Api.metadataView, { viewId: viewId });
 	};
 
 	fieldTypes = async (entityTypeCode: string): Promise<IFieldType[]> => {
@@ -43,4 +39,4 @@ export class MetadataService extends Fetcher {
 	delete = async (request: DeleteFieldDataRequest): Promise<ApiResult> => {
 		return this.post(Api.metadataDelete, request);
 	};
-};
+}

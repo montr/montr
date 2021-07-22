@@ -5,8 +5,7 @@ import React from "react";
 import { generatePath } from "react-router";
 
 export const Api = {
-	documentMetadataView: `${Constants.apiURL}/documentMetadata/view`,
-
+	documentMetadata: `${Constants.apiURL}/document/metadata`,
 	documentList: `${Constants.apiURL}/document/list`,
 	documentGet: `${Constants.apiURL}/document/get`,
 };
@@ -25,9 +24,9 @@ export const ClassifierTypeCode = {
 };
 
 export const Views = {
-	documentList: "Document/List",
-
-	documentTabs: "document_tabs"
+	documentList: "document_list",
+	documentTabs: "document_tabs",
+	documentForm: "document_form"
 };
 
 export const RouteBuilder = {

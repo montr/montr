@@ -39,11 +39,23 @@ namespace Montr.Docs.Impl.QueryHandlers
 
 			var result = new DataView();
 
-			if (request.ViewId == ViewCode.DocumentTabs)
+			if (request.ViewId == ViewCode.DocumentList)
+			{
+				result.Columns = new List<DataColumn>
+				{
+					new() { Key = "documentNumber", Name = "Номер", Sortable = true, UrlProperty = "url", Width = 50 },
+					new() { Key = "documentDate", Name = "Дата", Type = "datetime", Sortable = true, UrlProperty = "url", Width = 100 },
+					new() { Key = "direction", Name = "Направление", UrlProperty = "url", Width = 30 },
+					new() { Key = "name", Name = "Наименование", Width = 250 },
+					new() { Key = "configCode", Name = "Тип", Sortable = true, Width = 100 },
+					new() { Key = "statusCode", Name = "Статус", Sortable = true, Width = 100 },
+				};
+			}
+			else if (request.ViewId == ViewCode.DocumentTabs)
 			{
 				result.Panes = await _configurationService.GetItems<Document, DataPane>(document, request.Principal);
 			}
-			else
+			else if (request.ViewId == ViewCode.DocumentForm)
 			{
 				result.Fields = await GetDocumentFormMetadata(document, cancellationToken);
 			}
