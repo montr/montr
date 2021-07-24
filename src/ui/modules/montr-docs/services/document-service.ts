@@ -5,8 +5,8 @@ import { Api } from "../module";
 
 export class DocumentService extends Fetcher {
 
-	metadata = async<TEntity>(documentUid: Guid, viewId: string): Promise<DataView<TEntity>> => {
-		return await this.post(Api.documentMetadata, { documentUid, viewId });
+	metadata = async<TEntity>(viewId: string, documentUid?: Guid): Promise<DataView<TEntity>> => {
+		return await this.post(Api.documentMetadata, { viewId, documentUid });
 	};
 
 	get = async (uid: Guid | string): Promise<IDocument> => {

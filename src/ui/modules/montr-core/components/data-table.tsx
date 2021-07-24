@@ -1,16 +1,17 @@
+import { Divider, Table } from "antd";
+import { ColumnType, SorterResult, SortOrder, TablePaginationConfig } from "antd/lib/table/interface";
 import * as React from "react";
 import { Link } from "react-router-dom";
-import { Table, Tag, Divider } from "antd";
-import { SorterResult, SortOrder, ColumnType, TablePaginationConfig } from "antd/lib/table/interface";
-import { Fetcher, NotificationService, MetadataService, DateHelper } from "../services";
-import { IIndexer, DataColumn, DataResult, IMenu, Paging } from "../models";
-import { Constants } from "..";
 import { Icon, StatusTag } from ".";
+import { Constants } from "..";
+import { DataColumn, DataResult, IIndexer, IMenu, Paging } from "../models";
+import { DateHelper, Fetcher, MetadataService, NotificationService } from "../services";
 
 interface Props<TModel> {
 	rowKey?: string | ((record: TModel, index: number) => string);
 	rowActions?: IMenu[];
-	viewId: string;
+	viewId?: string;
+	columns?: DataColumn[],
 	loadUrl: string; // todo: (?) add data[]
 	// todo: add type for post params
 	onLoadData?: (loadUrl: string, postParams: unknown) => Promise<DataResult<TModel> | undefined>;
@@ -37,9 +38,9 @@ export interface DataTableUpdateToken {
 
 export class DataTable<TModel extends IIndexer> extends React.Component<Props<TModel>, State<TModel>> {
 
-	fetcher = new Fetcher();
-	metadataService = new MetadataService();
-	notificationService = new NotificationService();
+	private readonly fetcher = new Fetcher();
+	private readonly metadataService = new MetadataService();
+	private readonly notificationService = new NotificationService();
 
 	constructor(props: Props<TModel>) {
 		super(props);
@@ -59,7 +60,7 @@ export class DataTable<TModel extends IIndexer> extends React.Component<Props<TM
 	}
 
 	componentDidMount = async (): Promise<void> => {
-		await this.fetchMetadata();
+		await this.updateMetadata();
 	};
 
 	componentDidUpdate = async (prevProps: Props<TModel>): Promise<void> => {
@@ -76,6 +77,9 @@ export class DataTable<TModel extends IIndexer> extends React.Component<Props<TM
 				paging,
 				selectedRowKeys: updateToken?.resetSelectedRows ? [] : selectedRowKeys
 			}, () => this.fetchData());
+		} else if (this.props.viewId !== prevProps.viewId
+			|| this.props.columns !== prevProps.columns) {
+			await this.updateMetadata();
 		}
 	};
 
@@ -100,25 +104,66 @@ export class DataTable<TModel extends IIndexer> extends React.Component<Props<TM
 
 		paging.sortColumn = sortColumn;
 		paging.sortOrder =
-			sorter.order == "ascend" ? "ascending"
-				: sorter.order == "descend" ? "descending"
+			sorter.order == "ascend" ? "Ascending"
+				: sorter.order == "descend" ? "Descending"
 					: undefined;
 
 		this.setState({ paging }, () => this.fetchData());
 	};
 
-	fetchMetadata = async (): Promise<void> => {
-		const { viewId, rowActions } = this.props,
-			{ paging } = this.state;
+	updateMetadata = async (): Promise<void> => {
+		try {
 
-		const dataView = await this.metadataService.load(viewId);
+			const { paging } = this.state;
 
-		if (!dataView.columns) throw new Error("Metadata columns is empty");
+			const metaColumns = await this.fetchMetadata();
 
-		const columns = dataView.columns?.map((item: DataColumn): ColumnType<TModel> => {
+			if (!metaColumns) return;
+
+			const rcColumns = this.convertColumns(metaColumns);
+
+			const defaultSortColumn =
+				metaColumns.filter((col: DataColumn) => col.defaultSortOrder)[0];
+
+			if (defaultSortColumn) {
+				// fixme: why sorting columns stored in paging?
+				// todo: fix sorting indicator on initial load
+				paging.sortColumn = defaultSortColumn.key;
+				paging.sortOrder = defaultSortColumn.defaultSortOrder;
+			}
+
+
+			this.setState({ columns: rcColumns, paging }, () => this.fetchData());
+
+		} catch (error) {
+			this.setState({ error });
+			// todo: localize
+			this.notificationService.error("Error loading metadata", error.message);
+			throw error;
+		}
+	};
+
+	fetchMetadata = async (): Promise<DataColumn[]> => {
+		const { viewId, columns } = this.props;
+
+		if (columns) return columns;
+
+		if (viewId) {
+			return await (await this.metadataService.load(viewId))?.columns;
+		}
+
+		return null;
+	};
+
+	convertColumns = (metaColumns: DataColumn[]): ColumnType<TModel>[] => {
+
+		const { rowActions } = this.props;
+
+		const rcColumns = metaColumns.map((item: DataColumn): ColumnType<TModel> => {
 
 			let render;
 
+			// todo: fix url rendering for different item types below
 			if (item.urlProperty) {
 				render = (text: unknown, record: TModel): React.ReactNode => {
 					const url: string = record[item.urlProperty];
@@ -158,8 +203,8 @@ export class DataTable<TModel extends IIndexer> extends React.Component<Props<TM
 			}
 
 			let defaultSortOrder: SortOrder | undefined = undefined;
-			if (item.defaultSortOrder == "ascending") defaultSortOrder = "ascend";
-			else if (item.defaultSortOrder == "descending") defaultSortOrder = "descend";
+			if (item.defaultSortOrder == "Ascending") defaultSortOrder = "ascend";
+			else if (item.defaultSortOrder == "Descending") defaultSortOrder = "descend";
 
 			return {
 				key: item.key,
@@ -176,10 +221,10 @@ export class DataTable<TModel extends IIndexer> extends React.Component<Props<TM
 			};
 		});
 
-		if (rowActions && rowActions.length > 0) {
-			columns.push({
+		if (rowActions?.length > 0) {
+			rcColumns.push({
 				key: "$action",
-				title: "Действие",
+				title: "Action", // todo: localize
 				width: 40,
 				render: (text: unknown, record: TModel, index: number) => (
 					<span>
@@ -202,13 +247,7 @@ export class DataTable<TModel extends IIndexer> extends React.Component<Props<TM
 			});
 		}
 
-		const defaultSortColumn =
-			dataView.columns?.filter((col: DataColumn) => col.defaultSortOrder)[0];
-
-		paging.sortColumn = defaultSortColumn?.key;
-		paging.sortOrder = defaultSortColumn?.defaultSortOrder;
-
-		this.setState({ columns, paging }, () => this.fetchData());
+		return rcColumns;
 	};
 
 	fetchData = async (): Promise<void> => {
@@ -243,7 +282,7 @@ export class DataTable<TModel extends IIndexer> extends React.Component<Props<TM
 		} catch (error) {
 			this.setState({ error, loading: false });
 			// todo: localize (?)
-			this.notificationService.error("Ошибка загрузки данных.", error.message);
+			this.notificationService.error("Error loading data", error.message);
 			throw error;
 		}
 	};
@@ -257,8 +296,8 @@ export class DataTable<TModel extends IIndexer> extends React.Component<Props<TM
 	};
 
 	render = (): React.ReactNode => {
-		const { skipPaging } = this.props,
-			{ selectedRowKeys, paging, totalCount } = this.state;
+		const { rowKey = "id", skipPaging } = this.props,
+			{ loading, columns, data, selectedRowKeys, paging, totalCount } = this.state;
 
 		const rowSelection = {
 			columnWidth: 1,
@@ -283,11 +322,11 @@ export class DataTable<TModel extends IIndexer> extends React.Component<Props<TM
 
 		return (
 			<Table size="small"
-				rowKey={this.props.rowKey || "id"}
-				columns={this.state.columns}
-				dataSource={this.state.data}
+				rowKey={rowKey}
+				columns={columns}
+				dataSource={data}
 				pagination={skipPaging ? false : pagination}
-				loading={this.state.loading}
+				loading={loading}
 				onChange={this.handleTableChange}
 				rowSelection={rowSelection}
 			/* title={() =>

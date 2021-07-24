@@ -58,7 +58,7 @@ export default class PageViewDocument extends React.Component<Props, State> {
 		const documentType = await this.classifierService
 			.get(ClassifierTypeCode.documentType, document.documentTypeUid);
 
-		const dataView = await this.documentService.metadata(document.uid, Views.documentTabs);
+		const dataView = await this.documentService.metadata(Views.documentTabs, document.uid);
 
 		this.setState({ loading: false, document, documentType, dataView });
 	};

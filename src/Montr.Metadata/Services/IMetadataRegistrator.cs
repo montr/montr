@@ -14,7 +14,7 @@ namespace Montr.Metadata.Services
 
 	public class DefaultMetadataRegistrator : IMetadataRegistrator
 	{
-		private readonly ConcurrentDictionary<string, Func<string, DataView>> _registry = new ConcurrentDictionary<string, Func<string, DataView>>();
+		private readonly ConcurrentDictionary<string, Func<string, DataView>> _registry = new();
 
 		public void Register(string viewId, Func<string, DataView> getDataView)
 		{
@@ -23,6 +23,8 @@ namespace Montr.Metadata.Services
 
 		public bool TryGet(string viewId, out DataView dataView)
 		{
+			if (viewId == null) throw new ArgumentNullException(nameof(viewId));
+
 			if (_registry.TryGetValue(viewId, out var getDataView))
 			{
 				dataView = getDataView(viewId);

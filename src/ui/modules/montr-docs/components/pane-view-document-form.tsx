@@ -46,7 +46,7 @@ export default class PaneViewDocumentForm extends React.Component<Props, State> 
 		const { document } = this.props;
 
 		if (document.uid) {
-			const dataView = await this.documentService.metadata(document.uid, Views.documentForm);
+			const dataView = await this.documentService.metadata(Views.documentForm, document.uid);
 
 			this.setState({ loading: false, fields: dataView.fields });
 		}

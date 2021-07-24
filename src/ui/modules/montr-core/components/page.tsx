@@ -6,7 +6,7 @@ interface Props {
 }
 
 export class Page extends React.Component<Props> {
-	render = () => {
+	render = (): React.ReactNode => {
 
 		const { title, children } = this.props;
 
@@ -18,5 +18,5 @@ export class Page extends React.Component<Props> {
 				{children}
 			</div>
 		);
-	}
+	};
 };

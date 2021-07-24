@@ -243,8 +243,7 @@ namespace Montr.Metadata.Services
 				result.Columns = new List<DataColumn>
 				{
 					new()
-					{ Key = "id", Name = "Номер", Sortable = true, Width = 10,
-						UrlProperty = "url", DefaultSortOrder = SortOrder.Descending },
+					{ Key = "id", Name = "Номер", Sortable = true, Width = 10, UrlProperty = "url", DefaultSortOrder = SortOrder.Descending },
 					new() { Key = "configCode", Name = "Тип", Width = 25 },
 					new() { Key = "statusCode", Name = "Статус", Width = 25 /*, Align = DataColumnAlign.Center */ },
 					new() { Key = "name", Name = "Наименование", Sortable = true, Width = 400, UrlProperty = "url" },

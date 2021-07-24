@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
+using Montr.Core.Models;
 using Montr.Core.Services;
 using Montr.Docs.Models;
 using Montr.Docs.Queries;
@@ -30,13 +31,6 @@ namespace Montr.Docs.Impl.QueryHandlers
 
 		public async Task<DataView> Handle(GetDocumentMetadata request, CancellationToken cancellationToken)
 		{
-			var document = (await _documentService.Search(new DocumentSearchRequest
-			{
-				UserUid = request.UserUid,
-				Uid = request.DocumentUid,
-				SkipPaging = true
-			}, cancellationToken)).Rows.Single();
-
 			var result = new DataView();
 
 			if (request.ViewId == ViewCode.DocumentList)
@@ -44,14 +38,24 @@ namespace Montr.Docs.Impl.QueryHandlers
 				result.Columns = new List<DataColumn>
 				{
 					new() { Key = "documentNumber", Name = "Номер", Sortable = true, UrlProperty = "url", Width = 50 },
-					new() { Key = "documentDate", Name = "Дата", Type = "datetime", Sortable = true, UrlProperty = "url", Width = 100 },
-					new() { Key = "direction", Name = "Направление", UrlProperty = "url", Width = 30 },
+					new() { Key = "documentDate", Name = "Дата", Type = "datetime", Sortable = true, UrlProperty = "url", Width = 100, DefaultSortOrder = SortOrder.Descending },
+					// new() { Key = "direction", Name = "Направление", UrlProperty = "url", Width = 30 },
 					new() { Key = "name", Name = "Наименование", Width = 250 },
-					new() { Key = "configCode", Name = "Тип", Sortable = true, Width = 100 },
+					// new() { Key = "configCode", Name = "Тип", Sortable = true, Width = 100 },
 					new() { Key = "statusCode", Name = "Статус", Sortable = true, Width = 100 },
 				};
+
+				return result;
 			}
-			else if (request.ViewId == ViewCode.DocumentTabs)
+
+			var document = (await _documentService.Search(new DocumentSearchRequest
+			{
+				UserUid = request.UserUid,
+				Uid = request.DocumentUid,
+				SkipPaging = true
+			}, cancellationToken)).Rows.Single();
+
+			if (request.ViewId == ViewCode.DocumentTabs)
 			{
 				result.Panes = await _configurationService.GetItems<Document, DataPane>(document, request.Principal);
 			}

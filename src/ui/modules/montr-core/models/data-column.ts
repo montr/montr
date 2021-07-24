@@ -10,7 +10,7 @@ export interface DataColumn {
 	urlProperty?: string;
 }
 
-export declare type SortOrder = "ascending" | "descending";
+export declare type SortOrder = "Ascending" | "Descending";
 
 export interface Paging {
 	pageNo?: number;
