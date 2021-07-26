@@ -48,7 +48,7 @@
 		"copy-webpack-plugin": "^9.0.1",
 		"css-loader": "^6.2.0",
 		"eslint": "^7.31.0",
-		"fork-ts-checker-webpack-plugin": "^6.2.12",
+		"fork-ts-checker-webpack-plugin": "^6.2.13",
 		"hard-source-webpack-plugin": "^0.13.1",
 		"kind-of": ">=6.0.3",
 		"less": "^4.1.1",
