@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Montr.Core.Models;
 using Montr.Core.Services;
+using Montr.Docs.Commands;
 using Montr.Docs.Models;
 using Montr.Docs.Queries;
 using Montr.Metadata.Models;
@@ -39,6 +40,12 @@ namespace Montr.Docs.Controllers
 
 		[HttpPost]
 		public async Task<Document> Get(GetDocument request)
+		{
+			return await _mediator.Send(request);
+		}
+
+		[HttpPost]
+		public async Task<ApiResult> UpdateForm(UpdateDocumentForm request)
 		{
 			return await _mediator.Send(request);
 		}

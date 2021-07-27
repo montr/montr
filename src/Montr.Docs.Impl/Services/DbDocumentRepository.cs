@@ -29,6 +29,7 @@ namespace Montr.Docs.Impl.Services
 			_fieldDataRepository = fieldDataRepository;
 		}
 
+		// todo: move to IDocumentService
 		public async Task<SearchResult<Document>> Search(SearchRequest searchRequest, CancellationToken cancellationToken)
 		{
 			var request = (DocumentSearchRequest)searchRequest ?? throw new ArgumentNullException(nameof(searchRequest));

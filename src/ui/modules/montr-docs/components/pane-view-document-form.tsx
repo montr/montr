@@ -1,9 +1,9 @@
 import { DataForm } from "@montr-core/components";
-import { IDataField } from "@montr-core/models";
+import { ApiResult, IDataField } from "@montr-core/models";
 import { Spin } from "antd";
 import React from "react";
 import { IDocument } from "../models";
-import { Views } from "../module";
+import { Api, Views } from "../module";
 import { DocumentService } from "../services";
 
 interface Props {
@@ -52,13 +52,25 @@ export default class PaneViewDocumentForm extends React.Component<Props, State> 
 		}
 	};
 
+	handleSubmit = async (values: IDocument): Promise<ApiResult> => {
+		const { document } = this.props;
+
+		return await this.documentService.post(Api.documentUpdateForm, {
+			documentUid: document.uid, fields: { ...values }
+		});
+	};
+
 	render = (): React.ReactNode => {
-		const { document, mode } = this.props,
+		const { document, mode = "view" } = this.props,
 			{ fields, loading } = this.state;
 
 		return (
 			<Spin spinning={loading}>
-				<DataForm mode={mode} fields={fields} data={document} />
+				<DataForm
+					mode={mode}
+					fields={fields}
+					data={document}
+					onSubmit={this.handleSubmit} />
 			</Spin>
 		);
 	};

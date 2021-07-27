@@ -8,6 +8,7 @@ export const Api = {
 	documentMetadata: `${Constants.apiURL}/document/metadata`,
 	documentList: `${Constants.apiURL}/document/list`,
 	documentGet: `${Constants.apiURL}/document/get`,
+	documentUpdateForm: `${Constants.apiURL}/document/updateForm`,
 };
 
 export const Patterns = {

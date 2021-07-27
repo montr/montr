@@ -17,6 +17,7 @@ namespace Montr.MasterData.Impl.Services
 			_fieldMetadataRepository = fieldMetadataRepository;
 		}
 
+		// todo: move to DbClassifierRepository as private method
 		public async Task<IList<FieldMetadata>> GetMetadata(ClassifierType type, CancellationToken cancellationToken)
 		{
 			var metadata = await _fieldMetadataRepository.Search(new MetadataSearchRequest
