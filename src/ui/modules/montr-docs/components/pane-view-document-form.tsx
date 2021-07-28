@@ -69,7 +69,7 @@ export default class PaneViewDocumentForm extends React.Component<Props, State> 
 				<DataForm
 					mode={mode}
 					fields={fields}
-					data={document}
+					data={document.fields}
 					onSubmit={this.handleSubmit} />
 			</Spin>
 		);

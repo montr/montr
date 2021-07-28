@@ -9,6 +9,7 @@ using Montr.Core.Services;
 using Montr.Data.Linq2Db;
 using Montr.Docs.Impl.Entities;
 using Montr.Docs.Models;
+using Montr.MasterData;
 using Montr.Metadata.Models;
 using Montr.Metadata.Services;
 
@@ -56,7 +57,7 @@ namespace Montr.Docs.Impl.Services
 							// todo: load metadata once for each document type
 							var metadata = await _fieldMetadataRepository.Search(new MetadataSearchRequest
 							{
-								EntityTypeCode = DocumentType.EntityTypeCode,
+								EntityTypeCode = EntityTypeCode.Classifier,
 								EntityUid = item.DocumentTypeUid,
 								IsActive = true,
 								SkipPaging = true

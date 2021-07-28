@@ -10,4 +10,5 @@ export interface IDocument extends IIndexer {
 	documentDate?: Date;
 	name?: string;
 	url?: string;
+	fields?: unknown;
 }

@@ -52,8 +52,8 @@ namespace Montr.Docs.Impl.CommandHandlers
 
 			var manageFieldDataRequest = new ManageFieldDataRequest
 			{
-				EntityTypeCode = DocumentType.EntityTypeCode,
-				EntityUid = document.DocumentTypeUid,
+				EntityTypeCode = Document.TypeCode,
+				EntityUid = request.DocumentUid,
 				Metadata = metadata,
 				Item = request
 			};
