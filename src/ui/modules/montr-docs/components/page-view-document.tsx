@@ -1,9 +1,9 @@
-import { DataTabs, StatusTag } from "@montr-core/components";
+import { DataTabs, DataToolbar, StatusTag } from "@montr-core/components";
 import { DataView } from "@montr-core/models";
 import { DateHelper } from "@montr-core/services";
 import { Classifier } from "@montr-master-data/models";
 import { ClassifierService } from "@montr-master-data/services";
-import { Button, PageHeader, Spin } from "antd";
+import { PageHeader, Spin } from "antd";
 import React from "react";
 import { RouteComponentProps } from "react-router";
 import { DocumentBreadcrumb } from ".";
@@ -58,7 +58,7 @@ export default class PageViewDocument extends React.Component<Props, State> {
 		const documentType = await this.classifierService
 			.get(ClassifierTypeCode.documentType, document.documentTypeUid);
 
-		const dataView = await this.documentService.metadata(Views.documentTabs, document.uid);
+		const dataView = await this.documentService.metadata(Views.documentPage, document.uid);
 
 		this.setState({ loading: false, document, documentType, dataView });
 	};
@@ -87,6 +87,14 @@ export default class PageViewDocument extends React.Component<Props, State> {
 
 		const pageTitle = `${documentType.name} — ${document.documentNumber} — ${DateHelper.toLocaleDateString(document.documentDate)}`;
 
+		const dataProps = {
+			document,
+			documentType,
+			onDataChange: this.handleDataChange,
+			entityTypeCode: EntityTypeCode.document,
+			entityUid: document.uid
+		};
+
 		return (
 			<Spin spinning={loading}>
 				<PageHeader
@@ -95,10 +103,7 @@ export default class PageViewDocument extends React.Component<Props, State> {
 					subTitle={document.uid}
 					tags={<StatusTag statusCode={document.statusCode} />}
 					breadcrumb={<DocumentBreadcrumb />}
-					extra={[
-						<Button key="2">Accept or Reject</Button>,
-						<Button key="1" type="primary">Publish</Button>,
-					]}>
+					extra={<DataToolbar buttons={dataView.toolbar} buttonProps={dataProps} />}>
 					{/* <DocumentSignificantInfo document={document} /> */}
 				</PageHeader>
 
@@ -107,13 +112,7 @@ export default class PageViewDocument extends React.Component<Props, State> {
 					panes={dataView?.panes}
 					onTabChange={this.handleTabChange}
 					disabled={(_, index) => index > 0 && !document?.uid}
-					tabProps={{
-						document,
-						documentType,
-						onDataChange: this.handleDataChange,
-						entityTypeCode: EntityTypeCode.document,
-						entityUid: document?.uid
-					}}
+					tabProps={dataProps}
 				/>
 
 			</Spin>

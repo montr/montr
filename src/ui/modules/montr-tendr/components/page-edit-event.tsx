@@ -1,13 +1,13 @@
-import * as React from "react";
-import i18next from "i18next";
-import { Button, Tag, Spin } from "antd";
+import { DataBreadcrumb, DataTabs, Page, PageHeader, PaneComponent, Toolbar } from "@montr-core/components";
 import { DataView } from "@montr-core/models";
-import { EventService, EventTemplateService } from "../services";
-import { Page, PaneComponent, Toolbar, PageHeader, DataBreadcrumb, DataTabs } from "@montr-core/components";
 import { MetadataService, OperationService } from "@montr-core/services";
+import { Button, Spin, Tag } from "antd";
+import i18next from "i18next";
+import * as React from "react";
+import { RouteComponentProps } from "react-router";
 import { IEvent } from "../models";
 import { Locale, RouteBuilder } from "../module";
-import { RouteComponentProps } from "react-router";
+import { EventService, EventTemplateService } from "../services";
 
 interface RouteProps {
 	uid?: string;

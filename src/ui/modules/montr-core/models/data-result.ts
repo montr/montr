@@ -1,4 +1,4 @@
-import { ApiResult } from "@montr-core/models";
+import { ApiResult } from "./";
 
 export interface DataResult<TResult> extends ApiResult {
 	totalCount: number;

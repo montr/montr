@@ -45,7 +45,7 @@ namespace Montr.Docs.Controllers
 		}
 
 		[HttpPost]
-		public async Task<ApiResult> UpdateForm(UpdateDocumentForm request)
+		public async Task<ApiResult> Publish(PublishDocument request)
 		{
 			return await _mediator.Send(request);
 		}

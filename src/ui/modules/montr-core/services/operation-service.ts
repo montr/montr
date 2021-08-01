@@ -1,6 +1,6 @@
 import i18next from "i18next";
-import { ApiResult, ValidationProblemDetails, ApiResultError } from "../models";
-import { NotificationService, NavigationService } from ".";
+import { NavigationService, NotificationService } from ".";
+import { ApiResult, ApiResultError, ValidationProblemDetails } from "../models";
 
 interface OperationExecuteOptions {
 	successMessage?: string;
@@ -85,7 +85,7 @@ export class OperationService {
 		}
 	};
 
-	confirm = async (operation: () => Promise<ApiResult>, message: string): Promise<ApiResult> => {
+	confirm = async (operation: () => Promise<ApiResult>, message?: string): Promise<ApiResult> => {
 		return await this.execute(operation, { showConfirm: true, confirmContent: message });
 	};
 

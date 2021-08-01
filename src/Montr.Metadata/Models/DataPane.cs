@@ -2,7 +2,7 @@
 
 namespace Montr.Metadata.Models
 {
-	public class DataPane : IConfigurationItem
+	public class ConfigurationItem : IConfigurationItem
 	{
 		public string Permission { get; set; }
 
@@ -17,5 +17,14 @@ namespace Montr.Metadata.Models
 		public string Component { get; set; }
 
 		public object Props { get; set; }
+	}
+
+	public class Button : ConfigurationItem
+	{
+		public string Action { get; set; }
+	}
+
+	public class DataPane : ConfigurationItem
+	{
 	}
 }

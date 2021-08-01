@@ -40,6 +40,7 @@ namespace Montr.Tendr.Impl.CommandHandlers
 						.UpdateAsync(cancellationToken);
 				}
 
+				// todo: add action on Publish
 				_jobManager.Enqueue<ISender>(
 					x => x.Send(new SendInvitations { EventUid = request.Uid }, cancellationToken));
 

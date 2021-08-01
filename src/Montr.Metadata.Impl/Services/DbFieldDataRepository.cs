@@ -194,7 +194,7 @@ namespace Montr.Metadata.Impl.Services
 				// update
 				foreach (var field in updatable)
 				{
-					var updateResult = await db.GetTable<DbFieldData>()
+					await db.GetTable<DbFieldData>()
 						.Where(x => x.Uid == field.Uid)
 						.Set(x => x.Value, field.Value)
 						.UpdateAsync(cancellationToken);

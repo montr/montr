@@ -55,8 +55,9 @@ namespace Montr.Docs.Impl.QueryHandlers
 				SkipPaging = true
 			}, cancellationToken)).Rows.Single();
 
-			if (request.ViewId == ViewCode.DocumentTabs)
+			if (request.ViewId == ViewCode.DocumentPage)
 			{
+				result.Toolbar = await _configurationService.GetItems<Document, Button>(document, request.Principal);
 				result.Panes = await _configurationService.GetItems<Document, DataPane>(document, request.Principal);
 			}
 			else if (request.ViewId == ViewCode.DocumentForm)

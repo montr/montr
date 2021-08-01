@@ -10,12 +10,12 @@ interface Props {
 }
 
 export class Toolbar extends React.Component<Props> {
-	render = () => {
+	render = (): React.ReactNode => {
 
-		const { size, float, clear, children } = this.props;
+		const { size = "default", float = "left", clear, children } = this.props;
 
 		return (<>
-			<div className={`toolbar toolbar-${size || "default"} toolbar-${float || "left"}`}>
+			<div className={`toolbar toolbar-${size} toolbar-${float}`}>
 				{children}
 			</div>
 

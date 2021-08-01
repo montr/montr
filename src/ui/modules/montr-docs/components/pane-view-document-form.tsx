@@ -55,7 +55,7 @@ export default class PaneViewDocumentForm extends React.Component<Props, State> 
 	handleSubmit = async (values: IDocument): Promise<ApiResult> => {
 		const { document } = this.props;
 
-		return await this.documentService.post(Api.documentUpdateForm, {
+		return await this.documentService.post(Api.documentFormUpdate, {
 			documentUid: document.uid, fields: { ...values }
 		});
 	};

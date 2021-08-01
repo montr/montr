@@ -8,7 +8,9 @@ export const Api = {
 	documentMetadata: `${Constants.apiURL}/document/metadata`,
 	documentList: `${Constants.apiURL}/document/list`,
 	documentGet: `${Constants.apiURL}/document/get`,
-	documentUpdateForm: `${Constants.apiURL}/document/updateForm`,
+	documentPublish: `${Constants.apiURL}/document/publish`,
+
+	documentFormUpdate: `${Constants.apiURL}/documentForm/update`,
 };
 
 export const Patterns = {
@@ -26,7 +28,7 @@ export const ClassifierTypeCode = {
 
 export const Views = {
 	documentList: "document_list",
-	documentTabs: "document_tabs",
+	documentPage: "document_page",
 	documentForm: "document_form"
 };
 
