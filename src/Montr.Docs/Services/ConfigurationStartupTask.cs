@@ -37,11 +37,11 @@ namespace Montr.Docs.Services
 			_configurationManager.Configure<Document>(config =>
 			{
 				config.When(document => document.StatusCode == DocumentStatusCode.Draft)
-					.Add(new DataPane { Key = "form", Name = "Form", Component = "pane_view_document_form", Props = new { mode = "edit" } })
+					.Add(new DataPane { Key = "form", Name = "Form", Component = ComponentCode.PaneViewDocumentForm, Props = new { mode = "edit" } })
 					.Add(new Button { Key = "publish", Name = "Publish", Action = "/document/publish" });
 
 				config.When(document => document.StatusCode != DocumentStatusCode.Draft)
-					.Add(new DataPane { Key = "form", Name = "Form", Component = "pane_view_document_form", Props = new { mode = "view" } })
+					.Add(new DataPane { Key = "form", Name = "Form", Component = ComponentCode.PaneViewDocumentForm, Props = new { mode = "view" } })
 					.Add(new Button { Name = "Accept or Reject" });
 
 				config.Add(new DataPane { Key = "history", Name = "History", Icon = "eye" });
