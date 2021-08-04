@@ -48,13 +48,13 @@ namespace Montr.Core.Impl.Services
 
 		private class EntityConfiguration<TEntity> : IEntityConfiguration<TEntity>
 		{
-			private readonly List<ItemContainer> _items = new();
+			private readonly List<ConfigurationItemInfo> _items = new();
 
 			public IConditionalEntityConfiguration When(Predicate<object> condition)
 			{
 				var items = new List<IConfigurationItem>();
 
-				_items.Add(new ConditionalItemContainer(condition, items));
+				_items.Add(new ConditionalConfigurationItemInfo(condition, items));
 
 				return new ConditionalEntityConfiguration<TEntity>(items);
 			}
@@ -66,9 +66,14 @@ namespace Montr.Core.Impl.Services
 
 			public IConditionalEntityConfiguration<TEntity> Add(IConfigurationItem item)
 			{
-				_items.Add(new ItemContainer(item));
+				_items.Add(new ConfigurationItemInfo(item));
 
 				return this;
+			}
+
+			public IConditionalEntityConfiguration<TEntity> Add<T>(Action<TEntity, T> init) where T : IConfigurationItem, new()
+			{
+				throw new NotImplementedException();
 			}
 
 			public IEnumerable<IConfigurationItem> GetItems(Type ofItem, object entity)
@@ -104,17 +109,22 @@ namespace Montr.Core.Impl.Services
 
 				return this;
 			}
+
+			public IConditionalEntityConfiguration<TEntity> Add<T>(Action<TEntity, T> init) where T : IConfigurationItem, new()
+			{
+				throw new NotImplementedException();
+			}
 		}
 
-		private class ItemContainer
+		private class ConfigurationItemInfo
 		{
 			private readonly IConfigurationItem _item;
 
-			protected ItemContainer()
+			protected ConfigurationItemInfo()
 			{
 			}
 
-			public ItemContainer(IConfigurationItem item)
+			public ConfigurationItemInfo(IConfigurationItem item)
 			{
 				_item = item;
 			}
@@ -130,12 +140,12 @@ namespace Montr.Core.Impl.Services
 			}
 		}
 
-		private class ConditionalItemContainer : ItemContainer
+		private class ConditionalConfigurationItemInfo : ConfigurationItemInfo
 		{
 			private readonly Predicate<object> _condition;
 			private readonly ICollection<IConfigurationItem> _items;
 
-			public ConditionalItemContainer(Predicate<object> condition, ICollection<IConfigurationItem> items)
+			public ConditionalConfigurationItemInfo(Predicate<object> condition, ICollection<IConfigurationItem> items)
 			{
 				_condition = condition;
 				_items = items;

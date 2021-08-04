@@ -1,6 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using Montr.Core.Services;
+using Montr.Docs.Commands;
 using Montr.Docs.Models;
 using Montr.MasterData.Models;
 using Montr.Metadata.Models;
@@ -38,7 +39,14 @@ namespace Montr.Docs.Services
 			{
 				config.When(document => document.StatusCode == DocumentStatusCode.Draft)
 					.Add(new DataPane { Key = "form", Name = "Form", Component = ComponentCode.PaneViewDocumentForm, Props = new { mode = "edit" } })
-					.Add(new Button { Key = "publish", Name = "Publish", Action = "/document/publish" });
+					.Add(new Button { Key = "publish", Name = "Publish", Action = "/document/publish" })
+					.Add<Button>((document, x) =>
+					{
+						x.Key = "publish";
+						x.Name = "Publish";
+						x.Action = "/document/publish";
+						x.Props = new PublishDocument { DocumentUid = document.Uid };
+					});
 
 				config.When(document => document.StatusCode != DocumentStatusCode.Draft)
 					.Add(new DataPane { Key = "form", Name = "Form", Component = ComponentCode.PaneViewDocumentForm, Props = new { mode = "view" } })

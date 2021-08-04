@@ -34,6 +34,8 @@ namespace Montr.Core.Services
 	public interface IConditionalEntityConfiguration<out TEntity> : IConditionalEntityConfiguration
 	{
 		IConditionalEntityConfiguration<TEntity> Add(IConfigurationItem item);
+
+		IConditionalEntityConfiguration<TEntity> Add<T>(Action<TEntity, T> init) where T : IConfigurationItem, new();
 	}
 
 	public interface IConfigurationItem
