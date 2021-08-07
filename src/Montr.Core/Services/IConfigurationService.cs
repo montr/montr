@@ -9,6 +9,6 @@ namespace Montr.Core.Services
 	/// </summary>
 	public interface IConfigurationService
 	{
-		Task<ICollection<T>> GetItems<TEntity, T>(TEntity entity, ClaimsPrincipal principal) where T : IConfigurationItem;
+		Task<ICollection<T>> GetItems<TEntity, T>(TEntity entity, ClaimsPrincipal principal) where T : IConfigurationItem, new();
 	}
 }

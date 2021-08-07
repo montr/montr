@@ -19,7 +19,7 @@ namespace Montr.Core.Impl.Services
 			_authorizationService = authorizationService;
 		}
 
-		public async Task<ICollection<T>> GetItems<TEntity, T>(TEntity entity, ClaimsPrincipal principal) where T : IConfigurationItem
+		public async Task<ICollection<T>> GetItems<TEntity, T>(TEntity entity, ClaimsPrincipal principal) where T : IConfigurationItem, new()
 		{
 			var result = new List<T>();
 
