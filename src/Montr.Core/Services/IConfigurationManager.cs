@@ -9,21 +9,17 @@ namespace Montr.Core.Services
 
 		void Configure<TEntity>(Action<IEntityConfiguration<TEntity>> config);
 
-		IEnumerable<IConfigurationItem> GetItems(Type ofEntity, Type ofItem, object entity);
-
 		IEnumerable<T> GetItems<TEntity, T>(TEntity entity) where T : IConfigurationItem;
 	}
 
 	public interface IEntityConfiguration : IConditionalEntityConfiguration
 	{
-		IConditionalEntityConfiguration When(Predicate<object> condition);
-
-		IEnumerable<IConfigurationItem> GetItems(Type ofItem, object entity);
+		// todo: remove from interface (move to concrete) ???
+		IEnumerable<IConfigurationItem> GetItems<T>(object entity);
 	}
 
 	public interface IConditionalEntityConfiguration
 	{
-		// IConditionalEntityConfiguration Add(IConfigurationItem item);
 	}
 
 	public interface IEntityConfiguration<out TEntity> : IEntityConfiguration, IConditionalEntityConfiguration<TEntity>
@@ -33,9 +29,7 @@ namespace Montr.Core.Services
 
 	public interface IConditionalEntityConfiguration<out TEntity> : IConditionalEntityConfiguration
 	{
-		IConditionalEntityConfiguration<TEntity> Add(IConfigurationItem item);
-
-		IConditionalEntityConfiguration<TEntity> Add<T>(Action<TEntity, T> init) where T : IConfigurationItem, new();
+		IConditionalEntityConfiguration<TEntity> Add<T>(Action<TEntity, T> init = null) where T : IConfigurationItem, new();
 	}
 
 	public interface IConfigurationItem

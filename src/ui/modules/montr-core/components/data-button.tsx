@@ -18,7 +18,7 @@ export class DataButton extends React.Component<Props> {
 
         await this.operation.confirm(async () => {
             const url = `${Constants.apiURL}${button.action}`;
-            const result = await this.fetcher.post(url);
+            const result = await this.fetcher.post(url, button.props);
 
             if (result.success) {
                 console.log(button);

@@ -20,10 +20,23 @@ namespace Montr.Idx.Services
 			_configurationManager.Configure<Classifier>(config =>
 			{
 				config.When(classifier => classifier.Type == ClassifierTypeCode.Role)
-					.Add(new DataPane { Key = "permissions", Name = "Permissions", DisplayOrder = 15, Component = "components/tab-edit-role-permissions" });
+					.Add<DataPane>((_, x) =>
+					{
+						x.Key = "permissions";
+						x.Name = "Permissions";
+						x.DisplayOrder = 15;
+						x.Component = "components/tab-edit-role-permissions";
+					});
 
 				config.When(classifier => classifier.Type == ClassifierTypeCode.User)
-					.Add(new DataPane { Key = "roles", Name = "Roles", DisplayOrder = 15, Icon = "solution", Component = "components/tab-edit-user-roles" });
+					.Add<DataPane>((_, x) =>
+					{
+						x.Key = "roles";
+						x.Name = "Roles";
+						x.DisplayOrder = 15;
+						x.Icon = "solution";
+						x.Component = "components/tab-edit-user-roles";
+					});
 			});
 
 			return Task.CompletedTask;

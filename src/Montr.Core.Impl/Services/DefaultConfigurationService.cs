@@ -23,6 +23,7 @@ namespace Montr.Core.Impl.Services
 		{
 			var result = new List<T>();
 
+			// todo: check authorization before instantiating items
 			foreach (var item in _configurationManager.GetItems<TEntity, T>(entity))
 			{
 				if (await Authorize(item, principal) != false)

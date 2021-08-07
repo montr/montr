@@ -22,24 +22,59 @@ namespace Montr.Docs.Services
 			_configurationManager.Configure<Classifier>(config =>
 			{
 				config.When(classifier => classifier.Type == ClassifierTypeCode.Questionnaire)
-					.Add(new DataPane { Key = "questionnaire", Name = "Вопросы", DisplayOrder = 15, Component = "panes/PaneSearchMetadata" });
+					.Add<DataPane>((_, x) =>
+					{
+						x.Key = "questionnaire";
+						x.Name = "Вопросы";
+						x.DisplayOrder = 15;
+						x.Component = "panes/PaneSearchMetadata";
+					});
 
 				config.When(classifier => classifier.Type == ClassifierTypeCode.DocumentType)
-					.Add(new DataPane { Key = "fields", Name = "Анкета", DisplayOrder = 15, Component = "panes/PaneSearchMetadata" })
+					.Add<DataPane>((_, x) =>
+					{
+						x.Key = "fields";
+						x.Name = "Анкета";
+						x.DisplayOrder = 15;
+						x.Component = "panes/PaneSearchMetadata";
+					})
 
 					// todo: move to processes (?)
-					.Add(new DataPane { Key = "statuses", Name = "Statuses", DisplayOrder = 16, Component = "panes/PaneSearchEntityStatuses" })
-					.Add(new DataPane { Key = "automation", Name = "Automations", DisplayOrder = 17, Component = "panes/PaneSearchAutomation" });
+					.Add<DataPane>((_, x) =>
+					{
+						x.Key = "statuses";
+						x.Name = "Statuses";
+						x.DisplayOrder = 16;
+						x.Component = "panes/PaneSearchEntityStatuses";
+					})
+					.Add<DataPane>((_, x) =>
+					{
+						x.Key = "automation";
+						x.Name = "Automations";
+						x.DisplayOrder = 17;
+						x.Component = "panes/PaneSearchAutomation";
+					});
 
 				config.When(classifier => classifier.Type == ClassifierTypeCode.Process)
-					.Add(new DataPane { Key = "steps", Name = "Шаги", DisplayOrder = 15, Component = "panes/PaneProcessStepList" });
+					.Add<DataPane>((_, x) =>
+					{
+						x.Key = "steps";
+						x.Name = "Шаги";
+						x.DisplayOrder = 15;
+						x.Component = "panes/PaneProcessStepList";
+					});
 			});
 
 			_configurationManager.Configure<Document>(config =>
 			{
 				config.When(document => document.StatusCode == DocumentStatusCode.Draft)
-					.Add(new DataPane { Key = "form", Name = "Form", Component = ComponentCode.PaneViewDocumentForm, Props = new { mode = "edit" } })
-					.Add(new Button { Key = "publish", Name = "Publish", Action = "/document/publish" })
+					.Add<DataPane>((_, x) =>
+					{
+						x.Key = "form";
+						x.Name = "Form";
+						x.Component = ComponentCode.PaneViewDocumentForm;
+						x.Props = new { mode = "edit" };
+					})
 					.Add<Button>((document, x) =>
 					{
 						x.Key = "publish";
@@ -49,10 +84,26 @@ namespace Montr.Docs.Services
 					});
 
 				config.When(document => document.StatusCode != DocumentStatusCode.Draft)
-					.Add(new DataPane { Key = "form", Name = "Form", Component = ComponentCode.PaneViewDocumentForm, Props = new { mode = "view" } })
-					.Add(new Button { Name = "Accept or Reject" });
+					.Add<DataPane>((_, x) =>
+					{
+						x.Key = "form";
+						x.Name = "Form";
+						x.Component = ComponentCode.PaneViewDocumentForm;
+						x.Props = new { mode = "view" };
+					})
+					.Add<Button>((_, x) =>
+					{
+						x.Name ="Accept or Reject";
+					});
 
-				config.Add(new DataPane { Key = "history", Name = "History", Icon = "eye" });
+				// for any status
+				config
+					.Add<DataPane>((_, x) =>
+					{
+						x.Key = "history";
+						x.Name = "History";
+						x.Icon = "eye";
+					});
 			});
 
 			return Task.CompletedTask;

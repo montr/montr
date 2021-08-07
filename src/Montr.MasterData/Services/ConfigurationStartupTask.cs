@@ -20,23 +20,79 @@ namespace Montr.MasterData.Services
 			_configurationManager.Configure<ClassifierType>(config =>
 			{
 				config
-					.Add(new DataPane { Key = "info", Name = "Информация", Icon = "profile", Component = "panes/TabEditClassifierType" })
-					.Add(new DataPane { Key = "hierarchy", Name = "Иерархия", Component = "panes/TabEditClassifierTypeHierarchy" })
-					.Add(new DataPane { Key = "fields", Name = "Поля", Component = "panes/PaneSearchMetadata" })
-					.Add(new DataPane { Key = "numeration", Name = "Нумерация", Component = "panes/PaneEditNumeration" })
-					.Add(new DataPane { Key = "history", Name = "History", Icon = "eye" });
+					.Add<DataPane>((_, x) =>
+					{
+						x.Key = "info";
+						x.Name = "Информация";
+						x.Icon = "profile";
+						x.Component = "panes/TabEditClassifierType";
+					})
+					.Add<DataPane>((_, x) =>
+					{
+						x.Key = "hierarchy";
+						x.Name = "Иерархия";
+						x.Component = "panes/TabEditClassifierTypeHierarchy";
+					})
+					.Add<DataPane>((_, x) =>
+					{
+						x.Key = "fields";
+						x.Name = "Поля";
+						x.Component = "panes/PaneSearchMetadata";
+					})
+					.Add<DataPane>((_, x) =>
+					{
+						x.Key = "numeration";
+						x.Name = "Нумерация";
+						x.Component = "panes/PaneEditNumeration";
+					})
+					.Add<DataPane>((_, x) =>
+					{
+						x.Key = "history";
+						x.Name = "History";
+						x.Icon = "eye";
+					});
 			});
 
 			_configurationManager.Configure<Classifier>(config =>
 			{
 				config
-					.Add(new DataPane { Key = "info", Name = "Информация", DisplayOrder = 10, Icon = "profile", Component = "panes/TabEditClassifier" })
-					.Add(new DataPane { Key = "hierarchy", Name = "Иерархия", DisplayOrder = 20, Component = "panes/TabEditClassifierHierarchy" })
-					.Add(new DataPane { Key = "dependencies", Name = "Зависимости", DisplayOrder = 30 })
-					.Add(new DataPane { Key = "history", Name = "История изменений", DisplayOrder = 40, Icon = "eye" });
+					.Add<DataPane>((_, x) =>
+					{
+						x.Key = "info";
+						x.Name = "Информация";
+						x.DisplayOrder = 10;
+						x.Icon = "profile";
+						x.Component = "panes/TabEditClassifier";
+					})
+					.Add<DataPane>((_, x) =>
+					{
+						x.Key = "hierarchy";
+						x.Name = "Иерархия";
+						x.DisplayOrder = 20;
+						x.Component = "panes/TabEditClassifierHierarchy";
+					})
+					.Add<DataPane>((_, x) =>
+					{
+						x.Key = "dependencies";
+						x.Name = "Зависимости";
+						x.DisplayOrder = 30;
+					})
+					.Add<DataPane>((_, x) =>
+					{
+						x.Key = "history";
+						x.Name = "История изменений";
+						x.DisplayOrder = 40;
+						x.Icon = "eye";
+					});
 
 				config.When(classifier => classifier.Type == ClassifierTypeCode.Numerator)
-					.Add(new DataPane { Key = "usage", Name = "Использование", DisplayOrder = 15, Component = "panes/TabEditNumeratorEntities" });
+					.Add<DataPane>((_, x) =>
+					{
+						x.Key = "usage";
+						x.Name = "Использование";
+						x.DisplayOrder = 15;
+						x.Component = "panes/TabEditNumeratorEntities";
+					});
 			});
 
 			return Task.CompletedTask;

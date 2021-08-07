@@ -21,16 +21,13 @@ namespace Montr.Core.Impl.Services
 			Configure(typeof(TEntity), configuration => config((IEntityConfiguration<TEntity>)configuration));
 		}
 
-		public IEnumerable<IConfigurationItem> GetItems(Type ofEntity, Type ofItem, object entity)
-		{
-			var configuration = GetEntityConfiguration(ofEntity);
-
-			return configuration.GetItems(ofItem, entity);
-		}
-
 		public IEnumerable<T> GetItems<TEntity, T>(TEntity entity) where T : IConfigurationItem
 		{
-			foreach (var item in GetItems(typeof(TEntity), typeof(T), entity))
+			var configuration = GetEntityConfiguration(typeof(TEntity));
+
+			var items = configuration.GetItems<T>(entity);
+
+			foreach (var item in items)
 			{
 				yield return (T)item;
 			}
@@ -48,46 +45,34 @@ namespace Montr.Core.Impl.Services
 
 		private class EntityConfiguration<TEntity> : IEntityConfiguration<TEntity>
 		{
-			private readonly List<ConfigurationItemInfo> _items = new();
-
-			public IConditionalEntityConfiguration When(Predicate<object> condition)
-			{
-				var items = new List<IConfigurationItem>();
-
-				_items.Add(new ConditionalConfigurationItemInfo(condition, items));
-
-				return new ConditionalEntityConfiguration<TEntity>(items);
-			}
+			private readonly List<ConfigurationItem<TEntity>> _items = new();
 
 			public IConditionalEntityConfiguration<TEntity> When(Predicate<TEntity> condition)
 			{
-				return (IConditionalEntityConfiguration<TEntity>)When((object entity) => condition((TEntity)entity));
-			}
+				var items = new List<ItemInfo<TEntity>>();
 
-			public IConditionalEntityConfiguration<TEntity> Add(IConfigurationItem item)
-			{
-				_items.Add(new ConfigurationItemInfo(item));
+				_items.Add(new ConditionalConfigurationItem<TEntity>(condition, items));
 
-				return this;
+				return new ConditionalEntityConfiguration<TEntity>(items); // todo: pass conditional item (?)
 			}
 
 			public IConditionalEntityConfiguration<TEntity> Add<T>(Action<TEntity, T> init) where T : IConfigurationItem, new()
 			{
-				throw new NotImplementedException();
+				_items.Add(new ConfigurationItem<TEntity>(new ItemInfo<TEntity, T>(init)));
+
+				return this;
 			}
 
-			public IEnumerable<IConfigurationItem> GetItems(Type ofItem, object entity)
+			public IEnumerable<IConfigurationItem> GetItems<T>(object entity)
 			{
 				foreach (var container in _items)
 				{
-					if (container.MeetCondition(entity))
+					// todo: check condition in EnumerateItems
+					if (container.MeetCondition((TEntity)entity))
 					{
-						foreach (var item in container.EnumerateItems())
+						foreach (var item in container.EnumerateItems(typeof(T), (TEntity)entity))
 						{
-							if (ofItem.IsInstanceOfType(item))
-							{
-								yield return item;
-							}
+							yield return item;
 						}
 					}
 				}
@@ -96,69 +81,105 @@ namespace Montr.Core.Impl.Services
 
 		private class ConditionalEntityConfiguration<TEntity> : IConditionalEntityConfiguration<TEntity>
 		{
-			private readonly ICollection<IConfigurationItem> _items;
+			private readonly ICollection<ItemInfo<TEntity>> _items;
 
-			public ConditionalEntityConfiguration(ICollection<IConfigurationItem> items)
+			public ConditionalEntityConfiguration(ICollection<ItemInfo<TEntity>> items)
 			{
 				_items = items;
 			}
 
-			public IConditionalEntityConfiguration<TEntity> Add(IConfigurationItem item)
+			public IConditionalEntityConfiguration<TEntity> Add<T>(Action<TEntity, T> init) where T : IConfigurationItem, new()
 			{
-				_items.Add(item);
+				_items.Add(new ItemInfo<TEntity, T>(init));
 
 				return this;
 			}
+		}
 
-			public IConditionalEntityConfiguration<TEntity> Add<T>(Action<TEntity, T> init) where T : IConfigurationItem, new()
+		private abstract class ItemInfo<TEntity>
+		{
+			public abstract bool TryGetItem(Type ofItem, TEntity entity, out IConfigurationItem item);
+		}
+
+		private class ItemInfo<TEntity, TITem> : ItemInfo<TEntity> where TITem : IConfigurationItem, new()
+		{
+			private readonly Action<TEntity, TITem> _itemInit;
+
+			public ItemInfo(Action<TEntity, TITem> itemInit)
 			{
-				throw new NotImplementedException();
+				_itemInit = itemInit;
+			}
+
+			public override bool TryGetItem(Type ofItem, TEntity entity, out IConfigurationItem item)
+			{
+				if (/*ofItem == typeof(TITem) ||*/ ofItem.IsAssignableTo(typeof(TITem)))
+				{
+					var result = new TITem();
+
+					_itemInit?.Invoke(entity, result);
+
+					item = result;
+					return true;
+				}
+
+				item = null;
+				return false;
 			}
 		}
 
-		private class ConfigurationItemInfo
+		// todo: rename to list
+		private class ConfigurationItem<TEntity>
 		{
-			private readonly IConfigurationItem _item;
+			private readonly ItemInfo<TEntity> _item;
 
-			protected ConfigurationItemInfo()
+			protected ConfigurationItem()
 			{
 			}
 
-			public ConfigurationItemInfo(IConfigurationItem item)
+			public ConfigurationItem(ItemInfo<TEntity> item)
 			{
 				_item = item;
 			}
 
-			public virtual bool MeetCondition(object entity)
+			public virtual bool MeetCondition(TEntity entity)
 			{
 				return true;
 			}
 
-			public virtual IEnumerable<IConfigurationItem> EnumerateItems()
+			public virtual IEnumerable<IConfigurationItem> EnumerateItems(Type ofItem, TEntity entity)
 			{
-				yield return _item;
+				if (_item.TryGetItem(ofItem, entity, out var item))
+				{
+					yield return item;
+				}
 			}
 		}
 
-		private class ConditionalConfigurationItemInfo : ConfigurationItemInfo
+		private class ConditionalConfigurationItem<TEntity> : ConfigurationItem<TEntity>
 		{
-			private readonly Predicate<object> _condition;
-			private readonly ICollection<IConfigurationItem> _items;
+			private readonly Predicate<TEntity> _condition;
+			private readonly ICollection<ItemInfo<TEntity>> _items;
 
-			public ConditionalConfigurationItemInfo(Predicate<object> condition, ICollection<IConfigurationItem> items)
+			public ConditionalConfigurationItem(Predicate<TEntity> condition, ICollection<ItemInfo<TEntity>> items)
 			{
 				_condition = condition;
 				_items = items;
 			}
 
-			public override bool MeetCondition(object entity)
+			public override bool MeetCondition(TEntity entity)
 			{
 				return _condition(entity);
 			}
 
-			public override IEnumerable<IConfigurationItem> EnumerateItems()
+			public override IEnumerable<IConfigurationItem> EnumerateItems(Type ofItem, TEntity entity)
 			{
-				return _items;
+				foreach (var itemInfo in _items)
+				{
+					if (itemInfo.TryGetItem(ofItem, entity, out var item))
+					{
+						yield return item;
+					}
+				}
 			}
 		}
 	}
