@@ -79,6 +79,7 @@ namespace Montr.Docs.Services
 					{
 						x.Key = "publish";
 						x.Name = "Publish";
+						x.Type = ButtonType.Primary;
 						x.Action = "/document/publish";
 						x.Props = new PublishDocument { DocumentUid = document.Uid };
 					});

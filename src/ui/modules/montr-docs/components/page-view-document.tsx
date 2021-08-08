@@ -1,5 +1,5 @@
 import { DataTabs, DataToolbar, StatusTag } from "@montr-core/components";
-import { DataView } from "@montr-core/models";
+import { ConfigurationItemProps, DataView } from "@montr-core/models";
 import { DateHelper } from "@montr-core/services";
 import { Classifier } from "@montr-master-data/models";
 import { ClassifierService } from "@montr-master-data/services";
@@ -63,12 +63,8 @@ export default class PageViewDocument extends React.Component<Props, State> {
 		this.setState({ loading: false, document, documentType, dataView });
 	};
 
-	handleDataChange = (document: IDocument): void => {
-		const { uid } = this.props.match.params;
-
-		if (uid) {
-			this.setState({ document });
-		}
+	handleDataChange = async (): Promise<void> => {
+		await this.fetchData();
 	};
 
 	handleTabChange = (tabKey: string): void => {
@@ -87,7 +83,7 @@ export default class PageViewDocument extends React.Component<Props, State> {
 
 		const pageTitle = `${documentType.name} — ${document.documentNumber} — ${DateHelper.toLocaleDateString(document.documentDate)}`;
 
-		const dataProps = {
+		const dataProps: ConfigurationItemProps = {
 			document,
 			documentType,
 			onDataChange: this.handleDataChange,

@@ -1,6 +1,7 @@
 export * from "./api-result";
 export * from "./app-options";
 export * from "./button";
+export * from "./configuration-item-props";
 export * from "./data-column";
 export * from "./data-field";
 export * from "./data-pane";

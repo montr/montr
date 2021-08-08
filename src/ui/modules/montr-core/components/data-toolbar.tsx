@@ -1,39 +1,39 @@
 
 import React from "react";
 import { DataButton } from ".";
-import { Button } from "../models";
+import { Button, ConfigurationItemProps } from "../models";
 import { ComponentRegistry } from "../services";
 
 interface Props {
     buttons: Button[];
-    buttonProps?: Record<string, unknown>;
+    buttonProps?: ConfigurationItemProps;
 }
 
 export class DataToolbar extends React.Component<Props> {
     render = (): React.ReactNode => {
         const { buttons, buttonProps } = this.props;
 
-        return buttons &&
-            <>
-                {buttons.map((button) => {
-                    let component = undefined;
+        return buttons && <>{buttons.map((button, index) => {
 
-                    const props = { ...buttonProps, ...button.props };
+            const key = button.key || `btn-${index}`;
 
-                    if (button.component) {
-                        const componentClass = ComponentRegistry.getComponent(button.component);
+            const props = { key, button, ...buttonProps, ...button.props };
 
-                        if (componentClass) {
-                            component = React.createElement(componentClass, props);
-                        } else {
-                            console.error(`Component ${button.component} is not found.`);
-                        }
-                    } else {
-                        component = <DataButton button={button} {...props} />;
-                    }
+            let component = undefined;
 
-                    return component;
-                })}
-            </>;
+            if (button.component) {
+                const componentClass = ComponentRegistry.getComponent(button.component);
+
+                if (componentClass) {
+                    component = React.createElement(componentClass, props);
+                } else {
+                    console.error(`Component ${button.component} is not found.`);
+                }
+            } else {
+                component = <DataButton {...props} />;
+            }
+
+            return component;
+        })}</>;
     };
 }
