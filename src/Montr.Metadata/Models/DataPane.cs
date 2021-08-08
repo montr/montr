@@ -1,24 +1,7 @@
-﻿using Montr.Core.Services;
+﻿using Montr.Core.Models;
 
 namespace Montr.Metadata.Models
 {
-	public class ConfigurationItem : IConfigurationItem
-	{
-		public string Permission { get; set; }
-
-		public int DisplayOrder { get; set; }
-
-		public string Key { get; set; }
-
-		public string Name { get; set; }
-
-		public string Icon { get; set; }
-
-		public string Component { get; set; }
-
-		public object Props { get; set; }
-	}
-
 	public class Button : ConfigurationItem
 	{
 		public ButtonType Type { get; set; }

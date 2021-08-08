@@ -4,6 +4,7 @@ using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Montr.Core.Models;
 using Montr.Core.Services;
 
 namespace Montr.Core.Impl.Services

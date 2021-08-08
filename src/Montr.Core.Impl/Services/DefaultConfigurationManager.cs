@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using Montr.Core.Models;
 using Montr.Core.Services;
 
 namespace Montr.Core.Impl.Services
@@ -40,12 +41,12 @@ namespace Montr.Core.Impl.Services
 
 				_items.Add(new ItemInfoList<TEntity>(condition, items));
 
-				return new EntityConfiguration<TEntity>(items); // todo: pass conditional item (?)
+				return new EntityConfiguration<TEntity>(items);
 			}
 
 			public IEntityConfiguration<TEntity> Add<T>(Action<TEntity, T> init) where T : IConfigurationItem, new()
 			{
-				_items.Add(new ItemInfoList<TEntity>(_ => true, new [] { new ItemInfo<TEntity, T>(init) } ));
+				_items.Add(new ItemInfoList<TEntity>(_ => true, new[] { new ItemInfo<TEntity, T>(init) }));
 
 				return this;
 			}
@@ -89,7 +90,7 @@ namespace Montr.Core.Impl.Services
 
 			public override bool TryGetItem<T>(TEntity entity, out IConfigurationItem item)
 			{
-				if (typeof(T).IsAssignableTo(typeof(TITem)))
+				if (typeof(TITem).IsAssignableTo(typeof(T)))
 				{
 					var result = new TITem();
 
