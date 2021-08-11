@@ -53,7 +53,8 @@ namespace Montr.Docs.Impl.CommandHandlers
 			var manageFieldDataRequest = new ManageFieldDataRequest
 			{
 				EntityTypeCode = Document.TypeCode,
-				EntityUid = request.DocumentUid,
+				// ReSharper disable once PossibleInvalidOperationException
+				EntityUid = document.Uid.Value,
 				Metadata = metadata,
 				Item = request
 			};

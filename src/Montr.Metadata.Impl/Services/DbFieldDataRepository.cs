@@ -79,6 +79,16 @@ namespace Montr.Metadata.Impl.Services
 			{
 				data.TryGetValue(field.Key, out var value);
 
+				if (field.Required && value == null)
+				{
+					// todo: reuse "dataForm.rule.required" resource
+					errors.Add(new ApiResultError
+					{
+						Key = FieldKey.FormatFullKey(field.Key),
+						Messages = new[] { $"Field \"{field.Name}\" is required." }
+					});
+				}
+
 				var fieldProvider = _fieldProviderRegistry.GetFieldTypeProvider(field.Type);
 
 				if (fieldProvider.Validate(value, out var parsed, out var fieldErrors))

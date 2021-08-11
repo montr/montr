@@ -1,13 +1,10 @@
-import * as React from "react";
-import { Input, InputNumber, Select, Checkbox, DatePicker, Form } from "antd";
+import { Checkbox, DatePicker, Form, Input, InputNumber, Select } from "antd";
 import { getFieldId } from "antd/lib/form/util";
-import { Rule } from "rc-field-form/lib/interface";
-import {
-	IDataField, IIndexer, ISelectField, ITextAreaField, INumberField, IDateField, IBooleanField, ITextField,
-	IDesignSelectOptionsField, IPasswordField
-} from "../models";
-import { Icon, DesignSelectOptions, DesignSelectOptionsFI, EmptyFieldView, DataFormOptions, FormDefaults } from ".";
 import moment from "moment";
+import { Rule } from "rc-field-form/lib/interface";
+import * as React from "react";
+import { DataFormOptions, DesignSelectOptions, EmptyFieldView, FormDefaults, Icon } from ".";
+import { IBooleanField, IDataField, IDateField, IDesignSelectOptionsField, IIndexer, INumberField, IPasswordField, ISelectField, ITextAreaField, ITextField } from "../models";
 import { DataHelper } from "../services";
 
 export abstract class DataFieldFactory<TField extends IDataField> {

@@ -13,27 +13,31 @@ export class DataToolbar extends React.Component<Props> {
     render = (): React.ReactNode => {
         const { buttons, buttonProps } = this.props;
 
-        return buttons && <>{buttons.map((button, index) => {
+        if (!buttons) return null;
 
-            const key = button.key || `btn-${index}`;
+        return <>
+            {buttons.map((button, index) => {
 
-            const props = { key, button, ...buttonProps, ...button.props };
+                const key = button.key || `btn-${index}`;
 
-            let component = undefined;
+                const props = { key, button, ...buttonProps, ...button.props };
 
-            if (button.component) {
-                const componentClass = ComponentRegistry.getComponent(button.component);
+                let component = undefined;
 
-                if (componentClass) {
-                    component = React.createElement(componentClass, props);
+                if (button.component) {
+                    const componentClass = ComponentRegistry.getComponent(button.component);
+
+                    if (componentClass) {
+                        component = React.createElement(componentClass, props);
+                    } else {
+                        console.error(`Component ${button.component} is not found.`);
+                    }
                 } else {
-                    console.error(`Component ${button.component} is not found.`);
+                    component = <DataButton {...props} />;
                 }
-            } else {
-                component = <DataButton {...props} />;
-            }
 
-            return component;
-        })}</>;
+                return component;
+            })}
+        </>;
     };
 }

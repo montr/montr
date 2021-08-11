@@ -17,30 +17,31 @@ export class DataTabs<TModel> extends React.Component<Props<TModel>> {
     render = (): React.ReactNode => {
         const { tabKey, panes, onTabChange, disabled, tabProps } = this.props;
 
-        return panes &&
-            <Tabs size="small" defaultActiveKey={tabKey} onChange={onTabChange}>
-                {panes.map((pane, index) => {
+        if (!panes) return null;
 
-                    let component = undefined;
+        return <Tabs size="small" defaultActiveKey={tabKey} onChange={onTabChange}>
+            {panes.map((pane, index) => {
 
-                    if (pane.component) {
-                        const componentClass = ComponentRegistry.getComponent(pane.component);
+                let component = undefined;
 
-                        if (componentClass) {
-                            component = React.createElement(componentClass, { ...tabProps, ...pane.props });
-                        } else {
-                            console.error(`Component ${pane.component} is not found.`);
-                        }
+                if (pane.component) {
+                    const componentClass = ComponentRegistry.getComponent(pane.component);
+
+                    if (componentClass) {
+                        component = React.createElement(componentClass, { ...tabProps, ...pane.props });
+                    } else {
+                        console.error(`Component ${pane.component} is not found.`);
                     }
+                }
 
-                    return (
-                        <Tabs.TabPane key={pane.key}
-                            tab={<span>{pane.icon && Icon.get(pane.icon)} {pane.name}</span>}
-                            disabled={disabled ? disabled(pane, index) : false}>
-                            {component}
-                        </Tabs.TabPane>
-                    );
-                })}
-            </Tabs>;
+                return (
+                    <Tabs.TabPane key={pane.key}
+                        tab={<span>{pane.icon && Icon.get(pane.icon)} {pane.name}</span>}
+                        disabled={disabled ? disabled(pane, index) : false}>
+                        {component}
+                    </Tabs.TabPane>
+                );
+            })}
+        </Tabs>;
     };
 }

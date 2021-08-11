@@ -10,6 +10,10 @@ using Montr.Data.Linq2Db;
 using Montr.Docs.Commands;
 using Montr.Docs.Impl.Entities;
 using Montr.Docs.Models;
+using Montr.Docs.Services;
+using Montr.MasterData;
+using Montr.Metadata.Models;
+using Montr.Metadata.Services;
 
 namespace Montr.Docs.Impl.CommandHandlers
 {
@@ -17,16 +21,37 @@ namespace Montr.Docs.Impl.CommandHandlers
 	{
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IDbContextFactory _dbContextFactory;
+		private readonly IDocumentService _documentService;
+		private readonly IRepository<FieldMetadata> _fieldMetadataRepository;
+		private readonly IFieldDataRepository _fieldDataRepository;
 
-		public PublishDocumentHandler(IUnitOfWorkFactory unitOfWorkFactory, IDbContextFactory dbContextFactory)
+		public PublishDocumentHandler(
+			IUnitOfWorkFactory unitOfWorkFactory,
+			IDbContextFactory dbContextFactory,
+			IDocumentService documentService,
+			IRepository<FieldMetadata> fieldMetadataRepository,
+			IFieldDataRepository fieldDataRepository)
 		{
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_dbContextFactory = dbContextFactory;
+			_documentService = documentService;
+			_fieldMetadataRepository = fieldMetadataRepository;
+			_fieldDataRepository = fieldDataRepository;
 		}
 
 		public async Task<ApiResult> Handle(PublishDocument request, CancellationToken cancellationToken)
 		{
-			var documentUid = request.DocumentUid ?? throw new ArgumentNullException(nameof(request.DocumentUid));
+			var documentSearchRequest = new DocumentSearchRequest
+			{
+				Uid = request.DocumentUid ?? throw new ArgumentNullException(nameof(request.DocumentUid)),
+				IncludeFields = true
+			};
+
+			var document = (await _documentService.Search(documentSearchRequest, cancellationToken)).Rows.Single();
+
+			var result = await ValidateForm(document, document, cancellationToken);
+
+			if (result.Success == false) return result;
 
 			using (var scope = _unitOfWorkFactory.Create())
 			{
@@ -35,7 +60,7 @@ namespace Montr.Docs.Impl.CommandHandlers
 				using (var db = _dbContextFactory.Create())
 				{
 					affected = await db.GetTable<DbDocument>()
-						.Where(x => x.Uid == documentUid)
+						.Where(x => x.Uid == document.Uid)
 						.Set(x => x.StatusCode, DocumentStatusCode.Published)
 						.UpdateAsync(cancellationToken);
 				}
@@ -46,6 +71,33 @@ namespace Montr.Docs.Impl.CommandHandlers
 
 				return new ApiResult { Success = success, AffectedRows = affected };
 			}
+		}
+
+		// todo: use EntityStatusChanged event (?)
+		private async Task<ApiResult> ValidateForm(Document document, IFieldDataContainer data, CancellationToken cancellationToken)
+		{
+			var metadataSearchRequest = new MetadataSearchRequest
+			{
+				EntityTypeCode = EntityTypeCode.Classifier,
+				EntityUid = document.DocumentTypeUid,
+				// todo: check flags
+				// IsSystem = false,
+				IsActive = true,
+				SkipPaging = true
+			};
+
+			var metadata = (await _fieldMetadataRepository.Search(metadataSearchRequest, cancellationToken)).Rows;
+
+			var manageFieldDataRequest = new ManageFieldDataRequest
+			{
+				EntityTypeCode = Document.TypeCode,
+				// ReSharper disable once PossibleInvalidOperationException
+				EntityUid = document.Uid.Value,
+				Metadata = metadata,
+				Item = data
+			};
+
+			return await _fieldDataRepository.Validate(manageFieldDataRequest, cancellationToken);
 		}
 	}
 }
