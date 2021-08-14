@@ -1,8 +1,8 @@
+import { Button, Result } from "antd";
 import * as React from "react";
-import { Result, Button } from "antd";
 
 export default class PageError404 extends React.Component {
-	render() {
+	render(): React.ReactNode {
 		return (
 			<Result
 				status={404}

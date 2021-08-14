@@ -79,7 +79,7 @@ namespace Montr.Metadata.Impl.Services
 			{
 				data.TryGetValue(field.Key, out var value);
 
-				if (field.Required && value == null)
+				if (field.System == false && field.Required && value == null)
 				{
 					// todo: reuse "dataForm.rule.required" resource
 					errors.Add(new ApiResultError

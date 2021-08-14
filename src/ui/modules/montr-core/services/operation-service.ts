@@ -1,5 +1,6 @@
 import i18next from "i18next";
 import { NavigationService, NotificationService } from ".";
+import { NotificationContent } from "../components";
 import { ApiResult, ApiResultError, ValidationProblemDetails } from "../models";
 
 interface OperationExecuteOptions {
@@ -26,11 +27,19 @@ export class OperationService {
 				options.showFieldErrors(result);
 			}
 			else if (result?.errors) {
+
+				const errors: string[] = [];
+
 				result.errors.forEach(x => {
-					x.messages.forEach(e => {
-						this.notification.error(e);
+					x.messages.forEach(error => {
+						errors.push(error);
 					});
 				});
+
+				const message = result?.message ?? options?.errorMessage ?? t("operation.error"),
+					description = NotificationContent.build(errors);
+
+				this.notification.error(message, description);
 			}
 		};
 
@@ -45,9 +54,6 @@ export class OperationService {
 					this.notification.success(result.message ?? options?.successMessage ?? t("operation.success"));
 				}
 				else {
-					// todo: do not show common error if options.showFieldErrors passed
-					this.notification.error(result?.message ?? options?.errorMessage ?? t("operation.error"));
-
 					showFieldErrors(result);
 				}
 

@@ -22,6 +22,7 @@ export * from "./icon";
 export * from "./language-selector";
 export * from "./logo";
 export * from "./modal-edit-entity-status";
+export * from "./notification-content";
 export * from "./page";
 export * from "./page-header";
 export * from "./pane-component";

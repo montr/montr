@@ -1,11 +1,11 @@
+import { IMenu } from "@montr-core/models";
+import { Card, List, Skeleton } from "antd";
 import * as React from "react";
 import { Page } from ".";
-import { List, Card, Skeleton } from "antd";
-import { IMenu } from "@montr-core/models";
 
 export default class PageDashboard extends React.Component {
 
-	render() {
+	render(): React.ReactNode {
 		const data: IMenu[] = [];
 
 		data.push({ name: `Common Actions (Create/Manage)` });

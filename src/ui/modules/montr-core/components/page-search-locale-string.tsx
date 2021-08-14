@@ -1,11 +1,11 @@
-import React from "react";
-import { DataTableUpdateToken, Page, DataTable, Toolbar, PageHeader, DataBreadcrumb, ButtonImport, ButtonExport, Icon } from ".";
-import { Constants } from "..";
-import { IMenu, LocaleString, DataResult } from "../models";
-import { LocaleStringService, NotificationService } from "../services";
-import { Form, Select, Button, Upload } from "antd";
+import { Button, Form, Select, Upload } from "antd";
 import { UploadChangeParam } from "antd/lib/upload";
+import React from "react";
 import { Translation } from "react-i18next";
+import { ButtonExport, ButtonImport, DataBreadcrumb, DataTable, DataTableUpdateToken, Icon, Page, PageHeader, Toolbar } from ".";
+import { Constants } from "..";
+import { DataResult, IMenu, LocaleString } from "../models";
+import { LocaleStringService, NotificationService } from "../services";
 
 interface Props {
 }
@@ -80,7 +80,7 @@ export default class PageSearchLocaleString extends React.Component<Props, State
 		});
 	};
 
-	render = () => {
+	render = (): React.ReactNode => {
 		const { locale, module, updateTableToken } = this.state;
 
 		const rowActions: IMenu[] = [

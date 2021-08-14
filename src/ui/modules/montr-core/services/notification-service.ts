@@ -1,4 +1,4 @@
-import { message, notification, Modal } from "antd";
+import { message, Modal, notification } from "antd";
 import { MessageType } from "antd/lib/message";
 
 declare type Content = React.ReactNode | string;
@@ -9,7 +9,7 @@ export class NotificationService {
 
 	static initialize(): void {
 		notification.config({
-			placement: "bottomRight"
+			// placement: "bottomRight"
 		});
 	}
 
