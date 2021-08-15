@@ -1,9 +1,9 @@
-import React from "react";
-import { Drawer, FormInstance } from "antd";
-import { Guid } from "@montr-core/models";
 import { ButtonCancel, ButtonSave, Toolbar } from "@montr-core/components";
-import { ClassifierType } from "../models";
+import { Guid } from "@montr-core/models";
+import { Drawer, FormInstance } from "antd";
+import React from "react";
 import { FormEditClassifier } from ".";
+import { ClassifierType } from "../models";
 
 interface Props {
     type: ClassifierType;
@@ -12,6 +12,7 @@ interface Props {
     onSuccess?: () => void;
     onClose?: () => void;
 }
+
 export class PaneEditClassifier extends React.Component<Props> {
 
     formRef = React.createRef<FormInstance>();

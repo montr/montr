@@ -37,7 +37,7 @@ namespace Montr.MasterData.Services
 					{
 						x.Key = "fields";
 						x.Name = "Поля";
-						x.Component = "panes/PaneSearchMetadata";
+						x.Component = Core.ComponentCode.PaneEditFieldsMetadata;
 					})
 					.Add<DataPane>((_, x) =>
 					{

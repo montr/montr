@@ -24,19 +24,19 @@ namespace Montr.Docs.Services
 				config.When(classifier => classifier.Type == ClassifierTypeCode.Questionnaire)
 					.Add<DataPane>((_, x) =>
 					{
-						x.Key = "questionnaire";
+						x.Key = "form";
 						x.Name = "Вопросы";
 						x.DisplayOrder = 15;
-						x.Component = "panes/PaneSearchMetadata";
+						x.Component = Core.ComponentCode.PaneEditFormMetadata;
 					});
 
 				config.When(classifier => classifier.Type == ClassifierTypeCode.DocumentType)
 					.Add<DataPane>((_, x) =>
 					{
-						x.Key = "fields";
+						x.Key = "form";
 						x.Name = "Анкета";
 						x.DisplayOrder = 15;
-						x.Component = "panes/PaneSearchMetadata";
+						x.Component = Core.ComponentCode.PaneEditFormMetadata;
 					})
 
 					// todo: move to processes (?)
@@ -45,7 +45,7 @@ namespace Montr.Docs.Services
 						x.Key = "statuses";
 						x.Name = "Statuses";
 						x.DisplayOrder = 16;
-						x.Component = "panes/PaneSearchEntityStatuses";
+						x.Component = Core.ComponentCode.PaneSearchEntityStatuses;
 					})
 					.Add<DataPane>((_, x) =>
 					{

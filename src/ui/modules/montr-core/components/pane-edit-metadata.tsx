@@ -1,206 +1,126 @@
-import React from "react";
-import { Spin, Button, Popover, Switch, List, Drawer } from "antd";
-import { FormInstance } from "antd/lib/form";
-import { DataForm, ButtonSave, Icon, Toolbar, ButtonCancel } from ".";
-import { MetadataService, DataHelper } from "../services";
-import { IDataField, ApiResult, Guid } from "../models";
-import { Views } from "../module";
+import * as React from "react";
+import { Translation, WithTranslation, withTranslation } from "react-i18next";
+import { ButtonAdd, ButtonDelete, DataTable, DataTableUpdateToken, PaneEditMetadataItem } from ".";
+import { DataResult, Guid, IDataField } from "../models";
+import { Api, Views } from "../module";
+import { MetadataService, OperationService } from "../services";
+import { Toolbar } from "./toolbar";
 
-interface Props {
+interface Props extends WithTranslation {
+	mode: "fields" | "form";
 	entityTypeCode: string;
 	entityUid: Guid;
-	uid?: Guid;
-	onSuccess?: () => void;
-	onClose?: () => void;
 }
 
 interface State {
-	loading: boolean;
-	typeFieldMap: { [key: string]: IDataField[]; };
-	typeData?: IDataField;
-	data?: IDataField;
-	typeFields?: IDataField[];
-	optionalFields?: IDataField[];
-	visibleFields?: IDataField[];
+	showPane?: boolean;
+	editUid?: Guid;
+	selectedRowKeys?: string[] | number[];
+	updateTableToken?: DataTableUpdateToken;
 }
 
-// todo: read from server
-const DefaultFieldType = "text";
+class WrappedPaneEditMetadata extends React.Component<Props, State> {
 
-export class PaneEditMetadata extends React.Component<Props, State> {
-
-	private _metadataService = new MetadataService();
-	private _formRef = React.createRef<FormInstance>();
+	private operation = new OperationService();
+	private metadataService = new MetadataService();
 
 	constructor(props: Props) {
 		super(props);
 
 		this.state = {
-			loading: true,
-			typeFieldMap: {}
 		};
 	}
 
-	componentDidMount = async () => {
-		await this.fetchData();
-	};
-
 	componentWillUnmount = async () => {
-		await this._metadataService.abort();
+		await this.metadataService.abort();
 	};
 
-	fetchData = async () => {
-		const { entityTypeCode, entityUid, uid } = this.props;
+	onLoadTableData = async (loadUrl: string, postParams: any): Promise<DataResult<{}>> => {
+		const { entityTypeCode, entityUid } = this.props;
 
-		const { type, ...values } = (uid)
-			? await this._metadataService.get(entityTypeCode, entityUid, uid)
-			: { type: DefaultFieldType };
+		const params = { entityTypeCode, entityUid, ...postParams };
 
-		const dataView = await this._metadataService.load(Views.metadataEdit);
+		return await this.metadataService.post(loadUrl, params);
+	};
+
+	onSelectionChange = async (selectedRowKeys: string[] | number[]) => {
+		this.setState({ selectedRowKeys });
+	};
+
+	refreshTable = async (resetCurrentPage?: boolean, resetSelectedRows?: boolean) => {
+		const { selectedRowKeys } = this.state;
 
 		this.setState({
-			loading: false,
-			typeData: { type: type },
-			data: values as IDataField,
-			typeFields: dataView?.fields || [],
-			optionalFields: []
-		}, () => this.setVisibleFields(true));
+			updateTableToken: { date: new Date(), resetCurrentPage, resetSelectedRows },
+			selectedRowKeys: resetSelectedRows ? [] : selectedRowKeys
+		});
 	};
 
-	rebuildOptionalFields = (fields: IDataField[], currentOptionalFields: IDataField[], data: IDataField): IDataField[] => {
-		// todo: read optional field types from server
-		return fields
-			.filter(x => !x.required && (x.type == "text" || x.type == "textarea"))
-			.map(x => {
-				const current = currentOptionalFields.find(op => op.key == x.key);
-				const value = DataHelper.indexer(data, x.key, undefined);
-
-				// in optional fields using active as flag of visible field
-				return { type: x.type, key: x.key, name: x.name, active: current?.active || !!value };
-			});
+	showAddPane = () => {
+		this.setState({ showPane: true, editUid: null });
 	};
 
-	setVisibleFields = async (rebuildOptionalFields: boolean) => {
-		const { typeData, data, typeFieldMap, optionalFields: currentOptionalFields } = this.state;
-
-		let specificFields = typeFieldMap[typeData.type];
-
-		if (!specificFields) {
-			const dataView = await this._metadataService.load("Metadata/Edit/" + typeData.type);
-
-			specificFields = typeFieldMap[typeData.type] = dataView?.fields || [];
-		}
-
-		const optionalFields = (rebuildOptionalFields)
-			? this.rebuildOptionalFields(specificFields, currentOptionalFields, data)
-			: currentOptionalFields;
-
-		const visibleFields = specificFields.filter(field => {
-			const optional = optionalFields.find(optional => field.key == optional.key);
-			return !optional || optional.active;
-		}) || [];
-
-		this.setState({ typeFieldMap, optionalFields, visibleFields });
+	showEditPane = (data: IDataField) => {
+		this.setState({ showPane: true, editUid: data?.uid });
 	};
 
-	handleTypeChange = async (values: IDataField) => {
-		// todo: save/restore data between switching fields
-		this.setState({ typeData: { type: values.type } }, () => this.setVisibleFields(true));
+	closePane = () => {
+		this.setState({ showPane: false });
 	};
 
-	handleCheckOptionalField = (key: string, checked: boolean) => {
-		const { optionalFields } = this.state;
-
-		const field = optionalFields?.find(x => x.key == key);
-
-		if (field) {
-			field.active = checked;
-
-			this.setState({ optionalFields }, () => this.setVisibleFields(false));
-		}
+	handleSuccess = () => {
+		this.setState({ showPane: false });
+		this.refreshTable(false);
 	};
 
-	handleSubmitClick = async (e: React.MouseEvent<any>) => {
-		await this._formRef.current.submit();
-	};
+	delete = async () => {
+		await this.operation.confirmDelete(async () => {
+			const { entityTypeCode, entityUid } = this.props,
+				{ selectedRowKeys } = this.state;
 
-	handleSubmit = async (values: IDataField): Promise<ApiResult> => {
-		const { entityTypeCode, entityUid, uid, onSuccess } = this.props,
-			{ typeData } = this.state;
+			const result = await this.metadataService.delete({ entityTypeCode, entityUid, uids: selectedRowKeys });
 
-		const item = { type: typeData.type, ...values };
+			if (result.success) {
+				this.refreshTable(false, true);
+			}
 
-		let result;
-
-		if (uid) {
-			result = await this._metadataService.update({ entityTypeCode, entityUid, item: { uid, ...item } });
-		}
-		else {
-			result = await this._metadataService.insert({ entityTypeCode, entityUid, item });
-		}
-
-		if (result.success && onSuccess) {
-			onSuccess();
-		}
-
-		return result;
-	};
-
-	renderPopover = (optionalFields: IDataField[]) => {
-		return (
-			<List size="small" bordered={false}>
-				{optionalFields && optionalFields.map(x => {
-					return (
-						<List.Item key={x.key} style={{ border: 0, padding: 2 }}
-							actions={[
-								<Switch size="small" checked={x.active} onChange={(checked) => {
-									this.handleCheckOptionalField(x.key, checked);
-								}} />
-							]} >
-							<div style={{ width: "100%" }}>{x.name}</div>
-						</List.Item>
-					);
-				})}
-			</List>
-		);
+			return result;
+		});
 	};
 
 	render = () => {
-		const { onClose } = this.props,
-			{ loading, typeFields, visibleFields, optionalFields, typeData, data } = this.state;
+		const { entityTypeCode, entityUid } = this.props,
+			{ showPane, editUid, selectedRowKeys, updateTableToken } = this.state;
 
-		return (<>
-			<Spin spinning={loading}>
-				<Drawer
-					title="Metadata"
-					closable={true}
-					onClose={onClose}
-					visible={true}
-					width={720}
-					footer={
-						<Toolbar clear size="small" float="right">
-							<Popover content={this.renderPopover(optionalFields)} trigger="click" placement="topLeft">
-								<Button type="link" icon={Icon.Setting} />
-							</Popover>
-							<ButtonCancel onClick={onClose} />
-							<ButtonSave onClick={this.handleSubmitClick} />
-						</Toolbar>}>
+		return (<Translation>{(t) => <>
 
-					<DataForm
-						hideButtons={true}
-						fields={typeFields}
-						data={typeData}
-						onChange={this.handleTypeChange} />
+			<Toolbar clear>
+				<ButtonAdd type="primary" onClick={this.showAddPane} />
+				<ButtonDelete onClick={this.delete} disabled={!selectedRowKeys?.length} />
+			</Toolbar>
 
-					<DataForm
-						formRef={this._formRef}
-						hideButtons={true}
-						fields={visibleFields}
-						data={data}
-						onSubmit={this.handleSubmit} />
+			<DataTable
+				rowKey="uid"
+				rowActions={[{ name: t("button.edit"), onClick: this.showEditPane }]}
+				viewId={Views.metadataList}
+				loadUrl={Api.metadataList}
+				onLoadData={this.onLoadTableData}
+				onSelectionChange={this.onSelectionChange}
+				updateToken={updateTableToken}
+				skipPaging={true}
+			/>
 
-				</Drawer>
-			</Spin>
-		</>);
+			{showPane &&
+				<PaneEditMetadataItem
+					entityTypeCode={entityTypeCode}
+					entityUid={entityUid}
+					uid={editUid}
+					onSuccess={this.handleSuccess}
+					onClose={this.closePane}
+				/>}
+
+		</>}</Translation>);
 	};
 }
+
+export const PaneEditMetadata = withTranslation()(WrappedPaneEditMetadata);

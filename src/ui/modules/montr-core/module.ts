@@ -1,9 +1,9 @@
 import React from "react";
-import { AppRouteRegistry, ComponentRegistry } from "./services";
 import { Constants, Layout } from "./constants";
-
 import "./i18n";
 import "./index.less";
+import { AppRouteRegistry, ComponentRegistry } from "./services";
+
 
 export const Api = {
 	contentMenu: `${Constants.apiURL}/content/menu`,
@@ -67,6 +67,7 @@ AppRouteRegistry.add([
 ]);
 
 ComponentRegistry.add([
-	{ path: "panes/PaneSearchMetadata", component: React.lazy(() => import("./components/pane-search-metadata")) },
-	{ path: "panes/PaneSearchEntityStatuses", component: React.lazy(() => import("./components/pane-search-entity-statuses")) }
+	{ path: "@montr-core/components/pane-edit-fields-metadata", component: React.lazy(() => import("./components/pane-edit-fields-metadata")) },
+	{ path: "@montr-core/components/pane-edit-form-metadata", component: React.lazy(() => import("./components/pane-edit-form-metadata")) },
+	{ path: "@montr-core/components/pane-search-entity-statuses", component: React.lazy(() => import("./components/pane-search-entity-statuses")) }
 ]);
