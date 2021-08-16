@@ -62,17 +62,32 @@ namespace Montr.Metadata.Services
 				};
 			}
 
-			if (viewId == "Metadata/Grid")
+			if (viewId == "Metadata/Grid/fields")
 			{
 				result.Columns = new List<DataColumn>
 				{
 					new() { Key = "displayOrder", Name = "#", Width = 10, Sortable = true },
-					new() { Key = "key", Name = "Key", Width = 100, Sortable = true },
-					new() { Key = "type", Name = "Type", Width = 70, /*Sortable = true*/ },
+					new() { Key = "key", Name = "Key", Width = 50, Sortable = true },
 					new() { Key = "name", Name = "Name", Width = 150, Sortable = true },
-					new() { Key = "description", Name = "Description", Width = 150 },
+					new() { Key = "description", Name = "Description", Width = 250 },
+					new() { Key = "type", Name = "Type", Width = 70, /*Sortable = true*/ },
 					new() { Key = "active", Name = "Active", Width = 10, Sortable = true, Type = BooleanField.TypeCode },
 					new() { Key = "system", Name = "System", Width = 10, Sortable = true, Type = BooleanField.TypeCode },
+					new() { Key = "required", Name = "Required", Width = 10, Sortable = true, Type = BooleanField.TypeCode },
+				};
+			}
+
+			if (viewId == "Metadata/Grid/form")
+			{
+				result.Columns = new List<DataColumn>
+				{
+					new() { Key = "displayOrder", Name = "#", Width = 10, Sortable = true },
+					// new() { Key = "key", Name = "Key", Width = 50, Sortable = true },
+					new() { Key = "name", Name = "Name", Width = 150, Sortable = true },
+					new() { Key = "description", Name = "Description", Width = 250 },
+					new() { Key = "type", Name = "Type", Width = 70, /*Sortable = true*/ },
+					new() { Key = "active", Name = "Active", Width = 10, Sortable = true, Type = BooleanField.TypeCode },
+					// new() { Key = "system", Name = "System", Width = 10, Sortable = true, Type = BooleanField.TypeCode },
 					new() { Key = "required", Name = "Required", Width = 10, Sortable = true, Type = BooleanField.TypeCode },
 				};
 			}

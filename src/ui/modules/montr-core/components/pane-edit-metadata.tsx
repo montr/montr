@@ -89,7 +89,7 @@ class WrappedPaneEditMetadata extends React.Component<Props, State> {
 	};
 
 	render = () => {
-		const { entityTypeCode, entityUid } = this.props,
+		const { mode, entityTypeCode, entityUid } = this.props,
 			{ showPane, editUid, selectedRowKeys, updateTableToken } = this.state;
 
 		return (<Translation>{(t) => <>
@@ -102,7 +102,7 @@ class WrappedPaneEditMetadata extends React.Component<Props, State> {
 			<DataTable
 				rowKey="uid"
 				rowActions={[{ name: t("button.edit"), onClick: this.showEditPane }]}
-				viewId={Views.metadataList}
+				viewId={`${Views.metadataList}/${mode}`}
 				loadUrl={Api.metadataList}
 				onLoadData={this.onLoadTableData}
 				onSelectionChange={this.onSelectionChange}

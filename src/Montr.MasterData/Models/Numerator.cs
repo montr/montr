@@ -90,7 +90,7 @@ namespace Montr.MasterData.Models
 					{
 						Key = "pattern", Name = "Формат номера", Required = true,
 						Props = new TextAreaField.Properties { Rows = 4 },
-						Description = "Укажите шаблон наблон с использованием возможных подстановок, например: {DocumentType}-{Number}/{Year2}"
+						Description = "Укажите шаблон с использованием возможных подстановок, например: {DocumentType}-{Number}/{Year2}"
 					}
 				}
 			};
