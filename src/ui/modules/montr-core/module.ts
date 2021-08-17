@@ -37,8 +37,10 @@ export const Patterns = {
 };
 
 export const Views = {
-	metadataList: "Metadata/Grid",
-	metadataEdit: "Metadata/Edit",
+	fieldMetadataList: "field-metadata-list",
+	fieldmetadataForm: "field-metadata-form",
+	formMetadataList: "form-metadata-list",
+	formMetadataForm: "form-metadata-form",
 
 	setupForm: "Setup/Form",
 

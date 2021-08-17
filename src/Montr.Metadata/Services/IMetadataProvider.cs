@@ -62,7 +62,7 @@ namespace Montr.Metadata.Services
 				};
 			}
 
-			if (viewId == "Metadata/Grid/fields")
+			if (viewId == ViewCode.FieldMetadataList)
 			{
 				result.Columns = new List<DataColumn>
 				{
@@ -73,11 +73,11 @@ namespace Montr.Metadata.Services
 					new() { Key = "type", Name = "Type", Width = 70, /*Sortable = true*/ },
 					new() { Key = "active", Name = "Active", Width = 10, Sortable = true, Type = BooleanField.TypeCode },
 					new() { Key = "system", Name = "System", Width = 10, Sortable = true, Type = BooleanField.TypeCode },
-					new() { Key = "required", Name = "Required", Width = 10, Sortable = true, Type = BooleanField.TypeCode },
+					new() { Key = "required", Name = "Required", Width = 10, Sortable = true, Type = BooleanField.TypeCode }
 				};
 			}
 
-			if (viewId == "Metadata/Grid/form")
+			if (viewId == ViewCode.FormMetadataList)
 			{
 				result.Columns = new List<DataColumn>
 				{
@@ -88,11 +88,11 @@ namespace Montr.Metadata.Services
 					new() { Key = "type", Name = "Type", Width = 70, /*Sortable = true*/ },
 					new() { Key = "active", Name = "Active", Width = 10, Sortable = true, Type = BooleanField.TypeCode },
 					// new() { Key = "system", Name = "System", Width = 10, Sortable = true, Type = BooleanField.TypeCode },
-					new() { Key = "required", Name = "Required", Width = 10, Sortable = true, Type = BooleanField.TypeCode },
+					new() { Key = "required", Name = "Required", Width = 10, Sortable = true, Type = BooleanField.TypeCode }
 				};
 			}
 
-			if (viewId == "Metadata/Edit")
+			if (viewId == ViewCode.FieldMetadataForm)
 			{
 				var options = _fieldProviderRegistry
 					.GetFieldTypes()
@@ -104,15 +104,15 @@ namespace Montr.Metadata.Services
 				result.Fields = new List<FieldMetadata>
 				{
 					// todo: add system type SelectFieldType to select type with icons, common/advanced selection
-					new SelectField { Key = "type", Name = "Тип", Required = true, Props = { Options = options } },
+					new SelectField { Key = "type", Name = "Тип", Required = true, Props = { Options = options } }
 				};
 			}
 
 			if (viewId.StartsWith("Metadata/Edit/"))
 			{
-				var code = viewId.Substring("Metadata/Edit/".Length);
+				var fieldType = viewId.Substring("Metadata/Edit/".Length);
 
-				var fieldProvider = _fieldProviderRegistry.GetFieldTypeProvider(code);
+				var fieldProvider = _fieldProviderRegistry.GetFieldTypeProvider(fieldType);
 
 				result.Fields = fieldProvider.GetMetadata();
 			}

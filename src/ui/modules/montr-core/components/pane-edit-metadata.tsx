@@ -2,12 +2,14 @@ import * as React from "react";
 import { Translation, WithTranslation, withTranslation } from "react-i18next";
 import { ButtonAdd, ButtonDelete, DataTable, DataTableUpdateToken, PaneEditMetadataItem } from ".";
 import { DataResult, Guid, IDataField } from "../models";
-import { Api, Views } from "../module";
+import { Api } from "../module";
 import { MetadataService, OperationService } from "../services";
 import { Toolbar } from "./toolbar";
 
 interface Props extends WithTranslation {
-	mode: "fields" | "form";
+	mode: "field" | "form";
+	listViewId: string;
+	formViewId: string;
 	entityTypeCode: string;
 	entityUid: Guid;
 }
@@ -89,7 +91,7 @@ class WrappedPaneEditMetadata extends React.Component<Props, State> {
 	};
 
 	render = () => {
-		const { mode, entityTypeCode, entityUid } = this.props,
+		const { mode, listViewId, formViewId, entityTypeCode, entityUid } = this.props,
 			{ showPane, editUid, selectedRowKeys, updateTableToken } = this.state;
 
 		return (<Translation>{(t) => <>
@@ -102,7 +104,7 @@ class WrappedPaneEditMetadata extends React.Component<Props, State> {
 			<DataTable
 				rowKey="uid"
 				rowActions={[{ name: t("button.edit"), onClick: this.showEditPane }]}
-				viewId={`${Views.metadataList}/${mode}`}
+				viewId={listViewId}
 				loadUrl={Api.metadataList}
 				onLoadData={this.onLoadTableData}
 				onSelectionChange={this.onSelectionChange}
@@ -112,6 +114,8 @@ class WrappedPaneEditMetadata extends React.Component<Props, State> {
 
 			{showPane &&
 				<PaneEditMetadataItem
+					mode={mode}
+					formViewId={formViewId}
 					entityTypeCode={entityTypeCode}
 					entityUid={entityUid}
 					uid={editUid}

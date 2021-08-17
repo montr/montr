@@ -12,8 +12,6 @@ namespace Montr.Metadata.Services
 		// ReSharper disable once StaticMemberInGenericType
 		protected static readonly string PropsPrefix = ExpressionHelper.GetMemberName<TextAreaField>(x => x.Props).ToLowerInvariant();
 
-		public virtual FieldPurpose FieldPurpose => FieldPurpose.Content;
-
 		public Type FieldType => typeof(TFieldType);
 
 		public virtual IList<FieldMetadata> GetMetadata()
@@ -68,7 +66,7 @@ namespace Montr.Metadata.Services
 
 		public object ReadFromStorage(string value)
 		{
-			return value != null ? ReadInternal(value) : (object)null;
+			return value != null ? ReadInternal(value) : null;
 		}
 
 		public virtual TClrType ReadInternal(string value)
@@ -89,8 +87,6 @@ namespace Montr.Metadata.Services
 
 	public class SectionFieldProvider : DefaultFieldProvider<SectionField, string>
 	{
-		public override FieldPurpose FieldPurpose => FieldPurpose.Information;
-
 		public override IList<FieldMetadata> GetMetadata()
 		{
 			return new List<FieldMetadata>

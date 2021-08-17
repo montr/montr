@@ -3,10 +3,11 @@ import { FormInstance } from "antd/lib/form";
 import React from "react";
 import { ButtonCancel, ButtonSave, DataForm, Icon, Toolbar } from ".";
 import { ApiResult, Guid, IDataField } from "../models";
-import { Views } from "../module";
 import { DataHelper, MetadataService } from "../services";
 
 interface Props {
+	mode: "field" | "form";
+	formViewId: string;
 	entityTypeCode: string;
 	entityUid: Guid;
 	uid?: Guid;
@@ -50,13 +51,13 @@ export class PaneEditMetadataItem extends React.Component<Props, State> {
 	};
 
 	fetchData = async (): Promise<void> => {
-		const { entityTypeCode, entityUid, uid } = this.props;
+		const { formViewId, entityTypeCode, entityUid, uid } = this.props;
 
 		const { type, ...values } = (uid)
 			? await this.metadataService.get(entityTypeCode, entityUid, uid)
 			: { type: DefaultFieldType };
 
-		const dataView = await this.metadataService.load(Views.metadataEdit);
+		const dataView = await this.metadataService.load(formViewId);
 
 		this.setState({
 			loading: false,

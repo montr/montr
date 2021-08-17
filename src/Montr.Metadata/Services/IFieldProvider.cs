@@ -6,8 +6,6 @@ namespace Montr.Metadata.Services
 {
 	public interface IFieldProvider
 	{
-		FieldPurpose FieldPurpose { get; }
-
 		Type FieldType { get; }
 
 		/// <summary>
@@ -35,11 +33,5 @@ namespace Montr.Metadata.Services
 		/// <param name="value"></param>
 		/// <returns></returns>
 		string WriteToStorage(object value);
-	}
-
-	public enum FieldPurpose
-	{
-		Information,
-		Content
 	}
 }
