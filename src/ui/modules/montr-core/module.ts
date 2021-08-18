@@ -4,7 +4,6 @@ import "./i18n";
 import "./index.less";
 import { AppRouteRegistry, ComponentRegistry } from "./services";
 
-
 export const Api = {
 	contentMenu: `${Constants.apiURL}/content/menu`,
 

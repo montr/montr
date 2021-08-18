@@ -1,5 +1,6 @@
 export interface DataColumn {
 	key: string;
+	template: string;
 	type: string;
 	path: string;
 	name: string;

@@ -99,7 +99,7 @@ namespace Montr.MasterData.Services
 				{
 					new() { Key = "name", Name = "Наименование", Sortable = true, Width = 400, UrlProperty = "url" },
 					new() { Key = "code", Name = "Код", Sortable = true, Width = 10, UrlProperty = "url" },
-					new() { Key = "statusCode", Name = "Статус", Sortable = true, Width = 30 },
+					new() { Key = "statusCode", Template = "statusCode", Name = "Статус", Sortable = true, Width = 30 },
 				}
 			});
 

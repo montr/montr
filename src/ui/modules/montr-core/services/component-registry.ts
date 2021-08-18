@@ -6,7 +6,7 @@ interface ComponentInfo {
 export abstract class ComponentRegistry {
     static Components: ComponentInfo[] = [];
 
-    static add(items: ComponentInfo[]) {
+    static add(items: ComponentInfo[]): void {
         Array.prototype.push.apply(ComponentRegistry.Components, items);
     }
 

@@ -30,6 +30,23 @@ interface State<TModel> {
 	paging: Paging;
 }
 
+interface DataTableColumnTemplate {
+	name: string;
+	template: (value: unknown, record: unknown, index: number) => React.ReactNode;
+}
+
+export abstract class DataTableTemplateRegistry {
+	static Templates: DataTableColumnTemplate[] = [];
+
+	static add(items: DataTableColumnTemplate[]): void {
+		Array.prototype.push.apply(DataTableTemplateRegistry.Templates, items);
+	}
+
+	static getTemplate(name: string): (text: unknown, record: unknown, index: number) => React.ReactNode {
+		return name && DataTableTemplateRegistry.Templates.find(x => x.name == name)?.template;
+	}
+}
+
 export interface DataTableUpdateToken {
 	date: Date;
 	resetCurrentPage?: boolean;
@@ -132,7 +149,6 @@ export class DataTable<TModel extends IIndexer> extends React.Component<Props<TM
 				paging.sortOrder = defaultSortColumn.defaultSortOrder;
 			}
 
-
 			this.setState({ columns: rcColumns, paging }, () => this.fetchData());
 
 		} catch (error) {
@@ -161,46 +177,16 @@ export class DataTable<TModel extends IIndexer> extends React.Component<Props<TM
 
 		const rcColumns = metaColumns.map((item: DataColumn): ColumnType<TModel> => {
 
-			let render;
+			const template =
+				DataTableTemplateRegistry.getTemplate(item.template)
+				?? DataTableTemplateRegistry.getTemplate(`type:${item.type}`)
+				?? ((text: unknown): React.ReactNode => text);
 
-			// todo: fix url rendering for different item types below
-			if (item.urlProperty) {
-				render = (text: unknown, record: TModel): React.ReactNode => {
-					const url: string = record[item.urlProperty];
-					return (url ? <Link to={url}>{text}</Link> : text);
-				};
-			}
-
-			if (item.type == "boolean") {
-				render = (text: unknown): React.ReactNode => {
-					return text ? Icon.get("check") : null;
-				};
-			}
-
-			if (item.type == "date") {
-				render = (text: string | Date): React.ReactNode => {
-					return DateHelper.toLocaleDateString(text);
-				};
-			}
-
-			if (item.type == "time") {
-				render = (text: string | Date): React.ReactNode => {
-					return DateHelper.toLocaleTimeString(text);
-				};
-			}
-
-			if (item.type == "datetime") {
-				render = (text: string | Date): React.ReactNode => {
-					return DateHelper.toLocaleDateTimeString(text);
-				};
-			}
-
-			// todo: add support of custom renderers
-			if (item.key == "statusCode") {
-				render = (text: string): React.ReactNode => {
-					return <StatusTag statusCode={text} />;
-				};
-			}
+			const render = (value: unknown, record: TModel, index: number): React.ReactNode => {
+				const node = template(value, record, index);
+				const url: string = item.urlProperty && record[item.urlProperty];
+				return url ? <Link to={url}>{node}</Link> : node;
+			};
 
 			let defaultSortOrder: SortOrder | undefined = undefined;
 			if (item.defaultSortOrder == "Ascending") defaultSortOrder = "ascend";
@@ -338,3 +324,11 @@ export class DataTable<TModel extends IIndexer> extends React.Component<Props<TM
 		);
 	};
 }
+
+DataTableTemplateRegistry.add([
+	{ name: "type:boolean", template: (value: unknown) => value ? Icon.Check : null },
+	{ name: "type:date", template: (value: string | Date) => DateHelper.toLocaleDateString(value) },
+	{ name: "type:time", template: (value: string | Date) => DateHelper.toLocaleTimeString(value) },
+	{ name: "type:datetime", template: (value: string | Date) => DateHelper.toLocaleDateTimeString(value) },
+	{ name: "statusCode", template: (value: string) => <StatusTag statusCode={value} /> }
+]);

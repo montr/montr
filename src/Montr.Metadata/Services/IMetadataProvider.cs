@@ -92,7 +92,7 @@ namespace Montr.Metadata.Services
 				};
 			}
 
-			if (viewId == ViewCode.FieldMetadataForm)
+			if (viewId == ViewCode.FieldMetadataForm || viewId == ViewCode.FormMetadataForm)
 			{
 				var options = _fieldProviderRegistry
 					.GetFieldTypes()

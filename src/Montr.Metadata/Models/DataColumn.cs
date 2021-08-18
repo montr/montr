@@ -7,6 +7,8 @@ namespace Montr.Metadata.Models
 	{
 		public string Key { get; set; }
 
+		public string Template { get; set; }
+
 		public string Type { get; set; }
 
 		public string Path { get; set; }
