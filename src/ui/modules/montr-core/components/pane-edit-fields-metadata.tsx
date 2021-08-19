@@ -1,6 +1,5 @@
 import React from "react";
 import { Guid } from "../models";
-import { Views } from "../module";
 import { PaneEditMetadata } from "./";
 
 interface Props {
@@ -15,8 +14,6 @@ export default class PaneEditFieldsMetadata extends React.Component<Props> {
         return (
             <PaneEditMetadata
                 mode="field"
-                listViewId={Views.fieldMetadataList}
-                formViewId={Views.fieldmetadataForm}
                 entityTypeCode={entityTypeCode}
                 entityUid={entityUid}
             />

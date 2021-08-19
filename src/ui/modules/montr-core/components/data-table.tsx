@@ -1,4 +1,4 @@
-import { Divider, Table } from "antd";
+import { Divider, Table, Typography } from "antd";
 import { ColumnType, SorterResult, SortOrder, TablePaginationConfig } from "antd/lib/table/interface";
 import * as React from "react";
 import { Link } from "react-router-dom";
@@ -282,7 +282,7 @@ export class DataTable<TModel extends IIndexer> extends React.Component<Props<TM
 	};
 
 	render = (): React.ReactNode => {
-		const { rowKey = "id", skipPaging } = this.props,
+		const { rowKey = "id", skipPaging, viewId } = this.props,
 			{ loading, columns, data, selectedRowKeys, paging, totalCount } = this.state;
 
 		const rowSelection = {
@@ -306,7 +306,7 @@ export class DataTable<TModel extends IIndexer> extends React.Component<Props<TM
 			total: totalCount
 		};
 
-		return (
+		return (<>
 			<Table size="small"
 				rowKey={rowKey}
 				columns={columns}
@@ -321,7 +321,9 @@ export class DataTable<TModel extends IIndexer> extends React.Component<Props<TM
 				</Toolbar>
 			} */
 			/>
-		);
+
+			<Typography.Text type="secondary" copyable>{viewId}</Typography.Text>
+		</>);
 	};
 }
 
@@ -330,5 +332,11 @@ DataTableTemplateRegistry.add([
 	{ name: "type:date", template: (value: string | Date) => DateHelper.toLocaleDateString(value) },
 	{ name: "type:time", template: (value: string | Date) => DateHelper.toLocaleTimeString(value) },
 	{ name: "type:datetime", template: (value: string | Date) => DateHelper.toLocaleDateTimeString(value) },
-	{ name: "statusCode", template: (value: string) => <StatusTag statusCode={value} /> }
+	{ name: "code", template: (value: string) => <Typography.Text code>{value}</Typography.Text> },
+	{ name: "status", template: (value: string) => <StatusTag statusCode={value} /> },
+	{
+		name: "metadata-field-name", template: (value: unknown, record: IIndexer) => {
+			return <>{record["system"] && <StatusTag statusCode="system" />}{value}</>;
+		}
+	}
 ]);

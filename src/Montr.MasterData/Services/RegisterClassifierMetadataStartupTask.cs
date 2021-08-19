@@ -89,7 +89,7 @@ namespace Montr.MasterData.Services
 					new() { Key = "name", Name = "Наименование", Sortable = true, Width = 70, UrlProperty = "url" },
 					new() { Key = "description", Name = "Описание", Width = 200 },
 					// new() { Key = "hierarchyType", Name = "Иерархия", Width = 10 }
-					new() { Key = "code", Name = "Код", Sortable = true, Width = 60, UrlProperty = "url" },
+					new() { Key = "code", Template = "code", Name = "Код", Sortable = true, Width = 60, UrlProperty = "url" },
 				}
 			});
 
@@ -98,8 +98,8 @@ namespace Montr.MasterData.Services
 				Columns = new List<DataColumn>
 				{
 					new() { Key = "name", Name = "Наименование", Sortable = true, Width = 400, UrlProperty = "url" },
-					new() { Key = "code", Name = "Код", Sortable = true, Width = 10, UrlProperty = "url" },
-					new() { Key = "statusCode", Template = "statusCode", Name = "Статус", Sortable = true, Width = 30 },
+					new() { Key = "code", Template = "code", Name = "Код", Sortable = true, Width = 10, UrlProperty = "url" },
+					new() { Key = "statusCode", Template = "status", Name = "Статус", Sortable = true, Width = 30 },
 				}
 			});
 

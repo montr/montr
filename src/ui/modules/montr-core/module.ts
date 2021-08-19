@@ -38,8 +38,6 @@ export const Patterns = {
 export const Views = {
 	fieldMetadataList: "field-metadata-list",
 	fieldmetadataForm: "field-metadata-form",
-	formMetadataList: "form-metadata-list",
-	formMetadataForm: "form-metadata-form",
 
 	setupForm: "Setup/Form",
 

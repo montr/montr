@@ -27,9 +27,9 @@ export const ClassifierTypeCode = {
 };
 
 export const Views = {
-	documentList: "document_list",
-	documentPage: "document_page",
-	documentForm: "document_form"
+	documentList: "document-list",
+	documentPage: "document-page",
+	documentForm: "document-form"
 };
 
 export const RouteBuilder = {

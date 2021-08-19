@@ -12,22 +12,32 @@ namespace Montr.Metadata.Services
 		// ReSharper disable once StaticMemberInGenericType
 		protected static readonly string PropsPrefix = ExpressionHelper.GetMemberName<TextAreaField>(x => x.Props).ToLowerInvariant();
 
+		public virtual FieldPurpose Purpose => FieldPurpose.Content;
+
 		public Type FieldType => typeof(TFieldType);
 
 		public virtual IList<FieldMetadata> GetMetadata()
 		{
-			return new List<FieldMetadata>
+			var result = new List<FieldMetadata>
 			{
 				new NumberField { Key = "displayOrder", Name = "#", Required = true, Props = { Min = 0, Max = 256 } },
 				new TextField { Key = "key", Name = "Код", Required = true },
 				new TextField { Key = "name", Name = "Наименование", Required = true },
-				new TextAreaField { Key = "description", Name = "Описание", Props = new TextAreaField.Properties { Rows = 2 } },
-
-				new TextField { Key = "placeholder", Name = "Placeholder" },
-				new TextField { Key = "icon", Name = "Icon" },
-				// new BooleanField { Key = "readonly", Name = "Readonly" },
-				new BooleanField { Key = "required", Name = "Required" }
+				new TextAreaField { Key = "description", Name = "Описание", Props = new TextAreaField.Properties { Rows = 2 } }
 			};
+
+			if (Purpose == FieldPurpose.Content)
+			{
+				result.AddRange(new List<FieldMetadata>
+				{
+					new TextField { Key = "placeholder", Name = "Placeholder" },
+					new TextField { Key = "icon", Name = "Icon" },
+					// new BooleanField { Key = "readonly", Name = "Readonly" },
+					new BooleanField { Key = "required", Name = "Required" }
+				});
+			}
+
+			return result;
 		}
 
 		public virtual bool Validate(object value, out object parsed, out string[] errors)
@@ -85,18 +95,15 @@ namespace Montr.Metadata.Services
 		}
 	}
 
+	public enum FieldPurpose
+	{
+		Information,
+		Content
+	}
+
 	public class SectionFieldProvider : DefaultFieldProvider<SectionField, string>
 	{
-		public override IList<FieldMetadata> GetMetadata()
-		{
-			return new List<FieldMetadata>
-			{
-				new NumberField { Key = "displayOrder", Name = "#", Required = true, Props = { Min = 0, Max = 256 } },
-				new TextField { Key = "key", Name = "Код", Required = true },
-				new TextField { Key = "name", Name = "Наименование", Required = true },
-				new TextAreaField { Key = "description", Name = "Описание", Props = new TextAreaField.Properties { Rows = 2 } }
-			};
-		}
+		public override FieldPurpose Purpose => FieldPurpose.Information;
 	}
 
 	public class TextAreaFieldProvider : DefaultFieldProvider<TextAreaField, string>

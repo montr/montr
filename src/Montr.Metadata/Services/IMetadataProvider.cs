@@ -47,7 +47,7 @@ namespace Montr.Metadata.Services
 				result.Columns = new List<DataColumn>
 				{
 					new() { Key = "displayOrder", Name = "#", Width = 10, Sortable = true },
-					new() { Key = "code", Name = "Code", Width = 70, Sortable = true },
+					new() { Key = "code", Template = "code", Name = "Code", Width = 70, Sortable = true },
 					new() { Key = "name", Name = "Name", Width = 550, Sortable = true }
 				};
 			}
@@ -68,31 +68,16 @@ namespace Montr.Metadata.Services
 				{
 					new() { Key = "displayOrder", Name = "#", Width = 10, Sortable = true },
 					new() { Key = "key", Name = "Key", Width = 50, Sortable = true },
-					new() { Key = "name", Name = "Name", Width = 150, Sortable = true },
+					new() { Key = "name", Template = "metadata-field-name", Name = "Name", Width = 150, Sortable = true },
 					new() { Key = "description", Name = "Description", Width = 250 },
-					new() { Key = "type", Name = "Type", Width = 70, /*Sortable = true*/ },
-					new() { Key = "active", Name = "Active", Width = 10, Sortable = true, Type = BooleanField.TypeCode },
-					new() { Key = "system", Name = "System", Width = 10, Sortable = true, Type = BooleanField.TypeCode },
-					new() { Key = "required", Name = "Required", Width = 10, Sortable = true, Type = BooleanField.TypeCode }
-				};
-			}
-
-			if (viewId == ViewCode.FormMetadataList)
-			{
-				result.Columns = new List<DataColumn>
-				{
-					new() { Key = "displayOrder", Name = "#", Width = 10, Sortable = true },
-					// new() { Key = "key", Name = "Key", Width = 50, Sortable = true },
-					new() { Key = "name", Name = "Name", Width = 150, Sortable = true },
-					new() { Key = "description", Name = "Description", Width = 250 },
-					new() { Key = "type", Name = "Type", Width = 70, /*Sortable = true*/ },
+					new() { Key = "type", Template = "code", Name = "Type", Width = 70, /*Sortable = true*/ },
 					new() { Key = "active", Name = "Active", Width = 10, Sortable = true, Type = BooleanField.TypeCode },
 					// new() { Key = "system", Name = "System", Width = 10, Sortable = true, Type = BooleanField.TypeCode },
 					new() { Key = "required", Name = "Required", Width = 10, Sortable = true, Type = BooleanField.TypeCode }
 				};
 			}
 
-			if (viewId == ViewCode.FieldMetadataForm || viewId == ViewCode.FormMetadataForm)
+			if (viewId == ViewCode.FieldMetadataForm)
 			{
 				var options = _fieldProviderRegistry
 					.GetFieldTypes()

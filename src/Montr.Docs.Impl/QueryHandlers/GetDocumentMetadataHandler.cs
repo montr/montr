@@ -42,7 +42,7 @@ namespace Montr.Docs.Impl.QueryHandlers
 					// new() { Key = "direction", Name = "Направление", UrlProperty = "url", Width = 30 },
 					new() { Key = "name", Name = "Наименование", Width = 250 },
 					// new() { Key = "configCode", Name = "Тип", Sortable = true, Width = 100 },
-					new() { Key = "statusCode", Template = "statusCode", Name = "Статус", Sortable = true, UrlProperty = "url", Width = 100 },
+					new() { Key = "statusCode", Template = "status", Name = "Статус", Sortable = true, UrlProperty = "url", Width = 100 },
 				};
 
 				return result;
