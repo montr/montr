@@ -9,6 +9,7 @@ R&D of B2B automation applications
 ## Table of contents
 
 - 🚀[Getting Started](#getting-started)
+- 🧾 [License](#license)
 
 ## Getting Started
 
@@ -41,6 +42,6 @@ npm start
 7. Open http://127.0.0.1:5000 or https://127.0.0.1:5001 in browser.
 	* Specify default administrator email and password on opened Setup page.
 
-### License
+## License
 
 Montr is [AGPL 3.0 licensed](./LICENSE).
