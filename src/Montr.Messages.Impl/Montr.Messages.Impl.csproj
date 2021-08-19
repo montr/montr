@@ -6,7 +6,7 @@
 
   <ItemGroup>
     <PackageReference Include="linq2db" Version="3.4.3" />
-    <PackageReference Include="MailKit" Version="2.14.0" />
+    <PackageReference Include="MailKit" Version="2.15.0" />
     <PackageReference Include="Markdig" Version="0.25.0" />
     <PackageReference Include="Microsoft.Extensions.Options" Version="5.0.0" />
     <PackageReference Include="Stubble.Core" Version="1.9.3" />
