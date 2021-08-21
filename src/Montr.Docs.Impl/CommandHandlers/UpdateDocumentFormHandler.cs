@@ -6,7 +6,6 @@ using Montr.Core.Models;
 using Montr.Core.Services;
 using Montr.Docs.Commands;
 using Montr.Docs.Models;
-using Montr.Docs.Services;
 using Montr.MasterData;
 using Montr.Metadata.Models;
 using Montr.Metadata.Services;
@@ -16,18 +15,18 @@ namespace Montr.Docs.Impl.CommandHandlers
 	public class UpdateDocumentFormHandler : IRequestHandler<UpdateDocumentForm, ApiResult>
 	{
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
-		private readonly IDocumentService _documentService;
+		private readonly IRepository<Document> _documentRepository;
 		private readonly IRepository<FieldMetadata> _fieldMetadataRepository;
 		private readonly IFieldDataRepository _fieldDataRepository;
 
 		public UpdateDocumentFormHandler(
 			IUnitOfWorkFactory unitOfWorkFactory,
-			IDocumentService documentService,
+			IRepository<Document> documentRepository,
 			IRepository<FieldMetadata> fieldMetadataRepository,
 			IFieldDataRepository fieldDataRepository)
 		{
 			_unitOfWorkFactory = unitOfWorkFactory;
-			_documentService = documentService;
+			_documentRepository = documentRepository;
 			_fieldMetadataRepository = fieldMetadataRepository;
 			_fieldDataRepository = fieldDataRepository;
 		}
@@ -36,7 +35,7 @@ namespace Montr.Docs.Impl.CommandHandlers
 		{
 			var documentSearchRequest = new DocumentSearchRequest { Uid = request.DocumentUid };
 
-			var document = (await _documentService.Search(documentSearchRequest, cancellationToken)).Rows.Single();
+			var document = (await _documentRepository.Search(documentSearchRequest, cancellationToken)).Rows.Single();
 
 			var metadataSearchRequest = new MetadataSearchRequest
 			{

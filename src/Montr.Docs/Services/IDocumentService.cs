@@ -8,10 +8,8 @@ namespace Montr.Docs.Services
 {
 	public interface IDocumentService
 	{
-		Task<SearchResult<Document>> Search(DocumentSearchRequest request, CancellationToken cancellationToken);
+		Task<ApiResult> Create(Document document, CancellationToken cancellationToken = default);
 
-		Task<ApiResult> Create(Document document, CancellationToken cancellationToken);
-
-		Task<ApiResult> Delete(DeleteDocument request, CancellationToken cancellationToken);
+		Task<ApiResult> Delete(DeleteDocument request, CancellationToken cancellationToken = default);
 	}
 }

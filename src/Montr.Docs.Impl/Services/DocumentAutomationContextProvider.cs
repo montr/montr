@@ -12,16 +12,16 @@ namespace Montr.Docs.Impl.Services
 {
 	public class DocumentAutomationContextProvider : IAutomationContextProvider
 	{
-		private readonly IRepository<Document> _repository;
+		private readonly IRepository<Document> _documentRepository;
 
-		public DocumentAutomationContextProvider(IRepository<Document> repository)
+		public DocumentAutomationContextProvider(IRepository<Document> documentRepository)
 		{
-			_repository = repository;
+			_documentRepository = documentRepository;
 		}
 
 		public async Task<object> GetEntity(AutomationContext context, CancellationToken cancellationToken)
 		{
-			var result = await _repository.Search(new DocumentSearchRequest
+			var result = await _documentRepository.Search(new DocumentSearchRequest
 			{
 				Uid = context.EntityUid,
 				IncludeFields = true

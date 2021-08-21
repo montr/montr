@@ -35,7 +35,6 @@ namespace Montr.Kompany.Tests.CommandHandlers
 	[TestClass]
 	public class CreateCompanyHandlerTests
 	{
-
 		[TestMethod]
 		public async Task CreateCompany_Should_CreateCompany()
 		{
@@ -54,7 +53,7 @@ namespace Montr.Kompany.Tests.CommandHandlers
 			var dbFieldDataRepository = new DbFieldDataRepository(dbContextFactory, fieldProviderRegistry);
 			var classifierRepositoryFactory = CompanyMockHelper.CreateClassifierRepositoryFactory(dbContextFactory);
 			var dbNumberGenerator = new DbNumberGenerator(dbContextFactory, classifierRepositoryFactory, dateTimeProvider, Array.Empty<INumberTagResolver>());
-			var dbDocumentService = new DbDocumentService(dbContextFactory, dbNumberGenerator, mediatorMock.Object);
+			var dbDocumentService = new DbDocumentService(dbContextFactory,  dbNumberGenerator, mediatorMock.Object);
 			var jsonSerializer = new DefaultJsonSerializer();
 			var auditLogService = new DbAuditLogService(dbContextFactory, jsonSerializer);
 			var classifierRegistrator = new DefaultClassifierRegistrator(NullLogger<DefaultClassifierRegistrator>.Instance, classifierRepositoryFactory);

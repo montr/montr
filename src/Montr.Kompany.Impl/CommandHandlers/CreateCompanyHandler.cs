@@ -28,13 +28,13 @@ namespace Montr.Kompany.Impl.CommandHandlers
 		private readonly IRepository<FieldMetadata> _fieldMetadataRepository;
 		private readonly IFieldDataRepository _fieldDataRepository;
 		private readonly INamedServiceFactory<IClassifierRepository> _classifierRepositoryFactory;
-		private readonly IDocumentService _documentRepository;
+		private readonly IDocumentService _documentService;
 		private readonly IAuditLogService _auditLogService;
 		private readonly IBackgroundJobManager _jobManager;
 
 		public CreateCompanyHandler(IUnitOfWorkFactory unitOfWorkFactory, IDbContextFactory dbContextFactory,
 			IDateTimeProvider dateTimeProvider, IRepository<FieldMetadata> fieldMetadataRepository, IFieldDataRepository fieldDataRepository,
-			INamedServiceFactory<IClassifierRepository> classifierRepositoryFactory, IDocumentService documentRepository,
+			INamedServiceFactory<IClassifierRepository> classifierRepositoryFactory, IDocumentService documentService,
 			IAuditLogService auditLogService, IBackgroundJobManager jobManager)
 		{
 			_unitOfWorkFactory = unitOfWorkFactory;
@@ -43,7 +43,7 @@ namespace Montr.Kompany.Impl.CommandHandlers
 			_fieldMetadataRepository = fieldMetadataRepository;
 			_fieldDataRepository = fieldDataRepository;
 			_classifierRepositoryFactory = classifierRepositoryFactory;
-			_documentRepository = documentRepository;
+			_documentService = documentService;
 			_auditLogService = auditLogService;
 			_jobManager = jobManager;
 		}
@@ -123,7 +123,7 @@ namespace Montr.Kompany.Impl.CommandHandlers
 					// Name = $"Company {company.Name} registration request"
 				};
 
-				await _documentRepository.Create(document, cancellationToken);
+				await _documentService.Create(document, cancellationToken);
 
 				// todo: audit log for company and for document
 				await _auditLogService.Save(new AuditEvent

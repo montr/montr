@@ -7,7 +7,6 @@ using Montr.Core.Models;
 using Montr.Core.Services;
 using Montr.Docs.Models;
 using Montr.Docs.Queries;
-using Montr.Docs.Services;
 using Montr.MasterData;
 using Montr.Metadata.Models;
 
@@ -15,16 +14,16 @@ namespace Montr.Docs.Impl.QueryHandlers
 {
 	public class GetDocumentMetadataHandler : IRequestHandler<GetDocumentMetadata, DataView>
 	{
-		private readonly IDocumentService _documentService;
+		private readonly IRepository<Document> _documentRepository;
 		private readonly IConfigurationService _configurationService;
 		private readonly IRepository<FieldMetadata> _metadataRepository;
 
 		public GetDocumentMetadataHandler(
-			IDocumentService documentService,
+			IRepository<Document> documentRepository,
 			IConfigurationService configurationService,
 			IRepository<FieldMetadata> metadataRepository)
 		{
-			_documentService = documentService;
+			_documentRepository = documentRepository;
 			_configurationService = configurationService;
 			_metadataRepository = metadataRepository;
 		}
@@ -48,7 +47,7 @@ namespace Montr.Docs.Impl.QueryHandlers
 				return result;
 			}
 
-			var document = (await _documentService.Search(new DocumentSearchRequest
+			var document = (await _documentRepository.Search(new DocumentSearchRequest
 			{
 				UserUid = request.UserUid,
 				Uid = request.DocumentUid,

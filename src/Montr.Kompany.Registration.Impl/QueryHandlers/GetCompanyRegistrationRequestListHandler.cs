@@ -2,24 +2,24 @@
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
+using Montr.Core.Services;
 using Montr.Docs.Models;
-using Montr.Docs.Services;
 using Montr.Kompany.Registration.Queries;
 
 namespace Montr.Kompany.Registration.Impl.QueryHandlers
 {
 	public class GetCompanyRegistrationRequestListHandler : IRequestHandler<GetCompanyRegistrationRequestList, ICollection<Document>>
 	{
-		private readonly IDocumentService _documentService;
+		private readonly IRepository<Document> _documentRepository;
 
-		public GetCompanyRegistrationRequestListHandler(IDocumentService documentService)
+		public GetCompanyRegistrationRequestListHandler(IRepository<Document> documentRepository)
 		{
-			_documentService = documentService;
+			_documentRepository = documentRepository;
 		}
 
 		public async Task<ICollection<Document>> Handle(GetCompanyRegistrationRequestList request, CancellationToken cancellationToken)
 		{
-			var documents = await _documentService.Search(new DocumentSearchRequest
+			var documents = await _documentRepository.Search(new DocumentSearchRequest
 			{
 				UserUid = request.UserUid,
 				SkipPaging = true

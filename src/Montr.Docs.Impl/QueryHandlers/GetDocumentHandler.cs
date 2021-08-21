@@ -10,16 +10,16 @@ namespace Montr.Docs.Impl.QueryHandlers
 {
 	public class GetDocumentHandler : IRequestHandler<GetDocument, Document>
 	{
-		private readonly IRepository<Document> _repository;
+		private readonly IRepository<Document> _documentRepository;
 
-		public GetDocumentHandler(IRepository<Document> repository)
+		public GetDocumentHandler(IRepository<Document> documentRepository)
 		{
-			_repository = repository;
+			_documentRepository = documentRepository;
 		}
 
 		public async Task<Document> Handle(GetDocument request, CancellationToken cancellationToken)
 		{
-			var result = await _repository.Search(new DocumentSearchRequest
+			var result = await _documentRepository.Search(new DocumentSearchRequest
 			{
 				Uid = request.Uid,
 				IncludeFields = true

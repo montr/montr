@@ -10,7 +10,6 @@ using Montr.Data.Linq2Db;
 using Montr.Docs.Commands;
 using Montr.Docs.Impl.Entities;
 using Montr.Docs.Models;
-using Montr.Docs.Services;
 using Montr.MasterData;
 using Montr.Metadata.Models;
 using Montr.Metadata.Services;
@@ -21,14 +20,14 @@ namespace Montr.Docs.Impl.CommandHandlers
 	{
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IDbContextFactory _dbContextFactory;
-		private readonly IDocumentService _documentService;
+		private readonly IRepository<Document> _documentService;
 		private readonly IRepository<FieldMetadata> _fieldMetadataRepository;
 		private readonly IFieldDataRepository _fieldDataRepository;
 
 		public PublishDocumentHandler(
 			IUnitOfWorkFactory unitOfWorkFactory,
 			IDbContextFactory dbContextFactory,
-			IDocumentService documentService,
+			IRepository<Document> documentService,
 			IRepository<FieldMetadata> fieldMetadataRepository,
 			IFieldDataRepository fieldDataRepository)
 		{

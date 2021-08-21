@@ -6,6 +6,6 @@ namespace Montr.Core.Services
 {
 	public interface IRepository<TEntity>
 	{
-		Task<SearchResult<TEntity>> Search(SearchRequest searchRequest, CancellationToken cancellationToken);
+		Task<SearchResult<TEntity>> Search(SearchRequest searchRequest, CancellationToken cancellationToken = default);
 	}
 }

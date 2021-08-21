@@ -18,12 +18,12 @@ namespace Montr.Docs.Impl.Services
 			public static readonly string Company = "Company";
 		}
 
-		private readonly IRepository<Document> _repository;
+		private readonly IRepository<Document> _documentRepository;
 		private readonly INamedServiceFactory<IClassifierRepository> _classifierRepositoryFactory;
 
-		public DocumentNumberTagResolver(IRepository<Document> repository, INamedServiceFactory<IClassifierRepository> classifierRepositoryFactory)
+		public DocumentNumberTagResolver(IRepository<Document> documentRepository, INamedServiceFactory<IClassifierRepository> classifierRepositoryFactory)
 		{
-			_repository = repository;
+			_documentRepository = documentRepository;
 			_classifierRepositoryFactory = classifierRepositoryFactory;
 		}
 
@@ -44,7 +44,7 @@ namespace Montr.Docs.Impl.Services
 		{
 			if (request.EntityTypeCode == DocumentType.EntityTypeCode)
 			{
-				var searchResult = await _repository.Search(new DocumentSearchRequest { Uid = request.EntityUid }, cancellationToken);
+				var searchResult = await _documentRepository.Search(new DocumentSearchRequest { Uid = request.EntityUid }, cancellationToken);
 
 				var document = searchResult.Rows.FirstOrDefault();
 
@@ -69,7 +69,7 @@ namespace Montr.Docs.Impl.Services
 								documentType = (DocumentType)await classifierRepository.Get(ClassifierTypeCode.DocumentType, document.DocumentTypeUid, cancellationToken);
 							}
 
-							result.Values[tag] = "CRR"; // documentType.Code;
+							result.Values[tag] = documentType.Code;
 						}
 						else if (tag == SupportedTags.Company)
 						{

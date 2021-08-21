@@ -30,18 +30,23 @@ namespace Montr.Docs.Impl.Services
 			_fieldDataRepository = fieldDataRepository;
 		}
 
-		// todo: move to IDocumentService
 		public async Task<SearchResult<Document>> Search(SearchRequest searchRequest, CancellationToken cancellationToken)
 		{
-			var request = (DocumentSearchRequest)searchRequest ?? throw new ArgumentNullException(nameof(searchRequest));
+			var request = (DocumentSearchRequest)searchRequest;
 
 			using (var db = _dbContextFactory.Create())
 			{
+				// todo: add indexes
 				var query = db.GetTable<DbDocument>().AsQueryable();
 
 				if (request.Uid != null)
 				{
 					query = query.Where(x => x.Uid == request.Uid);
+				}
+
+				if (request.UserUid != null)
+				{
+					query = query.Where(x => x.CreatedBy == request.UserUid);
 				}
 
 				var data = await Materialize(
@@ -83,7 +88,7 @@ namespace Montr.Docs.Impl.Services
 			}
 		}
 
-		private static async Task<List<Document>> Materialize(IQueryable<DbDocument> query, CancellationToken cancellationToken)
+		protected virtual async Task<List<Document>> Materialize(IQueryable<DbDocument> query, CancellationToken cancellationToken)
 		{
 			return await query.Select(x => new Document
 			{
@@ -92,8 +97,8 @@ namespace Montr.Docs.Impl.Services
 				DocumentTypeUid = x.DocumentTypeUid,
 				StatusCode = x.StatusCode,
 				Direction = Enum.Parse<DocumentDirection>(x.Direction, true),
-				DocumentNumber = x.DocumentNumber,
 				DocumentDate = x.DocumentDate,
+				DocumentNumber = x.DocumentNumber,
 				Name = x.Name,
 				CreatedAtUtc = x.CreatedAtUtc,
 				CreatedBy = x.CreatedBy,

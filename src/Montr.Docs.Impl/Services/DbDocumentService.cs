@@ -6,7 +6,6 @@ using LinqToDB;
 using MediatR;
 using Montr.Core.Events;
 using Montr.Core.Models;
-using Montr.Core.Services;
 using Montr.Data.Linq2Db;
 using Montr.Docs.Commands;
 using Montr.Docs.Impl.Entities;
@@ -28,56 +27,6 @@ namespace Montr.Docs.Impl.Services
 			_dbContextFactory = dbContextFactory;
 			_numberGenerator = numberGenerator;
 			_mediator = mediator;
-		}
-
-		public async Task<SearchResult<Document>> Search(DocumentSearchRequest request, CancellationToken cancellationToken)
-		{
-			using (var db = _dbContextFactory.Create())
-			{
-				// todo: add indexes
-				var query = db.GetTable<DbDocument>().AsQueryable();
-
-				if (request.Uid.HasValue)
-				{
-					query = query.Where(x => x.Uid == request.Uid);
-				}
-
-				if (request.UserUid.HasValue)
-				{
-					query = query.Where(x => x.CreatedBy == request.UserUid);
-				}
-
-				var data = await query
-					.Apply(request, x => x.DocumentDate, SortOrder.Descending)
-					.Select(x => Materialize(x))
-					.ToListAsync(cancellationToken);
-
-				return new SearchResult<Document>
-				{
-					TotalCount = query.GetTotalCount(request),
-					Rows = data
-				};
-			}
-		}
-
-		protected virtual Document Materialize(DbDocument dbItem)
-		{
-			return new Document
-			{
-				Uid = dbItem.Uid,
-				DocumentTypeUid = dbItem.DocumentTypeUid,
-				StatusCode = dbItem.StatusCode,
-				Direction = Enum.Parse<DocumentDirection>(dbItem.Direction, true),
-				DocumentDate = dbItem.DocumentDate,
-				DocumentNumber = dbItem.DocumentNumber,
-				CompanyUid = dbItem.CompanyUid,
-				Name = dbItem.Name,
-				CreatedAtUtc = dbItem.CreatedAtUtc,
-				CreatedBy = dbItem.CreatedBy,
-				ModifiedAtUtc = dbItem.ModifiedAtUtc,
-				ModifiedBy = dbItem.ModifiedBy,
-				Url = $"/documents/edit/{dbItem.Uid}"
-			};
 		}
 
 		public async Task<ApiResult> Create(Document document, CancellationToken cancellationToken)
@@ -104,46 +53,43 @@ namespace Montr.Docs.Impl.Services
 					.InsertAsync(cancellationToken);
 			}
 
-			/*if (document.StatusCode != DocumentStatusCode.Draft)
+			// if (document.StatusCode == DocumentStatusCode.Published)
 			{
-				await _mediator.Publish(new EntityStatusChanged<Document>
-				{
-					Entity = document,
-					StatusCode = DocumentStatusCode.Draft
-				}, cancellationToken);
-			}*/
-
-			if (document.StatusCode == DocumentStatusCode.Published)
-			{
-				var documentNumber = await _numberGenerator
-					.GenerateNumber(new GenerateNumberRequest
-					{
-						EntityTypeCode = DocumentType.EntityTypeCode,
-						EntityTypeUid = document.DocumentTypeUid,
-						EntityUid = document.Uid
-					}, cancellationToken);
-
-				if (documentNumber != null)
-				{
-					document.DocumentNumber = documentNumber;
-
-					using (var db = _dbContextFactory.Create())
-					{
-						await db.GetTable<DbDocument>()
-							.Where(x => x.Uid == document.Uid)
-							.Set(x => x.DocumentNumber, documentNumber)
-							.UpdateAsync(cancellationToken);
-					}
-				}
+				await GenerateNumber(document, cancellationToken);
 			}
 
-			await _mediator.Publish(new EntityStatusChanged<Document>
+			var notification = new EntityStatusChanged<Document>
 			{
 				Entity = document,
 				StatusCode = document.StatusCode
-			}, cancellationToken);
+			};
+
+			await _mediator.Publish(notification, cancellationToken);
 
 			return new ApiResult { Uid = document.Uid };
+		}
+
+		private async Task GenerateNumber(Document document, CancellationToken cancellationToken)
+		{
+			var documentNumber = await _numberGenerator.GenerateNumber(new GenerateNumberRequest
+			{
+				EntityTypeCode = DocumentType.EntityTypeCode,
+				EntityTypeUid = document.DocumentTypeUid,
+				EntityUid = document.Uid
+			}, cancellationToken);
+
+			if (documentNumber != null)
+			{
+				document.DocumentNumber = documentNumber;
+
+				using (var db = _dbContextFactory.Create())
+				{
+					await db.GetTable<DbDocument>()
+						.Where(x => x.Uid == document.Uid)
+						.Set(x => x.DocumentNumber, documentNumber)
+						.UpdateAsync(cancellationToken);
+				}
+			}
 		}
 
 		public virtual async Task<ApiResult> Delete(DeleteDocument request, CancellationToken cancellationToken)

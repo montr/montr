@@ -19,10 +19,8 @@ namespace Montr.Docs.Impl.Services
 	{
 		public DbDocumentTypeRepository(IDbContextFactory dbContextFactory,
 			IClassifierTypeService classifierTypeService, IClassifierTreeService classifierTreeService,
-			IClassifierTypeMetadataService metadataService, IFieldDataRepository fieldDataRepository,
-			INumberGenerator numberGenerator)
-			: base(dbContextFactory, classifierTypeService, classifierTreeService, metadataService, fieldDataRepository,
-				numberGenerator)
+			IClassifierTypeMetadataService metadataService, IFieldDataRepository fieldDataRepository, INumberGenerator numberGenerator)
+			: base(dbContextFactory, classifierTypeService, classifierTreeService, metadataService, fieldDataRepository, numberGenerator)
 		{
 		}
 
