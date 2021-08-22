@@ -1,7 +1,7 @@
+import { Constants } from "@montr-core/constants";
+import { AppRouteRegistry, ComponentRegistry } from "@montr-core/services/";
 import React from "react";
 import { generatePath } from "react-router";
-import { AppRouteRegistry, ComponentRegistry } from "@montr-core/services/";
-import { Constants } from "@montr-core/constants";
 
 export const Locale = {
 	Namespace: "tendr"
@@ -34,6 +34,6 @@ AppRouteRegistry.add([
 ]);
 
 ComponentRegistry.add([
-	{ path: "panes/private/EditEventPane", component: React.lazy(() => import("./components/tab-edit-event")) },
-	{ path: "panes/private/InvitationPane", component: React.lazy(() => import("./components/tab-edit-invitations")) }
+	{ path: "@montr-tendr/components/tab-edit-event", component: React.lazy(() => import("./components/tab-edit-event")) },
+	{ path: "@montr-tendr/components/tab-edit-invitations", component: React.lazy(() => import("./components/tab-edit-invitations")) }
 ]);

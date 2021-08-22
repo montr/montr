@@ -1,6 +1,6 @@
-import React from "react";
 import { DataFieldFactory } from "@montr-core/components";
 import { ComponentRegistry } from "@montr-core/services";
+import React from "react";
 
 import("./components").then(x => {
 	DataFieldFactory.register("automation-condition-list", new x.AutomationConditionListFieldFactory());
@@ -13,5 +13,5 @@ import("./components").then(x => {
 });
 
 ComponentRegistry.add([
-	{ path: "panes/PaneSearchAutomation", component: React.lazy(() => import("./components/pane-search-automation")) }
+	{ path: "@montr-automate/components/pane-search-automation", component: React.lazy(() => import("./components/pane-search-automation")) }
 ]);

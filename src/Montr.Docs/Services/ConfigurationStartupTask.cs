@@ -25,7 +25,7 @@ namespace Montr.Docs.Services
 					.Add<DataPane>((_, x) =>
 					{
 						x.Key = "form";
-						x.Name = "Вопросы";
+						x.Name = "Form";
 						x.DisplayOrder = 15;
 						x.Component = Core.ComponentCode.PaneEditFormMetadata;
 					});
@@ -34,9 +34,17 @@ namespace Montr.Docs.Services
 					.Add<DataPane>((_, x) =>
 					{
 						x.Key = "form";
-						x.Name = "Анкета";
+						x.Name = "Form";
 						x.DisplayOrder = 15;
 						x.Component = Core.ComponentCode.PaneEditFormMetadata;
+					})
+
+					.Add<DataPane>((_, x) =>
+					{
+						x.Key = "numeration";
+						x.Name = "Numeration";
+						x.DisplayOrder = 20;
+						x.Component = MasterData.ComponentCode.TabEditNumeration;
 					})
 
 					// todo: move to processes (?)
@@ -44,24 +52,24 @@ namespace Montr.Docs.Services
 					{
 						x.Key = "statuses";
 						x.Name = "Statuses";
-						x.DisplayOrder = 16;
+						x.DisplayOrder = 25;
 						x.Component = Core.ComponentCode.PaneSearchEntityStatuses;
 					})
 					.Add<DataPane>((_, x) =>
 					{
 						x.Key = "automation";
 						x.Name = "Automations";
-						x.DisplayOrder = 17;
-						x.Component = "panes/PaneSearchAutomation";
+						x.DisplayOrder = 30;
+						x.Component = Automate.ComponentCode.PaneSearchAutomation;
 					});
 
 				config.When(classifier => classifier.Type == ClassifierTypeCode.Process)
 					.Add<DataPane>((_, x) =>
 					{
 						x.Key = "steps";
-						x.Name = "Шаги";
-						x.DisplayOrder = 15;
-						x.Component = "panes/PaneProcessStepList";
+						x.Name = "Steps";
+						x.DisplayOrder = 30;
+						x.Component = ComponentCode.PaneListProcessStep;
 					});
 			});
 

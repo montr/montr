@@ -25,7 +25,7 @@ namespace Montr.Idx.Services
 						x.Key = "permissions";
 						x.Name = "Permissions";
 						x.DisplayOrder = 15;
-						x.Component = "components/tab-edit-role-permissions";
+						x.Component = ComponentCode.TabEditRolePermissions;
 					});
 
 				config.When(classifier => classifier.Type == ClassifierTypeCode.User)
@@ -35,7 +35,7 @@ namespace Montr.Idx.Services
 						x.Name = "Roles";
 						x.DisplayOrder = 15;
 						x.Icon = "solution";
-						x.Component = "components/tab-edit-user-roles";
+						x.Component = ComponentCode.TabEditUserRoles;
 					});
 			});
 

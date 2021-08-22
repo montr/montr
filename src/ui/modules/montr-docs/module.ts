@@ -44,6 +44,6 @@ AppRouteRegistry.add([
 ]);
 
 ComponentRegistry.add([
-	{ path: "pane_view_document_form", component: React.lazy(() => import("./components/pane-view-document-form")) },
-	{ path: "panes/PaneProcessStepList", component: React.lazy(() => import("./components/pane-prosess-step-list")) }
+	{ path: "@montr-docs/components/pane-view-document-form", component: React.lazy(() => import("./components/pane-view-document-form")) },
+	{ path: "@montr-docs/components/pane-list-prosess-step", component: React.lazy(() => import("./components/pane-list-prosess-step")) }
 ]);

@@ -1,10 +1,10 @@
+import { Constants } from "@montr-core/.";
+import { DataFieldFactory } from "@montr-core/components";
+import { Guid } from "@montr-core/models";
+import { ComponentRegistry } from "@montr-core/services";
+import { AppRouteRegistry } from "@montr-core/services/app-route-registry";
 import React from "react";
 import { generatePath } from "react-router";
-import { Guid } from "@montr-core/models";
-import { AppRouteRegistry } from "@montr-core/services/app-route-registry";
-import { DataFieldFactory } from "@montr-core/components";
-import { Constants } from "@montr-core/.";
-import { ComponentRegistry } from "@montr-core/services";
 
 import("./components").then(x => {
 	DataFieldFactory.register("classifier-group", new x.ClassifierGroupFieldFactory());
@@ -85,12 +85,12 @@ AppRouteRegistry.add([
 ]);
 
 ComponentRegistry.add([
-	{ path: "panes/TabEditClassifierType", component: React.lazy(() => import("./components/tab-edit-classifier-type")) },
-	{ path: "panes/TabEditClassifierTypeHierarchy", component: React.lazy(() => import("./components/tab-edit-classifier-type-hierarchy")) },
+	{ path: "@montr-master-data/components/tab-edit-classifier-type", component: React.lazy(() => import("./components/tab-edit-classifier-type")) },
+	{ path: "@montr-master-data/components/tab-edit-classifier-type-hierarchy", component: React.lazy(() => import("./components/tab-edit-classifier-type-hierarchy")) },
 
-	{ path: "panes/TabEditClassifier", component: React.lazy(() => import("./components/tab-edit-classifier")) },
-	{ path: "panes/TabEditClassifierHierarchy", component: React.lazy(() => import("./components/tab-edit-classifier-hierarchy")) },
+	{ path: "@montr-master-data/components/tab-edit-classifier", component: React.lazy(() => import("./components/tab-edit-classifier")) },
+	{ path: "@montr-master-data/components/tab-edit-classifier-hierarchy", component: React.lazy(() => import("./components/tab-edit-classifier-hierarchy")) },
 
-	{ path: "panes/TabEditNumeratorEntities", component: React.lazy(() => import("./components/tab-edit-numerator-entities")) },
-	{ path: "panes/PaneEditNumeration", component: React.lazy(() => import("./components/tab-edit-numeration")) },
+	{ path: "@montr-master-data/components/tab-edit-numeration", component: React.lazy(() => import("./components/tab-edit-numeration")) },
+	{ path: "@montr-master-data/components/tab-edit-numerator-entities", component: React.lazy(() => import("./components/tab-edit-numerator-entities")) },
 ]);

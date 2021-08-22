@@ -23,66 +23,66 @@ namespace Montr.Tendr.Services
 					.Add<DataPane>((_, x) =>
 					{
 						x.Key = "info";
-						x.Name = "Информация";
+						x.Name = "Information";
 						x.Icon = "profile";
-						x.Component = "panes/private/EditEventPane";
+						x.Component = ComponentCode.TabEditEvent;
 					})
 					.Add<DataPane>((_, x) =>
 					{
 						x.Key = "invitations";
-						x.Name = "Приглашения (😎)";
+						x.Name = "Invitations (😎)";
 						x.Icon = "solution";
-						x.Component = "panes/private/InvitationPane";
+						x.Component = ComponentCode.TabEditInvitations;
 					})
 					.Add<DataPane>((_, x) =>
 					{
 						x.Key = "proposals";
-						x.Name = "Предложения";
+						x.Name = "Proposals";
 						x.Icon = "solution";
 					})
 					.Add<DataPane>((_, x) =>
 					{
 						x.Key = "questions";
-						x.Name = "Разъяснения";
+						x.Name = "Questions";
 						x.Icon = "solution";
 					})
 					.Add<DataPane>((_, x) =>
 					{
 						x.Key = "team";
-						x.Name = "Команда";
+						x.Name = "Team";
 						x.Icon = "team";
 					})
 					.Add<DataPane>((_, x) =>
 					{
 						x.Key = "items";
-						x.Name = "Позиции";
+						x.Name = "Items";
 						x.Icon = "table";
 					})
 					.Add<DataPane>((_, x) =>
 					{
 						x.Key = "history";
-						x.Name = "История изменений";
+						x.Name = "Change History";
 						x.Icon = "eye";
 					})
 					.Add<DataPane>((_, x) =>
 					{
 						x.Key = "5";
-						x.Name = "Тендерная комиссия (команда?)";
+						x.Name = "Commission (Team?)";
 					})
 					.Add<DataPane>((_, x) =>
 					{
 						x.Key = "6";
-						x.Name = "Критерии оценки (анкета?)";
+						x.Name = "Criteria (Form?)";
 					})
 					.Add<DataPane>((_, x) =>
 					{
 						x.Key = "7";
-						x.Name = "Документы (поле?)";
+						x.Name = "Documents (field?)";
 					})
 					.Add<DataPane>((_, x) =>
 					{
 						x.Key = "8";
-						x.Name = "Контактные лица (поле?)";
+						x.Name = "Contacts (field?)";
 					});
 			});
 

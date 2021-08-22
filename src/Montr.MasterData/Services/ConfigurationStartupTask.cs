@@ -23,27 +23,27 @@ namespace Montr.MasterData.Services
 					.Add<DataPane>((_, x) =>
 					{
 						x.Key = "info";
-						x.Name = "Информация";
+						x.Name = "Information";
 						x.Icon = "profile";
-						x.Component = "panes/TabEditClassifierType";
+						x.Component = ComponentCode.TabEditClassifierType;
 					})
 					.Add<DataPane>((_, x) =>
 					{
 						x.Key = "hierarchy";
-						x.Name = "Иерархия";
-						x.Component = "panes/TabEditClassifierTypeHierarchy";
+						x.Name = "Hierarchy";
+						x.Component = ComponentCode.TabEditClassifierTypeHierarchy;
 					})
 					.Add<DataPane>((_, x) =>
 					{
 						x.Key = "fields";
-						x.Name = "Поля";
+						x.Name = "Fields";
 						x.Component = Core.ComponentCode.PaneEditFieldsMetadata;
 					})
 					.Add<DataPane>((_, x) =>
 					{
 						x.Key = "numeration";
-						x.Name = "Нумерация";
-						x.Component = "panes/PaneEditNumeration";
+						x.Name = "Numeration";
+						x.Component = ComponentCode.TabEditNumeration;
 					})
 					.Add<DataPane>((_, x) =>
 					{
@@ -59,28 +59,28 @@ namespace Montr.MasterData.Services
 					.Add<DataPane>((_, x) =>
 					{
 						x.Key = "info";
-						x.Name = "Информация";
+						x.Name = "Information";
 						x.DisplayOrder = 10;
 						x.Icon = "profile";
-						x.Component = "panes/TabEditClassifier";
+						x.Component = ComponentCode.TabEditClassifier;
 					})
 					.Add<DataPane>((_, x) =>
 					{
 						x.Key = "hierarchy";
-						x.Name = "Иерархия";
+						x.Name = "Hierarchy";
 						x.DisplayOrder = 20;
-						x.Component = "panes/TabEditClassifierHierarchy";
+						x.Component = ComponentCode.TabEditClassifierHierarchy;
 					})
 					.Add<DataPane>((_, x) =>
 					{
 						x.Key = "dependencies";
-						x.Name = "Зависимости";
+						x.Name = "Dependencies";
 						x.DisplayOrder = 30;
 					})
 					.Add<DataPane>((_, x) =>
 					{
 						x.Key = "history";
-						x.Name = "История изменений";
+						x.Name = "Change History";
 						x.DisplayOrder = 40;
 						x.Icon = "eye";
 					});
@@ -89,9 +89,9 @@ namespace Montr.MasterData.Services
 					.Add<DataPane>((_, x) =>
 					{
 						x.Key = "usage";
-						x.Name = "Использование";
+						x.Name = "Usages";
 						x.DisplayOrder = 15;
-						x.Component = "panes/TabEditNumeratorEntities";
+						x.Component = ComponentCode.TabEditNumeratorEntities;
 					});
 			});
 

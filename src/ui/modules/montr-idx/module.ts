@@ -1,6 +1,6 @@
-import React from "react";
+import { Constants, Layout } from "@montr-core/constants";
 import { AppRouteRegistry, ComponentRegistry } from "@montr-core/services/";
-import { Layout, Constants } from "@montr-core/constants";
+import React from "react";
 
 export const Locale = {
 	Namespace: "idx"
@@ -79,6 +79,6 @@ export const ProfileRoutes = [
 ];
 
 ComponentRegistry.add([
-	{ path: "components/tab-edit-role-permissions", component: React.lazy(() => import("./components/tab-edit-role-permissions")) },
-	{ path: "components/tab-edit-user-roles", component: React.lazy(() => import("./components/tab-edit-user-roles")) },
+	{ path: "@montr-idx/components/tab-edit-role-permissions", component: React.lazy(() => import("./components/tab-edit-role-permissions")) },
+	{ path: "@montr-idx/components/tab-edit-user-roles", component: React.lazy(() => import("./components/tab-edit-user-roles")) },
 ]);
