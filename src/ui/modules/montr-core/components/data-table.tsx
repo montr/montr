@@ -1,3 +1,4 @@
+import LockTwoTone from "@ant-design/icons/lib/icons/LockTwoTone";
 import { Divider, Table, Typography } from "antd";
 import { ColumnType, SorterResult, SortOrder, TablePaginationConfig } from "antd/lib/table/interface";
 import * as React from "react";
@@ -334,9 +335,10 @@ DataTableTemplateRegistry.add([
 	{ name: "type:datetime", template: (value: string | Date) => DateHelper.toLocaleDateTimeString(value) },
 	{ name: "code", template: (value: string) => <Typography.Text code>{value}</Typography.Text> },
 	{ name: "status", template: (value: string) => <StatusTag statusCode={value} /> },
+
 	{
 		name: "metadata-field-name", template: (value: unknown, record: IIndexer) => {
-			return <>{record["system"] && <StatusTag statusCode="system" />}{value}</>;
+			return <>{value} {record["system"] && <LockTwoTone twoToneColor="red" title="System" />}</>;
 		}
 	}
 ]);

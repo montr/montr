@@ -1,26 +1,25 @@
 ﻿using System;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Montr.Core.Services;
-using Montr.Docs.Models;
+using Montr.MasterData.Services;
 
 namespace Montr.Docs.Impl.Services
 {
 	public class DocumentTypeNameResolver : IEntityNameResolver
 	{
-		private readonly IRepository<DocumentType> _repository;
+		private readonly INamedServiceFactory<IClassifierRepository> _classifierRepositoryFactory;
 
-		public DocumentTypeNameResolver(IRepository<DocumentType> repository)
+		public DocumentTypeNameResolver(INamedServiceFactory<IClassifierRepository> classifierRepositoryFactory)
 		{
-			_repository = repository;
+			_classifierRepositoryFactory = classifierRepositoryFactory;
 		}
 
 		public async Task<string> Resolve(string entityTypeCode, Guid entityUid, CancellationToken cancellationToken)
 		{
-			var result = await _repository.Search(new DocumentTypeSearchRequest { Uid = entityUid }, cancellationToken);
+			var documentTypeRepository = _classifierRepositoryFactory.GetNamedOrDefaultService(ClassifierTypeCode.DocumentType);
 
-			var entity = result?.Rows.SingleOrDefault();
+			var entity = await documentTypeRepository.Get(ClassifierTypeCode.DocumentType, entityUid, cancellationToken);
 
 			return entity?.Name;
 

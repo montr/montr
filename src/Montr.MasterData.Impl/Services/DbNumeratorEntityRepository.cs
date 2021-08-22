@@ -48,18 +48,20 @@ namespace Montr.MasterData.Impl.Services
 				}
 
 				var data = await (
-						from n in dbNumerators
-						join ne in dbNumeratorEntities on n.Uid equals ne.NumeratorUid
+						from ne in dbNumeratorEntities
+						join n in dbNumerators on ne.NumeratorUid equals n.Uid into ln
+						from lne in ln.DefaultIfEmpty()
+						where request.NumeratorUid == null || lne.Uid != null // if passed NumeratorUid then do right join
 						select new NumeratorEntity
 						{
 							IsAutoNumbering = ne.IsAutoNumbering,
-							NumeratorUid = n.Uid,
-							EntityTypeCode = n.EntityTypeCode,
+							NumeratorUid = lne.Uid,
+							EntityTypeCode = lne.EntityTypeCode,
 							EntityUid = ne.EntityUid
 						})
 					.ToListAsync(cancellationToken);
 
-				foreach (var entity in data)
+				foreach (var entity in data.Where(x => x.EntityTypeCode != null))
 				{
 					var entityNameResolver = _entityNameResolverFactory.GetRequiredService(entity.EntityTypeCode);
 

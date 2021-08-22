@@ -147,7 +147,7 @@ class WrappedDataForm extends React.Component<Props, State> {
 
 						if (!factory) {
 							// todo: display default placeholder for not found field type
-							console.error(`Field type ${field.type} is not found.`);
+							console.warn(`Warning: Field type '${field.type}' is not found.`);
 							return null;
 						}
 

@@ -355,11 +355,14 @@ namespace Montr.MasterData.Tests.Services
 					.Value(x => x.KeyTags, numerator.KeyTags != null ? string.Join(DbNumerator.KeyTagsSeparator, numerator.KeyTags) : null)
 					.InsertAsync(cancellationToken);
 
-				await db.GetTable<DbNumeratorEntity>()
-					.Value(x => x.IsAutoNumbering, true)
-					.Value(x => x.NumeratorUid, numeratorUid)
-					.Value(x => x.EntityUid, request.EntityTypeUid)
-					.InsertAsync(cancellationToken);
+				if (request.EntityTypeUid != null)
+				{
+					await db.GetTable<DbNumeratorEntity>()
+						.Value(x => x.IsAutoNumbering, true)
+						.Value(x => x.NumeratorUid, numeratorUid)
+						.Value(x => x.EntityUid, request.EntityTypeUid)
+						.InsertAsync(cancellationToken);
+				}
 
 				return new ApiResult { Uid = numeratorUid };
 			}

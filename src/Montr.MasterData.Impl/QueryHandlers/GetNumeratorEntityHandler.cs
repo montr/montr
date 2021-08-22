@@ -21,7 +21,7 @@ namespace Montr.MasterData.Impl.QueryHandlers
 		{
 			var result = await _repository.Search(new NumeratorEntitySearchRequest
 			{
-				EntityTypeCode = request.EntityTypeCode,
+				// EntityTypeCode = request.EntityTypeCode,
 				EntityUid = request.EntityUid
 			}, cancellationToken);
 

@@ -30,13 +30,13 @@ export class DataTabs<TModel> extends React.Component<Props<TModel>> {
                     if (componentClass) {
                         component = React.createElement(componentClass, { ...tabProps, ...pane.props });
                     } else {
-                        console.error(`Component ${pane.component} is not found.`);
+                        console.warn(`Warning: Component '${pane.component}' is not found.`);
                     }
                 }
 
                 return (
                     <Tabs.TabPane key={pane.key}
-                        tab={<span>{pane.icon && Icon.get(pane.icon)} {pane.name}</span>}
+                        tab={<>{pane.icon && Icon.get(pane.icon)}{pane.name}</>}
                         disabled={disabled ? disabled(pane, index) : false}>
                         {component}
                     </Tabs.TabPane>

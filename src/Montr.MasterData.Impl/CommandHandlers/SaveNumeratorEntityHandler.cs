@@ -33,7 +33,7 @@ namespace Montr.MasterData.Impl.CommandHandlers
 
 			var result = await _repository.Search(new NumeratorEntitySearchRequest
 			{
-				EntityTypeCode = item.EntityTypeCode,
+				// EntityTypeCode = item.EntityTypeCode,
 				EntityUid = item.EntityUid
 			}, cancellationToken);
 
