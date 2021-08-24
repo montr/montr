@@ -90,7 +90,7 @@ namespace Host
 			services.AddMediatR(assemblies);
 		}
 
-		private void AddJsonOptions(IMvcBuilder mvcBuilder)
+		private static void AddJsonOptions(IMvcBuilder mvcBuilder)
 		{
 			if (Module.UseSystemJson)
 			{
