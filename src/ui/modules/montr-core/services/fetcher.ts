@@ -105,36 +105,38 @@ export class Fetcher {
 				? new File([response.data], filename, { type: type })
 				: new Blob([response.data], { type: type });
 
-			if (typeof window.navigator.msSaveBlob !== 'undefined') {
+			// https://developer.mozilla.org/en-US/docs/Web/API/Navigator/msSaveBlob
+			/* if (typeof window.navigator.msSaveBlob !== 'undefined') {
 				// IE workaround for "HTML7007: One or more blob URLs were revoked by closing the blob for which they were created. These URLs will no longer resolve as the data backing the URL has been freed."
 				window.navigator.msSaveBlob(blob, filename);
-			} else {
-				const URL = window.URL /* || window.webkitURL */;
-				const downloadUrl = URL.createObjectURL(blob);
+				return;
+			} */
 
-				let a: HTMLAnchorElement;
-				if (filename) {
-					// use HTML5 a[download] attribute to specify filename
-					a = document.createElement("a");
-					// safari doesn't support this yet
-					if (typeof a.download === "undefined") {
-						window.location.href = downloadUrl;
-					} else {
-						a.href = downloadUrl;
-						a.download = filename;
-						document.body.appendChild(a);
-						a.click();
-					}
-				} else {
+			const URL = window.URL /* || window.webkitURL */;
+			const downloadUrl = URL.createObjectURL(blob);
+
+			let a: HTMLAnchorElement;
+			if (filename) {
+				// use HTML5 a[download] attribute to specify filename
+				a = document.createElement("a");
+				// safari doesn't support this yet
+				if (typeof a.download === "undefined") {
 					window.location.href = downloadUrl;
+				} else {
+					a.href = downloadUrl;
+					a.download = filename;
+					document.body.appendChild(a);
+					a.click();
 				}
-
-				// cleanup
-				setTimeout(function () {
-					document.body.removeChild(a);
-					URL.revokeObjectURL(downloadUrl);
-				}, 1);
+			} else {
+				window.location.href = downloadUrl;
 			}
+
+			// cleanup
+			setTimeout(function () {
+				document.body.removeChild(a);
+				URL.revokeObjectURL(downloadUrl);
+			}, 1);
 		}
 	}
 }
