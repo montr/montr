@@ -25,23 +25,23 @@ namespace Montr.Worker.Hangfire
 		{
 			services.AddSingleton<IContentProvider, ContentProvider>();
 
-			services.AddHangfire(config =>
-			{
-				config.UsePostgreSqlStorage(
-					configuration.GetConnectionString(Data.Constants.DefaultConnectionStringName),
-					new PostgreSqlStorageOptions { PrepareSchemaIfNecessary = false });
+			services
+				.AddHangfireServer()
+				.AddHangfire(config =>
+				{
+					config.UsePostgreSqlStorage(
+						configuration.GetConnectionString(Data.Constants.DefaultConnectionStringName),
+						new PostgreSqlStorageOptions { PrepareSchemaIfNecessary = false });
 
-				config.UseSerializerSettings(
-					new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects });
-			});
+					config.UseSerializerSettings(
+						new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects });
+				});
 
 			services.AddSingleton<IBackgroundJobManager, HangfireBackgroundJobManager>();
 		}
 
 		public void Configure(IApplicationBuilder app)
 		{
-			app.UseHangfireServer();
-
 			app.UseHangfireDashboard(options: new DashboardOptions
 			{
 				AppPath = ClientRoutes.Dashboard,
