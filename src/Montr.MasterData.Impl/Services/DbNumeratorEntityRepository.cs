@@ -47,19 +47,28 @@ namespace Montr.MasterData.Impl.Services
 					dbNumeratorEntities = dbNumeratorEntities.Where(x => x.EntityUid == request.EntityUid);
 				}
 
-				var data = await (
-						from ne in dbNumeratorEntities
-						join n in dbNumerators on ne.NumeratorUid equals n.Uid into ln
-						from lne in ln.DefaultIfEmpty()
-						where request.NumeratorUid == null || lne.Uid != null // if passed NumeratorUid then do right join
-						select new NumeratorEntity
-						{
-							IsAutoNumbering = ne.IsAutoNumbering,
-							NumeratorUid = lne.Uid,
-							EntityTypeCode = lne.EntityTypeCode,
-							EntityUid = ne.EntityUid
-						})
-					.ToListAsync(cancellationToken);
+				var query = request.NumeratorUid == null // if NumeratorUid is not provided - left join numerators
+					? from ne in dbNumeratorEntities
+					join n in dbNumerators on ne.NumeratorUid equals n.Uid into ln
+					from n in ln.DefaultIfEmpty()
+					select new NumeratorEntity
+					{
+						IsAutoNumbering = ne.IsAutoNumbering,
+						NumeratorUid = n.Uid,
+						EntityTypeCode = n.EntityTypeCode,
+						EntityUid = ne.EntityUid
+					}
+					: from ne in dbNumeratorEntities
+					join n in dbNumerators on ne.NumeratorUid equals n.Uid
+					select new NumeratorEntity
+					{
+						IsAutoNumbering = ne.IsAutoNumbering,
+						NumeratorUid = n.Uid,
+						EntityTypeCode = n.EntityTypeCode,
+						EntityUid = ne.EntityUid
+					};
+
+				var data = await query.ToListAsync(cancellationToken);
 
 				foreach (var entity in data.Where(x => x.EntityTypeCode != null))
 				{
