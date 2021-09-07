@@ -16,7 +16,7 @@ using Montr.Metadata.Services;
 
 namespace Montr.Docs.Impl.CommandHandlers
 {
-	public class PublishDocumentHandler : IRequestHandler<PublishDocument, ApiResult>
+	public class SubmitDocumentHandler : IRequestHandler<SubmitDocument, ApiResult>
 	{
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly IDbContextFactory _dbContextFactory;
@@ -24,7 +24,7 @@ namespace Montr.Docs.Impl.CommandHandlers
 		private readonly IRepository<FieldMetadata> _fieldMetadataRepository;
 		private readonly IFieldDataRepository _fieldDataRepository;
 
-		public PublishDocumentHandler(
+		public SubmitDocumentHandler(
 			IUnitOfWorkFactory unitOfWorkFactory,
 			IDbContextFactory dbContextFactory,
 			IRepository<Document> documentService,
@@ -38,7 +38,7 @@ namespace Montr.Docs.Impl.CommandHandlers
 			_fieldDataRepository = fieldDataRepository;
 		}
 
-		public async Task<ApiResult> Handle(PublishDocument request, CancellationToken cancellationToken)
+		public async Task<ApiResult> Handle(SubmitDocument request, CancellationToken cancellationToken)
 		{
 			var documentSearchRequest = new DocumentSearchRequest
 			{

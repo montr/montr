@@ -85,11 +85,11 @@ namespace Montr.Docs.Services
 					})
 					.Add<Button>((document, x) =>
 					{
-						x.Key = "publish";
-						x.Name = "Publish";
+						x.Key = "submit";
+						x.Name = "Submit";
 						x.Type = ButtonType.Primary;
-						x.Action = "/document/publish";
-						x.Props = new PublishDocument { DocumentUid = document.Uid };
+						x.Action = "/document/submit";
+						x.Props = new SubmitDocument { DocumentUid = document.Uid };
 					});
 
 				config.When(document => document.StatusCode != DocumentStatusCode.Draft)
