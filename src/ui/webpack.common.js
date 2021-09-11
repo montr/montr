@@ -21,6 +21,7 @@ const options = {
 			"@montr-automate": path.resolve(__dirname, "modules/montr-automate/"),
 			"@montr-docs": path.resolve(__dirname, "modules/montr-docs/"),
 			"@montr-kompany": path.resolve(__dirname, "modules/montr-kompany/"),
+			"@montr-kompany-registration": path.resolve(__dirname, "modules/montr-kompany-registration/"),
 			"@montr-tendr": path.resolve(__dirname, "modules/montr-tendr/"),
 		},
 		extensions: [".ts", ".tsx", ".js", ".json"]

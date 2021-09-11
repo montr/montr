@@ -33,6 +33,9 @@
 			"@montr-kompany/*": [
 				"modules/montr-kompany/*"
 			],
+			"@montr-kompany-registration/*": [
+				"modules/montr-kompany-registration/*"
+			],
 			"@montr-tendr/*": [
 				"modules/montr-tendr/*"
 			]

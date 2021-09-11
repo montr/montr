@@ -1,7 +1,7 @@
+import { UserContextProps, withUserContext } from "@montr-core/components";
+import { Patterns } from "@montr-core/module";
 import React from "react";
 import { Link } from "react-router-dom";
-import { Patterns } from "@montr-core/module";
-import { UserContextProps, withUserContext } from "@montr-core/components";
 
 class _StepRegisterUser extends React.Component<UserContextProps>{
     render = (): React.ReactNode => {

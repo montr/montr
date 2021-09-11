@@ -14,10 +14,10 @@ namespace Montr.Core.Impl.Services
 				return new[]
 				{
 					new Menu { Id = "p.0", Icon = "home", Route = "/" },
-					// new Menu { Id = "login", Name = "Войти", Icon = "login", Route = "/account/login/" },
-					// new Menu { Id = "register", Name = "Регистрация", Icon = "user-add", Route = "/account/register/" },
-					new Menu { Id = "p.1", Name = "Регистрация", Icon = "user-add", Route = "/register/" },
-					// new Menu { Id = "p.2", Name = "Панель управления", Icon = "dashboard", Route = "/dashboard/" }
+					// new Menu { Id = "login", Name = "Login", Icon = "login", Route = "/account/login/" },
+					// new Menu { Id = "register", Name = "Registration", Icon = "user-add", Route = "/account/register/" },
+					new Menu { Id = "p.1", Name = "Registration", Icon = "user-add", Route = "/registration/" },
+					// new Menu { Id = "p.2", Name = "Dashboard", Icon = "dashboard", Route = "/dashboard/" }
 				};
 			}
 
@@ -33,24 +33,24 @@ namespace Montr.Core.Impl.Services
 			{
 				return new[]
 				{
-					new Menu { Name = "Панель управления", Icon = "dashboard", Route = "/dashboard/" },
-					new Menu { Name = "Отчеты", Icon = "bar-chart", Route = "/reports/" },
+					new Menu { Name = "Dashboard", Icon = "dashboard", Route = "/dashboard/" },
+					new Menu { Name = "Reports", Icon = "bar-chart", Route = "/reports/" },
 
 					new Menu
 					{
 						Id = MenuCode.AdminMenu,
-						Name = "Администрирование",
+						Name = "Administration",
 						Icon = "setting",
 						Position = 100,
 						Items = new[]
 						{
-							// new Menu { Id = "integrations", Name = "Интеграции", Route = "/integrations/" },
-							new Menu { Name = "Настройки", Route = "/settings/", Permission = Permission.GetCode(typeof(ManageSettings)) },
-							new Menu { Name = "Локализация", Route = "/locales/", Permission = Permission.GetCode(typeof(ViewLocales)) }
+							// new Menu { Id = "integrations", Name = "Integrations", Route = "/integrations/" },
+							new Menu { Name = "Settings", Route = "/settings/", Permission = Permission.GetCode(typeof(ManageSettings)) },
+							new Menu { Name = "Localization", Route = "/locales/", Permission = Permission.GetCode(typeof(ViewLocales)) }
 						}
 					},
 
-					new Menu { Name = "Промо", Icon = "global", Position = 200, Route = "/" }
+					new Menu { Name = "Promo", Icon = "global", Position = 200, Route = "/" }
 				};
 			}
 

@@ -1,6 +1,6 @@
+import { Guid } from "@montr-core/models";
 import * as React from "react";
 import { Company } from "../models";
-import { Guid } from "@montr-core/models";
 
 export interface CompanyContextProps {
 	currentCompany?: Company;

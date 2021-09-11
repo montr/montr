@@ -1,8 +1,9 @@
-import * as React from "react";
-import { Steps } from "antd";
 import { Page } from "@montr-core/components";
 import { UserContextProps, withUserContext } from "@montr-core/components/";
-import { CompanyContextProps, StepRegisterCompany, StepRegisterFinish, StepRegisterUser, withCompanyContext } from ".";
+import { CompanyContextProps, withCompanyContext } from "@montr-kompany/components";
+import { Steps } from "antd";
+import * as React from "react";
+import { StepRegisterCompany, StepRegisterFinish, StepRegisterUser } from ".";
 
 class _PageRegistration extends React.Component<UserContextProps & CompanyContextProps> {
 	render() {

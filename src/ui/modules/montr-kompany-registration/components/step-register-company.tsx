@@ -2,10 +2,10 @@ import { ButtonCreate, ButtonDelete, StatusTag, UserContextProps, withUserContex
 import { OperationService } from "@montr-core/services";
 import { IDocument } from "@montr-docs/models";
 import { RouteBuilder } from "@montr-docs/module";
+import { CompanyContextProps, withCompanyContext } from "@montr-kompany/components";
 import { Button, List, Space, Spin, Typography } from "antd";
 import React from "react";
 import { Redirect } from "react-router";
-import { CompanyContextProps, withCompanyContext } from ".";
 import { CompanyRegistrationRequestService } from "../services";
 
 interface Props extends UserContextProps, CompanyContextProps {
