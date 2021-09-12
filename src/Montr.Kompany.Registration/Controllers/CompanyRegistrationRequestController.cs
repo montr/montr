@@ -42,5 +42,13 @@ namespace Montr.Kompany.Registration.Controllers
 
 			return await _mediator.Send(request);
 		}
+
+		[HttpPost]
+		public async Task<ApiResult> Submit(SubmitCompanyRegistrationRequest request)
+		{
+			request.UserUid = _currentUserProvider.GetUserUid();
+
+			return await _mediator.Send(request);
+		}
 	}
 }

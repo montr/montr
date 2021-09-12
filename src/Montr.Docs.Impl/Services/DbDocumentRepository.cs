@@ -34,6 +34,8 @@ namespace Montr.Docs.Impl.Services
 		{
 			var request = (DocumentSearchRequest)searchRequest;
 
+			SearchResult<Document> result;
+
 			using (var db = _dbContextFactory.Create())
 			{
 				// todo: add indexes
@@ -52,40 +54,42 @@ namespace Montr.Docs.Impl.Services
 				var data = await Materialize(
 					query.Apply(request, x => x.DocumentDate, SortOrder.Descending), cancellationToken);
 
-				// todo: preload fields for multiple items
-				if (request.IncludeFields)
-				{
-					foreach (var item in data)
-					{
-						if (item.Uid.HasValue)
-						{
-							// todo: load metadata once for each document type
-							var metadata = await _fieldMetadataRepository.Search(new MetadataSearchRequest
-							{
-								EntityTypeCode = EntityTypeCode.Classifier,
-								EntityUid = item.DocumentTypeUid,
-								IsActive = true,
-								SkipPaging = true
-							}, cancellationToken);
-
-							var fields = await _fieldDataRepository.Search(new FieldDataSearchRequest
-							{
-								Metadata = metadata.Rows,
-								EntityTypeCode = Document.TypeCode,
-								EntityUids = new[] { item.Uid.Value }
-							}, cancellationToken);
-
-							item.Fields = fields.Rows.SingleOrDefault();
-						}
-					}
-				}
-
-				return new SearchResult<Document>
+				result = new SearchResult<Document>
 				{
 					TotalCount = query.GetTotalCount(request),
 					Rows = data
 				};
 			}
+
+			// todo: preload fields for multiple items
+			if (request.IncludeFields)
+			{
+				foreach (var item in result.Rows)
+				{
+					if (item.Uid.HasValue)
+					{
+						// todo: load metadata once for each document type
+						var metadata = await _fieldMetadataRepository.Search(new MetadataSearchRequest
+						{
+							EntityTypeCode = EntityTypeCode.Classifier,
+							EntityUid = item.DocumentTypeUid,
+							IsActive = true,
+							SkipPaging = true
+						}, cancellationToken);
+
+						var fields = await _fieldDataRepository.Search(new FieldDataSearchRequest
+						{
+							Metadata = metadata.Rows,
+							EntityTypeCode = Document.TypeCode,
+							EntityUids = new[] { item.Uid.Value }
+						}, cancellationToken);
+
+						item.Fields = fields.Rows.SingleOrDefault();
+					}
+				}
+			}
+
+			return result;
 		}
 
 		protected virtual async Task<List<Document>> Materialize(IQueryable<DbDocument> query, CancellationToken cancellationToken)

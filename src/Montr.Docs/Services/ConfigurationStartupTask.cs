@@ -1,7 +1,6 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using Montr.Core.Services;
-using Montr.Docs.Commands;
 using Montr.Docs.Models;
 using Montr.MasterData.Models;
 using Montr.Metadata.Models;
@@ -83,14 +82,14 @@ namespace Montr.Docs.Services
 						x.Component = ComponentCode.PaneViewDocumentForm;
 						x.Props = new { mode = "edit" };
 					})
-					.Add<Button>((document, x) =>
+					/*.Add<Button>((document, x) =>
 					{
 						x.Key = "submit";
 						x.Name = "Submit";
 						x.Type = ButtonType.Primary;
-						x.Action = "/document/submit";
+						x.Action = "/companyRegistrationRequest/submit";
 						x.Props = new SubmitDocument { DocumentUid = document.Uid };
-					});
+					})*/;
 
 				config.When(document => document.StatusCode != DocumentStatusCode.Draft)
 					.Add<DataPane>((_, x) =>
@@ -100,10 +99,10 @@ namespace Montr.Docs.Services
 						x.Component = ComponentCode.PaneViewDocumentForm;
 						x.Props = new { mode = "view" };
 					})
-					.Add<Button>((_, x) =>
+					/*.Add<Button>((_, x) =>
 					{
-						x.Name ="Accept or Reject";
-					});
+						x.Name = "Accept or Reject";
+					})*/;
 
 				// for any status
 				config

@@ -12,6 +12,7 @@ namespace Montr.Kompany.Registration
 		public void ConfigureServices(IConfiguration configuration, IServiceCollection services)
 		{
 			services.AddTransient<IStartupTask, RegisterClassifiersStartupTask>();
+			services.AddTransient<IStartupTask, ConfigurationStartupTask>();
 		}
 	}
 }

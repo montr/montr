@@ -14,7 +14,7 @@ export class CompanyRegistrationRequestService extends Fetcher {
     };
 
     delete = async (uid: string | Guid): Promise<ApiResult> => {
-        return await this.post(Api.companyRegistrationRequestDelete, { uid });
+        return await this.post(Api.companyRegistrationRequestDelete, { documentUid: uid });
     };
 
 }

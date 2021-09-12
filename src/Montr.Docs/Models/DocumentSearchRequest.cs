@@ -9,6 +9,7 @@ namespace Montr.Docs.Models
 
 		public Guid? UserUid { get; set; }
 
+		// todo: remove (?) - form should be loaded only for document's form tab
 		public bool IncludeFields { get; set; }
 	}
 }

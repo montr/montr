@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Montr.Core;
+using Montr.Kompany.Registration.Impl.Services;
 
 namespace Montr.Kompany.Registration.Impl
 {
@@ -9,6 +10,7 @@ namespace Montr.Kompany.Registration.Impl
 	{
 		public void ConfigureServices(IConfiguration configuration, IServiceCollection services)
 		{
+			services.AddTransient<CompanyRequestValidationHelper, CompanyRequestValidationHelper>();
 		}
 	}
 }

@@ -5,7 +5,7 @@ using Microsoft.Extensions.Logging;
 using Montr.Core.Events;
 using Montr.Docs.Models;
 
-namespace Montr.Kompany.Impl.EventHandlers
+namespace Montr.Kompany.Registration.Impl.EventHandlers
 {
 	public class CompanyRegistrationRequestPublishedHandler : INotificationHandler<EntityStatusChanged<Document>>
 	{

@@ -6,27 +6,39 @@ using LinqToDB;
 using MediatR;
 using Montr.Core.Events;
 using Montr.Core.Models;
+using Montr.Core.Services;
 using Montr.Data.Linq2Db;
 using Montr.Docs.Commands;
 using Montr.Docs.Impl.Entities;
 using Montr.Docs.Models;
 using Montr.Docs.Services;
+using Montr.MasterData;
 using Montr.MasterData.Models;
 using Montr.MasterData.Services;
+using Montr.Metadata.Models;
+using Montr.Metadata.Services;
 
 namespace Montr.Docs.Impl.Services
 {
 	public class DbDocumentService : IDocumentService
 	{
 		private readonly IDbContextFactory _dbContextFactory;
+		private readonly IRepository<Document> _documentRepository;
 		private readonly INumberGenerator _numberGenerator;
 		private readonly IPublisher _mediator;
+		private readonly IRepository<FieldMetadata> _fieldMetadataRepository;
+		private readonly IFieldDataRepository _fieldDataRepository;
 
-		public DbDocumentService(IDbContextFactory dbContextFactory, INumberGenerator numberGenerator, IPublisher mediator)
+		public DbDocumentService(IDbContextFactory dbContextFactory,
+			IRepository<Document> documentRepository, INumberGenerator numberGenerator, IPublisher mediator,
+			IRepository<FieldMetadata> fieldMetadataRepository, IFieldDataRepository fieldDataRepository)
 		{
 			_dbContextFactory = dbContextFactory;
+			_documentRepository = documentRepository;
 			_numberGenerator = numberGenerator;
 			_mediator = mediator;
+			_fieldMetadataRepository = fieldMetadataRepository;
+			_fieldDataRepository = fieldDataRepository;
 		}
 
 		public async Task<ApiResult> Create(Document document, CancellationToken cancellationToken)
@@ -67,6 +79,63 @@ namespace Montr.Docs.Impl.Services
 			await _mediator.Publish(notification, cancellationToken);
 
 			return new ApiResult { Uid = document.Uid };
+		}
+
+		public async Task<ApiResult> ChangeStatus(Guid documentUid, string statusCode, CancellationToken cancellationToken = default)
+		{
+			var documentSearchRequest = new DocumentSearchRequest { Uid = documentUid, IncludeFields = true };
+
+			var document = (await _documentRepository.Search(documentSearchRequest, cancellationToken)).Rows.Single();
+
+			// todo: it is not required to load document - load only form of document
+			var result = await ValidateForm(document, document, cancellationToken);
+
+			if (result.Success == false) return result;
+
+			using (var db = _dbContextFactory.Create())
+			{
+				await db.GetTable<DbDocument>()
+					.Where(x => x.Uid == documentUid)
+					.Set(x => x.StatusCode, statusCode)
+					.UpdateAsync(cancellationToken);
+			}
+
+			var notification = new EntityStatusChanged<Document>
+			{
+				Entity = document,
+				StatusCode = statusCode
+			};
+
+			await _mediator.Publish(notification, cancellationToken);
+
+			return new ApiResult { Success = true };
+		}
+
+		// todo: use EntityStatusChanged event (?)
+		private async Task<ApiResult> ValidateForm(Document document, IFieldDataContainer data, CancellationToken cancellationToken)
+		{
+			var metadataSearchRequest = new MetadataSearchRequest
+			{
+				EntityTypeCode = EntityTypeCode.Classifier,
+				EntityUid = document.DocumentTypeUid,
+				// todo: check flags
+				// IsSystem = false,
+				IsActive = true,
+				SkipPaging = true
+			};
+
+			var metadata = (await _fieldMetadataRepository.Search(metadataSearchRequest, cancellationToken)).Rows;
+
+			var manageFieldDataRequest = new ManageFieldDataRequest
+			{
+				EntityTypeCode = Document.TypeCode,
+				// ReSharper disable once PossibleInvalidOperationException
+				EntityUid = document.Uid.Value,
+				Metadata = metadata,
+				Item = data
+			};
+
+			return await _fieldDataRepository.Validate(manageFieldDataRequest, cancellationToken);
 		}
 
 		private async Task GenerateNumber(Document document, CancellationToken cancellationToken)
