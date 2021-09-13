@@ -1,7 +1,7 @@
 import { Tabs } from "antd";
 import React from "react";
 import { Icon } from ".";
-import { DataPane } from "../models";
+import { DataPane, DataPaneProps } from "../models";
 import { ComponentRegistry } from "../services";
 
 interface Props<TModel> {
@@ -9,7 +9,7 @@ interface Props<TModel> {
     panes?: DataPane<TModel>[],
     onTabChange?: (tabKey: string) => void,
     disabled?: (pane: DataPane<TModel>, index: number) => boolean,
-    tabProps?: any; // todo: add types for classifiers, documents
+    tabProps?: DataPaneProps<TModel>;
 }
 
 export class DataTabs<TModel> extends React.Component<Props<TModel>> {

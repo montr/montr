@@ -1,11 +1,11 @@
+import { Constants } from "@montr-core/.";
+import { ButtonAdd, ButtonDelete, DataTable, DataTableUpdateToken, Toolbar } from "@montr-core/components";
+import { DataResult, Guid } from "@montr-core/models";
+import { OperationService } from "@montr-core/services";
 import React from "react";
 import { Translation } from "react-i18next";
-import { DataTableUpdateToken, Toolbar, ButtonAdd, ButtonDelete, DataTable } from "@montr-core/components";
-import { Guid, DataResult } from "@montr-core/models";
-import { OperationService } from "@montr-core/services";
-import { Constants } from "@montr-core/.";
-import { AutomationService } from "../services/automation-service";
 import { Automation } from "../models/automation";
+import { AutomationService } from "../services/automation-service";
 import { PaneEditAutomation } from "./pane-edit-automation";
 
 interface Props {

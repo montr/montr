@@ -24,7 +24,7 @@ interface State {
 	configCodes: IEvent[];
 }
 
-class _EditEvent extends React.Component<Props, State> {
+export default class PageEditEvent extends React.Component<Props, State> {
 
 	private readonly operation = new OperationService();
 	private readonly metadataService = new MetadataService();
@@ -186,7 +186,3 @@ class _EditEvent extends React.Component<Props, State> {
 		);
 	};
 }
-
-const EditEvent = _EditEvent;
-
-export default EditEvent;

@@ -1,5 +1,5 @@
 import { DataTabs, DataToolbar, StatusTag } from "@montr-core/components";
-import { ConfigurationItemProps, DataView } from "@montr-core/models";
+import { ConfigurationItemProps, DataPaneProps, DataView } from "@montr-core/models";
 import { DateHelper } from "@montr-core/services";
 import { Classifier } from "@montr-master-data/models";
 import { ClassifierService } from "@montr-master-data/services";
@@ -83,10 +83,17 @@ export default class PageViewDocument extends React.Component<Props, State> {
 
 		const pageTitle = `${documentType.name} — ${document.documentNumber} — ${DateHelper.toLocaleDateString(document.documentDate)}`;
 
-		const dataProps: ConfigurationItemProps = {
+		const buttonProps: ConfigurationItemProps = {
+			// document,
+			// documentType,
+			onDataChange: this.handleDataChange,
+			// entityTypeCode: EntityTypeCode.document,
+			// entityUid: document.uid
+		};
+
+		const paneProps: DataPaneProps<IDocument> = {
 			document,
 			documentType,
-			onDataChange: this.handleDataChange,
 			entityTypeCode: EntityTypeCode.document,
 			entityUid: document.uid
 		};
@@ -99,7 +106,7 @@ export default class PageViewDocument extends React.Component<Props, State> {
 					subTitle={document.uid}
 					tags={<StatusTag statusCode={document.statusCode} />}
 					breadcrumb={<DocumentBreadcrumb />}
-					extra={<DataToolbar buttons={dataView.toolbar} buttonProps={dataProps} />}>
+					extra={<DataToolbar buttons={dataView.toolbar} buttonProps={buttonProps} />}>
 					{/* <DocumentSignificantInfo document={document} /> */}
 				</PageHeader>
 
@@ -108,7 +115,7 @@ export default class PageViewDocument extends React.Component<Props, State> {
 					panes={dataView?.panes}
 					onTabChange={this.handleTabChange}
 					disabled={(_, index) => index > 0 && !document?.uid}
-					tabProps={dataProps}
+					tabProps={paneProps}
 				/>
 
 			</Spin>

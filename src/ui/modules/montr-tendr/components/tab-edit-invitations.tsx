@@ -1,15 +1,15 @@
-import * as React from "react";
-import { Button, Alert } from "antd";
-import { PaneProps, Guid, DataResult, IMenu } from "@montr-core/models";
-import { DataTable, Toolbar, DataTableUpdateToken, ButtonAdd, ButtonDelete, Icon } from "@montr-core/components";
-import { PaneSelectClassifier } from "@montr-master-data/components";
+import { ButtonAdd, ButtonDelete, DataTable, DataTableUpdateToken, Icon, Toolbar } from "@montr-core/components";
+import { DataPaneProps, DataResult, Guid, IMenu } from "@montr-core/models";
 import { OperationService } from "@montr-core/services";
+import { PaneSelectClassifier } from "@montr-master-data/components";
+import { Alert, Button } from "antd";
+import * as React from "react";
 import { ModalEditInvitation } from "../components";
 import { IEvent, Invitation } from "../models";
-import { InvitationService } from "../services";
 import { Api, Views } from "../module";
+import { InvitationService } from "../services";
 
-interface Props extends PaneProps<IEvent> {
+interface Props extends DataPaneProps<IEvent> {
 	data: IEvent;
 }
 

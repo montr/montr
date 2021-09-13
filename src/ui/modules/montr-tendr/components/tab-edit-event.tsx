@@ -1,9 +1,9 @@
-import * as React from "react";
-import { ApiResult, PaneProps, IDataField } from "@montr-core/models";
-import { EventService, EventMetadataService } from "../services";
 import { DataForm } from "@montr-core/components";
-import { IEvent } from "../models";
+import { ApiResult, DataPaneProps, IDataField } from "@montr-core/models";
 import { FormInstance } from "antd/lib/form";
+import * as React from "react";
+import { IEvent } from "../models";
+import { EventMetadataService, EventService } from "../services";
 
 interface Props {
 	data: IEvent;
@@ -62,7 +62,7 @@ class EventForm extends React.Component<Props, State> {
 	};
 }
 
-interface EditEventPaneProps extends PaneProps<IEvent> {
+interface EditEventPaneProps extends DataPaneProps<IEvent> {
 	data: IEvent;
 }
 

@@ -1,13 +1,17 @@
+import { Guid } from ".";
+
 export interface DataPane<TEntity> {
 	key?: string;
 	name?: string;
 	icon?: string;
 	component?: string;
-	props?: any;
+	props?: DataPaneProps<TEntity>;
 }
 
-export interface PaneProps<TEntity> {
-	data: TEntity;
-	ref?: any;
-	// [key: string]: any;
+export interface DataPaneProps<TEntity> {
+	entityTypeCode: string;
+	entityUid: Guid;
+	data?: TEntity;
+	ref?: unknown; // any
+	[key: string]: unknown;
 }
