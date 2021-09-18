@@ -17,6 +17,10 @@ export const Patterns = {
 	editEvent: "/events/edit/:uid/:tabKey?",
 };
 
+export const EntityTypeCode = {
+	event: "event"
+};
+
 export const Views = {
 	eventInvitationList: "Event/Invitation/List"
 };

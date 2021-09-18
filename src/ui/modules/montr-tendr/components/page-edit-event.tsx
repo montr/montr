@@ -1,12 +1,12 @@
 import { DataBreadcrumb, DataTabs, Page, PageHeader, PaneComponent, Toolbar } from "@montr-core/components";
-import { DataView } from "@montr-core/models";
+import { DataPaneProps, DataView } from "@montr-core/models";
 import { MetadataService, OperationService } from "@montr-core/services";
 import { Button, Spin, Tag } from "antd";
 import i18next from "i18next";
 import * as React from "react";
 import { RouteComponentProps } from "react-router";
 import { IEvent } from "../models";
-import { Locale, RouteBuilder } from "../module";
+import { EntityTypeCode, Locale, RouteBuilder } from "../module";
 import { EventService, EventTemplateService } from "../services";
 
 interface RouteProps {
@@ -160,6 +160,13 @@ export default class PageEditEvent extends React.Component<Props, State> {
 			</>);
 		} */
 
+		const paneProps: DataPaneProps<IEvent> = {
+			entityTypeCode: EntityTypeCode.event,
+			entityUid: data.uid,
+			data,
+			/* , ref: this.createRefForKey(pane.key) */
+		};
+
 		return (
 			<Page title={<>
 				<Toolbar float="right">
@@ -178,7 +185,7 @@ export default class PageEditEvent extends React.Component<Props, State> {
 						panes={dataView?.panes}
 						onTabChange={this.handleTabChange}
 						disabled={(pane, index) => index > 0 && !data?.uid}
-						tabProps={{ data /* , ref: this.createRefForKey(pane.key) */ }}
+						tabProps={paneProps}
 					/>
 
 				</Spin>
