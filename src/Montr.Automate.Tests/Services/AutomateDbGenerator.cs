@@ -48,7 +48,7 @@ namespace Montr.Automate.Tests.Services
 			var result = await _automationService.Insert(new InsertAutomation
 			{
 				EntityTypeCode = EntityTypeCode,
-				EntityTypeUid = EntityTypeUid,
+				EntityUid = EntityTypeUid,
 				Item = automation
 			}, cancellationToken);
 

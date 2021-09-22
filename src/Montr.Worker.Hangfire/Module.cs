@@ -1,7 +1,9 @@
-﻿using System.Text;
+﻿using System;
+using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Hangfire;
+using Hangfire.AspNetCore;
 using Hangfire.Common;
 using Hangfire.Dashboard;
 using Hangfire.PostgreSql;
@@ -21,6 +23,13 @@ namespace Montr.Worker.Hangfire
 	[Module( DependsOn = new [] { typeof(Idx.Module) })]
 	public class Module : IWebModule
 	{
+		/*private readonly IServiceScopeFactory _serviceScopeFactory;
+
+		public Module(IServiceScopeFactory serviceScopeFactory)
+		{
+			_serviceScopeFactory = serviceScopeFactory;
+		}*/
+
 		public void ConfigureServices(IConfiguration configuration, IServiceCollection services)
 		{
 			services.AddSingleton<IContentProvider, ContentProvider>();
@@ -29,6 +38,8 @@ namespace Montr.Worker.Hangfire
 				.AddHangfireServer()
 				.AddHangfire(config =>
 				{
+					// config.UseActivator(new AspNetCoreJobActivator(_serviceScopeFactory));
+
 					config.UsePostgreSqlStorage(
 						configuration.GetConnectionString(Data.Constants.DefaultConnectionStringName),
 						new PostgreSqlStorageOptions { PrepareSchemaIfNecessary = false });

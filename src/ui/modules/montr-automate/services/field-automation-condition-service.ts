@@ -1,9 +1,9 @@
-import { Fetcher } from "@montr-core/services";
+import { Api } from "@montr-automate/module";
 import { Guid, IDataField } from "@montr-core/models";
-import { Constants } from "@montr-core/.";
+import { Fetcher } from "@montr-core/services";
 
 export class FieldAutomationConditionService extends Fetcher {
 	fields = async (entityTypeCode: string, entityTypeUid: Guid | string): Promise<IDataField[]> => {
-		return this.post(`${Constants.apiURL}/fieldAutomationCondition/fields`, { entityTypeCode, entityTypeUid });
+		return this.post(Api.fieldAutomationConditionFields, { entityTypeCode, entityTypeUid });
 	};
 }

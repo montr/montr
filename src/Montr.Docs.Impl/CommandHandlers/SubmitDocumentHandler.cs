@@ -26,7 +26,7 @@ namespace Montr.Docs.Impl.CommandHandlers
 
 			using (var scope = _unitOfWorkFactory.Create())
 			{
-				var result = await _documentService.ChangeStatus(documentUid, DocumentStatusCode.Published, cancellationToken);
+				var result = await _documentService.ChangeStatus(documentUid, DocumentStatusCode.Submitted, cancellationToken);
 
 				if (result.Success) scope.Commit();
 

@@ -68,7 +68,7 @@ namespace Montr.Automate.Tests.CommandHandlers
 				var command = new DeleteAutomation
 				{
 					EntityTypeCode = generator.EntityTypeCode,
-					EntityTypeUid = generator.EntityTypeUid,
+					EntityUid = generator.EntityTypeUid,
 					Uids = new [] { automation.Uid  }
 				};
 

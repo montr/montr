@@ -67,7 +67,7 @@ namespace Montr.Automate.Tests.CommandHandlers
 				var command = new InsertAutomation
 				{
 					EntityTypeCode = generator.EntityTypeCode,
-					EntityTypeUid = generator.EntityTypeUid,
+					EntityUid = generator.EntityTypeUid,
 					Item = automation
 				};
 

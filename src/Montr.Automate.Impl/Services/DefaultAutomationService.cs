@@ -43,7 +43,7 @@ namespace Montr.Automate.Impl.Services
 				affected = await db.GetTable<DbAutomation>()
 					.Value(x => x.Uid, item.Uid)
 					.Value(x => x.EntityTypeCode, request.EntityTypeCode)
-					.Value(x => x.EntityTypeUid, request.EntityTypeUid)
+					.Value(x => x.EntityTypeUid, request.EntityUid)
 					.Value(x => x.TypeCode, "trigger") // todo: ask user
 					.Value(x => x.Name, item.Name)
 					.Value(x => x.Description, item.Description)
@@ -73,7 +73,7 @@ namespace Montr.Automate.Impl.Services
 			{
 				affected = await db.GetTable<DbAutomation>()
 					.Where(x => x.EntityTypeCode == request.EntityTypeCode &&
-								x.EntityTypeUid == request.EntityTypeUid &&
+								x.EntityTypeUid == request.EntityUid &&
 								x.Uid == item.Uid)
 					.Set(x => x.Name, item.Name)
 					.Set(x => x.Description, item.Description)
@@ -110,7 +110,7 @@ namespace Montr.Automate.Impl.Services
 
 				affected = await db.GetTable<DbAutomation>()
 					.Where(x => x.EntityTypeCode == request.EntityTypeCode &&
-								x.EntityTypeUid == request.EntityTypeUid &&
+								x.EntityTypeUid == request.EntityUid &&
 								request.Uids.Contains(x.Uid))
 					.DeleteAsync(cancellationToken);
 			}

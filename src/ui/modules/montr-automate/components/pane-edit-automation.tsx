@@ -1,16 +1,17 @@
-import React from "react";
-import { Spin, Drawer } from "antd";
-import { FormInstance } from "antd/lib/form";
-import { Guid, ApiResult, IDataField } from "@montr-core/models";
-import { Toolbar, ButtonCancel, ButtonSave, DataForm } from "@montr-core/components";
-import { Automation } from "../models";
+import { ButtonCancel, ButtonSave, DataForm, Toolbar } from "@montr-core/components";
+import { ApiResult, Guid, IDataField } from "@montr-core/models";
 import { MetadataService } from "@montr-core/services";
+import { Drawer, Spin } from "antd";
+import { FormInstance } from "antd/lib/form";
+import React from "react";
+import { Automation } from "../models";
+import { Views } from "../module";
 import { AutomationService } from "../services";
 import { AutomationContextProvider } from "./automation-context";
 
 interface Props {
 	entityTypeCode: string;
-	entityTypeUid: Guid | string;
+	entityUid: Guid | string;
 	uid?: Guid;
 	onSuccess?: () => void;
 	onClose?: () => void;
@@ -36,27 +37,27 @@ export class PaneEditAutomation extends React.Component<Props, State> {
 		};
 	}
 
-	componentDidMount = async () => {
+	componentDidMount = async (): Promise<void> => {
 		await this.fetchData();
 	};
 
-	componentWillUnmount = async () => {
+	componentWillUnmount = async (): Promise<void> => {
 		await this._metadataService.abort();
 		await this._automationService.abort();
 	};
 
-	fetchData = async () => {
-		const { entityTypeCode, entityTypeUid, uid } = this.props;
+	fetchData = async (): Promise<void> => {
+		const { entityTypeCode, entityUid, uid } = this.props;
 
 		const data: Automation = (uid)
-			? await this._automationService.get(entityTypeCode, entityTypeUid, uid)
+			? await this._automationService.get(entityTypeCode, entityUid, uid)
 			// todo: load defaults from server
 			: {
 				conditions: [],
 				actions: []
 			};
 
-		const dataView = await this._metadataService.load("Automation/Edit");
+		const dataView = await this._metadataService.load(Views.automationEdit);
 
 		this.setState({
 			loading: false,
@@ -65,22 +66,22 @@ export class PaneEditAutomation extends React.Component<Props, State> {
 		});
 	};
 
-	handleSubmitClick = async (e: React.MouseEvent<any>) => {
+	handleSubmitClick = async (e: React.MouseEvent<any>): Promise<void> => {
 		await this._formRef.current.submit();
 	};
 
 	handleSubmit = async (values: Automation): Promise<ApiResult> => {
-		const { entityTypeCode, entityTypeUid, uid, onSuccess } = this.props;
+		const { entityTypeCode, entityUid, uid, onSuccess } = this.props;
 
 		const item = { ...values };
 
 		let result;
 
 		if (uid) {
-			result = await this._automationService.update({ entityTypeCode, entityTypeUid, item: { uid, ...item } });
+			result = await this._automationService.update({ entityTypeCode, entityUid, item: { uid, ...item } });
 		}
 		else {
-			result = await this._automationService.insert({ entityTypeCode, entityTypeUid, item });
+			result = await this._automationService.insert({ entityTypeCode, entityUid, item });
 		}
 
 		if (result.success && onSuccess) {
@@ -90,8 +91,8 @@ export class PaneEditAutomation extends React.Component<Props, State> {
 		return result;
 	};
 
-	render = () => {
-		const { entityTypeCode, entityTypeUid, onClose } = this.props,
+	render = (): React.ReactNode => {
+		const { entityTypeCode, entityUid, onClose } = this.props,
 			{ loading, data, fields } = this.state;
 
 		return (<>
@@ -108,8 +109,8 @@ export class PaneEditAutomation extends React.Component<Props, State> {
 							<ButtonSave onClick={this.handleSubmitClick} />
 						</Toolbar>}>
 
-					{/* todo: pass Autmation to context? */}
-					<AutomationContextProvider entityTypeCode={entityTypeCode} entityTypeUid={entityTypeUid}>
+					{/* todo: pass Automation to context? */}
+					<AutomationContextProvider entityTypeCode={entityTypeCode} entityUid={entityUid}>
 						<DataForm
 							formRef={this._formRef}
 							hideButtons={true}

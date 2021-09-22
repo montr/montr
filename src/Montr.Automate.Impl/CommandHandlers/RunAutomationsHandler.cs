@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using MediatR;
 using Montr.Automate.Commands;
+using Montr.Automate.Models;
 using Montr.Automate.Services;
 using Montr.Core.Models;
 using Montr.Core.Services;
@@ -23,7 +24,12 @@ namespace Montr.Automate.Impl.CommandHandlers
 		{
 			// using (var scope = _unitOfWorkFactory.Create())
 			{
-				var result = await _automationRunner.Run(request, cancellationToken);
+				var result = await _automationRunner.Run(new AutomationContext
+				{
+					EntityTypeCode = request.EntityTypeCode,
+					EntityTypeUid = request.EntityTypeUid,
+					EntityUid = request.EntityUid
+				}, cancellationToken);
 
 				// scope.Commit();
 

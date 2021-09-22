@@ -1,7 +1,7 @@
+import { Form, Input, Select, Space } from "antd";
 import React from "react";
-import { Space, Input, Form, Select } from "antd";
-import { AutomationItemProps } from "./automation-field-factory";
 import { SetFieldAutomationAction } from "../models/automation";
+import { AutomationItemProps } from "./automation-field-factory";
 
 interface Props extends AutomationItemProps {
 	action: SetFieldAutomationAction;
@@ -9,7 +9,7 @@ interface Props extends AutomationItemProps {
 
 export class SetFieldAutomationActionItem extends React.Component<Props> {
 
-	render = () => {
+	render = (): React.ReactNode => {
 		const { typeSelector, item } = this.props;
 
 		return (

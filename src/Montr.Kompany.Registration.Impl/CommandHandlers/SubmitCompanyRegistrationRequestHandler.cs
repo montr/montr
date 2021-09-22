@@ -30,7 +30,7 @@ namespace Montr.Kompany.Registration.Impl.CommandHandlers
 
 			using (var scope = _unitOfWorkFactory.Create())
 			{
-				var result = await _documentService.ChangeStatus(request.DocumentUid, DocumentStatusCode.Published, cancellationToken);
+				var result = await _documentService.ChangeStatus(request.DocumentUid, DocumentStatusCode.Submitted, cancellationToken);
 
 				if (result.Success) scope.Commit();
 

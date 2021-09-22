@@ -9,7 +9,7 @@ namespace Montr.Automate.Commands
 	{
 		public string EntityTypeCode { get; set; }
 
-		public Guid EntityTypeUid { get; set; }
+		public Guid EntityUid { get; set; }
 
 		public Automation Item { get; set; }}
 }

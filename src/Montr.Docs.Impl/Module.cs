@@ -26,9 +26,9 @@ namespace Montr.Docs.Impl
 
 			services.AddTransient<INumberTagResolver, DocumentNumberTagResolver>();
 
-			services.AddNamedTransient<IRecipientResolver, DocumentRecipientResolver>(DocumentType.EntityTypeCode);
+			services.AddNamedTransient<IRecipientResolver, DocumentRecipientResolver>("classifier" /*DocumentType.EntityTypeCode*/);
 			services.AddNamedTransient<IEntityNameResolver, DocumentTypeNameResolver>(DocumentType.EntityTypeCode);
-			services.AddNamedTransient<IAutomationContextProvider, DocumentAutomationContextProvider>(DocumentType.EntityTypeCode);
+			services.AddNamedTransient<IAutomationContextProvider, DocumentAutomationContextProvider>("classifier" /*DocumentType.EntityTypeCode*/);
 		}
 	}
 }

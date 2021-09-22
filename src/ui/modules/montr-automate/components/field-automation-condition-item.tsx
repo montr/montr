@@ -1,9 +1,9 @@
-import React from "react";
-import { Form, Space, Select } from "antd";
-import { FieldAutomationCondition } from "../models";
-import { AutomationItemProps, withAutomationContext } from ".";
 import { FieldAutomationConditionService } from "@montr-automate/services";
 import { IDataField } from "@montr-core/models";
+import { Form, Select, Space } from "antd";
+import React from "react";
+import { AutomationItemProps, withAutomationContext } from ".";
+import { FieldAutomationCondition } from "../models";
 import { AutomationContextProps } from "./automation-context";
 
 interface Props extends AutomationItemProps, AutomationContextProps {
@@ -35,14 +35,14 @@ class WrappedFieldAutomationConditionItem extends React.Component<Props, State> 
 	};
 
 	fetchData = async () => {
-		const { entityTypeCode, entityTypeUid } = this.props;
+		const { entityTypeCode, entityUid } = this.props;
 
-		const fields = await this._service.fields(entityTypeCode, entityTypeUid);
+		const fields = await this._service.fields(entityTypeCode, entityUid);
 
 		this.setState({ fields });
 	};
 
-	render = () => {
+	render = (): React.ReactNode => {
 		const { typeSelector, item } = this.props,
 			{ fields } = this.state;
 
@@ -82,10 +82,11 @@ class WrappedFieldAutomationConditionItem extends React.Component<Props, State> 
 					fieldKey={[item.fieldKey, "value"]}
 					rules={[{ required: true }]}>
 					<Select placeholder="Select value" style={{ minWidth: 100 }}>
-						<Select.Option value="Draft">Draft</Select.Option>
-						<Select.Option value="Published">Published</Select.Option>
-						<Select.Option value="Completed">Completed</Select.Option>
-						<Select.Option value="Closed">Closed</Select.Option>
+						<Select.Option value="draft">Draft</Select.Option>
+						<Select.Option value="submitted">Submitted</Select.Option>
+						<Select.Option value="published">Published</Select.Option>
+						<Select.Option value="completed">Completed</Select.Option>
+						<Select.Option value="closed">Closed</Select.Option>
 					</Select>
 				</Form.Item>
 

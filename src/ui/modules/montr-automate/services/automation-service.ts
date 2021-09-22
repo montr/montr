@@ -1,43 +1,43 @@
+import { ApiResult, Guid } from "@montr-core/models";
 import { Fetcher } from "@montr-core/services/fetcher";
 import { Automation, AutomationRuleType } from "../models/automation";
-import { Guid, ApiResult } from "@montr-core/models";
-import { Constants } from "@montr-core/.";
+import { Api } from "../module";
 
 interface IManageAutomationRequest {
 	entityTypeCode: string;
-	entityTypeUid: Guid | string;
+	entityUid: Guid | string;
 	item: Automation;
 }
 
 interface IDeleteAutomationRequest {
 	entityTypeCode: string;
-	entityTypeUid: Guid | string;
+	entityUid: Guid | string;
 	uids: string[] | number[];
 }
 
 export class AutomationService extends Fetcher {
 
-	get = async (entityTypeCode: string, entityTypeUid: Guid | string, uid: Guid): Promise<Automation> => {
-		return this.post(`${Constants.apiURL}/automation/get`, { entityTypeCode, entityTypeUid, uid });
+	get = async (entityTypeCode: string, entityUid: Guid | string, uid: Guid): Promise<Automation> => {
+		return this.post(Api.automationGet, { entityTypeCode, entityUid, uid });
 	};
 
 	insert = async (request: IManageAutomationRequest): Promise<ApiResult> => {
-		return this.post(`${Constants.apiURL}/automation/insert`, request);
+		return this.post(Api.automationInsert, request);
 	};
 
 	update = async (request: IManageAutomationRequest): Promise<ApiResult> => {
-		return this.post(`${Constants.apiURL}/automation/update`, request);
+		return this.post(Api.automationUpdate, request);
 	};
 
 	delete = async (request: IDeleteAutomationRequest): Promise<ApiResult> => {
-		return this.post(`${Constants.apiURL}/automation/delete`, request);
+		return this.post(Api.automationDelete, request);
 	};
 
 	actionTypes = async (): Promise<AutomationRuleType[]> => {
-		return this.post(`${Constants.apiURL}/automation/actionTypes`, {});
+		return this.post(Api.automationActionTypes, {});
 	};
 
 	conditionTypes = async (): Promise<AutomationRuleType[]> => {
-		return this.post(`${Constants.apiURL}/automation/conditionTypes`, {});
+		return this.post(Api.automationConditionTypes, {});
 	};
 }

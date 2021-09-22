@@ -1,16 +1,14 @@
-import { Constants } from "@montr-core/.";
 import { ButtonAdd, ButtonDelete, DataTable, DataTableUpdateToken, Toolbar } from "@montr-core/components";
-import { DataResult, Guid } from "@montr-core/models";
+import { DataPaneProps, DataResult, Guid } from "@montr-core/models";
 import { OperationService } from "@montr-core/services";
 import React from "react";
 import { Translation } from "react-i18next";
 import { Automation } from "../models/automation";
+import { Api, Views } from "../module";
 import { AutomationService } from "../services/automation-service";
 import { PaneEditAutomation } from "./pane-edit-automation";
 
-interface Props {
-	entityTypeCode: string;
-	entityTypeUid: Guid | string;
+interface Props extends DataPaneProps<unknown> {
 }
 
 interface State {
@@ -37,9 +35,9 @@ export default class PaneSearchAutomation extends React.Component<Props, State> 
 	};
 
 	onLoadTableData = async (loadUrl: string, postParams: any): Promise<DataResult<{}>> => {
-		const { entityTypeCode, entityTypeUid } = this.props;
+		const { entityTypeCode, entityUid } = this.props;
 
-		const params = { entityTypeCode, entityTypeUid, ...postParams };
+		const params = { entityTypeCode, entityUid, ...postParams };
 
 		return await this.automationService.post(loadUrl, params);
 	};
@@ -76,10 +74,10 @@ export default class PaneSearchAutomation extends React.Component<Props, State> 
 
 	delete = async (): Promise<void> => {
 		await this.operation.confirmDelete(async () => {
-			const { entityTypeCode, entityTypeUid } = this.props,
+			const { entityTypeCode, entityUid } = this.props,
 				{ selectedRowKeys } = this.state;
 
-			const result = await this.automationService.delete({ entityTypeCode, entityTypeUid, uids: selectedRowKeys });
+			const result = await this.automationService.delete({ entityTypeCode, entityUid, uids: selectedRowKeys });
 
 			if (result.success) {
 				this.refreshTable(false, true);
@@ -90,7 +88,7 @@ export default class PaneSearchAutomation extends React.Component<Props, State> 
 	};
 
 	render = (): React.ReactNode => {
-		const { entityTypeCode, entityTypeUid } = this.props,
+		const { entityTypeCode, entityUid } = this.props,
 			{ showPane, editUid, selectedRowKeys, updateTableToken } = this.state;
 
 		return (<Translation>{(t) => <>
@@ -103,8 +101,8 @@ export default class PaneSearchAutomation extends React.Component<Props, State> 
 			<DataTable
 				rowKey="uid"
 				rowActions={[{ name: t("button.edit"), onClick: this.showEditPane }]}
-				viewId={`Automation/Grid`}
-				loadUrl={`${Constants.apiURL}/automation/list/`}
+				viewId={Views.automationList}
+				loadUrl={Api.automationList}
 				onLoadData={this.onLoadTableData}
 				onSelectionChange={this.onSelectionChange}
 				updateToken={updateTableToken}
@@ -114,7 +112,7 @@ export default class PaneSearchAutomation extends React.Component<Props, State> 
 			{showPane &&
 				<PaneEditAutomation
 					entityTypeCode={entityTypeCode}
-					entityTypeUid={entityTypeUid}
+					entityUid={entityUid}
 					uid={editUid}
 					onSuccess={this.handleSuccess}
 					onClose={this.closePane}

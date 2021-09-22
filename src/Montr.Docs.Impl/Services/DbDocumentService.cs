@@ -100,13 +100,11 @@ namespace Montr.Docs.Impl.Services
 					.UpdateAsync(cancellationToken);
 			}
 
-			var notification = new EntityStatusChanged<Document>
+			await _mediator.Publish(new EntityStatusChanged<Document>
 			{
 				Entity = document,
 				StatusCode = statusCode
-			};
-
-			await _mediator.Publish(notification, cancellationToken);
+			}, cancellationToken);
 
 			return new ApiResult { Success = true };
 		}
