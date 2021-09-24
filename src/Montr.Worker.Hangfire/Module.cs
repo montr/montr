@@ -1,5 +1,4 @@
-﻿using System;
-using System.Text;
+﻿using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using Hangfire;
@@ -34,11 +33,18 @@ namespace Montr.Worker.Hangfire
 		{
 			services.AddSingleton<IContentProvider, ContentProvider>();
 
+			services.AddTransient<JobActivator, AspNetCoreJobActivator>();
+
 			services
-				.AddHangfireServer()
-				.AddHangfire(config =>
+				.AddHangfireServer((serviceProvider, options) =>
 				{
-					// config.UseActivator(new AspNetCoreJobActivator(_serviceScopeFactory));
+					// options.Activator = new AspNetCoreJobActivator(serviceProvider.GetService<IServiceScopeFactory>());
+				})
+				.AddHangfire((serviceProvider, config) =>
+				{
+					// config.UseSerilogLogProvider();
+
+					// config.UseActivator(new AspNetCoreJobActivator(serviceProvider.GetService<IServiceScopeFactory>()));
 
 					config.UsePostgreSqlStorage(
 						configuration.GetConnectionString(Data.Constants.DefaultConnectionStringName),
@@ -47,6 +53,7 @@ namespace Montr.Worker.Hangfire
 					config.UseSerializerSettings(
 						new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects });
 				});
+
 
 			services.AddSingleton<IBackgroundJobManager, HangfireBackgroundJobManager>();
 		}
