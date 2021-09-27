@@ -20,10 +20,10 @@ namespace Montr.Automate.Impl
 		{
 			services.AddSingleton<IStartupTask, AutomationJsonOptionsInitializer>();
 
-			services.AddSingleton<IAutomationProviderRegistry, DefaultAutomationProviderRegistry>();
-			services.AddSingleton<IAutomationService, DefaultAutomationService>();
-			services.AddSingleton<IAutomationRunner, DefaultAutomationRunner>();
-			services.AddSingleton<IRecipientResolver, DefaultRecipientResolver>();
+			services.AddTransient<IAutomationProviderRegistry, DefaultAutomationProviderRegistry>();
+			services.AddTransient<IAutomationService, DefaultAutomationService>();
+			services.AddTransient<IAutomationRunner, DefaultAutomationRunner>();
+			services.AddTransient<IRecipientResolver, DefaultRecipientResolver>();
 
 			services.AddTransient<IRepository<Automation>, DbAutomationRepository>();
 

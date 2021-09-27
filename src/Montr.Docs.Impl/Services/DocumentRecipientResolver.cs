@@ -38,7 +38,7 @@ namespace Montr.Docs.Impl.Services
 					var userRepository = _classifierRepositoryFactory.GetNamedOrDefaultService(Idx.ClassifierTypeCode.User);
 
 					var searchResult = await userRepository.Search(
-						new UserSearchRequest { Uid = document.CreatedBy }, cancellationToken);
+						new UserSearchRequest { TypeCode = Idx.ClassifierTypeCode.User, Uid = document.CreatedBy }, cancellationToken);
 
 					if (searchResult.Rows.SingleOrDefault() is User user)
 					{

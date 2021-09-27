@@ -19,22 +19,22 @@ namespace Montr.Core.Services
 	public class DefaultNamedServiceFactory<TService> : INamedServiceFactory<TService>
 	{
 		private readonly IServiceProvider _serviceProvider;
-		private readonly IDictionary<string, Type> _registrations;
 
-		public DefaultNamedServiceFactory(IServiceProvider serviceProvider, IDictionary<string, Type> registrations)
+		public IDictionary<string, Type> Registrations { get; set; }
+
+		public DefaultNamedServiceFactory(IServiceProvider serviceProvider)
 		{
 			_serviceProvider = serviceProvider;
-			_registrations = registrations;
 		}
 
 		public IEnumerable<string> GetNames()
 		{
-			return _registrations.Keys;
+			return Registrations.Keys;
 		}
 
 		public TService GetService(string name)
 		{
-			if (_registrations.TryGetValue(name, out var serviceType))
+			if (Registrations.TryGetValue(name, out var serviceType))
 			{
 				return (TService)_serviceProvider.GetRequiredService(serviceType);
 			}
@@ -85,8 +85,14 @@ namespace Montr.Core.Services
 			{
 				var registrations = new ConcurrentDictionary<string, Type>(StringComparer.OrdinalIgnoreCase);
 
-				services.AddTransient<INamedServiceFactory<TService>>(
-					serviceProvider => new DefaultNamedServiceFactory<TService>(serviceProvider, registrations));
+				services.AddTransient<INamedServiceFactory<TService>>(serviceProvider =>
+				{
+					var factory = ActivatorUtilities.GetServiceOrCreateInstance<DefaultNamedServiceFactory<TService>>(serviceProvider);
+
+					factory.Registrations = registrations;
+
+					return factory;
+				});
 
 				return registrations;
 			});

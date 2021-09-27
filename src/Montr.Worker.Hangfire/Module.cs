@@ -22,13 +22,6 @@ namespace Montr.Worker.Hangfire
 	[Module( DependsOn = new [] { typeof(Idx.Module) })]
 	public class Module : IWebModule
 	{
-		/*private readonly IServiceScopeFactory _serviceScopeFactory;
-
-		public Module(IServiceScopeFactory serviceScopeFactory)
-		{
-			_serviceScopeFactory = serviceScopeFactory;
-		}*/
-
 		public void ConfigureServices(IConfiguration configuration, IServiceCollection services)
 		{
 			services.AddSingleton<IContentProvider, ContentProvider>();
@@ -36,15 +29,12 @@ namespace Montr.Worker.Hangfire
 			services.AddTransient<JobActivator, AspNetCoreJobActivator>();
 
 			services
-				.AddHangfireServer((serviceProvider, options) =>
+				.AddHangfireServer((_, _) =>
 				{
-					// options.Activator = new AspNetCoreJobActivator(serviceProvider.GetService<IServiceScopeFactory>());
 				})
-				.AddHangfire((serviceProvider, config) =>
+				.AddHangfire((_, config) =>
 				{
-					// config.UseSerilogLogProvider();
-
-					// config.UseActivator(new AspNetCoreJobActivator(serviceProvider.GetService<IServiceScopeFactory>()));
+					config.UseSerilogLogProvider();
 
 					config.UsePostgreSqlStorage(
 						configuration.GetConnectionString(Data.Constants.DefaultConnectionStringName),
@@ -53,7 +43,6 @@ namespace Montr.Worker.Hangfire
 					config.UseSerializerSettings(
 						new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects });
 				});
-
 
 			services.AddSingleton<IBackgroundJobManager, HangfireBackgroundJobManager>();
 		}
