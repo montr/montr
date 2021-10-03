@@ -66,6 +66,10 @@ namespace Montr.Docs.Impl.Services
 				.Where(x => request.Uids.Contains(x.Uid))
 				.DeleteAsync(cancellationToken);
 
+			await db.GetTable<DbDocumentType>()
+				.Where(x => request.Uids.Contains(x.Uid))
+				.DeleteAsync(cancellationToken);
+
 			return await base.DeleteInternal(db, type, request, cancellationToken);
 		}
 	}
