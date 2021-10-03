@@ -1,0 +1,13 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+    <PropertyGroup>
+        <TargetFramework>net5.0</TargetFramework>
+        <Nullable>disable</Nullable>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\Montr.Tasks.Impl\Montr.Tasks.Impl.csproj" />
+      <ProjectReference Include="..\Montr.Tasks\Montr.Tasks.csproj" />
+    </ItemGroup>
+
+</Project>

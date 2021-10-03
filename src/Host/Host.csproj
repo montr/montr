@@ -53,6 +53,8 @@
     <ProjectReference Include="..\Montr.Messages\Montr.Messages.csproj" />
     <ProjectReference Include="..\Montr.Metadata.Impl\Montr.Metadata.Impl.csproj" />
     <ProjectReference Include="..\Montr.Metadata\Montr.Metadata.csproj" />
+    <ProjectReference Include="..\Montr.Tasks.Impl\Montr.Tasks.Impl.csproj" />
+    <ProjectReference Include="..\Montr.Tasks\Montr.Tasks.csproj" />
     <ProjectReference Include="..\Montr.Tendr.Impl\Montr.Tendr.Impl.csproj" />
     <ProjectReference Include="..\Montr.Tendr\Montr.Tendr.csproj" />
     <ProjectReference Include="..\Montr.Worker.Hangfire\Montr.Worker.Hangfire.csproj" />
