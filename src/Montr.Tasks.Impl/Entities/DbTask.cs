@@ -35,6 +35,12 @@ namespace Montr.Tasks.Impl.Entities
 		[Column(Name = "name", Length = 2048), DataType(DataType.VarChar), Nullable]
 		public string Name { get; set; }
 
+		[Column("start_date_utc"), DataType(DataType.DateTime2)]
+		public DateTime? StartDateUtc { get; set; }
+
+		[Column("due_date_utc"), DataType(DataType.DateTime2)]
+		public DateTime? DueDateUtc { get; set; }
+
 		[Column("created_at_utc"), DataType(DataType.DateTime2)]
 		public DateTime? CreatedAtUtc { get; set; }
 

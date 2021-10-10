@@ -16,6 +16,10 @@ namespace Montr.Tasks.Models
 
 		public string StatusCode { get; set; }
 
+		public string Number { get; set; }
+
 		public string Name { get; set; }
+
+		public string Url { get; set; }
 	}
 }
