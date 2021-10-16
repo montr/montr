@@ -15,26 +15,29 @@
 		"jsx": "react",
 		"baseUrl": ".",
 		"paths": {
-			"@montr-core/*": [
-				"modules/montr-core/*"
-			],
-			"@montr-idx/*": [
-				"modules/montr-idx/*"
-			],
-			"@montr-master-data/*": [
-				"modules/montr-master-data/*"
-			],
 			"@montr-automate/*": [
 				"modules/montr-automate/*"
 			],
+			"@montr-core/*": [
+				"modules/montr-core/*"
+			],
 			"@montr-docs/*": [
 				"modules/montr-docs/*"
+			],
+			"@montr-idx/*": [
+				"modules/montr-idx/*"
 			],
 			"@montr-kompany/*": [
 				"modules/montr-kompany/*"
 			],
 			"@montr-kompany-registration/*": [
 				"modules/montr-kompany-registration/*"
+			],
+			"@montr-master-data/*": [
+				"modules/montr-master-data/*"
+			],
+			"@montr-tasks/*": [
+				"modules/montr-tasks/*"
 			],
 			"@montr-tendr/*": [
 				"modules/montr-tendr/*"

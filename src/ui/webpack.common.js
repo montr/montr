@@ -15,13 +15,14 @@ const options = {
 	},
 	resolve: {
 		alias: {
-			"@montr-core": path.resolve(__dirname, "modules/montr-core/"),
-			"@montr-idx": path.resolve(__dirname, "modules/montr-idx/"),
-			"@montr-master-data": path.resolve(__dirname, "modules/montr-master-data/"),
 			"@montr-automate": path.resolve(__dirname, "modules/montr-automate/"),
+			"@montr-core": path.resolve(__dirname, "modules/montr-core/"),
 			"@montr-docs": path.resolve(__dirname, "modules/montr-docs/"),
+			"@montr-idx": path.resolve(__dirname, "modules/montr-idx/"),
 			"@montr-kompany": path.resolve(__dirname, "modules/montr-kompany/"),
 			"@montr-kompany-registration": path.resolve(__dirname, "modules/montr-kompany-registration/"),
+			"@montr-master-data": path.resolve(__dirname, "modules/montr-master-data/"),
+			"@montr-tasks": path.resolve(__dirname, "modules/montr-tasks/"),
 			"@montr-tendr": path.resolve(__dirname, "modules/montr-tendr/"),
 		},
 		extensions: [".ts", ".tsx", ".js", ".json"]
