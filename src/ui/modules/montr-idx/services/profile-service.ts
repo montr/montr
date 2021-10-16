@@ -1,44 +1,44 @@
-import { Fetcher } from "@montr-core/services";
-import { Constants } from "@montr-core/constants";
 import { ApiResult } from "@montr-core/models";
-import { ProfileModel, ChangePasswordModel, SetPasswordModel, UserLoginInfo } from "../models";
+import { Fetcher } from "@montr-core/services";
+import { ChangePasswordModel, ProfileModel, SetPasswordModel, UserLoginInfo } from "../models";
+import { Api } from "../module";
 
 export class ProfileService extends Fetcher {
 
 	get = async (): Promise<ProfileModel> => {
-		return this.post(`${Constants.apiURL}/profile/get`);
+		return this.post(Api.profileGet);
 	};
 
 	update = async (request: ProfileModel): Promise<ApiResult> => {
-		return this.post(`${Constants.apiURL}/profile/update`, request);
+		return this.post(Api.profileUpdate, request);
 	};
 
 	changeEmail = async (request: ProfileModel): Promise<ApiResult> => {
-		return this.post(`${Constants.apiURL}/profile/changeEmail`, request);
+		return this.post(Api.profileChangeEmail, request);
 	};
 
 	changePhone = async (request: ProfileModel): Promise<ApiResult> => {
-		return this.post(`${Constants.apiURL}/profile/changePhone`, request);
+		return this.post(Api.profileChangePhone, request);
 	};
 
 	changePassword = async (request: ChangePasswordModel): Promise<ApiResult> => {
-		return this.post(`${Constants.apiURL}/profile/changePassword`, request);
+		return this.post(Api.profileChangePassword, request);
 	};
 
 	setPassword = async (request: SetPasswordModel): Promise<ApiResult> => {
-		return this.post(`${Constants.apiURL}/profile/setPassword`, request);
+		return this.post(Api.profileSetPassword, request);
 	};
 
 	externalLogins = async (): Promise<UserLoginInfo[]> => {
-		return this.post(`${Constants.apiURL}/profile/externalLogins`, {});
+		return this.post(Api.profileExternalLogins, {});
 	};
 
 	linkLoginCallback = async (): Promise<ApiResult> => {
-		return this.post(`${Constants.apiURL}/profile/linkLoginCallback`, {});
+		return this.post(Api.profileLinkLoginCallback, {});
 	};
 
 	removeLogin = async (request: UserLoginInfo): Promise<ApiResult> => {
-		return this.post(`${Constants.apiURL}/profile/removeLogin`, request);
+		return this.post(Api.profileRemoveLogin, request);
 	};
 
 }

@@ -1,4 +1,4 @@
-import { Constants, Layout } from "@montr-core/constants";
+import { Layout } from "@montr-core/constants";
 import { AppRouteRegistry, ComponentRegistry } from "@montr-core/services/";
 import React from "react";
 
@@ -11,15 +11,37 @@ export const StorageNames = {
 };
 
 export const Api = {
-	authLinkLogin: `${Constants.apiURL}/authentication/linkLogin`,
-	authExternalLogin: `${Constants.apiURL}/authentication/externalLogin`,
+	accountRegister: "/account/register",
+	accountSendEmailConfirmation: "/account/sendEmailConfirmation",
+	accountConfirmEmail: "/account/confirmEmail",
+	accountConfirmEmailChange: "/account/confirmEmailChange",
+	accountLogin: "/account/login",
+	accountLogout: "/account/logout",
+	accountExternalLoginCallback: "/account/externalLoginCallback",
+	accountExternalRegister: "/account/externalRegister",
+	accountAuthSchemes: "/account/authSchemes",
+	accountForgotPassword: "/account/forgotPassword",
+	accountResetPassword: "/account/resetPassword",
 
-	rolePermissionList: `${Constants.apiURL}/rolePermission/list`,
-	rolePermissionUpdate: `${Constants.apiURL}/rolePermission/update`,
+	profileGet: "/profile/get",
+	profileUpdate: "/profile/update",
+	profileChangeEmail: "/profile/changeEmail",
+	profileChangePhone: "/profile/changePhone",
+	profileChangePassword: "/profile/changePassword",
+	profileSetPassword: "/profile/setPassword",
+	profileExternalLogins: "/profile/externalLogins",
+	profileLinkLoginCallback: "/profile/linkLoginCallback",
+	profileRemoveLogin: "/profile/removeLogin",
 
-	userRoleList: `${Constants.apiURL}/userRole/listRoles`,
-	userRoleAddRoles: `${Constants.apiURL}/userRole/addRoles`,
-	userRoleRemoveRoles: `${Constants.apiURL}/userRole/removeRoles`,
+	authLinkLogin: "/authentication/linkLogin",
+	authExternalLogin: "/authentication/externalLogin",
+
+	rolePermissionList: "/rolePermission/list",
+	rolePermissionUpdate: "/rolePermission/update",
+
+	userRoleList: "/userRole/listRoles",
+	userRoleAddRoles: "/userRole/addRoles",
+	userRoleRemoveRoles: "/userRole/removeRoles",
 };
 
 export const Patterns = {

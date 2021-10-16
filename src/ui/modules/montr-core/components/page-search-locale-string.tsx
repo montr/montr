@@ -1,9 +1,9 @@
+import { Api } from "@montr-core/module";
 import { Button, Form, Select, Upload } from "antd";
 import { UploadChangeParam } from "antd/lib/upload";
 import React from "react";
 import { Translation } from "react-i18next";
 import { ButtonExport, ButtonImport, DataBreadcrumb, DataTable, DataTableUpdateToken, Icon, Page, PageHeader, Toolbar } from ".";
-import { Constants } from "..";
 import { DataResult, IMenu, LocaleString } from "../models";
 import { LocaleStringService, NotificationService } from "../services";
 
@@ -99,7 +99,7 @@ export default class PageSearchLocaleString extends React.Component<Props, State
 							<Toolbar float="right">
 								<Upload
 									accept=".json"
-									action={`${Constants.apiURL}/locale/import/`}
+									action={Api.localeImport}
 									name="file"
 									showUploadList={false}
 									style={{ display: "inline-block" }}
@@ -140,7 +140,7 @@ export default class PageSearchLocaleString extends React.Component<Props, State
 							rowKey={(x: LocaleString) => `${x.locale}-${x.module}-${x.key}`}
 							rowActions={rowActions}
 							viewId={`LocaleString/Grid/`}
-							loadUrl={`${Constants.apiURL}/locale/list/`}
+							loadUrl={Api.localeList}
 							onLoadData={this.onLoadTableData}
 							updateToken={updateTableToken}
 						/>

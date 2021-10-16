@@ -1,11 +1,11 @@
-import * as React from "react";
+import { ButtonAdd, DataTable, DataTableUpdateToken, Toolbar } from "@montr-core/components";
+import { DataResult, Guid, IMenu } from "@montr-core/models";
 import { Alert, Modal } from "antd";
-import { Constants } from "@montr-core/.";
-import { DataTableUpdateToken, Toolbar, DataTable, ButtonAdd } from "@montr-core/components";
-import { ClassifierType, Classifier, ClassifierLink } from "../models";
-import { DataResult, IMenu, Guid } from "@montr-core/models";
-import { ClassifierLinkService } from "../services";
+import * as React from "react";
 import { ModalEditClassifierLink } from ".";
+import { Classifier, ClassifierLink, ClassifierType } from "../models";
+import { Api } from "../module";
+import { ClassifierLinkService } from "../services";
 
 interface Props {
 	type: ClassifierType;
@@ -114,7 +114,7 @@ export default class TabEditClassifierHierarchy extends React.Component<Props, S
 				<DataTable
 					rowKey={(x: ClassifierLink) => `${x.tree.uid}`}
 					viewId="ClassifierLink/Grid"
-					loadUrl={`${Constants.apiURL}/classifierLink/list/`}
+					loadUrl={Api.classifierLinkList}
 					rowActions={rowActions}
 					onLoadData={this.onLoadTableData}
 					updateToken={updateTableToken}

@@ -1,13 +1,13 @@
-import { Fetcher } from "@montr-core/services";
 import { DataView } from "@montr-core/models";
-import { Constants } from "@montr-core/.";
+import { Fetcher } from "@montr-core/services";
+import { Api } from "../module";
 
 export class EventMetadataService extends Fetcher {
 
 	load = async<TEntity>(viewId: string): Promise<DataView<TEntity>> => {
 
 		const data: DataView<TEntity> =
-			await this.post(`${Constants.apiURL}/EventMetadata/View`, { viewId });
+			await this.post(Api.eventMetadataView, { viewId });
 
 		return data;
 	};

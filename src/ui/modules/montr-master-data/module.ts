@@ -1,4 +1,3 @@
-import { Constants } from "@montr-core/.";
 import { DataFieldFactory } from "@montr-core/components";
 import { Guid } from "@montr-core/models";
 import { ComponentRegistry } from "@montr-core/services";
@@ -21,19 +20,43 @@ export const Locale = {
 };
 
 export const Api = {
-	classifierMetadataView: `${Constants.apiURL}/classifierMetadata/view`,
+	classifierMetadataView: "/classifierMetadata/view",
 
-	classifierList: `${Constants.apiURL}/classifier/list`,
-	classifierExport: `${Constants.apiURL}/classifier/export`,
-	classifierCreate: `${Constants.apiURL}/classifier/create`,
-	classifierGet: `${Constants.apiURL}/classifier/get`,
-	classifierInsert: `${Constants.apiURL}/classifier/insert`,
-	classifierUpdate: `${Constants.apiURL}/classifier/update`,
-	classifierDelete: `${Constants.apiURL}/classifier/delete`,
+	classifierTypeMetadata: "/classifierType/metadata",
+	classifierTypeList: "/classifierType/list",
+	classifierTypeGet: "/classifierType/get",
+	classifierTypeCreate: "/classifierType/create",
+	classifierTypeInsert: "/classifierType/insert",
+	classifierTypeUpdate: "/classifierType/update",
+	classifierTypeDelete: "/classifierType/delete",
 
-	numeratorEntityList: `${Constants.apiURL}/numeratorEntity/list`,
-	numeratorEntityGet: `${Constants.apiURL}/numeratorEntity/get`,
-	numeratorEntitySave: `${Constants.apiURL}/numeratorEntity/save`,
+	classifierList: "/classifier/list",
+	classifierExport: "/classifier/export",
+	classifierCreate: "/classifier/create",
+	classifierGet: "/classifier/get",
+	classifierInsert: "/classifier/insert",
+	classifierUpdate: "/classifier/update",
+	classifierDelete: "/classifier/delete",
+
+	classifierGroupList: "/classifierGroup/list",
+	classifierGroupGet: "/classifierGroup/get",
+	classifierGroupInsert: "/classifierGroup/insert",
+	classifierGroupUpdate: "/classifierGroup/update",
+	classifierGroupDelete: "/classifierGroup/delete",
+
+	classifierLinkList: "/classifierLink/list",
+	classifierLinkInsert: "/classifierLink/insert",
+	classifierLinkDelete: "/classifierLink/delete",
+
+	classifierTreeList: "/classifierTree/list",
+	classifierTreeGet: "/classifierTree/get",
+	classifierTreeInsert: "/classifierTree/insert",
+	classifierTreeUpdate: "/classifierTree/update",
+	classifierTreeDelete: "/classifierTree/delete",
+
+	numeratorEntityList: "/numeratorEntity/list",
+	numeratorEntityGet: "/numeratorEntity/get",
+	numeratorEntitySave: "/numeratorEntity/save",
 };
 
 export const Views = {

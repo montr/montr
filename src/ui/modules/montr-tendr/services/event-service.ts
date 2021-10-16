@@ -1,38 +1,33 @@
-import { Fetcher } from "@montr-core/services";
-import { Guid, DataResult } from "@montr-core/models";
+import { DataResult, Guid } from "@montr-core/models";
 import { ApiResult } from "@montr-core/models/api-result";
-import { Constants } from "@montr-core/.";
+import { Fetcher } from "@montr-core/services";
 import { IEvent } from "../models";
+import { Api } from "../module";
 
 export class EventService extends Fetcher {
 
-	// todo: remove, use list method in data grid
-	getLoadUrl = (): string => {
-		return `${Constants.apiURL}/Events/List`;
-	}
-
 	list = async (): Promise<DataResult<IEvent>> => {
-		return this.post(`${Constants.apiURL}/Events/List`);
+		return this.post(Api.eventsList);
 	};
 
 	get = async (uid: Guid | string): Promise<IEvent> => {
-		return this.post(`${Constants.apiURL}/Events/Get`, { uid });
+		return this.post(Api.eventsGet, { uid });
 	};
 
 	insert = async (item: IEvent): Promise<ApiResult> => {
-		return this.post(`${Constants.apiURL}/Events/Insert`, { item });
+		return this.post(Api.eventsInsert, { item });
 	};
 
 	update = async (item: IEvent): Promise<ApiResult> => {
-		return this.post(`${Constants.apiURL}/Events/Update`, { item });
+		return this.post(Api.eventsUpdate, { item });
 	};
 
 	publish = async (uid: number | string): Promise<ApiResult> => {
-		return this.post(`${Constants.apiURL}/Events/Publish`, { uid });
+		return this.post(Api.eventsPublish, { uid });
 	};
 
 	cancel = async (uid: number | string): Promise<ApiResult> => {
-		return this.post(`${Constants.apiURL}/Events/Cancel`, { uid });
+		return this.post(Api.eventsCancel, { uid });
 	};
 
 }

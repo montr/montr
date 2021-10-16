@@ -1,11 +1,10 @@
-import * as React from "react";
-import { EventService } from "../services";
-import { Redirect } from "react-router-dom";
-import { Constants } from "@montr-core/.";
-import { Page, DataTable } from "@montr-core/components";
-import { IEvent } from "../models";
+import { DataTable, Page } from "@montr-core/components";
 import { ApiResult, Guid, IMenu } from "@montr-core/models";
-import { RouteBuilder } from "../module";
+import * as React from "react";
+import { Redirect } from "react-router-dom";
+import { IEvent } from "../models";
+import { Api, RouteBuilder } from "../module";
+import { EventService } from "../services";
 
 interface Props {
 }
@@ -55,7 +54,7 @@ export default class SelectEventTemplate extends React.Component<Props, State> {
 				<DataTable
 					rowKey="uid"
 					viewId="PrivateEventSearch/Grid"
-					loadUrl={`${Constants.apiURL}/EventTemplate/List/`}
+					loadUrl={Api.eventTemplateList}
 					rowActions={rowActions}
 				/>
 

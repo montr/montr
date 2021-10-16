@@ -1,4 +1,3 @@
-import { Constants } from "@montr-core/constants";
 import { AppRouteRegistry, ComponentRegistry } from "@montr-core/services/";
 import React from "react";
 import { generatePath } from "react-router";
@@ -8,7 +7,22 @@ export const Locale = {
 };
 
 export const Api = {
-	eventInvitationList: `${Constants.apiURL}/invitation/list/`
+	eventMetadataView: "/eventMetadata/view",
+
+	eventTemplateList: "/eventTemplate/list",
+
+	eventsList: "/events/list",
+	eventsGet: "/events/get",
+	eventsInsert: "/events/insert",
+	eventsUpdate: "/events/update",
+	eventsPublish: "/events/publish",
+	eventsCancel: "/events/cancel",
+
+	eventInvitationList: "/invitation/list",
+	eventInvitationGet: "/invitation/get",
+	eventInvitationInsert: "/invitation/insert",
+	eventInvitationUpdate: "/invitation/update",
+	eventInvitationDelete: "/invitation/delete"
 };
 
 export const Patterns = {

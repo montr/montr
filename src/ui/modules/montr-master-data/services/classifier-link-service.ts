@@ -1,7 +1,7 @@
+import { ApiResult, DataResult, Guid } from "@montr-core/models";
 import { Fetcher } from "@montr-core/services";
-import { Constants } from "@montr-core/.";
-import { Guid, ApiResult, DataResult } from "@montr-core/models";
 import { ClassifierLink } from "../models";
+import { Api } from "../module";
 
 interface IClassifierLinkSearchRequest {
 	typeCode: string;
@@ -12,14 +12,14 @@ interface IClassifierLinkSearchRequest {
 export class ClassifierLinkService extends Fetcher {
 
 	list = async (request: IClassifierLinkSearchRequest): Promise<DataResult<ClassifierLink>> => {
-		return this.post(`${Constants.apiURL}/classifierLink/list`, request);
+		return this.post(Api.classifierLinkList, request);
 	};
 
 	insert = async (typeCode: string, groupUid: Guid, itemUid: string | Guid): Promise<ApiResult> => {
-		return this.post(`${Constants.apiURL}/classifierLink/insert`, { typeCode, groupUid, itemUid });
+		return this.post(Api.classifierLinkInsert, { typeCode, groupUid, itemUid });
 	};
 
 	delete = async (typeCode: string, groupUid: Guid, itemUid: string | Guid): Promise<ApiResult> => {
-		return this.post(`${Constants.apiURL}/classifierLink/delete`, { typeCode, groupUid, itemUid });
+		return this.post(Api.classifierLinkDelete, { typeCode, groupUid, itemUid });
 	};
 }

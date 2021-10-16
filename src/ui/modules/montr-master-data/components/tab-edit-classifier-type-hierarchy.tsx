@@ -1,11 +1,11 @@
-import * as React from "react";
-import { DataTable, DataTableUpdateToken, Toolbar, ButtonAdd } from "@montr-core/components";
-import { ClassifierType, ClassifierTree } from "../models";
-import { Constants } from "@montr-core/.";
-import { ClassifierTreeService } from "../services";
+import { ButtonAdd, DataTable, DataTableUpdateToken, Toolbar } from "@montr-core/components";
 import { DataResult, IMenu } from "@montr-core/models";
 import { Alert, Modal } from "antd";
+import * as React from "react";
 import { ModalEditClassifierTree } from ".";
+import { ClassifierTree, ClassifierType } from "../models";
+import { Api } from "../module";
+import { ClassifierTreeService } from "../services";
 
 interface Props {
 	data: ClassifierType;
@@ -114,7 +114,7 @@ export default class TabEditClassifierTypeHierarchy extends React.Component<Prop
 					rowKey="code"
 					viewId="ClassifierType/Grid/Hierarchy"
 					// todo: get url from service
-					loadUrl={`${Constants.apiURL}/classifierTree/list/`}
+					loadUrl={Api.classifierTreeList}
 					rowActions={rowActions}
 					onLoadData={this.onLoadTableData}
 					updateToken={updateTableToken}

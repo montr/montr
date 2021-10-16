@@ -1,7 +1,9 @@
 import axios, { AxiosRequestConfig, AxiosResponse } from "axios";
+import { Constants } from "../constants";
 import { AuthService } from "./auth-service";
 
 // axios.defaults.withCredentials = true;
+axios.defaults.baseURL = Constants.apiURL;
 axios.defaults.headers.common["X-Requested-With"] = "XMLHttpRequest";
 axios.defaults.headers.common["Access-Control-Allow-Origin"] = "*";
 

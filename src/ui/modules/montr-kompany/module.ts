@@ -1,10 +1,12 @@
-import { Constants, Layout } from "@montr-core/constants";
+import { Layout } from "@montr-core/constants";
 import { AppRouteRegistry } from "@montr-core/services";
 import React from "react";
 
 export const Api = {
-	companyList: `${Constants.apiURL}/userCompany/list`,
-	companyCreate: `${Constants.apiURL}/userCompany/create`,
+	companyList: "/userCompany/list",
+	companyCreate: "/userCompany/create",
+
+	companyMetadataView: "/companyMetadata/view",
 };
 
 export const Patterns = {

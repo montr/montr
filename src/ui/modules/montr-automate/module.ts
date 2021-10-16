@@ -1,4 +1,3 @@
-import { Constants } from "@montr-core/.";
 import { DataFieldFactory } from "@montr-core/components";
 import { ComponentRegistry } from "@montr-core/services";
 import React from "react";
@@ -14,15 +13,15 @@ import("./components").then(x => {
 });
 
 export const Api = {
-	automationList: `${Constants.apiURL}/automation/list/`,
-	automationGet: `${Constants.apiURL}/automation/get/`,
-	automationActionTypes: `${Constants.apiURL}/automation/actionTypes/`,
-	automationConditionTypes: `${Constants.apiURL}/automation/conditionTypes/`,
-	automationInsert: `${Constants.apiURL}/automation/insert/`,
-	automationUpdate: `${Constants.apiURL}/automation/update/`,
-	automationDelete: `${Constants.apiURL}/automation/delete/`,
+	automationList: "/automation/list/",
+	automationGet: "/automation/get/",
+	automationActionTypes: "/automation/actionTypes/",
+	automationConditionTypes: "/automation/conditionTypes/",
+	automationInsert: "/automation/insert/",
+	automationUpdate: "/automation/update/",
+	automationDelete: "/automation/delete/",
 
-	fieldAutomationConditionFields: `${Constants.apiURL}/fieldAutomationCondition/fields/`
+	fieldAutomationConditionFields: "/fieldAutomationCondition/fields/"
 };
 
 export const Views = {

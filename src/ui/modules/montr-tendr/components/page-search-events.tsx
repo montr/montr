@@ -1,9 +1,10 @@
+import { ButtonCreate, DataBreadcrumb, DataTable, Icon, Page, PageHeader, Toolbar } from "@montr-core/components";
+import { Button, DatePicker, Form, Select } from "antd";
 import * as React from "react";
 import { Link } from "react-router-dom";
-import { Form, Select, Button, DatePicker } from "antd";
-import { EventService, EventTemplateService } from "../services";
-import { Page, DataTable, PageHeader, DataBreadcrumb, Toolbar, ButtonCreate, Icon } from "@montr-core/components";
 import { IEvent } from "../models";
+import { Api } from "../module";
+import { EventTemplateService } from "../services";
 
 interface Props {
 }
@@ -14,7 +15,6 @@ interface State {
 
 export default class SearchEvents extends React.Component<Props, State> {
 
-	private readonly eventService = new EventService();
 	private readonly eventTemplateService = new EventTemplateService();
 
 	constructor(props: Props) {
@@ -31,7 +31,6 @@ export default class SearchEvents extends React.Component<Props, State> {
 
 	componentWillUnmount = async (): Promise<void> => {
 		await this.eventTemplateService.abort();
-		await this.eventService.abort();
 	};
 
 	fetchConfigCodes = async (): Promise<void> => {
@@ -74,7 +73,7 @@ export default class SearchEvents extends React.Component<Props, State> {
 				<DataTable
 					rowKey="uid"
 					viewId="PrivateEventSearch/Grid"
-					loadUrl={this.eventService.getLoadUrl()} />
+					loadUrl={Api.eventsList} />
 
 			</Page>
 		);

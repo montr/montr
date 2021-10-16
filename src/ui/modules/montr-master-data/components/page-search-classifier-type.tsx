@@ -1,4 +1,3 @@
-import { Constants } from "@montr-core/.";
 import { ButtonAdd, ButtonDelete, DataTable, DataTableUpdateToken, Page, PageHeader, Toolbar } from "@montr-core/components";
 import { IMenu } from "@montr-core/models";
 import { OperationService } from "@montr-core/services";
@@ -8,7 +7,7 @@ import { Translation, withTranslation, WithTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { ClassifierBreadcrumb } from ".";
 import { ClassifierGroup } from "../models";
-import { Locale, RouteBuilder } from "../module";
+import { Api, Locale, RouteBuilder } from "../module";
 import { ClassifierTypeService } from "../services";
 
 interface Props extends CompanyContextProps, WithTranslation {
@@ -94,7 +93,7 @@ class WrappedSearchClassifierType extends React.Component<Props, State> {
 					<DataTable
 						rowKey="uid"
 						viewId={`ClassifierType/Grid/`}
-						loadUrl={`${Constants.apiURL}/classifierType/list/`}
+						loadUrl={Api.classifierTypeList}
 						onSelectionChange={this.onSelectionChange}
 						updateToken={updateTableToken}
 						rowActions={rowActions}

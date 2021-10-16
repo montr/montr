@@ -1,27 +1,31 @@
 import React from "react";
-import { Constants, Layout } from "./constants";
+import { Layout } from "./constants";
 import "./i18n";
 import "./index.less";
 import { AppRouteRegistry, ComponentRegistry } from "./services";
 
 export const Api = {
-	contentMenu: `${Constants.apiURL}/content/menu`,
+	contentMenu: "/content/menu",
 
-	metadataList: `${Constants.apiURL}/metadata/list`,
-	metadataView: `${Constants.apiURL}/metadata/view`,
-	metadataFieldTypes: `${Constants.apiURL}/metadata/fieldTypes`,
-	metadataGet: `${Constants.apiURL}/metadata/get`,
-	metadataInsert: `${Constants.apiURL}/metadata/insert`,
-	metadataUpdate: `${Constants.apiURL}/metadata/update`,
-	metadataDelete: `${Constants.apiURL}/metadata/delete`,
+	metadataList: "/metadata/list",
+	metadataView: "/metadata/view",
+	metadataFieldTypes: "/metadata/fieldTypes",
+	metadataGet: "/metadata/get",
+	metadataInsert: "/metadata/insert",
+	metadataUpdate: "/metadata/update",
+	metadataDelete: "/metadata/delete",
 
-	setupSave: `${Constants.apiURL}/setup/save`,
+	setupSave: "/setup/save",
 
-	entityStatusList: `${Constants.apiURL}/entityStatus/list`,
-	entityStatusGet: `${Constants.apiURL}/entityStatus/get`,
-	entityStatusInsert: `${Constants.apiURL}/entityStatus/insert`,
-	entityStatusUpdate: `${Constants.apiURL}/entityStatus/update`,
-	entityStatusDelete: `${Constants.apiURL}/entityStatus/delete`,
+	entityStatusList: "/entityStatus/list",
+	entityStatusGet: "/entityStatus/get",
+	entityStatusInsert: "/entityStatus/insert",
+	entityStatusUpdate: "/entityStatus/update",
+	entityStatusDelete: "/entityStatus/delete",
+
+	localeList: "/locale/list",
+	localeExport: "/locale/export",
+	localeImport: "/locale/import",
 };
 
 export const Patterns = {

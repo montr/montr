@@ -12,13 +12,13 @@ using Montr.Tendr.Queries;
 namespace Montr.Tendr.Controllers
 {
 	[Authorize, ApiController, Route("api/[controller]/[action]")]
-	public class InvitationController
+	public class EventInvitationController
 	{
 		private readonly ISender _mediator;
 		private readonly ICurrentCompanyProvider _currentCompanyProvider;
 		private readonly ICurrentUserProvider _currentUserProvider;
 
-		public InvitationController(ISender mediator,
+		public EventInvitationController(ISender mediator,
 			ICurrentCompanyProvider currentCompanyProvider, ICurrentUserProvider currentUserProvider)
 		{
 			_mediator = mediator;

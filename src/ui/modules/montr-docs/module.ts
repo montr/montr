@@ -1,16 +1,15 @@
-import { Constants } from "@montr-core/.";
 import { Guid } from "@montr-core/models";
 import { AppRouteRegistry, ComponentRegistry } from "@montr-core/services";
 import React from "react";
 import { generatePath } from "react-router";
 
 export const Api = {
-	documentMetadata: `${Constants.apiURL}/document/metadata`,
-	documentList: `${Constants.apiURL}/document/list`,
-	documentGet: `${Constants.apiURL}/document/get`,
-	documentPublish: `${Constants.apiURL}/document/publish`,
+	documentMetadata: "/document/metadata",
+	documentList: "/document/list",
+	documentGet: "/document/get",
+	documentPublish: "/document/publish",
 
-	documentFormUpdate: `${Constants.apiURL}/documentForm/update`,
+	documentFormUpdate: "/documentForm/update",
 };
 
 export const Patterns = {

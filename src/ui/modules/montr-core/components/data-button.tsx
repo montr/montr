@@ -1,7 +1,6 @@
 import { Button as Btn } from "antd";
 import { ButtonType } from "antd/lib/button";
 import React from "react";
-import { Constants } from "..";
 import { Button, ConfigurationItemProps } from "../models";
 import { Fetcher, OperationService } from "../services";
 
@@ -19,7 +18,7 @@ export class DataButton extends React.Component<Props> {
 
         if (button.action) {
             await this.operation.confirm(async () => {
-                const url = `${Constants.apiURL}${button.action}`;
+                const url = button.action;
                 const result = await this.fetcher.post(url, button.props);
 
                 if (result.success) {
