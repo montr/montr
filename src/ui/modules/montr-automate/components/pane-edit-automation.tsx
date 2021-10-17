@@ -57,7 +57,7 @@ export class PaneEditAutomation extends React.Component<Props, State> {
 				actions: []
 			};
 
-		const dataView = await this._metadataService.load(Views.automationEdit);
+		const dataView = await this._metadataService.load(Views.automationForm);
 
 		this.setState({
 			loading: false,

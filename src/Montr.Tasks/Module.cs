@@ -11,6 +11,9 @@ namespace Montr.Tasks
 		public void ConfigureServices(IConfiguration configuration, IServiceCollection services)
 		{
 			services.AddTransient<IStartupTask, RegisterClassifierTypeStartupTask>();
+
+			services.AddTransient<IStartupTask, RegisterMetadataStartupTask>();
+
 		}
 	}
 }

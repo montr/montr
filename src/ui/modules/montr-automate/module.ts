@@ -25,8 +25,8 @@ export const Api = {
 };
 
 export const Views = {
-	automationList: "Automation/Grid",
-	automationEdit: "Automation/Edit"
+	automationList: "automation-list",
+	automationForm: "automation-form"
 };
 
 ComponentRegistry.add([

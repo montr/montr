@@ -2,6 +2,7 @@ import ArrowDownOutlined from "@ant-design/icons/ArrowDownOutlined";
 import ArrowLeftOutlined from "@ant-design/icons/ArrowLeftOutlined";
 import ArrowUpOutlined from "@ant-design/icons/ArrowUpOutlined";
 import BarChartOutlined from "@ant-design/icons/BarChartOutlined";
+import CarryOutOutlined from "@ant-design/icons/CarryOutOutlined";
 import CheckCircleOutlined from "@ant-design/icons/CheckCircleOutlined";
 import CheckCircleTwoTone from "@ant-design/icons/CheckCircleTwoTone";
 import CheckOutlined from "@ant-design/icons/CheckOutlined";
@@ -49,6 +50,7 @@ export abstract class Icon {
 	static ArrowLeft = Icon.Map["arrow-left"] = <ArrowLeftOutlined />;
 	static ArrowUp = Icon.Map["arrow-up"] = <ArrowUpOutlined />;
 	static BarChart = Icon.Map["bar-chart"] = <BarChartOutlined />;
+	static CarryOutOutlined = Icon.Map["carry-out"] = <CarryOutOutlined />;
 	static Check = Icon.Map["check"] = <CheckOutlined />;
 	static CheckCircle = Icon.Map["check-circle"] = <CheckCircleOutlined />;
 	static CheckCircleTwoTone = Icon.Map["check-circle-2t"] = <CheckCircleTwoTone twoToneColor="#52c41a" />;

@@ -1,7 +1,6 @@
 import { ButtonAdd, ButtonDelete, DataTable, DataTableUpdateToken, Page, PageHeader, Toolbar } from "@montr-core/components";
 import { IMenu } from "@montr-core/models";
 import { OperationService } from "@montr-core/services";
-import { CompanyContextProps, withCompanyContext } from "@montr-kompany/components";
 import * as React from "react";
 import { Translation, withTranslation, WithTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
@@ -10,7 +9,7 @@ import { ClassifierGroup } from "../models";
 import { Api, Locale, RouteBuilder } from "../module";
 import { ClassifierTypeService } from "../services";
 
-interface Props extends CompanyContextProps, WithTranslation {
+interface Props extends WithTranslation {
 }
 
 interface State {
@@ -31,13 +30,6 @@ class WrappedSearchClassifierType extends React.Component<Props, State> {
 			updateTableToken: { date: new Date() }
 		};
 	}
-
-	componentDidUpdate = async (prevProps: Props) => {
-		// todo: detect company changed without CompanyContextProps (here and everywhere)
-		if (this.props.currentCompany !== prevProps.currentCompany) {
-			this.refreshTable(true);
-		}
-	};
 
 	componentWillUnmount = async () => {
 		await this.classifierTypeService.abort();
@@ -105,6 +97,6 @@ class WrappedSearchClassifierType extends React.Component<Props, State> {
 	};
 }
 
-const SearchClassifierType = withTranslation()(withCompanyContext(WrappedSearchClassifierType));
+const SearchClassifierType = withTranslation()(WrappedSearchClassifierType);
 
 export default SearchClassifierType;

@@ -9,7 +9,7 @@ namespace Montr.Tasks.Impl.Entities
 	[DebuggerDisplay("{" + nameof(DebuggerDisplay) + ",nq}")]
 	public class DbTask
 	{
-		private string DebuggerDisplay => $"{Number}, {Name}";
+		private string DebuggerDisplay => $"{Code}, {Name}";
 
 		[Column(Name = "uid"), DataType(DataType.Guid), NotNull, PrimaryKey]
 		public Guid Uid { get; set; }
@@ -23,8 +23,8 @@ namespace Montr.Tasks.Impl.Entities
 		[Column(Name = "status_code", Length = 16), DataType(DataType.VarChar), NotNull]
 		public string StatusCode { get; set; }
 
-		[Column(Name = "number"), DataType(DataType.VarChar), Nullable]
-		public string Number { get; set; }
+		[Column(Name = "code"), DataType(DataType.VarChar), Nullable]
+		public string Code { get; set; }
 
 		[Column(Name = "assignee_uid"), DataType(DataType.Guid), Nullable]
 		public Guid? AssigneeUid { get; set; }

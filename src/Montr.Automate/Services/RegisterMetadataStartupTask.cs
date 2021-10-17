@@ -19,19 +19,19 @@ namespace Montr.Automate.Services
 
 		public Task Run(CancellationToken cancellationToken)
 		{
-			_registrator.Register("Automation/Grid", viewId => new DataView
+			_registrator.Register(ViewCode.AutomationList, _ => new DataView
 			{
 				Columns = new List<DataColumn>
 				{
-					new DataColumn { Key = "displayOrder", Name = "#", Width = 10, Sortable = true },
-					new DataColumn { Key = "name", Name = "Name", Width = 450, Sortable = true },
-					// new DataColumn { Key = "description", Name = "Description", Width = 150 },
-					new DataColumn { Key = "active", Name = "Active", Width = 10, Sortable = true, Type = BooleanField.TypeCode },
-					new DataColumn { Key = "system", Name = "System", Width = 10, Sortable = true, Type = BooleanField.TypeCode },
+					new() { Key = "displayOrder", Name = "#", Width = 10, Sortable = true },
+					new() { Key = "name", Name = "Name", Width = 450, Sortable = true },
+					// new() { Key = "description", Name = "Description", Width = 150 },
+					new() { Key = "active", Name = "Active", Width = 10, Sortable = true, Type = BooleanField.TypeCode },
+					new() { Key = "system", Name = "System", Width = 10, Sortable = true, Type = BooleanField.TypeCode }
 				}
 			});
 
-			_registrator.Register("Automation/Edit", viewId => new DataView
+			_registrator.Register(ViewCode.AutomationForm, _ => new DataView
 			{
 				Fields = new List<FieldMetadata>
 				{

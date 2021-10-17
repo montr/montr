@@ -2,9 +2,9 @@
 using Montr.Core.Models;
 using Montr.Core.Services;
 
-namespace Montr.Docs.Impl.Services
+namespace Montr.Tasks.Impl.Services
 {
-	public class ContentProvider : IContentProvider
+	public class ContentProvider: IContentProvider
 	{
 		public IList<Menu> GetMenuItems(string menuId)
 		{
@@ -12,7 +12,7 @@ namespace Montr.Docs.Impl.Services
 			{
 				return new[]
 				{
-					new Menu { Id = "documents", Name = "Documents", Icon = "container", Route = "/documents/" },
+					new Menu { Id = "tasks", Name = "Tasks", Icon = "carry-out", Route = "/tasks/" },
 				};
 			}
 

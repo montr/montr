@@ -28,7 +28,7 @@ namespace Montr.Tasks.Impl.Services
 			{
 				var all = db.GetTable<DbTask>().AsQueryable();
 
-				var paged = all.Apply(request, x => x.Number, SortOrder.Descending);
+				var paged = all.Apply(request, x => x.Code, SortOrder.Descending);
 
 				if (request.Uid != null)
 				{
@@ -40,9 +40,9 @@ namespace Montr.Tasks.Impl.Services
 					{
 						Uid = x.Uid,
 						StatusCode = x.StatusCode,
-						Number = x.Number,
+						Code = x.Code,
 						Name = x.Name,
-						Url = $"/tasks/{x.Number}/"
+						Url = $"/tasks/{x.Code}/"
 					})
 					.ToListAsync(cancellationToken);
 
