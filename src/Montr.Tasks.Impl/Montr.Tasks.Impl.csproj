@@ -6,6 +6,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <ProjectReference Include="..\Montr.Automate\Montr.Automate.csproj" />
       <ProjectReference Include="..\Montr.Data.Linq2Db\Montr.Data.Linq2Db.csproj" />
       <ProjectReference Include="..\Montr.Tasks\Montr.Tasks.csproj" />
     </ItemGroup>

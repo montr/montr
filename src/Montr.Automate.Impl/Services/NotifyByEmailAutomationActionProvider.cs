@@ -7,6 +7,7 @@ using Montr.Messages.Services;
 
 namespace Montr.Automate.Impl.Services
 {
+	// todo: move to Messages?
 	public class NotifyByEmailAutomationActionProvider : IAutomationActionProvider
 	{
 		private readonly IAutomationContextProvider _automationContextProvider;
@@ -26,7 +27,7 @@ namespace Montr.Automate.Impl.Services
 			_emailSender = emailSender;
 		}
 
-		public AutomationRuleType RuleType => new AutomationRuleType
+		public AutomationRuleType RuleType => new()
 		{
 			Code = NotifyByEmailAutomationAction.TypeCode,
 			Name = "Notify By Email",
