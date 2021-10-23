@@ -23,7 +23,7 @@ namespace Montr.Automate.Impl.QueryHandlers
 		public async Task<IList<AutomationRuleType>> Handle(GetAutomationConditionTypeList request,
 			CancellationToken cancellationToken)
 		{
-			var result = _providerFactory.GetNames()
+			var result = _providerFactory.GetNames().OrderBy(x => x)
 				.Select(x => _providerFactory.GetRequiredService(x).RuleType).ToList();
 
 			return await Task.FromResult(result);

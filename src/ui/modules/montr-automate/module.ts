@@ -1,15 +1,17 @@
 import { DataFieldFactory } from "@montr-core/components";
 import { ComponentRegistry } from "@montr-core/services";
 import React from "react";
+import { AutomationActionFactory, AutomationConditionFactory } from "./components";
 
 import("./components").then(x => {
 	DataFieldFactory.register("automation-condition-list", new x.AutomationConditionListFieldFactory());
 	DataFieldFactory.register("automation-action-list", new x.AutomationActionListFieldFactory());
 
-	x.AutomationConditionFactory.register("group", new x.GroupAutomationConditionFactory());
-	x.AutomationConditionFactory.register("field", new x.FieldAutomationConditionFactory());
-	x.AutomationActionFactory.register("set-field", new x.SetFieldAutomationActionFactory());
-	x.AutomationActionFactory.register("notify-by-email", new x.NotifyByEmailAutomationActionFactory());
+	AutomationConditionFactory.register("group", new x.GroupAutomationConditionFactory());
+	AutomationConditionFactory.register("field", new x.FieldAutomationConditionFactory());
+
+	AutomationActionFactory.register("set-field", new x.SetFieldAutomationActionFactory());
+	AutomationActionFactory.register("notify-by-email", new x.NotifyByEmailAutomationActionFactory());
 });
 
 export const Api = {

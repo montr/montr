@@ -1,5 +1,11 @@
+import { AutomationActionFactory } from "@montr-automate/components";
 import { AppRouteRegistry, ComponentRegistry } from "@montr-core/services";
 import React from "react";
+import { CreateTaskAutomationActionFactory } from "./components/create-task-automation-action";
+
+import("./components").then(x => {
+    AutomationActionFactory.register("create-task", new CreateTaskAutomationActionFactory());
+});
 
 export const Locale = {
     Namespace: "tasks"
@@ -25,5 +31,4 @@ AppRouteRegistry.add([
 ]);
 
 ComponentRegistry.add([
-
 ]);

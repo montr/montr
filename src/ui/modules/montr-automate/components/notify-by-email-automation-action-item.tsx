@@ -1,8 +1,8 @@
-import React from "react";
-import { Space, Input, Form } from "antd";
-import { AutomationItemProps } from "./automation-field-factory";
-import { NotifyByEmailAutomationAction } from "../models/automation";
 import { FormDefaults } from "@montr-core/components";
+import { Form, Input, Space } from "antd";
+import React from "react";
+import { NotifyByEmailAutomationAction } from "../models/automation";
+import { AutomationItemProps } from "./automation-field-factory";
 
 interface Props extends AutomationItemProps {
 	action: NotifyByEmailAutomationAction;
