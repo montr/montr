@@ -20,6 +20,7 @@ using Montr.Worker.Services;
 
 namespace Montr.Kompany.Impl.CommandHandlers
 {
+	// todo: remove with old registration ui
 	public class CreateCompanyHandler : IRequestHandler<CreateCompany, ApiResult>
 	{
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
@@ -93,7 +94,6 @@ namespace Montr.Kompany.Impl.CommandHandlers
 				using (var db = _dbContextFactory.Create())
 				{
 					// todo: валидация и ограничения
-
 					var companyResult = await companyRepository.Insert(company, cancellationToken);
 
 					companyResult.AssertSuccess(() => $"Failed to register company {company}");

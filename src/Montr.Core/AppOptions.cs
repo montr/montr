@@ -17,6 +17,8 @@ namespace Montr.Core
 		public AppState State { get; set; }
 
 		public Guid? SuperUserId { get; set; }
+
+		public Guid? OperatorCompanyId { get; set; }
 	}
 
 	public enum AppState : byte

@@ -30,6 +30,7 @@ namespace Montr.Tasks.Impl.Services
 			{
 				await db.GetTable<DbTask>()
 					.Value(x => x.Uid, itemUid)
+					.Value(x => x.CompanyUid, item.CompanyUid)
 					.Value(x => x.Name, item.Name)
 					.InsertAsync(cancellationToken);
 			}
@@ -41,6 +42,7 @@ namespace Montr.Tasks.Impl.Services
 		{
 			using (var db = _dbContextFactory.Create())
 			{
+				// todo: check company uid
 				await db.GetTable<DbTask>()
 					.Where(x => x.Uid == item.Uid)
 					.Set(x => x.Name, item.Name)
@@ -54,6 +56,7 @@ namespace Montr.Tasks.Impl.Services
 		{
 			using (var db = _dbContextFactory.Create())
 			{
+				// todo: check company uid
 				var affected = await db.GetTable<DbTask>()
 					.Where(x => uids.Contains(x.Uid))
 					.DeleteAsync(cancellationToken);

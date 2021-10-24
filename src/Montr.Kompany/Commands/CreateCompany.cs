@@ -5,6 +5,7 @@ using Montr.Kompany.Models;
 
 namespace Montr.Kompany.Commands
 {
+	// todo: remove with old registration ui
 	public class CreateCompany : IRequest<ApiResult>
 	{
 		public abstract class Resources

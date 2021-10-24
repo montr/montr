@@ -1,14 +1,17 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
+using LinqToDB;
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Montr.Core;
 using Montr.Core.Models;
 using Montr.Core.Services;
+using Montr.Data.Linq2Db;
 using Montr.Idx.Models;
 using Montr.Idx.Services;
 using Montr.Kompany.Commands;
+using Montr.Kompany.Impl.Entities;
 using Montr.Kompany.Models;
 using Montr.MasterData.Services;
 using ClientRoutes = Montr.Core.ClientRoutes;
@@ -20,6 +23,7 @@ namespace Montr.Kompany.Impl.CommandHandlers
 		private readonly ILogger<SetupSystemHandler> _logger;
 		private readonly IOptionsMonitor<AppOptions> _optionsMonitor;
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+		private readonly IDbContextFactory _dbContextFactory;
 		private readonly INamedServiceFactory<IClassifierRepository> _classifierRepositoryFactory;
 		private readonly ISignInManager _signInManager;
 		private readonly ISettingsRepository _settingsRepository;
@@ -30,6 +34,7 @@ namespace Montr.Kompany.Impl.CommandHandlers
 		public SetupSystemHandler(ILogger<SetupSystemHandler> logger,
 			IOptionsMonitor<AppOptions> optionsMonitor,
 			IUnitOfWorkFactory unitOfWorkFactory,
+			IDbContextFactory dbContextFactory,
 			INamedServiceFactory<IClassifierRepository> classifierRepositoryFactory,
 			ISignInManager signInManager,
 			ISettingsRepository settingsRepository,
@@ -40,6 +45,7 @@ namespace Montr.Kompany.Impl.CommandHandlers
 			_logger = logger;
 			_optionsMonitor = optionsMonitor;
 			_unitOfWorkFactory = unitOfWorkFactory;
+			_dbContextFactory = dbContextFactory;
 			_classifierRepositoryFactory = classifierRepositoryFactory;
 			_signInManager = signInManager;
 			_settingsRepository = settingsRepository;
@@ -61,6 +67,9 @@ namespace Montr.Kompany.Impl.CommandHandlers
 				};
 			}
 
+			var userRepository = _classifierRepositoryFactory.GetRequiredService(Idx.ClassifierTypeCode.User);
+			var companyRepository = _classifierRepositoryFactory.GetNamedOrDefaultService(ClassifierTypeCode.Company);
+
 			using (var scope = _unitOfWorkFactory.Create())
 			{
 				_logger.LogInformation($"Creating default administrator {request.AdminEmail}", request.AdminEmail);
@@ -73,8 +82,6 @@ namespace Montr.Kompany.Impl.CommandHandlers
 					Email = request.AdminEmail
 				};
 
-				var userRepository = _classifierRepositoryFactory.GetRequiredService(Idx.ClassifierTypeCode.User);
-
 				var userResult = await userRepository.Insert(user, cancellationToken);
 
 				if (userResult.Success == false) return userResult;
@@ -85,26 +92,42 @@ namespace Montr.Kompany.Impl.CommandHandlers
 
 				var userUid = userResult.Uid;
 
-				_logger.LogInformation($"Creating default company {request.CompanyName}", request.CompanyName);
+				_logger.LogInformation($"Creating operator company {request.CompanyName}", request.CompanyName);
+
+				var company = new Company
+				{
+					Name = request.CompanyName,
+					ConfigCode = CompanyConfigCode.Company // todo: register and use allowed company types
+				};
+
+				var companyResult = await companyRepository.Insert(company, cancellationToken);
 
 				// todo: create company without mediator and company request
-				var companyResult = await _mediator.Send(new CreateCompany
+				/*var companyResult = await _mediator.Send(new CreateCompany
 				{
 					UserUid = userUid,
-					Item = new Company
-					{
-						Name = request.CompanyName,
-						ConfigCode = CompanyConfigCode.Company // todo: register and use allowed company types
-					}
-				}, cancellationToken);
+					Item = company
+				}, cancellationToken);*/
 
 				if (companyResult.Success == false) return companyResult;
+
+				var companyUid = companyResult.Uid;
+
+				using (var db = _dbContextFactory.Create())
+				{
+					// user in company
+					await db.GetTable<DbCompanyUser>()
+						.Value(x => x.CompanyUid, companyUid)
+						.Value(x => x.UserUid, userUid)
+						.InsertAsync(cancellationToken);
+				}
 
 				_logger.LogInformation("Updating application initialization options");
 
 				await _settingsRepository.GetSettings<AppOptions>()
 					.Set(x => x.State, AppState.Initialized)
 					.Set(x => x.SuperUserId, userUid)
+					.Set(x => x.OperatorCompanyId, companyUid)
 					.Update(cancellationToken);
 
 				scope.Commit();

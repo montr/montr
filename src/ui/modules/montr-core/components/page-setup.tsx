@@ -1,24 +1,24 @@
-import * as React from "react";
 import { Alert, Spin } from "antd";
+import * as React from "react";
 import { Translation } from "react-i18next";
-import { ApiResult, AppState, IDataField, IIndexer } from "../models";
-import { MetadataService, SetupService } from "../services";
 import { DataForm, Page } from ".";
-import { Views } from "../module";
 import { Constants } from "..";
+import { ApiResult, AppState, IDataField, IIndexer } from "../models";
+import { Views } from "../module";
+import { MetadataService, SetupService } from "../services";
 
 interface State {
     loading: boolean;
     fields?: IDataField[];
 }
 
-export default class PageSetup extends React.Component<null, State> {
+export default class PageSetup extends React.Component<unknown, State> {
 
     private _metadataService = new MetadataService();
     private _setupService = new SetupService();
 
-    constructor() {
-        super(null);
+    constructor(props: unknown) {
+        super(props);
 
         this.state = {
             loading: true

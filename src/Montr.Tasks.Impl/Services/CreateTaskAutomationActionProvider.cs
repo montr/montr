@@ -1,7 +1,9 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Options;
 using Montr.Automate.Models;
 using Montr.Automate.Services;
+using Montr.Core;
 using Montr.Tasks.Models;
 using Montr.Tasks.Services;
 
@@ -9,10 +11,12 @@ namespace Montr.Tasks.Impl.Services
 {
 	public class CreateTaskAutomationActionProvider : IAutomationActionProvider
 	{
+		private readonly IOptionsMonitor<AppOptions> _appOptionsMonitor;
 		private readonly ITaskService _taskService;
 
-		public CreateTaskAutomationActionProvider(ITaskService taskService)
+		public CreateTaskAutomationActionProvider(IOptionsMonitor<AppOptions> appOptionsMonitor, ITaskService taskService)
 		{
+			_appOptionsMonitor = appOptionsMonitor;
 			_taskService = taskService;
 		}
 
@@ -27,8 +31,11 @@ namespace Montr.Tasks.Impl.Services
 		{
 			var action = (CreateTaskAutomationAction)automationAction;
 
+			var appOptions = _appOptionsMonitor.CurrentValue;
+
 			var model = new TaskModel
 			{
+				CompanyUid = appOptions.OperatorCompanyId,
 				Name = action.Props.Name,
 				Description = action.Props.Description
 			};
