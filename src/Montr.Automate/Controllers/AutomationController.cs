@@ -7,6 +7,7 @@ using Montr.Automate.Commands;
 using Montr.Automate.Models;
 using Montr.Automate.Queries;
 using Montr.Core.Models;
+using Montr.Metadata.Models;
 
 namespace Montr.Automate.Controllers
 {
@@ -22,6 +23,12 @@ namespace Montr.Automate.Controllers
 
 		[HttpPost]
 		public async Task<SearchResult<Automation>> List(GetAutomationList request)
+		{
+			return await _mediator.Send(request);
+		}
+
+		[HttpPost]
+		public async Task<IList<FieldMetadata>> Metadata(GetAutomationMetadata request)
 		{
 			return await _mediator.Send(request);
 		}

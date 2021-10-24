@@ -29,7 +29,6 @@ namespace Montr.Kompany.Impl.CommandHandlers
 		private readonly ISettingsRepository _settingsRepository;
 		private readonly IAppUrlBuilder _appUrlBuilder;
 		private readonly ILocalizer _localizer;
-		private readonly ISender _mediator;
 
 		public SetupSystemHandler(ILogger<SetupSystemHandler> logger,
 			IOptionsMonitor<AppOptions> optionsMonitor,
@@ -39,8 +38,7 @@ namespace Montr.Kompany.Impl.CommandHandlers
 			ISignInManager signInManager,
 			ISettingsRepository settingsRepository,
 			IAppUrlBuilder appUrlBuilder,
-			ILocalizer localizer,
-			ISender mediator)
+			ILocalizer localizer)
 		{
 			_logger = logger;
 			_optionsMonitor = optionsMonitor;
@@ -51,7 +49,6 @@ namespace Montr.Kompany.Impl.CommandHandlers
 			_settingsRepository = settingsRepository;
 			_appUrlBuilder = appUrlBuilder;
 			_localizer = localizer;
-			_mediator = mediator;
 		}
 
 		public async Task<ApiResult> Handle(SetupSystem request, CancellationToken cancellationToken)

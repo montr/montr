@@ -16,6 +16,7 @@ import("./components").then(x => {
 
 export const Api = {
 	automationList: "/automation/list/",
+	automationMetadata: "/automation/metadata/",
 	automationGet: "/automation/get/",
 	automationActionTypes: "/automation/actionTypes/",
 	automationConditionTypes: "/automation/conditionTypes/",

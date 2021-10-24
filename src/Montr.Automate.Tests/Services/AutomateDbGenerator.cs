@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
@@ -12,6 +13,7 @@ using Montr.Automate.Services;
 using Montr.Core.Models;
 using Montr.Core.Services;
 using Montr.Data.Linq2Db;
+using Montr.Metadata.Models;
 using Moq;
 
 namespace Montr.Automate.Tests.Services
@@ -70,7 +72,12 @@ namespace Montr.Automate.Tests.Services
 
 		private class NoopAutomationActionProvider : IAutomationActionProvider
 		{
-			public AutomationRuleType RuleType { get; set; }
+			public AutomationRuleType RuleType { get; init; }
+
+			public IList<FieldMetadata> GetMetadata()
+			{
+				return null;
+			}
 
 			public Task Execute(AutomationAction automationAction, AutomationContext context, CancellationToken cancellationToken)
 			{

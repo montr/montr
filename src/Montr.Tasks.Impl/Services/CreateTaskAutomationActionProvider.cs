@@ -1,9 +1,11 @@
-﻿using System.Threading;
+﻿using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using Montr.Automate.Models;
 using Montr.Automate.Services;
 using Montr.Core;
+using Montr.Metadata.Models;
 using Montr.Tasks.Models;
 using Montr.Tasks.Services;
 
@@ -26,6 +28,15 @@ namespace Montr.Tasks.Impl.Services
 			Name = "Create Task",
 			Type = typeof(CreateTaskAutomationAction)
 		};
+
+		public IList<FieldMetadata> GetMetadata()
+		{
+			return new List<FieldMetadata>
+			{
+				new TextField { Key = "name", Name = "Name", Required = true },
+				new TextAreaField { Key = "description", Name = "Description", Props = new TextAreaField.Properties { Rows = 1 } },
+			};
+		}
 
 		public async Task Execute(AutomationAction automationAction, AutomationContext context, CancellationToken cancellationToken)
 		{

@@ -1,9 +1,11 @@
-﻿using System.Threading;
+﻿using System.Collections.Generic;
+using System.Threading;
 using System.Threading.Tasks;
 using Montr.Automate.Impl.Models;
 using Montr.Automate.Models;
 using Montr.Automate.Services;
 using Montr.Messages.Services;
+using Montr.Metadata.Models;
 
 namespace Montr.Automate.Impl.Services
 {
@@ -33,6 +35,11 @@ namespace Montr.Automate.Impl.Services
 			Name = "Notify By Email",
 			Type = typeof(NotifyByEmailAutomationAction)
 		};
+
+		public IList<FieldMetadata> GetMetadata()
+		{
+			throw new System.NotImplementedException();
+		}
 
 		public async Task Execute(AutomationAction automationAction, AutomationContext context, CancellationToken cancellationToken)
 		{

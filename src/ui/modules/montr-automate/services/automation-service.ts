@@ -1,4 +1,4 @@
-import { ApiResult, Guid } from "@montr-core/models";
+import { ApiResult, Guid, IDataField } from "@montr-core/models";
 import { Fetcher } from "@montr-core/services/fetcher";
 import { Automation, AutomationRuleType } from "../models/automation";
 import { Api } from "../module";
@@ -16,6 +16,10 @@ interface IDeleteAutomationRequest {
 }
 
 export class AutomationService extends Fetcher {
+
+	metadata = async (actionTypeCode: string): Promise<IDataField[]> => {
+		return this.post(Api.automationMetadata, { actionTypeCode });
+	};
 
 	get = async (entityTypeCode: string, entityUid: Guid | string, uid: Guid): Promise<Automation> => {
 		return this.post(Api.automationGet, { entityTypeCode, entityUid, uid });
