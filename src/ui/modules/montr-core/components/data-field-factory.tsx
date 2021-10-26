@@ -1,4 +1,5 @@
 import { Checkbox, DatePicker, Form, Input, InputNumber, Select } from "antd";
+import { NamePath } from "antd/lib/form/interface";
 import { getFieldId } from "antd/lib/form/util";
 import moment from "moment";
 import { Rule } from "rc-field-form/lib/interface";
@@ -22,7 +23,7 @@ export abstract class DataFieldFactory<TField extends IDataField> {
 
 	shouldFormatValue: boolean = false;
 
-	createFormItem = (field: TField, data: IIndexer, options: DataFormOptions): React.ReactNode => {
+	createFormItem = (field: TField, data: IIndexer, options: DataFormOptions, name: NamePath = null): React.ReactNode => {
 		const { t, layout, mode, hideLabels } = options;
 
 		const required: Rule = {
@@ -52,6 +53,8 @@ export abstract class DataFieldFactory<TField extends IDataField> {
 			return (
 				<Form.Item
 					key={field.key}
+					// fieldKey={fieldKey} // todo: use key 
+					// name={name}
 					label={hideLabels ? null : field.name}
 					extra={field.description}
 					valuePropName={this.valuePropName}
@@ -67,7 +70,7 @@ export abstract class DataFieldFactory<TField extends IDataField> {
 		return (
 			<Form.Item
 				key={field.key}
-				name={namePath}
+				name={name ?? namePath}
 				htmlFor={getFieldId(namePath)} // replace(".", "_")
 				label={hideLabels || (field.type == "boolean") ? null : field.name}
 				extra={field.description}

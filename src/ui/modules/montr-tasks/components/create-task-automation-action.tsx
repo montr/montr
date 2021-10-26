@@ -1,8 +1,8 @@
 import { AutomationConditionFactory, AutomationItemProps } from "@montr-automate/components";
 import { AutomationService } from "@montr-automate/services";
-import { DataForm, FormDefaults } from "@montr-core/components";
+import { DataFieldFactory, FormDefaults } from "@montr-core/components";
 import { IDataField } from "@montr-core/models";
-import { Form, Input, Space } from "antd";
+import { Space } from "antd";
 import React from "react";
 import { CreateTaskAutomationAction } from "../models";
 
@@ -44,7 +44,7 @@ export class CreateTaskAutomationActionItem extends React.Component<Props, State
     };
 
     render = () => {
-        const { typeSelector, item } = this.props,
+        const { typeSelector, item, options } = this.props,
             { fields } = this.state;
 
         const { key, ...other } = item;
@@ -56,11 +56,21 @@ export class CreateTaskAutomationActionItem extends React.Component<Props, State
                     {typeSelector}
                 </Space>
 
-                <DataForm fields={fields} hideButtons={true}>
+                {fields && fields.map(field => {
+                    const factory = DataFieldFactory.get(field.type);
 
-                </DataForm>
+                    if (!factory) {
+                        // todo: display default placeholder for not found field type
+                        console.warn(`Warning: Field type '${field.type}' is not found.`);
+                        return null;
+                    }
 
-                <Form.Item
+                    const name = [item.name, "props", field.key];
+
+                    return factory.createFormItem(field, null /* item */, options, name);
+                })}
+
+                {/* <Form.Item
                     {...itemProps}
                     label="Name"
                     name={[item.name, "props", "name"]}
@@ -76,7 +86,7 @@ export class CreateTaskAutomationActionItem extends React.Component<Props, State
                     fieldKey={[item.fieldKey, "description"]}
                     rules={[{ required: false }]}>
                     <Input.TextArea placeholder="Description" rows={4} />
-                </Form.Item>
+                </Form.Item> */}
             </>
         );
     };

@@ -33,8 +33,8 @@ namespace Montr.Tasks.Impl.Services
 		{
 			return new List<FieldMetadata>
 			{
-				new TextField { Key = "name", Name = "Name", Required = true },
-				new TextAreaField { Key = "description", Name = "Description", Props = new TextAreaField.Properties { Rows = 1 } },
+				new TextField { Key = "name", Name = "Name", Placeholder = "Name", Required = true },
+				new TextAreaField { Key = "description", Name = "Description", Placeholder = "Description", Props = new TextAreaField.Properties { Rows = 2 } },
 			};
 		}
 
