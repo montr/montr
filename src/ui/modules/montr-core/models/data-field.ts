@@ -12,6 +12,7 @@ export interface IDataField {
 	key?: string;
 	name?: string;
 	description?: string;
+	tooltip?: string;
 	placeholder?: string;
 	icon?: string;
 	// multiple?: boolean;

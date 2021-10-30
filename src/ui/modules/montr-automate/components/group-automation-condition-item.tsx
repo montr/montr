@@ -1,8 +1,8 @@
+import { DataFieldFactory, DataFormOptions } from "@montr-core/components";
+import { Form, Radio, Space } from "antd";
 import React from "react";
-import { Radio, Form, Space } from "antd";
-import { GroupAutomationCondition, AutomationConditionListField } from "../models";
 import { AutomationItemProps } from ".";
-import { DataFieldFactory } from "@montr-core/components";
+import { AutomationConditionListField, GroupAutomationCondition } from "../models";
 
 interface Props extends AutomationItemProps {
 	// todo: rename to value here in other conditions and actions?
@@ -19,8 +19,11 @@ export class GroupAutomationConditionItem extends React.Component<Props> {
 			key: "conditions"
 		};
 
+		const innerOptions: DataFormOptions = { namePathPrefix: [item.name, "props", "conditions"], ...options };
+
 		const factory = DataFieldFactory.get(field.type);
-		const children = factory.createFormItem(field, condition.conditions, options);
+
+		const children = factory?.createFormItem(field, null /* condition.conditions */, innerOptions);
 
 		return (<>
 			<Space align="start">

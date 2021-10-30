@@ -1,6 +1,4 @@
 import { Checkbox, DatePicker, Form, Input, InputNumber, Select } from "antd";
-import { NamePath } from "antd/lib/form/interface";
-import { getFieldId } from "antd/lib/form/util";
 import moment from "moment";
 import { Rule } from "rc-field-form/lib/interface";
 import * as React from "react";
@@ -16,24 +14,22 @@ export abstract class DataFieldFactory<TField extends IDataField> {
 	}
 
 	static get(key: string): DataFieldFactory<IDataField> {
-		return DataFieldFactory.Map[key];
+		const factory = DataFieldFactory.Map[key];
+
+		if (!factory) {
+			// todo: display default placeholder for not found field type (?)
+			console.warn(`Warning: Field type '${key}' is not found.`);
+		}
+
+		return factory;
 	}
 
-	valuePropName: string = "value";
+	valuePropName = "value";
 
-	shouldFormatValue: boolean = false;
+	shouldFormatValue = false;
 
-	createFormItem = (field: TField, data: IIndexer, options: DataFormOptions, name: NamePath = null): React.ReactNode => {
+	createFormItem = (field: TField, data: IIndexer, options: DataFormOptions): React.ReactNode => {
 		const { t, layout, mode, hideLabels } = options;
-
-		const required: Rule = {
-			required: field.required,
-			message: t("dataForm.rule.required", { name: field.name })
-		};
-
-		if (field.type == "text" || field.type == "textarea" || field.type == "password") {
-			required.whitespace = field.required;
-		}
 
 		if (this.shouldFormatValue) {
 			const value = DataHelper.indexer(data, field.key, undefined);
@@ -49,38 +45,55 @@ export abstract class DataFieldFactory<TField extends IDataField> {
 			? (mode != "view" && field.type == "boolean" ? FormDefaults.tailFormItemLayout : FormDefaults.formItemLayout)
 			: {};
 
+		const namePath: (string | number)[] = [];
+		if (options.namePathPrefix)
+			namePath.push(...options.namePathPrefix);
+		namePath.push(...field.key.split("."));
+
+		const key = namePath.join(".");
+
 		if (mode == "view") {
 			return (
 				<Form.Item
-					key={field.key}
-					// fieldKey={fieldKey} // todo: use key 
-					// name={name}
+					key={key}
 					label={hideLabels ? null : field.name}
 					extra={field.description}
 					valuePropName={this.valuePropName}
-					rules={[required]}
 					{...itemLayout}>
 					{fieldNode}
 				</Form.Item>
 			);
 		}
 
-		const namePath = field.key.split(".");
-
 		return (
 			<Form.Item
-				key={field.key}
-				name={name ?? namePath}
-				htmlFor={getFieldId(namePath)} // replace(".", "_")
+				key={key}
+				name={namePath}
 				label={hideLabels || (field.type == "boolean") ? null : field.name}
 				extra={field.description}
 				valuePropName={this.valuePropName}
-				rules={[required]}
+				tooltip={field.tooltip}
+				rules={this.createFormItemRules(field, options)}
 				{...itemLayout}>
 				{fieldNode}
 			</Form.Item>
 		);
 	};
+
+	createFormItemRules(field: TField, options: DataFormOptions): Rule[] {
+		const { t } = options;
+
+		const required: Rule = {
+			required: field.required,
+			message: t("dataForm.rule.required", { name: field.name })
+		};
+
+		if (field.type == "text" || field.type == "textarea" || field.type == "password") {
+			required.whitespace = field.required;
+		}
+
+		return [required];
+	}
 
 	formatValue(field: TField, data: IIndexer, value: any): any {
 		return value;

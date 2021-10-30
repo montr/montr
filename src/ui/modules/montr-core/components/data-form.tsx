@@ -12,6 +12,7 @@ export interface DataFormOptions extends WithTranslation {
 	mode?: "edit" | "view";
 	layout?: "horizontal" | "inline" | "vertical";
 	hideLabels?: boolean;
+	namePathPrefix?: (string | number)[];
 }
 
 interface Props extends DataFormOptions {
@@ -145,13 +146,7 @@ class WrappedDataForm extends React.Component<Props, State> {
 					{fields.map(field => {
 						const factory = DataFieldFactory.get(field.type);
 
-						if (!factory) {
-							// todo: display default placeholder for not found field type
-							console.warn(`Warning: Field type '${field.type}' is not found.`);
-							return null;
-						}
-
-						return factory.createFormItem(field, data, this.props);
+						return factory?.createFormItem(field, data, this.props);
 					})}
 
 					<Form.Item {...itemLayout} style={{ display: buttonsDisplay }}>
