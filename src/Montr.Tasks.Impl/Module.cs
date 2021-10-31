@@ -3,6 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Montr.Automate.Services;
 using Montr.Core;
 using Montr.Core.Services;
+using Montr.MasterData.Services;
 using Montr.Tasks.Impl.Services;
 using Montr.Tasks.Models;
 using Montr.Tasks.Services;
@@ -19,6 +20,8 @@ namespace Montr.Tasks.Impl
 
 			services.AddTransient<ITaskService, DbTaskService>();
 			services.AddTransient<IRepository<TaskModel>, DbTaskRepository>();
+
+			services.AddNamedTransient<IClassifierRepository, DbTaskTypeRepository>(ClassifierTypeCode.TaskType);
 
 			services.AddNamedTransient<IAutomationActionProvider, CreateTaskAutomationActionProvider>(CreateTaskAutomationAction.TypeCode);
 		}

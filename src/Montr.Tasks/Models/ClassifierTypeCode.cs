@@ -1,4 +1,4 @@
-﻿namespace Montr.Tasks
+﻿namespace Montr.Tasks.Models
 {
 	public class ClassifierTypeCode
 	{

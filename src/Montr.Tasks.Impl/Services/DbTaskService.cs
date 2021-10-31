@@ -30,8 +30,12 @@ namespace Montr.Tasks.Impl.Services
 			{
 				await db.GetTable<DbTask>()
 					.Value(x => x.Uid, itemUid)
+					.Value(x => x.StatusCode, TaskStatusCode.Open)
 					.Value(x => x.CompanyUid, item.CompanyUid)
+					.Value(x => x.TaskTypeUid, item.TaskTypeUid)
+					.Value(x => x.AssigneeUid, item.AssigneeUid)
 					.Value(x => x.Name, item.Name)
+					.Value(x => x.Description, item.Description)
 					.InsertAsync(cancellationToken);
 			}
 
@@ -45,7 +49,10 @@ namespace Montr.Tasks.Impl.Services
 				// todo: check company uid
 				await db.GetTable<DbTask>()
 					.Where(x => x.Uid == item.Uid)
+					.Set(x => x.TaskTypeUid, item.TaskTypeUid)
+					.Set(x => x.AssigneeUid, item.AssigneeUid)
 					.Set(x => x.Name, item.Name)
+					.Set(x => x.Description, item.Description)
 					.UpdateAsync(cancellationToken);
 
 				return new ApiResult();

@@ -1,4 +1,5 @@
-﻿using Montr.Automate.Models;
+﻿using System;
+using Montr.Automate.Models;
 
 namespace Montr.Tasks.Models
 {
@@ -10,6 +11,10 @@ namespace Montr.Tasks.Models
 
 		public class Properties
 		{
+			public Guid? TaskTypeUid { get; set; }
+
+			public Guid? AssigneeUid { get; set; }
+
 			public string Name { get; set; }
 
 			public string Description { get; set; }

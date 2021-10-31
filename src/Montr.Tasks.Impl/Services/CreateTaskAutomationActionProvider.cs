@@ -5,6 +5,7 @@ using Microsoft.Extensions.Options;
 using Montr.Automate.Models;
 using Montr.Automate.Services;
 using Montr.Core;
+using Montr.MasterData.Models;
 using Montr.Metadata.Models;
 using Montr.Tasks.Models;
 using Montr.Tasks.Services;
@@ -33,6 +34,8 @@ namespace Montr.Tasks.Impl.Services
 		{
 			return new List<FieldMetadata>
 			{
+				new ClassifierField { Key = "taskTypeUid", Name = "Task type", Required = true, Props = { TypeCode = ClassifierTypeCode.TaskType } },
+				new ClassifierField { Key = "assigneeUid", Name = "Assignee", Required = true, Props = { TypeCode = Idx.ClassifierTypeCode.User } },
 				new TextField { Key = "name", Name = "Name", Placeholder = "Name", Required = true },
 				new TextAreaField { Key = "description", Name = "Description", Placeholder = "Description", Props = new TextAreaField.Properties { Rows = 2 } },
 			};
@@ -47,6 +50,8 @@ namespace Montr.Tasks.Impl.Services
 			var model = new TaskModel
 			{
 				CompanyUid = appOptions.OperatorCompanyId,
+				TaskTypeUid = action.Props.TaskTypeUid,
+				AssigneeUid = action.Props.AssigneeUid,
 				Name = action.Props.Name,
 				Description = action.Props.Description
 			};

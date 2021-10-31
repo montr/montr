@@ -12,7 +12,9 @@ namespace Montr.Tasks.Models
 
 		public Guid? CompanyUid { get; set; }
 
-		public Guid TaskTypeUid { get; set; }
+		public Guid? TaskTypeUid { get; set; }
+
+		public Guid? AssigneeUid { get; set; }
 
 		public string StatusCode { get; set; }
 

@@ -29,6 +29,7 @@ CREATE TABLE montr.task (
 	assignee_uid uuid NULL,
 	parent_uid uuid NULL,
 	"name" varchar(2048) NULL,
+	description text NULL,
 	start_date_utc timestamptz NULL,
 	due_date_utc timestamptz NULL,
 	created_by uuid NULL,

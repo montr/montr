@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Montr.Core.Services;
 using Montr.Metadata.Models;
 using Montr.Metadata.Services;
+using Montr.Tasks.Models;
 
 namespace Montr.Tasks.Services
 {
