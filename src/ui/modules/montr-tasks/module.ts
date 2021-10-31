@@ -1,11 +1,5 @@
-import { AutomationActionFactory } from "@montr-automate/components";
-import { AppRouteRegistry, ComponentRegistry } from "@montr-core/services";
+import { AppRouteRegistry } from "@montr-core/services";
 import React from "react";
-import { CreateTaskAutomationActionFactory } from "./components/create-task-automation-action";
-
-import("./components").then(x => {
-    AutomationActionFactory.register("create-task", new CreateTaskAutomationActionFactory());
-});
 
 export const Locale = {
     Namespace: "tasks"
@@ -28,7 +22,4 @@ export const RouteBuilder = {
 
 AppRouteRegistry.add([
     { path: Patterns.searchTask, exact: true, component: React.lazy(() => import("./components/page-search-tasks")) },
-]);
-
-ComponentRegistry.add([
 ]);

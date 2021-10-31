@@ -1,8 +1,8 @@
 import { DataFieldFactory, DataFormOptions } from "@montr-core/components";
 import { FieldData, IIndexer } from "@montr-core/models";
 import React from "react";
-import { AutomationActionList, AutomationConditionList, FieldAutomationConditionItem, GroupAutomationConditionItem, NotifyByEmailAutomationActionItem, SetFieldAutomationActionItem } from ".";
-import { AutomationAction, AutomationActionListField, AutomationCondition, AutomationConditionListField, FieldAutomationCondition, GroupAutomationCondition, NotifyByEmailAutomationAction, SetFieldAutomationAction } from "../models/";
+import { AutomationActionList, AutomationConditionList, FieldAutomationConditionItem, GroupAutomationConditionItem, SetFieldAutomationActionItem } from ".";
+import { AutomationAction, AutomationActionListField, AutomationCondition, AutomationConditionListField, FieldAutomationCondition, GroupAutomationCondition, SetFieldAutomationAction } from "../models/";
 
 export class AutomationConditionListFieldFactory extends DataFieldFactory<AutomationConditionListField> {
 
@@ -83,11 +83,5 @@ export class FieldAutomationConditionFactory extends AutomationConditionFactory<
 export class SetFieldAutomationActionFactory extends AutomationConditionFactory<SetFieldAutomationAction> {
 	createFormItem(action: SetFieldAutomationAction, props: AutomationItemProps): React.ReactElement {
 		return <SetFieldAutomationActionItem action={action} {...props} />;
-	}
-}
-
-export class NotifyByEmailAutomationActionFactory extends AutomationConditionFactory<NotifyByEmailAutomationAction> {
-	createFormItem(action: NotifyByEmailAutomationAction, props: AutomationItemProps): React.ReactElement {
-		return <NotifyByEmailAutomationActionItem action={action} {...props} />;
 	}
 }

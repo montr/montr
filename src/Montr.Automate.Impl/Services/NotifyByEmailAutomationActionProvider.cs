@@ -38,7 +38,12 @@ namespace Montr.Automate.Impl.Services
 
 		public IList<FieldMetadata> GetMetadata()
 		{
-			throw new System.NotImplementedException();
+			return new List<FieldMetadata>
+			{
+				new TextField { Key = "recipient", Name = "Recipient", Required = true },
+				new TextField { Key = "subject", Name = "Subject", Required = true },
+				new TextAreaField { Key = "body", Name = "Body", Required = true, Props = new TextAreaField.Properties { Rows = 2 } }
+			};
 		}
 
 		public async Task Execute(AutomationAction automationAction, AutomationContext context, CancellationToken cancellationToken)

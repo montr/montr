@@ -1,9 +1,11 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Montr.Automate.Impl.Models;
 using Montr.Automate.Models;
 using Montr.Automate.Services;
+using Montr.Metadata.Models;
 
 namespace Montr.Automate.Impl.Services
 {
@@ -16,12 +18,17 @@ namespace Montr.Automate.Impl.Services
 			_automationContextProvider = automationContextProvider;
 		}
 
-		public AutomationRuleType RuleType => new AutomationRuleType
+		public AutomationRuleType RuleType => new()
 		{
 			Code = FieldAutomationCondition.TypeCode,
 			Name = "Field",
 			Type = typeof(FieldAutomationCondition)
 		};
+
+		public IList<FieldMetadata> GetMetadata()
+		{
+			throw new NotImplementedException();
+		}
 
 		public async Task<bool> Meet(AutomationCondition automationCondition, AutomationContext context, CancellationToken cancellationToken)
 		{

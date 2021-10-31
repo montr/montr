@@ -11,7 +11,6 @@ import("./components").then(x => {
 	AutomationConditionFactory.register("field", new x.FieldAutomationConditionFactory());
 
 	AutomationActionFactory.register("set-field", new x.SetFieldAutomationActionFactory());
-	AutomationActionFactory.register("notify-by-email", new x.NotifyByEmailAutomationActionFactory());
 });
 
 export const Api = {

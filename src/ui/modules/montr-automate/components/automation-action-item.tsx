@@ -1,13 +1,13 @@
-import { AutomationConditionFactory, AutomationItemProps } from "@montr-automate/components";
-import { AutomationService } from "@montr-automate/services";
 import { DataFieldFactory, DataFormOptions } from "@montr-core/components";
 import { IDataField } from "@montr-core/models";
 import { Space } from "antd";
 import React from "react";
-import { CreateTaskAutomationAction } from "../models";
+import { AutomationItemProps } from ".";
+import { AutomationAction } from "../models";
+import { AutomationService } from "../services";
 
 interface Props extends AutomationItemProps {
-    action: CreateTaskAutomationAction;
+    action: AutomationAction;
 }
 
 interface State {
@@ -15,7 +15,7 @@ interface State {
     fields?: IDataField[];
 }
 
-export class CreateTaskAutomationActionItem extends React.Component<Props, State> {
+export class AutomationActionItem extends React.Component<Props, State> {
 
     private readonly automationService = new AutomationService();
 
@@ -35,12 +35,22 @@ export class CreateTaskAutomationActionItem extends React.Component<Props, State
         await this.automationService.abort();
     };
 
+    componentDidUpdate = async (prevProps: Props): Promise<void> => {
+        if (this.props.action !== prevProps.action) {
+            await this.fetchMetadata();
+        }
+    };
+
     fetchMetadata = async (): Promise<void> => {
         const { action } = this.props;
 
-        const fields = await this.automationService.metadata(action.type);
+        if (action?.type) {
+            const fields = await this.automationService.metadata(action.type, null);
 
-        this.setState({ loading: false, fields });
+            this.setState({ loading: false, fields });
+        } else {
+            this.setState({ loading: false });
+        }
     };
 
     render = () => {
@@ -61,10 +71,4 @@ export class CreateTaskAutomationActionItem extends React.Component<Props, State
             })}
         </>);
     };
-}
-
-export class CreateTaskAutomationActionFactory extends AutomationConditionFactory<CreateTaskAutomationAction> {
-    createFormItem(action: CreateTaskAutomationAction, props: AutomationItemProps): React.ReactElement {
-        return <CreateTaskAutomationActionItem action={action} {...props} />;
-    }
 }

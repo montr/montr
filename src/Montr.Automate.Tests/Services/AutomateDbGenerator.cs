@@ -87,7 +87,12 @@ namespace Montr.Automate.Tests.Services
 
 		private class NoopAutomationConditionProvider : IAutomationConditionProvider
 		{
-			public AutomationRuleType RuleType { get; set; }
+			public AutomationRuleType RuleType { get; init; }
+
+			public IList<FieldMetadata> GetMetadata()
+			{
+				return null;
+			}
 
 			public Task<bool> Meet(AutomationCondition automationCondition, AutomationContext context, CancellationToken cancellationToken)
 			{

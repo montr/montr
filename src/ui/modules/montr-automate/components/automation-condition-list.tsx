@@ -1,8 +1,8 @@
-import React from "react";
+import { ButtonAdd, DataFormOptions, FormListItemToolbar, Toolbar } from "@montr-core/components";
 import { Divider, Form, Select } from "antd";
-import { ButtonAdd, Toolbar, FormListItemToolbar, DataFormOptions } from "@montr-core/components";
-import { AutomationConditionListField, AutomationRuleType } from "../models/";
-import { AutomationConditionItem } from ".";
+import React from "react";
+import { AutomationConditionItemWrapper } from ".";
+import { AutomationConditionListField, AutomationRuleType, FieldAutomationCondition } from "../models/";
 import { AutomationService } from "../services";
 
 interface Props {
@@ -40,7 +40,7 @@ export class AutomationConditionList extends React.Component<Props, State> {
 		const { field, options } = this.props,
 			{ types } = this.state;
 
-		const defaultCondition/* : IFieldAutomationCondition */ = { type: "field", props: { operator: "Equal" } };
+		const defaultCondition: FieldAutomationCondition = { type: "field", props: { operator: "Equal" } };
 
 		return (
 			<Form.List name={field.key}>
@@ -79,7 +79,7 @@ export class AutomationConditionList extends React.Component<Props, State> {
 										fieldKey={[item.fieldKey]}
 										rules={[{ required: true }]}
 										noStyle>
-										<AutomationConditionItem item={item} typeSelector={typeSelector} options={options} />
+										<AutomationConditionItemWrapper item={item} typeSelector={typeSelector} options={options} />
 									</Form.Item>
 
 								</div>

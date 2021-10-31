@@ -17,8 +17,8 @@ interface IDeleteAutomationRequest {
 
 export class AutomationService extends Fetcher {
 
-	metadata = async (actionTypeCode: string): Promise<IDataField[]> => {
-		return this.post(Api.automationMetadata, { actionTypeCode });
+	metadata = async (actionTypeCode: string, conditionTypeCode: string): Promise<IDataField[]> => {
+		return this.post(Api.automationMetadata, { actionTypeCode, conditionTypeCode });
 	};
 
 	get = async (entityTypeCode: string, entityUid: Guid | string, uid: Guid): Promise<Automation> => {

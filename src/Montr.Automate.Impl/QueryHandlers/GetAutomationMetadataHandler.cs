@@ -19,9 +19,20 @@ namespace Montr.Automate.Impl.QueryHandlers
 
 		public Task<IList<FieldMetadata>> Handle(GetAutomationMetadata request, CancellationToken cancellationToken)
 		{
-			var actionProvider = _providerRegistry.GetActionProvider(request.ActionTypeCode);
+			IList<FieldMetadata> metadata = null;
 
-			var metadata = actionProvider.GetMetadata();
+			if (request.ActionTypeCode != null)
+			{
+				var actionProvider = _providerRegistry.GetActionProvider(request.ActionTypeCode);
+
+				metadata = actionProvider.GetMetadata();
+			}
+			else if (request.ConditionTypeCode != null)
+			{
+				var conditionProvider = _providerRegistry.GetConditionProvider(request.ConditionTypeCode);
+
+				metadata = conditionProvider.GetMetadata();
+			}
 
 			return Task.FromResult(metadata);
 		}

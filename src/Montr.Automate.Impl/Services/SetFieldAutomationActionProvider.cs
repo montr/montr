@@ -10,7 +10,7 @@ namespace Montr.Automate.Impl.Services
 {
 	public class SetFieldAutomationActionProvider : IAutomationActionProvider
 	{
-		public AutomationRuleType RuleType => new AutomationRuleType
+		public AutomationRuleType RuleType => new()
 		{
 			Code = SetFieldAutomationAction.TypeCode,
 			Name = "Set Field",

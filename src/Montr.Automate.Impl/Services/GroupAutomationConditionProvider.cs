@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Montr.Automate.Impl.Models;
 using Montr.Automate.Models;
 using Montr.Automate.Services;
+using Montr.Metadata.Models;
 
 namespace Montr.Automate.Impl.Services
 {
@@ -16,12 +17,17 @@ namespace Montr.Automate.Impl.Services
 			_providerRegistry = providerRegistry;
 		}
 
-		public AutomationRuleType RuleType => new AutomationRuleType
+		public AutomationRuleType RuleType => new()
 		{
 			Code = GroupAutomationCondition.TypeCode,
 			Name = "Group",
 			Type = typeof(GroupAutomationCondition)
 		};
+
+		public IList<FieldMetadata> GetMetadata()
+		{
+			throw new System.NotImplementedException();
+		}
 
 		public async Task<bool> Meet(AutomationCondition automationCondition, AutomationContext context, CancellationToken cancellationToken)
 		{

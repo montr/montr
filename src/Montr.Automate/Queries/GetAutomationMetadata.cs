@@ -7,5 +7,7 @@ namespace Montr.Automate.Queries
 	public class GetAutomationMetadata : MetadataSearchRequest, IRequest<IList<FieldMetadata>>
 	{
 		public string ActionTypeCode { get; set; }
+
+		public string ConditionTypeCode { get; set; }
 	}
 }
