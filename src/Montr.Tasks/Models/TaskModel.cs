@@ -14,6 +14,8 @@ namespace Montr.Tasks.Models
 
 		public Guid? TaskTypeUid { get; set; }
 
+		public string TaskTypeName { get; set; }
+
 		public Guid? AssigneeUid { get; set; }
 
 		public string StatusCode { get; set; }
@@ -23,6 +25,14 @@ namespace Montr.Tasks.Models
 		public string Name { get; set; }
 
 		public string Description { get; set; }
+
+		public DateTime? StartDateUtc { get; set; }
+
+		public DateTime? DueDateUtc { get; set; }
+
+		public DateTime? CreatedAtUtc { get; set; }
+
+		public DateTime? ModifiedAtUtc { get; set; }
 
 		public string Url { get; set; }
 	}

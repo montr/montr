@@ -1,8 +1,8 @@
-import React from "react";
+import { ButtonAdd, DataFormOptions, FormListItemToolbar, Toolbar } from "@montr-core/components";
 import { Divider, Form, Select } from "antd";
-import { ButtonAdd, Toolbar, FormListItemToolbar, DataFormOptions } from "@montr-core/components";
-import { AutomationActionListField, AutomationRuleType } from "../models";
+import React from "react";
 import { AutomationActionItemWrapper } from ".";
+import { AutomationActionListField, AutomationRuleType } from "../models";
 import { AutomationService } from "../services";
 
 interface Props {
@@ -17,7 +17,7 @@ interface State {
 
 export class AutomationActionList extends React.Component<Props, State> {
 
-	private _automationService = new AutomationService();
+	private readonly automationService = new AutomationService();
 
 	constructor(props: Props) {
 		super(props);
@@ -33,7 +33,7 @@ export class AutomationActionList extends React.Component<Props, State> {
 	};
 
 	fetchData = async () => {
-		this.setState({ loading: false, types: await this._automationService.actionTypes() });
+		this.setState({ loading: false, types: await this.automationService.actionTypes() });
 	};
 
 	render = () => {

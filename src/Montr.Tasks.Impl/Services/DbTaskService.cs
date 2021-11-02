@@ -4,6 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using LinqToDB;
 using Montr.Core.Models;
+using Montr.Core.Services;
 using Montr.Data.Linq2Db;
 using Montr.Tasks.Impl.Entities;
 using Montr.Tasks.Models;
@@ -14,15 +15,19 @@ namespace Montr.Tasks.Impl.Services
 	public class DbTaskService : ITaskService
 	{
 		private readonly IDbContextFactory _dbContextFactory;
+		private readonly IDateTimeProvider _dateTimeProvider;
 
-		public DbTaskService(IDbContextFactory dbContextFactory)
+		public DbTaskService(IDbContextFactory dbContextFactory, IDateTimeProvider dateTimeProvider)
 		{
 			_dbContextFactory = dbContextFactory;
+			_dateTimeProvider = dateTimeProvider;
 		}
 
 		public async Task<ApiResult> Insert(TaskModel item, CancellationToken cancellationToken)
 		{
 			var itemUid = Guid.NewGuid();
+
+			var now = _dateTimeProvider.GetUtcNow();
 
 			// todo: validation and limits
 
@@ -36,6 +41,7 @@ namespace Montr.Tasks.Impl.Services
 					.Value(x => x.AssigneeUid, item.AssigneeUid)
 					.Value(x => x.Name, item.Name)
 					.Value(x => x.Description, item.Description)
+					.Value(x => x.CreatedAtUtc, now)
 					.InsertAsync(cancellationToken);
 			}
 

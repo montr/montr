@@ -23,9 +23,15 @@ namespace Montr.Tasks.Services
 			{
 				Columns = new List<DataColumn>
 				{
-					new() { Key = "code", Name = "Code", Width = 450, Sortable = true },
-					new() { Key = "name", Name = "Name", Width = 450, Sortable = true },
-					new() { Key = "statusCode", Template = "status", Name = "Status", Sortable = true, Width = 30 },
+					new() { Key = "code", Name = "Code", Width = 50, Sortable = true, UrlProperty = "url" },
+					new() { Key = "taskTypeName", Name = "Type", Width = 200 },
+					new() { Key = "statusCode", Template = "status", Name = "Status", Sortable = true, Width = 30, UrlProperty = "url" },
+					new() { Key = "name", Name = "Name", Width = 250, Sortable = true, UrlProperty = "url" },
+					new() { Key = "assigneeName", Name = "Assignee", Width = 150 },
+					new() { Key = "startDateUtc", Name = "Start Date", Type = "datetime", Sortable = true, Width = 100 },
+					new() { Key = "dueDateUtc", Name = "Due Date", Type = "datetime", Sortable = true, Width = 100 },
+					new() { Key = "createdAtUtc", Name = "Created", Type = "datetime", Sortable = true, Width = 100 },
+					new() { Key = "modifiedAtUtc", Name = "Modified", Type = "datetime", Sortable = true, Width = 100 }
 				}
 			});
 

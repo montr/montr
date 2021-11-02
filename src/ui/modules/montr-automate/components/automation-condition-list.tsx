@@ -17,7 +17,7 @@ interface State {
 
 export class AutomationConditionList extends React.Component<Props, State> {
 
-	private _automationService = new AutomationService();
+	private readonly automationService = new AutomationService();
 
 	constructor(props: Props) {
 		super(props);
@@ -33,7 +33,7 @@ export class AutomationConditionList extends React.Component<Props, State> {
 	};
 
 	fetchData = async () => {
-		this.setState({ loading: false, types: await this._automationService.conditionTypes() });
+		this.setState({ loading: false, types: await this.automationService.conditionTypes() });
 	};
 
 	render = () => {
