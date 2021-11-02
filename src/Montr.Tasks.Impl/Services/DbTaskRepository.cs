@@ -63,7 +63,7 @@ namespace Montr.Tasks.Impl.Services
 						DueDateUtc = x.Task.DueDateUtc,
 						CreatedAtUtc = x.Task.CreatedAtUtc,
 						ModifiedAtUtc = x.Task.ModifiedAtUtc,
-						Url = $"/tasks/{x.Task.Uid}/"
+						Url = $"/tasks/view/{x.Task.Uid}/"
 					})
 					.ToListAsync(cancellationToken);
 
