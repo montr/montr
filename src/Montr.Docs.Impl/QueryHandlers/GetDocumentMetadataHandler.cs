@@ -49,7 +49,6 @@ namespace Montr.Docs.Impl.QueryHandlers
 
 			var document = (await _documentRepository.Search(new DocumentSearchRequest
 			{
-				UserUid = request.UserUid,
 				Uid = request.DocumentUid,
 				SkipPaging = true
 			}, cancellationToken)).Rows.Single();

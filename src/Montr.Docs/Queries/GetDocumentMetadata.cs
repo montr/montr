@@ -6,8 +6,6 @@ namespace Montr.Docs.Queries
 {
 	public class GetDocumentMetadata : MetadataRequest, IRequest<DataView>
 	{
-		public Guid UserUid { get; set; }
-
 		public Guid DocumentUid { get; set; }
 	}
 }

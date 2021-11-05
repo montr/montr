@@ -1,4 +1,5 @@
 import { DataTable, DataTableUpdateToken } from "@montr-core/components";
+import { DataColumn } from "@montr-core/models";
 import { PageHeader, Spin } from "antd";
 import React from "react";
 import { Api, Views } from "../module";
@@ -6,6 +7,7 @@ import { TaskService } from "../services";
 
 interface State {
     loading: boolean;
+    columns?: DataColumn[];
     selectedRowKeys: string[] | number[];
     updateTableToken: DataTableUpdateToken;
 }
@@ -33,12 +35,14 @@ export default class PageSearchTasks extends React.Component<unknown, State> {
     };
 
     fetchMetadata = async (): Promise<void> => {
-        this.setState({ loading: false });
+        const dataView = await this.taskService.metadata(Views.taskList);
+
+        this.setState({ loading: false, columns: dataView.columns });
     };
 
     render = (): React.ReactNode => {
 
-        const { loading, updateTableToken } = this.state;
+        const { loading, columns, updateTableToken } = this.state;
 
         return (
 
@@ -57,7 +61,7 @@ export default class PageSearchTasks extends React.Component<unknown, State> {
 
                 <DataTable
                     rowKey="uid"
-                    viewId={Views.taskList}
+                    columns={columns}
                     loadUrl={Api.taskList}
                     updateToken={updateTableToken}
                 />

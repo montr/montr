@@ -15,10 +15,12 @@ export const Api = {
     taskMetadata: "/task/metadata",
     taskList: "/task/list",
     taskGet: "/task/get",
+    taskUpdate: "/task/update",
 };
 
 export const Views = {
     taskList: "task-list",
+    taskPage: "task-page",
     taskForm: "task-form",
 };
 
@@ -39,5 +41,5 @@ AppRouteRegistry.add([
 ]);
 
 ComponentRegistry.add([
-    // { path: "@montr-tasks/components/pane-view-task-form", component: React.lazy(() => import("./components/pane-view-task-form")) },
+    { path: "@montr-tasks/components/pane-view-task-info", component: React.lazy(() => import("./components/pane-view-task-info")) },
 ]);

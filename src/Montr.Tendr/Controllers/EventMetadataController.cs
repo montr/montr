@@ -2,7 +2,6 @@
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Montr.Core.Services;
 using Montr.Metadata.Models;
 using Montr.Tendr.Queries;
 
@@ -12,19 +11,16 @@ namespace Montr.Tendr.Controllers
 	public class EventMetadataController : ControllerBase
 	{
 		private readonly ISender _mediator;
-		private readonly ICurrentUserProvider _currentUserProvider;
 
-		public EventMetadataController(ISender mediator, ICurrentUserProvider currentUserProvider)
+		public EventMetadataController(ISender mediator)
 		{
 			_mediator = mediator;
-			_currentUserProvider = currentUserProvider;
 		}
 
 		[HttpPost]
 		public async Task<DataView> View(GetEventMetadata request)
 		{
 			request.Principal = User;
-			request.UserUid = _currentUserProvider.GetUserUid();
 
 			return await _mediator.Send(request);
 		}

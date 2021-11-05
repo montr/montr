@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Montr.Core.Models;
 using Montr.Core.Services;
+using Montr.Metadata.Models;
 using Montr.Tasks.Commands;
 using Montr.Tasks.Models;
 using Montr.Tasks.Permissions;
@@ -21,6 +22,14 @@ namespace Montr.Tasks.Controllers
 		{
 			_mediator = mediator;
 			_currentUserProvider = currentUserProvider;
+		}
+
+		[HttpPost]
+		public async Task<DataView> Metadata(GetTaskMetadata request)
+		{
+			request.Principal = User;
+
+			return await _mediator.Send(request);
 		}
 
 		[HttpPost, Permission(typeof(ViewTasks))]
