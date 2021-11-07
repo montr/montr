@@ -19,14 +19,11 @@ namespace Montr.Tasks.Impl.QueryHandlers
 
 		public async Task<TaskModel> Handle(GetTask command, CancellationToken cancellationToken)
 		{
-			var request = new TaskSearchRequest
-			{
-				Uid = command.Uid
-			};
+			var request = new TaskSearchRequest { Uid = command.Uid };
 
-			var types = await _repository.Search(request, cancellationToken);
+			var result = await _repository.Search(request, cancellationToken);
 
-			return types.Rows.Single();
+			return result?.Rows?.SingleOrDefault();
 		}
 	}
 }

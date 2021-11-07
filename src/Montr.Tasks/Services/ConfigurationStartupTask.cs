@@ -19,17 +19,8 @@ namespace Montr.Tasks.Services
 		{
 			_configurationManager.Configure<TaskModel>(config =>
 			{
-				config.When(document => document.StatusCode == TaskStatusCode.Open)
-					.Add<DataPane>((_, x) =>
-					{
-						x.Key = "info";
-						x.Name = "Information";
-						x.Icon = "profile";
-						x.Component = ComponentCode.PaneViewTaskInfo;
-						x.Props = new { mode = "edit" };
-					});
-
-				config.When(document => document.StatusCode != TaskStatusCode.Open)
+				config
+					//.When(task => task.StatusCode == TaskStatusCode.Open)
 					.Add<DataPane>((_, x) =>
 					{
 						x.Key = "info";
@@ -39,12 +30,30 @@ namespace Montr.Tasks.Services
 						x.Props = new { mode = "view" };
 					});
 
-				config.Add<DataPane>((_, x) =>
-				{
-					x.Key = "history";
-					x.Name = "History";
-					x.Icon = "eye";
-				});
+				/*config
+					.When(task => task.StatusCode != TaskStatusCode.Open)
+					.Add<DataPane>((_, x) =>
+					{
+						x.Key = "info";
+						x.Name = "Information";
+						x.Icon = "profile";
+						x.Component = ComponentCode.PaneViewTaskInfo;
+						x.Props = new { mode = "view" };
+					});*/
+
+				config
+					.Add<DataPane>((_, x) =>
+					{
+						x.Key = "history";
+						x.Name = "History";
+						x.Icon = "eye";
+					}).Add<Button>((task, x) =>
+					{
+						x.Key = "edit";
+						x.Name = "Edit";
+						x.Type = ButtonType.Primary;
+						x.Props = task.Uid.HasValue ? new { TaskUid = task.Uid.Value } : null;
+					});
 			});
 
 			return Task.CompletedTask;

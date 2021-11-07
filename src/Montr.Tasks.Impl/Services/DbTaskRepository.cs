@@ -57,7 +57,7 @@ namespace Montr.Tasks.Impl.Services
 						StatusCode = x.Task.StatusCode,
 						TaskTypeUid = x.Task.TaskTypeUid,
 						TaskTypeName = x.TaskType.Name,
-						Code = x.Task.Code,
+						Number = x.Task.Number,
 						Name = x.Task.Name,
 						StartDateUtc = x.Task.StartDateUtc,
 						DueDateUtc = x.Task.DueDateUtc,

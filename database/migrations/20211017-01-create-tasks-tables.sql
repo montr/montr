@@ -25,7 +25,7 @@ CREATE TABLE montr.task (
 	company_uid uuid NOT NULL,
 	task_type_uid uuid NOT NULL,
 	status_code varchar(16) NOT NULL,
-	code varchar(32) NULL,
+	number varchar(32) NULL,
 	assignee_uid uuid NULL,
 	parent_uid uuid NULL,
 	"name" varchar(2048) NULL,

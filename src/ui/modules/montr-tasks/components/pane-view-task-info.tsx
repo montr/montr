@@ -45,11 +45,11 @@ export default class PaneViewTaskInfo extends React.Component<Props, State> {
     fetchData = async (): Promise<void> => {
         const { task } = this.props;
 
-        if (task.uid) {
-            const dataView = await this.taskService.metadata(Views.taskForm, task.uid);
+        const dataView = (task.uid)
+            ? await this.taskService.metadata(Views.taskForm, task.uid)
+            : null;
 
-            this.setState({ loading: false, fields: dataView.fields });
-        }
+        this.setState({ loading: false, fields: dataView?.fields });
     };
 
     handleSubmit = async (values: Task): Promise<ApiResult> => {
