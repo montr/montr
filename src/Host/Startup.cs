@@ -96,7 +96,7 @@ namespace Host
 			{
 				mvcBuilder.AddJsonOptions(options =>
 				{
-					options.JsonSerializerOptions.IgnoreNullValues = true;
+					options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
 					options.JsonSerializerOptions.WriteIndented = false;
 					options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
 					options.JsonSerializerOptions.Converters.Add(new PolymorphicWriteOnlyJsonConverter<FieldMetadata>());
@@ -117,10 +117,12 @@ namespace Host
 		// ReSharper disable once UnusedMember.Global
 		public void Configure(IApplicationBuilder app, IHostApplicationLifetime appLifetime)
 		{
-			appLifetime.ApplicationStarted.Register(async () =>
+			async void RunStartupTasks()
 			{
 				await app.ApplicationServices.RunStartupTasks(Logger);
-			});
+			}
+
+			appLifetime.ApplicationStarted.Register(RunStartupTasks);
 
 			app.UseWhen(context => context.Request.Path.StartsWithSegments("/api") == false, context =>
 			{

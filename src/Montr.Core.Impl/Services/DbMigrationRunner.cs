@@ -181,13 +181,13 @@ namespace Montr.Core.Impl.Services
 
 		private class HashProvider
 		{
-			private readonly MD5CryptoServiceProvider _md5Provider = new MD5CryptoServiceProvider();
+			private readonly MD5 _md5 = MD5.Create();
 
 			public string GetHash(string value)
 			{
-				lock (_md5Provider)
+				lock (_md5)
 				{
-					var hash = _md5Provider.ComputeHash(Encoding.Unicode.GetBytes(value));
+					var hash = _md5.ComputeHash(Encoding.Unicode.GetBytes(value));
 
 					return new Guid(hash).ToString();
 				}

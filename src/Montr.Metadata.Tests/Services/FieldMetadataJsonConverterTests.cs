@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Montr.Core.Services;
 using Montr.Metadata.Models;
@@ -17,7 +18,7 @@ namespace Montr.Metadata.Tests.Services
 			var options = new JsonSerializerOptions
 			{
 				PropertyNamingPolicy = JsonNamingPolicy.CamelCase,
-				IgnoreNullValues = true,
+				DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
 				WriteIndented = false,
 				// Converters = { new FieldMetadataJsonConverter() }
 				Converters = { new PolymorphicWriteOnlyJsonConverter<FieldMetadata>() }
