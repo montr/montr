@@ -1,4 +1,4 @@
-import { DataForm } from "@montr-core/components";
+import { DataForm, PageContextProps, withPageContext } from "@montr-core/components";
 import { ApiResult, IDataField } from "@montr-core/models";
 import { Spin } from "antd";
 import React from "react";
@@ -6,7 +6,7 @@ import { Task } from "../models";
 import { Api, Views } from "../module";
 import { TaskService } from "../services";
 
-interface Props {
+interface Props extends PageContextProps {
     task: Task;
     mode?: "edit" | "view";
 }
@@ -16,7 +16,7 @@ interface State {
     fields?: IDataField[];
 }
 
-export default class PaneViewTaskInfo extends React.Component<Props, State> {
+class PaneViewTaskInfo extends React.Component<Props, State> {
 
     private readonly taskService = new TaskService();
 
@@ -56,18 +56,18 @@ export default class PaneViewTaskInfo extends React.Component<Props, State> {
         const { task } = this.props;
 
         return await this.taskService.post(Api.taskUpdate, {
-            taskUid: task.uid, fields: { ...values }
+            item: { uid: task.uid, ...values }
         });
     };
 
     render = (): React.ReactNode => {
-        const { task, mode = "view" } = this.props,
+        const { task, mode = "view", isEditMode } = this.props,
             { fields, loading } = this.state;
 
         return (
             <Spin spinning={loading}>
                 <DataForm
-                    mode={mode}
+                    mode={isEditMode ? "edit" : "view"}
                     fields={fields}
                     data={task}
                     onSubmit={this.handleSubmit} />
@@ -75,3 +75,7 @@ export default class PaneViewTaskInfo extends React.Component<Props, State> {
         );
     };
 }
+
+const PaneViewTaskInfoWrapper = withPageContext(PaneViewTaskInfo);
+
+export default PaneViewTaskInfoWrapper; 

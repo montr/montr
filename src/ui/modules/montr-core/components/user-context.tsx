@@ -1,17 +1,17 @@
-import * as React from "react";
 import { User } from "oidc-client";
+import * as React from "react";
 
 export interface UserContextProps {
-	user?: User,
+	user?: User;
 
 	// todo: remove methods below
-	login: () => void,
+	login: () => void;
 	logout: () => void;
 }
 
 const defaultState: UserContextProps = {
-	login: () => { },
-	logout: () => { }
+	login: () => { return; },
+	logout: () => { return; }
 };
 
 export const UserContext = React.createContext<UserContextProps>(defaultState);

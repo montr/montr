@@ -52,6 +52,7 @@ namespace Montr.Tasks.Services
 						x.Key = "edit";
 						x.Name = "Edit";
 						x.Type = ButtonType.Primary;
+						x.Component = Core.ComponentCode.ButtonEdit;
 						x.Props = task.Uid.HasValue ? new { TaskUid = task.Uid.Value } : null;
 					});
 			});

@@ -1,17 +1,17 @@
-import * as React from "react";
 import { User } from "oidc-client";
-import { AuthService } from "../services";
+import * as React from "react";
 import { UserContext, UserContextProps } from ".";
+import { AuthService } from "../services";
 
 interface UserContextState {
 	user?: User;
 }
 
-export class UserContextProvider extends React.Component<any, UserContextState> {
+export class UserContextProvider extends React.Component<unknown, UserContextState> {
 
-	_authService = new AuthService();
+	private readonly authService = new AuthService();
 
-	constructor(props: any) {
+	constructor(props: unknown) {
 		super(props);
 
 		this.state = {
@@ -21,35 +21,35 @@ export class UserContextProvider extends React.Component<any, UserContextState> 
 	componentDidMount = () => {
 		this.getUser(true);
 
-		this._authService.onAuthenticated((user: User) => {
+		this.authService.onAuthenticated((user: User) => {
 			this.setState({ user });
 		});
 
-		this._authService.addUserSignedOut(() => {
+		this.authService.addUserSignedOut(() => {
 			this.setState({ user: null });
 		});
 	};
 
 	login = () => {
-		this._authService.login()
+		this.authService.login()
 			.catch(error => { // todo: use logger here and below
 				console.error("login error", error);
 			});
 	};
 
 	logout = () => {
-		this._authService.logout()
+		this.authService.logout()
 			.catch(error => {
 				console.error("logout error", error);
 			});
 	};
 
 	getUser = (withLoginSilent: boolean) => {
-		this._authService.getUser().then((user: User) => {
+		this.authService.getUser().then((user: User) => {
 			this.setState({ user });
 			// todo: move to AuthService (?)
 			if (withLoginSilent && user?.expired) {
-				this._authService.loginSilent()
+				this.authService.loginSilent()
 					.catch(error => {
 						console.error("loginSilent error", error);
 					});
@@ -59,7 +59,7 @@ export class UserContextProvider extends React.Component<any, UserContextState> 
 		});
 	};
 
-	render = () => {
+	render = (): React.ReactNode => {
 		const { user } = this.state;
 
 		const context: UserContextProps = {

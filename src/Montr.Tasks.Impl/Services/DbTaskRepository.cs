@@ -59,6 +59,8 @@ namespace Montr.Tasks.Impl.Services
 						TaskTypeName = x.TaskType.Name,
 						Number = x.Task.Number,
 						Name = x.Task.Name,
+						Description = x.Task.Description,
+						AssigneeUid = x.Task.AssigneeUid,
 						StartDateUtc = x.Task.StartDateUtc,
 						DueDateUtc = x.Task.DueDateUtc,
 						CreatedAtUtc = x.Task.CreatedAtUtc,

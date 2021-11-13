@@ -24,6 +24,7 @@ export * from "./logo";
 export * from "./modal-edit-entity-status";
 export * from "./notification-content";
 export * from "./page";
+export * from "./page-context";
 export * from "./page-header";
 export * from "./pane-component";
 export * from "./pane-edit-metadata";

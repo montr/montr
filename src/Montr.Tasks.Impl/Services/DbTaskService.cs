@@ -39,6 +39,7 @@ namespace Montr.Tasks.Impl.Services
 					.Value(x => x.CompanyUid, item.CompanyUid)
 					.Value(x => x.TaskTypeUid, item.TaskTypeUid)
 					.Value(x => x.AssigneeUid, item.AssigneeUid)
+					.Value(x => x.Number, item.Number)
 					.Value(x => x.Name, item.Name)
 					.Value(x => x.Description, item.Description)
 					.Value(x => x.CreatedAtUtc, now)
@@ -50,18 +51,22 @@ namespace Montr.Tasks.Impl.Services
 
 		public async Task<ApiResult> Update(TaskModel item, CancellationToken cancellationToken)
 		{
+			var now = _dateTimeProvider.GetUtcNow();
+
 			using (var db = _dbContextFactory.Create())
 			{
 				// todo: check company uid
-				await db.GetTable<DbTask>()
+				var affected = await db.GetTable<DbTask>()
 					.Where(x => x.Uid == item.Uid)
 					.Set(x => x.TaskTypeUid, item.TaskTypeUid)
 					.Set(x => x.AssigneeUid, item.AssigneeUid)
+					.Set(x => x.Number, item.Number)
 					.Set(x => x.Name, item.Name)
 					.Set(x => x.Description, item.Description)
+					.Set(x => x.ModifiedAtUtc, now)
 					.UpdateAsync(cancellationToken);
 
-				return new ApiResult();
+				return new ApiResult { AffectedRows = affected };
 			}
 		}
 

@@ -1,4 +1,4 @@
-import { DataTabs, DataToolbar, StatusTag } from "@montr-core/components";
+import { DataTabs, DataToolbar, PageContextProvider, StatusTag } from "@montr-core/components";
 import { ConfigurationItemProps, DataPaneProps, DataView } from "@montr-core/models";
 import { PageHeader, Spin } from "antd";
 import React from "react";
@@ -80,24 +80,26 @@ export default class PageViewTask extends React.Component<Props, State> {
 
         return (
             <Spin spinning={loading}>
-                <PageHeader
-                    onBack={() => window.history.back()}
-                    title={task.name}
-                    subTitle={task.uid}
-                    tags={<StatusTag statusCode={task.statusCode} />}
-                    // breadcrumb={<TaskBreadcrumb />}
-                    extra={<DataToolbar buttons={dataView?.toolbar} buttonProps={buttonProps} />}
-                >
-                    {/* <TaskSignificantInfo task={task} /> */}
-                </PageHeader>
+                <PageContextProvider>
+                    <PageHeader
+                        onBack={() => window.history.back()}
+                        title={task.name}
+                        subTitle={task.uid}
+                        tags={<StatusTag statusCode={task.statusCode} />}
+                        // breadcrumb={<TaskBreadcrumb />}
+                        extra={<DataToolbar buttons={dataView?.toolbar} buttonProps={buttonProps} />}
+                    >
+                        {/* <TaskSignificantInfo task={task} /> */}
+                    </PageHeader>
 
-                <DataTabs
-                    tabKey={tabKey}
-                    panes={dataView?.panes}
-                    onTabChange={this.handleTabChange}
-                    disabled={(_, index) => index > 0 && !task.uid}
-                    tabProps={paneProps}
-                />
+                    <DataTabs
+                        tabKey={tabKey}
+                        panes={dataView?.panes}
+                        onTabChange={this.handleTabChange}
+                        disabled={(_, index) => index > 0 && !task.uid}
+                        tabProps={paneProps}
+                    />
+                </PageContextProvider>
             </Spin>
         );
     };

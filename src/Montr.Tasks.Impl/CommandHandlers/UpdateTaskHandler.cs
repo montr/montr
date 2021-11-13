@@ -27,9 +27,9 @@ namespace Montr.Tasks.Impl.CommandHandlers
 			using (var scope = _unitOfWorkFactory.Create())
 			{
 				var result = await _taskService.Update(item, cancellationToken);
-				
+
 				if (result.Success) scope.Commit();
-				
+
 				return result;
 			}
 		}

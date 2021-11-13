@@ -1,11 +1,11 @@
-import * as React from "react";
-import { Spin, Select, Divider, Button } from "antd";
-import { Guid } from "@montr-core/models";
-import { ClassifierService } from "../services";
-import { IClassifierField, ClassifierGroup, ClassifierTree, ClassifierType, Classifier } from "../models";
-import { RouteBuilder } from "../module";
-import { Link } from "react-router-dom";
 import { Icon } from "@montr-core/components";
+import { Guid } from "@montr-core/models";
+import { Button, Divider, Select, Spin } from "antd";
+import * as React from "react";
+import { Link } from "react-router-dom";
+import { Classifier, ClassifierGroup, ClassifierTree, ClassifierType, IClassifierField } from "../models";
+import { RouteBuilder } from "../module";
+import { ClassifierService } from "../services";
 // import { debounce } from "lodash";
 
 interface Props {
@@ -127,7 +127,7 @@ export class ClassifierSelect extends React.Component<Props, State> {
 			notFoundContent={fetching ? <Spin size="small" /> : null}
 			filterOption={false}
 			placeholder={field.placeholder}
-			allowClear={!field.required}
+			// allowClear={!field.required}
 			onChange={this.handleChange}
 			dropdownRender={menu => (
 				<div>
