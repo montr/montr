@@ -3,11 +3,24 @@ import React from "react";
 export interface PageContextProps {
     isEditMode: boolean;
     setEditMode: (isEditMode: boolean) => void;
+    addPageEventListener: (listener: PageEventListener) => void;
+    removePageEventListener: (listener: PageEventListener) => void;
+    onPageSubmit: () => void;
+    onPageCancel: () => void;
+}
+
+export interface PageEventListener {
+    onPageSubmit: () => void;
+    onPageCancel: () => void;
 }
 
 const defaultState: PageContextProps = {
     isEditMode: false,
-    setEditMode: (isEditMode: boolean) => { return; }
+    setEditMode: (isEditMode: boolean) => { return; },
+    addPageEventListener: (listener: PageEventListener) => { return; },
+    removePageEventListener: (listener: PageEventListener) => { return; },
+    onPageSubmit: () => { return; },
+    onPageCancel: () => { return; }
 };
 
 export const PageContext = React.createContext<PageContextProps>(defaultState);
@@ -28,6 +41,8 @@ interface PageContextState {
 
 export class PageContextProvider extends React.Component<unknown, PageContextState> {
 
+    private readonly listeners: PageEventListener[] = [];
+
     constructor(props: unknown) {
         super(props);
 
@@ -45,7 +60,20 @@ export class PageContextProvider extends React.Component<unknown, PageContextSta
 
         const context: PageContextProps = {
             isEditMode,
-            setEditMode: this.setEditMode
+            setEditMode: this.setEditMode,
+            addPageEventListener: (listener: PageEventListener) => {
+                this.listeners.push(listener);
+            },
+            removePageEventListener: (listener: PageEventListener) => {
+                const index = this.listeners.findIndex(x => x == listener);
+                if (index >= 0) this.listeners.splice(index, 1);
+            },
+            onPageSubmit: () => {
+                this.listeners.forEach(x => x.onPageSubmit());
+            },
+            onPageCancel: () => {
+                this.listeners.forEach(x => x.onPageCancel());
+            }
         };
 
         return (

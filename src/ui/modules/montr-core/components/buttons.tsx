@@ -1,8 +1,14 @@
-import React from "react";
-import { useTranslation } from "react-i18next";
 import { Button } from "antd";
 import { ButtonProps } from "antd/lib/button";
+import React from "react";
+import { useTranslation } from "react-i18next";
 import { Icon } from ".";
+
+export function ButtonEdit(props: ButtonProps): React.ReactElement {
+	const { t } = useTranslation();
+
+	return <Button type="primary" icon={Icon.Edit} {...props}>{props.children || t("button.edit")}</Button>;
+}
 
 export function ButtonSave(props: ButtonProps): React.ReactElement {
 	const { t } = useTranslation();

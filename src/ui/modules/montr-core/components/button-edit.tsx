@@ -1,34 +1,47 @@
-import { Button as Btn } from "antd";
-import { ButtonType } from "antd/lib/button";
 import React from "react";
-import { ButtonCancel, ButtonSave, PageContextProps, withPageContext } from ".";
+import { ButtonCancel, ButtonEdit, ButtonSave, PageContextProps, withPageContext } from ".";
 import { Button } from "../models";
 
 interface Props extends PageContextProps {
     button: Button;
 }
 
-class ButtonEdit extends React.Component<Props> {
+class DataButtonEdit extends React.Component<Props> {
 
-    onClick = async (): Promise<void> => {
+    onEdit = async (): Promise<void> => {
         const { setEditMode } = this.props;
+
+        return setEditMode(true);
+    };
+
+    onSubmit = async (): Promise<void> => {
+        const { onPageSubmit, setEditMode } = this.props;
+
+        await onPageSubmit();
+
+        return setEditMode(false);
+    };
+
+    onCancel = async (): Promise<void> => {
+        const { onPageCancel, setEditMode } = this.props;
+
+        await onPageCancel();
+
+        return setEditMode(false);
     };
 
     render = (): React.ReactNode => {
-        const { button, isEditMode, setEditMode } = this.props;
+        const { isEditMode } = this.props;
 
         if (isEditMode) {
             return <>
-                <ButtonSave onClick={() => setEditMode(false)} />
-                <ButtonCancel onClick={() => setEditMode(false)} />
+                <ButtonSave onClick={this.onSubmit} />
+                <ButtonCancel onClick={this.onCancel} />
             </>;
         } else {
-            const buttonType = button?.type?.toLowerCase() as ButtonType;
-            return <Btn type={buttonType} onClick={() => setEditMode(true)}>{button?.name}</Btn>;
+            return <ButtonEdit onClick={this.onEdit} />;
         }
     };
 }
 
-const ButtonEditWrapper = withPageContext(ButtonEdit);
-
-export default ButtonEditWrapper;
+export default withPageContext(DataButtonEdit);

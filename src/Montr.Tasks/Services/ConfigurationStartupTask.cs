@@ -47,13 +47,11 @@ namespace Montr.Tasks.Services
 						x.Key = "history";
 						x.Name = "History";
 						x.Icon = "eye";
-					}).Add<Button>((task, x) =>
+					})
+					.Add<Button>((task, x) =>
 					{
 						x.Key = "edit";
-						x.Name = "Edit";
-						x.Type = ButtonType.Primary;
 						x.Component = Core.ComponentCode.ButtonEdit;
-						x.Props = task.Uid.HasValue ? new { TaskUid = task.Uid.Value } : null;
 					});
 			});
 

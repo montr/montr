@@ -25,9 +25,9 @@ interface State {
 
 export class PaneEditAutomation extends React.Component<Props, State> {
 
-	private _metadataService = new MetadataService();
-	private _automationService = new AutomationService();
-	private _formRef = React.createRef<FormInstance>();
+	private readonly metadataService = new MetadataService();
+	private readonly automationService = new AutomationService();
+	private readonly formRef = React.createRef<FormInstance>();
 
 	constructor(props: Props) {
 		super(props);
@@ -42,22 +42,22 @@ export class PaneEditAutomation extends React.Component<Props, State> {
 	};
 
 	componentWillUnmount = async (): Promise<void> => {
-		await this._metadataService.abort();
-		await this._automationService.abort();
+		await this.metadataService.abort();
+		await this.automationService.abort();
 	};
 
 	fetchData = async (): Promise<void> => {
 		const { entityTypeCode, entityUid, uid } = this.props;
 
 		const data: Automation = (uid)
-			? await this._automationService.get(entityTypeCode, entityUid, uid)
+			? await this.automationService.get(entityTypeCode, entityUid, uid)
 			// todo: load defaults from server
 			: {
 				conditions: [],
 				actions: []
 			};
 
-		const dataView = await this._metadataService.load(Views.automationForm);
+		const dataView = await this.metadataService.load(Views.automationForm);
 
 		this.setState({
 			loading: false,
@@ -67,7 +67,7 @@ export class PaneEditAutomation extends React.Component<Props, State> {
 	};
 
 	handleSubmitClick = async (e: React.MouseEvent<any>): Promise<void> => {
-		await this._formRef.current.submit();
+		await this.formRef.current.submit();
 	};
 
 	handleSubmit = async (values: Automation): Promise<ApiResult> => {
@@ -78,10 +78,10 @@ export class PaneEditAutomation extends React.Component<Props, State> {
 		let result;
 
 		if (uid) {
-			result = await this._automationService.update({ entityTypeCode, entityUid, item: { uid, ...item } });
+			result = await this.automationService.update({ entityTypeCode, entityUid, item: { uid, ...item } });
 		}
 		else {
-			result = await this._automationService.insert({ entityTypeCode, entityUid, item });
+			result = await this.automationService.insert({ entityTypeCode, entityUid, item });
 		}
 
 		if (result.success && onSuccess) {
@@ -112,7 +112,7 @@ export class PaneEditAutomation extends React.Component<Props, State> {
 					{/* todo: pass Automation to context? */}
 					<AutomationContextProvider entityTypeCode={entityTypeCode} entityUid={entityUid}>
 						<DataForm
-							formRef={this._formRef}
+							formRef={this.formRef}
 							hideButtons={true}
 							fields={fields}
 							data={data}
