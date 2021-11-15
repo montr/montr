@@ -67,6 +67,7 @@ const options = {
 									// "font-family": "'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif"
 									// "font-family": "'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif"
 									// "font-family": "Nunito, 'Helvetica Neue', Helvetica, Arial, sans-serif"
+									"font-family": "Inter, 'Helvetica Neue', Helvetica, Arial, sans-serif"
 								}
 							}
 						}
