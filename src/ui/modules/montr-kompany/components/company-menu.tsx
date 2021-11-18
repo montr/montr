@@ -1,25 +1,26 @@
-import * as React from "react";
 import Menu from "antd/lib/menu";
 import { MenuItemProps } from "antd/lib/menu/MenuItem";
+import * as React from "react";
+import { CompanyContextProps, withCompanyContext } from ".";
 import { Company } from "../models";
-import { withCompanyContext, CompanyContextProps } from ".";
 
 class WrappedCompanyMenu extends React.Component<MenuItemProps & CompanyContextProps> {
 
 	render() {
 
-		const { currentCompany, companyList, registerCompany, manageCompany, switchCompany, onMouseEnter, ...props } = this.props;
+		const { currentCompany, companyList, registerCompany, manageCompany, switchCompany, ...menuProps } = this.props;
+		const { title, onClick, onMouseLeave, onMouseEnter, ...dividerProps } = menuProps;
 
 		if (currentCompany) {
 			return <>
-				<Menu.Item key="company:header" className="menu-header" disabled {...props}>
+				<Menu.Item key="company:header" className="menu-header" disabled {...menuProps}>
 					{/* <Icon type="team" /> */}
 					<strong>{currentCompany.name}</strong>
 				</Menu.Item>
-				<Menu.Item key="company:settings" {...props}>
+				<Menu.Item key="company:settings" {...menuProps}>
 					<a onClick={manageCompany}>Настройки организации</a>
 				</Menu.Item>
-				<Menu.SubMenu key="company:switch" {...props} title="Переключить организацию &#xA0; &#xA0;">
+				<Menu.SubMenu key="company:switch" {...menuProps} title="Переключить организацию &#xA0; &#xA0;">
 
 					{Array.isArray(companyList) && companyList.map((item: Company) => {
 						return (
@@ -37,7 +38,7 @@ class WrappedCompanyMenu extends React.Component<MenuItemProps & CompanyContextP
 					</Menu.Item>
 				</Menu.SubMenu>
 
-				<Menu.Divider {...props} />
+				<Menu.Divider {...dividerProps} />
 			</>;
 		}
 
