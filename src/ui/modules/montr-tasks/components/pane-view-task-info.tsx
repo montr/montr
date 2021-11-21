@@ -51,11 +51,15 @@ class PaneViewTaskInfo extends React.Component<Props, State> implements PageEven
         await this.taskService.abort();
     };
 
-    onPageSubmit = async () => {
+    onPageSubmit = async (): Promise<void> => {
         await this.formRef.current.submit();
     };
 
-    onPageCancel = async () => {
+    onPageSubmitted = async (): Promise<void> => {
+        return;
+    };
+
+    onPageCancel = async (): Promise<void> => {
         this.formRef.current.resetFields();
     };
 
@@ -74,7 +78,7 @@ class PaneViewTaskInfo extends React.Component<Props, State> implements PageEven
     };
 
     handleSubmit = async (values: Task): Promise<ApiResult> => {
-        const { entityUid, setEditMode } = this.props;
+        const { entityUid, setEditMode, onPageSubmitted } = this.props;
 
         // todo: move to task service
         const result: ApiResult = await this.taskService.post(Api.taskUpdate, {
@@ -84,7 +88,8 @@ class PaneViewTaskInfo extends React.Component<Props, State> implements PageEven
         if (result.success) {
             await this.fetchData();
 
-            setEditMode(false);
+            onPageSubmitted();
+            setEditMode(false); // todo: should be called after all submits
         }
 
         return result;
@@ -98,7 +103,7 @@ class PaneViewTaskInfo extends React.Component<Props, State> implements PageEven
             <Spin spinning={loading}>
                 <DataForm
                     formRef={this.formRef}
-                    mode={isEditMode ? "edit" : "view"}
+                    mode={isEditMode ? "edit" : "view"} // todo: use mode from props too
                     fields={fields}
                     data={data}
                     onSubmit={this.handleSubmit}

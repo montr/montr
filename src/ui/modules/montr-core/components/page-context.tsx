@@ -1,17 +1,16 @@
 import React from "react";
 
-export interface PageContextProps {
+export interface PageContextProps extends PageEventListener {
     isEditMode: boolean;
     setEditMode: (isEditMode: boolean) => void;
     addPageEventListener: (listener: PageEventListener) => void;
     removePageEventListener: (listener: PageEventListener) => void;
-    onPageSubmit: () => void;
-    onPageCancel: () => void;
 }
 
 export interface PageEventListener {
-    onPageSubmit: () => void;
-    onPageCancel: () => void;
+    onPageSubmit: () => Promise<void>;
+    onPageSubmitted: () => Promise<void>;
+    onPageCancel: () => Promise<void>;
 }
 
 const defaultState: PageContextProps = {
@@ -19,8 +18,9 @@ const defaultState: PageContextProps = {
     setEditMode: (isEditMode: boolean) => { return; },
     addPageEventListener: (listener: PageEventListener) => { return; },
     removePageEventListener: (listener: PageEventListener) => { return; },
-    onPageSubmit: () => { return; },
-    onPageCancel: () => { return; }
+    onPageSubmit: async () => { return; },
+    onPageSubmitted: async () => { return; },
+    onPageCancel: async () => { return; }
 };
 
 export const PageContext = React.createContext<PageContextProps>(defaultState);
@@ -51,16 +51,14 @@ export class PageContextProvider extends React.Component<unknown, PageContextSta
         };
     }
 
-    setEditMode = (isEditMode: boolean): void => {
-        this.setState({ isEditMode });
-    };
-
     render = (): React.ReactNode => {
         const { isEditMode } = this.state;
 
         const context: PageContextProps = {
             isEditMode,
-            setEditMode: this.setEditMode,
+            setEditMode: (isEditMode: boolean): void => {
+                this.setState({ isEditMode });
+            },
             addPageEventListener: (listener: PageEventListener) => {
                 this.listeners.push(listener);
             },
@@ -68,11 +66,14 @@ export class PageContextProvider extends React.Component<unknown, PageContextSta
                 const index = this.listeners.findIndex(x => x == listener);
                 if (index >= 0) this.listeners.splice(index, 1);
             },
-            onPageSubmit: () => {
-                this.listeners.forEach(x => x.onPageSubmit());
+            onPageSubmit: async () => {
+                await Promise.all(this.listeners.map(x => x.onPageSubmit()));
             },
-            onPageCancel: () => {
-                this.listeners.forEach(x => x.onPageCancel());
+            onPageSubmitted: async () => {
+                await Promise.all(this.listeners.map(x => x.onPageSubmitted()));
+            },
+            onPageCancel: async () => {
+                await Promise.all(this.listeners.map(x => x.onPageCancel()));
             }
         };
 

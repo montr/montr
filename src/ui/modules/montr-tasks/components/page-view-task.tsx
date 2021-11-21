@@ -1,4 +1,4 @@
-import { DataTabs, DataToolbar, PageContextProvider, StatusTag } from "@montr-core/components";
+import { DataTabs, DataToolbar, PageContextProps, StatusTag, withPageContext } from "@montr-core/components";
 import { ConfigurationItemProps, DataPaneProps, DataView } from "@montr-core/models";
 import { PageHeader, Spin } from "antd";
 import React from "react";
@@ -12,7 +12,7 @@ interface RouteProps {
     tabKey?: string;
 }
 
-interface Props extends RouteComponentProps<RouteProps> {
+interface Props extends RouteComponentProps<RouteProps>, PageContextProps {
 }
 
 interface State {
@@ -21,7 +21,7 @@ interface State {
     dataView?: DataView<Task>;
 }
 
-export default class PageViewTask extends React.Component<Props, State> {
+class PageViewTask extends React.Component<Props, State> {
 
     private readonly taskService = new TaskService();
 
@@ -35,11 +35,31 @@ export default class PageViewTask extends React.Component<Props, State> {
     }
 
     componentDidMount = async (): Promise<void> => {
+        const { addPageEventListener } = this.props;
+
+        addPageEventListener(this);
+
         await this.fetchData();
     };
 
     componentWillUnmount = async (): Promise<void> => {
+        const { removePageEventListener } = this.props;
+
+        removePageEventListener(this);
+
         await this.taskService.abort();
+    };
+
+    onPageSubmit = async (): Promise<void> => {
+        return;
+    };
+
+    onPageSubmitted = async (): Promise<void> => {
+        await this.fetchData();
+    };
+
+    onPageCancel = async (): Promise<void> => {
+        return;
     };
 
     fetchData = async (): Promise<void> => {
@@ -80,27 +100,27 @@ export default class PageViewTask extends React.Component<Props, State> {
 
         return (
             <Spin spinning={loading}>
-                <PageContextProvider>
-                    <PageHeader
-                        onBack={() => window.history.back()}
-                        title={task.name}
-                        subTitle={task.uid}
-                        tags={<StatusTag statusCode={task.statusCode} />}
-                        // breadcrumb={<TaskBreadcrumb />}
-                        extra={<DataToolbar buttons={dataView?.toolbar} buttonProps={buttonProps} />}
-                    >
-                        {/* <TaskSignificantInfo task={task} /> */}
-                    </PageHeader>
+                <PageHeader
+                    onBack={() => window.history.back()}
+                    title={task.name}
+                    subTitle={task.uid}
+                    tags={<StatusTag statusCode={task.statusCode} />}
+                    // breadcrumb={<TaskBreadcrumb />}
+                    extra={<DataToolbar buttons={dataView?.toolbar} buttonProps={buttonProps} />}
+                >
+                    {/* <TaskSignificantInfo task={task} /> */}
+                </PageHeader>
 
-                    <DataTabs
-                        tabKey={tabKey}
-                        panes={dataView?.panes}
-                        onTabChange={this.handleTabChange}
-                        disabled={(_, index) => index > 0 && !task.uid}
-                        tabProps={paneProps}
-                    />
-                </PageContextProvider>
+                <DataTabs
+                    tabKey={tabKey}
+                    panes={dataView?.panes}
+                    onTabChange={this.handleTabChange}
+                    disabled={(_, index) => index > 0 && !task.uid}
+                    tabProps={paneProps}
+                />
             </Spin>
         );
     };
 }
+
+export default withPageContext(PageViewTask);

@@ -21,7 +21,7 @@ export class OperationService {
 
 		const t = (key: string) => i18next.t(key);
 
-		const showFieldErrors = (result: ApiResult) => {
+		const showFieldErrors = async (result: ApiResult): Promise<void> => {
 			// todo: show detailed field errors as notification.error?
 			if (options?.showFieldErrors) {
 				options.showFieldErrors(result);
@@ -54,7 +54,7 @@ export class OperationService {
 					this.notification.success(result.message ?? options?.successMessage ?? t("operation.success"));
 				}
 				else {
-					showFieldErrors(result);
+					await showFieldErrors(result);
 				}
 
 				if (result && result.redirectUrl) {

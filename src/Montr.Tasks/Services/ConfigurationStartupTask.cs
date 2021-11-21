@@ -48,10 +48,9 @@ namespace Montr.Tasks.Services
 						x.Name = "History";
 						x.Icon = "eye";
 					})
-					.Add<Button>((task, x) =>
+					.Add<ButtonEdit>((_, x) =>
 					{
 						x.Key = "edit";
-						x.Component = Core.ComponentCode.ButtonEdit;
 					});
 			});
 

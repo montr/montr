@@ -52,7 +52,7 @@ class WrappedDataForm extends React.Component<Props, State> {
 		return (this.props.formRef ?? this.formRef);
 	};
 
-	handleValuesChange = async (changedValues: Store, values: Store) => {
+	handleValuesChange = async (changedValues: Store, values: Store): Promise<void> => {
 		const { onChange } = this.props;
 
 		if (onChange) {
@@ -60,7 +60,7 @@ class WrappedDataForm extends React.Component<Props, State> {
 		}
 	};
 
-	handleSubmit = async (values: unknown /* IIndexer */) => {
+	handleSubmit = async (values: unknown /* IIndexer */): Promise<void> => {
 		const { t, onSubmit, successMessage, errorMessage } = this.props;
 
 		if (onSubmit) {
@@ -80,7 +80,7 @@ class WrappedDataForm extends React.Component<Props, State> {
 		}
 	};
 
-	setFieldErrors = async (result: ApiResult, values: unknown /* IIndexer */) => {
+	setFieldErrors = async (result: ApiResult, values: unknown /* IIndexer */): Promise<void> => {
 		const { fields } = this.props;
 
 		const form = this.getFormRef().current;
@@ -120,7 +120,7 @@ class WrappedDataForm extends React.Component<Props, State> {
 		}
 	};
 
-	render = () => {
+	render = (): React.ReactNode => {
 		const { mode = "edit", layout = "horizontal", hideButtons = false,
 			data, fields, submitButton, resetButton, t } = this.props,
 			{ loading } = this.state;
