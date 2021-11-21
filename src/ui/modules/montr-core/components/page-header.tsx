@@ -6,4 +6,4 @@ export class PageHeader extends React.Component {
 			<h2>{this.props.children}</h2>
 		);
 	}
-};
+}

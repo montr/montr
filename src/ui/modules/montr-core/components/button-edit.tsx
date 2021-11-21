@@ -11,7 +11,7 @@ class DataButtonEdit extends React.Component<Props> {
     onEdit = async (): Promise<void> => {
         const { setEditMode } = this.props;
 
-        return setEditMode(true);
+        await setEditMode(true);
     };
 
     onSubmit = async (): Promise<void> => {
@@ -19,7 +19,7 @@ class DataButtonEdit extends React.Component<Props> {
 
         await onPageSubmit();
 
-        return setEditMode(false);
+        await setEditMode(false);
     };
 
     onCancel = async (): Promise<void> => {
@@ -27,7 +27,7 @@ class DataButtonEdit extends React.Component<Props> {
 
         await onPageCancel();
 
-        return setEditMode(false);
+        await setEditMode(false);
     };
 
     render = (): React.ReactNode => {

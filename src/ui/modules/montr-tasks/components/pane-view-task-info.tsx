@@ -60,7 +60,7 @@ class PaneViewTaskInfo extends React.Component<Props, State> implements PageEven
     };
 
     onPageCancel = async (): Promise<void> => {
-        this.formRef.current.resetFields();
+        await this.formRef.current.resetFields();
     };
 
     fetchData = async (): Promise<void> => {
@@ -77,6 +77,12 @@ class PaneViewTaskInfo extends React.Component<Props, State> implements PageEven
         this.setState({ loading: false, data, fields: dataView?.fields });
     };
 
+    handleChange = async (): Promise<void> => {
+        const { setDirty } = this.props;
+
+        setDirty(true);
+    };
+
     handleSubmit = async (values: Task): Promise<ApiResult> => {
         const { entityUid, setEditMode, onPageSubmitted } = this.props;
 
@@ -86,10 +92,11 @@ class PaneViewTaskInfo extends React.Component<Props, State> implements PageEven
         });
 
         if (result.success) {
-            await this.fetchData();
+            await onPageSubmitted();
 
-            onPageSubmitted();
-            setEditMode(false); // todo: should be called after all submits
+            await setEditMode(false); // todo: should be called after all submits
+
+            await this.fetchData();
         }
 
         return result;
@@ -106,6 +113,7 @@ class PaneViewTaskInfo extends React.Component<Props, State> implements PageEven
                     mode={isEditMode ? "edit" : "view"} // todo: use mode from props too
                     fields={fields}
                     data={data}
+                    onChange={this.handleChange}
                     onSubmit={this.handleSubmit}
                     hideButtons={true}
                 />

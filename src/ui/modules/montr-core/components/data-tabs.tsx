@@ -19,7 +19,7 @@ export class DataTabs<TModel> extends React.Component<Props<TModel>> {
 
         if (!panes) return null;
 
-        return <Tabs size="small" defaultActiveKey={tabKey} onChange={onTabChange}>
+        return <Tabs size="small" activeKey={tabKey} onChange={onTabChange}>
             {panes.map((pane, index) => {
 
                 let component = undefined;

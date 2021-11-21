@@ -1,8 +1,9 @@
 import { DataTabs, DataToolbar, PageContextProps, StatusTag, withPageContext } from "@montr-core/components";
 import { ConfigurationItemProps, DataPaneProps, DataView } from "@montr-core/models";
-import { PageHeader, Spin } from "antd";
+import { Modal, PageHeader, Spin } from "antd";
+import { Location } from "history";
 import React from "react";
-import { RouteComponentProps } from "react-router";
+import { Prompt, Redirect, RouteComponentProps } from "react-router";
 import { Task } from "../models";
 import { EntityTypeCode, RouteBuilder, Views } from "../module";
 import { TaskService } from "../services";
@@ -17,6 +18,9 @@ interface Props extends RouteComponentProps<RouteProps>, PageContextProps {
 
 interface State {
     loading: boolean;
+    modalVisible: boolean;
+    confirmedNavigation: boolean;
+    nextLocation?: Location;
     task?: Task;
     dataView?: DataView<Task>;
 }
@@ -30,6 +34,8 @@ class PageViewTask extends React.Component<Props, State> {
 
         this.state = {
             loading: true,
+            modalVisible: false,
+            confirmedNavigation: false,
             task: {}
         };
     }
@@ -62,6 +68,18 @@ class PageViewTask extends React.Component<Props, State> {
         return;
     };
 
+    onModalConfirm = () => {
+        const { setEditMode } = this.props;
+
+        setEditMode(false);
+
+        this.setState({ modalVisible: false, confirmedNavigation: true });
+    };
+
+    onModalClose = () => {
+        this.setState({ modalVisible: false });
+    };
+
     fetchData = async (): Promise<void> => {
         const { uid } = this.props.match.params;
 
@@ -84,9 +102,28 @@ class PageViewTask extends React.Component<Props, State> {
         this.props.history.replace(path);
     };
 
+    // https://v5.reactrouter.com/core/api/Prompt/message-func
+    handleNavigation = (location: Location): string | boolean => {
+        const { isDirty, setEditMode } = this.props,
+            { confirmedNavigation } = this.state;
+
+        if (isDirty && !confirmedNavigation) {
+            this.setState({ modalVisible: true, nextLocation: location });
+            return false;
+        } else {
+            setEditMode(false);
+            return true;
+        }
+    };
+
     render = (): React.ReactNode => {
         const { tabKey } = this.props.match.params,
-            { loading, task = {}, dataView } = this.state;
+            { loading, modalVisible, confirmedNavigation, nextLocation, task = {}, dataView } = this.state;
+
+        if (confirmedNavigation && nextLocation) {
+            this.setState({ confirmedNavigation: null, nextLocation: null });
+            return <Redirect to={nextLocation.pathname} push={true} />;
+        }
 
         const buttonProps: ConfigurationItemProps = {
             onDataChange: this.handleDataChange,
@@ -100,6 +137,14 @@ class PageViewTask extends React.Component<Props, State> {
 
         return (
             <Spin spinning={loading}>
+
+                <Prompt message={this.handleNavigation} />
+
+                <Modal
+                    visible={modalVisible}
+                    onOk={this.onModalConfirm}
+                    onCancel={this.onModalClose}>Are you sure you want to ...</Modal>
+
                 <PageHeader
                     onBack={() => window.history.back()}
                     title={task.name}
