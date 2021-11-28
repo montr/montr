@@ -5,6 +5,8 @@ using Microsoft.Extensions.Options;
 using Montr.Automate.Models;
 using Montr.Automate.Services;
 using Montr.Core;
+using Montr.Core.Models;
+using Montr.Core.Services;
 using Montr.MasterData.Models;
 using Montr.Metadata.Models;
 using Montr.Tasks.Models;
@@ -16,11 +18,14 @@ namespace Montr.Tasks.Impl.Services
 	{
 		private readonly IOptionsMonitor<AppOptions> _appOptionsMonitor;
 		private readonly ITaskService _taskService;
+		private readonly IEntityRelationService _entityRelationService;
 
-		public CreateTaskAutomationActionProvider(IOptionsMonitor<AppOptions> appOptionsMonitor, ITaskService taskService)
+		public CreateTaskAutomationActionProvider(IOptionsMonitor<AppOptions> appOptionsMonitor,
+			ITaskService taskService, IEntityRelationService entityRelationService)
 		{
 			_appOptionsMonitor = appOptionsMonitor;
 			_taskService = taskService;
+			_entityRelationService = entityRelationService;
 		}
 
 		public AutomationRuleType RuleType => new()
@@ -59,6 +64,20 @@ namespace Montr.Tasks.Impl.Services
 			var result = await _taskService.Insert(model, cancellationToken);
 
 			result.AssertSuccess(() => $"Failed to create task {model}");
+
+			if (result.Uid.HasValue)
+			{
+				var relation = new EntityRelation
+				{
+					EntityTypeCode = "task",
+					EntityUid = result.Uid.Value,
+					RelatedEntityTypeCode = context.EntityTypeCode,
+					RelatedEntityUid = context.EntityUid,
+					RelationType = "context"
+				};
+
+				await _entityRelationService.Insert(relation, cancellationToken);
+			}
 		}
 	}
 }

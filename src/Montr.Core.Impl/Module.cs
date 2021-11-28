@@ -36,6 +36,7 @@ namespace Montr.Core.Impl
 
 			services.AddTransient<IConfigurationService, DefaultConfigurationService>();
 			services.AddTransient<IRecipeExecutor, DefaultRecipeExecutor>();
+			services.AddTransient<IEntityRelationService, DbEntityRelationService>();
 		}
 	}
 }
