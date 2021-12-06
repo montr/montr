@@ -15,7 +15,7 @@ namespace Montr.MasterData.Impl.Services
 				{
 					new Menu
 					{
-						Id = "classifiers", Name = "Классификаторы", Route = "/classifiers/",
+						Id = "classifiers", Name = "Classifiers", Route = "/classifiers/",
 						Permission = Permission.GetCode(typeof(GetClassifierTypeList))
 					}
 				};

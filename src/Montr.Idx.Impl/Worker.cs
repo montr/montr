@@ -29,25 +29,29 @@ namespace Montr.Idx.Impl
 
 			var manager = scope.ServiceProvider.GetRequiredService<IOpenIddictApplicationManager>();
 
-			if (await manager.FindByClientIdAsync("ui", cancellationToken) is null)
+			var clientId = "ui";
+			var clientName = "UI Client";
+			var baseUrl = "https://127.0.0.1:5001";
+
+			if (await manager.FindByClientIdAsync(clientId, cancellationToken) is null)
 			{
 				await manager.CreateAsync(new OpenIddictApplicationDescriptor
 				{
-					ClientId = "ui",
+					ClientId = clientId,
 					// ConsentType = ConsentTypes.Explicit,
 					ConsentType = ConsentTypes.Implicit,
-					DisplayName = "UI Client",
+					DisplayName = clientName,
 					Type = ClientTypes.Public,
 					PostLogoutRedirectUris =
 					{
-						new Uri("https://app.montr.io:5001/authentication/logout-callback"),
-						new Uri("https://app.montr.io:5001/signout-callback-oidc"),
+						new Uri($"{baseUrl}/authentication/logout-callback"),
+						new Uri($"{baseUrl}/signout-callback-oidc"),
 					},
 					RedirectUris =
 					{
-						new Uri("https://app.montr.io:5001/authentication/login-callback"),
-						new Uri("https://app.montr.io:5001/signin-oidc"),
-						new Uri("https://app.montr.io:5001/silent-renew-oidc"),
+						new Uri($"{baseUrl}/authentication/login-callback"),
+						new Uri($"{baseUrl}/signin-oidc"),
+						new Uri($"{baseUrl}/silent-renew-oidc"),
 					},
 					Permissions =
 					{
