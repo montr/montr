@@ -51,19 +51,20 @@ namespace Montr.MasterData.Models
 					// todo: remove "Numerator/Grid" and "Numerator/Form" from RegisterClassifierMetadataStartupTask
 					new TextField
 					{
-						Key = "code", Name = "Code", Required = true, Active = true, DisplayOrder = 10, System = true
+						Key = "code", Name = "Code", Required = true, DisplayOrder = 10, System = true
 					},
 					new TextAreaField
 					{
-						Key = "name", Name = "Name", Required = true, Active = true, System = true,
+						Key = "name", Name = "Name", Required = true, DisplayOrder = 20, System = true,
 						Props = new TextAreaField.Properties { Rows = 2 }
 					},
 					new SelectField
 					{
-						Key = "entityTypeCode", Name = "EntityTypeCode", Required = true,
+						Key = "entityTypeCode", Name = "EntityTypeCode", Required = true, DisplayOrder = 30, System = true,
 						Props =
 						{
-							// todo: replace hardcoded options
+							// todo: replace hardcoded options, should be entity types registered at startup,
+							// e.g. classifier, document, task etc.
 							Options = new[]
 							{
 								new SelectFieldOption { Value = "DocumentType", Name = "DocumentType" },
@@ -73,7 +74,7 @@ namespace Montr.MasterData.Models
 					},
 					new SelectField
 					{
-						Key = "periodicity", Name = "Periodicity", Required = true,
+						Key = "periodicity", Name = "Periodicity", Required = true, DisplayOrder = 40, System = true,
 						Props =
 						{
 							Options = new[]
@@ -88,7 +89,7 @@ namespace Montr.MasterData.Models
 					},
 					new TextAreaField
 					{
-						Key = "pattern", Name = "Формат номера", Required = true,
+						Key = "pattern", Name = "Формат номера", Required = true, DisplayOrder = 50, System = true,
 						Props = new TextAreaField.Properties { Rows = 4 },
 						Description = "Укажите шаблон с использованием возможных подстановок, например: {DocumentType}-{Number}/{Year2}"
 					}
