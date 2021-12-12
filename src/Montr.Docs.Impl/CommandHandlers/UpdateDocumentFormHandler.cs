@@ -6,7 +6,6 @@ using Montr.Core.Models;
 using Montr.Core.Services;
 using Montr.Docs.Commands;
 using Montr.Docs.Models;
-using Montr.MasterData;
 using Montr.Metadata.Models;
 using Montr.Metadata.Services;
 
@@ -39,7 +38,7 @@ namespace Montr.Docs.Impl.CommandHandlers
 
 			var metadataSearchRequest = new MetadataSearchRequest
 			{
-				EntityTypeCode = EntityTypeCode.Classifier,
+				EntityTypeCode = MasterData.EntityTypeCode.Classifier,
 				EntityUid = document.DocumentTypeUid,
 				// todo: check flags
 				// IsSystem = false,
@@ -51,7 +50,7 @@ namespace Montr.Docs.Impl.CommandHandlers
 
 			var manageFieldDataRequest = new ManageFieldDataRequest
 			{
-				EntityTypeCode = Document.TypeCode,
+				EntityTypeCode = EntityTypeCode.Document,
 				// ReSharper disable once PossibleInvalidOperationException
 				EntityUid = document.Uid.Value,
 				Metadata = metadata,

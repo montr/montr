@@ -7,7 +7,6 @@ using Montr.Core.Models;
 using Montr.Core.Services;
 using Montr.Docs.Models;
 using Montr.Docs.Queries;
-using Montr.MasterData;
 using Montr.Metadata.Models;
 
 namespace Montr.Docs.Impl.QueryHandlers
@@ -71,7 +70,7 @@ namespace Montr.Docs.Impl.QueryHandlers
 			// todo: separate document type metadata and document type (company registration request) form
 			var metadata = await _metadataRepository.Search(new MetadataSearchRequest
 			{
-				EntityTypeCode = EntityTypeCode.Classifier,
+				EntityTypeCode = MasterData.EntityTypeCode.Classifier,
 				EntityUid = document.DocumentTypeUid,
 				IsActive = true,
 				SkipPaging = true

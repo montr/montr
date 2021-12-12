@@ -15,9 +15,6 @@ namespace Montr.MasterData.Models
 
 		private string DebuggerDisplay => $"[{Type}] {Code}, {Name}";
 
-		// todo: migrate to EntityTypeCode.Classifier
-		public static readonly string TypeCode = nameof(Classifier);
-
 		public string Type { get; set; }
 
 		public Guid? Uid { get; set; }

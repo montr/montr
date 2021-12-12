@@ -28,8 +28,9 @@ namespace Montr.Docs.Impl.EventHandlers
 			// todo: auto-approve request, notifications
 			var jobId = _jobManager.Enqueue<ISender>(x => x.Send(new RunAutomations
 			{
-				EntityTypeCode = "classifier", // DocumentType.EntityTypeCode,
-				EntityTypeUid = document.DocumentTypeUid,
+				MetadataEntityTypeCode = MasterData.EntityTypeCode.Classifier,
+				MetadataEntityUid = document.DocumentTypeUid,
+				EntityTypeCode = EntityTypeCode.Document,
 				EntityUid = document.Uid.Value
 			}, cancellationToken));
 

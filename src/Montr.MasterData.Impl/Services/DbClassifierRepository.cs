@@ -101,7 +101,7 @@ namespace Montr.MasterData.Impl.Services
 						var fields = await _fieldDataRepository.Search(new FieldDataSearchRequest
 						{
 							Metadata = metadata,
-							EntityTypeCode = Classifier.TypeCode,
+							EntityTypeCode = EntityTypeCode.Classifier,
 							// ReSharper disable once PossibleInvalidOperationException
 							EntityUids = new[] { item.Uid.Value }
 						}, cancellationToken);
@@ -278,7 +278,7 @@ namespace Montr.MasterData.Impl.Services
 
 			var manageFieldDataRequest = new ManageFieldDataRequest
 			{
-				EntityTypeCode = Classifier.TypeCode,
+				EntityTypeCode = EntityTypeCode.Classifier,
 				EntityUid = item.Uid.Value,
 				Metadata = metadata,
 				Item = item
@@ -422,7 +422,7 @@ namespace Montr.MasterData.Impl.Services
 
 			var manageFieldDataRequest = new ManageFieldDataRequest
 			{
-				EntityTypeCode = Classifier.TypeCode,
+				EntityTypeCode = EntityTypeCode.Classifier,
 				// ReSharper disable once PossibleInvalidOperationException
 				EntityUid = item.Uid.Value,
 				Metadata = metadata,
@@ -529,7 +529,7 @@ namespace Montr.MasterData.Impl.Services
 			// delete fields
 			var result = await _fieldDataRepository.Delete(new DeleteFieldDataRequest
 			{
-				EntityTypeCode = Classifier.TypeCode,
+				EntityTypeCode = EntityTypeCode.Classifier,
 				EntityUids = request.Uids
 			}, cancellationToken);
 

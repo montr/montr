@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 
 namespace Montr.Automate.Models
 {
@@ -10,9 +11,11 @@ namespace Montr.Automate.Models
 			Values = new Dictionary<string, object>();
 		}
 
-		public string EntityTypeCode { get; set; }
+		public string MetadataEntityTypeCode { get; set; }
 
-		public Guid EntityTypeUid { get; set; }
+		public Guid MetadataEntityUid { get; set; }
+
+		public string EntityTypeCode { get; set; }
 
 		public Guid EntityUid { get; set; }
 

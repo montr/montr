@@ -15,7 +15,7 @@ export default class PageDashboard extends React.Component {
 		data.push({ name: `Events stats (year/month/select period)` });
 
 		return (
-			<Page title="Панель управления">
+			<Page title="Dashboard">
 				<List
 					grid={{ gutter: 12, column: 3 }}
 					dataSource={data}

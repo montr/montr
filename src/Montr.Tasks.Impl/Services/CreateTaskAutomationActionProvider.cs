@@ -69,11 +69,11 @@ namespace Montr.Tasks.Impl.Services
 			{
 				var relation = new EntityRelation
 				{
-					EntityTypeCode = "task",
+					EntityTypeCode = EntityTypeCode.Task,
 					EntityUid = result.Uid.Value,
 					RelatedEntityTypeCode = context.EntityTypeCode,
 					RelatedEntityUid = context.EntityUid,
-					RelationType = "context"
+					RelationType = RelationTypeCode.Context
 				};
 
 				await _entityRelationService.Insert(relation, cancellationToken);

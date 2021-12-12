@@ -9,8 +9,6 @@ namespace Montr.Docs.Models
 	{
 		private string DebuggerDisplay => $"{StatusCode}, {Name}";
 
-		public static readonly string TypeCode = nameof(Document);
-
 		public Guid? Uid { get; set; }
 
 		public Guid? CompanyUid { get; set; }
