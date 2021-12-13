@@ -85,7 +85,7 @@ if (!process.env.CI) {
 	options.plugins.push(
 		new copyPlugin({
 			patterns: [
-				{ from: "./assets/", to: "../../Host/wwwroot/assets" }
+				{ from: "./assets/*", to: "../../Host/wwwroot" }
 			]
 		})
 	);

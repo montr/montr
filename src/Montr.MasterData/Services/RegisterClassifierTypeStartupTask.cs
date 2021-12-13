@@ -24,7 +24,7 @@ namespace Montr.MasterData.Services
 			}
 		}
 
-		protected  static IEnumerable<RegisterClassifierType> GetCommands()
+		protected static IEnumerable<RegisterClassifierType> GetCommands()
 		{
 			yield return Numerator.GetDefaultMetadata();
 		}

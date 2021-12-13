@@ -2,7 +2,7 @@ import * as React from "react";
 import { Icon } from "./";
 
 export class Logo extends React.Component {
-	public render() {
+	render = (): React.ReactNode => {
 		return (
 			<div className="logo">
 				<a href="/">
@@ -10,5 +10,5 @@ export class Logo extends React.Component {
 				</a>
 			</div>
 		);
-	}
-};
+	};
+}
