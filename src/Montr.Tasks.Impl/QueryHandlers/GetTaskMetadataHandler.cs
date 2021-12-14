@@ -64,6 +64,7 @@ namespace Montr.Tasks.Impl.QueryHandlers
 
 				result.Toolbar = await _configurationService.GetItems<TaskModel, Button>(task, request.Principal);
 				result.Panes = await _configurationService.GetItems<TaskModel, DataPane>(task, request.Principal);
+				result.Panels = await _configurationService.GetItems<TaskModel, DataPanel>(task, request.Principal);
 			}
 
 			return result;

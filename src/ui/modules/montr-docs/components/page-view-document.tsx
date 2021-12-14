@@ -115,7 +115,7 @@ export default class PageViewDocument extends React.Component<Props, State> {
 					panes={dataView?.panes}
 					onTabChange={this.handleTabChange}
 					disabled={(_, index) => index > 0 && !document?.uid}
-					tabProps={paneProps}
+					paneProps={paneProps}
 				/>
 
 			</Spin>

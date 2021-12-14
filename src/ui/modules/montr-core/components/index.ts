@@ -8,6 +8,7 @@ export * from "./data-button";
 export * from "./data-field-factory";
 export * from "./data-form";
 export * from "./data-menu";
+export * from "./data-sider";
 export * from "./data-table";
 export * from "./data-tabs";
 export * from "./data-toolbar";

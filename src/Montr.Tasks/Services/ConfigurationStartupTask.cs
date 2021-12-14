@@ -48,6 +48,12 @@ namespace Montr.Tasks.Services
 						x.Name = "History";
 						x.Icon = "eye";
 					})
+					.Add<DataPanel>((_, x) =>
+					{
+						x.Key = "related-entities";
+						x.Name = "Related Entities";
+						x.Component = Core.ComponentCode.PanelViewRelatedEntities;
+					})
 					.Add<ButtonEdit>((_, x) =>
 					{
 						x.Key = "edit";

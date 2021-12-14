@@ -9,13 +9,13 @@ interface Props<TModel> {
     panes?: DataPane<TModel>[],
     onTabChange?: (tabKey: string) => void,
     disabled?: (pane: DataPane<TModel>, index: number) => boolean,
-    tabProps?: DataPaneProps<TModel>;
+    paneProps?: DataPaneProps<TModel>;
 }
 
 export class DataTabs<TModel> extends React.Component<Props<TModel>> {
 
     render = (): React.ReactNode => {
-        const { tabKey, panes, onTabChange, disabled, tabProps } = this.props;
+        const { tabKey, panes, onTabChange, disabled, paneProps } = this.props;
 
         if (!panes) return null;
 
@@ -28,7 +28,7 @@ export class DataTabs<TModel> extends React.Component<Props<TModel>> {
                     const componentClass = ComponentRegistry.getComponent(pane.component);
 
                     if (componentClass) {
-                        component = React.createElement(componentClass, { ...tabProps, ...pane.props });
+                        component = React.createElement(componentClass, { ...paneProps, ...pane.props });
                     } else {
                         console.warn(`Warning: Component '${pane.component}' is not found.`);
                     }

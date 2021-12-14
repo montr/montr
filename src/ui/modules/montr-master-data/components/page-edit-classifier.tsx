@@ -107,7 +107,7 @@ export default class PageEditClassifier extends React.Component<Props, State> {
 						panes={dataView?.panes}
 						onTabChange={this.handleTabChange}
 						disabled={(_, index) => index > 0 && !data?.uid}
-						tabProps={{
+						paneProps={{
 							type,
 							data,
 							onDataChange: this.handleDataChange,

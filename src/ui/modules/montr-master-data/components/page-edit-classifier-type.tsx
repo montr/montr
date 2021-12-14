@@ -106,7 +106,7 @@ export default class EditClassifierType extends React.Component<Props, State> {
 						panes={dataView?.panes}
 						onTabChange={this.handleTabChange}
 						disabled={(_, index) => index > 0 && !data?.uid}
-						tabProps={{
+						paneProps={{
 							data,
 							onDataChange: this.handleDataChange,
 							entityTypeCode: `ClassifierType`,

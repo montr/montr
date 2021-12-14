@@ -26,4 +26,8 @@ namespace Montr.Metadata.Models
 	public class DataPane : ConfigurationItem
 	{
 	}
+
+	public class DataPanel : ConfigurationItem
+	{
+	}
 }

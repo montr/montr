@@ -185,7 +185,7 @@ export default class PageEditEvent extends React.Component<Props, State> {
 						panes={dataView?.panes}
 						onTabChange={this.handleTabChange}
 						disabled={(pane, index) => index > 0 && !data?.uid}
-						tabProps={paneProps}
+						paneProps={paneProps}
 					/>
 
 				</Spin>

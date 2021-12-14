@@ -10,6 +10,8 @@ namespace Montr.Metadata.Models
 
 		public ICollection<DataPane> Panes { get; set; }
 
+		public ICollection<DataPanel> Panels { get; set; }
+
 		public ICollection<DataColumn> Columns { get; set; }
 
 		public ICollection<FieldMetadata> Fields { get; set; }
