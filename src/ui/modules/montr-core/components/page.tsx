@@ -19,4 +19,4 @@ export class Page extends React.Component<Props> {
 			</div>
 		);
 	};
-};
+}

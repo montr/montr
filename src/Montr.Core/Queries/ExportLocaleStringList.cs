@@ -1,9 +1,8 @@
 ﻿using MediatR;
 using Montr.Core.Models;
 
-namespace Montr.Core.Queries
+namespace Montr.Core.Queries;
+
+public class ExportLocaleStringList : LocaleStringSearchRequest, IRequest<FileResult>
 {
-	public class ExportLocaleStringList : LocaleStringSearchRequest, IRequest<FileResult>
-	{
-	}
 }

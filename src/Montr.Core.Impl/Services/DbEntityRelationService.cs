@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using LinqToDB;
@@ -16,6 +17,26 @@ public class DbEntityRelationService : IEntityRelationService
 	public DbEntityRelationService(IDbContextFactory dbContextFactory)
 	{
 		_dbContextFactory = dbContextFactory;
+	}
+
+	public async Task<IList<EntityRelation>> List(EntityRelationSearchRequest request, CancellationToken cancellationToken = default)
+	{
+		using (var db = _dbContextFactory.Create())
+		{
+			var query = db.GetTable<DbEntityRelation>()
+				.Where(x => x.EntityTypeCode == request.EntityTypeCode && x.EntityUid == request.EntityUid);
+
+			var data = await query.Select(x => new EntityRelation
+			{
+				EntityTypeCode = x.EntityTypeCode,
+				EntityUid = x.EntityUid,
+				RelatedEntityTypeCode = x.RelatedEntityTypeCode,
+				RelatedEntityUid = x.RelatedEntityUid,
+				RelationType = x.RelationType
+			}).ToListAsync(cancellationToken);
+
+			return data;
+		}
 	}
 
 	public async Task<ApiResult> Insert(EntityRelation relation, CancellationToken cancellationToken)

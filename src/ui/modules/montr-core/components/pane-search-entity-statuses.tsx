@@ -1,9 +1,9 @@
 import React from "react";
-import { WithTranslation, Translation, withTranslation } from "react-i18next";
-import { Guid, DataResult, EntityStatus } from "../models";
-import { OperationService, MetadataService, EntityStatusService } from "../services";
-import { DataTableUpdateToken, Toolbar, ButtonAdd, ButtonDelete, DataTable, ModalEditEntityStatus } from ".";
+import { Translation, WithTranslation, withTranslation } from "react-i18next";
+import { ButtonAdd, ButtonDelete, DataTable, DataTableUpdateToken, ModalEditEntityStatus, Toolbar } from ".";
+import { DataResult, EntityStatus, Guid } from "../models";
 import { Api, Views } from "../module";
+import { EntityStatusService, MetadataService, OperationService } from "../services";
 
 interface Props extends WithTranslation {
 	entityTypeCode: string;
@@ -95,7 +95,7 @@ class WrappedPaneSearchEntityStatuses extends React.Component<Props, State> {
 		this.setState({ editData: null });
 	};
 
-	render = () => {
+	render = (): React.ReactNode => {
 		const { entityTypeCode, entityUid } = this.props,
 			{ editData, selectedRowKeys, updateTableToken } = this.state;
 

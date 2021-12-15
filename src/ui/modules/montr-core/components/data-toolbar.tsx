@@ -2,42 +2,29 @@
 import React from "react";
 import { DataButton } from ".";
 import { Button, ConfigurationItemProps } from "../models";
-import { ComponentRegistry } from "../services";
+import { ComponentFactory } from "./component-factory";
 
 interface Props {
-    buttons: Button[];
-    buttonProps?: ConfigurationItemProps;
+	buttons: Button[];
+	buttonProps?: ConfigurationItemProps;
 }
 
 export class DataToolbar extends React.Component<Props> {
-    render = (): React.ReactNode => {
-        const { buttons, buttonProps } = this.props;
+	render = (): React.ReactNode => {
+		const { buttons, buttonProps } = this.props;
 
-        if (!buttons) return null;
+		if (!buttons) return null;
 
-        return <>
-            {buttons.map((button, index) => {
+		return <>
+			{buttons.map((button, index) => {
 
-                const key = button.key || `btn-${index}`;
+				const key = button.key || `btn-${index}`;
 
-                const props = { key, button, ...buttonProps, ...button.props };
+				const props = { key, button, ...buttonProps, ...button.props };
 
-                let component = undefined;
-
-                if (button.component) {
-                    const componentClass = ComponentRegistry.getComponent(button.component);
-
-                    if (componentClass) {
-                        component = React.createElement(componentClass, props);
-                    } else {
-                        console.error(`Component ${button.component} is not found.`);
-                    }
-                } else {
-                    component = <DataButton {...props} />;
-                }
-
-                return component;
-            })}
-        </>;
-    };
+				return ComponentFactory.createComponent(button.component, props)
+					?? <DataButton {...props} />;
+			})}
+		</>;
+	};
 }

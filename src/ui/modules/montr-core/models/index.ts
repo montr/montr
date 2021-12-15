@@ -7,6 +7,7 @@ export * from "./data-field";
 export * from "./data-pane";
 export * from "./data-result";
 export * from "./data-view";
+export * from "./entity-relation";
 export * from "./entity-status";
 export * from "./field-data";
 export * from "./guid";

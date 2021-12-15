@@ -2,46 +2,33 @@ import { Tabs } from "antd";
 import React from "react";
 import { Icon } from ".";
 import { DataPane, DataPaneProps } from "../models";
-import { ComponentRegistry } from "../services";
+import { ComponentFactory } from "./component-factory";
 
 interface Props<TModel> {
-    tabKey?: string;
-    panes?: DataPane<TModel>[],
-    onTabChange?: (tabKey: string) => void,
-    disabled?: (pane: DataPane<TModel>, index: number) => boolean,
-    paneProps?: DataPaneProps<TModel>;
+	tabKey?: string;
+	panes?: DataPane<TModel>[],
+	onTabChange?: (tabKey: string) => void,
+	disabled?: (pane: DataPane<TModel>, index: number) => boolean,
+	paneProps?: DataPaneProps<TModel>;
 }
 
 export class DataTabs<TModel> extends React.Component<Props<TModel>> {
 
-    render = (): React.ReactNode => {
-        const { tabKey, panes, onTabChange, disabled, paneProps } = this.props;
+	render = (): React.ReactNode => {
+		const { tabKey, panes, onTabChange, disabled, paneProps } = this.props;
 
-        if (!panes) return null;
+		if (!panes) return null;
 
-        return <Tabs size="small" activeKey={tabKey} onChange={onTabChange}>
-            {panes.map((pane, index) => {
-
-                let component = undefined;
-
-                if (pane.component) {
-                    const componentClass = ComponentRegistry.getComponent(pane.component);
-
-                    if (componentClass) {
-                        component = React.createElement(componentClass, { ...paneProps, ...pane.props });
-                    } else {
-                        console.warn(`Warning: Component '${pane.component}' is not found.`);
-                    }
-                }
-
-                return (
-                    <Tabs.TabPane key={pane.key}
-                        tab={<>{pane.icon && Icon.get(pane.icon)}{pane.name}</>}
-                        disabled={disabled ? disabled(pane, index) : false}>
-                        {component}
-                    </Tabs.TabPane>
-                );
-            })}
-        </Tabs>;
-    };
+		return <Tabs size="small" activeKey={tabKey} onChange={onTabChange}>
+			{panes.map((pane, index) => {
+				return (
+					<Tabs.TabPane key={pane.key}
+						tab={<>{pane.icon && Icon.get(pane.icon)}{pane.name}</>}
+						disabled={disabled ? disabled(pane, index) : false}>
+						{ComponentFactory.createComponent(pane.component, { ...paneProps, ...pane.props })}
+					</Tabs.TabPane>
+				);
+			})}
+		</Tabs>;
+	};
 }
