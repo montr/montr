@@ -46,9 +46,9 @@ namespace Montr.Tasks.Impl.QueryHandlers
 			{
 				result.Fields = new List<FieldMetadata>
 				{
+					new TextField { Key = "number", Name = "Number", Required = true },
 					new ClassifierField { Key = "taskTypeUid", Name = "Task type", Required = true, Props = { TypeCode = ClassifierTypeCode.TaskType } },
 					new ClassifierField { Key = "assigneeUid", Name = "Assignee", Props = { TypeCode = Idx.ClassifierTypeCode.User } },
-					new TextField { Key = "number", Name = "Number", Required = true },
 					new TextField { Key = "name", Name = "Name", Required = true },
 					new TextAreaField { Key = "description", Name = "Description", Placeholder = "Description", Props = new TextAreaField.Properties { Rows = 2 } }
 				};

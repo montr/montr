@@ -67,7 +67,8 @@ const options = {
 									// "font-family": "'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif"
 									// "font-family": "'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif"
 									// "font-family": "Nunito, 'Helvetica Neue', Helvetica, Arial, sans-serif"
-									"font-family": "Inter, 'Helvetica Neue', Helvetica, Arial, sans-serif"
+									// "font-family": "Inter, 'Helvetica Neue', Helvetica, Arial, sans-serif"
+									"font-family": "-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Oxygen-Sans,Ubuntu,Cantarell,'Helvetica Neue',sans-serif"
 								}
 							}
 						}

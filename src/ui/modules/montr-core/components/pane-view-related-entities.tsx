@@ -1,7 +1,8 @@
-import { EntityRelationService } from "@montr-core/services";
+import { ComponentNameConvention, EntityRelationService } from "@montr-core/services";
 import { Empty, Spin } from "antd";
 import React from "react";
 import { EntityRelation, Guid } from "../models";
+import { ComponentFactory } from "./component-factory";
 
 interface Props {
 	entityTypeCode: string;
@@ -46,7 +47,13 @@ export default class PaneViewRelatedEntities extends React.Component<Props, Stat
 
 		return <Spin spinning={loading}>
 			{data?.map(item => {
-				return <div>{item.relationType}: {item.relatedEntityTypeCode}@{item.relatedEntityUid}</div>;
+				const componentName = ComponentNameConvention.entityPane(item.relatedEntityTypeCode);
+
+				return ComponentFactory.createComponent(componentName, {
+					entityTypeCode: item.relatedEntityTypeCode,
+					entityUid: item.relatedEntityUid,
+					item
+				});
 			})}
 
 			{data?.length == 0 && <Empty image={Empty.PRESENTED_IMAGE_SIMPLE} />}

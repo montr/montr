@@ -77,5 +77,5 @@ ComponentRegistry.add([
 	{ path: "@montr-core/components/pane-edit-fields-metadata", component: React.lazy(() => import("./components/pane-edit-fields-metadata")) },
 	{ path: "@montr-core/components/pane-edit-form-metadata", component: React.lazy(() => import("./components/pane-edit-form-metadata")) },
 	{ path: "@montr-core/components/pane-search-entity-statuses", component: React.lazy(() => import("./components/pane-search-entity-statuses")) },
-	{ path: "@montr-core/components/pane-view-related-entities", component: React.lazy(() => import("./components/pane-view-related-entities")) }
+	{ path: "@montr-core/components/pane-view-related-entities", component: React.lazy(() => import("./components/pane-view-related-entities")) },
 ]);

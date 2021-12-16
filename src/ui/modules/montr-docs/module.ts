@@ -1,5 +1,5 @@
 import { Guid } from "@montr-core/models";
-import { AppRouteRegistry, ComponentRegistry } from "@montr-core/services";
+import { AppRouteRegistry, ComponentNameConvention, ComponentRegistry } from "@montr-core/services";
 import React from "react";
 import { generatePath } from "react-router";
 
@@ -44,5 +44,7 @@ AppRouteRegistry.add([
 
 ComponentRegistry.add([
 	{ path: "@montr-docs/components/pane-view-document-form", component: React.lazy(() => import("./components/pane-view-document-form")) },
-	{ path: "@montr-docs/components/pane-list-prosess-step", component: React.lazy(() => import("./components/pane-list-prosess-step")) }
+	{ path: "@montr-docs/components/pane-list-prosess-step", component: React.lazy(() => import("./components/pane-list-prosess-step")) },
+
+	{ path: ComponentNameConvention.entityPane("document"), component: React.lazy(() => import("./components/pane-view-document")) }
 ]);
