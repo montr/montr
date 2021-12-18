@@ -7,6 +7,7 @@ export const Api = {
 	documentMetadata: "/document/metadata",
 	documentList: "/document/list",
 	documentGet: "/document/get",
+	documentUpdate: "/document/update",
 	documentPublish: "/document/publish",
 
 	documentFormUpdate: "/documentForm/update",
@@ -28,6 +29,7 @@ export const ClassifierTypeCode = {
 export const Views = {
 	documentList: "document-list",
 	documentPage: "document-page",
+	documentInfo: "document-info",
 	documentForm: "document-form"
 };
 
@@ -43,8 +45,10 @@ AppRouteRegistry.add([
 ]);
 
 ComponentRegistry.add([
+	{ path: "@montr-docs/components/pane-view-document-info", component: React.lazy(() => import("./components/pane-view-document-info")) },
 	{ path: "@montr-docs/components/pane-view-document-form", component: React.lazy(() => import("./components/pane-view-document-form")) },
-	{ path: "@montr-docs/components/pane-list-prosess-step", component: React.lazy(() => import("./components/pane-list-prosess-step")) },
+	{ path: "@montr-docs/components/pane-list-prosess-step", component: React.lazy(() => import("./components/pane-list-process-step")) },
 
 	{ path: ComponentNameConvention.entityPane("document"), component: React.lazy(() => import("./components/pane-view-document")) }
 ]);
+

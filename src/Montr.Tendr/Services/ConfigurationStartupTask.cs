@@ -61,7 +61,7 @@ namespace Montr.Tendr.Services
 					.Add<DataPane>((_, x) =>
 					{
 						x.Key = "history";
-						x.Name = "Change History";
+						x.Name = "History";
 						x.Icon = "eye";
 					})
 					.Add<DataPane>((_, x) =>

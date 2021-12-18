@@ -74,6 +74,16 @@ namespace Montr.Docs.Services
 
 			_configurationManager.Configure<Document>(config =>
 			{
+				config //.When(document => document.StatusCode == DocumentStatusCode.Draft)
+					.Add<DataPane>((_, x) =>
+					{
+						x.Key = "info";
+						x.Name = "Information";
+						x.Icon = "profile";
+						x.Component = ComponentCode.PaneViewDocumentInfo;
+						// x.Props = new {mode = "edit"};
+					});
+
 				config.When(document => document.StatusCode == DocumentStatusCode.Draft)
 					.Add<DataPane>((_, x) =>
 					{

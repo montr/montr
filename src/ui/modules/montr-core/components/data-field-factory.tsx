@@ -207,7 +207,7 @@ export class PasswordFieldFactory extends DataFieldFactory<IPasswordField> {
 export class DateFieldFactory extends DataFieldFactory<IDateField> {
 	constructor() {
 		super();
-		this.shouldFormatValue = true;
+		// this.shouldFormatValue = true;
 	}
 
 	formatValue(field: IDateField, data: IIndexer, value: any): any {
@@ -229,7 +229,7 @@ export class DateFieldFactory extends DataFieldFactory<IDateField> {
 		const value = DataHelper.indexer(data, field.key, undefined);
 
 		return (value != undefined)
-			? value.format(field.props.includeTime ? "LLL" : "L")
+			? value // .format(field.props.includeTime ? "LLL" : "L")
 			: <EmptyFieldView />;
 	}
 }

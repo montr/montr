@@ -3,6 +3,7 @@ import { IDocument } from "@montr-docs/models";
 import { DocumentService } from "@montr-docs/services";
 import { Spin } from "antd";
 import React from "react";
+import { Link } from "react-router-dom";
 
 interface Props {
 	entityTypeCode: string;
@@ -47,6 +48,11 @@ export default class PaneViewDocument extends React.Component<Props, State> {
 
 		return <Spin spinning={loading}>
 			<code>{JSON.stringify(document)}</code>
+
+			<br />
+			<br />
+
+			<Link to={document?.url} >{document?.documentNumber}</Link>
 		</Spin>;
 	};
 }

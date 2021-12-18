@@ -7,6 +7,7 @@ using Montr.Core.Models;
 using Montr.Core.Services;
 using Montr.Docs.Models;
 using Montr.Docs.Queries;
+using Montr.MasterData.Models;
 using Montr.Metadata.Models;
 
 namespace Montr.Docs.Impl.QueryHandlers
@@ -56,6 +57,16 @@ namespace Montr.Docs.Impl.QueryHandlers
 			{
 				result.Toolbar = await _configurationService.GetItems<Document, Button>(document, request.Principal);
 				result.Panes = await _configurationService.GetItems<Document, DataPane>(document, request.Principal);
+			}
+			else if (request.ViewId == ViewCode.DocumentInfo)
+			{
+				result.Fields = new List<FieldMetadata>
+				{
+					new ClassifierField { Key = "documentTypeUid", Name = "Type", Required = true, Props = { TypeCode = ClassifierTypeCode.DocumentType }},
+					new TextField { Key = "documentNumber", Name = "Number", Required = true },
+					new DateField { Key = "documentDate", Name = "Date", Required = true },
+					new TextField { Key = "name", Name = "Name", Required = true },
+				};
 			}
 			else if (request.ViewId == ViewCode.DocumentForm)
 			{

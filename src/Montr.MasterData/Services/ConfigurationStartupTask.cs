@@ -80,7 +80,7 @@ namespace Montr.MasterData.Services
 					.Add<DataPane>((_, x) =>
 					{
 						x.Key = "history";
-						x.Name = "Change History";
+						x.Name = "History";
 						x.DisplayOrder = 40;
 						x.Icon = "eye";
 					});
