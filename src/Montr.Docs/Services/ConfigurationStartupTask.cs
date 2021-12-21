@@ -1,6 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using Montr.Core.Services;
+using Montr.Docs.Commands;
 using Montr.Docs.Models;
 using Montr.MasterData.Models;
 using Montr.Metadata.Models;
@@ -82,16 +83,16 @@ namespace Montr.Docs.Services
 						x.Icon = "profile";
 						x.Component = ComponentCode.PaneViewDocumentInfo;
 						// x.Props = new {mode = "edit"};
-					});
-
-				config.When(document => document.StatusCode == DocumentStatusCode.Draft)
-					.Add<DataPane>((_, x) =>
+					})
+					.Add<DataPane>((document, x) =>
 					{
 						x.Key = "form";
 						x.Name = "Form";
 						x.Component = ComponentCode.PaneViewDocumentForm;
-						x.Props = new { mode = "edit" };
-					})
+						x.Props = new {mode = document.StatusCode == DocumentStatusCode.Draft ? "edit" : "view"};
+					});
+
+				config.When(document => document.StatusCode == DocumentStatusCode.Draft)
 					/*.Add<Button>((document, x) =>
 					{
 						x.Key = "submit";
@@ -102,13 +103,6 @@ namespace Montr.Docs.Services
 					})*/;
 
 				config.When(document => document.StatusCode != DocumentStatusCode.Draft)
-					.Add<DataPane>((_, x) =>
-					{
-						x.Key = "form";
-						x.Name = "Form";
-						x.Component = ComponentCode.PaneViewDocumentForm;
-						x.Props = new { mode = "view" };
-					})
 					/*.Add<Button>((_, x) =>
 					{
 						x.Name = "Accept or Reject";
