@@ -1,9 +1,11 @@
-import { Guid } from "@montr-core/models";
+import { DataForm } from "@montr-core/components";
+import { Guid, IDataField } from "@montr-core/models";
 import { IDocument } from "@montr-docs/models";
 import { DocumentService } from "@montr-docs/services";
-import { Spin } from "antd";
+import { Spin, Tag } from "antd";
 import React from "react";
 import { Link } from "react-router-dom";
+import { Views } from "../module";
 
 interface Props {
 	entityTypeCode: string;
@@ -13,6 +15,7 @@ interface Props {
 interface State {
 	loading: boolean;
 	document?: IDocument;
+	fields?: IDataField[];
 }
 
 export default class PaneViewDocument extends React.Component<Props, State> {
@@ -40,19 +43,26 @@ export default class PaneViewDocument extends React.Component<Props, State> {
 
 		const document = await this.documentService.get(entityUid);
 
-		this.setState({ loading: false, document });
+		const dataView = await this.documentService.metadata(Views.documentInfo, document.uid);
+
+		this.setState({ loading: false, document, fields: dataView.fields });
 	};
 
 	render = (): React.ReactNode => {
-		const { loading, document } = this.state;
+		const { loading, document, fields } = this.state;
 
-		return <Spin spinning={loading}>
-			<code>{JSON.stringify(document)}</code>
+		return (
+			<Spin spinning={loading}>
 
-			<br />
-			<br />
+				<DataForm
+					mode="view"
+					layout="vertical"
+					fields={fields}
+					data={document} />
 
-			<Link to={document?.url} >{document?.documentNumber}</Link>
-		</Spin>;
+				<Tag>Document</Tag>
+				<Link to={document?.url} >{document?.documentNumber}</Link>
+			</Spin>
+		);
 	};
 }
