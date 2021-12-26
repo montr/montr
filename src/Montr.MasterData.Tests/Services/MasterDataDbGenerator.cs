@@ -6,7 +6,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using LinqToDB;
 using Microsoft.Extensions.Logging.Abstractions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Montr.Core.Models;
 using Montr.Core.Services;
 using Montr.Data.Linq2Db;
@@ -20,6 +19,7 @@ using Montr.MasterData.Queries;
 using Montr.MasterData.Services;
 using Montr.Metadata.Impl.Services;
 using Montr.Metadata.Models;
+using NUnit.Framework;
 
 namespace Montr.MasterData.Tests.Services
 {

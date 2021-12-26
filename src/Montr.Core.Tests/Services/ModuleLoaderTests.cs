@@ -1,13 +1,13 @@
 ﻿using Microsoft.Extensions.Logging;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Montr.Core.Impl.Services;
+using NUnit.Framework;
 
 namespace Montr.Core.Tests.Services
 {
-	[TestClass]
+	[TestFixture]
 	public class ModuleLoaderTests
 	{
-		[TestMethod]
+		[Test]
 		public void GetSortedModules_ForHost_ReturnsSortedModules()
 		{
 			// arrange
@@ -23,10 +23,10 @@ namespace Montr.Core.Tests.Services
 			Assert.IsTrue(modules.Count > 0);
 		}
 
-		[TestMethod]
-		[DataRow("Microsoft.Extensions.Http.dll", true)]
-		[DataRow("System.Data.SqlClient.dll", true)]
-		[DataRow("Montr.Core.dll", false)]
+		[Test]
+		[TestCase("Microsoft.Extensions.Http.dll", true)]
+		[TestCase("System.Data.SqlClient.dll", true)]
+		[TestCase("Montr.Core.dll", false)]
 		public void ExcludeAssembly_ForFile_ReturnsExpected(string file, bool expected)
 		{
 			// arrange

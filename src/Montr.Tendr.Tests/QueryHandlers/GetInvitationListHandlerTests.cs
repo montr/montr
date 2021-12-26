@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Montr.Data.Linq2Db;
 using Montr.MasterData.Impl.Services;
 using Montr.MasterData.Models;
@@ -11,13 +10,14 @@ using Montr.Metadata.Models;
 using Montr.Tendr.Impl.QueryHandlers;
 using Montr.Tendr.Queries;
 using Moq;
+using NUnit.Framework;
 
 namespace Montr.Tendr.Tests.QueryHandlers
 {
-	[TestClass]
+	[TestFixture]
 	public class GetInvitationListHandlerTests
 	{
-		[TestMethod]
+		[Test]
 		public async Task GetInvitationList_ForNormalRequest_ReturnItems()
 		{
 			// arrange

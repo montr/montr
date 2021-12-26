@@ -4,7 +4,6 @@ using System.IO.Compression;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Montr.Core.Services;
 using Montr.Data.Linq2Db;
 using Montr.MasterData.Commands;
@@ -13,10 +12,11 @@ using Montr.MasterData.Impl.Services;
 using Montr.MasterData.Models;
 using Montr.MasterData.Plugin.GovRu.Services;
 using Montr.MasterData.Services;
+using NUnit.Framework;
 
 namespace Montr.MasterData.Plugin.GovRu.Tests.Services
 {
-	[TestClass]
+	[TestFixture]
 	public class OkParserTests
 	{
 		private async Task<ParseResult> Parse(IClassifierParser parser, string searchPattern)
@@ -50,8 +50,8 @@ namespace Montr.MasterData.Plugin.GovRu.Tests.Services
 			return parser.GetResult();
 		}
 
-		[TestMethod]
-		[DataRow(false)]
+		[Test]
+		[TestCase(false)]
 		public async Task Parser_Should_ParseOkeiFile(bool dumpToDb)
 		{
 			// arrange
@@ -69,8 +69,8 @@ namespace Montr.MasterData.Plugin.GovRu.Tests.Services
 			if (dumpToDb) await DumpToDb(result, "okei");
 		}
 
-		[TestMethod]
-		[DataRow(false)]
+		[Test]
+		[TestCase(false)]
 		public async Task Parser_Should_ParseOkved2File(bool dumpToDb)
 		{
 			// arrange
@@ -89,8 +89,8 @@ namespace Montr.MasterData.Plugin.GovRu.Tests.Services
 			if (dumpToDb) await DumpToDb(result, "okved2");
 		}
 
-		[TestMethod]
-		[DataRow(false)]
+		[Test]
+		[TestCase(false)]
 		public async Task Parser_Should_ParseOkpd2File(bool dumpToDb)
 		{
 			// arrange
@@ -110,8 +110,8 @@ namespace Montr.MasterData.Plugin.GovRu.Tests.Services
 			if (dumpToDb) await DumpToDb(result, "okpd2");
 		}
 
-		[TestMethod]
-		[DataRow(false)]
+		[Test]
+		[TestCase(false)]
 		public async Task Parser_Should_ParseOktmoXmlFile(bool dumpToDb)
 		{
 			// arrange
@@ -129,8 +129,8 @@ namespace Montr.MasterData.Plugin.GovRu.Tests.Services
 			if (dumpToDb) await DumpToDb(result, "oktmo");
 		}
 
-		[TestMethod, Ignore]
-		[DataRow(false)]
+		[Test, Ignore("check it why ignored later")]
+		[TestCase(false)]
 		public async Task Parser_Should_ParseOktmoCsvFile(bool dumpToDb)
 		{
 			// arrange
@@ -148,8 +148,8 @@ namespace Montr.MasterData.Plugin.GovRu.Tests.Services
 			if (dumpToDb) await DumpToDb(result, "oktmo");
 		}
 
-		[TestMethod]
-		[DataRow(false)]
+		[Test]
+		[TestCase(false)]
 		public async Task Parser_Should_ParseOkvFile(bool dumpToDb)
 		{
 			// arrange
@@ -166,8 +166,8 @@ namespace Montr.MasterData.Plugin.GovRu.Tests.Services
 			if (dumpToDb) await DumpToDb(result, "okv");
 		}
 
-		[TestMethod]
-		[DataRow(false)]
+		[Test]
+		[TestCase(false)]
 		public async Task Parser_Should_ParseOkopfFile(bool dumpToDb)
 		{
 			// arrange

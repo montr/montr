@@ -2,16 +2,16 @@
 using System.Collections.Generic;
 using System.Text.Json;
 using System.Text.Json.Serialization;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Montr.Core.Services;
 using Montr.Metadata.Models;
+using NUnit.Framework;
 
 namespace Montr.Metadata.Tests.Services
 {
-	[TestClass]
+	[TestFixture]
 	public class FieldMetadataJsonConverterTests
 	{
-		[TestMethod]
+		[Test]
 		public void Write_FieldsArrayWithConverter_ShouldSerializeAllProperties()
 		{
 			// arrange
@@ -35,7 +35,7 @@ namespace Montr.Metadata.Tests.Services
 			AssertAllPropertiesSerialized(result, fields);
 		}
 
-		[TestMethod]
+		[Test]
 		public void Write_FieldsArrayWithoutConverter_ShouldThrow()
 		{
 			// arrange
@@ -49,7 +49,7 @@ namespace Montr.Metadata.Tests.Services
 			// assert
 			Assert.IsNotNull(result);
 
-			Assert.ThrowsException<AssertFailedException>(() => AssertAllPropertiesSerialized(result, fields));
+			Assert.Throws<AssertionException>(() => AssertAllPropertiesSerialized(result, fields));
 		}
 
 		private static void AssertAllPropertiesSerialized(string result, IReadOnlyList<FieldMetadata> fields)

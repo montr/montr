@@ -1,18 +1,18 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Montr.Data.Linq2Db;
+﻿using Montr.Data.Linq2Db;
+using NUnit.Framework;
 
 namespace Montr.Tendr.Tests
 {
-	[TestClass]
+	[SetUpFixture]
 	public class Initialize
 	{
-		[AssemblyInitialize]
-		public static void AssemblyInitialize(TestContext context)
+		[OneTimeSetUp]
+		public static void AssemblyInitialize()
 		{
 			DbConfigurationExtensions.SetLinq2DbTestSettings();
 		}
 
-		[AssemblyCleanup]
+		[OneTimeTearDown]
 		public static void AssemblyCleanup()
 		{
 		}

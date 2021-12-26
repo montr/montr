@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Globalization;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Montr.Metadata.Services;
+using NUnit.Framework;
 
 namespace Montr.Metadata.Tests.Services
 {
-	[TestClass]
+	[TestFixture]
 	public class FieldProviderTests
 	{
-		[TestMethod]
-		[DataRow("2020-01-31 12:40:00", "2020-01-31T12:40:00")]
+		[Test]
+		[TestCase("2020-01-31 12:40:00", "2020-01-31T12:40:00")]
 		public void DateFieldProvider_ReadNormalValues_ShouldDeserialize(string value, string expectedValue)
 		{
 			// arrange
@@ -23,10 +23,10 @@ namespace Montr.Metadata.Tests.Services
 			Assert.AreEqual(expected, result);
 		}
 
-		[TestMethod]
-		[DataRow("12:45:36", "12:45:36")]
-		[DataRow("23:01:15", "23:01:15")]
-		[DataRow("08.01.2020 15:45:10", "15:45:10")]
+		[Test]
+		[TestCase("12:45:36", "12:45:36")]
+		[TestCase("23:01:15", "23:01:15")]
+		[TestCase("08.01.2020 15:45:10", "15:45:10")]
 		public void TimeFieldProvider_ReadNormalValues_ShouldDeserialize(string value, string expectedValue)
 		{
 			// arrange
@@ -40,7 +40,7 @@ namespace Montr.Metadata.Tests.Services
 			Assert.AreEqual(expected, result);
 		}
 
-		[TestMethod]
+		[Test]
 		public void TimeFieldProvider_Write_ShouldSerialize()
 		{
 			// arrange

@@ -1,13 +1,13 @@
 ﻿using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Montr.Core.Services;
+using NUnit.Framework;
 
 namespace Montr.Core.Tests.Services
 {
-	[TestClass]
+	[TestFixture]
 	public class QueryableExtensionsTests
 	{
-		[TestMethod]
+		[Test]
 		public void OrderBy_Should_OrderAscending()
 		{
 			// arrange
@@ -29,7 +29,7 @@ namespace Montr.Core.Tests.Services
 			Assert.AreEqual(3, result[2].Prop1);
 		}
 
-		[TestMethod]
+		[Test]
 		public void OrderByDescending_Should_OrderDescending()
 		{
 			// arrange
@@ -51,7 +51,7 @@ namespace Montr.Core.Tests.Services
 			Assert.AreEqual(5, result[2].Prop1);
 		}
 
-		[TestMethod]
+		[Test]
 		public void OrderByAscending_ThenByDescending_Should_Order()
 		{
 			// arrange
@@ -77,7 +77,7 @@ namespace Montr.Core.Tests.Services
 			Assert.AreEqual("str2", result[2].Prop2);
 		}
 
-		[TestMethod]
+		[Test]
 		public void OrderByDescending_ThenByAscending_Should_Order()
 		{
 			// arrange

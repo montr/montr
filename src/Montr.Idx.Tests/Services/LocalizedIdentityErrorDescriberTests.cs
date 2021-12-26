@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Linq;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+using NUnit.Framework;
 
 namespace Montr.Idx.Tests.Services
 {
-	[TestClass]
+	[TestFixture]
 	public class LocalizedIdentityErrorDescriberTests
 	{
-		[TestMethod]
+		[Test]
 		public void ExtractResources()
 		{
 			// https://github.com/aspnet/AspNetIdentity/blob/master/src/Microsoft.AspNet.Identity.Core/Resources.Designer.cs

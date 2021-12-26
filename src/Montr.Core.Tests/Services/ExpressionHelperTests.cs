@@ -1,12 +1,12 @@
-﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using Montr.Core.Services;
+﻿using Montr.Core.Services;
+using NUnit.Framework;
 
 namespace Montr.Core.Tests.Services
 {
-	[TestClass]
+	[TestFixture]
 	public class ExpressionHelperTests
 	{
-		[TestMethod]
+		[Test]
 		public void GetMemberName_Should_ReturnExpressionAsString()
 		{
 			var result = ExpressionHelper.GetFullName<Resources>(x => x.Key1);

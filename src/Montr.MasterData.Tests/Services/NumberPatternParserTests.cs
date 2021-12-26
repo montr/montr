@@ -1,18 +1,18 @@
 ﻿using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Montr.MasterData.Impl.Services;
 using Montr.MasterData.Models;
+using NUnit.Framework;
 
 namespace Montr.MasterData.Tests.Services
 {
-	[TestClass]
+	[TestFixture]
 	public class NumberPatternParserTests
 	{
-		[TestMethod]
-		[DataRow("P-{Number}", "Number")]
-		[DataRow("P-{Number}-{Year2}", "Number,Year2")]
-		[DataRow("P-{Number}/{Year4}", "Number,Year4")]
-		[DataRow("{Company}-{Number}/{Year4}", "Company,Number,Year4")]
+		[Test]
+		[TestCase("P-{Number}", "Number")]
+		[TestCase("P-{Number}-{Year2}", "Number,Year2")]
+		[TestCase("P-{Number}/{Year4}", "Number,Year4")]
+		[TestCase("{Company}-{Number}/{Year4}", "Company,Number,Year4")]
 		public void PatternParser_SimpleParse_ReturnTags(string pattern, string tags)
 		{
 			// arrange
@@ -26,7 +26,7 @@ namespace Montr.MasterData.Tests.Services
 			CollectionAssert.AreEqual(expected, result.Tokens.OfType<TagToken>().Select(x => x.Name).ToArray());
 		}
 
-		[TestMethod]
+		[Test]
 		public void PatternParser_Parse_ReturnTokens_1()
 		{
 			// arrange
@@ -45,31 +45,31 @@ namespace Montr.MasterData.Tests.Services
 			AssertTagToken(result.Tokens[5], "Year", new[] { "4" });
 		}
 
-		[TestMethod]
-		[DataRow("{{Number}", 1, TokenType.TagBegin)]
-		[DataRow("{Number}/{Year{}", 14, TokenType.TagBegin)]
-		[DataRow("{Number}/{Year:{}", 15, TokenType.TagBegin)]
-		[DataRow("{Number:5{}", 9, TokenType.TagBegin)]
-		[DataRow("}No", 0, TokenType.TagEnd)]
-		[DataRow("{}Number", 1, TokenType.TagEnd)]
-		[DataRow("{Number}}", 8, TokenType.TagEnd)]
-		[DataRow("{Number}/}", 9, TokenType.TagEnd)]
-		[DataRow("{Number:5:}", 10, TokenType.TagEnd)]
-		[DataRow("{Number:}", 8, TokenType.TagEnd)]
-		[DataRow("{:Number}", 1, TokenType.TagArgSeparator)]
-		[DataRow(":{:Number}", 2, TokenType.TagArgSeparator)]
-		[DataRow("{Number::}", 8, TokenType.TagArgSeparator)]
-		[DataRow("{Number:5}:{:}", 12, TokenType.TagArgSeparator)]
-		[DataRow("{Tag1", 5, TokenType.End)]
-		[DataRow("{Tag1}-{Tag2", 12, TokenType.End)]
-		[DataRow("{Tag1}-{Tag2:", 13, TokenType.End)]
+		[Test]
+		[TestCase("{{Number}", 1, TokenType.TagBegin)]
+		[TestCase("{Number}/{Year{}", 14, TokenType.TagBegin)]
+		[TestCase("{Number}/{Year:{}", 15, TokenType.TagBegin)]
+		[TestCase("{Number:5{}", 9, TokenType.TagBegin)]
+		[TestCase("}No", 0, TokenType.TagEnd)]
+		[TestCase("{}Number", 1, TokenType.TagEnd)]
+		[TestCase("{Number}}", 8, TokenType.TagEnd)]
+		[TestCase("{Number}/}", 9, TokenType.TagEnd)]
+		[TestCase("{Number:5:}", 10, TokenType.TagEnd)]
+		[TestCase("{Number:}", 8, TokenType.TagEnd)]
+		[TestCase("{:Number}", 1, TokenType.TagArgSeparator)]
+		[TestCase(":{:Number}", 2, TokenType.TagArgSeparator)]
+		[TestCase("{Number::}", 8, TokenType.TagArgSeparator)]
+		[TestCase("{Number:5}:{:}", 12, TokenType.TagArgSeparator)]
+		[TestCase("{Tag1", 5, TokenType.End)]
+		[TestCase("{Tag1}-{Tag2", 12, TokenType.End)]
+		[TestCase("{Tag1}-{Tag2:", 13, TokenType.End)]
 		public void PatternParser_ParseInvalidPattern_ThrowsException(string pattern, int errorPosition, TokenType errorToken)
 		{
 			// arrange
 			var parser = new NumberPatternParser();
 
 			// act
-			var exception = Assert.ThrowsException<NumberPatternParseException>(() => parser.Parse(pattern));
+			var exception = Assert.Throws<NumberPatternParseException>(() => parser.Parse(pattern));
 
 			// assert
 			Assert.AreEqual(errorPosition, exception.Position);

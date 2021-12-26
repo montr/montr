@@ -1,7 +1,6 @@
 ﻿using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Montr.Core.Services;
 using Montr.Data.Linq2Db;
 using Montr.MasterData.Impl.QueryHandlers;
@@ -9,13 +8,14 @@ using Montr.MasterData.Impl.Services;
 using Montr.MasterData.Models;
 using Montr.MasterData.Queries;
 using Montr.MasterData.Tests.Services;
+using NUnit.Framework;
 
 namespace Montr.MasterData.Tests.QueryHandlers
 {
-	[TestClass]
+	[TestFixture]
 	public class GetClassifierLinkListHandlerTests
 	{
-		[TestMethod]
+		[Test]
 		public async Task GetClassifierLinkList_Should_ReturnList()
 		{
 			// arrange

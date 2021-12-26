@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Montr.Core.Services;
 using Montr.Data.Linq2Db;
 using Montr.MasterData.Commands;
@@ -9,13 +8,14 @@ using Montr.MasterData.Impl.CommandHandlers;
 using Montr.MasterData.Impl.Services;
 using Montr.MasterData.Models;
 using Montr.MasterData.Tests.Services;
+using NUnit.Framework;
 
 namespace Montr.MasterData.Tests.CommandHandlers
 {
-	[TestClass]
+	[TestFixture]
 	public class InsertClassifierTreeHandlerTests
 	{
-		[TestMethod]
+		[Test]
 		public async Task Handle_NormalValues_InsertClassifierTree()
 		{
 			// arrange

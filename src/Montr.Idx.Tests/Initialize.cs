@@ -1,22 +1,22 @@
 ﻿using LinqToDB.Mapping;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Montr.Data.Linq2Db;
 using Montr.Idx.Impl.Services;
+using NUnit.Framework;
 
 namespace Montr.Idx.Tests
 {
-	[TestClass]
+	[SetUpFixture]
 	public class Initialize
 	{
-		[AssemblyInitialize]
-		public static void AssemblyInitialize(TestContext context)
+		[OneTimeSetUp]
+		public static void AssemblyInitialize()
 		{
 			IdentitySchemaMapper.MapSchema(MappingSchema.Default);
 
 			DbConfigurationExtensions.SetLinq2DbTestSettings();
 		}
 
-		[AssemblyCleanup]
+		[OneTimeTearDown]
 		public static void AssemblyCleanup()
 		{
 		}

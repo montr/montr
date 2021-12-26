@@ -1,13 +1,13 @@
 ﻿using System;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Montr.Core.Services;
+using NUnit.Framework;
 
 namespace Montr.Core.Tests.Services
 {
-	[TestClass]
+	[TestFixture]
 	public class DirectedAcyclicGraphVerifierTests
 	{
-		[TestMethod]
+		[Test]
 		public void TopologicalSort_WithoutCycles1_ShouldSort()
 		{
 			// arrange
@@ -34,7 +34,7 @@ namespace Montr.Core.Tests.Services
 			Assert.AreEqual("A", result[4].Name);
 		}
 
-		[TestMethod]
+		[Test]
 		public void TopologicalSort_WithoutCycles2_ShouldSort()
 		{
 			// arrange
@@ -60,7 +60,7 @@ namespace Montr.Core.Tests.Services
 			Assert.AreEqual("A", result[3].Name);
 		}
 
-		[TestMethod]
+		[Test]
 		public void TopologicalSort_WithoutCycles3_ShouldSort()
 		{
 			// arrange
@@ -82,7 +82,7 @@ namespace Montr.Core.Tests.Services
 			Assert.AreEqual("D", result[3].Name);
 		}
 
-		[TestMethod]
+		[Test]
 		public void TopologicalSort_WithCycles1_ShouldThrow()
 		{
 			// arrange
@@ -95,13 +95,13 @@ namespace Montr.Core.Tests.Services
 			c.DependsOn = new[] { "A" };
 
 			// act && assert
-			Assert.ThrowsException<InvalidOperationException>(
+			Assert.Throws<InvalidOperationException>(
 				() => DirectedAcyclicGraphVerifier.TopologicalSort(
 					new[] { a, b, c }, node => node.Name, node => node.DependsOn));
 		}
 
 
-		[TestMethod]
+		[Test]
 		public void TopologicalSort_WithCycles2_ShouldThrow()
 		{
 			// arrange
@@ -116,7 +116,7 @@ namespace Montr.Core.Tests.Services
 			a.DependsOn = new[] { "A" };
 
 			// act && assert
-			Assert.ThrowsException<InvalidOperationException>(
+			Assert.Throws<InvalidOperationException>(
 				() => DirectedAcyclicGraphVerifier.TopologicalSort(
 					new[] { a, b, c, d }, node => node.Name, node => node.DependsOn));
 		}

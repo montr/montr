@@ -3,15 +3,15 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Montr.Core.Impl.Services;
+using NUnit.Framework;
 
 namespace Montr.Core.Tests.Services
 {
-	[TestClass]
+	[TestFixture]
 	public class LocaleStringSerializerTests
 	{
-		[TestMethod]
+		[Test]
 		public async Task Deserialize_Should_ReturnData()
 		{
 			// arrange

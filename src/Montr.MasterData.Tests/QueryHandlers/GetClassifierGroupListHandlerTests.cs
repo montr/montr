@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Montr.Core.Services;
 using Montr.Data.Linq2Db;
 using Montr.MasterData.Impl.QueryHandlers;
@@ -9,13 +8,14 @@ using Montr.MasterData.Impl.Services;
 using Montr.MasterData.Models;
 using Montr.MasterData.Queries;
 using Montr.MasterData.Tests.Services;
+using NUnit.Framework;
 
 namespace Montr.MasterData.Tests.QueryHandlers
 {
-	[TestClass]
+	[TestFixture]
 	public class GetClassifierGroupListHandlerTests
 	{
-		[TestMethod]
+		[Test]
 		public async Task GetGroups_ForNullParent_ReturnItems()
 		{
 			// arrange
@@ -62,7 +62,7 @@ namespace Montr.MasterData.Tests.QueryHandlers
 			}
 		}
 
-		[TestMethod]
+		[Test]
 		public async Task GetGroups_ForNotNullParent_ReturnItems()
 		{
 			// arrange
@@ -107,13 +107,13 @@ namespace Montr.MasterData.Tests.QueryHandlers
 			}
 		}
 
-		[TestMethod, Ignore]
+		[Test, Ignore("implement")]
 		public async Task GetGroups_WhenAutoExpandSingleChildRequested_ShouldReturnExpanded()
 		{
 			await Task.FromException<NotImplementedException>(new NotImplementedException());
 		}
 
-		[TestMethod]
+		[Test]
 		public async Task GetItems_ForNullParent_ReturnItems()
 		{
 			// arrange
@@ -151,7 +151,7 @@ namespace Montr.MasterData.Tests.QueryHandlers
 			}
 		}
 
-		[TestMethod]
+		[Test]
 		public async Task GetItems_ForNotNullParent_ReturnItems()
 		{
 			// arrange
@@ -190,14 +190,13 @@ namespace Montr.MasterData.Tests.QueryHandlers
 			}
 		}
 
-		[TestMethod, Ignore]
+		[Test, Ignore("implement")]
 		public async Task GetItems_WhenAutoExpandSingleChildRequested_ShouldReturnExpanded()
 		{
 			await Task.FromException<NotImplementedException>(new NotImplementedException());
 		}
 
-		// todo: check this - what shold be for a lot of groups
-		[TestMethod, Ignore]
+		[Test, Ignore("todo: check this - what should be for a lot of groups")]
 		public async Task GetItems_ForBigGroups_ReturnNoMoreThan1000Items()
 		{
 			// arrange
@@ -233,7 +232,7 @@ namespace Montr.MasterData.Tests.QueryHandlers
 			}
 		}
 
-		[TestMethod]
+		[Test]
 		public async Task GetGroups_WithFocusUid_ReturnChildrenOfEachParentGroups()
 		{
 			// arrange

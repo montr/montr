@@ -2,7 +2,6 @@
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Montr.Core.Services;
 using Montr.Data.Linq2Db;
 using Montr.MasterData.Impl.QueryHandlers;
@@ -14,13 +13,14 @@ using Montr.MasterData.Tests.Services;
 using Montr.Metadata.Impl.Services;
 using Montr.Metadata.Models;
 using Moq;
+using NUnit.Framework;
 
 namespace Montr.MasterData.Tests.QueryHandlers
 {
-	[TestClass]
+	[TestFixture]
 	public class ExportClassifierListHandlerTests
 	{
-		[TestMethod]
+		[Test]
 		public async Task ExportClassifierList_Should_ReturnStream()
 		{
 			// arrange

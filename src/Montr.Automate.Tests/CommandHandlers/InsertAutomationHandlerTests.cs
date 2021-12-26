@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Montr.Automate.Commands;
 using Montr.Automate.Impl.CommandHandlers;
 using Montr.Automate.Impl.Models;
@@ -12,13 +11,14 @@ using Montr.Automate.Models;
 using Montr.Automate.Tests.Services;
 using Montr.Core.Services;
 using Montr.Data.Linq2Db;
+using NUnit.Framework;
 
 namespace Montr.Automate.Tests.CommandHandlers
 {
-	[TestClass]
+	[TestFixture]
 	public class InsertAutomationHandlerTests
 	{
-		[TestMethod]
+		[Test]
 		public async Task Handle_NormalValues_InsertAutomation()
 		{
 			// arrange

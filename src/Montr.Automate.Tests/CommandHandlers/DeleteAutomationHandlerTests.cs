@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Montr.Automate.Commands;
 using Montr.Automate.Impl.CommandHandlers;
 using Montr.Automate.Impl.Models;
@@ -11,13 +10,14 @@ using Montr.Automate.Models;
 using Montr.Automate.Tests.Services;
 using Montr.Core.Services;
 using Montr.Data.Linq2Db;
+using NUnit.Framework;
 
 namespace Montr.Automate.Tests.CommandHandlers
 {
-	[TestClass]
+	[TestFixture]
 	public class DeleteAutomationHandlerTests
 	{
-		[TestMethod]
+		[Test]
 		public async Task Handle_NormalValues_DeleteAutomation()
 		{
 			// arrange
@@ -79,7 +79,7 @@ namespace Montr.Automate.Tests.CommandHandlers
 				Assert.IsTrue(result.Success);
 				Assert.AreEqual(1, result.AffectedRows);
 
-				await Assert.ThrowsExceptionAsync<InvalidOperationException>(
+				Assert.ThrowsAsync<InvalidOperationException>(
 					() => generator.GetAutomation(automation.Uid, cancellationToken));
 			}
 		}

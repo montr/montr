@@ -2,17 +2,17 @@
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Montr.Core.Impl.Services;
 using Montr.Data.Linq2Db;
 using Moq;
+using NUnit.Framework;
 
 namespace Montr.Core.Tests.Services
 {
-	[TestClass]
+	[TestFixture]
 	public class DbMigrationRunnerTests
 	{
-		[TestMethod]
+		[Test]
 		public async Task Run_DefaultConfig_ShouldBootstrapDatabase()
 		{
 			// arrange

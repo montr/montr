@@ -3,7 +3,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Montr.Core;
 using Montr.Core.Services;
 using Montr.Data.Linq2Db;
@@ -15,13 +14,14 @@ using Montr.Idx.Tests.Services;
 using Montr.MasterData.Models;
 using Montr.MasterData.Tests.Services;
 using Moq;
+using NUnit.Framework;
 
 namespace Montr.Idx.Tests.CommandHandlers
 {
-	[TestClass]
+	[TestFixture]
 	public class RegisterHandlerTests
 	{
-		[TestMethod]
+		[Test]
 		public async Task Handle_NormalValues_RegisterUser()
 		{
 			// arrange

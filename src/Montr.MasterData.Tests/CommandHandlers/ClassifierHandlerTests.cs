@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using LinqToDB;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Montr.Core.Services;
 using Montr.Data.Linq2Db;
 using Montr.MasterData.Commands;
@@ -17,10 +16,11 @@ using Montr.Metadata.Impl.Entities;
 using Montr.Metadata.Impl.Services;
 using Montr.Metadata.Models;
 using Moq;
+using NUnit.Framework;
 
 namespace Montr.MasterData.Tests.CommandHandlers
 {
-	[TestClass]
+	[TestFixture]
 	public class ClassifierHandlerTests
 	{
 		private static readonly string NumeratorTypeCode = "numerator_for_test";
@@ -62,7 +62,7 @@ namespace Montr.MasterData.Tests.CommandHandlers
 			return classifierRepositoryFactoryMock.Object;
 		}
 
-		[TestMethod]
+		[Test]
 		public async Task InsertClassifier_NormalValues_InsertItems()
 		{
 			// arrange
@@ -129,7 +129,7 @@ namespace Montr.MasterData.Tests.CommandHandlers
 			}
 		}
 
-		[TestMethod]
+		[Test]
 		public async Task InsertClassifier_DuplicateCode_ReturnError()
 		{
 			// arrange
@@ -182,7 +182,7 @@ namespace Montr.MasterData.Tests.CommandHandlers
 			}
 		}
 
-		[TestMethod]
+		[Test]
 		public async Task UpdateClassifier_NormalValues_UpdateItems()
 		{
 			// arrange
@@ -228,7 +228,7 @@ namespace Montr.MasterData.Tests.CommandHandlers
 			}
 		}
 
-		[TestMethod]
+		[Test]
 		public async Task DeleteClassifier_NormalValues_DeleteItems()
 		{
 			// arrange
@@ -281,7 +281,7 @@ namespace Montr.MasterData.Tests.CommandHandlers
 			}
 		}
 
-		[TestMethod]
+		[Test]
 		public async Task ManageNumerator_NormalValues_ManageItems()
 		{
 			// arrange

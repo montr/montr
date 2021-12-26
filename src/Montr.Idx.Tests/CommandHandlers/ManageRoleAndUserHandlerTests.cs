@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Montr.Core.Services;
 using Montr.Data.Linq2Db;
 using Montr.Idx.Models;
@@ -12,13 +11,14 @@ using Montr.MasterData.Commands;
 using Montr.MasterData.Impl.CommandHandlers;
 using Montr.MasterData.Models;
 using Montr.MasterData.Tests.Services;
+using NUnit.Framework;
 
 namespace Montr.Idx.Tests.CommandHandlers
 {
-	[TestClass]
+	[TestFixture]
 	public class ManageRoleAndUserHandlerTests
 	{
-		[TestMethod]
+		[Test]
 		public async Task ManageRole_NormalValues_ManageItems()
 		{
 			// arrange
@@ -118,7 +118,7 @@ namespace Montr.Idx.Tests.CommandHandlers
 			}
 		}
 
-		[TestMethod]
+		[Test]
 		public async Task ManageUser_NormalValues_ManageItems()
 		{
 			// arrange

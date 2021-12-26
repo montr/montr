@@ -4,19 +4,19 @@ using System.Threading;
 using System.Threading.Tasks;
 using LinqToDB;
 using MediatR;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Montr.Core.Impl.Entities;
 using Montr.Core.Impl.Services;
 using Montr.Core.Services;
 using Montr.Data.Linq2Db;
 using Moq;
+using NUnit.Framework;
 
 namespace Montr.Core.Tests.Services
 {
-	[TestClass]
+	[TestFixture]
 	public class DbSettingsRepositoryTests
 	{
-		[TestMethod]
+		[Test]
 		public async Task Update_WithGetOptions_ShouldInsertAndUpdate()
 		{
 			// arrange

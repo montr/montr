@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using LinqToDB;
 using MediatR;
 using Microsoft.Extensions.Logging.Abstractions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Montr.Core.Impl.Services;
 using Montr.Core.Models;
 using Montr.Core.Services;
@@ -29,13 +28,14 @@ using Montr.Metadata.Impl.Services;
 using Montr.Metadata.Models;
 using Montr.Worker.Services;
 using Moq;
+using NUnit.Framework;
 
 namespace Montr.Kompany.Tests.CommandHandlers
 {
-	[TestClass]
+	[TestFixture]
 	public class CreateCompanyHandlerTests
 	{
-		[TestMethod]
+		[Test]
 		public async Task CreateCompany_Should_CreateCompany()
 		{
 			// arrange

@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Montr.Core.Services;
+using NUnit.Framework;
 
 namespace Montr.Core.Tests.Services
 {
-	[TestClass]
+	[TestFixture]
 	// todo: write tests for both converters
 	public class PolymorphicNewtonsoftJsonConverterTests
 	{
-		[TestMethod]
+		[Test]
 		public void CanConvert_InExactMode_CheckExactType()
 		{
 			// arrange
@@ -21,7 +21,7 @@ namespace Montr.Core.Tests.Services
 			Assert.AreEqual(false, converter.CanConvert(typeof(string)));
 		}
 
-		/*[TestMethod]
+		/*[Test]
 		public void CanConvert_InInheritorsMode_AllowOnlyInheritors()
 		{
 			// arrange

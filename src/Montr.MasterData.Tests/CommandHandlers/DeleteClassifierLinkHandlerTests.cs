@@ -1,7 +1,6 @@
 ﻿using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Montr.Core.Services;
 using Montr.Data.Linq2Db;
 using Montr.MasterData.Commands;
@@ -9,13 +8,14 @@ using Montr.MasterData.Impl.CommandHandlers;
 using Montr.MasterData.Impl.Services;
 using Montr.MasterData.Models;
 using Montr.MasterData.Tests.Services;
+using NUnit.Framework;
 
 namespace Montr.MasterData.Tests.CommandHandlers
 {
-	[TestClass]
+	[TestFixture]
 	public class DeleteClassifierLinkHandlerTests
 	{
-		[TestMethod]
+		[Test]
 		public async Task Handle_InSecondaryHierarchy_ShouldDeleteExistingLink()
 		{
 			// arrange
@@ -69,7 +69,7 @@ namespace Montr.MasterData.Tests.CommandHandlers
 			}
 		}
 
-		[TestMethod, Ignore("No links to default root, restore test later")]
+		[Test, Ignore("No links to default root, restore test later")]
 		public async Task Handle_LastLinkInDefaultHierarchy_ShouldThrow()
 		{
 			// arrange

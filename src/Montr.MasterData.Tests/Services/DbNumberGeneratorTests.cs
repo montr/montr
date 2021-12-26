@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Montr.Core.Services;
 using Montr.Data.Linq2Db;
 using Montr.MasterData.Impl.Services;
@@ -12,10 +11,11 @@ using Montr.MasterData.Services;
 using Montr.Metadata.Impl.Services;
 using Montr.Metadata.Models;
 using Moq;
+using NUnit.Framework;
 
 namespace Montr.MasterData.Tests.Services
 {
-	[TestClass]
+	[TestFixture]
 	public class DbNumberGeneratorTests
 	{
 		private static readonly string NumerableEntityTypeCode = "Numerable";
@@ -49,7 +49,7 @@ namespace Montr.MasterData.Tests.Services
 			return classifierRepositoryFactoryMock.Object;
 		}
 
-		[TestMethod]
+		[Test]
 		public async Task GenerateNumber_SimpleNumerator_ShouldGenerate()
 		{
 			// arrange
@@ -88,7 +88,7 @@ namespace Montr.MasterData.Tests.Services
 			}
 		}
 
-		[TestMethod]
+		[Test]
 		public async Task GenerateNumber_WithPeriodTags_ShouldGenerate()
 		{
 			// arrange
@@ -128,7 +128,7 @@ namespace Montr.MasterData.Tests.Services
 			}
 		}
 
-		[TestMethod]
+		[Test]
 		public async Task GenerateNumber_IndependentNumerator_ShouldGenerate()
 		{
 			// arrange
@@ -172,7 +172,7 @@ namespace Montr.MasterData.Tests.Services
 			}
 		}
 
-		[TestMethod]
+		[Test]
 		public async Task GenerateNumber_YearPeriodicity_ShouldGenerate()
 		{
 			// arrange
@@ -234,7 +234,7 @@ namespace Montr.MasterData.Tests.Services
 			}
 		}
 
-		[TestMethod]
+		[Test]
 		public async Task GenerateNumber_QuarterPeriodicity_ShouldGenerate()
 		{
 			// arrange

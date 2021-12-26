@@ -1,7 +1,6 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using LinqToDB;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Montr.Core.Services;
 using Montr.Data.Linq2Db;
 using Montr.Idx.Models;
@@ -11,13 +10,14 @@ using Montr.Kompany.Models;
 using Montr.Kompany.Queries;
 using Montr.Kompany.Tests.Services;
 using Montr.MasterData.Tests.Services;
+using NUnit.Framework;
 
 namespace Montr.Kompany.Tests.QueryHandlers
 {
-	[TestClass]
+	[TestFixture]
 	public class GetUserCompanyListHandlerTests
 	{
-		[TestMethod]
+		[Test]
 		public async Task GetUserCompanyList_Should_ReturnCompanyList()
 		{
 			// arrange

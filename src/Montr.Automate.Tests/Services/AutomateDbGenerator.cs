@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Montr.Automate.Commands;
 using Montr.Automate.Impl.Models;
 using Montr.Automate.Impl.QueryHandlers;
@@ -15,6 +14,7 @@ using Montr.Core.Services;
 using Montr.Data.Linq2Db;
 using Montr.Metadata.Models;
 using Moq;
+using NUnit.Framework;
 
 namespace Montr.Automate.Tests.Services
 {

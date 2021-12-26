@@ -4,20 +4,20 @@ using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Montr.Core.Impl.QueryHandlers;
 using Montr.Core.Impl.Services;
 using Montr.Core.Models;
 using Montr.Core.Queries;
 using Montr.Core.Services;
 using Moq;
+using NUnit.Framework;
 
 namespace Montr.Core.Tests.QueryHandlers
 {
-	[TestClass]
+	[TestFixture]
 	public class GetMenuHandlerTests
 	{
-		[TestMethod]
+		[Test]
 		public async Task GetMenu_ExistingId_ShouldReturnCombinedMenuItems()
 		{
 			// arrange
@@ -57,7 +57,7 @@ namespace Montr.Core.Tests.QueryHandlers
 			Assert.AreEqual("m1.5", result1.Items[4].Id);
 		}
 
-		[TestMethod]
+		[Test]
 		public async Task GetMenu_WhenAllChildrenUnauthorized_ShouldNotReturnParent()
 		{
 			// arrange

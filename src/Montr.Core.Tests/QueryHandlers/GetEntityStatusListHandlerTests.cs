@@ -1,6 +1,5 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Montr.Core.Impl.QueryHandlers;
 using Montr.Core.Impl.Services;
 using Montr.Core.Models;
@@ -8,13 +7,14 @@ using Montr.Core.Queries;
 using Montr.Core.Services;
 using Montr.Core.Tests.Services;
 using Montr.Data.Linq2Db;
+using NUnit.Framework;
 
 namespace Montr.Core.Tests.QueryHandlers
 {
-	[TestClass]
+	[TestFixture]
 	public class GetEntityStatusListHandlerTests
 	{
-		[TestMethod]
+		[Test]
 		public async Task GetEntityStatusList_Should_ReturnList()
 		{
 			// arrange

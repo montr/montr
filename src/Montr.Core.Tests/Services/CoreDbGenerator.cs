@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Montr.Core.Commands;
 using Montr.Core.Impl.CommandHandlers;
 using Montr.Core.Impl.QueryHandlers;
@@ -10,6 +9,7 @@ using Montr.Core.Models;
 using Montr.Core.Queries;
 using Montr.Core.Services;
 using Montr.Data.Linq2Db;
+using NUnit.Framework;
 
 namespace Montr.Core.Tests.Services
 {

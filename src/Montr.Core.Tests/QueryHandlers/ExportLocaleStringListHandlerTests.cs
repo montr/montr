@@ -2,20 +2,20 @@
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Montr.Core.Impl.QueryHandlers;
 using Montr.Core.Impl.Services;
 using Montr.Core.Models;
 using Montr.Core.Queries;
 using Montr.Core.Services;
 using Moq;
+using NUnit.Framework;
 
 namespace Montr.Core.Tests.QueryHandlers
 {
-	[TestClass]
+	[TestFixture]
 	public class ExportLocaleStringListHandlerTests
 	{
-		[TestMethod]
+		[Test]
 		public async Task ExportLocaleStringList_Should_ReturnStream()
 		{
 			// arrange

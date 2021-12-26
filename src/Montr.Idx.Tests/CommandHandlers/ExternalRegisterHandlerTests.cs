@@ -1,22 +1,21 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging.Abstractions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Montr.Core.Services;
 using Montr.Data.Linq2Db;
 using Montr.Idx.Commands;
 using Montr.Idx.Impl.CommandHandlers;
 using Montr.Idx.Impl.Services;
-using Montr.Idx.Models;
 using Montr.Idx.Tests.Services;
 using Moq;
+using NUnit.Framework;
 
 namespace Montr.Idx.Tests.CommandHandlers
 {
-	[TestClass, Ignore]
+	[TestFixture, Ignore("check it")]
 	public class ExternalRegisterHandlerTests
 	{
-		[TestMethod]
+		[Test]
 		public async Task Handle_NormalValues_RegisterExternalUser()
 		{
 			// arrange

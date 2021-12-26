@@ -10,4 +10,8 @@
       <ProjectReference Include="..\Montr.Tasks\Montr.Tasks.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.0.0" />
+    </ItemGroup>
+
 </Project>

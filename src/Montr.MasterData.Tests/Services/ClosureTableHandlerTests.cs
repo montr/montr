@@ -1,17 +1,17 @@
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Montr.Core.Services;
 using Montr.Data.Linq2Db;
 using Montr.MasterData.Models;
+using NUnit.Framework;
 
 namespace Montr.MasterData.Tests.Services
 {
-	[TestClass]
+	[TestFixture]
 	public class ClosureTableHandlerTests
 	{
-		[TestMethod]
+		[Test]
 		public async Task InsertGroup_Should_BuildClosureTable()
 		{
 			// arrange
@@ -36,7 +36,7 @@ namespace Montr.MasterData.Tests.Services
 			}
 		}
 
-		[TestMethod]
+		[Test]
 		public async Task UpdateGroup_ShouldThrow_WhenCyclicDependencyDetected()
 		{
 			// arrange
@@ -63,7 +63,7 @@ namespace Montr.MasterData.Tests.Services
 			}
 		}
 
-		[TestMethod]
+		[Test]
 		public async Task UpdateGroup_Should_RebuildClosureTable()
 		{
 			// arrange
@@ -94,7 +94,7 @@ namespace Montr.MasterData.Tests.Services
 			}
 		}
 
-		[TestMethod]
+		[Test]
 		public async Task DeleteGroup_Should_RebuildClosureTable()
 		{
 			// arrange

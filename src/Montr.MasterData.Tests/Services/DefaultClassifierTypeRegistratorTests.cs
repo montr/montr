@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging.Abstractions;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Montr.Core.Services;
 using Montr.Data.Linq2Db;
 using Montr.MasterData.Commands;
@@ -11,13 +10,14 @@ using Montr.MasterData.Impl.Services;
 using Montr.MasterData.Models;
 using Montr.Metadata.Impl.Services;
 using Montr.Metadata.Models;
+using NUnit.Framework;
 
 namespace Montr.MasterData.Tests.Services
 {
-	[TestClass]
+	[TestFixture]
 	public class DefaultClassifierTypeRegistratorTests
 	{
-		[TestMethod]
+		[Test]
 		public async Task Register_NormalValues_RegisterClassifierType()
 		{
 			// arrange

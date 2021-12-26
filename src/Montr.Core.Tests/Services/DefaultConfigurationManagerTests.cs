@@ -1,14 +1,14 @@
 ﻿using System.Linq;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Montr.Core.Impl.Services;
 using Montr.Core.Models;
+using NUnit.Framework;
 
 namespace Montr.Core.Tests.Services
 {
-	[TestClass]
+	[TestFixture]
 	public class DefaultConfigurationManagerTests
 	{
-		[TestMethod]
+		[Test]
 		public void GetItems_ForTestItem_ShouldReturnList()
 		{
 			// arrange

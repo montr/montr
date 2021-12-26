@@ -3,15 +3,15 @@ using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using IdentityModel.Client;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json.Linq;
+using NUnit.Framework;
 
 namespace Montr.Tendr.Tests.Misc
 {
-	[TestClass, Ignore]
+	[TestFixture, Ignore("remove or implement")]
 	public class AuthTests
 	{
-		[TestMethod]
+		[Test]
 		public async Task CallApiUsingClientCredentials()
 		{
 			var client = new HttpClient();
@@ -55,7 +55,7 @@ namespace Montr.Tendr.Tests.Misc
 			var response = await client.PostAsync("http://app.tendr.montr.io:5000/api/events/load", httpContent);
 
 			Assert.IsTrue(response.IsSuccessStatusCode, "Response status code: " + response.StatusCode);
-			
+
 			var content = await response.Content.ReadAsStringAsync();
 			Console.WriteLine("ApiResponse:\n" + JObject.Parse(content) + "\n");
 		}

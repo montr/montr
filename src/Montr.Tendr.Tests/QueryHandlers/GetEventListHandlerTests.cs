@@ -1,17 +1,17 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Montr.Data.Linq2Db;
 using Montr.Tendr.Impl.QueryHandlers;
 using Montr.Tendr.Queries;
+using NUnit.Framework;
 
 namespace Montr.Tendr.Tests.QueryHandlers
 {
-	[TestClass]
+	[TestFixture]
 	public class GetEventListHandlerTests
 	{
-		[TestMethod]
+		[Test]
 		public async Task GetEventList_ForNormalRequest_ReturnItems()
 		{
 			// arrange

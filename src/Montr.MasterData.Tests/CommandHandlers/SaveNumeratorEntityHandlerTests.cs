@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Montr.Core.Services;
 using Montr.Data.Linq2Db;
 using Montr.MasterData.Commands;
@@ -13,13 +12,14 @@ using Montr.MasterData.Models;
 using Montr.MasterData.Queries;
 using Montr.MasterData.Tests.Services;
 using Moq;
+using NUnit.Framework;
 
 namespace Montr.MasterData.Tests.CommandHandlers
 {
-	[TestClass]
+	[TestFixture]
 	public class SaveNumeratorEntityHandlerTests
 	{
-		[TestMethod]
+		[Test]
 		public async Task Save_SelectedNumerator_ShouldSave()
 		{
 			// arrange
