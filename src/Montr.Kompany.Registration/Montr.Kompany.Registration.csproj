@@ -10,8 +10,4 @@
       <ProjectReference Include="..\Montr.MasterData\Montr.MasterData.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <Folder Include="Models" />
-    </ItemGroup>
-
 </Project>
