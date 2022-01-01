@@ -56,7 +56,7 @@ export class AutomationConditionList extends React.Component<Props, State> {
 								<Form.Item
 									{...item}
 									name={[item.name, "type"]}
-									fieldKey={[item.fieldKey, "type"]}
+									/* fieldKey={[item.fieldKey, "type"]} */
 									rules={[{ required: true }]}>
 									<Select placeholder="Select condition" style={{ minWidth: 150 }}>
 										{types.map(x => <Select.Option key={x.code} value={x.code}>{x.name}</Select.Option>)}
@@ -76,7 +76,7 @@ export class AutomationConditionList extends React.Component<Props, State> {
 									<Form.Item
 										{...item}
 										name={[item.name]}
-										fieldKey={[item.fieldKey]}
+										/* fieldKey={[item.fieldKey]} */
 										rules={[{ required: true }]}
 										noStyle>
 										<AutomationConditionItemWrapper item={item} typeSelector={typeSelector} options={options} />

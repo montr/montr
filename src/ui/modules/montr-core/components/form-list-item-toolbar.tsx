@@ -1,12 +1,7 @@
-import React from "react";
 import { Button } from "antd";
-import { Toolbar, Icon } from ".";
-
-interface FieldData {
-	name: number;
-	key: number;
-	fieldKey: number;
-}
+import React from "react";
+import { Icon, Toolbar } from ".";
+import { FieldData } from "../models";
 
 interface Operations {
 	remove: (index: number) => void;

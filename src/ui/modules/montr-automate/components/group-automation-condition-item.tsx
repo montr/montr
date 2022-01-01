@@ -33,7 +33,7 @@ export class GroupAutomationConditionItem extends React.Component<Props> {
 				<Form.Item
 					{...item}
 					name={[item.name, "props", "meet"]}
-					fieldKey={[item.fieldKey, "meet"]}
+					/* fieldKey={[item.fieldKey, "meet"]} */
 					rules={[{ required: true }]}>
 					<Radio.Group buttonStyle="solid">
 						<Radio.Button value="All">All</Radio.Button>

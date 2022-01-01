@@ -20,7 +20,7 @@ export class SetFieldAutomationActionItem extends React.Component<Props> {
 				<Form.Item
 					{...item}
 					name={[item.name, "field"]}
-					fieldKey={[item.fieldKey, "field"]}
+					/* fieldKey={[item.fieldKey, "field"]} */
 					rules={[{ required: true }]}>
 					<Select placeholder="Field" />
 				</Form.Item>
@@ -28,7 +28,7 @@ export class SetFieldAutomationActionItem extends React.Component<Props> {
 				<Form.Item
 					{...item}
 					name={[item.name, "value"]}
-					fieldKey={[item.fieldKey, "value"]}
+					/* fieldKey={[item.fieldKey, "value"]} */
 					rules={[{ required: true }]}>
 					<Input placeholder="Value" />
 				</Form.Item>

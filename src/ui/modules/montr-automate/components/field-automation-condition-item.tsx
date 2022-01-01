@@ -16,7 +16,7 @@ interface State {
 
 class WrappedFieldAutomationConditionItem extends React.Component<Props, State> {
 
-	private _service = new FieldAutomationConditionService();
+	private readonly automationConditionService = new FieldAutomationConditionService();
 
 	constructor(props: Props) {
 		super(props);
@@ -31,13 +31,13 @@ class WrappedFieldAutomationConditionItem extends React.Component<Props, State> 
 	};
 
 	componentWillUnmount = async () => {
-		await this._service.abort();
+		await this.automationConditionService.abort();
 	};
 
 	fetchData = async () => {
 		const { entityTypeCode, entityUid } = this.props;
 
-		const fields = await this._service.fields(entityTypeCode, entityUid);
+		const fields = await this.automationConditionService.fields(entityTypeCode, entityUid);
 
 		this.setState({ fields });
 	};
@@ -54,7 +54,7 @@ class WrappedFieldAutomationConditionItem extends React.Component<Props, State> 
 				<Form.Item
 					{...item}
 					name={[item.name, "props", "field"]}
-					fieldKey={[item.fieldKey, "field"]}
+					/* fieldKey={[item.fieldKey, "field"]} */
 					rules={[{ required: true }]}>
 					<Select placeholder="Select field" style={{ minWidth: 200 }}>
 						{fields.map(x => <Select.Option key={x.key} value={x.key}>{x.name}</Select.Option>)}
@@ -64,7 +64,7 @@ class WrappedFieldAutomationConditionItem extends React.Component<Props, State> 
 				<Form.Item
 					{...item}
 					name={[item.name, "props", "operator"]}
-					fieldKey={[item.fieldKey, "operator"]}
+					/* fieldKey={[item.fieldKey, "operator"]} */
 					rules={[{ required: true }]}>
 					<Select style={{ minWidth: 50 }}>
 						<Select.Option value="Equal">=</Select.Option>
@@ -79,7 +79,7 @@ class WrappedFieldAutomationConditionItem extends React.Component<Props, State> 
 				<Form.Item
 					{...item}
 					name={[item.name, "props", "value"]}
-					fieldKey={[item.fieldKey, "value"]}
+					/* fieldKey={[item.fieldKey, "value"]} */
 					rules={[{ required: true }]}>
 					<Select placeholder="Select value" style={{ minWidth: 100 }}>
 						<Select.Option value="draft">Draft</Select.Option>
