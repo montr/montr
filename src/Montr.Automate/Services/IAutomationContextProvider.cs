@@ -42,7 +42,9 @@ namespace Montr.Automate.Services
 
 		public async Task<IList<FieldMetadata>> GetFields(AutomationContext context, CancellationToken cancellationToken)
 		{
-			return await _serviceFactory.GetRequiredService(context.MetadataEntityTypeCode).GetFields(context, cancellationToken);
+			var contextProvider = _serviceFactory.GetRequiredService(context.MetadataEntityTypeCode);
+
+			return await contextProvider.GetFields(context, cancellationToken);
 		}
 	}
 }
