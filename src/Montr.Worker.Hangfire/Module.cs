@@ -5,7 +5,6 @@ using Hangfire;
 using Hangfire.AspNetCore;
 using Hangfire.Common;
 using Hangfire.Dashboard;
-using Hangfire.PostgreSql;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
@@ -15,7 +14,6 @@ using Montr.Core.Models;
 using Montr.Core.Services;
 using Montr.Worker.Hangfire.Services;
 using Montr.Worker.Services;
-using Newtonsoft.Json;
 
 namespace Montr.Worker.Hangfire
 {
@@ -29,22 +27,14 @@ namespace Montr.Worker.Hangfire
 			services.AddTransient<JobActivator, AspNetCoreJobActivator>();
 
 			services
-				.AddHangfireServer((_, _) =>
-				{
-				})
+				.AddHangfireServer((_, _) => { })
 				.AddHangfire((_, config) =>
 				{
 					config.UseSerilogLogProvider();
-
-					config.UsePostgreSqlStorage(
-						configuration.GetConnectionString(Data.Constants.DefaultConnectionStringName),
-						new PostgreSqlStorageOptions { PrepareSchemaIfNecessary = false });
-
-					config.UseSerializerSettings(
-						new JsonSerializerSettings { TypeNameHandling = TypeNameHandling.Objects });
+					config.UseDefaults(configuration);
 				});
 
-			services.AddSingleton<IBackgroundJobManager, HangfireBackgroundJobManager>();
+			services.AddTransient<IBackgroundJobManager, HangfireBackgroundJobManager>();
 		}
 
 		public void Configure(IApplicationBuilder app)

@@ -33,7 +33,7 @@ namespace Montr.Core.Services
 			{
 				_scope = scope;
 			}
-			
+
 			public void Commit()
 			{
 				_scope.Complete();
