@@ -7,8 +7,8 @@ namespace Montr.Automate.Queries
 {
 	public class GetFieldAutomationConditionFieldList : IRequest<IList<FieldMetadata>>
 	{
-		public string EntityTypeCode { get; set; }
+		public string MetadataEntityTypeCode { get; set; }
 
-		public Guid EntityTypeUid { get; set; }
+		public Guid MetadataEntityUid { get; set; }
 	}
 }

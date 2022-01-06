@@ -20,6 +20,9 @@ public static class HangfireGlobalConfigurationExtensions
 			});
 
 		config.UseSerializerSettings(
-			new JsonSerializerSettings {TypeNameHandling = TypeNameHandling.Objects});
+			new JsonSerializerSettings
+			{
+				TypeNameHandling = TypeNameHandling.Objects
+			});
 	}
 }

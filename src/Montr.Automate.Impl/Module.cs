@@ -21,6 +21,7 @@ namespace Montr.Automate.Impl
 			services.AddSingleton<IStartupTask, AutomationJsonOptionsInitializer>();
 
 			services.AddTransient<IAutomationProviderRegistry, DefaultAutomationProviderRegistry>();
+			services.AddTransient<IAutomationContextProvider, DefaultAutomationContextProvider>();
 			services.AddTransient<IAutomationService, DefaultAutomationService>();
 			services.AddTransient<IAutomationRunner, DefaultAutomationRunner>();
 			services.AddTransient<IRecipientResolver, DefaultRecipientResolver>();

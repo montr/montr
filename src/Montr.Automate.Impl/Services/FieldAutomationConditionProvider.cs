@@ -40,7 +40,7 @@ namespace Montr.Automate.Impl.Services
 
 			var result = false;
 
-			// todo: move to automation context provider (?)
+			// todo: use GetFields from automation context provider (?)
 			var property = entity.GetType().GetProperty(props.Field);
 
 			if (property != null)
