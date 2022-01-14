@@ -5,7 +5,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="EPPlus" Version="4.5.3.3" />
+    <PackageReference Include="EPPlus" Version="5.8.5" />
     <PackageReference Include="linq2db" Version="3.6.0" />
     <PackageReference Include="MediatR" Version="9.0.0" />
   </ItemGroup>
