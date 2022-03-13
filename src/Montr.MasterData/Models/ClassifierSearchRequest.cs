@@ -26,5 +26,9 @@ namespace Montr.MasterData.Models
 		public string Code { get; set; }
 
 		public bool IncludeFields { get; set; }
+
+		public bool? IsActive { get; set; }
+
+		public bool? IsSystem { get; set; }
 	}
 }

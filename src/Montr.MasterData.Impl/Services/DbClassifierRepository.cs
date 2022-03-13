@@ -214,6 +214,16 @@ namespace Montr.MasterData.Impl.Services
 				query = query.Where(x => x.Code == request.Code);
 			}
 
+			if (request.IsActive != null)
+			{
+				query = query.Where(x => x.IsActive == request.IsActive);
+			}
+
+			if (request.IsSystem != null)
+			{
+				query = query.Where(x => x.IsSystem == request.IsSystem);
+			}
+
 			if (request.SearchTerm != null)
 			{
 				query = query.Where(x => SqlExpr.ILike(x.Name, "%" + request.SearchTerm + "%"));

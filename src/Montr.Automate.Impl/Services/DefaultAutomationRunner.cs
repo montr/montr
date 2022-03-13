@@ -24,7 +24,7 @@ namespace Montr.Automate.Impl.Services
 			var automations = await _repository.Search(new AutomationSearchRequest
 			{
 				EntityTypeCode = context.MetadataEntityTypeCode,
-				EntityUid = context.MetadataEntityUid,
+				// EntityUid = context.MetadataEntityUid,
 				IsActive = true,
 				IncludeRules = true,
 				PageSize = 100

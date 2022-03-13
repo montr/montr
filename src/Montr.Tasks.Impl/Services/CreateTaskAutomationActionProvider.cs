@@ -39,7 +39,7 @@ namespace Montr.Tasks.Impl.Services
 		{
 			return new List<FieldMetadata>
 			{
-				new ClassifierField { Key = "taskTypeUid", Name = "Task type", Required = true, Props = { TypeCode = ClassifierTypeCode.TaskType } },
+				new ClassifierField { Key = "taskTypeUid", Name = "Task type", Required = true, Props = { TypeCode = Models.ClassifierTypeCode.TaskType } },
 				new ClassifierField { Key = "assigneeUid", Name = "Assignee", Required = true, Props = { TypeCode = Idx.ClassifierTypeCode.User } },
 				new TextField { Key = "name", Name = "Name", Placeholder = "Name", Required = true },
 				new TextAreaField { Key = "description", Name = "Description", Placeholder = "Description", Props = new TextAreaField.Properties { Rows = 2 } }

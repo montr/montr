@@ -12,6 +12,7 @@
       <ProjectReference Include="..\Montr.Automate\Montr.Automate.csproj" />
 		<ProjectReference Include="..\Montr.Data.Linq2Db\Montr.Data.Linq2Db.csproj" />
       <ProjectReference Include="..\Montr.Core\Montr.Core.csproj" />
+      <ProjectReference Include="..\Montr.MasterData.Impl\Montr.MasterData.Impl.csproj" />
       <ProjectReference Include="..\Montr.Messages\Montr.Messages.csproj" />
     </ItemGroup>
 

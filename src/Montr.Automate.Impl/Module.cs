@@ -9,6 +9,7 @@ using Montr.Automate.Models;
 using Montr.Automate.Services;
 using Montr.Core;
 using Montr.Core.Services;
+using Montr.MasterData.Services;
 using Montr.Metadata.Services;
 
 namespace Montr.Automate.Impl
@@ -22,11 +23,10 @@ namespace Montr.Automate.Impl
 
 			services.AddTransient<IAutomationProviderRegistry, DefaultAutomationProviderRegistry>();
 			services.AddTransient<IAutomationContextProvider, DefaultAutomationContextProvider>();
-			services.AddTransient<IAutomationService, DefaultAutomationService>();
 			services.AddTransient<IAutomationRunner, DefaultAutomationRunner>();
 			services.AddTransient<IRecipientResolver, DefaultRecipientResolver>();
 
-			services.AddTransient<IRepository<Automation>, DbAutomationRepository>();
+			services.AddNamedTransient<IClassifierRepository, DbAutomationRepository>(ClassifierTypeCode.Automation);
 
 			services.AddNamedTransient<IAutomationConditionProvider, GroupAutomationConditionProvider>(GroupAutomationCondition.TypeCode);
 			services.AddNamedTransient<IAutomationConditionProvider, FieldAutomationConditionProvider>(FieldAutomationCondition.TypeCode);
@@ -36,7 +36,6 @@ namespace Montr.Automate.Impl
 			services.AddSingleton<JsonTypeProvider<AutomationCondition>>();
 			services.AddSingleton<JsonTypeProvider<AutomationAction>>();
 			services.AddSingleton<IConfigureOptions<MvcNewtonsoftJsonOptions>, AutomationJsonOptionsConfigurator>();
-
 		}
 
 		public void Configure(IApplicationBuilder app)

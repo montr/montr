@@ -1,21 +1,19 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using System.Diagnostics;
+using Montr.MasterData.Models;
 
 namespace Montr.Automate.Models
 {
-	public class Automation
+	[DebuggerDisplay("{" + nameof(DebuggerDisplay) + ",nq}")]
+	public class Automation : Classifier
 	{
-		public Guid Uid { get; set; }
+		private string DebuggerDisplay => $"{Name} ({EntityTypeCode})";
 
-		public int DisplayOrder { get; set; }
+		/// <summary>
+		/// document, classifier etc.</summary>
+		public string EntityTypeCode { get; set; }
 
-		public string Name { get; set; }
-
-		public string Description { get; set; }
-
-		public bool Active { get; set; }
-
-		public bool System { get; set; }
+		public string TypeCode { get; set; }
 
 		/// <summary>
 		/// Meet all conditions...
@@ -26,5 +24,10 @@ namespace Montr.Automate.Models
 		/// ...to execute all actions
 		/// </summary>
 		public IList<AutomationAction> Actions { get; set; }
+	}
+
+	public static class AutomationTypeCode
+	{
+		public static readonly string Trigger = "trigger";
 	}
 }
