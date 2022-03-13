@@ -31,7 +31,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2.4.0
 
-      - uses: actions/setup-dotnet@v1.9.0
+      - uses: actions/setup-dotnet@v2
         with:
           dotnet-version: '6.x'
 
@@ -46,7 +46,7 @@ jobs:
       - run: dotnet test ./src/Montr.Kompany.Tests
       #- run: dotnet test ./src/Montr.Tendr.Tests
 
-      - uses: actions/setup-node@v2.5.1
+      - uses: actions/setup-node@v3
         with:
           node-version: '12.x'
 
