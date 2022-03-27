@@ -14,10 +14,11 @@
 </head>
 <body>
 	<div id="root"></div>
-<script>
+	<script>
 	var APP_OPTIONS = @Html.Raw(JsonSerializer.Serialize(new { Options.CurrentValue.AppUrl, Options.CurrentValue.CookieDomain, Options.CurrentValue.State },
 		new JsonSerializerOptions { DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull, PropertyNamingPolicy = JsonNamingPolicy.CamelCase, Converters = { new JsonStringEnumConverter() } }));
-</script>
+	</script>
+	<script>window['_dotnet_watch_ws_injected'] = true;</script>
 	<script src="/assets/app.bundle.js"></script>
 </body>
 </html>
