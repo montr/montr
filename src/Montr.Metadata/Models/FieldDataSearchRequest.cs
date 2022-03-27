@@ -10,6 +10,6 @@ namespace Montr.Metadata.Models
 
 		public Guid[] EntityUids { get; set; }
 
-		public IList<FieldMetadata> Metadata { get; set; }
+		public ICollection<FieldMetadata> Metadata { get; set; }
 	}
 }

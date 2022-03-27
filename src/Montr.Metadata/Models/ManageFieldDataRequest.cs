@@ -9,7 +9,7 @@ namespace Montr.Metadata.Models
 
 		public Guid EntityUid { get; set; }
 
-		public IList<FieldMetadata> Metadata { get; set; }
+		public ICollection<FieldMetadata> Metadata { get; set; }
 
 		public IFieldDataContainer Item { get; set; }
 	}

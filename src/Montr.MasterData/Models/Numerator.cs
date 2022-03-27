@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Linq;
 using Montr.MasterData.Commands;
 using Montr.Metadata.Models;
 
@@ -63,13 +64,10 @@ namespace Montr.MasterData.Models
 						Key = "entityTypeCode", Name = "EntityTypeCode", Required = true, DisplayOrder = 30, System = true,
 						Props =
 						{
-							// todo: replace hardcoded options, should be entity types registered at startup,
-							// e.g. classifier, document, task etc.
-							Options = new[]
-							{
-								new SelectFieldOption { Value = "DocumentType", Name = "DocumentType" },
-								new SelectFieldOption { Value = "ClassifierType", Name = "ClassifierType" },
-							}
+							Options = Core.Models.EntityTypeCode
+								.GetRegisteredEntityTypeCodes()
+								.Select(x => new SelectFieldOption { Value = x, Name = x })
+								.ToArray()
 						}
 					},
 					new SelectField

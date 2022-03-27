@@ -69,7 +69,8 @@ namespace Montr.Automate.Impl.Services
 				.Cast<Classifier>()
 				.ToListAsync(cancellationToken);
 
-			if (automationRequest?.IncludeRules == true)
+			// todo: commented to load conditions and actions on classifier edit page
+			// if (automationRequest?.IncludeRules == true)
 			{
 				foreach (var automation in data.Cast<Automation>())
 				{

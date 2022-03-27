@@ -31,6 +31,7 @@ namespace Montr.Automate.Services
 				}
 			});
 
+			// todo: remove
 			_registrator.Register(ViewCode.AutomationForm, _ => new DataView
 			{
 				Fields = new List<FieldMetadata>

@@ -33,18 +33,18 @@ public class AutomateClassifierHandlerTests
 		var classifierTypeService = new DbClassifierTypeService(dbContextFactory, classifierTypeRepository);
 
 		var fieldProviderRegistry = new DefaultFieldProviderRegistry();
+		fieldProviderRegistry.AddFieldType(typeof(NumberField));
 		fieldProviderRegistry.AddFieldType(typeof(TextField));
+		fieldProviderRegistry.AddFieldType(typeof(TextAreaField));
+		fieldProviderRegistry.AddFieldType(typeof(SelectField));
+		fieldProviderRegistry.AddFieldType(typeof(AutomationConditionListField));
+		fieldProviderRegistry.AddFieldType(typeof(AutomationActionListField));
 		var dbFieldDataRepository = new DbFieldDataRepository(dbContextFactory, fieldProviderRegistry);
 
 		var metadataServiceMock = new Mock<IClassifierTypeMetadataService>();
 		metadataServiceMock
 			.Setup(x => x.GetMetadata(It.IsAny<ClassifierType>(), It.IsAny<CancellationToken>()))
-			.ReturnsAsync(() => new FieldMetadata[]
-			{
-				new TextField { Key = "test1", Active = true, System = false },
-				new TextField { Key = "test2", Active = true, System = false },
-				new TextField { Key = "test3", Active = true, System = false }
-			});
+			.ReturnsAsync(() => Automation.GetDefaultMetadata().Fields.ToArray());
 
 		var acpfMock = new Mock<INamedServiceFactory<IAutomationConditionProvider>>();
 		acpfMock.Setup(x => x.GetRequiredService(FieldAutomationCondition.TypeCode))

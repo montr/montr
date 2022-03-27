@@ -8,6 +8,6 @@ namespace Montr.MasterData.Services
 {
 	public interface IClassifierTypeMetadataService
 	{
-		Task<IList<FieldMetadata>> GetMetadata(ClassifierType type, CancellationToken cancellationToken);
+		Task<ICollection<FieldMetadata>> GetMetadata(ClassifierType type, CancellationToken cancellationToken);
 	}
 }
