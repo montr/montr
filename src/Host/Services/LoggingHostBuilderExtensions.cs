@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using Serilog;
-using Serilog.Events;
 
 namespace Host.Services
 {
@@ -12,10 +11,10 @@ namespace Host.Services
 			return builder.UseSerilog((context, configuration) => ConfigureLogger(context.HostingEnvironment, configuration));
 		}
 
-		public static IWebHostBuilder UseLogging(this IWebHostBuilder builder)
+		/*public static IWebHostBuilder UseLogging(this IWebHostBuilder builder)
 		{
 			return builder.UseSerilog((context, configuration) => ConfigureLogger(context.HostingEnvironment, configuration));
-		}
+		}*/
 
 		private static void ConfigureLogger(IHostEnvironment environment, LoggerConfiguration configuration)
 		{

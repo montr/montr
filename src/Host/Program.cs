@@ -13,7 +13,7 @@ using Montr.Data.Linq2Db;
 
 namespace Host
 {
-	public class Program
+	public static class Program
 	{
 		public static async Task Main(string[] args)
 		{
@@ -35,7 +35,7 @@ namespace Host
 				.UseDbSettings(reloadOnChange: true)
 				.UseStartup<Startup>()
 				.UseSentry()
-				.UseLogging();
+				/*.UseLogging()*/;
 
 			var host = hostBuilder.Build();
 
@@ -68,7 +68,7 @@ namespace Host
 					services.AddSingleton<IDbContextFactory, DefaultDbContextFactory>();
 					services.AddSingleton<EmbeddedResourceProvider, EmbeddedResourceProvider>();
 				})
-				.UseLogging();
+				/*.UseLogging()*/;
 
 			var host = hostBuilder.Build();
 
