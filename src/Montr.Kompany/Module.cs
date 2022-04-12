@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Montr.Core;
 using Montr.Core.Services;
@@ -7,11 +7,11 @@ using Montr.Kompany.Services;
 namespace Montr.Kompany
 {
 	// ReSharper disable once UnusedMember.Global
-	public class Module : IModule
+	public class Module : IModule, IWebApplicationBuilderConfigurator
 	{
-		public void ConfigureServices(IConfiguration configuration, IServiceCollection services)
+		public void Configure(WebApplicationBuilder appBuilder)
 		{
-			services.AddTransient<IStartupTask, RegisterClassifierTypeStartupTask>();
+			appBuilder.Services.AddTransient<IStartupTask, RegisterClassifierTypeStartupTask>();
 		}
 	}
 }

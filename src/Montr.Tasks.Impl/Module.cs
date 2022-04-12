@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Montr.Automate.Services;
 using Montr.Core;
@@ -10,20 +10,20 @@ using Montr.Tasks.Services;
 
 namespace Montr.Tasks.Impl
 {
-	public class Module : IModule
+	public class Module : IModule, IWebApplicationBuilderConfigurator
 	{
-		public void ConfigureServices(IConfiguration configuration, IServiceCollection services)
+		public void Configure(WebApplicationBuilder appBuilder)
 		{
-			services.AddSingleton<IContentProvider, ContentProvider>();
+			appBuilder.Services.AddSingleton<IContentProvider, ContentProvider>();
 
-			services.AddTransient<IPermissionProvider, PermissionProvider>();
+			appBuilder.Services.AddTransient<IPermissionProvider, PermissionProvider>();
 
-			services.AddTransient<ITaskService, DbTaskService>();
-			services.AddTransient<IRepository<TaskModel>, DbTaskRepository>();
+			appBuilder.Services.AddTransient<ITaskService, DbTaskService>();
+			appBuilder.Services.AddTransient<IRepository<TaskModel>, DbTaskRepository>();
 
-			services.AddNamedTransient<IClassifierRepository, DbTaskTypeRepository>(ClassifierTypeCode.TaskType);
+			appBuilder.Services.AddNamedTransient<IClassifierRepository, DbTaskTypeRepository>(ClassifierTypeCode.TaskType);
 
-			services.AddNamedTransient<IAutomationActionProvider, CreateTaskAutomationActionProvider>(CreateTaskAutomationAction.TypeCode);
+			appBuilder.Services.AddNamedTransient<IAutomationActionProvider, CreateTaskAutomationActionProvider>(CreateTaskAutomationAction.TypeCode);
 		}
 	}
 }

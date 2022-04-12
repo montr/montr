@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Montr.Core;
@@ -12,24 +11,24 @@ using Montr.Metadata.Services;
 namespace Montr.Metadata.Impl
 {
 	// ReSharper disable once UnusedMember.Global
-	public class Module : IWebModule
+	public class Module : IModule, IWebApplicationBuilderConfigurator, IWebApplicationConfigurator
 	{
-		public void ConfigureServices(IConfiguration configuration, IServiceCollection services)
+		public void Configure(WebApplicationBuilder appBuilder)
 		{
-			services.AddSingleton<IStartupTask, FieldMetadataJsonOptionsInitializer>();
+			appBuilder.Services.AddSingleton<IStartupTask, FieldMetadataJsonOptionsInitializer>();
 
-			services.AddSingleton<IFieldProviderRegistry, DefaultFieldProviderRegistry>();
-			services.AddSingleton<IRepository<FieldMetadata>, DbFieldMetadataRepository>();
-			services.AddSingleton<IFieldMetadataService, DbFieldMetadataService>();
-			services.AddSingleton<IFieldDataRepository, DbFieldDataRepository>();
-			services.AddSingleton<IMetadataProvider, DefaultMetadataProvider>();
-			services.AddSingleton<IMetadataRegistrator, DefaultMetadataRegistrator>();
+			appBuilder.Services.AddSingleton<IFieldProviderRegistry, DefaultFieldProviderRegistry>();
+			appBuilder.Services.AddSingleton<IRepository<FieldMetadata>, DbFieldMetadataRepository>();
+			appBuilder.Services.AddSingleton<IFieldMetadataService, DbFieldMetadataService>();
+			appBuilder.Services.AddSingleton<IFieldDataRepository, DbFieldDataRepository>();
+			appBuilder.Services.AddSingleton<IMetadataProvider, DefaultMetadataProvider>();
+			appBuilder.Services.AddSingleton<IMetadataRegistrator, DefaultMetadataRegistrator>();
 
-			services.AddSingleton<JsonTypeProvider<FieldMetadata>>();
-			services.AddSingleton<IConfigureOptions<MvcNewtonsoftJsonOptions>, FieldMetadataJsonOptionsConfigurator>();
+			appBuilder.Services.AddSingleton<JsonTypeProvider<FieldMetadata>>();
+			appBuilder.Services.AddSingleton<IConfigureOptions<MvcNewtonsoftJsonOptions>, FieldMetadataJsonOptionsConfigurator>();
 		}
 
-		public void Configure(IApplicationBuilder app)
+		public void Configure(WebApplication app)
 		{
 			// todo: add phone, email, address, inn, bank info
 			app.ConfigureMetadata(options =>

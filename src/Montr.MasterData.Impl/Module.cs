@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Montr.Core;
@@ -12,43 +11,43 @@ using Montr.Metadata.Services;
 
 namespace Montr.MasterData.Impl
 {
-	// ReSharper disable once UnusedMember.Global
-	public class Module : IWebModule
+	// ReSharper disable once UnusedType.Global
+	public class Module : IModule, IWebApplicationBuilderConfigurator, IWebApplicationConfigurator
 	{
-		public void ConfigureServices(IConfiguration configuration, IServiceCollection services)
+		public void Configure(WebApplicationBuilder appBuilder)
 		{
-			services.AddSingleton<IStartupTask, ClassifierJsonOptionsInitializer>();
+			appBuilder.Services.AddSingleton<IStartupTask, ClassifierJsonOptionsInitializer>();
 
-			services.AddSingleton<IContentProvider, ContentProvider>();
-			services.AddTransient<IPermissionProvider, PermissionProvider>();
+			appBuilder.Services.AddSingleton<IContentProvider, ContentProvider>();
+			appBuilder.Services.AddTransient<IPermissionProvider, PermissionProvider>();
 
-			services.AddTransient<INumberGenerator, DbNumberGenerator>();
+			appBuilder.Services.AddTransient<INumberGenerator, DbNumberGenerator>();
 
-			services.AddTransient<IClassifierRepository, DbClassifierRepository<Classifier>>();
-			services.AddNamedTransient<IClassifierRepository, DbNumeratorRepository>(ClassifierTypeCode.Numerator);
+			appBuilder.Services.AddTransient<IClassifierRepository, DbClassifierRepository<Classifier>>();
+			appBuilder.Services.AddNamedTransient<IClassifierRepository, DbNumeratorRepository>(ClassifierTypeCode.Numerator);
 
-			services.AddNamedTransient<IEntityNameResolver, ClassifierTypeNameResolver>(ClassifierType.TypeCode);
+			appBuilder.Services.AddNamedTransient<IEntityNameResolver, ClassifierTypeNameResolver>(ClassifierType.TypeCode);
 
-			services.AddNamedTransient<IRecipeStepHandler, RegisterClassifierTypeStep>(RegisterClassifierTypeStep.Name);
+			appBuilder.Services.AddNamedTransient<IRecipeStepHandler, RegisterClassifierTypeStep>(RegisterClassifierTypeStep.Name);
 
-			services.AddTransient<IRepository<ClassifierType>, DbClassifierTypeRepository>();
-			services.AddTransient<IRepository<ClassifierTree>, DbClassifierTreeRepository>();
-			services.AddTransient<IRepository<NumeratorEntity>, DbNumeratorEntityRepository>();
+			appBuilder.Services.AddTransient<IRepository<ClassifierType>, DbClassifierTypeRepository>();
+			appBuilder.Services.AddTransient<IRepository<ClassifierTree>, DbClassifierTreeRepository>();
+			appBuilder.Services.AddTransient<IRepository<NumeratorEntity>, DbNumeratorEntityRepository>();
 
-			services.AddTransient<IClassifierTypeRegistrator, DefaultClassifierTypeRegistrator>();
-			services.AddTransient<IClassifierRegistrator, DefaultClassifierRegistrator>();
+			appBuilder.Services.AddTransient<IClassifierTypeRegistrator, DefaultClassifierTypeRegistrator>();
+			appBuilder.Services.AddTransient<IClassifierRegistrator, DefaultClassifierRegistrator>();
 
-			services.AddTransient<IClassifierTypeService, DbClassifierTypeService>();
-			services.AddTransient<IClassifierTypeMetadataService, ClassifierTypeMetadataService>();
-			services.AddTransient<IClassifierTreeService, DefaultClassifierTreeService>();
+			appBuilder.Services.AddTransient<IClassifierTypeService, DbClassifierTypeService>();
+			appBuilder.Services.AddTransient<IClassifierTypeMetadataService, ClassifierTypeMetadataService>();
+			appBuilder.Services.AddTransient<IClassifierTreeService, DefaultClassifierTreeService>();
 
-			services.AddTransient<INumberGenerator, DbNumberGenerator>();
+			appBuilder.Services.AddTransient<INumberGenerator, DbNumberGenerator>();
 
-			services.AddSingleton<JsonTypeProvider<Classifier>>();
-			services.AddSingleton<IConfigureOptions<MvcNewtonsoftJsonOptions>, ClassifierJsonOptionsConfigurator>();
+			appBuilder.Services.AddSingleton<JsonTypeProvider<Classifier>>();
+			appBuilder.Services.AddSingleton<IConfigureOptions<MvcNewtonsoftJsonOptions>, ClassifierJsonOptionsConfigurator>();
 		}
 
-		public void Configure(IApplicationBuilder app)
+		public void Configure(WebApplication app)
 		{
 			app.ConfigureMetadata(options =>
 			{

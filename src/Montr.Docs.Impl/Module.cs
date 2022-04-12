@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Montr.Automate.Services;
 using Montr.Core;
@@ -11,24 +11,24 @@ using Montr.MasterData.Services;
 namespace Montr.Docs.Impl
 {
 	// ReSharper disable once UnusedMember.Global
-	public class Module : IModule
+	public class Module : IModule, IWebApplicationBuilderConfigurator
 	{
-		public void ConfigureServices(IConfiguration configuration, IServiceCollection services)
+		public void Configure(WebApplicationBuilder appBuilder)
 		{
-			services.AddSingleton<IContentProvider, ContentProvider>();
+			appBuilder.Services.AddSingleton<IContentProvider, ContentProvider>();
 
-			services.AddSingleton<IProcessService, DefaultProcessService>();
+			appBuilder.Services.AddSingleton<IProcessService, DefaultProcessService>();
 
-			services.AddNamedTransient<IClassifierRepository, DbDocumentTypeRepository>(ClassifierTypeCode.DocumentType);
+			appBuilder.Services.AddNamedTransient<IClassifierRepository, DbDocumentTypeRepository>(ClassifierTypeCode.DocumentType);
 
-			services.AddSingleton<IRepository<Document>, DbDocumentRepository>();
-			services.AddSingleton<IDocumentService, DbDocumentService>();
+			appBuilder.Services.AddSingleton<IRepository<Document>, DbDocumentRepository>();
+			appBuilder.Services.AddSingleton<IDocumentService, DbDocumentService>();
 
-			services.AddTransient<INumberTagResolver, DocumentNumberTagResolver>();
+			appBuilder.Services.AddTransient<INumberTagResolver, DocumentNumberTagResolver>();
 
-			services.AddNamedTransient<IRecipientResolver, DocumentRecipientResolver>(EntityTypeCode.Document);
-			services.AddNamedTransient<IEntityNameResolver, DocumentTypeNameResolver>(DocumentType.EntityTypeCode);
-			services.AddNamedTransient<IAutomationContextProvider, DocumentAutomationContextProvider>(MasterData.EntityTypeCode.Classifier);
+			appBuilder.Services.AddNamedTransient<IRecipientResolver, DocumentRecipientResolver>(EntityTypeCode.Document);
+			appBuilder.Services.AddNamedTransient<IEntityNameResolver, DocumentTypeNameResolver>(DocumentType.EntityTypeCode);
+			appBuilder.Services.AddNamedTransient<IAutomationContextProvider, DocumentAutomationContextProvider>(MasterData.EntityTypeCode.Classifier);
 		}
 	}
 }

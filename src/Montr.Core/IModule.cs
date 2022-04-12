@@ -7,12 +7,16 @@ namespace Montr.Core
 {
 	public interface IModule
 	{
-		void ConfigureServices(IConfiguration configuration, IServiceCollection services);
 	}
 
-	public interface IWebModule : IModule
+	public interface IWebApplicationBuilderConfigurator
 	{
-		void Configure(IApplicationBuilder app);
+		void Configure(WebApplicationBuilder appBuilder);
+	}
+
+	public interface IWebApplicationConfigurator
+	{
+		void Configure(WebApplication app);
 	}
 
 	[AttributeUsage(AttributeTargets.Class)]

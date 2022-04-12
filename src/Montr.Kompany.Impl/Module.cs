@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Montr.Core;
 using Montr.Core.Services;
@@ -9,13 +9,13 @@ using Montr.MasterData.Services;
 namespace Montr.Kompany.Impl
 {
 	// ReSharper disable once UnusedMember.Global
-	public class Module : IModule
+	public class Module : IModule, IWebApplicationBuilderConfigurator
 	{
-		public void ConfigureServices(IConfiguration configuration, IServiceCollection services)
+		public void Configure(WebApplicationBuilder appBuilder)
 		{
-			services.AddNamedTransient<IClassifierRepository, DbCompanyRepository>(ClassifierTypeCode.Company);
+			appBuilder.Services.AddNamedTransient<IClassifierRepository, DbCompanyRepository>(ClassifierTypeCode.Company);
 
-			services.AddSingleton<ICurrentCompanyProvider, DefaultCurrentCompanyProvider>();
+			appBuilder.Services.AddSingleton<ICurrentCompanyProvider, DefaultCurrentCompanyProvider>();
 		}
 	}
 }

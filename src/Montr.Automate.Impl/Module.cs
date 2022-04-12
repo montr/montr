@@ -15,30 +15,30 @@ using Montr.Metadata.Services;
 namespace Montr.Automate.Impl
 {
 	// ReSharper disable once UnusedMember.Global
-	public class Module : IWebModule
+	public class Module : IModule, IWebApplicationBuilderConfigurator, IWebApplicationConfigurator
 	{
-		public void ConfigureServices(IConfiguration configuration, IServiceCollection services)
+		public void Configure(WebApplicationBuilder appBuilder)
 		{
-			services.AddSingleton<IStartupTask, AutomationJsonOptionsInitializer>();
+			appBuilder.Services.AddSingleton<IStartupTask, AutomationJsonOptionsInitializer>();
 
-			services.AddTransient<IAutomationProviderRegistry, DefaultAutomationProviderRegistry>();
-			services.AddTransient<IAutomationContextProvider, DefaultAutomationContextProvider>();
-			services.AddTransient<IAutomationRunner, DefaultAutomationRunner>();
-			services.AddTransient<IRecipientResolver, DefaultRecipientResolver>();
+			appBuilder.Services.AddTransient<IAutomationProviderRegistry, DefaultAutomationProviderRegistry>();
+			appBuilder.Services.AddTransient<IAutomationContextProvider, DefaultAutomationContextProvider>();
+			appBuilder.Services.AddTransient<IAutomationRunner, DefaultAutomationRunner>();
+			appBuilder.Services.AddTransient<IRecipientResolver, DefaultRecipientResolver>();
 
-			services.AddNamedTransient<IClassifierRepository, DbAutomationRepository>(ClassifierTypeCode.Automation);
+			appBuilder.Services.AddNamedTransient<IClassifierRepository, DbAutomationRepository>(ClassifierTypeCode.Automation);
 
-			services.AddNamedTransient<IAutomationConditionProvider, GroupAutomationConditionProvider>(GroupAutomationCondition.TypeCode);
-			services.AddNamedTransient<IAutomationConditionProvider, FieldAutomationConditionProvider>(FieldAutomationCondition.TypeCode);
-			services.AddNamedTransient<IAutomationActionProvider, SetFieldAutomationActionProvider>(SetFieldAutomationAction.TypeCode);
-			services.AddNamedTransient<IAutomationActionProvider, NotifyByEmailAutomationActionProvider>(NotifyByEmailAutomationAction.TypeCode);
+			appBuilder.Services.AddNamedTransient<IAutomationConditionProvider, GroupAutomationConditionProvider>(GroupAutomationCondition.TypeCode);
+			appBuilder.Services.AddNamedTransient<IAutomationConditionProvider, FieldAutomationConditionProvider>(FieldAutomationCondition.TypeCode);
+			appBuilder.Services.AddNamedTransient<IAutomationActionProvider, SetFieldAutomationActionProvider>(SetFieldAutomationAction.TypeCode);
+			appBuilder.Services.AddNamedTransient<IAutomationActionProvider, NotifyByEmailAutomationActionProvider>(NotifyByEmailAutomationAction.TypeCode);
 
-			services.AddSingleton<JsonTypeProvider<AutomationCondition>>();
-			services.AddSingleton<JsonTypeProvider<AutomationAction>>();
-			services.AddSingleton<IConfigureOptions<MvcNewtonsoftJsonOptions>, AutomationJsonOptionsConfigurator>();
+			appBuilder.Services.AddSingleton<JsonTypeProvider<AutomationCondition>>();
+			appBuilder.Services.AddSingleton<JsonTypeProvider<AutomationAction>>();
+			appBuilder.Services.AddSingleton<IConfigureOptions<MvcNewtonsoftJsonOptions>, AutomationJsonOptionsConfigurator>();
 		}
 
-		public void Configure(IApplicationBuilder app)
+		public void Configure(WebApplication app)
 		{
 			app.ConfigureMetadata(options =>
 			{

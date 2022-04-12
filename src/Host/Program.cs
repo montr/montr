@@ -1,4 +1,5 @@
 ﻿using System.IO;
+using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
@@ -7,6 +8,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Montr.Core;
 using Montr.Core.Impl.Services;
 using Montr.Core.Services;
@@ -48,9 +50,28 @@ namespace Host
 			appBuilder.WebHost
 				.UseDbSettings(reloadOnChange: true)
 				.UseSentry()
-				.UseStartup<Startup>();
+				/*.UseStartup<Startup>()*/;
+
+			var logger = LoggerFactory.Create(_ => { }).CreateLogger<Startup>();
+
+			var modules = appBuilder.Services.AddModules(appBuilder.Configuration, logger);
+
+			/*foreach (var module in modules)
+			{
+				module.ConfigureServices(appBuilder.Configuration, appBuilder.Services);
+			}*/
+
+			foreach (var module in modules)
+			{
+				(module as IWebApplicationBuilderConfigurator)?.Configure(appBuilder);
+			}
 
 			var app = appBuilder.Build();
+
+			foreach (var module in modules)
+			{
+				(module as IWebApplicationConfigurator)?.Configure(app);
+			}
 
 			await app.RunAsync();
 		}

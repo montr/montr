@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authentication.MicrosoftAccount;
-using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Montr.Core;
@@ -8,7 +8,7 @@ using Montr.Core.Services;
 namespace Montr.Idx.Plugin.MicrosoftAccount
 {
 	[Module(DependsOn = new[] { typeof(Idx.Module) })]
-	public class Module : IModule
+	public class Module : IModule, IWebApplicationBuilderConfigurator
 	{
 		private readonly ILogger<Module> _logger;
 
@@ -17,15 +17,15 @@ namespace Montr.Idx.Plugin.MicrosoftAccount
 			_logger = logger;
 		}
 
-		public void ConfigureServices(IConfiguration configuration, IServiceCollection services)
+		public void Configure(WebApplicationBuilder appBuilder)
 		{
-			var microsoftOptions = configuration.GetOptions<MicrosoftAccountOptions>();
+			var microsoftOptions = appBuilder.Configuration.GetOptions<MicrosoftAccountOptions>();
 
 			if (microsoftOptions?.ClientId != null)
 			{
 				_logger.LogInformation("Add {scheme} authentication provider", MicrosoftAccountDefaults.AuthenticationScheme);
 
-				services.AddAuthentication().AddMicrosoftAccount(MicrosoftAccountDefaults.AuthenticationScheme, options =>
+				appBuilder.Services.AddAuthentication().AddMicrosoftAccount(MicrosoftAccountDefaults.AuthenticationScheme, options =>
 				{
 					options.ClientId = microsoftOptions.ClientId;
 					options.ClientSecret = microsoftOptions.ClientSecret;

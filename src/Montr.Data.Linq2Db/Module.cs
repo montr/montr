@@ -1,17 +1,17 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Montr.Core;
 
 namespace Montr.Data.Linq2Db
 {
 	// ReSharper disable once UnusedMember.Global
-	public class Module : IModule
+	public class Module : IModule, IWebApplicationBuilderConfigurator
 	{
-		public void ConfigureServices(IConfiguration configuration, IServiceCollection services)
+		public void Configure(WebApplicationBuilder appBuilder)
 		{
-			configuration.SetLinq2DbDefaultSettings();
+			appBuilder.Configuration.SetLinq2DbDefaultSettings();
 
-			services.AddSingleton<IDbContextFactory, DefaultDbContextFactory>();
+			appBuilder.Services.AddSingleton<IDbContextFactory, DefaultDbContextFactory>();
 		}
 	}
 }

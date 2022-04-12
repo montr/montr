@@ -39,6 +39,8 @@ namespace Host
 
 		public void ConfigureServices(IServiceCollection services)
 		{
+			_modules = services.AddModules(Configuration, Logger);
+
 			services.Configure<CookiePolicyOptions>(options =>
 			{
 				options.CheckConsentNeeded = _ => true;
@@ -60,8 +62,6 @@ namespace Host
 						.AllowAnyMethod();
 				});
 			});
-
-			_modules = services.AddModules(Configuration, Logger);
 
 			var assemblies = _modules.Select(x => x.GetType().Assembly).ToArray();
 
@@ -137,10 +137,10 @@ namespace Host
 
 			app.UseRouting();
 
-			foreach (var module in _modules.OfType<IWebModule>())
+			/*foreach (var module in _modules.OfType<IWebModule>())
 			{
 				module.Configure(app);
-			}
+			}*/
 
 			app.UseEndpoints(endpoints =>
 			{

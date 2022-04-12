@@ -1,14 +1,13 @@
-﻿using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.AspNetCore.Builder;
 using Montr.Core;
 using Npgsql.Logging;
 
 namespace Montr.Data.Npgsql
 {
 	// ReSharper disable once UnusedMember.Global
-	public class Module : IModule
+	public class Module : IModule, IWebApplicationBuilderConfigurator
 	{
-		public void ConfigureServices(IConfiguration configuration, IServiceCollection services)
+		public void Configure(WebApplicationBuilder appBuilder)
 		{
 			// todo: remove: use connection string parameters
 			NpgsqlLogManager.IsParameterLoggingEnabled = true;

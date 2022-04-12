@@ -1,5 +1,6 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Montr.Core;
@@ -9,13 +10,13 @@ using Montr.Messages.Services;
 namespace Montr.Messages
 {
 	// ReSharper disable once UnusedMember.Global
-	public class Module : IModule, IStartupTask
+	public class Module : IModule, IWebApplicationBuilderConfigurator, IStartupTask
 	{
-		public void ConfigureServices(IConfiguration configuration, IServiceCollection services)
+		public void Configure(WebApplicationBuilder appBuilder)
 		{
-			services.BindOptions<Options>(configuration);
+			appBuilder.Services.BindOptions<Options>(appBuilder.Configuration);
 
-			services.AddTransient<IStartupTask, RegisterClassifierTypeStartupTask>();
+			appBuilder.Services.AddTransient<IStartupTask, RegisterClassifierTypeStartupTask>();
 		}
 
 		public Task Run(CancellationToken cancellationToken)

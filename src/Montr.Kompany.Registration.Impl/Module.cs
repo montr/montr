@@ -1,4 +1,4 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Montr.Core;
 using Montr.Kompany.Registration.Impl.Services;
@@ -6,11 +6,11 @@ using Montr.Kompany.Registration.Impl.Services;
 namespace Montr.Kompany.Registration.Impl
 {
 	// ReSharper disable once UnusedMember.Global
-	public class Module : IModule
+	public class Module : IModule, IWebApplicationBuilderConfigurator
 	{
-		public void ConfigureServices(IConfiguration configuration, IServiceCollection services)
+		public void Configure(WebApplicationBuilder appBuilder)
 		{
-			services.AddTransient<CompanyRequestValidationHelper, CompanyRequestValidationHelper>();
+			appBuilder.Services.AddTransient<CompanyRequestValidationHelper, CompanyRequestValidationHelper>();
 		}
 	}
 }

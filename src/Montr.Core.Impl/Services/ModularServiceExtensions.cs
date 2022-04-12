@@ -15,10 +15,10 @@ namespace Montr.Core.Impl.Services
 		{
 			var loader = new ModuleLoader(logger);
 
-			var modules = loader.GetSortedModules(AppDomain.CurrentDomain.BaseDirectory, true);
+			var sortedModuleTypes = loader.GetSortedModules(AppDomain.CurrentDomain.BaseDirectory, true);
 
 			// register module types to create modules later with dependencies
-			foreach (var type in modules)
+			foreach (var type in sortedModuleTypes)
 			{
 				// modules instances will be created twice (?) (with temp and real service providers)
 				// todo: create modules using ActivatorUtilities?
@@ -30,7 +30,7 @@ namespace Montr.Core.Impl.Services
 
 			var result = new List<IModule>();
 
-			foreach (var type in modules)
+			foreach (var type in sortedModuleTypes)
 			{
 				var module = (IModule)serviceProvider.GetRequiredService(type);
 
@@ -43,7 +43,7 @@ namespace Montr.Core.Impl.Services
 				}
 
 				// todo: configure module services later (?)
-				module.ConfigureServices(configuration, services);
+				// module.ConfigureServices(configuration, services);
 
 				result.Add(module);
 			}

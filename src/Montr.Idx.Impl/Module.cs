@@ -17,31 +17,31 @@ using static OpenIddict.Abstractions.OpenIddictConstants;
 namespace Montr.Idx.Impl
 {
 	// ReSharper disable once UnusedMember.Global
-	public class Module : IWebModule
+	public class Module : IModule, IWebApplicationBuilderConfigurator, IWebApplicationConfigurator
 	{
-		public void ConfigureServices(IConfiguration configuration, IServiceCollection services)
+		public void Configure(WebApplicationBuilder appBuilder)
 		{
-			services.AddTransient<IStartupTask, RegisterPermissionsStartupTask>();
+			appBuilder.Services.AddTransient<IStartupTask, RegisterPermissionsStartupTask>();
 
-			services.AddSingleton<IContentProvider, ContentProvider>();
-			services.AddTransient<IPermissionProvider, PermissionProvider>();
+			appBuilder.Services.AddSingleton<IContentProvider, ContentProvider>();
+			appBuilder.Services.AddTransient<IPermissionProvider, PermissionProvider>();
 
-			services.AddTransient<IEmailConfirmationService, EmailConfirmationService>();
-			services.AddTransient<ISignInManager, DefaultSignInManager>();
-			services.AddTransient<IOidcServer, OpenIddictServer>();
+			appBuilder.Services.AddTransient<IEmailConfirmationService, EmailConfirmationService>();
+			appBuilder.Services.AddTransient<ISignInManager, DefaultSignInManager>();
+			appBuilder.Services.AddTransient<IOidcServer, OpenIddictServer>();
 
-			services.AddNamedTransient<IClassifierRepository, DbRoleRepository>(ClassifierTypeCode.Role);
-			services.AddNamedTransient<IClassifierRepository, DbUserRepository>(ClassifierTypeCode.User);
+			appBuilder.Services.AddNamedTransient<IClassifierRepository, DbRoleRepository>(ClassifierTypeCode.Role);
+			appBuilder.Services.AddNamedTransient<IClassifierRepository, DbUserRepository>(ClassifierTypeCode.User);
 
-			services.AddScoped<IAuthorizationHandler, UserPermissionAuthorizationHandler>();
-			services.AddScoped<IAuthorizationHandler, SuperUserAuthorizationHandler>();
+			appBuilder.Services.AddScoped<IAuthorizationHandler, UserPermissionAuthorizationHandler>();
+			appBuilder.Services.AddScoped<IAuthorizationHandler, SuperUserAuthorizationHandler>();
 
-			services
+			appBuilder.Services
 				.AddAuthentication()
 				.AddCookie();
 
 			// todo: move from impl to idx?
-			services.Configure<IdentityOptions>(options =>
+			appBuilder.Services.Configure<IdentityOptions>(options =>
 			{
 				// todo: move to settings
 				options.SignIn.RequireConfirmedAccount = false;
@@ -67,17 +67,17 @@ namespace Montr.Idx.Impl
 				options.ClaimsIdentity.EmailClaimType = Claims.Email;
 			});
 
-			services.AddDbContext<ApplicationDbContext>(options =>
+			appBuilder.Services.AddDbContext<ApplicationDbContext>(options =>
 			{
 				// todo: remove hardcoded connection name
-				options.UseNpgsql(configuration.GetConnectionString("Default"));
+				options.UseNpgsql(appBuilder.Configuration.GetConnectionString("Default"));
 
 				options.UseOpenIddict();
 			});
 
 			IdentitySchemaMapper.MapSchema(MappingSchema.Default);
 
-			services
+			appBuilder.Services
 				.AddIdentity<DbUser, DbRole>()
 				.AddErrorDescriber<LocalizedIdentityErrorDescriber>()
 				.AddLinqToDBStores(new DbConnectionFactory(), // todo: why connection factory instance here?
@@ -91,7 +91,7 @@ namespace Montr.Idx.Impl
 
 			// ConfigureApplicationCookie should be after AddIdentity
 			// https://github.com/dotnet/aspnetcore/issues/5828
-			services.ConfigureApplicationCookie(options =>
+			appBuilder.Services.ConfigureApplicationCookie(options =>
 			{
 				options.LoginPath = ClientRoutes.Login;
 				options.LogoutPath = ClientRoutes.Logout;
@@ -120,7 +120,7 @@ namespace Montr.Idx.Impl
 				};*/
 			});
 
-			services.AddOpenIddict()
+			appBuilder.Services.AddOpenIddict()
 				.AddCore(options =>
 				{
 					options.UseEntityFrameworkCore()
@@ -169,14 +169,14 @@ namespace Montr.Idx.Impl
 					options.UseAspNetCore();
 				});
 
-			services.AddAuthorization();
+			appBuilder.Services.AddAuthorization();
 
 			// Register the worker responsible of seeding the database with the sample clients.
 			// Note: in a real world application, this step should be part of a setup script.
-			services.AddHostedService<Worker>();
+			appBuilder.Services.AddHostedService<Worker>();
 		}
 
-		public void Configure(IApplicationBuilder app)
+		public void Configure(WebApplication app)
 		{
 			app.UseCors(AppConstants.CorsPolicyName);
 			app.UseAuthentication();

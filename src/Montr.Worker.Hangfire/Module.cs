@@ -7,7 +7,6 @@ using Hangfire.Common;
 using Hangfire.Dashboard;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Montr.Core;
 using Montr.Core.Models;
@@ -18,26 +17,26 @@ using Montr.Worker.Services;
 namespace Montr.Worker.Hangfire
 {
 	[Module( DependsOn = new [] { typeof(Idx.Module) })]
-	public class Module : IWebModule
+	public class Module : IModule, IWebApplicationBuilderConfigurator, IWebApplicationConfigurator
 	{
-		public void ConfigureServices(IConfiguration configuration, IServiceCollection services)
+		public void Configure(WebApplicationBuilder appBuilder)
 		{
-			services.AddSingleton<IContentProvider, ContentProvider>();
+			appBuilder.Services.AddSingleton<IContentProvider, ContentProvider>();
 
-			services.AddTransient<JobActivator, AspNetCoreJobActivator>();
+			appBuilder.Services.AddTransient<JobActivator, AspNetCoreJobActivator>();
 
-			services
+			appBuilder.Services
 				.AddHangfireServer((_, _) => { })
 				.AddHangfire((_, config) =>
 				{
 					config.UseSerilogLogProvider();
-					config.UseDefaults(configuration);
+					config.UseDefaults(appBuilder.Configuration);
 				});
 
-			services.AddTransient<IBackgroundJobManager, HangfireBackgroundJobManager>();
+			appBuilder.Services.AddTransient<IBackgroundJobManager, HangfireBackgroundJobManager>();
 		}
 
-		public void Configure(IApplicationBuilder app)
+		public void Configure(WebApplication app)
 		{
 			app.UseHangfireDashboard(options: new DashboardOptions
 			{

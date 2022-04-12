@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authentication.Google;
-using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Montr.Core;
@@ -8,7 +8,7 @@ using Montr.Core.Services;
 namespace Montr.Idx.Plugin.Google
 {
 	[Module(DependsOn = new[] { typeof(Idx.Module) })]
-	public class Module : IModule
+	public class Module : IModule, IWebApplicationBuilderConfigurator
 	{
 		private readonly ILogger<Module> _logger;
 
@@ -17,15 +17,15 @@ namespace Montr.Idx.Plugin.Google
 			_logger = logger;
 		}
 
-		public void ConfigureServices(IConfiguration configuration, IServiceCollection services)
+		public void Configure(WebApplicationBuilder appBuilder)
 		{
-			var googleOptions = configuration.GetOptions<GoogleOptions>();
+			var googleOptions = appBuilder.Configuration.GetOptions<GoogleOptions>();
 
 			if (googleOptions?.ClientId != null)
 			{
 				_logger.LogInformation("Add {scheme} authentication provider", GoogleDefaults.AuthenticationScheme);
 
-				services.AddAuthentication().AddGoogle(GoogleDefaults.AuthenticationScheme, options =>
+				appBuilder.Services.AddAuthentication().AddGoogle(GoogleDefaults.AuthenticationScheme, options =>
 				{
 					options.ClientId = googleOptions.ClientId;
 					options.ClientSecret = googleOptions.ClientSecret;

@@ -6,13 +6,11 @@ namespace Montr.Metadata.Services
 {
 	public static class MetadataApplicationBuilderExtensions
 	{
-		public static IApplicationBuilder ConfigureMetadata(this IApplicationBuilder app, Action<MetadataOptions> action)
+		public static IApplicationBuilder ConfigureMetadata(this WebApplication app, Action<MetadataOptions> action)
 		{
-			var serviceProvider = app.ApplicationServices;
-
 			var options = new MetadataOptions
 			{
-				Registry = serviceProvider.GetRequiredService<IFieldProviderRegistry>()
+				Registry = app.Services.GetRequiredService<IFieldProviderRegistry>()
 			};
 
 			action(options);

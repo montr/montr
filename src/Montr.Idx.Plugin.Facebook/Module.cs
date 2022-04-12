@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authentication.Facebook;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -8,7 +9,7 @@ using Montr.Core.Services;
 namespace Montr.Idx.Plugin.Facebook
 {
 	[Module(DependsOn = new [] { typeof(Idx.Module) })]
-	public class Module : IModule
+	public class Module : IModule, IWebApplicationBuilderConfigurator
 	{
 		private readonly ILogger<Module> _logger;
 
@@ -17,15 +18,15 @@ namespace Montr.Idx.Plugin.Facebook
 			_logger = logger;
 		}
 
-		public void ConfigureServices(IConfiguration configuration, IServiceCollection services)
+		public void Configure(WebApplicationBuilder appBuilder)
 		{
-			var facebookOptions = configuration.GetOptions<FacebookOptions>();
+			var facebookOptions = appBuilder.Configuration.GetOptions<FacebookOptions>();
 
 			if (facebookOptions?.AppId != null)
 			{
 				_logger.LogInformation("Add {scheme} authentication provider", FacebookDefaults.AuthenticationScheme);
 
-				services.AddAuthentication().AddFacebook(FacebookDefaults.AuthenticationScheme, options =>
+				appBuilder.Services.AddAuthentication().AddFacebook(FacebookDefaults.AuthenticationScheme, options =>
 				{
 					options.AppId = facebookOptions.AppId;
 					options.AppSecret = facebookOptions.AppSecret;

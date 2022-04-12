@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Montr.Core.Impl.Services;
 using Montr.Core.Models;
@@ -8,35 +8,35 @@ using Montr.Core.Services;
 namespace Montr.Core.Impl
 {
 	// ReSharper disable once UnusedMember.Global
-	public class Module : IModule
+	public class Module : IModule, IWebApplicationBuilderConfigurator
 	{
-		public void ConfigureServices(IConfiguration configuration, IServiceCollection services)
+		public void Configure(WebApplicationBuilder appBuilder)
 		{
-			services.AddTransient<IStartupTask, ImportDefaultLocaleStringListStartupTask>();
+			appBuilder.Services.AddTransient<IStartupTask, ImportDefaultLocaleStringListStartupTask>();
 
-			services.AddSingleton<IConfigurationManager, DefaultConfigurationManager>();
-			services.AddSingleton<IContentService, DefaultContentService>();
-			services.AddSingleton<IContentProvider, DefaultContentProvider>();
-			services.AddTransient<IPermissionProvider, PermissionProvider>();
+			appBuilder.Services.AddSingleton<IConfigurationManager, DefaultConfigurationManager>();
+			appBuilder.Services.AddSingleton<IContentService, DefaultContentService>();
+			appBuilder.Services.AddSingleton<IContentProvider, DefaultContentProvider>();
+			appBuilder.Services.AddTransient<IPermissionProvider, PermissionProvider>();
 
-			services.AddSingleton<ICurrentUserProvider, DefaultCurrentUserProvider>();
-			services.AddSingleton<EmbeddedResourceProvider, EmbeddedResourceProvider>();
-			services.AddSingleton<LocaleStringSerializer, LocaleStringSerializer>();
+			appBuilder.Services.AddSingleton<ICurrentUserProvider, DefaultCurrentUserProvider>();
+			appBuilder.Services.AddSingleton<EmbeddedResourceProvider, EmbeddedResourceProvider>();
+			appBuilder.Services.AddSingleton<LocaleStringSerializer, LocaleStringSerializer>();
 
-			services.AddSingleton<ILocaleStringImporter, DbLocaleStringImporter>();
-			services.AddSingleton<IRepository<LocaleString>, DbLocaleStringRepository>();
-			services.AddSingleton<IAuditLogService, DbAuditLogService>();
-			services.AddSingleton<ISettingsRepository, DbSettingsRepository>();
+			appBuilder.Services.AddSingleton<ILocaleStringImporter, DbLocaleStringImporter>();
+			appBuilder.Services.AddSingleton<IRepository<LocaleString>, DbLocaleStringRepository>();
+			appBuilder.Services.AddSingleton<IAuditLogService, DbAuditLogService>();
+			appBuilder.Services.AddSingleton<ISettingsRepository, DbSettingsRepository>();
 
-			services.AddSingleton<IRepository<EntityStatus>, DbEntityStatusRepository>();
-			services.AddSingleton<IEntityStatusProvider, DefaultEntityStatusProvider>();
+			appBuilder.Services.AddSingleton<IRepository<EntityStatus>, DbEntityStatusRepository>();
+			appBuilder.Services.AddSingleton<IEntityStatusProvider, DefaultEntityStatusProvider>();
 
-			services.AddSingleton<IPermissionResolver, DefaultPermissionResolver>();
-			services.AddSingleton<IAuthorizationPolicyProvider, AuthorizationPolicyProvider>();
+			appBuilder.Services.AddSingleton<IPermissionResolver, DefaultPermissionResolver>();
+			appBuilder.Services.AddSingleton<IAuthorizationPolicyProvider, AuthorizationPolicyProvider>();
 
-			services.AddTransient<IConfigurationService, DefaultConfigurationService>();
-			services.AddTransient<IRecipeExecutor, DefaultRecipeExecutor>();
-			services.AddTransient<IEntityRelationService, DbEntityRelationService>();
+			appBuilder.Services.AddTransient<IConfigurationService, DefaultConfigurationService>();
+			appBuilder.Services.AddTransient<IRecipeExecutor, DefaultRecipeExecutor>();
+			appBuilder.Services.AddTransient<IEntityRelationService, DbEntityRelationService>();
 		}
 	}
 }

@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Routing;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Montr.Core.Services;
@@ -15,28 +14,28 @@ using Montr.Core.Services;
 namespace Montr.Core
 {
 	// ReSharper disable once UnusedMember.Global
-	public class Module : IWebModule, IStartupTask
+	public class Module : IModule, IWebApplicationBuilderConfigurator, IWebApplicationConfigurator, IStartupTask
 	{
 		public static readonly bool UseSystemJson = false;
 
-		public void ConfigureServices(IConfiguration configuration, IServiceCollection services)
+		public void Configure(WebApplicationBuilder appBuilder)
 		{
-			services.AddHttpContextAccessor();
+			appBuilder.Services.AddHttpContextAccessor();
 
-			services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
+			appBuilder.Services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
 
 			// ReSharper disable once RedundantTypeArgumentsOfMethod
-			services.AddScoped<IUrlHelper>(x =>
+			appBuilder.Services.AddScoped<IUrlHelper>(x =>
 			{
-				var actionContext = x.GetRequiredService<IActionContextAccessor>().ActionContext;
-				var factory = x.GetRequiredService<IUrlHelperFactory>();
+				var actionContextAccessor = x.GetRequiredService<IActionContextAccessor>();
+				var urlHelperFactory = x.GetRequiredService<IUrlHelperFactory>();
 
-				return factory.GetUrlHelper(actionContext);
+				return urlHelperFactory.GetUrlHelper(actionContextAccessor.ActionContext);
 			});
 
-			services.BindOptions<AppOptions>(configuration);
+			appBuilder.Services.BindOptions<AppOptions>(appBuilder.Configuration);
 
-			services.Configure<RequestLocalizationOptions>(options =>
+			appBuilder.Services.Configure<RequestLocalizationOptions>(options =>
 			{
 				var supportedCultures = new[] { "en", "ru" };
 
@@ -54,25 +53,25 @@ namespace Montr.Core
 
 			if (UseSystemJson)
 			{
-				services.AddSingleton<IJsonSerializer, DefaultJsonSerializer>();
+				appBuilder.Services.AddSingleton<IJsonSerializer, DefaultJsonSerializer>();
 			}
 			else
 			{
-				services.AddSingleton<IJsonSerializer, NewtonsoftJsonSerializer>();
+				appBuilder.Services.AddSingleton<IJsonSerializer, NewtonsoftJsonSerializer>();
 			}
 
-			services.AddSingleton<IAppUrlBuilder, DefaultAppUrlBuilder>();
-			services.AddSingleton<IDateTimeProvider, DefaultDateTimeProvider>();
-			services.AddSingleton<IUnitOfWorkFactory, TransactionScopeUnitOfWorkFactory>();
+			appBuilder.Services.AddSingleton<IAppUrlBuilder, DefaultAppUrlBuilder>();
+			appBuilder.Services.AddSingleton<IDateTimeProvider, DefaultDateTimeProvider>();
+			appBuilder.Services.AddSingleton<IUnitOfWorkFactory, TransactionScopeUnitOfWorkFactory>();
 
-			services.AddTransient<ICache, CombinedCache>();
-			services.AddTransient<ILocalizer, DefaultLocalizer>();
+			appBuilder.Services.AddTransient<ICache, CombinedCache>();
+			appBuilder.Services.AddTransient<ILocalizer, DefaultLocalizer>();
 		}
 
-		public void Configure(IApplicationBuilder app)
+		public void Configure(WebApplication app)
 		{
 			app.UseRequestLocalization(
-				app.ApplicationServices.GetRequiredService<IOptions<RequestLocalizationOptions>>().Value);
+				app.Services.GetRequiredService<IOptions<RequestLocalizationOptions>>().Value);
 		}
 
 		public Task Run(CancellationToken cancellationToken)
