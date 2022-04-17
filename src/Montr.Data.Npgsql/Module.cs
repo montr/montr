@@ -5,9 +5,9 @@ using Npgsql.Logging;
 namespace Montr.Data.Npgsql
 {
 	// ReSharper disable once UnusedMember.Global
-	public class Module : IModule, IWebApplicationBuilderConfigurator
+	public class Module : IModule, IAppBuilderConfigurator
 	{
-		public void Configure(WebApplicationBuilder appBuilder)
+		public void Configure(IAppBuilder appBuilder)
 		{
 			// todo: remove: use connection string parameters
 			NpgsqlLogManager.IsParameterLoggingEnabled = true;

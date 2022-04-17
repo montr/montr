@@ -10,9 +10,9 @@ using Montr.Tasks.Services;
 
 namespace Montr.Tasks.Impl
 {
-	public class Module : IModule, IWebApplicationBuilderConfigurator
+	public class Module : IModule, IAppBuilderConfigurator
 	{
-		public void Configure(WebApplicationBuilder appBuilder)
+		public void Configure(IAppBuilder appBuilder)
 		{
 			appBuilder.Services.AddSingleton<IContentProvider, ContentProvider>();
 

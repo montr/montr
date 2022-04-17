@@ -1,5 +1,4 @@
 ﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Montr.Core.Impl.Services;
 using Montr.Core.Models;
@@ -8,9 +7,9 @@ using Montr.Core.Services;
 namespace Montr.Core.Impl
 {
 	// ReSharper disable once UnusedMember.Global
-	public class Module : IModule, IWebApplicationBuilderConfigurator
+	public class Module : IModule, IAppBuilderConfigurator
 	{
-		public void Configure(WebApplicationBuilder appBuilder)
+		public void Configure(IAppBuilder appBuilder)
 		{
 			appBuilder.Services.AddTransient<IStartupTask, ImportDefaultLocaleStringListStartupTask>();
 

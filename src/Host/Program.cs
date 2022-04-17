@@ -1,7 +1,4 @@
-﻿using System.IO;
-using System.Linq;
-using System.Reflection;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using Host.Services;
 using Microsoft.AspNetCore.Builder;
@@ -16,7 +13,7 @@ using Montr.Data.Linq2Db;
 
 namespace Host
 {
-	public static class Program
+	public class Program
 	{
 		public static async Task Main(string[] args)
 		{
@@ -24,8 +21,8 @@ namespace Host
 
 			var options = new WebApplicationOptions
 			{
-				ApplicationName = typeof(Program).Assembly.FullName,
-				ContentRootPath = Path.GetFullPath(Directory.GetCurrentDirectory()),
+				// ApplicationName = typeof(Program).Assembly.FullName,
+				// ContentRootPath = Path.GetFullPath(Directory.GetCurrentDirectory()),
 				WebRootPath = "wwwroot",
 				Args = args
 			};
@@ -34,44 +31,42 @@ namespace Host
 
 			appBuilder.Host
 				.UseLogging()
-				.ConfigureAppConfiguration((context, config) =>
-				{
-					var env = context.HostingEnvironment;
-
-					config
-						.AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
-						.AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true)
-						.AddUserSecrets(Assembly.Load(new AssemblyName(env.ApplicationName)),
-							optional: true) // todo: remove
-						.AddEnvironmentVariables()
-						.AddCommandLine(args);
-				});
+				.UseDefaultConfiguration(args);
 
 			appBuilder.WebHost
 				.UseDbSettings(reloadOnChange: true)
-				.UseSentry()
-				/*.UseStartup<Startup>()*/;
+				.UseSentry();
 
-			var logger = LoggerFactory.Create(_ => { }).CreateLogger<Startup>();
+			// todo: create in modules builder
+			var logger = LoggerFactory.Create(builder => { }).CreateLogger<Program>();
+			var modules = appBuilder.Services.AddModules(logger);
 
-			var modules = appBuilder.Services.AddModules(appBuilder.Configuration, logger);
-
-			/*foreach (var module in modules)
-			{
-				module.ConfigureServices(appBuilder.Configuration, appBuilder.Services);
-			}*/
+			var appBuilderWrapper = new WebApplicationBuilderWrapper(appBuilder, modules);
 
 			foreach (var module in modules)
 			{
-				(module as IWebApplicationBuilderConfigurator)?.Configure(appBuilder);
+				(module as IAppBuilderConfigurator)?.Configure(appBuilderWrapper);
 			}
 
 			var app = appBuilder.Build();
 
+			var appWrapper = new WebApplicationWrapper(app);
+
 			foreach (var module in modules)
 			{
-				(module as IWebApplicationConfigurator)?.Configure(app);
+				(module as IAppConfigurator)?.Configure(appWrapper);
 			}
+
+			app.UseEndpoints(endpoints =>
+			{
+				endpoints.MapRazorPages();
+				endpoints.MapControllers();
+				endpoints.MapFallbackToController("Index", "Home");
+				// endpoints.MapFallbackToFile("Home/Index.cshtml");
+				// endpoints.MapHub<MyChatHub>()
+				// endpoints.MapGrpcService<MyCalculatorService>()
+				endpoints.MapDefaultControllerRoute();
+			});
 
 			await app.RunAsync();
 		}
@@ -81,19 +76,8 @@ namespace Host
 		{
 			var hostBuilder = Microsoft.Extensions.Hosting.Host
 				.CreateDefaultBuilder()
-				.ConfigureAppConfiguration((context, config) =>
-				{
-					var env = context.HostingEnvironment;
-
-					config
-						.AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-						.AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true, reloadOnChange: true)
-						.AddUserSecrets(Assembly.Load(new AssemblyName(env.ApplicationName)), optional: true)
-						.AddEnvironmentVariables()
-						.AddCommandLine(args);
-
-					config.Build().SetLinq2DbDefaultSettings();
-				})
+				.UseLogging()
+				.UseDefaultConfiguration(args)
 				.ConfigureServices((context, services) =>
 				{
 					services.BindOptions<MigrationOptions>(context.Configuration);
@@ -101,19 +85,21 @@ namespace Host
 					services.AddSingleton<IMigrationRunner, DbMigrationRunner>();
 					services.AddSingleton<IDbContextFactory, DefaultDbContextFactory>();
 					services.AddSingleton<EmbeddedResourceProvider, EmbeddedResourceProvider>();
-				})
-				.UseLogging();
+				});
 
-			var host = hostBuilder.Build();
-
-			using (var scope = host.Services.CreateScope())
+			using (var host = hostBuilder.Build())
 			{
-				var migrator = scope.ServiceProvider.GetRequiredService<IMigrationRunner>();
+				using (var scope = host.Services.CreateScope())
+				{
+					var services = scope.ServiceProvider;
 
-				await migrator.Run(CancellationToken.None);
+					services.GetRequiredService<IConfiguration>().SetLinq2DbDefaultSettings();
+
+					var migrator = services.GetRequiredService<IMigrationRunner>();
+
+					await migrator.Run(CancellationToken.None);
+				}
 			}
-
-			host.Dispose();
 
 			NamedServiceCollectionExtensions.ClearRegistrations();
 		}

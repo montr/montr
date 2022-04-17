@@ -6,7 +6,6 @@ using Hangfire.AspNetCore;
 using Hangfire.Common;
 using Hangfire.Dashboard;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
 using Montr.Core;
 using Montr.Core.Models;
@@ -17,9 +16,9 @@ using Montr.Worker.Services;
 namespace Montr.Worker.Hangfire
 {
 	[Module( DependsOn = new [] { typeof(Idx.Module) })]
-	public class Module : IModule, IWebApplicationBuilderConfigurator, IWebApplicationConfigurator
+	public class Module : IModule, IAppBuilderConfigurator, IAppConfigurator
 	{
-		public void Configure(WebApplicationBuilder appBuilder)
+		public void Configure(IAppBuilder appBuilder)
 		{
 			appBuilder.Services.AddSingleton<IContentProvider, ContentProvider>();
 
@@ -36,7 +35,7 @@ namespace Montr.Worker.Hangfire
 			appBuilder.Services.AddTransient<IBackgroundJobManager, HangfireBackgroundJobManager>();
 		}
 
-		public void Configure(WebApplication app)
+		public void Configure(IApp app)
 		{
 			app.UseHangfireDashboard(options: new DashboardOptions
 			{

@@ -8,9 +8,9 @@ using Montr.Kompany.Registration.Services;
 namespace Montr.Kompany.Registration
 {
 	// ReSharper disable once UnusedMember.Global
-	public class Module : IModule, IWebApplicationBuilderConfigurator
+	public class Module : IModule, IAppBuilderConfigurator
 	{
-		public void Configure(WebApplicationBuilder appBuilder)
+		public void Configure(IAppBuilder appBuilder)
 		{
 			appBuilder.Services.AddTransient<IStartupTask, RegisterClassifiersStartupTask>();
 			appBuilder.Services.AddTransient<IStartupTask, ConfigurationStartupTask>();

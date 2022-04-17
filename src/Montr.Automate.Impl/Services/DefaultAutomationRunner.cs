@@ -1,27 +1,33 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Montr.Automate.Models;
 using Montr.Automate.Services;
 using Montr.Core.Models;
 using Montr.Core.Services;
+using Montr.MasterData.Services;
 
 namespace Montr.Automate.Impl.Services
 {
 	public class DefaultAutomationRunner : IAutomationRunner
 	{
-		private readonly IRepository<Automation> _repository;
+		private readonly INamedServiceFactory<IClassifierRepository> _classifierRepositoryFactory;
 		private readonly IAutomationProviderRegistry _providerRegistry;
 
-		public DefaultAutomationRunner(IRepository<Automation> repository, IAutomationProviderRegistry providerRegistry)
+		public DefaultAutomationRunner(
+			INamedServiceFactory<IClassifierRepository> classifierRepositoryFactory,
+			IAutomationProviderRegistry providerRegistry)
 		{
-			_repository = repository;
+			_classifierRepositoryFactory = classifierRepositoryFactory;
 			_providerRegistry = providerRegistry;
 		}
 
 		public async Task<ApiResult> Run(AutomationContext context, CancellationToken cancellationToken)
 		{
-			var automations = await _repository.Search(new AutomationSearchRequest
+			var classifierRepository = _classifierRepositoryFactory.GetService(ClassifierTypeCode.Automation);
+
+			var automations = await classifierRepository.Search(new AutomationSearchRequest
 			{
 				EntityTypeCode = context.MetadataEntityTypeCode,
 				// EntityUid = context.MetadataEntityUid,
@@ -32,7 +38,7 @@ namespace Montr.Automate.Impl.Services
 
 			var affected = 0;
 
-			foreach (var automation in automations.Rows)
+			foreach (var automation in automations.Rows.Cast<Automation>())
 			{
 				if (await MeetAll(automation.Conditions, context, cancellationToken))
 				{

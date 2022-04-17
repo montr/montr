@@ -9,7 +9,7 @@ using Montr.Core.Services;
 namespace Montr.Idx.Plugin.Facebook
 {
 	[Module(DependsOn = new [] { typeof(Idx.Module) })]
-	public class Module : IModule, IWebApplicationBuilderConfigurator
+	public class Module : IModule, IAppBuilderConfigurator
 	{
 		private readonly ILogger<Module> _logger;
 
@@ -18,7 +18,7 @@ namespace Montr.Idx.Plugin.Facebook
 			_logger = logger;
 		}
 
-		public void Configure(WebApplicationBuilder appBuilder)
+		public void Configure(IAppBuilder appBuilder)
 		{
 			var facebookOptions = appBuilder.Configuration.GetOptions<FacebookOptions>();
 

@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Montr.Core.Services;
@@ -11,7 +10,7 @@ namespace Montr.Core.Impl.Services
 {
 	public static class ModularServiceExtensions
 	{
-		public static ICollection<IModule> AddModules(this IServiceCollection services, IConfiguration configuration, ILogger logger)
+		public static ICollection<IModule> AddModules(this IServiceCollection services, ILogger logger)
 		{
 			var loader = new ModuleLoader(logger);
 
@@ -26,7 +25,7 @@ namespace Montr.Core.Impl.Services
 			}
 
 			// temp service provider to create modules
-			IServiceProvider serviceProvider = services.BuildServiceProvider();
+			var serviceProvider = services.BuildServiceProvider();
 
 			var result = new List<IModule>();
 
@@ -41,9 +40,6 @@ namespace Montr.Core.Impl.Services
 				{
 					logger.LogInformation("Initializing {module}", module);
 				}
-
-				// todo: configure module services later (?)
-				// module.ConfigureServices(configuration, services);
 
 				result.Add(module);
 			}

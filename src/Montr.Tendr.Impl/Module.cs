@@ -7,9 +7,9 @@ using Montr.Tendr.Impl.Services;
 namespace Montr.Tendr.Impl
 {
 	// ReSharper disable once UnusedMember.Global
-	public class Module : IModule, IWebApplicationBuilderConfigurator
+	public class Module : IModule, IAppBuilderConfigurator
 	{
-		public void Configure(WebApplicationBuilder appBuilder)
+		public void Configure(IAppBuilder appBuilder)
 		{
 			appBuilder.Services.AddSingleton<IContentProvider, ContentProvider>();
 		}

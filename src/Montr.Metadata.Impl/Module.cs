@@ -11,9 +11,9 @@ using Montr.Metadata.Services;
 namespace Montr.Metadata.Impl
 {
 	// ReSharper disable once UnusedMember.Global
-	public class Module : IModule, IWebApplicationBuilderConfigurator, IWebApplicationConfigurator
+	public class Module : IModule, IAppBuilderConfigurator, IAppConfigurator
 	{
-		public void Configure(WebApplicationBuilder appBuilder)
+		public void Configure(IAppBuilder appBuilder)
 		{
 			appBuilder.Services.AddSingleton<IStartupTask, FieldMetadataJsonOptionsInitializer>();
 
@@ -28,7 +28,7 @@ namespace Montr.Metadata.Impl
 			appBuilder.Services.AddSingleton<IConfigureOptions<MvcNewtonsoftJsonOptions>, FieldMetadataJsonOptionsConfigurator>();
 		}
 
-		public void Configure(WebApplication app)
+		public void Configure(IApp app)
 		{
 			// todo: add phone, email, address, inn, bank info
 			app.ConfigureMetadata(options =>

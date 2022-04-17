@@ -10,9 +10,9 @@ using Montr.Messages.Services;
 namespace Montr.Messages
 {
 	// ReSharper disable once UnusedMember.Global
-	public class Module : IModule, IWebApplicationBuilderConfigurator, IStartupTask
+	public class Module : IModule, IAppBuilderConfigurator, IStartupTask
 	{
-		public void Configure(WebApplicationBuilder appBuilder)
+		public void Configure(IAppBuilder appBuilder)
 		{
 			appBuilder.Services.BindOptions<Options>(appBuilder.Configuration);
 

@@ -8,7 +8,7 @@ using Montr.Core.Services;
 namespace Montr.Idx.Plugin.Google
 {
 	[Module(DependsOn = new[] { typeof(Idx.Module) })]
-	public class Module : IModule, IWebApplicationBuilderConfigurator
+	public class Module : IModule, IAppBuilderConfigurator
 	{
 		private readonly ILogger<Module> _logger;
 
@@ -17,7 +17,7 @@ namespace Montr.Idx.Plugin.Google
 			_logger = logger;
 		}
 
-		public void Configure(WebApplicationBuilder appBuilder)
+		public void Configure(IAppBuilder appBuilder)
 		{
 			var googleOptions = appBuilder.Configuration.GetOptions<GoogleOptions>();
 

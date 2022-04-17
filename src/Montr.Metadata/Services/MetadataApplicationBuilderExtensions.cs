@@ -1,12 +1,13 @@
 ﻿using System;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.DependencyInjection;
+using Montr.Core;
 
 namespace Montr.Metadata.Services
 {
 	public static class MetadataApplicationBuilderExtensions
 	{
-		public static IApplicationBuilder ConfigureMetadata(this WebApplication app, Action<MetadataOptions> action)
+		public static IApp ConfigureMetadata(this IApp app, Action<MetadataOptions> action)
 		{
 			var options = new MetadataOptions
 			{

@@ -6,9 +6,9 @@ using Montr.Tasks.Services;
 
 namespace Montr.Tasks
 {
-	public class Module : IModule, IWebApplicationBuilderConfigurator
+	public class Module : IModule, IAppBuilderConfigurator
 	{
-		public void Configure(WebApplicationBuilder appBuilder)
+		public void Configure(IAppBuilder appBuilder)
 		{
 			appBuilder.Services.AddTransient<IStartupTask, RegisterClassifierTypeStartupTask>();
 			appBuilder.Services.AddTransient<IStartupTask, ConfigurationStartupTask>();

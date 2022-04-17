@@ -12,9 +12,9 @@ using Montr.Metadata.Services;
 namespace Montr.MasterData.Impl
 {
 	// ReSharper disable once UnusedType.Global
-	public class Module : IModule, IWebApplicationBuilderConfigurator, IWebApplicationConfigurator
+	public class Module : IModule, IAppBuilderConfigurator, IAppConfigurator
 	{
-		public void Configure(WebApplicationBuilder appBuilder)
+		public void Configure(IAppBuilder appBuilder)
 		{
 			appBuilder.Services.AddSingleton<IStartupTask, ClassifierJsonOptionsInitializer>();
 
@@ -47,7 +47,7 @@ namespace Montr.MasterData.Impl
 			appBuilder.Services.AddSingleton<IConfigureOptions<MvcNewtonsoftJsonOptions>, ClassifierJsonOptionsConfigurator>();
 		}
 
-		public void Configure(WebApplication app)
+		public void Configure(IApp app)
 		{
 			app.ConfigureMetadata(options =>
 			{

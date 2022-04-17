@@ -1,25 +1,39 @@
 ﻿using System.Globalization;
 using System.Linq;
+using System.Text.Json.Serialization;
 using System.Threading;
 using System.Threading.Tasks;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Localization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.Extensions.Primitives;
+using Montr.Core.Impl.Services;
 using Montr.Core.Services;
+using Newtonsoft.Json.Converters;
+using Newtonsoft.Json.Serialization;
 
 namespace Montr.Core
 {
 	// ReSharper disable once UnusedMember.Global
-	public class Module : IModule, IWebApplicationBuilderConfigurator, IWebApplicationConfigurator, IStartupTask
+	public class Module : IModule, IAppBuilderConfigurator, IAppConfigurator, IStartupTask
 	{
 		public static readonly bool UseSystemJson = false;
 
-		public void Configure(WebApplicationBuilder appBuilder)
+		public void Configure(IAppBuilder appBuilder)
 		{
+			appBuilder.Services.Configure<CookiePolicyOptions>(options =>
+			{
+				options.CheckConsentNeeded = _ => true;
+				options.MinimumSameSitePolicy = SameSiteMode.None;
+			});
+
 			appBuilder.Services.AddHttpContextAccessor();
 
 			appBuilder.Services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
@@ -34,6 +48,48 @@ namespace Montr.Core
 			});
 
 			appBuilder.Services.BindOptions<AppOptions>(appBuilder.Configuration);
+
+			// todo: move to idx?
+			var appOptions = appBuilder.Configuration.GetOptions<AppOptions>();
+
+			appBuilder.Services.AddCors(options =>
+			{
+				options.AddPolicy(AppConstants.CorsPolicyName, policy =>
+				{
+					policy
+						.WithOrigins(appOptions.ClientUrls)
+						.WithExposedHeaders("content-disposition") // to export work (fetcher.openFile)
+						.AllowCredentials()
+						.AllowAnyHeader()
+						.AllowAnyMethod();
+				});
+			});
+
+			var assemblies = appBuilder.Modules.Select(x => x.GetType().Assembly).ToArray();
+
+			var mvcBuilder = appBuilder.Services.AddMvc();
+
+			appBuilder.Services
+				.AddControllers(_ =>
+				{
+				})
+				.AddRazorPagesOptions(_ =>
+				{
+					// options.AllowAreas = true;
+					// options.Conventions.AuthorizeAreaFolder("Identity", "/Account/Manage");
+					// options.Conventions.AuthorizeAreaPage("Identity", "/Account/Logout");
+				});
+
+			AddJsonOptions(mvcBuilder);
+
+			foreach (var assembly in assemblies)
+			{
+				mvcBuilder.AddApplicationPart(assembly);
+			}
+
+			// Microsoft.IdentityModel.Logging.IdentityModelEventSource.ShowPII = true;
+
+			appBuilder.Services.AddMediatR(assemblies);
 
 			appBuilder.Services.Configure<RequestLocalizationOptions>(options =>
 			{
@@ -68,10 +124,68 @@ namespace Montr.Core
 			appBuilder.Services.AddTransient<ILocalizer, DefaultLocalizer>();
 		}
 
-		public void Configure(WebApplication app)
+		private static void AddJsonOptions(IMvcBuilder mvcBuilder)
 		{
+			if (UseSystemJson)
+			{
+				mvcBuilder.AddJsonOptions(options =>
+				{
+					options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
+					options.JsonSerializerOptions.WriteIndented = false;
+					options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+					// options.JsonSerializerOptions.Converters.Add(new PolymorphicWriteOnlyJsonConverter<FieldMetadata>()); // todo: restore
+					// options.JsonSerializerOptions.Converters.Add(new DataFieldJsonConverter());
+				});
+			}
+			else
+			{
+				mvcBuilder.AddNewtonsoftJson(options =>
+				{
+					// options.SerializerSettings.DefaultValueHandling = DefaultValueHandling.Ignore; // do not use - zeros in numbers ignored also
+					options.SerializerSettings.Converters.Add(new StringEnumConverter());
+					options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+				});
+			}
+		}
+
+		public void Configure(IApp app)
+		{
+			async void RunStartupTasks()
+			{
+				await app.ApplicationServices.RunStartupTasks(app.Logger);
+			}
+
+			app.Lifetime.ApplicationStarted.Register(RunStartupTasks);
+
+			app.UseWhen(context => context.Request.Path.StartsWithSegments("/api") == false, context =>
+			{
+				// context.SetIdentityServerOrigin(appOptions.AppUrl);
+				context.UseExceptionHandler("/Home/Error");
+			});
+
+			app.UseHsts();
+			app.UseHttpsRedirection();
+			app.UseStaticFiles();
+			app.UseCookiePolicy();
+
+			app.UseRouting();
+
 			app.UseRequestLocalization(
 				app.Services.GetRequiredService<IOptions<RequestLocalizationOptions>>().Value);
+
+			/*app.UseEndpoints(endpoints =>
+			{
+				endpoints.MapRazorPages();
+				endpoints.MapControllers();
+				endpoints.MapFallbackToController("Index", "Home");
+				// endpoints.MapFallbackToFile("Home/Index.cshtml");
+				// endpoints.MapHub<MyChatHub>()
+				// endpoints.MapGrpcService<MyCalculatorService>()
+				endpoints.MapDefaultControllerRoute();
+			});*/
+
+			ChangeToken.OnChange(() => app.Configuration.GetReloadToken(),
+				_ => app.Logger.LogInformation("Configuration changed."), app.Environment);
 		}
 
 		public Task Run(CancellationToken cancellationToken)

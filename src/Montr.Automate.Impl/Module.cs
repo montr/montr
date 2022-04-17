@@ -15,9 +15,9 @@ using Montr.Metadata.Services;
 namespace Montr.Automate.Impl
 {
 	// ReSharper disable once UnusedMember.Global
-	public class Module : IModule, IWebApplicationBuilderConfigurator, IWebApplicationConfigurator
+	public class Module : IModule, IAppBuilderConfigurator, IAppConfigurator
 	{
-		public void Configure(WebApplicationBuilder appBuilder)
+		public void Configure(IAppBuilder appBuilder)
 		{
 			appBuilder.Services.AddSingleton<IStartupTask, AutomationJsonOptionsInitializer>();
 
@@ -38,7 +38,7 @@ namespace Montr.Automate.Impl
 			appBuilder.Services.AddSingleton<IConfigureOptions<MvcNewtonsoftJsonOptions>, AutomationJsonOptionsConfigurator>();
 		}
 
-		public void Configure(WebApplication app)
+		public void Configure(IApp app)
 		{
 			app.ConfigureMetadata(options =>
 			{

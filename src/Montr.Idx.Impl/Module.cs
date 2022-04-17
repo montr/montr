@@ -17,9 +17,9 @@ using static OpenIddict.Abstractions.OpenIddictConstants;
 namespace Montr.Idx.Impl
 {
 	// ReSharper disable once UnusedMember.Global
-	public class Module : IModule, IWebApplicationBuilderConfigurator, IWebApplicationConfigurator
+	public class Module : IModule, IAppBuilderConfigurator, IAppConfigurator
 	{
-		public void Configure(WebApplicationBuilder appBuilder)
+		public void Configure(IAppBuilder appBuilder)
 		{
 			appBuilder.Services.AddTransient<IStartupTask, RegisterPermissionsStartupTask>();
 
@@ -176,7 +176,7 @@ namespace Montr.Idx.Impl
 			appBuilder.Services.AddHostedService<Worker>();
 		}
 
-		public void Configure(WebApplication app)
+		public void Configure(IApp app)
 		{
 			app.UseCors(AppConstants.CorsPolicyName);
 			app.UseAuthentication();
