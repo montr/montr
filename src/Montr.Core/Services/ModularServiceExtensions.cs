@@ -4,9 +4,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Montr.Core.Services;
 
-namespace Montr.Core.Impl.Services
+namespace Montr.Core.Services
 {
 	public static class ModularServiceExtensions
 	{
@@ -35,11 +34,6 @@ namespace Montr.Core.Impl.Services
 
 				// to prevent modules to be created twice
 				services.AddTransient(typeof(IModule), _ => module);
-
-				if (logger.IsEnabled(LogLevel.Information))
-				{
-					logger.LogInformation("Initializing {module}", module);
-				}
 
 				result.Add(module);
 			}

@@ -45,7 +45,15 @@ namespace Host
 
 			foreach (var module in modules)
 			{
-				(module as IAppBuilderConfigurator)?.Configure(appBuilderWrapper);
+				if (module is IAppBuilderConfigurator configurator)
+				{
+					if (logger.IsEnabled(LogLevel.Information))
+					{
+						logger.LogInformation("Configuring app builder for {module}", module);
+					}
+
+					configurator.Configure(appBuilderWrapper);
+				}
 			}
 
 			var app = appBuilder.Build();
@@ -54,7 +62,15 @@ namespace Host
 
 			foreach (var module in modules)
 			{
-				(module as IAppConfigurator)?.Configure(appWrapper);
+				if (module is IAppConfigurator configurator)
+				{
+					if (logger.IsEnabled(LogLevel.Information))
+					{
+						logger.LogInformation("Configuring app for {module}", module);
+					}
+
+					configurator.Configure(appWrapper);
+				}
 			}
 
 			app.UseEndpoints(endpoints =>

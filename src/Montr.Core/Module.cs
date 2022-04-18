@@ -14,7 +14,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Primitives;
-using Montr.Core.Impl.Services;
 using Montr.Core.Services;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;

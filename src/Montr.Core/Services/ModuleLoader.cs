@@ -5,9 +5,8 @@ using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using Microsoft.Extensions.Logging;
-using Montr.Core.Services;
 
-namespace Montr.Core.Impl.Services
+namespace Montr.Core.Services
 {
 	public class ModuleLoader
 	{
