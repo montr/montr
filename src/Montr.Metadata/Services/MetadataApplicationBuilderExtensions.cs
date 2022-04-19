@@ -22,6 +22,6 @@ namespace Montr.Metadata.Services
 
 	public class MetadataOptions
 	{
-		public IFieldProviderRegistry Registry { get; internal set; }
+		public IFieldProviderRegistry Registry { get; internal init; }
 	}
 }

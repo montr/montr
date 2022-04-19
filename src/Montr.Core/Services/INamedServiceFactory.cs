@@ -16,6 +16,28 @@ namespace Montr.Core.Services
 		TService GetNamedOrDefaultService(string name);
 	}
 
+	// ReSharper disable once UnusedTypeParameter - type parameter used to register and resolve service
+	public class NamedServiceTypeMapper<TService>
+	{
+		private readonly IDictionary<string, Type> _registrations =
+			new ConcurrentDictionary<string, Type>(StringComparer.OrdinalIgnoreCase);
+
+		public bool TryGetTypeByName(string name, out Type type)
+		{
+			return _registrations.TryGetValue(name, out type);
+		}
+
+		public void MapTypeToName(string name, Type type)
+		{
+			_registrations[name] = type;
+		}
+
+		public IEnumerable<string> GetNames()
+		{
+			return _registrations.Keys;
+		}
+	}
+
 	public class DefaultNamedServiceFactory<TService> : INamedServiceFactory<TService>
 	{
 		private readonly IServiceProvider _serviceProvider;
@@ -85,6 +107,8 @@ namespace Montr.Core.Services
 			{
 				var registrations = new ConcurrentDictionary<string, Type>(StringComparer.OrdinalIgnoreCase);
 
+				// Implementation for INamedServiceFactory<> itself registered as transient,
+				// so it can be used as scoped service too.
 				services.AddTransient<INamedServiceFactory<TService>>(serviceProvider =>
 				{
 					var factory = ActivatorUtilities.GetServiceOrCreateInstance<DefaultNamedServiceFactory<TService>>(serviceProvider);

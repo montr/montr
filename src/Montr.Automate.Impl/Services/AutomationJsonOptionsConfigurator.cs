@@ -17,7 +17,6 @@ namespace Montr.Automate.Impl.Services
 			_actionTypeProvider = actionTypeProvider;
 		}
 
-
 		public void Configure(MvcNewtonsoftJsonOptions options)
 		{
 			options.SerializerSettings.Converters.Add(new PolymorphicNewtonsoftJsonConverter<AutomationCondition>(x => x.Type, _conditionTypeProvider.Map));
