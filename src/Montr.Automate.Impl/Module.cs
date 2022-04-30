@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Montr.Automate.Impl.Models;
@@ -14,7 +12,7 @@ using Montr.Metadata.Services;
 
 namespace Montr.Automate.Impl
 {
-	// ReSharper disable once UnusedMember.Global
+	// ReSharper disable once UnusedType.Global
 	public class Module : IModule, IAppBuilderConfigurator, IAppConfigurator
 	{
 		public void Configure(IAppBuilder appBuilder)
@@ -26,12 +24,14 @@ namespace Montr.Automate.Impl
 			appBuilder.Services.AddTransient<IAutomationRunner, DefaultAutomationRunner>();
 			appBuilder.Services.AddTransient<IRecipientResolver, DefaultRecipientResolver>();
 
-			appBuilder.Services.AddNamedTransient<IClassifierRepository, DbAutomationRepository>(ClassifierTypeCode.Automation);
+			appBuilder.Services
+				.AddNamedTransient<IClassifierRepository, DbAutomationRepository>(ClassifierTypeCode.Automation);
 
-			appBuilder.Services.AddNamedTransient<IAutomationConditionProvider, GroupAutomationConditionProvider>(GroupAutomationCondition.TypeCode);
-			appBuilder.Services.AddNamedTransient<IAutomationConditionProvider, FieldAutomationConditionProvider>(FieldAutomationCondition.TypeCode);
-			appBuilder.Services.AddNamedTransient<IAutomationActionProvider, SetFieldAutomationActionProvider>(SetFieldAutomationAction.TypeCode);
-			appBuilder.Services.AddNamedTransient<IAutomationActionProvider, NotifyByEmailAutomationActionProvider>(NotifyByEmailAutomationAction.TypeCode);
+			appBuilder.Services
+				.AddNamedTransient<IAutomationConditionProvider, GroupAutomationConditionProvider>(GroupAutomationCondition.TypeCode)
+				.AddNamedTransient<IAutomationConditionProvider, FieldAutomationConditionProvider>(FieldAutomationCondition.TypeCode)
+				.AddNamedTransient<IAutomationActionProvider, SetFieldAutomationActionProvider>(SetFieldAutomationAction.TypeCode)
+				.AddNamedTransient<IAutomationActionProvider, NotifyByEmailAutomationActionProvider>(NotifyByEmailAutomationAction.TypeCode);
 
 			appBuilder.Services.AddSingleton<JsonTypeProvider<AutomationCondition>>();
 			appBuilder.Services.AddSingleton<JsonTypeProvider<AutomationAction>>();

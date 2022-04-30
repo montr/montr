@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Montr.Automate.Services;
 using Montr.Core;
 using Montr.Core.Services;
@@ -10,7 +9,7 @@ using Montr.MasterData.Services;
 
 namespace Montr.Docs.Impl
 {
-	// ReSharper disable once UnusedMember.Global
+	// ReSharper disable once UnusedType.Global
 	public class Module : IModule, IAppBuilderConfigurator
 	{
 		public void Configure(IAppBuilder appBuilder)
@@ -19,7 +18,8 @@ namespace Montr.Docs.Impl
 
 			appBuilder.Services.AddSingleton<IProcessService, DefaultProcessService>();
 
-			appBuilder.Services.AddNamedTransient<IClassifierRepository, DbDocumentTypeRepository>(ClassifierTypeCode.DocumentType);
+			appBuilder.Services
+				.AddNamedTransient<IClassifierRepository, DbDocumentTypeRepository>(ClassifierTypeCode.DocumentType);
 
 			appBuilder.Services.AddSingleton<IRepository<Document>, DbDocumentRepository>();
 			appBuilder.Services.AddSingleton<IDocumentService, DbDocumentService>();

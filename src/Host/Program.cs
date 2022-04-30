@@ -17,6 +17,7 @@ namespace Host
 	{
 		public static async Task Main(string[] args)
 		{
+			// todo: run migration with incremental timeouts if db is not started
 			await Migrate(args);
 
 			var options = new WebApplicationOptions
@@ -45,6 +46,7 @@ namespace Host
 
 			foreach (var module in modules)
 			{
+				// todo: merge with IModule
 				if (module is IAppBuilderConfigurator configurator)
 				{
 					if (logger.IsEnabled(LogLevel.Information))
@@ -57,6 +59,8 @@ namespace Host
 			}
 
 			var app = appBuilder.Build();
+
+			app.Services.UseNamedServices();
 
 			var appWrapper = new WebApplicationWrapper(app);
 
@@ -73,6 +77,7 @@ namespace Host
 				}
 			}
 
+			// todo: run on event "app configured"
 			app.UseEndpoints(endpoints =>
 			{
 				endpoints.MapRazorPages();
@@ -116,8 +121,6 @@ namespace Host
 					await migrator.Run(CancellationToken.None);
 				}
 			}
-
-			NamedServiceCollectionExtensions.ClearRegistrations();
 		}
 	}
 }

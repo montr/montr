@@ -2,6 +2,7 @@
 using System.Collections.Concurrent;
 using System.Collections.Generic;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace Montr.Core.Services
 {
@@ -22,14 +23,14 @@ namespace Montr.Core.Services
 		private readonly IDictionary<string, Type> _registrations =
 			new ConcurrentDictionary<string, Type>(StringComparer.OrdinalIgnoreCase);
 
-		public bool TryGetTypeByName(string name, out Type type)
-		{
-			return _registrations.TryGetValue(name, out type);
-		}
-
 		public void MapTypeToName(string name, Type type)
 		{
 			_registrations[name] = type;
+		}
+
+		public bool TryGetTypeByName(string name, out Type type)
+		{
+			return _registrations.TryGetValue(name, out type);
 		}
 
 		public IEnumerable<string> GetNames()
@@ -38,25 +39,49 @@ namespace Montr.Core.Services
 		}
 	}
 
+	public interface IConfigureNamedServiceTypeMapper
+	{
+		public void Configure();
+	}
+
+	public class ConfigureNamedServiceTypeMapper<TService> : IConfigureNamedServiceTypeMapper
+	{
+		private readonly NamedServiceTypeMapper<TService> _mapper;
+		private readonly string _name;
+		private readonly Type _implementation;
+
+		public ConfigureNamedServiceTypeMapper(NamedServiceTypeMapper<TService> mapper, string name, Type implementation)
+		{
+			_mapper = mapper;
+			_name = name;
+			_implementation = implementation;
+		}
+
+		public void Configure()
+		{
+			_mapper.MapTypeToName(_name, _implementation);
+		}
+	}
+
 	public class DefaultNamedServiceFactory<TService> : INamedServiceFactory<TService>
 	{
+		private readonly NamedServiceTypeMapper<TService> _serviceTypeMapper;
 		private readonly IServiceProvider _serviceProvider;
 
-		public IDictionary<string, Type> Registrations { get; set; }
-
-		public DefaultNamedServiceFactory(IServiceProvider serviceProvider)
+		public DefaultNamedServiceFactory(NamedServiceTypeMapper<TService> serviceTypeMapper, IServiceProvider serviceProvider)
 		{
+			_serviceTypeMapper = serviceTypeMapper;
 			_serviceProvider = serviceProvider;
 		}
 
 		public IEnumerable<string> GetNames()
 		{
-			return Registrations.Keys;
+			return _serviceTypeMapper.GetNames();
 		}
 
 		public TService GetService(string name)
 		{
-			if (Registrations.TryGetValue(name, out var serviceType))
+			if (_serviceTypeMapper.TryGetTypeByName(name, out var serviceType))
 			{
 				return (TService)_serviceProvider.GetRequiredService(serviceType);
 			}
@@ -95,42 +120,34 @@ namespace Montr.Core.Services
 	/// </summary>
 	public static class NamedServiceCollectionExtensions
 	{
-		private static readonly ConcurrentDictionary<Type, IDictionary<string, Type>> FactoryRegistrations = new();
-
 		public static IServiceCollection AddNamedTransient<TService, TImplementation>(this IServiceCollection services, string name)
 			where TService : class
 			where TImplementation : class, TService
 		{
-			var factoryType = typeof(INamedServiceFactory<>).MakeGenericType(typeof(TService));
+			// try add (if not already) single instance that holds name to implementation type mapping
+			services.TryAddSingleton<NamedServiceTypeMapper<TService>>();
 
-			var factoryRegistrations = FactoryRegistrations.GetOrAdd(factoryType, _ =>
-			{
-				var registrations = new ConcurrentDictionary<string, Type>(StringComparer.OrdinalIgnoreCase);
+			// try add (if not already) named factory for given service
+			services.TryAddTransient<INamedServiceFactory<TService>, DefaultNamedServiceFactory<TService>>();
 
-				// Implementation for INamedServiceFactory<> itself registered as transient,
-				// so it can be used as scoped service too.
-				services.AddTransient<INamedServiceFactory<TService>>(serviceProvider =>
-				{
-					var factory = ActivatorUtilities.GetServiceOrCreateInstance<DefaultNamedServiceFactory<TService>>(serviceProvider);
+			// for each registered implementation register its mapping
+			services.AddTransient<IConfigureNamedServiceTypeMapper>(serviceProvider => ActivatorUtilities
+				.CreateInstance<ConfigureNamedServiceTypeMapper<TService>>(serviceProvider, name, typeof(TImplementation)));
 
-					factory.Registrations = registrations;
-
-					return factory;
-				});
-
-				return registrations;
-			});
-
-			factoryRegistrations.Add(name, typeof(TImplementation));
-
+			// add implementation
 			services.AddTransient<TImplementation>();
 
 			return services;
 		}
 
-		public static void ClearRegistrations()
+		public static void UseNamedServices(this IServiceProvider serviceProvider)
 		{
-			FactoryRegistrations.Clear();
+			var configurators = serviceProvider.GetServices<IConfigureNamedServiceTypeMapper>();
+
+			foreach (var configurator in configurators)
+			{
+				configurator.Configure();
+			}
 		}
 	}
 }
