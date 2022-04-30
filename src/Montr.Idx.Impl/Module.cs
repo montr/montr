@@ -16,8 +16,8 @@ using static OpenIddict.Abstractions.OpenIddictConstants;
 
 namespace Montr.Idx.Impl
 {
-	// ReSharper disable once UnusedMember.Global
-	public class Module : IModule, IAppBuilderConfigurator, IAppConfigurator
+	// ReSharper disable once UnusedType.Global
+	public class Module : IModule, IAppConfigurator
 	{
 		public void Configure(IAppBuilder appBuilder)
 		{

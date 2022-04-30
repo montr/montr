@@ -16,7 +16,8 @@ using Montr.Worker.Services;
 namespace Montr.Worker.Hangfire
 {
 	[Module( DependsOn = new [] { typeof(Idx.Module) })]
-	public class Module : IModule, IAppBuilderConfigurator, IAppConfigurator
+	// ReSharper disable once UnusedType.Global
+	public class Module : IModule, IAppConfigurator
 	{
 		public void Configure(IAppBuilder appBuilder)
 		{

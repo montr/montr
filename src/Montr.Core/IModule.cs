@@ -13,10 +13,6 @@ namespace Montr.Core
 {
 	public interface IModule
 	{
-	}
-
-	public interface IAppBuilderConfigurator
-	{
 		void Configure(IAppBuilder appBuilder);
 	}
 

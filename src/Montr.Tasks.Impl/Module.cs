@@ -10,7 +10,7 @@ using Montr.Tasks.Services;
 
 namespace Montr.Tasks.Impl
 {
-	public class Module : IModule, IAppBuilderConfigurator
+	public class Module : IModule
 	{
 		public void Configure(IAppBuilder appBuilder)
 		{

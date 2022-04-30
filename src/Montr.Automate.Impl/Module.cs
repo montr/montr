@@ -13,7 +13,7 @@ using Montr.Metadata.Services;
 namespace Montr.Automate.Impl
 {
 	// ReSharper disable once UnusedType.Global
-	public class Module : IModule, IAppBuilderConfigurator, IAppConfigurator
+	public class Module : IModule, IAppConfigurator
 	{
 		public void Configure(IAppBuilder appBuilder)
 		{

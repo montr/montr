@@ -41,27 +41,13 @@ namespace Montr.Core.Services
 			return result.AsReadOnly();
 		}
 
-		public static async Task RunStartupTasks(this IServiceProvider services, ILogger logger, CancellationToken cancellationToken = default)
+		public static async Task RunStartupTasks(this IApp app, CancellationToken cancellationToken = default)
 		{
-			using (var scope = services.CreateScope())
+			using (var scope = app.ApplicationServices.CreateScope())
 			{
-				// todo: IStartupTask of modules should be run right after modules -
-				// - so either modules or startup tasks should left, remove other
-				foreach (var module in scope.ServiceProvider.GetServices<IModule>())
-				{
-					if (module is IStartupTask startupTask)
-					{
-						logger.LogInformation("Running startup module {module}", module);
-
-						await startupTask.Run(cancellationToken);
-					}
-				}
-
-				// todo: run startup tasks from modules or sort IStartupTask's by module initialization order
-				// fixme: startup tasks already ordered, because they are registered in ordered modules
 				foreach (var task in scope.ServiceProvider.GetServices<IStartupTask>())
 				{
-					logger.LogInformation("Running startup task {task}", task);
+					app.Logger.LogInformation("Running startup task {task}", task);
 
 					await task.Run(cancellationToken);
 				}

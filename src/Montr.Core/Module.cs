@@ -1,7 +1,6 @@
 ﻿using System.Globalization;
 using System.Linq;
 using System.Text.Json.Serialization;
-using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Builder;
@@ -20,8 +19,8 @@ using Newtonsoft.Json.Serialization;
 
 namespace Montr.Core
 {
-	// ReSharper disable once UnusedMember.Global
-	public class Module : IModule, IAppBuilderConfigurator, IAppConfigurator, IStartupTask
+	// ReSharper disable once UnusedType.Global
+	public class Module : IModule, IAppConfigurator
 	{
 		public static readonly bool UseSystemJson = false;
 
@@ -151,7 +150,7 @@ namespace Montr.Core
 		{
 			async void RunStartupTasks()
 			{
-				await app.ApplicationServices.RunStartupTasks(app.Logger);
+				await app.RunStartupTasks();
 			}
 
 			app.Lifetime.ApplicationStarted.Register(RunStartupTasks);
@@ -185,11 +184,6 @@ namespace Montr.Core
 
 			ChangeToken.OnChange(() => app.Configuration.GetReloadToken(),
 				_ => app.Logger.LogInformation("Configuration changed."), app.Environment);
-		}
-
-		public Task Run(CancellationToken cancellationToken)
-		{
-			return Task.CompletedTask;
 		}
 	}
 }

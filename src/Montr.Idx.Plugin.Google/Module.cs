@@ -8,7 +8,8 @@ using Montr.Core.Services;
 namespace Montr.Idx.Plugin.Google
 {
 	[Module(DependsOn = new[] { typeof(Idx.Module) })]
-	public class Module : IModule, IAppBuilderConfigurator
+	// ReSharper disable once UnusedType.Global
+	public class Module : IModule
 	{
 		private readonly ILogger<Module> _logger;
 

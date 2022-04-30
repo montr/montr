@@ -1,11 +1,10 @@
-﻿using Microsoft.AspNetCore.Builder;
-using Montr.Core;
+﻿using Montr.Core;
 using Npgsql.Logging;
 
 namespace Montr.Data.Npgsql
 {
-	// ReSharper disable once UnusedMember.Global
-	public class Module : IModule, IAppBuilderConfigurator
+	// ReSharper disable once UnusedType.Global
+	public class Module : IModule
 	{
 		public void Configure(IAppBuilder appBuilder)
 		{

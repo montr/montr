@@ -6,7 +6,8 @@ using Montr.Tasks.Services;
 
 namespace Montr.Tasks
 {
-	public class Module : IModule, IAppBuilderConfigurator
+	// ReSharper disable once UnusedType.Global
+	public class Module : IModule
 	{
 		public void Configure(IAppBuilder appBuilder)
 		{

@@ -40,22 +40,19 @@ namespace Host
 
 			// todo: create in modules builder
 			var logger = LoggerFactory.Create(builder => { }).CreateLogger<Program>();
+
 			var modules = appBuilder.Services.AddModules(logger);
 
 			var appBuilderWrapper = new WebApplicationBuilderWrapper(appBuilder, modules);
 
 			foreach (var module in modules)
 			{
-				// todo: merge with IModule
-				if (module is IAppBuilderConfigurator configurator)
+				if (logger.IsEnabled(LogLevel.Information))
 				{
-					if (logger.IsEnabled(LogLevel.Information))
-					{
-						logger.LogInformation("Configuring app builder for {module}", module);
-					}
-
-					configurator.Configure(appBuilderWrapper);
+					logger.LogInformation("Configuring app builder for {module}", module);
 				}
+
+				module.Configure(appBuilderWrapper);
 			}
 
 			var app = appBuilder.Build();

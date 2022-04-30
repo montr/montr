@@ -10,7 +10,7 @@ using Montr.MasterData.Services;
 namespace Montr.Docs.Impl
 {
 	// ReSharper disable once UnusedType.Global
-	public class Module : IModule, IAppBuilderConfigurator
+	public class Module : IModule
 	{
 		public void Configure(IAppBuilder appBuilder)
 		{
