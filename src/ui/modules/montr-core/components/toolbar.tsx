@@ -7,6 +7,7 @@ interface Props {
 	size?: (typeof Sizes)[number];
 	float?: (typeof Floats)[number];
 	clear?: boolean;
+	children: React.ReactNode;
 }
 
 export class Toolbar extends React.Component<Props> {

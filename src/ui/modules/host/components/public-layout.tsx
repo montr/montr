@@ -1,9 +1,13 @@
-import * as React from "react";
-import { Layout, Breadcrumb } from "antd";
 import { DataMenu, ErrorBoundary, Footer } from "@montr-core/components";
 import { UserWithCompanyMenu } from "@montr-kompany/components/.";
+import { Breadcrumb, Layout } from "antd";
+import * as React from "react";
 
-export class PublicLayout extends React.Component {
+interface Props {
+	children: React.ReactNode;
+}
+
+export class PublicLayout extends React.Component<Props> {
 	render = () => {
 		return (
 			<Layout className="public-layout">

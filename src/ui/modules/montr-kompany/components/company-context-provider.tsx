@@ -1,19 +1,23 @@
+import { Constants } from "@montr-core/.";
+import { Guid } from "@montr-core/models";
+import { AuthService, NavigationService, NotificationService } from "@montr-core/services";
+import { User } from "oidc-client";
 import * as React from "react";
 import Cookies from "universal-cookie";
 import { Company } from "../models";
-import { UserCompanyService, } from "../services";
-import { CompanyContextProps, CompanyContext } from "./";
-import { Constants } from "@montr-core/.";
-import { Guid } from "@montr-core/models";
-import { NavigationService, NotificationService, AuthService } from "@montr-core/services";
-import { User } from "oidc-client";
+import { UserCompanyService } from "../services";
+import { CompanyContext, CompanyContextProps } from "./";
+
+interface Props {
+	children: React.ReactNode;
+}
 
 interface State {
 	currentCompany?: Company;
 	companyList: Company[];
 }
 
-export class CompanyContextProvider extends React.Component<unknown, State> {
+export class CompanyContextProvider extends React.Component<Props, State> {
 
 	private readonly cookies = new Cookies();
 	private readonly navigation = new NavigationService();
@@ -21,7 +25,7 @@ export class CompanyContextProvider extends React.Component<unknown, State> {
 	private readonly authService = new AuthService();
 	private readonly userCompanyService = new UserCompanyService();
 
-	constructor(props: unknown) {
+	constructor(props: Props) {
 		super(props);
 
 		this.state = {

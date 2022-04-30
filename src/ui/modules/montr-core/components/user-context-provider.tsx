@@ -3,15 +3,19 @@ import * as React from "react";
 import { UserContext, UserContextProps } from ".";
 import { AuthService } from "../services";
 
-interface UserContextState {
+interface Props {
+	children: React.ReactNode;
+}
+
+interface State {
 	user?: User;
 }
 
-export class UserContextProvider extends React.Component<unknown, UserContextState> {
+export class UserContextProvider extends React.Component<Props, State> {
 
 	private readonly authService = new AuthService();
 
-	constructor(props: unknown) {
+	constructor(props: Props) {
 		super(props);
 
 		this.state = {

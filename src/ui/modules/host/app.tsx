@@ -7,7 +7,7 @@ import { Locale } from "antd/lib/locale-provider";
 import en_US from "antd/lib/locale-provider/en_US";
 import ru_RU from "antd/lib/locale-provider/ru_RU";
 import * as React from "react";
-import * as ReactDOM from "react-dom";
+import { createRoot } from "react-dom/client";
 import { Translation } from "react-i18next";
 import * as Layouts from "./components";
 import "./modules";
@@ -50,4 +50,10 @@ class App extends React.Component {
 	};
 }
 
-ReactDOM.render(<App />, document.getElementById("root"));
+createRoot(
+	document.getElementById("root")
+).render(
+	<React.StrictMode>
+		<App />
+	</React.StrictMode>
+);

@@ -103,7 +103,7 @@ export default class PageViewDocument extends React.Component<Props, State> {
 				<PageHeader
 					onBack={() => window.history.back()}
 					title={pageTitle}
-					subTitle={document.uid}
+					subTitle={<>document.uid</>}
 					tags={<StatusTag statusCode={document.statusCode} />}
 					breadcrumb={<DocumentBreadcrumb />}
 					extra={<DataToolbar buttons={dataView.toolbar} buttonProps={buttonProps} />}>

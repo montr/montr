@@ -4,11 +4,13 @@ import React from "react";
 export interface AutomationContextProps {
 	entityTypeCode: string;
 	entityUid: Guid | string;
+	children: React.ReactNode;
 }
 
 const defaultState: AutomationContextProps = {
 	entityTypeCode: undefined,
-	entityUid: undefined
+	entityUid: undefined,
+	children: undefined
 };
 
 export const AutomationContext = React.createContext<AutomationContextProps>(defaultState);

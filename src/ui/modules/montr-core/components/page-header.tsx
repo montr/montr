@@ -1,6 +1,10 @@
 import * as React from "react";
 
-export class PageHeader extends React.Component {
+interface Props {
+	children: React.ReactNode;
+}
+
+export class PageHeader extends React.Component<Props> {
 	public render(): React.ReactNode {
 		return (
 			<h2>{this.props.children}</h2>

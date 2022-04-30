@@ -3,6 +3,7 @@ import { PageHeader } from ".";
 
 interface Props {
 	title?: string | React.ReactNode;
+	children: React.ReactNode;
 }
 
 export class Page extends React.Component<Props> {

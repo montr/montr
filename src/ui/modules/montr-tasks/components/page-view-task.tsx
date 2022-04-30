@@ -148,7 +148,7 @@ class PageViewTask extends React.Component<Props, State> {
 				<PageHeader
 					onBack={() => window.history.back()}
 					title={task.name}
-					subTitle={task.uid}
+					subTitle={<>task.uid</>}
 					tags={<StatusTag statusCode={task.statusCode} />}
 					// breadcrumb={<TaskBreadcrumb />}
 					extra={<DataToolbar buttons={dataView?.toolbar} buttonProps={buttonProps} />}

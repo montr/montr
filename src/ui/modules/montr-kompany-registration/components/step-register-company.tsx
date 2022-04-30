@@ -12,137 +12,137 @@ interface Props extends UserContextProps, CompanyContextProps {
 }
 
 interface State {
-    loading: boolean;
-    documents: IDocument[];
-    redirectTo?: string;
+	loading: boolean;
+	documents: IDocument[];
+	redirectTo?: string;
 }
 
 class _StepRegisterCompany extends React.Component<Props, State> {
 
-    private readonly operation = new OperationService();
-    private readonly companyRegistrationRequestService = new CompanyRegistrationRequestService();
+	private readonly operation = new OperationService();
+	private readonly companyRegistrationRequestService = new CompanyRegistrationRequestService();
 
-    constructor(props: Props) {
-        super(props);
+	constructor(props: Props) {
+		super(props);
 
-        this.state = {
-            loading: true,
-            documents: []
-        };
-    }
+		this.state = {
+			loading: true,
+			documents: []
+		};
+	}
 
-    componentDidMount = async (): Promise<void> => {
-        await this.fetchData();
-    };
+	componentDidMount = async (): Promise<void> => {
+		await this.fetchData();
+	};
 
-    componentWillUnmount = async (): Promise<void> => {
-        await this.companyRegistrationRequestService.abort();
-    };
+	componentWillUnmount = async (): Promise<void> => {
+		await this.companyRegistrationRequestService.abort();
+	};
 
-    fetchData = async (): Promise<void> => {
+	fetchData = async (): Promise<void> => {
 
-        const documents = await this.companyRegistrationRequestService.search();
+		const documents = await this.companyRegistrationRequestService.search();
 
-        this.setState({ loading: false, documents });
-    };
+		this.setState({ loading: false, documents });
+	};
 
-    createRequest = async () => {
-        const result = await this.operation.execute(() => {
-            return this.companyRegistrationRequestService.create();
-        });
+	createRequest = async () => {
+		const result = await this.operation.execute(() => {
+			return this.companyRegistrationRequestService.create();
+		});
 
-        if (result.success) {
-            this.openRequest({ uid: result.uid });
-        }
-    };
+		if (result.success) {
+			this.openRequest({ uid: result.uid });
+		}
+	};
 
-    openRequest = async (item: IDocument) => {
-        this.setState({ redirectTo: RouteBuilder.viewDocument(item.uid) });
-    };
+	openRequest = async (item: IDocument) => {
+		this.setState({ redirectTo: RouteBuilder.viewDocument(item.uid) });
+	};
 
-    deleteRequest = async (item: IDocument) => {
-        await this.operation.confirmDelete(async () => {
-            const result = await this.companyRegistrationRequestService.delete(item.uid);
+	deleteRequest = async (item: IDocument) => {
+		await this.operation.confirmDelete(async () => {
+			const result = await this.companyRegistrationRequestService.delete(item.uid);
 
-            if (result.success) {
-                this.setState({ loading: true });
+			if (result.success) {
+				this.setState({ loading: true });
 
-                await this.fetchData();
-            }
+				await this.fetchData();
+			}
 
-            return result;
-        });
-    };
+			return result;
+		});
+	};
 
-    render = (): React.ReactNode => {
-        const { user, currentCompany: company, registerCompany } = this.props,
-            { redirectTo, loading, documents } = this.state;
+	render = (): React.ReactNode => {
+		const { user, currentCompany: company, registerCompany } = this.props,
+			{ redirectTo, loading, documents } = this.state;
 
-        if (redirectTo) {
-            return <Redirect to={redirectTo} push={true} />;
-        }
+		if (redirectTo) {
+			return <Redirect to={redirectTo} push={true} />;
+		}
 
-        return (
-            <Spin spinning={loading}>
+		return (
+			<Spin spinning={loading}>
 
-                <List
-                    size="small"
-                    dataSource={documents}
-                    renderItem={item => {
+				<List
+					size="small"
+					dataSource={documents}
+					renderItem={item => {
 
-                        const actions = [];
+						const actions = [];
 
-                        if (item.statusCode == "draft") {
-                            actions.push(<ButtonDelete type="link" onClick={() => this.deleteRequest(item)} />);
-                            actions.push(<Button onClick={() => this.openRequest(item)}>Edit</Button>);
-                        } else {
-                            actions.push(<Button onClick={() => this.openRequest(item)}>View</Button>);
-                        }
+						if (item.statusCode == "draft") {
+							actions.push(<ButtonDelete type="link" onClick={() => this.deleteRequest(item)} />);
+							actions.push(<Button onClick={() => this.openRequest(item)}>Edit</Button>);
+						} else {
+							actions.push(<Button onClick={() => this.openRequest(item)}>View</Button>);
+						}
 
-                        return (
-                            <List.Item actions={actions}>
-                                <List.Item.Meta
-                                    description={
-                                        <Space>
-                                            Number: <Typography.Text>{item.documentNumber || "n/a"}</Typography.Text>
-                                            Date: <Typography.Text>{item.documentDate}</Typography.Text>
+						return (
+							<List.Item actions={actions}>
+								<List.Item.Meta
+									description={
+										<Space>
+											Number: <Typography.Text>{item.documentNumber || "n/a"}</Typography.Text>
+											Date: <Typography.Text>{<>item.documentDate</>}</Typography.Text>
 
-                                            <StatusTag statusCode={item.statusCode} />
-                                        </Space>}
-                                />
-                            </List.Item>
-                        );
-                    }}
-                />
+											<StatusTag statusCode={item.statusCode} />
+										</Space>}
+								/>
+							</List.Item>
+						);
+					}}
+				/>
 
-                <ButtonCreate onClick={this.createRequest}>Create company registration request</ButtonCreate>
+				<ButtonCreate onClick={this.createRequest}>Create company registration request</ButtonCreate>
 
-            </Spin>
-        );
+			</Spin>
+		);
 
-        if (user) {
+		if (user) {
 
-            if (company) {
-                return (
-                    <p>
-                        Организация <strong>{company.name}</strong> зарегистрирована.<br />
-                    </p>
-                );
-            }
+			if (company) {
+				return (
+					<p>
+						Организация <strong>{company.name}</strong> зарегистрирована.<br />
+					</p>
+				);
+			}
 
-            return (
-                <p>
-                    Зарегистрируйте организацию пройдя по <a onClick={registerCompany}>ссылке</a>.
-                </p>
-            );
-        }
+			return (
+				<p>
+					Зарегистрируйте организацию пройдя по <a onClick={registerCompany}>ссылке</a>.
+				</p>
+			);
+		}
 
-        return (
-            <p>
-                После регистрации пользователя будет доступна регистрация организации.
-            </p>
-        );
-    };
+		return (
+			<p>
+				После регистрации пользователя будет доступна регистрация организации.
+			</p>
+		);
+	};
 }
 
 export const StepRegisterCompany = withCompanyContext(withUserContext(_StepRegisterCompany));

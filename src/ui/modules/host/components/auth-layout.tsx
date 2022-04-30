@@ -1,8 +1,12 @@
-import * as React from "react";
-import { Layout } from "antd";
 import { ErrorBoundary, Footer, Logo } from "@montr-core/components";
+import { Layout } from "antd";
+import * as React from "react";
 
-export class AuthLayout extends React.Component {
+interface Props {
+	children: React.ReactNode;
+}
+
+export class AuthLayout extends React.Component<Props> {
 	render = () => {
 		return (
 			<Layout className="public-layout auth-layout">
