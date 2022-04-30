@@ -31,7 +31,7 @@ namespace Host
 			var appBuilder = WebApplication.CreateBuilder(options);
 
 			appBuilder.Host
-				.UseLogging()
+				.UseSerilog()
 				.UseDefaultConfiguration(args);
 
 			appBuilder.WebHost
@@ -39,7 +39,7 @@ namespace Host
 				.UseSentry();
 
 			// todo: create in modules builder
-			var logger = LoggerFactory.Create(builder => { }).CreateLogger<Program>();
+			var logger = appBuilder.CreateBootstrapLogger();
 
 			var modules = appBuilder.Services.AddModules(logger);
 
@@ -49,7 +49,7 @@ namespace Host
 			{
 				if (logger.IsEnabled(LogLevel.Information))
 				{
-					logger.LogInformation("Configuring app builder for {module}", module);
+					logger.LogInformation("Configuring {module}", module);
 				}
 
 				module.Configure(appBuilderWrapper);
@@ -94,7 +94,7 @@ namespace Host
 		{
 			var hostBuilder = Microsoft.Extensions.Hosting.Host
 				.CreateDefaultBuilder()
-				.UseLogging()
+				.UseSerilog()
 				.UseDefaultConfiguration(args)
 				.ConfigureServices((context, services) =>
 				{

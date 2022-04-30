@@ -1,28 +1,33 @@
-﻿using Microsoft.Extensions.Hosting;
+﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Serilog;
+using Serilog.Extensions.Logging;
 
 namespace Host.Services
 {
 	public static class LoggingHostBuilderExtensions
 	{
-		public static IHostBuilder UseLogging(this IHostBuilder builder)
+		public static IHostBuilder UseSerilog(this IHostBuilder builder)
 		{
-			return builder.UseSerilog((context, configuration) =>
-			{
-				configuration
-					/*
-					.MinimumLevel.Debug()
-					.MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
-					.MinimumLevel.Override("System", LogEventLevel.Warning)
-					.MinimumLevel.Override("Microsoft.AspNetCore.Authentication", LogEventLevel.Information)
-					.MinimumLevel.Override("Hangfire.Processing.BackgroundExecution", LogEventLevel.Information)
-					.MinimumLevel.Override("Hangfire.Server.ServerHeartbeatProcess", LogEventLevel.Information)
-					.MinimumLevel.Override("Sentry.ISentryClient", LogEventLevel.Information)
-					*/
-					.Enrich.FromLogContext()
-					.WriteTo.File($"../../../.logs/montr-{context.HostingEnvironment.EnvironmentName}.log")
-					.WriteTo.Console(outputTemplate: "{Timestamp:o} [{Level:w4}] {SourceContext} - {Message:lj}{NewLine}{Exception}");
-			});
+			return builder.UseSerilog((context, _, configuration) =>
+				ConfigureLogger(context.Configuration, configuration));
+		}
+
+		public static Microsoft.Extensions.Logging.ILogger CreateBootstrapLogger(this WebApplicationBuilder builder)
+		{
+			var logger = ConfigureLogger(builder.Configuration, new LoggerConfiguration())
+				.CreateBootstrapLogger();
+
+			var loggerFactory = new SerilogLoggerFactory(logger);
+
+			return loggerFactory.CreateLogger<Program>();
+		}
+
+		private static LoggerConfiguration ConfigureLogger(IConfiguration configuration, LoggerConfiguration logger)
+		{
+			return logger.ReadFrom.Configuration(configuration);
 		}
 	}
 }
