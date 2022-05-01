@@ -181,7 +181,7 @@ export class DataTable<TModel extends IIndexer> extends React.Component<Props<TM
 			const template =
 				DataTableTemplateRegistry.getTemplate(item.template)
 				?? DataTableTemplateRegistry.getTemplate(`type:${item.type}`)
-				?? ((text: unknown): React.ReactNode => <>text</>);
+				?? ((text: unknown): React.ReactNode => <>{text}</>);
 
 			const render = (value: unknown, record: TModel, index: number): React.ReactNode => {
 				const node = template(value, record, index);

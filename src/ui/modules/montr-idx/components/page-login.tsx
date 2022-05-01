@@ -1,14 +1,14 @@
-import * as React from "react";
-import { Link } from "react-router-dom";
-import { Spin, Divider } from "antd";
-import { useTranslation } from "react-i18next";
-import { useLocalStorage, Page, DataForm } from "@montr-core/components";
-import { IDataField, ApiResult } from "@montr-core/models";
+import { DataForm, Page, useLocalStorage } from "@montr-core/components";
+import { ApiResult, IDataField } from "@montr-core/models";
 import { MetadataService, NavigationService } from "@montr-core/services";
-import { LoginModel } from "../models";
-import { AccountService } from "../services/account-service";
+import { Divider, Spin } from "antd";
+import * as React from "react";
+import { useTranslation } from "react-i18next";
+import { Link } from "react-router-dom";
 import { ExternalLoginForm } from ".";
-import { Views, Patterns, StorageNames, Locale } from "../module";
+import { LoginModel } from "../models";
+import { Locale, Patterns, StorageNames, Views } from "../module";
+import { AccountService } from "../services/account-service";
 
 interface State {
 	loading: boolean;
@@ -42,14 +42,14 @@ export default function Login() {
 
 	async function handleChange(values: LoginModel) {
 		setEmail(values.email);
-	};
+	}
 
 	async function handleSubmit(values: LoginModel): Promise<ApiResult> {
 		return await accountService.login({
 			returnUrl: navigation.getReturnUrlParameter() ?? "/",
 			...values
 		});
-	};
+	}
 
 	const { loading, fields } = state;
 

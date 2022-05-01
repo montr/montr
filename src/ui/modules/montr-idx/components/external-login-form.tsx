@@ -1,27 +1,24 @@
-import React from "react";
-import { AuthScheme } from "../models";
-import { Button, Spin, Avatar } from "antd";
-import { NavigationService } from "@montr-core/services";
-import { AccountService } from "../services/account-service";
-import { Constants } from "@montr-core/constants";
-import { Translation } from "react-i18next";
-import { Api, Locale } from "../module";
 import { Icon } from "@montr-core/components";
-
-interface Props {
-}
+import { Constants } from "@montr-core/constants";
+import { NavigationService } from "@montr-core/services";
+import { Avatar, Button, Spin } from "antd";
+import React from "react";
+import { Translation } from "react-i18next";
+import { AuthScheme } from "../models";
+import { Api, Locale } from "../module";
+import { AccountService } from "../services/account-service";
 
 interface State {
 	loading: boolean;
 	authSchemes: AuthScheme[];
 }
 
-export class ExternalLoginForm extends React.Component<Props, State> {
+export class ExternalLoginForm extends React.Component<unknown, State> {
 
 	private _navigation = new NavigationService();
 	private _accountService = new AccountService();
 
-	constructor(props: Props) {
+	constructor(props: unknown) {
 		super(props);
 
 		this.state = {
