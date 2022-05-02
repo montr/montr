@@ -1,6 +1,6 @@
+import { DataBreadcrumb, DataMenu, Page, RouteList, Toolbar } from "@montr-core/components";
 import React from "react";
 import { Translation } from "react-i18next";
-import { Page, Toolbar, DataBreadcrumb, DataMenu, RouteList } from "@montr-core/components";
 import { Locale, ProfileRoutes } from "../module";
 
 interface State {
@@ -8,12 +8,12 @@ interface State {
 	selectedKey: string;
 }
 
-export default class PageProfile extends React.Component<null, State> {
+export default class PageProfile extends React.Component<unknown, State> {
 
 	private main: HTMLDivElement | undefined = undefined;
 
-	constructor() {
-		super(null);
+	constructor(props: unknown) {
+		super(props);
 
 		this.state = {
 			mode: "inline",

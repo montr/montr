@@ -1,12 +1,12 @@
-import React from "react";
-import { IDataField, ApiResult } from "@montr-core/models";
+import { DataForm, PageHeader } from "@montr-core/components";
+import { ApiResult, IDataField } from "@montr-core/models";
 import { MetadataService } from "@montr-core/services";
-import { ProfileModel } from "../models";
-import { ProfileService } from "../services";
-import { Locale, Views } from "../module";
-import { PageHeader, DataForm } from "@montr-core/components";
-import { Translation } from "react-i18next";
 import { Spin } from "antd";
+import React from "react";
+import { Translation } from "react-i18next";
+import { ProfileModel } from "../models";
+import { Locale, Views } from "../module";
+import { ProfileService } from "../services";
 
 interface State {
 	loading: boolean;
@@ -14,13 +14,13 @@ interface State {
 	fields?: IDataField[];
 }
 
-export default class PaneEditProfile extends React.Component<null, State> {
+export default class PaneEditProfile extends React.Component<unknown, State> {
 
 	private readonly metadataService = new MetadataService();
 	private readonly profileService = new ProfileService();
 
-	constructor() {
-		super(null);
+	constructor(props: unknown) {
+		super(props);
 
 		this.state = {
 			loading: true,
