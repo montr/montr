@@ -1,13 +1,13 @@
-import * as React from "react";
-import { Link } from "react-router-dom";
-import { Menu } from "antd";
-import { IMenu } from "../models";
-import { MenuProps } from "antd/lib/menu";
-import { ContentService } from "../services/content-service";
 import { NavigationService } from "@montr-core/services";
+import { Menu } from "antd";
+import { MenuProps } from "antd/lib/menu";
+import * as React from "react";
+import { RouteComponentProps, withRouter } from "react-router-dom";
+import { IMenu } from "../models";
+import { ContentService } from "../services/content-service";
 import { Icon } from "./";
 
-interface Props extends MenuProps {
+interface Props extends MenuProps, RouteComponentProps {
 	menuId: string;
 	head?: React.ReactElement<MenuProps>;
 	tail?: React.ReactElement<MenuProps>;
@@ -19,7 +19,9 @@ interface State {
 	selectedKeys?: string[];
 }
 
-export class DataMenu extends React.Component<Props, State> {
+type MenuItem = Required<MenuProps>['items'][number];
+
+class WrappedDataMenu extends React.Component<Props, State> {
 
 	private readonly navigation = new NavigationService();
 	private readonly contentService = new ContentService();
@@ -46,7 +48,7 @@ export class DataMenu extends React.Component<Props, State> {
 
 	// returns true, if parent item contains selected menu item
 	collectOpenAndSelectedItems = (parent: IMenu, path: string, openKeys: string[], selectedKeys: string[]): boolean => {
-		if (parent.items) {
+		if (parent?.items) {
 
 			let selectedItem;
 
@@ -91,72 +93,51 @@ export class DataMenu extends React.Component<Props, State> {
 		await this.contentService.abort();
 	};
 
-	getItemRoute = (item: IMenu): string => {
-		if (typeof item.route == "string") {
-			return item.route as string;
-		}
-
-		return item.route();
-	};
-
-	buildItems = (menu: IMenu, keyPrefix = ""): React.ReactElement[] => {
+	buildItems = (menu: IMenu, keyPrefix = ""): MenuItem[] => {
 		return menu?.items?.map((item, index) => {
 
-			const key = item.id ?? keyPrefix + "_" + index;
+			const key = item.id ?? (keyPrefix + "_" + index);
 
-			if (item.items?.length > 0) {
-				return (
-					<Menu.SubMenu key={key} title={
-						<span>
-							{item.icon && Icon.get(item.icon)}
-							<span>{item.name}</span>
-						</span>
-					}>
-						{this.buildItems(item, key + "_")}
-					</Menu.SubMenu>
-				);
-			}
-
-			if (item.route) {
-				return (
-					<Menu.Item key={key}>
-						<Link to={this.getItemRoute(item)}>
-							{item.icon && Icon.get(item.icon)}
-							<span className="nav-text">{item.name}</span>
-						</Link>
-					</Menu.Item>
-				);
-			}
-
-			return (
-				<Menu.Item key={key}>
-					<a href={item.url}>
-						{item.icon && Icon.get(item.icon)}
-						<span className="nav-text">{item.name}</span>
-					</a>
-				</Menu.Item>
-			);
+			return {
+				key: key,
+				label: item.name,
+				icon: item.icon && Icon.get(item.icon),
+				children: (item.items?.length > 0) ? this.buildItems(item, key + "_") : null,
+				onClick: () => this.onClick(item)
+			} as MenuItem;
 		});
+	};
+
+	onClick = (item: IMenu): void => {
+		if (item.route) {
+			const route =
+				(typeof item.route == "string")
+					? item.route as string
+					: item.route();
+
+			this.props.history.push(route);
+		}
+		else if (item.url) {
+			window.location.href = item.url;
+		}
 	};
 
 	render = (): React.ReactNode => {
 
-		const { menuId: _, head, tail, ...props } = this.props,
+		const { menuId, head, tail, staticContext: _, ...props } = this.props,
 			{ menu, openKeys, selectedKeys } = this.state;
+
+		const items = this.buildItems(menu, menuId);
 
 		return (<>
 			{menu && <Menu
 				defaultOpenKeys={openKeys}
 				defaultSelectedKeys={selectedKeys}
-				{...props}>
-
-				{head}
-
-				{this.buildItems(menu)}
-
-				{tail}
-
-			</Menu>}
+				items={items}
+				{...props} />
+			}
 		</>);
 	};
 }
+
+export const DataMenu = withRouter(WrappedDataMenu);
