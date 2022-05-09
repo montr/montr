@@ -15,7 +15,7 @@
 	"private": true,
 	"dependencies": {
 		"ansi-regex": ">=5.0.1",
-		"antd": "^4.20.2",
+		"antd": "^4.20.3",
 		"axios": "^0.27.2",
 		"i18next": "^21.6.16",
 		"i18next-browser-languagedetector": "^6.1.4",
