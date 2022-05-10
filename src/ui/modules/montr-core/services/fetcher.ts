@@ -24,9 +24,11 @@ authenticated.interceptors.request.use(
 		return config;
 	}, (error) => {
 
-		/* if (axios.isCancel(error)) {
+		console.log("authenticated.interceptors.request.error", error);
+
+		if (axios.isCancel(error)) {
 			return;
-		} */
+		}
 
 		return Promise.reject(error);
 	}
@@ -34,6 +36,10 @@ authenticated.interceptors.request.use(
 
 authenticated.interceptors.response.use(null,
 	(error) => {
+
+		if (axios.isCancel(error)) {
+			return;
+		}
 
 		if (error.response && error.response.status === 401) {
 			authService.login();
@@ -71,7 +77,7 @@ export class Fetcher {
 		this.openFile(response);
 	};
 
-	post = async (url: string, body?: any): Promise<any> => {
+	post = async (url: string, body?: unknown): Promise<any> => {
 
 		const config = this.getRequestConfig();
 
@@ -81,7 +87,7 @@ export class Fetcher {
 		return response ? response.data : null;
 	};
 
-	abort = async (message?: string): Promise<any> => {
+	abort = async (message?: string): Promise<void> => {
 		this.cancelTokenSource.cancel(message /* || `${this.constructor.name} cancelled` */);
 	};
 

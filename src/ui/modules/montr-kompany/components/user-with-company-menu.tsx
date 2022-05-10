@@ -1,7 +1,7 @@
-import * as React from "react";
-import { MenuProps } from "antd/lib/menu";
 import { UserMenu } from "@montr-core/components";
-import { CompanyContextProps, withCompanyContext, CompanyMenu } from ".";
+import { MenuProps } from "antd/lib/menu";
+import * as React from "react";
+import { CompanyContextProps, CompanyMenu, withCompanyContext } from ".";
 
 class _UserWithCompanyMenu extends React.Component<MenuProps & CompanyContextProps> {
 	render = () => {

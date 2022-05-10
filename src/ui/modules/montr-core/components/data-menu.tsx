@@ -9,8 +9,8 @@ import { Icon } from "./";
 
 interface Props extends MenuProps, RouteComponentProps {
 	menuId: string;
-	head?: React.ReactElement<MenuProps>;
-	tail?: React.ReactElement<MenuProps>;
+	// head?: React.ReactElement<MenuProps>;
+	tail?: IMenu[];
 }
 
 interface State {
@@ -74,6 +74,7 @@ class WrappedDataMenu extends React.Component<Props, State> {
 						(route == "/" && path == route) ||
 						(route != "/" && path.startsWith(route))
 					);
+
 					if (startWithMatch) {
 						selectedItem = item;
 					}
@@ -90,11 +91,11 @@ class WrappedDataMenu extends React.Component<Props, State> {
 	};
 
 	componentWillUnmount = async (): Promise<void> => {
-		await this.contentService.abort();
+		// await this.contentService.abort();
 	};
 
-	buildItems = (menu: IMenu, keyPrefix = ""): MenuItem[] => {
-		return menu?.items?.map((item, index) => {
+	buildItems = (items: IMenu[], keyPrefix = ""): MenuItem[] => {
+		return items?.map((item, index) => {
 
 			const key = item.id ?? (keyPrefix + "_" + index);
 
@@ -102,32 +103,38 @@ class WrappedDataMenu extends React.Component<Props, State> {
 				key: key,
 				label: item.name,
 				icon: item.icon && Icon.get(item.icon),
-				children: (item.items?.length > 0) ? this.buildItems(item, key + "_") : null,
+				children: (item.items?.length > 0) ? this.buildItems(item.items, key + "_") : null,
 				onClick: () => this.onClick(item)
 			} as MenuItem;
 		});
 	};
 
 	onClick = (item: IMenu): void => {
-		if (item.route) {
+		if (item.onClick) {
+			item.onClick();
+		} else if (item.route) {
 			const route =
 				(typeof item.route == "string")
 					? item.route as string
 					: item.route();
 
 			this.props.history.push(route);
-		}
-		else if (item.url) {
+		} else if (item.url) {
 			window.location.href = item.url;
 		}
 	};
 
 	render = (): React.ReactNode => {
 
-		const { menuId, head, tail, staticContext: _, ...props } = this.props,
+		const { menuId, /* head, */ tail, staticContext: _, ...props } = this.props,
 			{ menu, openKeys, selectedKeys } = this.state;
 
-		const items = this.buildItems(menu, menuId);
+		let menus: IMenu[] = [];
+
+		if (menu?.items) menus = menus.concat(menu?.items);
+		if (tail) menus = menus.concat(tail);
+
+		const items = this.buildItems(menus, menuId);
 
 		return (<>
 			{menu && <Menu

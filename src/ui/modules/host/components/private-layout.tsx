@@ -1,7 +1,7 @@
-import { DataMenu, ErrorBoundary, Footer } from "@montr-core/components";
-import { UserWithCompanyMenu } from "@montr-kompany/components";
+import { ErrorBoundary, Footer } from "@montr-core/components";
 import { Layout } from "antd";
 import * as React from "react";
+import { MainMenu } from "./main-menu";
 
 interface Props {
 	children: React.ReactNode;
@@ -25,14 +25,9 @@ export class PrivateLayout extends React.Component<Props> {
 				>
 					<ErrorBoundary>
 						{/* <Logo /> */}
-						<DataMenu
+						<MainMenu
 							menuId="SideMenu"
-							theme={theme}
-							mode="inline"
-							tail={
-								<UserWithCompanyMenu />
-							}
-						/>
+							mode="inline" />
 					</ErrorBoundary>
 				</Layout.Sider>
 				<Layout>

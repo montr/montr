@@ -25,6 +25,7 @@ import Html5TwoTone from "@ant-design/icons/Html5TwoTone";
 import ImportOutlined from "@ant-design/icons/ImportOutlined";
 import LeftOutlined from "@ant-design/icons/LeftOutlined";
 import LockOutlined from "@ant-design/icons/LockOutlined";
+import LoginOutlined from "@ant-design/icons/LoginOutlined";
 import LogoutOutlined from "@ant-design/icons/LogoutOutlined";
 import MinusCircleOutlined from "@ant-design/icons/MinusCircleOutlined";
 import PlusOutlined from "@ant-design/icons/PlusOutlined";
@@ -73,7 +74,8 @@ export abstract class Icon {
 	static Import = Icon.Map["import"] = <ImportOutlined />;
 	static Left = Icon.Map["left"] = <LeftOutlined />;
 	static Lock = Icon.Map["lock"] = <LockOutlined />;
-	static Logout = Icon.Map["login"] = <LogoutOutlined />;
+	static Login = Icon.Map["login"] = <LoginOutlined />;
+	static Logout = Icon.Map["logout"] = <LogoutOutlined />;
 	static MinusCircle = Icon.Map["minus-circle"] = <MinusCircleOutlined />;
 	static Plus = Icon.Map["plus"] = <PlusOutlined />;
 	static Profile = Icon.Map["profile"] = <ProfileOutlined />;

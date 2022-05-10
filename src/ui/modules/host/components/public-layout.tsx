@@ -1,26 +1,27 @@
-import { DataMenu, ErrorBoundary, Footer } from "@montr-core/components";
-import { UserWithCompanyMenu } from "@montr-kompany/components/.";
+import { ErrorBoundary, Footer } from "@montr-core/components";
 import { Breadcrumb, Layout } from "antd";
 import * as React from "react";
+import { MainMenu } from "./main-menu";
 
 interface Props {
 	children: React.ReactNode;
 }
 
 export class PublicLayout extends React.Component<Props> {
+
 	render = () => {
 		return (
 			<Layout className="public-layout">
 				<Layout.Header>
 					<ErrorBoundary>
-						<DataMenu
+						<MainMenu
 							menuId="TopMenu"
-							theme="light"
 							mode="horizontal"
-							style={{ lineHeight: "64px" }}
-							tail={
-								<UserWithCompanyMenu style={{ float: "right" }} />
-							}
+						// style={{ lineHeight: "64px" }}
+						// tail={this.getUserWithCompanyMenu()}
+						/* tail={
+							<UserWithCompanyMenu style={{ float: "right" }} />
+						} */
 						/>
 					</ErrorBoundary>
 				</Layout.Header>

@@ -1,22 +1,21 @@
-import * as React from "react";
-import { Menu } from "antd";
-import { UserContextProps, withUserContext } from "./";
-import { MenuProps } from "antd/lib/menu";
-import { Icon } from "./";
 import { Patterns } from "@montr-core/module";
+import { Menu } from "antd";
+import { MenuProps } from "antd/lib/menu";
+import * as React from "react";
 import { Link } from "react-router-dom";
+import { Icon, UserContextProps, withUserContext } from "./";
 
 interface Props {
 	strongTitle?: string;
 	head?: React.ReactElement<MenuProps>;
-	tail?: React.ReactElement<MenuProps>;
+	// tail?: React.ReactElement<MenuProps>;
 }
 
 class _UserMenu extends React.Component<MenuProps & UserContextProps & Props> {
 
 	render = () => {
 
-		const { strongTitle, user, login, logout, head, tail, ...props } = this.props;
+		const { strongTitle, user, login, logout, head, /* tail, */ ...props } = this.props;
 
 		if (user) {
 
@@ -42,7 +41,7 @@ class _UserMenu extends React.Component<MenuProps & UserContextProps & Props> {
 						<a onClick={logout}>Выйти</a>
 					</Menu.Item>
 
-					{tail}
+					{/* {tail} */}
 
 				</Menu.SubMenu>
 			);
