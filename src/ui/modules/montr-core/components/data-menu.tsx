@@ -103,23 +103,29 @@ class WrappedDataMenu extends React.Component<Props, State> {
 				key: key,
 				label: item.name,
 				icon: item.icon && Icon.get(item.icon),
+				disabled: item.disabled,
 				children: (item.items?.length > 0) ? this.buildItems(item.items, key + "_") : null,
-				onClick: () => this.onClick(item)
+				onClick: (mi) => this.onClick(mi.domEvent, item)
 			} as MenuItem;
 		});
 	};
 
-	onClick = (item: IMenu): void => {
+	onClick = (e: React.MouseEvent<HTMLElement> | React.KeyboardEvent<HTMLElement>, item: IMenu): void => {
+
+		e.preventDefault();
+
 		if (item.onClick) {
 			item.onClick();
-		} else if (item.route) {
+		}
+		else if (item.route) {
 			const route =
 				(typeof item.route == "string")
 					? item.route as string
 					: item.route();
 
 			this.props.history.push(route);
-		} else if (item.url) {
+		}
+		else if (item.url) {
 			window.location.href = item.url;
 		}
 	};

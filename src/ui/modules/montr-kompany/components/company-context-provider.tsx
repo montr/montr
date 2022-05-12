@@ -67,9 +67,7 @@ export class CompanyContextProvider extends React.Component<Props, State> {
 
 	switchCompany = async (companyUid?: Guid): Promise<void> => {
 
-		await this.loadCompanyList();
-
-		const { companyList } = this.state;
+		const companyList = await this.getCompanyList();
 
 		if (companyList && Array.isArray(companyList) && companyList.length > 0) {
 
@@ -77,24 +75,25 @@ export class CompanyContextProvider extends React.Component<Props, State> {
 
 			const setCookieCompanyUid = companyUid || cookieCompanyUid;
 
-			const company =
+			const currentCompany =
 				companyList.find(x => x.uid == setCookieCompanyUid) || companyList[0];
 
-			if (company && company.uid != cookieCompanyUid) {
-				this.setCookieCompanyUid(company.uid);
+			if (currentCompany && currentCompany.uid != cookieCompanyUid) {
+				this.setCookieCompanyUid(currentCompany.uid);
 			}
 
-			this.setState({ currentCompany: company });
+			this.setState({ currentCompany, companyList });
 		}
 	};
 
-	loadCompanyList = async (): Promise<void> => {
+	getCompanyList = async (): Promise<Company[]> => {
 		try {
 			const user = await this.authService.getUser();
 
 			const result = user ? await this.userCompanyService.list() : [];
 
-			this.setState({ companyList: result });
+			return result;
+
 		} catch (error) {
 			console.log(error);
 			this.notification.error(`Error loading companies list`, error.message);
