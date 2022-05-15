@@ -4,9 +4,9 @@ import { MetadataService, OperationService } from "@montr-core/services";
 import { Button, Spin, Tag } from "antd";
 import i18next from "i18next";
 import * as React from "react";
-import { RouteComponentProps } from "react-router";
+import { RouteComponentProps, useMatch } from "react-router";
 import { IEvent } from "../models";
-import { EntityTypeCode, Locale, RouteBuilder } from "../module";
+import { EntityTypeCode, Locale, Patterns, RouteBuilder } from "../module";
 import { EventService, EventTemplateService } from "../services";
 
 interface RouteProps {
@@ -59,7 +59,9 @@ export default class PageEditEvent extends React.Component<Props, State> {
 		// todo: get metadata key from server
 		const dataView = await this.metadataService.load("PrivateEvent/Edit");
 
-		const data = await this.eventService.get(this.props.match.params.uid);
+		const match = useMatch(Patterns.editEvent);
+
+		const data = await this.eventService.get(match.params.uid);
 
 		this.setState({ loading: false, configCodes: templates.rows, dataView, data });
 	};

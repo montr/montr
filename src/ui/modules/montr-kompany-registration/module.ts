@@ -13,5 +13,5 @@ export const Patterns = {
 };
 
 AppRouteRegistry.add([
-    { path: Patterns.registration, layout: Layout.public, exact: true, component: React.lazy(() => import("./components/page-registration")) },
+    { path: Patterns.registration, layout: Layout.public, component: React.lazy(() => import("./components/page-registration")) },
 ]);

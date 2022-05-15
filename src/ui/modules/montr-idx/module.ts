@@ -1,4 +1,5 @@
 import { Layout } from "@montr-core/constants";
+import { IRoute } from "@montr-core/models";
 import { AppRouteRegistry, ComponentRegistry } from "@montr-core/services/";
 import React from "react";
 
@@ -80,24 +81,24 @@ export const Views = {
 };
 
 AppRouteRegistry.add([
-	{ path: Patterns.register, layout: Layout.auth, exact: true, component: React.lazy(() => import("./components/page-register")) },
-	{ path: Patterns.confirmEmail, layout: Layout.auth, exact: true, component: React.lazy(() => import("./components/page-confirm-email")) },
-	{ path: Patterns.confirmEmailChange, layout: Layout.auth, exact: true, component: React.lazy(() => import("./components/page-confirm-email-change")) },
-	{ path: Patterns.sendEmailConfirmation, layout: Layout.auth, exact: true, component: React.lazy(() => import("./components/page-send-email-confirmation")) },
-	{ path: Patterns.login, layout: Layout.auth, exact: true, component: React.lazy(() => import("./components/page-login")) },
-	{ path: Patterns.logout, layout: Layout.auth, exact: true, component: React.lazy(() => import("./components/page-logout")) },
-	{ path: Patterns.externalLogin, layout: Layout.auth, exact: true, component: React.lazy(() => import("./components/page-external-login")) },
-	{ path: Patterns.forgotPassword, layout: Layout.auth, exact: true, component: React.lazy(() => import("./components/page-forgot-password")) },
-	{ path: Patterns.resetPassword, layout: Layout.auth, exact: true, component: React.lazy(() => import("./components/page-reset-password")) },
+	{ path: Patterns.register, layout: Layout.auth, component: React.lazy(() => import("./components/page-register")) },
+	{ path: Patterns.confirmEmail, layout: Layout.auth, component: React.lazy(() => import("./components/page-confirm-email")) },
+	{ path: Patterns.confirmEmailChange, layout: Layout.auth, component: React.lazy(() => import("./components/page-confirm-email-change")) },
+	{ path: Patterns.sendEmailConfirmation, layout: Layout.auth, component: React.lazy(() => import("./components/page-send-email-confirmation")) },
+	{ path: Patterns.login, layout: Layout.auth, component: React.lazy(() => import("./components/page-login")) },
+	{ path: Patterns.logout, layout: Layout.auth, component: React.lazy(() => import("./components/page-logout")) },
+	{ path: Patterns.externalLogin, layout: Layout.auth, component: React.lazy(() => import("./components/page-external-login")) },
+	{ path: Patterns.forgotPassword, layout: Layout.auth, component: React.lazy(() => import("./components/page-forgot-password")) },
+	{ path: Patterns.resetPassword, layout: Layout.auth, component: React.lazy(() => import("./components/page-reset-password")) },
 
 	{ path: Patterns.profile, component: React.lazy(() => import("./components/page-profile")) }
 ]);
 
-export const ProfileRoutes = [
-	{ path: Patterns.profile, exact: true, component: React.lazy(() => import("./components/pane-edit-profile")) },
-	{ path: Patterns.profileSecurity, exact: true, component: React.lazy(() => import("./components/pane-security")) },
-	{ path: Patterns.profileExternalLogin, exact: true, component: React.lazy(() => import("./components/pane-external-logins")) },
-	{ path: Patterns.profileExternalLoginLink, exact: true, component: React.lazy(() => import("./components/pane-external-login-link")) },
+export const ProfileRoutes: IRoute[] = [
+	{ path: Patterns.profile, component: React.lazy(() => import("./components/pane-edit-profile")) },
+	{ path: Patterns.profileSecurity, component: React.lazy(() => import("./components/pane-security")) },
+	{ path: Patterns.profileExternalLogin, component: React.lazy(() => import("./components/pane-external-logins")) },
+	{ path: Patterns.profileExternalLoginLink, component: React.lazy(() => import("./components/pane-external-login-link")) },
 ];
 
 ComponentRegistry.add([

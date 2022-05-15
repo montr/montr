@@ -40,8 +40,8 @@ export const RouteBuilder = {
 };
 
 AppRouteRegistry.add([
-	{ path: Patterns.searchDocuments, exact: true, component: React.lazy(() => import("./components/page-search-documents")) },
-	{ path: Patterns.viewDocument, exact: true, component: React.lazy(() => import("./components/page-view-document")) },
+	{ path: Patterns.searchDocuments, component: React.lazy(() => import("./components/page-search-documents")) },
+	{ path: Patterns.viewDocument, component: React.lazy(() => import("./components/page-view-document")) },
 ]);
 
 ComponentRegistry.add([

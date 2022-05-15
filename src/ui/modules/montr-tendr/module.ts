@@ -46,9 +46,9 @@ export const RouteBuilder = {
 };
 
 AppRouteRegistry.add([
-	{ path: Patterns.searchEvents, exact: true, component: React.lazy(() => import("./components/page-search-events")) },
-	{ path: Patterns.addEvent, exact: true, component: React.lazy(() => import("./components/page-select-event-template")) },
-	{ path: Patterns.editEvent, exact: true, component: React.lazy(() => import("./components/page-edit-event")) }
+	{ path: Patterns.searchEvents, component: React.lazy(() => import("./components/page-search-events")) },
+	{ path: Patterns.addEvent, component: React.lazy(() => import("./components/page-select-event-template")) },
+	{ path: Patterns.editEvent, component: React.lazy(() => import("./components/page-edit-event")) }
 ]);
 
 ComponentRegistry.add([
