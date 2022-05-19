@@ -2,7 +2,7 @@ import { NavigationService } from "@montr-core/services";
 import { Menu } from "antd";
 import { MenuProps } from "antd/lib/menu";
 import * as React from "react";
-import { RouteComponentProps, withRouter } from "react-router-dom";
+import { RouteComponentProps, useNavigate, withRouter } from "react-router-dom";
 import { IMenu } from "../models";
 import { ContentService } from "../services/content-service";
 import { Icon } from "./";
@@ -123,7 +123,9 @@ class WrappedDataMenu extends React.Component<Props, State> {
 					? item.route as string
 					: item.route();
 
-			this.props.history.push(route);
+			const navigate = useNavigate();
+
+			navigate(route);
 		}
 		else if (item.url) {
 			window.location.href = item.url;

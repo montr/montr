@@ -1,11 +1,11 @@
-import React from "react";
-import { RouteComponentProps } from "react-router";
-import { Spin } from "antd";
-import { Translation } from "react-i18next";
 import { Page } from "@montr-core/components";
 import { OperationService } from "@montr-core/services";
-import { ProfileService } from "../services";
+import { Spin } from "antd";
+import React from "react";
+import { Translation } from "react-i18next";
+import { RouteComponentProps, useNavigate } from "react-router";
 import { Locale, Patterns } from "../module";
+import { ProfileService } from "../services";
 
 interface Props extends RouteComponentProps {
 }
@@ -43,7 +43,9 @@ export default class PaneExternalLoginLink extends React.Component<Props, State>
 
 		this.setState({ loading: false });
 
-		this.props.history.push(Patterns.profileExternalLogin);
+		const navigate = useNavigate();
+
+		navigate(Patterns.profileExternalLogin);
 	};
 
 	render = () => {

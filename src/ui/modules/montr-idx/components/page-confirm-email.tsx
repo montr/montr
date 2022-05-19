@@ -1,10 +1,10 @@
-import * as React from "react";
 import { Page } from "@montr-core/components";
-import { Spin, Button } from "antd";
-import { RouteComponentProps } from "react-router-dom";
+import { Button, Spin } from "antd";
+import * as React from "react";
 import { Translation } from "react-i18next";
-import { AccountService } from "../services/account-service";
+import { RouteComponentProps, useNavigate } from "react-router-dom";
 import { Locale } from "../module";
+import { AccountService } from "../services/account-service";
 
 interface RouteProps {
 	userId: string;
@@ -50,7 +50,9 @@ export default class ConfirmEmail extends React.Component<Props, State> {
 
 	handleContinue = async () => {
 		// todo: use route const, redirect to profile
-		this.props.history.push("/dashboard");
+		const navigate = useNavigate();
+
+		navigate("/dashboard");
 	};
 
 	render = () => {

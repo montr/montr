@@ -5,7 +5,7 @@ import { Classifier } from "@montr-master-data/models";
 import { ClassifierService } from "@montr-master-data/services";
 import { PageHeader, Spin } from "antd";
 import React from "react";
-import { RouteComponentProps } from "react-router";
+import { RouteComponentProps, useNavigate } from "react-router";
 import { DocumentBreadcrumb } from ".";
 import { IDocument } from "../models";
 import { ClassifierTypeCode, EntityTypeCode, RouteBuilder, Views } from "../module";
@@ -70,9 +70,11 @@ export default class PageViewDocument extends React.Component<Props, State> {
 	handleTabChange = (tabKey: string): void => {
 		const { uid } = this.props.match.params;
 
+		const navigate = useNavigate();
+
 		const path = RouteBuilder.viewDocument(uid, tabKey);
 
-		this.props.history.replace(path);
+		navigate(path);
 	};
 
 	render = (): React.ReactNode => {

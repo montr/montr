@@ -4,7 +4,7 @@ import { MetadataService, OperationService } from "@montr-core/services";
 import { Button, Spin, Tag } from "antd";
 import i18next from "i18next";
 import * as React from "react";
-import { RouteComponentProps, useMatch } from "react-router";
+import { RouteComponentProps, useMatch, useNavigate } from "react-router";
 import { IEvent } from "../models";
 import { EntityTypeCode, Locale, Patterns, RouteBuilder } from "../module";
 import { EventService, EventTemplateService } from "../services";
@@ -129,9 +129,11 @@ export default class PageEditEvent extends React.Component<Props, State> {
 	handleTabChange = (tabKey: string): void => {
 		const { uid } = this.props.match.params;
 
+		const navigate = useNavigate();
+
 		const path = RouteBuilder.editEvent(uid, tabKey);
 
-		this.props.history.replace(path);
+		navigate(path);
 	};
 
 	render = (): React.ReactNode => {

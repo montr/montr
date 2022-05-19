@@ -1,11 +1,11 @@
-import * as React from "react";
-import { Spin, Button } from "antd";
-import { Patterns } from "@montr-core/module";
 import { Page } from "@montr-core/components";
-import { RouteComponentProps } from "react-router-dom";
+import { Patterns } from "@montr-core/module";
+import { Button, Spin } from "antd";
+import * as React from "react";
 import { Translation } from "react-i18next";
-import { AccountService } from "../services/account-service";
+import { RouteComponentProps, useNavigate } from "react-router-dom";
 import { Locale } from "../module";
+import { AccountService } from "../services/account-service";
 
 interface RouteProps {
 	userId: string;
@@ -51,7 +51,9 @@ export default class ConfirmEmailChange extends React.Component<Props, State> {
 	};
 
 	handleContinue = async () => {
-		this.props.history.push(Patterns.dashboard);
+		const navigate = useNavigate();
+
+		navigate(Patterns.dashboard);
 	};
 
 	render = () => {

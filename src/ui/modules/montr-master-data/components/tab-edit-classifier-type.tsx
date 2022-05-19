@@ -1,12 +1,12 @@
-import * as React from "react";
-import { Redirect } from "react-router";
-import { Spin } from "antd";
 import { DataForm } from "@montr-core/components";
-import { IDataField, ApiResult } from "@montr-core/models";
+import { ApiResult, IDataField } from "@montr-core/models";
 import { MetadataService } from "@montr-core/services";
+import { Spin } from "antd";
+import * as React from "react";
+import { Navigate } from "react-router";
 import { ClassifierType } from "../models";
-import { ClassifierTypeService } from "../services";
 import { RouteBuilder, Views } from "../module";
+import { ClassifierTypeService } from "../services";
 
 interface Props {
 	data: ClassifierType;
@@ -78,7 +78,7 @@ export default class TabEditClassifierType extends React.Component<Props, State>
 
 		if (redirect) {
 			// this.setState({ redirect: null });
-			return <Redirect to={redirect} />;
+			return <Navigate to={redirect} />;
 		}
 
 		return (

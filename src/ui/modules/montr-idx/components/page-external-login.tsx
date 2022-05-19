@@ -1,15 +1,15 @@
-import * as React from "react";
-import { Page, DataForm, Icon } from "@montr-core/components";
-import { Spin } from "antd";
-import { Translation, Trans } from "react-i18next";
-import { AccountService } from "../services/account-service";
-import { ExternalRegisterModel } from "../models";
-import { MetadataService, NavigationService, OperationService } from "@montr-core/services";
-import { RouteComponentProps } from "react-router";
-import { Locale, Patterns, Views } from "../module";
-import { IDataField, ApiResult } from "@montr-core/models";
+import { DataForm, Icon, Page } from "@montr-core/components";
 import { Constants } from "@montr-core/constants";
+import { ApiResult, IDataField } from "@montr-core/models";
+import { MetadataService, NavigationService, OperationService } from "@montr-core/services";
+import { Spin } from "antd";
+import * as React from "react";
+import { Trans, Translation } from "react-i18next";
+import { RouteComponentProps, useNavigate } from "react-router";
 import { Link } from "react-router-dom";
+import { ExternalRegisterModel } from "../models";
+import { Locale, Patterns, Views } from "../module";
+import { AccountService } from "../services/account-service";
 
 interface Props extends RouteComponentProps {
 }
@@ -59,7 +59,9 @@ export default class ExternalLogin extends React.Component<Props, State> {
 				this.setState({ loading: false, data: result.data, fields: dataView.fields });
 			}
 			else {
-				this.props.history.push(Patterns.login);
+				const navigate = useNavigate();
+
+				navigate(Patterns.login);
 			}
 
 			return result;

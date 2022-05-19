@@ -3,7 +3,7 @@ import { ConfigurationItemProps, DataPaneProps, DataView } from "@montr-core/mod
 import { Layout, Modal, PageHeader, Spin } from "antd";
 import { Location } from "history";
 import React from "react";
-import { Prompt, Redirect, RouteComponentProps } from "react-router";
+import { Navigate, Prompt, RouteComponentProps, useNavigate } from "react-router";
 import { Task } from "../models";
 import { EntityTypeCode, RouteBuilder, Views } from "../module";
 import { TaskService } from "../services";
@@ -97,9 +97,11 @@ class PageViewTask extends React.Component<Props, State> {
 	handleTabChange = (tabKey: string): void => {
 		const { uid } = this.props.match.params;
 
+		const navigate = useNavigate();
+
 		const path = RouteBuilder.viewTask(uid, tabKey);
 
-		this.props.history.replace(path);
+		navigate(path);
 	};
 
 	// https://v5.reactrouter.com/core/api/Prompt/message-func
@@ -122,7 +124,7 @@ class PageViewTask extends React.Component<Props, State> {
 
 		if (confirmedNavigation && nextLocation) {
 			this.setState({ confirmedNavigation: null, nextLocation: null });
-			return <Redirect to={nextLocation.pathname} push={true} />;
+			return <Navigate to={nextLocation.pathname} replace={true} />;
 		}
 
 		const buttonProps: ConfigurationItemProps = {

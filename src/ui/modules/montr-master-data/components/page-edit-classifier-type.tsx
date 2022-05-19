@@ -2,7 +2,7 @@ import { DataTabs, Page, PageHeader } from "@montr-core/components";
 import { DataView } from "@montr-core/models";
 import { Spin } from "antd";
 import * as React from "react";
-import { RouteComponentProps } from "react-router";
+import { RouteComponentProps, useNavigate } from "react-router";
 import { ClassifierBreadcrumb } from ".";
 import { ClassifierType } from "../models";
 import { RouteBuilder, Views } from "../module";
@@ -70,9 +70,11 @@ export default class EditClassifierType extends React.Component<Props, State> {
 	handleTabChange = (tabKey: string): void => {
 		const { uid } = this.props.match.params;
 
+		const navigate = useNavigate();
+
 		const path = RouteBuilder.editClassifierType(uid, tabKey);
 
-		this.props.history.replace(path);
+		navigate(path);
 	};
 
 	render = (): React.ReactNode => {

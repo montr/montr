@@ -1,13 +1,13 @@
-import * as React from "react";
-import { Page, DataForm } from "@montr-core/components";
-import { Spin, Button } from "antd";
-import { RouteComponentProps } from "react-router-dom";
-import { Translation } from "react-i18next";
-import { AccountService } from "../services/account-service";
-import { Locale, Patterns, Views } from "../module";
-import { MetadataService } from "@montr-core/services";
-import { ResetPasswordModel } from "../models";
+import { DataForm, Page } from "@montr-core/components";
 import { ApiResult, IDataField } from "@montr-core/models";
+import { MetadataService } from "@montr-core/services";
+import { Button, Spin } from "antd";
+import * as React from "react";
+import { Translation } from "react-i18next";
+import { RouteComponentProps, useNavigate } from "react-router";
+import { ResetPasswordModel } from "../models";
+import { Locale, Patterns, Views } from "../module";
+import { AccountService } from "../services/account-service";
 
 interface RouteProps {
 	code: string;
@@ -56,7 +56,9 @@ export default class ResetPassword extends React.Component<Props, State> {
 	};
 
 	handleContinue = async () => {
-		this.props.history.push(Patterns.login);
+		const navigate = useNavigate();
+
+		navigate(Patterns.login);
 	};
 
 	render = () => {
