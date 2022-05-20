@@ -4,7 +4,7 @@ import { MetadataService, OperationService } from "@montr-core/services";
 import { Button, Spin, Tag } from "antd";
 import i18next from "i18next";
 import * as React from "react";
-import { RouteComponentProps, useMatch, useNavigate } from "react-router";
+import { RouteComponentProps, useMatch, useNavigate, useParams } from "react-router";
 import { IEvent } from "../models";
 import { EntityTypeCode, Locale, Patterns, RouteBuilder } from "../module";
 import { EventService, EventTemplateService } from "../services";
@@ -105,7 +105,9 @@ export default class PageEditEvent extends React.Component<Props, State> {
 		const t = (key: string) => i18next.getFixedT(null, Locale.Namespace)(key);
 
 		const result = await this.operation.confirm(async () => {
-			return await this.eventService.publish(this.props.match.params.uid);
+			const { uid } = useParams();
+
+			return await this.eventService.publish(uid);
 		}, t("publish.confirm.content"));
 
 		if (result.success) {
@@ -118,7 +120,9 @@ export default class PageEditEvent extends React.Component<Props, State> {
 		const t = (key: string) => i18next.getFixedT(null, Locale.Namespace)(key);
 
 		const result = await this.operation.confirm(async () => {
-			return await this.eventService.cancel(this.props.match.params.uid);
+			const { uid } = useParams();
+
+			return await this.eventService.cancel(uid);
 		}, t("cancel.confirm.content"));
 
 		if (result.success) {
@@ -127,7 +131,7 @@ export default class PageEditEvent extends React.Component<Props, State> {
 	};
 
 	handleTabChange = (tabKey: string): void => {
-		const { uid } = this.props.match.params;
+		const { uid } = useParams();
 
 		const navigate = useNavigate();
 
@@ -138,7 +142,7 @@ export default class PageEditEvent extends React.Component<Props, State> {
 
 	render = (): React.ReactNode => {
 		const t = (key: string) => i18next.getFixedT(null, Locale.Namespace)(key),
-			{ tabKey } = this.props.match.params,
+			{ tabKey } = useParams(),
 			{ loading, data, dataView } = this.state;
 
 		if (data.id == null) return null;

@@ -3,6 +3,7 @@ import { Patterns } from "@montr-core/module";
 import { Button, Spin } from "antd";
 import * as React from "react";
 import { Translation } from "react-i18next";
+import { useParams } from "react-router";
 import { RouteComponentProps, useNavigate } from "react-router-dom";
 import { Locale } from "../module";
 import { AccountService } from "../services/account-service";
@@ -41,7 +42,7 @@ export default class ConfirmEmailChange extends React.Component<Props, State> {
 	};
 
 	fetchData = async () => {
-		const { userId, email, code } = this.props.match.params;
+		const { userId, email, code } = useParams();
 
 		const result = await this._accountService.confirmEmailChange({ userId, email, code });
 

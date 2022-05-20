@@ -4,7 +4,7 @@ import { MetadataService } from "@montr-core/services";
 import { Button, Spin } from "antd";
 import * as React from "react";
 import { Translation } from "react-i18next";
-import { RouteComponentProps, useNavigate } from "react-router";
+import { RouteComponentProps, useNavigate, useParams } from "react-router";
 import { ResetPasswordModel } from "../models";
 import { Locale, Patterns, Views } from "../module";
 import { AccountService } from "../services/account-service";
@@ -50,7 +50,7 @@ export default class ResetPassword extends React.Component<Props, State> {
 	};
 
 	resetPassword = async (values: ResetPasswordModel): Promise<ApiResult> => {
-		const { code } = this.props.match.params;
+		const { code } = useParams();
 
 		return await this._accountService.resetPassword({ code, ...values });
 	};

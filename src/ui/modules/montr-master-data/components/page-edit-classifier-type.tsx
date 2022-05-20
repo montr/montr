@@ -2,7 +2,7 @@ import { DataTabs, Page, PageHeader } from "@montr-core/components";
 import { DataView } from "@montr-core/models";
 import { Spin } from "antd";
 import * as React from "react";
-import { RouteComponentProps, useNavigate } from "react-router";
+import { RouteComponentProps, useNavigate, useParams } from "react-router";
 import { ClassifierBreadcrumb } from ".";
 import { ClassifierType } from "../models";
 import { RouteBuilder, Views } from "../module";
@@ -50,7 +50,7 @@ export default class EditClassifierType extends React.Component<Props, State> {
 	};
 
 	fetchData = async (): Promise<void> => {
-		const { uid } = this.props.match.params;
+		const { uid } = useParams();
 
 		const types = await this.classifierTypeService.list({ skipPaging: true });
 
@@ -68,7 +68,7 @@ export default class EditClassifierType extends React.Component<Props, State> {
 	};
 
 	handleTabChange = (tabKey: string): void => {
-		const { uid } = this.props.match.params;
+		const { uid } = useParams();
 
 		const navigate = useNavigate();
 
@@ -78,7 +78,7 @@ export default class EditClassifierType extends React.Component<Props, State> {
 	};
 
 	render = (): React.ReactNode => {
-		const { uid, tabKey } = this.props.match.params,
+		const { uid, tabKey } = useParams(),
 			{ loading, dataView, data, types } = this.state;
 
 		let title;
