@@ -5,7 +5,7 @@ import { RouteBuilder } from "@montr-docs/module";
 import { CompanyContextProps, withCompanyContext } from "@montr-kompany/components";
 import { Button, List, Space, Spin, Typography } from "antd";
 import React from "react";
-import { Navigate } from "react-router";
+import { Navigate } from "react-router-dom";
 import { CompanyRegistrationRequestService } from "../services";
 
 interface Props extends UserContextProps, CompanyContextProps {

@@ -1,4 +1,4 @@
-import { useLocation, useNavigate } from "react-router";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Constants } from "..";
 import { AppState } from "../models";
 import { Patterns } from "../module";

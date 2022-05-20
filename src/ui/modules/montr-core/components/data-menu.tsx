@@ -2,12 +2,12 @@ import { NavigationService } from "@montr-core/services";
 import { Menu } from "antd";
 import { MenuProps } from "antd/lib/menu";
 import * as React from "react";
-import { RouteComponentProps, useNavigate, withRouter } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { IMenu } from "../models";
 import { ContentService } from "../services/content-service";
 import { Icon } from "./";
 
-interface Props extends MenuProps, RouteComponentProps {
+interface Props extends MenuProps {
 	menuId: string;
 	// head?: React.ReactElement<MenuProps>;
 	tail?: IMenu[];
@@ -134,7 +134,7 @@ class WrappedDataMenu extends React.Component<Props, State> {
 
 	render = (): React.ReactNode => {
 
-		const { menuId, /* head, */ tail, staticContext: _, ...props } = this.props,
+		const { menuId, /* head, */ tail, ...props } = this.props,
 			{ menu, openKeys, selectedKeys } = this.state;
 
 		let menus: IMenu[] = [];
@@ -155,4 +155,4 @@ class WrappedDataMenu extends React.Component<Props, State> {
 	};
 }
 
-export const DataMenu = withRouter(WrappedDataMenu);
+export const DataMenu = WrappedDataMenu;

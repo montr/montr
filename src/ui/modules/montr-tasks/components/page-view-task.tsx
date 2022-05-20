@@ -3,7 +3,7 @@ import { ConfigurationItemProps, DataPaneProps, DataView } from "@montr-core/mod
 import { Layout, Modal, PageHeader, Spin } from "antd";
 import { Location } from "history";
 import React from "react";
-import { Navigate, Prompt, useNavigate, useParams } from "react-router";
+import { Navigate, Prompt, useNavigate, useParams } from "react-router-dom";
 import { Task } from "../models";
 import { EntityTypeCode, RouteBuilder, Views } from "../module";
 import { TaskService } from "../services";
@@ -13,7 +13,7 @@ interface RouteProps {
 	tabKey?: string;
 }
 
-interface Props extends RouteComponentProps<RouteProps>, PageContextProps {
+interface Props extends PageContextProps {
 }
 
 interface State {
@@ -39,6 +39,10 @@ class PageViewTask extends React.Component<Props, State> {
 			task: {}
 		};
 	}
+
+	getRouteProps = (): RouteProps => {
+		return useParams();
+	};
 
 	componentDidMount = async (): Promise<void> => {
 		const { addPageEventListener } = this.props;
@@ -81,7 +85,7 @@ class PageViewTask extends React.Component<Props, State> {
 	};
 
 	fetchData = async (): Promise<void> => {
-		const { uid } = useParams();
+		const { uid } = this.getRouteProps();
 
 		const task = await this.taskService.get(uid);
 
@@ -95,7 +99,7 @@ class PageViewTask extends React.Component<Props, State> {
 	};
 
 	handleTabChange = (tabKey: string): void => {
-		const { uid } = useParams();
+		const { uid } = this.getRouteProps();
 
 		const navigate = useNavigate();
 
@@ -119,7 +123,7 @@ class PageViewTask extends React.Component<Props, State> {
 	};
 
 	render = (): React.ReactNode => {
-		const { tabKey } = useParams(),
+		const { tabKey } = this.getRouteProps(),
 			{ loading, modalVisible, confirmedNavigation, nextLocation, task = {}, dataView } = this.state;
 
 		if (confirmedNavigation && nextLocation) {

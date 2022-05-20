@@ -2,7 +2,7 @@ import { DataTabs, Page, PageHeader } from "@montr-core/components";
 import { DataView } from "@montr-core/models";
 import { Spin } from "antd";
 import * as React from "react";
-import { RouteComponentProps, useNavigate, useParams } from "react-router";
+import { useNavigate, useParams } from "react-router-dom";
 import { ClassifierBreadcrumb } from ".";
 import { Classifier, ClassifierType } from "../models";
 import { EntityTypeCode, RouteBuilder, Views } from "../module";
@@ -15,9 +15,6 @@ interface RouteProps {
 	tabKey?: string;
 }
 
-interface Props extends RouteComponentProps<RouteProps> {
-}
-
 interface State {
 	loading: boolean;
 	dataView?: DataView<Classifier>;
@@ -25,13 +22,13 @@ interface State {
 	data?: Classifier;
 }
 
-export default class PageEditClassifier extends React.Component<Props, State> {
+export default class PageEditClassifier extends React.Component<unknown, State> {
 
 	private readonly classifierMetadataService = new ClassifierMetadataService();
 	private readonly classifierTypeService = new ClassifierTypeService();
 	private readonly classifierService = new ClassifierService();
 
-	constructor(props: Props) {
+	constructor(props: unknown) {
 		super(props);
 
 		this.state = {
@@ -39,11 +36,15 @@ export default class PageEditClassifier extends React.Component<Props, State> {
 		};
 	}
 
+	getRouteProps = (): RouteProps => {
+		return useParams();
+	};
+
 	componentDidMount = async (): Promise<void> => {
 		await this.fetchData();
 	};
 
-	componentDidUpdate = async (prevProps: Props): Promise<void> => {
+	componentDidUpdate = async (prevProps: unknown): Promise<void> => {
 		if (this.props.match.params.typeCode !== prevProps.match.params.typeCode ||
 			this.props.match.params.uid !== prevProps.match.params.uid) {
 			await this.fetchData();
@@ -57,7 +58,7 @@ export default class PageEditClassifier extends React.Component<Props, State> {
 	};
 
 	fetchData = async (): Promise<void> => {
-		const { typeCode, uid, parentUid } = useParams();
+		const { typeCode, uid, parentUid } = this.getRouteProps();
 
 		const dataView = await this.classifierMetadataService.view(typeCode, Views.classifierTabs);
 
@@ -71,7 +72,7 @@ export default class PageEditClassifier extends React.Component<Props, State> {
 	};
 
 	handleDataChange = (data: Classifier): void => {
-		const { typeCode, uid } = useParams();
+		const { typeCode, uid } = this.getRouteProps();
 
 		if (uid) {
 			this.setState({ data });
@@ -86,7 +87,7 @@ export default class PageEditClassifier extends React.Component<Props, State> {
 	};
 
 	handleTabChange = (tabKey: string): void => {
-		const { typeCode, uid } = useParams();
+		const { typeCode, uid } = this.getRouteProps();
 
 		const navigate = useNavigate();
 
@@ -96,7 +97,7 @@ export default class PageEditClassifier extends React.Component<Props, State> {
 	};
 
 	render = (): React.ReactNode => {
-		const { tabKey } = useParams(),
+		const { tabKey } = this.getRouteProps(),
 			{ loading, dataView, type, data } = this.state;
 
 		return (

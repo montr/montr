@@ -5,14 +5,10 @@ import { MetadataService, NavigationService, OperationService } from "@montr-cor
 import { Spin } from "antd";
 import * as React from "react";
 import { Trans, Translation } from "react-i18next";
-import { RouteComponentProps, useNavigate } from "react-router";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { ExternalRegisterModel } from "../models";
 import { Locale, Patterns, Views } from "../module";
 import { AccountService } from "../services/account-service";
-
-interface Props extends RouteComponentProps {
-}
 
 interface State {
 	loading: boolean;
@@ -20,14 +16,14 @@ interface State {
 	fields?: IDataField[];
 }
 
-export default class ExternalLogin extends React.Component<Props, State> {
+export default class ExternalLogin extends React.Component<unknown, State> {
 
 	private _operation = new OperationService();
 	private _navigation = new NavigationService();
 	private _metadataService = new MetadataService();
 	private _accountService = new AccountService();
 
-	constructor(props: Props) {
+	constructor(props: unknown) {
 		super(props);
 
 		this.state = {

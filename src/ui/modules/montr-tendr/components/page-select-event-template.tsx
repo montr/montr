@@ -1,7 +1,7 @@
 import { DataTable, Page } from "@montr-core/components";
 import { ApiResult, Guid, IMenu } from "@montr-core/models";
 import * as React from "react";
-import { Navigate } from "react-router";
+import { Navigate } from "react-router-dom";
 import { IEvent } from "../models";
 import { Api, RouteBuilder } from "../module";
 import { EventService } from "../services";

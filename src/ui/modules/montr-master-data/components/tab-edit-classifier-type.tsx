@@ -3,7 +3,7 @@ import { ApiResult, IDataField } from "@montr-core/models";
 import { MetadataService } from "@montr-core/services";
 import { Spin } from "antd";
 import * as React from "react";
-import { Navigate } from "react-router";
+import { Navigate } from "react-router-dom";
 import { ClassifierType } from "../models";
 import { RouteBuilder, Views } from "../module";
 import { ClassifierTypeService } from "../services";
@@ -20,6 +20,7 @@ interface State {
 }
 
 export default class TabEditClassifierType extends React.Component<Props, State> {
+
 	private _metadataService = new MetadataService();
 	private _classifierTypeService = new ClassifierTypeService();
 

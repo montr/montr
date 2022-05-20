@@ -4,7 +4,7 @@ import { MetadataService } from "@montr-core/services";
 import { Button, Spin } from "antd";
 import * as React from "react";
 import { Translation } from "react-i18next";
-import { RouteComponentProps, useNavigate, useParams } from "react-router";
+import { useNavigate, useParams } from "react-router-dom";
 import { ResetPasswordModel } from "../models";
 import { Locale, Patterns, Views } from "../module";
 import { AccountService } from "../services/account-service";
@@ -13,20 +13,17 @@ interface RouteProps {
 	code: string;
 }
 
-interface Props extends RouteComponentProps<RouteProps> {
-}
-
 interface State {
 	loading: boolean;
 	fields?: IDataField[];
 }
 
-export default class ResetPassword extends React.Component<Props, State> {
+export default class ResetPassword extends React.Component<unknown, State> {
 
-	private _metadataService = new MetadataService();
-	private _accountService = new AccountService();
+	private readonly metadataService = new MetadataService();
+	private readonly accountService = new AccountService();
 
-	constructor(props: Props) {
+	constructor(props: unknown) {
 		super(props);
 
 		this.state = {
@@ -34,25 +31,29 @@ export default class ResetPassword extends React.Component<Props, State> {
 		};
 	}
 
+	getRouteProps = (): RouteProps => {
+		return useParams();
+	};
+
 	componentDidMount = async () => {
 		await this.fetchData();
 	};
 
 	componentWillUnmount = async () => {
-		await this._metadataService.abort();
-		await this._accountService.abort();
+		await this.metadataService.abort();
+		await this.accountService.abort();
 	};
 
 	fetchData = async () => {
-		const dataView = await this._metadataService.load(Views.formResetPassword);
+		const dataView = await this.metadataService.load(Views.formResetPassword);
 
 		this.setState({ loading: false, fields: dataView.fields });
 	};
 
 	resetPassword = async (values: ResetPasswordModel): Promise<ApiResult> => {
-		const { code } = useParams();
+		const { code } = this.getRouteProps();
 
-		return await this._accountService.resetPassword({ code, ...values });
+		return await this.accountService.resetPassword({ code, ...values });
 	};
 
 	handleContinue = async () => {

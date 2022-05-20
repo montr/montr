@@ -2,7 +2,7 @@ import { Page } from "@montr-core/components";
 import { Button, Spin } from "antd";
 import * as React from "react";
 import { Translation } from "react-i18next";
-import { RouteComponentProps, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { Locale } from "../module";
 import { AccountService } from "../services/account-service";
 
@@ -11,24 +11,25 @@ interface RouteProps {
 	code: string;
 }
 
-interface Props extends RouteComponentProps<RouteProps> {
-}
-
 interface State {
 	loading: boolean;
 }
 
-export default class ConfirmEmail extends React.Component<Props, State> {
+export default class ConfirmEmail extends React.Component<unknown, State> {
 
 	private _accountService = new AccountService();
 
-	constructor(props: Props) {
+	constructor(props: unknown) {
 		super(props);
 
 		this.state = {
 			loading: true
 		};
 	}
+
+	getRouteProps = (): RouteProps => {
+		return useParams();
+	};
 
 	componentDidMount = async () => {
 		await this.fetchData();
@@ -39,7 +40,7 @@ export default class ConfirmEmail extends React.Component<Props, State> {
 	};
 
 	fetchData = async () => {
-		const { userId, code } = useParams();
+		const { userId, code } = this.getRouteProps();
 
 		const result = await this._accountService.confirmEmail({ userId, code });
 

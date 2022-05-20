@@ -3,23 +3,20 @@ import { OperationService } from "@montr-core/services";
 import { Spin } from "antd";
 import React from "react";
 import { Translation } from "react-i18next";
-import { RouteComponentProps, useNavigate } from "react-router";
+import { useNavigate } from "react-router-dom";
 import { Locale, Patterns } from "../module";
 import { ProfileService } from "../services";
-
-interface Props extends RouteComponentProps {
-}
 
 interface State {
 	loading: boolean;
 }
 
-export default class PaneExternalLoginLink extends React.Component<Props, State> {
+export default class PaneExternalLoginLink extends React.Component<unknown, State> {
 
 	private _operation = new OperationService();
 	private _profileService = new ProfileService();
 
-	constructor(props: Props) {
+	constructor(props: unknown) {
 		super(props);
 
 		this.state = {

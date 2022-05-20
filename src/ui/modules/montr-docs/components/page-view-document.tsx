@@ -5,7 +5,7 @@ import { Classifier } from "@montr-master-data/models";
 import { ClassifierService } from "@montr-master-data/services";
 import { PageHeader, Spin } from "antd";
 import React from "react";
-import { RouteComponentProps, useNavigate, useParams } from "react-router";
+import { useNavigate, useParams } from "react-router-dom";
 import { DocumentBreadcrumb } from ".";
 import { IDocument } from "../models";
 import { ClassifierTypeCode, EntityTypeCode, RouteBuilder, Views } from "../module";
@@ -16,9 +16,6 @@ interface RouteProps {
 	tabKey?: string;
 }
 
-interface Props extends RouteComponentProps<RouteProps> {
-}
-
 interface State {
 	loading: boolean;
 	document?: IDocument;
@@ -26,12 +23,12 @@ interface State {
 	dataView?: DataView<Classifier>;
 }
 
-export default class PageViewDocument extends React.Component<Props, State> {
+export default class PageViewDocument extends React.Component<unknown, State> {
 
 	private readonly documentService = new DocumentService();
 	private readonly classifierService = new ClassifierService();
 
-	constructor(props: Props) {
+	constructor(props: unknown) {
 		super(props);
 
 		this.state = {
@@ -40,6 +37,10 @@ export default class PageViewDocument extends React.Component<Props, State> {
 			documentType: {}
 		};
 	}
+
+	getRouteProps = (): RouteProps => {
+		return useParams();
+	};
 
 	componentDidMount = async (): Promise<void> => {
 		await this.fetchData();
@@ -51,7 +52,7 @@ export default class PageViewDocument extends React.Component<Props, State> {
 	};
 
 	fetchData = async (): Promise<void> => {
-		const { uid } = useParams();
+		const { uid } = this.getRouteProps();
 
 		const document = await this.documentService.get(uid);
 
@@ -68,7 +69,7 @@ export default class PageViewDocument extends React.Component<Props, State> {
 	};
 
 	handleTabChange = (tabKey: string): void => {
-		const { uid } = useParams();
+		const { uid } = this.getRouteProps();
 
 		const navigate = useNavigate();
 
@@ -78,7 +79,7 @@ export default class PageViewDocument extends React.Component<Props, State> {
 	};
 
 	render = (): React.ReactNode => {
-		const { tabKey } = useParams(),
+		const { tabKey } = this.getRouteProps(),
 			{ loading, document, documentType, dataView } = this.state;
 
 		if (!document || !document.documentTypeUid) return null;
