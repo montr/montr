@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { PaneSearchClassifier } from ".";
 
 interface RouteProps {
-	typeCode: string;
+	typeCode?: string;
 }
 
 export default class SearchClassifier extends React.Component {

@@ -10,7 +10,7 @@ import { Locale, Patterns, Views } from "../module";
 import { AccountService } from "../services/account-service";
 
 interface RouteProps {
-	code: string;
+	code?: string;
 }
 
 interface State {

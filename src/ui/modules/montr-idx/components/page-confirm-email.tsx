@@ -7,8 +7,8 @@ import { Locale } from "../module";
 import { AccountService } from "../services/account-service";
 
 interface RouteProps {
-	userId: string;
-	code: string;
+	userId?: string;
+	code?: string;
 }
 
 interface State {

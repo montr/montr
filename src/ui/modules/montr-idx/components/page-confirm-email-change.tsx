@@ -8,9 +8,9 @@ import { Locale } from "../module";
 import { AccountService } from "../services/account-service";
 
 interface RouteProps {
-	userId: string;
-	email: string;
-	code: string;
+	userId?: string;
+	email?: string;
+	code?: string;
 }
 
 interface State {

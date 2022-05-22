@@ -9,7 +9,7 @@ import { EntityTypeCode, RouteBuilder, Views } from "../module";
 import { ClassifierMetadataService, ClassifierService, ClassifierTypeService } from "../services";
 
 interface RouteProps {
-	typeCode: string;
+	typeCode?: string;
 	uid?: string;
 	parentUid?: string;
 	tabKey?: string;
