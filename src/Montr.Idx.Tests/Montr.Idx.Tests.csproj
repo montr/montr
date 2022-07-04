@@ -7,8 +7,8 @@
 	<ItemGroup>
 		<PackageReference Include="linq2db.Identity" Version="3.3.0" />
 		<PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.2.0" />
-		<PackageReference Include="Moq" Version="4.18.0" />
-		<PackageReference Include="Npgsql" Version="6.0.4" />
+		<PackageReference Include="Moq" Version="4.18.1" />
+		<PackageReference Include="Npgsql" Version="6.0.5" />
 		<PackageReference Include="NUnit" Version="3.13.3" />
 	</ItemGroup>
 
