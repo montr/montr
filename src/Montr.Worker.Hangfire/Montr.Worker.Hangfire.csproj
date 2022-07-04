@@ -5,9 +5,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="Hangfire.AspNetCore" Version="1.7.28" />
-    <PackageReference Include="HangFire.Core" Version="1.7.28" />
-    <PackageReference Include="Hangfire.PostgreSql" Version="1.9.7" />
+    <PackageReference Include="Hangfire.AspNetCore" Version="1.7.30" />
+    <PackageReference Include="HangFire.Core" Version="1.7.30" />
+    <PackageReference Include="Hangfire.PostgreSql" Version="1.9.8" />
   </ItemGroup>
 
   <ItemGroup>
