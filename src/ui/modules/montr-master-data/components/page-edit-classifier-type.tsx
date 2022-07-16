@@ -20,11 +20,11 @@ interface State {
 	data?: ClassifierType;
 }
 
-export default class EditClassifierType extends React.Component<unknown, State> {
+export default class EditClassifierType extends React.Component<RouteProps, State> {
 
 	private readonly classifierTypeService = new ClassifierTypeService();
 
-	constructor(props: unknown) {
+	constructor(props: RouteProps) {
 		super(props);
 
 		this.state = {
@@ -40,8 +40,11 @@ export default class EditClassifierType extends React.Component<unknown, State> 
 		await this.fetchData();
 	};
 
-	componentDidUpdate = async (prevProps: unknown): Promise<void> => {
-		if (this.props.match.params.uid !== prevProps.match.params.uid) {
+	componentDidUpdate = async (prevProps: RouteProps): Promise<void> => {
+		/* if (this.props.match.params.uid !== prevProps.match.params.uid) {
+			await this.fetchData();
+		} */
+		if (this.props.uid !== prevProps.uid) {
 			await this.fetchData();
 		}
 	};
