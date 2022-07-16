@@ -1,7 +1,7 @@
 import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { IRoute } from "../models";
-import { AppRoute, AppSetupRedirect } from "./";
+import { AppSetupRedirect } from "./";
 
 interface Props {
 	routes: IRoute[];
@@ -10,14 +10,20 @@ interface Props {
 	errorLayout: string;
 }
 
+const PageError404 = React.lazy(() => import("./page-error-404"));
+
 export const AppRouteList = ({ routes, layoutRegistry, defaultLayout, errorLayout }: Props): React.ReactElement => (
 	<BrowserRouter>
 		<AppSetupRedirect>
 			<Routes>
-				{routes.map(({ layout, ...props }, _do_not_remove_) => {
-					return <AppRoute key={0} {...props} layoutComponent={layoutRegistry(layout || defaultLayout)} />;
+				{routes.map(({ layout, component: Component, ...props }, _do_not_remove_) => {
+					/* return <AppRoute key={0} {...props} layoutComponent={layoutRegistry(layout || defaultLayout)} />; */
+					return <Route key={0} {...props} element={<Component />} />;
 				})}
-				<AppRoute component={React.lazy(() => import("./page-error-404"))} layoutComponent={layoutRegistry(errorLayout)} />
+				{/* <AppRoute component={React.lazy(() => import("./page-error-404"))} layoutComponent={layoutRegistry(errorLayout)} /> */}
+				<Route path="*" element={<React.Suspense fallback={<>...</>}>
+					<PageError404 />
+				</React.Suspense>} />
 			</Routes>
 		</AppSetupRedirect>
 	</BrowserRouter >

@@ -3,7 +3,7 @@ import { ConfigurationItemProps, DataPaneProps, DataView } from "@montr-core/mod
 import { Layout, Modal, PageHeader, Spin } from "antd";
 import { Location } from "history";
 import React from "react";
-import { Navigate, Prompt, useNavigate, useParams } from "react-router-dom";
+import { Navigate, /* Prompt, */ useNavigate, useParams } from "react-router-dom";
 import { Task } from "../models";
 import { EntityTypeCode, RouteBuilder, Views } from "../module";
 import { TaskService } from "../services";
@@ -144,7 +144,8 @@ class PageViewTask extends React.Component<Props, State> {
 		return (
 			<Spin spinning={loading}>
 
-				<Prompt message={this.handleNavigation} />
+				{/* https://reactrouter.com/docs/en/v6/upgrading/v5#prompt-is-not-currently-supported */}
+				{/* <Prompt message={this.handleNavigation} /> */}
 
 				<Modal
 					visible={modalVisible}
