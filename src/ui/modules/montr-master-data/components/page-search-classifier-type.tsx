@@ -64,7 +64,7 @@ class WrappedSearchClassifierType extends React.Component<Props, State> {
 		const { updateTableToken, selectedRowKeys } = this.state;
 
 		const rowActions: IMenu[] = [
-			{ name: "Настроить", route: (item: ClassifierGroup) => RouteBuilder.editClassifierType(item.uid) }
+			{ name: "Настроить", route: (item: ClassifierGroup) => RouteBuilder.editClassifierType(item.uid, "") }
 		];
 
 		return (
