@@ -3,6 +3,6 @@ import { RouteProps } from "react-router";
 
 export interface IRoute extends RouteProps {
 	component: LazyExoticComponent<ComponentType<any>>;
-	layout?: string;
+	layout: string;
 	layoutComponent?: React.ComponentType<any>;
 }

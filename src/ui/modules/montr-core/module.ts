@@ -66,9 +66,9 @@ AppRouteRegistry.add([
 	{ path: Patterns.home, layout: Layout.public, component: React.lazy(() => import("./components/page-home")) },
 	{ path: Patterns.setup, layout: Layout.auth, component: React.lazy(() => import("./components/page-setup")) },
 
-	{ path: Patterns.dashboard, component: React.lazy(() => import("./components/page-dashboard")) },
-	{ path: Patterns.locales, component: React.lazy(() => import("./components/page-search-locale-string")) },
-	{ path: Patterns.settings, component: React.lazy(() => import("./components/page-settings")) },
+	{ path: Patterns.dashboard, layout: Layout.private, component: React.lazy(() => import("./components/page-dashboard")) },
+	{ path: Patterns.locales, layout: Layout.private, component: React.lazy(() => import("./components/page-search-locale-string")) },
+	{ path: Patterns.settings, layout: Layout.private, component: React.lazy(() => import("./components/page-settings")) },
 ]);
 
 ComponentRegistry.add([

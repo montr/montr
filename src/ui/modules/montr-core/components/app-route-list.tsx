@@ -26,7 +26,7 @@ export const AppRouteList = ({ routes, layoutRegistry, defaultLayout, errorLayou
 				</React.Suspense>} />
 			</Routes>
 		</AppSetupRedirect>
-	</BrowserRouter >
+	</BrowserRouter>
 );
 
 interface RouteListProps {

@@ -91,14 +91,14 @@ AppRouteRegistry.add([
 	{ path: Patterns.forgotPassword, layout: Layout.auth, component: React.lazy(() => import("./components/page-forgot-password")) },
 	{ path: Patterns.resetPassword, layout: Layout.auth, component: React.lazy(() => import("./components/page-reset-password")) },
 
-	{ path: Patterns.profile, component: React.lazy(() => import("./components/page-profile")) }
+	{ path: Patterns.profile, layout: Layout.private, component: React.lazy(() => import("./components/page-profile")) }
 ]);
 
 export const ProfileRoutes: IRoute[] = [
-	{ path: Patterns.profile, component: React.lazy(() => import("./components/pane-edit-profile")) },
-	{ path: Patterns.profileSecurity, component: React.lazy(() => import("./components/pane-security")) },
-	{ path: Patterns.profileExternalLogin, component: React.lazy(() => import("./components/pane-external-logins")) },
-	{ path: Patterns.profileExternalLoginLink, component: React.lazy(() => import("./components/pane-external-login-link")) },
+	{ path: Patterns.profile, layout: Layout.profile, component: React.lazy(() => import("./components/pane-edit-profile")) },
+	{ path: Patterns.profileSecurity, layout: Layout.profile, component: React.lazy(() => import("./components/pane-security")) },
+	{ path: Patterns.profileExternalLogin, layout: Layout.profile, component: React.lazy(() => import("./components/pane-external-logins")) },
+	{ path: Patterns.profileExternalLoginLink, layout: Layout.profile, component: React.lazy(() => import("./components/pane-external-login-link")) },
 ];
 
 ComponentRegistry.add([

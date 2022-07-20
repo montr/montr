@@ -1,4 +1,5 @@
 import { DataFieldFactory } from "@montr-core/components";
+import { Layout } from "@montr-core/constants";
 import { Guid } from "@montr-core/models";
 import { ComponentRegistry } from "@montr-core/services";
 import { AppRouteRegistry } from "@montr-core/services/app-route-registry";
@@ -98,13 +99,13 @@ export const RouteBuilder = {
 };
 
 AppRouteRegistry.add([
-	{ path: Patterns.searchClassifierType, component: React.lazy(() => import("./components/page-search-classifier-type")) },
-	{ path: Patterns.addClassifierType, component: React.lazy(() => import("./components/page-edit-classifier-type")) },
-	{ path: Patterns.editClassifierType, component: React.lazy(() => import("./components/page-edit-classifier-type")) },
+	{ path: Patterns.searchClassifierType, layout: Layout.private, component: React.lazy(() => import("./components/page-search-classifier-type")) },
+	{ path: Patterns.addClassifierType, layout: Layout.private, component: React.lazy(() => import("./components/page-edit-classifier-type")) },
+	{ path: Patterns.editClassifierType, layout: Layout.private, component: React.lazy(() => import("./components/page-edit-classifier-type")) },
 
-	{ path: Patterns.searchClassifier, component: React.lazy(() => import("./components/page-search-classifier")) },
-	{ path: Patterns.addClassifier, component: React.lazy(() => import("./components/page-edit-classifier")) },
-	{ path: Patterns.editClassifier, component: React.lazy(() => import("./components/page-edit-classifier")) },
+	{ path: Patterns.searchClassifier, layout: Layout.private, component: React.lazy(() => import("./components/page-search-classifier")) },
+	{ path: Patterns.addClassifier, layout: Layout.private, component: React.lazy(() => import("./components/page-edit-classifier")) },
+	{ path: Patterns.editClassifier, layout: Layout.private, component: React.lazy(() => import("./components/page-edit-classifier")) },
 ]);
 
 ComponentRegistry.add([

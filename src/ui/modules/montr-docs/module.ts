@@ -1,3 +1,4 @@
+import { Layout } from "@montr-core/constants";
 import { Guid } from "@montr-core/models";
 import { AppRouteRegistry, ComponentNameConvention, ComponentRegistry } from "@montr-core/services";
 import React from "react";
@@ -40,8 +41,8 @@ export const RouteBuilder = {
 };
 
 AppRouteRegistry.add([
-	{ path: Patterns.searchDocuments, component: React.lazy(() => import("./components/page-search-documents")) },
-	{ path: Patterns.viewDocument, component: React.lazy(() => import("./components/page-view-document")) },
+	{ path: Patterns.searchDocuments, layout: Layout.private, component: React.lazy(() => import("./components/page-search-documents")) },
+	{ path: Patterns.viewDocument, layout: Layout.private, component: React.lazy(() => import("./components/page-view-document")) },
 ]);
 
 ComponentRegistry.add([

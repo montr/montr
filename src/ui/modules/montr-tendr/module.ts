@@ -1,3 +1,4 @@
+import { Layout } from "@montr-core/constants";
 import { AppRouteRegistry, ComponentRegistry } from "@montr-core/services/";
 import React from "react";
 import { generatePath } from "react-router";
@@ -46,9 +47,9 @@ export const RouteBuilder = {
 };
 
 AppRouteRegistry.add([
-	{ path: Patterns.searchEvents, component: React.lazy(() => import("./components/page-search-events")) },
-	{ path: Patterns.addEvent, component: React.lazy(() => import("./components/page-select-event-template")) },
-	{ path: Patterns.editEvent, component: React.lazy(() => import("./components/page-edit-event")) }
+	{ path: Patterns.searchEvents, layout: Layout.private, component: React.lazy(() => import("./components/page-search-events")) },
+	{ path: Patterns.addEvent, layout: Layout.private, component: React.lazy(() => import("./components/page-select-event-template")) },
+	{ path: Patterns.editEvent, layout: Layout.private, component: React.lazy(() => import("./components/page-edit-event")) }
 ]);
 
 ComponentRegistry.add([
