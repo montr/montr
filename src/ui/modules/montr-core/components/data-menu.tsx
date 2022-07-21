@@ -2,7 +2,7 @@ import { NavigationService } from "@montr-core/services";
 import { Menu } from "antd";
 import { MenuProps } from "antd/lib/menu";
 import * as React from "react";
-import { useNavigate } from "react-router-dom";
+import { NavigateFunction, useNavigate } from "react-router-dom";
 import { IMenu } from "../models";
 import { ContentService } from "../services/content-service";
 import { Icon } from "./";
@@ -11,6 +11,7 @@ interface Props extends MenuProps {
 	menuId: string;
 	// head?: React.ReactElement<MenuProps>;
 	tail?: IMenu[];
+	navigate: NavigateFunction;
 }
 
 interface State {
@@ -123,9 +124,7 @@ class WrappedDataMenu extends React.Component<Props, State> {
 					? item.route as string
 					: item.route();
 
-			const navigate = useNavigate();
-
-			navigate(route);
+			this.props.navigate(route);
 		}
 		else if (item.url) {
 			window.location.href = item.url;
@@ -134,7 +133,7 @@ class WrappedDataMenu extends React.Component<Props, State> {
 
 	render = (): React.ReactNode => {
 
-		const { menuId, /* head, */ tail, ...props } = this.props,
+		const { menuId, /* head, */ tail, navigate, ...props } = this.props,
 			{ menu, openKeys, selectedKeys } = this.state;
 
 		let menus: IMenu[] = [];
@@ -155,4 +154,19 @@ class WrappedDataMenu extends React.Component<Props, State> {
 	};
 }
 
-export const DataMenu = WrappedDataMenu;
+export const withNavigate = (Component: React.ElementType) => {
+	const Wrapper = (props: any) => {
+		const navigate = useNavigate();
+
+		return (
+			<Component
+				navigate={navigate}
+				{...props}
+			/>
+		);
+	};
+
+	return Wrapper;
+};
+
+export const DataMenu = withNavigate(WrappedDataMenu);
