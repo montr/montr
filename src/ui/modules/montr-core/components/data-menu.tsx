@@ -2,10 +2,11 @@ import { NavigationService } from "@montr-core/services";
 import { Menu } from "antd";
 import { MenuProps } from "antd/lib/menu";
 import * as React from "react";
-import { NavigateFunction, useNavigate } from "react-router-dom";
+import { NavigateFunction } from "react-router-dom";
 import { IMenu } from "../models";
 import { ContentService } from "../services/content-service";
 import { Icon } from "./";
+import { withNavigate } from "./react-router-wrappers";
 
 interface Props extends MenuProps {
 	menuId: string;
@@ -153,20 +154,5 @@ class WrappedDataMenu extends React.Component<Props, State> {
 		</>);
 	};
 }
-
-export const withNavigate = (Component: React.ElementType) => {
-	const Wrapper = (props: any) => {
-		const navigate = useNavigate();
-
-		return (
-			<Component
-				navigate={navigate}
-				{...props}
-			/>
-		);
-	};
-
-	return Wrapper;
-};
 
 export const DataMenu = withNavigate(WrappedDataMenu);

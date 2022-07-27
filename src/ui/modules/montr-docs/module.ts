@@ -16,7 +16,7 @@ export const Api = {
 
 export const Patterns = {
 	searchDocuments: "/documents/",
-	viewDocument: "/documents/view/:uid/:tabKey?",
+	viewDocument: "/documents/view/:uid/:tabKey",
 };
 
 export const EntityTypeCode = {

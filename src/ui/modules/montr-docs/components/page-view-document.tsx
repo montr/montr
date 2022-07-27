@@ -1,11 +1,12 @@
 import { DataTabs, DataToolbar, StatusTag } from "@montr-core/components";
+import { withNavigate, withParams } from "@montr-core/components/react-router-wrappers";
 import { ConfigurationItemProps, DataPaneProps, DataView } from "@montr-core/models";
 import { DateHelper } from "@montr-core/services";
 import { Classifier } from "@montr-master-data/models";
 import { ClassifierService } from "@montr-master-data/services";
 import { PageHeader, Spin } from "antd";
 import React from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { NavigateFunction } from "react-router-dom";
 import { DocumentBreadcrumb } from ".";
 import { IDocument } from "../models";
 import { ClassifierTypeCode, EntityTypeCode, RouteBuilder, Views } from "../module";
@@ -16,6 +17,11 @@ interface RouteProps {
 	tabKey?: string;
 }
 
+interface Props {
+	params: RouteProps;
+	navigate: NavigateFunction;
+}
+
 interface State {
 	loading: boolean;
 	document?: IDocument;
@@ -23,12 +29,12 @@ interface State {
 	dataView?: DataView<Classifier>;
 }
 
-export default class PageViewDocument extends React.Component<unknown, State> {
+class WrappedPageViewDocument extends React.Component<Props, State> {
 
 	private readonly documentService = new DocumentService();
 	private readonly classifierService = new ClassifierService();
 
-	constructor(props: unknown) {
+	constructor(props: Props) {
 		super(props);
 
 		this.state = {
@@ -39,7 +45,7 @@ export default class PageViewDocument extends React.Component<unknown, State> {
 	}
 
 	getRouteProps = (): RouteProps => {
-		return useParams();
+		return this.props.params;
 	};
 
 	componentDidMount = async (): Promise<void> => {
@@ -71,11 +77,9 @@ export default class PageViewDocument extends React.Component<unknown, State> {
 	handleTabChange = (tabKey: string): void => {
 		const { uid } = this.getRouteProps();
 
-		const navigate = useNavigate();
-
 		const path = RouteBuilder.viewDocument(uid, tabKey);
 
-		navigate(path);
+		this.props.navigate(path);
 	};
 
 	render = (): React.ReactNode => {
@@ -125,3 +129,7 @@ export default class PageViewDocument extends React.Component<unknown, State> {
 		);
 	};
 }
+
+const PageViewDocument = withNavigate(withParams(WrappedPageViewDocument));
+
+export default PageViewDocument;

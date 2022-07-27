@@ -6,18 +6,11 @@ interface RouteProps {
 	typeCode?: string;
 }
 
-export default class SearchClassifier extends React.Component {
+export default function SearchClassifier() {
 
-	getRouteProps = (): RouteProps => {
-		return useParams();
-	};
+	const { typeCode } = useParams();
 
-	render(): React.ReactNode {
-
-		const { typeCode } = this.getRouteProps();
-
-		return (
-			<PaneSearchClassifier mode="page" typeCode={typeCode} />
-		);
-	}
+	return (
+		<PaneSearchClassifier mode="page" typeCode={typeCode} />
+	);
 }
