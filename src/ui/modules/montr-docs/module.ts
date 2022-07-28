@@ -16,7 +16,8 @@ export const Api = {
 
 export const Patterns = {
 	searchDocuments: "/documents/",
-	viewDocument: "/documents/view/:uid/:tabKey",
+	viewDocument: "/documents/view/:uid",
+	viewDocumentTab: "/documents/view/:uid/:tabKey",
 };
 
 export const EntityTypeCode = {
@@ -36,13 +37,14 @@ export const Views = {
 
 export const RouteBuilder = {
 	viewDocument: (uid: Guid | string, tabKey?: string): string => {
-		return generatePath(Patterns.viewDocument, { uid: uid.toString(), tabKey });
+		return generatePath(Patterns.viewDocumentTab, { uid: uid.toString(), tabKey });
 	}
 };
 
 AppRouteRegistry.add([
 	{ path: Patterns.searchDocuments, layout: Layout.private, component: React.lazy(() => import("./components/page-search-documents")) },
 	{ path: Patterns.viewDocument, layout: Layout.private, component: React.lazy(() => import("./components/page-view-document")) },
+	{ path: Patterns.viewDocumentTab, layout: Layout.private, component: React.lazy(() => import("./components/page-view-document")) },
 ]);
 
 ComponentRegistry.add([

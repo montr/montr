@@ -27,18 +27,20 @@ export const Views = {
 
 export const Patterns = {
 	searchTasks: "/tasks/",
-	viewTask: "/tasks/view/:uid/:tabKey?",
+	viewTask: "/tasks/view/:uid",
+	viewTaskTab: "/tasks/view/:uid/:tabKey",
 };
 
 export const RouteBuilder = {
 	viewTask: (uid: Guid | string, tabKey?: string): string => {
-		return generatePath(Patterns.viewTask, { uid: uid.toString(), tabKey });
+		return generatePath(Patterns.viewTaskTab, { uid: uid.toString(), tabKey });
 	}
 };
 
 AppRouteRegistry.add([
 	{ path: Patterns.searchTasks, layout: Layout.private, component: React.lazy(() => import("./components/page-search-tasks")) },
 	{ path: Patterns.viewTask, layout: Layout.private, component: React.lazy(() => import("./components/page-view-task")) },
+	{ path: Patterns.viewTaskTab, layout: Layout.private, component: React.lazy(() => import("./components/page-view-task")) },
 ]);
 
 ComponentRegistry.add([

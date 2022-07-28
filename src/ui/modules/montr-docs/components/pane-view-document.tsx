@@ -61,7 +61,7 @@ export default class PaneViewDocument extends React.Component<Props, State> {
 					data={document} />
 
 				<Tag>Document</Tag>
-				<Link to={document?.url} >{document?.documentNumber}</Link>
+				{document && <Link to={document?.url} >{document?.documentNumber}</Link>}
 			</Spin>
 		);
 	};

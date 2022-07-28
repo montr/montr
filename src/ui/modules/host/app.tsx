@@ -60,9 +60,11 @@ class App extends React.Component {
 																return <Route key={index} element={<Component />} {...props} />;
 															})}
 														</Route>
-														<Route path="*" element={<React.Suspense fallback={<>...</>}>
-															<PageError404 />
-														</React.Suspense>} />
+														<Route path="*" element={
+															<React.Suspense fallback={<>...</>}>
+																<PageError404 />
+															</React.Suspense>
+														} />
 													</Routes>
 												</AppSetupRedirect>
 											</BrowserRouter>

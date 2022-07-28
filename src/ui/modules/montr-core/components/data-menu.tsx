@@ -36,6 +36,10 @@ class WrappedDataMenu extends React.Component<Props, State> {
 	}
 
 	componentDidMount = async (): Promise<void> => {
+		await this.fetchData();
+	};
+
+	fetchData = async (): Promise<void> => {
 		const { menuId } = this.props;
 
 		const menu = await this.contentService.getMenu(menuId),

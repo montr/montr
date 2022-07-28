@@ -1,9 +1,10 @@
 import { DataSider, DataTabs, DataToolbar, PageContextProps, StatusTag, withPageContext } from "@montr-core/components";
+import { withParams } from "@montr-core/components/react-router-wrappers";
 import { ConfigurationItemProps, DataPaneProps, DataView } from "@montr-core/models";
 import { Layout, Modal, PageHeader, Spin } from "antd";
 import { Location } from "history";
 import React from "react";
-import { Navigate, /* Prompt, */ useNavigate, useParams } from "react-router-dom";
+import { Navigate, /* Prompt, */ useNavigate } from "react-router-dom";
 import { Task } from "../models";
 import { EntityTypeCode, RouteBuilder, Views } from "../module";
 import { TaskService } from "../services";
@@ -14,6 +15,7 @@ interface RouteProps {
 }
 
 interface Props extends PageContextProps {
+	params: RouteProps;
 }
 
 interface State {
@@ -41,7 +43,7 @@ class PageViewTask extends React.Component<Props, State> {
 	}
 
 	getRouteProps = (): RouteProps => {
-		return useParams();
+		return this.props.params;
 	};
 
 	componentDidMount = async (): Promise<void> => {
@@ -186,4 +188,4 @@ class PageViewTask extends React.Component<Props, State> {
 	};
 }
 
-export default withPageContext(PageViewTask);
+export default withPageContext(withParams(PageViewTask));
