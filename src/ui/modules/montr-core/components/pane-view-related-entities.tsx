@@ -50,6 +50,7 @@ export default class PaneViewRelatedEntities extends React.Component<Props, Stat
 				const componentName = ComponentNameConvention.entityPane(item.relatedEntityTypeCode);
 
 				return ComponentFactory.createComponent(componentName, {
+					key: item.entityUid,
 					entityTypeCode: item.relatedEntityTypeCode,
 					entityUid: item.relatedEntityUid,
 					item

@@ -1,10 +1,10 @@
 import { DataSider, DataTabs, DataToolbar, PageContextProps, StatusTag, withPageContext } from "@montr-core/components";
-import { withParams } from "@montr-core/components/react-router-wrappers";
+import { withNavigate, withParams } from "@montr-core/components/react-router-wrappers";
 import { ConfigurationItemProps, DataPaneProps, DataView } from "@montr-core/models";
 import { Layout, Modal, PageHeader, Spin } from "antd";
 import { Location } from "history";
 import React from "react";
-import { Navigate, /* Prompt, */ useNavigate } from "react-router-dom";
+import { Navigate, NavigateFunction } from "react-router-dom";
 import { Task } from "../models";
 import { EntityTypeCode, RouteBuilder, Views } from "../module";
 import { TaskService } from "../services";
@@ -16,6 +16,7 @@ interface RouteProps {
 
 interface Props extends PageContextProps {
 	params: RouteProps;
+	navigate: NavigateFunction;
 }
 
 interface State {
@@ -103,11 +104,9 @@ class PageViewTask extends React.Component<Props, State> {
 	handleTabChange = (tabKey: string): void => {
 		const { uid } = this.getRouteProps();
 
-		const navigate = useNavigate();
-
 		const path = RouteBuilder.viewTask(uid, tabKey);
 
-		navigate(path);
+		this.props.navigate(path);
 	};
 
 	// https://v5.reactrouter.com/core/api/Prompt/message-func
@@ -188,4 +187,4 @@ class PageViewTask extends React.Component<Props, State> {
 	};
 }
 
-export default withPageContext(withParams(PageViewTask));
+export default withPageContext(withNavigate(withParams(PageViewTask)));
