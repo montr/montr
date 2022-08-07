@@ -43,7 +43,7 @@ export default class PaneViewDocument extends React.Component<Props, State> {
 
 		const document = await this.documentService.get(entityUid);
 
-		const dataView = await this.documentService.metadata(Views.documentInfo, document.uid);
+		const dataView = await this.documentService.metadata(Views.documentInfo, entityUid);
 
 		this.setState({ loading: false, document, fields: dataView.fields });
 	};

@@ -1,13 +1,13 @@
-import * as React from "react";
-import { Spin } from "antd";
-import { useTranslation } from "react-i18next";
-import { useLocalStorage, Page, DataForm, Icon } from "@montr-core/components";
-import { IDataField, ApiResult } from "@montr-core/models";
+import { DataForm, Icon, Page, useLocalStorage } from "@montr-core/components";
+import { ApiResult, IDataField } from "@montr-core/models";
 import { MetadataService } from "@montr-core/services";
-import { SendEmailConfirmationModel } from "../models";
-import { AccountService } from "../services/account-service";
-import { Views, Patterns, StorageNames, Locale } from "../module";
+import { Spin } from "antd";
+import * as React from "react";
+import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
+import { SendEmailConfirmationModel } from "../models";
+import { Locale, Patterns, StorageNames, Views } from "../module";
+import { AccountService } from "../services/account-service";
 
 interface State {
 	loading: boolean;
@@ -35,7 +35,7 @@ export default function SendEmailConfirmation() {
 
 		return () => {
 			metadataService.abort();
-			// accountService.abort();
+			accountService.abort();
 		};
 	}, []);
 

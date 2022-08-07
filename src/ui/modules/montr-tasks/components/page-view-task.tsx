@@ -92,7 +92,7 @@ class PageViewTask extends React.Component<Props, State> {
 
 		const task = await this.taskService.get(uid);
 
-		const dataView = await this.taskService.metadata(Views.taskPage, task.uid);
+		const dataView = await this.taskService.metadata(Views.taskPage, uid);
 
 		this.setState({ loading: false, task, dataView });
 	};
@@ -131,6 +131,8 @@ class PageViewTask extends React.Component<Props, State> {
 			this.setState({ confirmedNavigation: null, nextLocation: null });
 			return <Navigate to={nextLocation.pathname} replace={true} />;
 		}
+
+		if (!task) return null;
 
 		const buttonProps: ConfigurationItemProps = {
 			onDataChange: this.handleDataChange,

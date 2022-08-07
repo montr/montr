@@ -97,7 +97,7 @@ class WrappedDataMenu extends React.Component<Props, State> {
 	};
 
 	componentWillUnmount = async (): Promise<void> => {
-		// await this.contentService.abort();
+		await this.contentService.abort();
 	};
 
 	buildItems = (items: IMenu[], keyPrefix = ""): MenuItem[] => {
