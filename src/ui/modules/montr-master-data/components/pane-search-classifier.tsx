@@ -479,7 +479,7 @@ class _PaneSearchClassifier extends React.Component<Props, State> {
 						<ButtonAdd type="primary" onClick={this.showAddPane} />
 						<ButtonDelete onClick={this.delete} disabled={!selectedRowKeys?.length} />
 						<ButtonExport onClick={this.export} />
-						<Link to={RouteBuilder.editClassifierType(type.uid, "info")}>
+						<Link to={RouteBuilder.editClassifierType(type.uid)}>
 							<Button icon={Icon.Setting}> Настроить</Button>
 						</Link>
 					</Toolbar>

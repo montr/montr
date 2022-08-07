@@ -41,7 +41,7 @@ export const Views = {
 };
 
 export const RouteBuilder = {
-	editEvent: (uid: string, tabKey?: string): string => {
+	editEvent: (uid: string, tabKey = "info"): string => {
 		return generatePath(Patterns.editEvent, { uid, tabKey });
 	},
 };

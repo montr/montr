@@ -57,7 +57,7 @@ class _StepRegisterCompany extends React.Component<Props, State> {
 	};
 
 	openRequest = async (item: IDocument) => {
-		this.setState({ redirectTo: RouteBuilder.viewDocument(item.uid) });
+		this.setState({ redirectTo: RouteBuilder.viewDocument(item.uid, "form") });
 	};
 
 	deleteRequest = async (item: IDocument) => {
@@ -79,7 +79,7 @@ class _StepRegisterCompany extends React.Component<Props, State> {
 			{ redirectTo, loading, documents } = this.state;
 
 		if (redirectTo) {
-			return <Navigate to={redirectTo} replace={true} />;
+			return <Navigate to={redirectTo} />;
 		}
 
 		return (

@@ -32,7 +32,7 @@ export const Patterns = {
 };
 
 export const RouteBuilder = {
-	viewTask: (uid: Guid | string, tabKey?: string): string => {
+	viewTask: (uid: Guid | string, tabKey = "info"): string => {
 		return generatePath(Patterns.viewTaskTab, { uid: uid.toString(), tabKey });
 	}
 };

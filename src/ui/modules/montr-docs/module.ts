@@ -36,7 +36,7 @@ export const Views = {
 };
 
 export const RouteBuilder = {
-	viewDocument: (uid: Guid | string, tabKey?: string): string => {
+	viewDocument: (uid: Guid | string, tabKey = "info"): string => {
 		return generatePath(Patterns.viewDocumentTab, { uid: uid.toString(), tabKey });
 	}
 };

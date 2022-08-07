@@ -83,7 +83,7 @@ export const Patterns = {
 };
 
 export const RouteBuilder = {
-	editClassifierType: (uid: Guid | string, tabKey?: string): string => {
+	editClassifierType: (uid: Guid | string, tabKey = "info"): string => {
 		return generatePath(Patterns.editClassifierType, { uid: uid.toString(), tabKey });
 	},
 
@@ -93,7 +93,7 @@ export const RouteBuilder = {
 	addClassifier: (typeCode: string, parentUid: Guid | string): string => {
 		return generatePath(Patterns.addClassifier, { typeCode, parentUid: parentUid ? parentUid.toString() : null });
 	},
-	editClassifier: (typeCode: string, uid: Guid | string, tabKey?: string): string => {
+	editClassifier: (typeCode: string, uid: Guid | string, tabKey = "info"): string => {
 		return generatePath(Patterns.editClassifier, { typeCode, uid: uid.toString(), tabKey });
 	},
 };
