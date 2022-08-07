@@ -78,8 +78,10 @@ export const Patterns = {
 	editClassifierType: "/classifiers/edit/:uid/:tabKey?",
 
 	searchClassifier: "/classifiers/:typeCode/",
-	addClassifier: "/classifiers/:typeCode/add/:parentUid?",
-	editClassifier: "/classifiers/:typeCode/edit/:uid/:tabKey?",
+	addClassifier: "/classifiers/:typeCode/add/",
+	addClassifierParent: "/classifiers/:typeCode/add/:parentUid?",
+	editClassifier: "/classifiers/:typeCode/edit/:uid",
+	editClassifierTab: "/classifiers/:typeCode/edit/:uid/:tabKey?",
 };
 
 export const RouteBuilder = {
@@ -90,8 +92,10 @@ export const RouteBuilder = {
 	searchClassifier: (typeCode: string): string => {
 		return generatePath(Patterns.searchClassifier, { typeCode });
 	},
-	addClassifier: (typeCode: string, parentUid: Guid | string): string => {
-		return generatePath(Patterns.addClassifier, { typeCode, parentUid: parentUid ? parentUid.toString() : null });
+	addClassifier: (typeCode: string, parentUid?: Guid | string): string => {
+		return parentUid
+			? generatePath(Patterns.addClassifierParent, { typeCode, parentUid: parentUid.toString() })
+			: generatePath(Patterns.addClassifier, { typeCode });
 	},
 	editClassifier: (typeCode: string, uid: Guid | string, tabKey = "info"): string => {
 		return generatePath(Patterns.editClassifier, { typeCode, uid: uid.toString(), tabKey });
@@ -105,7 +109,9 @@ AppRouteRegistry.add([
 
 	{ path: Patterns.searchClassifier, layout: Layout.private, component: React.lazy(() => import("./components/page-search-classifier")) },
 	{ path: Patterns.addClassifier, layout: Layout.private, component: React.lazy(() => import("./components/page-edit-classifier")) },
+	{ path: Patterns.addClassifierParent, layout: Layout.private, component: React.lazy(() => import("./components/page-edit-classifier")) },
 	{ path: Patterns.editClassifier, layout: Layout.private, component: React.lazy(() => import("./components/page-edit-classifier")) },
+	{ path: Patterns.editClassifierTab, layout: Layout.private, component: React.lazy(() => import("./components/page-edit-classifier")) },
 ]);
 
 ComponentRegistry.add([

@@ -1,8 +1,9 @@
 import { DataTabs, Page, PageHeader } from "@montr-core/components";
+import { withParams } from "@montr-core/components/react-router-wrappers";
 import { DataView } from "@montr-core/models";
 import { Spin } from "antd";
 import * as React from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { ClassifierBreadcrumb } from ".";
 import { Classifier, ClassifierType } from "../models";
 import { EntityTypeCode, RouteBuilder, Views } from "../module";
@@ -15,6 +16,9 @@ interface RouteProps {
 	tabKey?: string;
 }
 
+interface Params {
+	params: RouteProps;
+}
 interface State {
 	loading: boolean;
 	dataView?: DataView<Classifier>;
@@ -22,13 +26,13 @@ interface State {
 	data?: Classifier;
 }
 
-export default class PageEditClassifier extends React.Component<RouteProps, State> {
+class PageEditClassifier extends React.Component<Params, State> {
 
 	private readonly classifierMetadataService = new ClassifierMetadataService();
 	private readonly classifierTypeService = new ClassifierTypeService();
 	private readonly classifierService = new ClassifierService();
 
-	constructor(props: RouteProps) {
+	constructor(props: Params) {
 		super(props);
 
 		this.state = {
@@ -37,20 +41,20 @@ export default class PageEditClassifier extends React.Component<RouteProps, Stat
 	}
 
 	getRouteProps = (): RouteProps => {
-		return useParams();
+		return this.props.params;
 	};
 
 	componentDidMount = async (): Promise<void> => {
 		await this.fetchData();
 	};
 
-	componentDidUpdate = async (prevProps: RouteProps): Promise<void> => {
+	componentDidUpdate = async (prevProps: Params): Promise<void> => {
 		/* if (this.props.match.params.typeCode !== prevProps.match.params.typeCode ||
 			this.props.match.params.uid !== prevProps.match.params.uid) {
 			await this.fetchData();
 		} */
-		if (this.props.typeCode !== prevProps.typeCode ||
-			this.props.uid !== prevProps.uid) {
+		if (this.props.params.typeCode !== prevProps.params.typeCode ||
+			this.props.params.uid !== prevProps.params.uid) {
 			await this.fetchData();
 		}
 	};
@@ -130,3 +134,5 @@ export default class PageEditClassifier extends React.Component<RouteProps, Stat
 		);
 	};
 }
+
+export default withParams(PageEditClassifier);

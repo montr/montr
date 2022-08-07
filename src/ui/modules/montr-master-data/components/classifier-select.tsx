@@ -39,7 +39,7 @@ export class ClassifierSelect extends React.Component<Props, State> {
 		return null;
 	}
 
-	private _classifierService = new ClassifierService();
+	private readonly classifierService = new ClassifierService();
 
 	constructor(props: Props) {
 		super(props);
@@ -67,14 +67,14 @@ export class ClassifierSelect extends React.Component<Props, State> {
 	};
 
 	componentWillUnmount = async (): Promise<void> => {
-		await this._classifierService.abort();
+		await this.classifierService.abort();
 	};
 
 	fetchData = async (): Promise<void> => {
 		const { field } = this.props,
 			{ value } = this.state;
 
-		const data = await this._classifierService.list({
+		const data = await this.classifierService.list({
 			typeCode: field.props.typeCode, focusUid: value, pageSize: 1000
 		});
 
@@ -100,7 +100,7 @@ export class ClassifierSelect extends React.Component<Props, State> {
 
 		this.setState({ items: [], fetching: true });
 
-		const data = await this._classifierService.list({
+		const data = await this.classifierService.list({
 			typeCode: field.props.typeCode, searchTerm: value
 		});
 
