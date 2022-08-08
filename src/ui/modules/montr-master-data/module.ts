@@ -75,7 +75,8 @@ export const Views = {
 export const Patterns = {
 	searchClassifierType: "/classifiers/",
 	addClassifierType: "/classifiers/add/",
-	editClassifierType: "/classifiers/edit/:uid/:tabKey?",
+	editClassifierType: "/classifiers/edit/:uid/",
+	editClassifierTypeTab: "/classifiers/edit/:uid/:tabKey?",
 
 	searchClassifier: "/classifiers/:typeCode/",
 	addClassifier: "/classifiers/:typeCode/add/",
@@ -106,6 +107,7 @@ AppRouteRegistry.add([
 	{ path: Patterns.searchClassifierType, layout: Layout.private, component: React.lazy(() => import("./components/page-search-classifier-type")) },
 	{ path: Patterns.addClassifierType, layout: Layout.private, component: React.lazy(() => import("./components/page-edit-classifier-type")) },
 	{ path: Patterns.editClassifierType, layout: Layout.private, component: React.lazy(() => import("./components/page-edit-classifier-type")) },
+	{ path: Patterns.editClassifierTypeTab, layout: Layout.private, component: React.lazy(() => import("./components/page-edit-classifier-type")) },
 
 	{ path: Patterns.searchClassifier, layout: Layout.private, component: React.lazy(() => import("./components/page-search-classifier")) },
 	{ path: Patterns.addClassifier, layout: Layout.private, component: React.lazy(() => import("./components/page-edit-classifier")) },

@@ -1,8 +1,9 @@
 import { DataTabs, Page, PageHeader } from "@montr-core/components";
+import { withNavigate, withParams } from "@montr-core/components/react-router-wrappers";
 import { DataView } from "@montr-core/models";
 import { Spin } from "antd";
 import * as React from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import { NavigateFunction } from "react-router-dom";
 import { ClassifierBreadcrumb } from ".";
 import { ClassifierType } from "../models";
 import { RouteBuilder, Views } from "../module";
@@ -13,6 +14,10 @@ interface RouteProps {
 	tabKey?: string;
 }
 
+interface Props extends RouteProps {
+	params: RouteProps;
+	navigate: NavigateFunction;
+}
 interface State {
 	loading: boolean;
 	dataView?: DataView<ClassifierType>;
@@ -20,11 +25,11 @@ interface State {
 	data?: ClassifierType;
 }
 
-export default class EditClassifierType extends React.Component<RouteProps, State> {
+class PageEditClassifierType extends React.Component<Props, State> {
 
 	private readonly classifierTypeService = new ClassifierTypeService();
 
-	constructor(props: RouteProps) {
+	constructor(props: Props) {
 		super(props);
 
 		this.state = {
@@ -33,7 +38,7 @@ export default class EditClassifierType extends React.Component<RouteProps, Stat
 	}
 
 	getRouteProps = (): RouteProps => {
-		return useParams();
+		return this.props.params;
 	};
 
 	componentDidMount = async (): Promise<void> => {
@@ -74,11 +79,9 @@ export default class EditClassifierType extends React.Component<RouteProps, Stat
 	handleTabChange = (tabKey: string): void => {
 		const { uid } = this.getRouteProps();
 
-		const navigate = useNavigate();
-
 		const path = RouteBuilder.editClassifierType(uid, tabKey);
 
-		navigate(path);
+		this.props.navigate(path);
 	};
 
 	render = (): React.ReactNode => {
@@ -96,8 +99,8 @@ export default class EditClassifierType extends React.Component<RouteProps, Stat
 		else {
 			title = <>
 				{(uid)
-					? <ClassifierBreadcrumb types={types} type={data} item={{ name: "Настройка" }} />
-					: <ClassifierBreadcrumb item={{ name: "Добавление" }} />
+					? <ClassifierBreadcrumb types={types} type={data} item={{ name: "Settings" }} />
+					: <ClassifierBreadcrumb item={{ name: "Add new type" }} />
 				}
 				<PageHeader>{data.name}</PageHeader>
 			</>;
@@ -125,3 +128,5 @@ export default class EditClassifierType extends React.Component<RouteProps, Stat
 		);
 	};
 }
+
+export default withNavigate(withParams(PageEditClassifierType));
