@@ -9,7 +9,7 @@ interface State {
 	selectedKey: string;
 }
 
-export class PageProfile extends React.Component<unknown, State> {
+export default class PageProfile extends React.Component<unknown, State> {
 
 	private main: HTMLDivElement | undefined = undefined;
 

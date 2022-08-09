@@ -12,6 +12,8 @@ export const Patterns = {
 	registration: "/registration/",
 };
 
+const PageRegistration = React.lazy(() => import("./components/page-registration"));
+
 AppRouteRegistry.add(Layout.public, [
-	{ path: Patterns.registration, component: React.lazy(() => import("./components/page-registration")) },
+	{ path: Patterns.registration, element: <PageRegistration /> },
 ]);

@@ -41,10 +41,13 @@ export const RouteBuilder = {
 	}
 };
 
+const PageSearchDocuments = React.lazy(() => import("./components/page-search-documents"));
+const PageViewDocument = React.lazy(() => import("./components/page-view-document"));
+
 AppRouteRegistry.add(Layout.private, [
-	{ path: Patterns.searchDocuments, component: React.lazy(() => import("./components/page-search-documents")) },
-	{ path: Patterns.viewDocument, component: React.lazy(() => import("./components/page-view-document")) },
-	{ path: Patterns.viewDocumentTab, component: React.lazy(() => import("./components/page-view-document")) },
+	{ path: Patterns.searchDocuments, element: <PageSearchDocuments /> },
+	{ path: Patterns.viewDocument, element: <PageViewDocument /> },
+	{ path: Patterns.viewDocumentTab, element: <PageViewDocument /> },
 ]);
 
 ComponentRegistry.add([

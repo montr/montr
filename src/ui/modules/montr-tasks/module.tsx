@@ -37,10 +37,13 @@ export const RouteBuilder = {
 	}
 };
 
+const PageSearchTasks = React.lazy(() => import("./components/page-search-tasks"));
+const PageViewTask = React.lazy(() => import("./components/page-view-task"));
+
 AppRouteRegistry.add(Layout.private, [
-	{ path: Patterns.searchTasks, /* element:{}, */ component: React.lazy(() => import("./components/page-search-tasks")) },
-	{ path: Patterns.viewTask, component: React.lazy(() => import("./components/page-view-task")) },
-	{ path: Patterns.viewTaskTab, component: React.lazy(() => import("./components/page-view-task")) },
+	{ path: Patterns.searchTasks, element: <PageSearchTasks /> },
+	{ path: Patterns.viewTask, element: <PageViewTask /> },
+	{ path: Patterns.viewTaskTab, element: <PageViewTask /> }
 ]);
 
 ComponentRegistry.add([

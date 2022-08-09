@@ -3,8 +3,7 @@ import { Layout } from "antd";
 import * as React from "react";
 import { Outlet } from "react-router-dom";
 
-
-export class AuthLayout extends React.Component {
+export default class AuthLayout extends React.Component {
 	render = () => {
 		return (
 			<Layout className="public-layout auth-layout">

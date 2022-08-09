@@ -1,7 +1,6 @@
 import { AppSetupRedirect, AuthCallbackHandler, ErrorBoundary, PageContextProvider, SuspenseFallback, UserContextProvider } from "@montr-core/components";
 import { Layout } from "@montr-core/constants";
-import { AppLayoutRegistry, AppRouteRegistry } from "@montr-core/services";
-import { PageProfile } from "@montr-idx/components/page-profile";
+import { AppRouteRegistry } from "@montr-core/services";
 import { CompanyContextProvider } from "@montr-kompany/components";
 import { ConfigProvider } from "antd";
 import { Locale } from "antd/lib/locale-provider";
@@ -11,19 +10,22 @@ import * as React from "react";
 import { createRoot } from "react-dom/client";
 import { Translation } from "react-i18next";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import * as Layouts from "./components";
-import { AuthLayout, PrivateLayout, PublicLayout } from "./components";
 import "./modules";
 
-AppLayoutRegistry.register(Layout.auth, Layouts.AuthLayout);
+/* AppLayoutRegistry.register(Layout.auth, Layouts.AuthLayout);
 AppLayoutRegistry.register(Layout.public, Layouts.PublicLayout);
-AppLayoutRegistry.register(Layout.private, Layouts.PrivateLayout);
+AppLayoutRegistry.register(Layout.private, Layouts.PrivateLayout); */
 
 function getLocale(lng: string): Locale {
 	if (lng == "ru") return ru_RU;
 	return en_US;
 }
 
+const PublicLayout = React.lazy(() => import("./components/public-layout"));
+const PrivateLayout = React.lazy(() => import("./components/private-layout"));
+const AuthLayout = React.lazy(() => import("./components/auth-layout"));
+
+const PageProfile = React.lazy(() => import("@montr-idx/components/page-profile"));
 const PageError404 = React.lazy(() => import("@montr-core/components/page-error-404"));
 
 class App extends React.Component {
@@ -47,26 +49,22 @@ class App extends React.Component {
 												<AppSetupRedirect>
 													<Routes>
 														<Route element={<PublicLayout />} >
-															{AppRouteRegistry.get(Layout.public).map(({ component: Component, ...props }, index) => {
-																return <Route key={index} element={<Component />} {...props} />;
-															})}
+															{AppRouteRegistry.get(Layout.public).map(({ ...props }, index) => <Route key={index} {...props} />)}
+															{/* {LayoutRoutes(Layout.public)} */}
 														</Route>
 														<Route element={<PrivateLayout />} >
 
 															<Route element={<PageProfile />} >
-																{AppRouteRegistry.get(Layout.profile).map(({ component: Component, ...props }, index) => {
-																	return <Route key={index} element={<Component />} {...props} />;
-																})}
+																{AppRouteRegistry.get(Layout.profile).map(({ ...props }, index) => <Route key={index} {...props} />)}
+																{/* {LayoutRoutes(Layout.private)} */}
 															</Route>
 
-															{AppRouteRegistry.get(Layout.private).map(({ component: Component, ...props }, index) => {
-																return <Route key={index} element={<Component />} {...props} />;
-															})}
+															{AppRouteRegistry.get(Layout.private).map(({ ...props }, index) => <Route key={index} {...props} />)}
+															{/* {LayoutRoutes(Layout.private)} */}
 														</Route>
 														<Route element={<AuthLayout />} >
-															{AppRouteRegistry.get(Layout.auth).map(({ component: Component, ...props }, index) => {
-																return <Route key={index} element={<Component />} {...props} />;
-															})}
+															{AppRouteRegistry.get(Layout.auth).map(({ ...props }, index) => <Route key={index} {...props} />)}
+															{/* {LayoutRoutes(Layout.auth)} */}
 														</Route>
 
 														<Route path="*" element={<PageError404 />} />
@@ -85,6 +83,10 @@ class App extends React.Component {
 		);
 	};
 }
+
+/* function LayoutRoutes(layout: string) {
+	return useRoutes(AppRouteRegistry.get(layout));
+} */
 
 const root = createRoot(document.getElementById("root"));
 

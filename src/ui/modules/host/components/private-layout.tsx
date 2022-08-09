@@ -4,7 +4,7 @@ import * as React from "react";
 import { Outlet } from "react-router-dom";
 import { MainMenu } from "./main-menu";
 
-export class PrivateLayout extends React.Component {
+export default class PrivateLayout extends React.Component {
 
 	render = () => {
 

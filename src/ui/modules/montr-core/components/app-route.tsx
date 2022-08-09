@@ -9,10 +9,10 @@ import { IRoute } from "../models";
 		</LayoutComponent>
 	)} />
 ); */
-export const AppRoute = ({ component: Component, /* layout: Layout, layoutComponent: LayoutComponent, */ ...rest }: IRoute): React.ReactElement => (
-	<Route {...rest} element={
-		// <LayoutComponent>
-		<Component /* {...props} */ />
-		// </LayoutComponent>
-	} />
+export const AppRoute = ({ /* component: Component, layout: Layout, layoutComponent: LayoutComponent, */ ...rest }: IRoute): React.ReactElement => (
+	<Route {...rest} /* element={
+		<LayoutComponent>
+		<Component {...props} />
+		</LayoutComponent>
+	} */ />
 );

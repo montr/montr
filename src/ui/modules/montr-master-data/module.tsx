@@ -103,17 +103,22 @@ export const RouteBuilder = {
 	},
 };
 
-AppRouteRegistry.add(Layout.private, [
-	{ path: Patterns.searchClassifierType, component: React.lazy(() => import("./components/page-search-classifier-type")) },
-	{ path: Patterns.addClassifierType, component: React.lazy(() => import("./components/page-edit-classifier-type")) },
-	{ path: Patterns.editClassifierType, component: React.lazy(() => import("./components/page-edit-classifier-type")) },
-	{ path: Patterns.editClassifierTypeTab, component: React.lazy(() => import("./components/page-edit-classifier-type")) },
+const PageSearchClassifierType = React.lazy(() => import("./components/page-search-classifier-type"));
+const PageEditClassifierType = React.lazy(() => import("./components/page-edit-classifier-type"));
+const PageSearchClassifier = React.lazy(() => import("./components/page-search-classifier"));
+const PageEditClassifier = React.lazy(() => import("./components/page-edit-classifier"));
 
-	{ path: Patterns.searchClassifier, component: React.lazy(() => import("./components/page-search-classifier")) },
-	{ path: Patterns.addClassifier, component: React.lazy(() => import("./components/page-edit-classifier")) },
-	{ path: Patterns.addClassifierParent, component: React.lazy(() => import("./components/page-edit-classifier")) },
-	{ path: Patterns.editClassifier, component: React.lazy(() => import("./components/page-edit-classifier")) },
-	{ path: Patterns.editClassifierTab, component: React.lazy(() => import("./components/page-edit-classifier")) },
+AppRouteRegistry.add(Layout.private, [
+	{ path: Patterns.searchClassifierType, element: <PageSearchClassifierType /> },
+	{ path: Patterns.addClassifierType, element: <PageEditClassifierType /> },
+	{ path: Patterns.editClassifierType, element: <PageEditClassifierType /> },
+	{ path: Patterns.editClassifierTypeTab, element: <PageEditClassifierType /> },
+
+	{ path: Patterns.searchClassifier, element: <PageSearchClassifier /> },
+	{ path: Patterns.addClassifier, element: <PageEditClassifier /> },
+	{ path: Patterns.addClassifierParent, element: <PageEditClassifier /> },
+	{ path: Patterns.editClassifier, element: <PageEditClassifier /> },
+	{ path: Patterns.editClassifierTab, element: <PageEditClassifier /> },
 ]);
 
 ComponentRegistry.add([

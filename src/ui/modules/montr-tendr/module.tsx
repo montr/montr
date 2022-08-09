@@ -46,10 +46,14 @@ export const RouteBuilder = {
 	},
 };
 
+const PageSearchEvents = React.lazy(() => import("./components/page-search-events"));
+const PageSelectEventTemplate = React.lazy(() => import("./components/page-select-event-template"));
+const PageEditEvent = React.lazy(() => import("./components/page-edit-event"));
+
 AppRouteRegistry.add(Layout.private, [
-	{ path: Patterns.searchEvents, component: React.lazy(() => import("./components/page-search-events")) },
-	{ path: Patterns.addEvent, component: React.lazy(() => import("./components/page-select-event-template")) },
-	{ path: Patterns.editEvent, component: React.lazy(() => import("./components/page-edit-event")) }
+	{ path: Patterns.searchEvents, element: <PageSearchEvents /> },
+	{ path: Patterns.addEvent, element: <PageSelectEventTemplate /> },
+	{ path: Patterns.editEvent, element: <PageEditEvent /> }
 ]);
 
 ComponentRegistry.add([

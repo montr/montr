@@ -62,18 +62,24 @@ import("./components").then(x => {
 	x.DataFieldFactory.register("date", new x.DateFieldFactory());
 });
 
+const PageSetup = React.lazy(() => import("./components/page-setup"));
+const PageHome = React.lazy(() => import("./components/page-home"));
+const PageDashboard = React.lazy(() => import("./components/page-dashboard"));
+const PageSearchLocaleString = React.lazy(() => import("./components/page-search-locale-string"));
+const PageSettings = React.lazy(() => import("./components/page-settings"));
+
 AppRouteRegistry.add(Layout.auth, [
-	{ path: Patterns.setup, component: React.lazy(() => import("./components/page-setup")) }
+	{ path: Patterns.setup, element: <PageSetup /> }
 ]);
 
 AppRouteRegistry.add(Layout.public, [
-	{ path: Patterns.home, component: React.lazy(() => import("./components/page-home")) },
+	{ path: Patterns.home, element: <PageHome /> },
 ]);
 
 AppRouteRegistry.add(Layout.private, [
-	{ path: Patterns.dashboard, component: React.lazy(() => import("./components/page-dashboard")) },
-	{ path: Patterns.locales, component: React.lazy(() => import("./components/page-search-locale-string")) },
-	{ path: Patterns.settings, component: React.lazy(() => import("./components/page-settings")) },
+	{ path: Patterns.dashboard, element: <PageDashboard /> },
+	{ path: Patterns.locales, element: <PageSearchLocaleString /> },
+	{ path: Patterns.settings, element: <PageSettings /> },
 ]);
 
 ComponentRegistry.add([
