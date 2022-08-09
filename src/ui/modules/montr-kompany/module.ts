@@ -16,6 +16,6 @@ export const Patterns = {
 export const Views = {
 };
 
-AppRouteRegistry.add([
-	{ path: Patterns.registerCompany, layout: Layout.public, component: React.lazy(() => import("./components/page-register-company")) },
+AppRouteRegistry.add(Layout.public, [
+	{ path: Patterns.registerCompany, component: React.lazy(() => import("./components/page-register-company")) },
 ]);

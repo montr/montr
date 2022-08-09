@@ -16,7 +16,7 @@ export const AppRouteList = ({ routes, layoutRegistry, defaultLayout, errorLayou
 	<BrowserRouter>
 		<AppSetupRedirect>
 			<Routes>
-				{routes.map(({ layout, component: Component, ...props }, _do_not_remove_) => {
+				{routes.map(({ /* layout, */ component: Component, ...props }, _do_not_remove_) => {
 					/* return <AppRoute key={0} {...props} layoutComponent={layoutRegistry(layout || defaultLayout)} />; */
 					return <Route key={0} {...props} element={<Component />} />;
 				})}

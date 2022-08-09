@@ -3,15 +3,15 @@ import { AppRouteRegistry } from "@montr-core/services";
 import React from "react";
 
 export const Api = {
-    companyRegistrationRequestList: "/companyRegistrationRequest/search",
-    companyRegistrationRequestCreate: "/companyRegistrationRequest/create",
-    companyRegistrationRequestDelete: "/companyRegistrationRequest/delete"
+	companyRegistrationRequestList: "/companyRegistrationRequest/search",
+	companyRegistrationRequestCreate: "/companyRegistrationRequest/create",
+	companyRegistrationRequestDelete: "/companyRegistrationRequest/delete"
 };
 
 export const Patterns = {
-    registration: "/registration/",
+	registration: "/registration/",
 };
 
-AppRouteRegistry.add([
-    { path: Patterns.registration, layout: Layout.public, component: React.lazy(() => import("./components/page-registration")) },
+AppRouteRegistry.add(Layout.public, [
+	{ path: Patterns.registration, component: React.lazy(() => import("./components/page-registration")) },
 ]);

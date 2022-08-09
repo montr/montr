@@ -103,17 +103,17 @@ export const RouteBuilder = {
 	},
 };
 
-AppRouteRegistry.add([
-	{ path: Patterns.searchClassifierType, layout: Layout.private, component: React.lazy(() => import("./components/page-search-classifier-type")) },
-	{ path: Patterns.addClassifierType, layout: Layout.private, component: React.lazy(() => import("./components/page-edit-classifier-type")) },
-	{ path: Patterns.editClassifierType, layout: Layout.private, component: React.lazy(() => import("./components/page-edit-classifier-type")) },
-	{ path: Patterns.editClassifierTypeTab, layout: Layout.private, component: React.lazy(() => import("./components/page-edit-classifier-type")) },
+AppRouteRegistry.add(Layout.private, [
+	{ path: Patterns.searchClassifierType, component: React.lazy(() => import("./components/page-search-classifier-type")) },
+	{ path: Patterns.addClassifierType, component: React.lazy(() => import("./components/page-edit-classifier-type")) },
+	{ path: Patterns.editClassifierType, component: React.lazy(() => import("./components/page-edit-classifier-type")) },
+	{ path: Patterns.editClassifierTypeTab, component: React.lazy(() => import("./components/page-edit-classifier-type")) },
 
-	{ path: Patterns.searchClassifier, layout: Layout.private, component: React.lazy(() => import("./components/page-search-classifier")) },
-	{ path: Patterns.addClassifier, layout: Layout.private, component: React.lazy(() => import("./components/page-edit-classifier")) },
-	{ path: Patterns.addClassifierParent, layout: Layout.private, component: React.lazy(() => import("./components/page-edit-classifier")) },
-	{ path: Patterns.editClassifier, layout: Layout.private, component: React.lazy(() => import("./components/page-edit-classifier")) },
-	{ path: Patterns.editClassifierTab, layout: Layout.private, component: React.lazy(() => import("./components/page-edit-classifier")) },
+	{ path: Patterns.searchClassifier, component: React.lazy(() => import("./components/page-search-classifier")) },
+	{ path: Patterns.addClassifier, component: React.lazy(() => import("./components/page-edit-classifier")) },
+	{ path: Patterns.addClassifierParent, component: React.lazy(() => import("./components/page-edit-classifier")) },
+	{ path: Patterns.editClassifier, component: React.lazy(() => import("./components/page-edit-classifier")) },
+	{ path: Patterns.editClassifierTab, component: React.lazy(() => import("./components/page-edit-classifier")) },
 ]);
 
 ComponentRegistry.add([

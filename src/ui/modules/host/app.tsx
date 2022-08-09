@@ -1,6 +1,7 @@
 import { AppSetupRedirect, AuthCallbackHandler, ErrorBoundary, PageContextProvider, SuspenseFallback, UserContextProvider } from "@montr-core/components";
 import { Layout } from "@montr-core/constants";
 import { AppLayoutRegistry, AppRouteRegistry } from "@montr-core/services";
+import { PageProfile } from "@montr-idx/components/page-profile";
 import { CompanyContextProvider } from "@montr-kompany/components";
 import { ConfigProvider } from "antd";
 import { Locale } from "antd/lib/locale-provider";
@@ -51,6 +52,13 @@ class App extends React.Component {
 															})}
 														</Route>
 														<Route element={<PrivateLayout />} >
+
+															<Route element={<PageProfile />} >
+																{AppRouteRegistry.get(Layout.profile).map(({ component: Component, ...props }, index) => {
+																	return <Route key={index} element={<Component />} {...props} />;
+																})}
+															</Route>
+
 															{AppRouteRegistry.get(Layout.private).map(({ component: Component, ...props }, index) => {
 																return <Route key={index} element={<Component />} {...props} />;
 															})}
@@ -60,11 +68,9 @@ class App extends React.Component {
 																return <Route key={index} element={<Component />} {...props} />;
 															})}
 														</Route>
-														<Route path="*" element={
-															<React.Suspense fallback={<>...</>}>
-																<PageError404 />
-															</React.Suspense>
-														} />
+
+														<Route path="*" element={<PageError404 />} />
+
 													</Routes>
 												</AppSetupRedirect>
 											</BrowserRouter>

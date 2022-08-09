@@ -1,4 +1,4 @@
-import { ErrorBoundary, Footer } from "@montr-core/components";
+import { ErrorBoundary, Footer, SuspenseFallback } from "@montr-core/components";
 import { Layout } from "antd";
 import * as React from "react";
 import { Outlet } from "react-router-dom";
@@ -30,9 +30,9 @@ export class PrivateLayout extends React.Component {
 				<Layout>
 					<Layout.Content className="bg-white">
 						<ErrorBoundary>
-
-							<Outlet />
-
+							<React.Suspense fallback={<SuspenseFallback />}>
+								<Outlet />
+							</React.Suspense>
 						</ErrorBoundary>
 					</Layout.Content>
 					<Layout.Footer className="bg-white">
