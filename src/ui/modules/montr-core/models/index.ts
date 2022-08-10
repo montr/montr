@@ -14,6 +14,5 @@ export * from "./guid";
 export * from "./indexer";
 export * from "./locale-string";
 export * from "./menu";
-export * from "./route";
 export * from "./search-request";
 

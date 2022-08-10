@@ -1,4 +1,3 @@
-export * from "./app-layout-registry";
 export * from "./app-route-registry";
 export * from "./app-service";
 export * from "./auth-service";
