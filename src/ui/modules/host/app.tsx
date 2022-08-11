@@ -38,12 +38,10 @@ class App extends React.Component {
 						</ConfigProvider>}
 					</Translation>
 				</ErrorBoundary>
-			</React.Suspense >
+			</React.Suspense>
 		);
 	};
 }
-
-
 
 const root = createRoot(document.getElementById("root"));
 

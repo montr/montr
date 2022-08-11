@@ -57,4 +57,3 @@ ComponentRegistry.add([
 
 	{ path: ComponentNameConvention.entityPane("document"), component: React.lazy(() => import("./components/pane-view-document")) }
 ]);
-
