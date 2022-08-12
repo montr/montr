@@ -1,9 +1,9 @@
 import { DataTabs, Page, PageHeader } from "@montr-core/components";
-import { withParams } from "@montr-core/components/react-router-wrappers";
+import { withNavigate, withParams } from "@montr-core/components/react-router-wrappers";
 import { DataView } from "@montr-core/models";
 import { Spin } from "antd";
 import * as React from "react";
-import { useNavigate } from "react-router-dom";
+import { NavigateFunction } from "react-router-dom";
 import { ClassifierBreadcrumb } from ".";
 import { Classifier, ClassifierType } from "../models";
 import { EntityTypeCode, RouteBuilder, Views } from "../module";
@@ -18,7 +18,9 @@ interface RouteProps {
 
 interface Params {
 	params: RouteProps;
+	navigate: NavigateFunction;
 }
+
 interface State {
 	loading: boolean;
 	dataView?: DataView<Classifier>;
@@ -86,22 +88,18 @@ class PageEditClassifier extends React.Component<Params, State> {
 			this.setState({ data });
 		}
 		else {
-			const navigate = useNavigate();
-
 			const path = RouteBuilder.editClassifier(typeCode, data.uid);
 
-			navigate(path);
+			this.props.navigate(path);
 		}
 	};
 
 	handleTabChange = (tabKey: string): void => {
 		const { typeCode, uid } = this.getRouteProps();
 
-		const navigate = useNavigate();
-
 		const path = RouteBuilder.editClassifier(typeCode, uid, tabKey);
 
-		navigate(path);
+		this.props.navigate(path);
 	};
 
 	render = (): React.ReactNode => {
@@ -135,4 +133,4 @@ class PageEditClassifier extends React.Component<Params, State> {
 	};
 }
 
-export default withParams(PageEditClassifier);
+export default withNavigate(withParams(PageEditClassifier));

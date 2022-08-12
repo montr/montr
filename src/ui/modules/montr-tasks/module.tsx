@@ -26,7 +26,7 @@ export const Views = {
 };
 
 export const Patterns = {
-	searchTasks: "/tasks/",
+	searchTasks: "/tasks",
 	viewTask: "/tasks/view/:uid",
 	viewTaskTab: "/tasks/view/:uid/:tabKey",
 };

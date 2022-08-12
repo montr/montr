@@ -10,7 +10,7 @@ export const Api = {
 };
 
 export const Patterns = {
-	registerCompany: "/register/company/"
+	registerCompany: "/register/company"
 };
 
 export const Views = {

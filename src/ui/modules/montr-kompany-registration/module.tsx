@@ -9,7 +9,7 @@ export const Api = {
 };
 
 export const Patterns = {
-	registration: "/registration/",
+	registration: "/registration",
 };
 
 const PageRegistration = React.lazy(() => import("./components/page-registration"));

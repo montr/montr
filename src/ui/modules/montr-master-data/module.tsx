@@ -73,23 +73,22 @@ export const Views = {
 };
 
 export const Patterns = {
-	searchClassifierType: "/classifiers/",
-	addClassifierType: "/classifiers/add/",
-	editClassifierType: "/classifiers/edit/:uid/",
-	editClassifierTypeTab: "/classifiers/edit/:uid/:tabKey?",
+	searchClassifierType: "/classifiers",
+	addClassifierType: "/classifiers/add",
+	editClassifierType: "/classifiers/edit/:uid",
+	editClassifierTypeTab: "/classifiers/edit/:uid/:tabKey",
 
-	searchClassifier: "/classifiers/:typeCode/",
-	addClassifier: "/classifiers/:typeCode/add/",
-	addClassifierParent: "/classifiers/:typeCode/add/:parentUid?",
+	searchClassifier: "/classifiers/:typeCode",
+	addClassifier: "/classifiers/:typeCode/add",
+	addClassifierParent: "/classifiers/:typeCode/add/:parentUid",
 	editClassifier: "/classifiers/:typeCode/edit/:uid",
-	editClassifierTab: "/classifiers/:typeCode/edit/:uid/:tabKey?",
+	editClassifierTab: "/classifiers/:typeCode/edit/:uid/:tabKey",
 };
 
 export const RouteBuilder = {
 	editClassifierType: (uid: Guid | string, tabKey = "info"): string => {
-		return generatePath(Patterns.editClassifierType, { uid: uid.toString(), tabKey });
+		return generatePath(Patterns.editClassifierTypeTab, { uid: uid.toString(), tabKey });
 	},
-
 	searchClassifier: (typeCode: string): string => {
 		return generatePath(Patterns.searchClassifier, { typeCode });
 	},
@@ -99,7 +98,7 @@ export const RouteBuilder = {
 			: generatePath(Patterns.addClassifier, { typeCode });
 	},
 	editClassifier: (typeCode: string, uid: Guid | string, tabKey = "info"): string => {
-		return generatePath(Patterns.editClassifier, { typeCode, uid: uid.toString(), tabKey });
+		return generatePath(Patterns.editClassifierTab, { typeCode, uid: uid.toString(), tabKey });
 	},
 };
 

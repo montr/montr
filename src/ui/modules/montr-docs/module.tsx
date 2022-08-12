@@ -15,7 +15,7 @@ export const Api = {
 };
 
 export const Patterns = {
-	searchDocuments: "/documents/",
+	searchDocuments: "/documents",
 	viewDocument: "/documents/view/:uid",
 	viewDocumentTab: "/documents/view/:uid/:tabKey",
 };

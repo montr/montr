@@ -18,6 +18,7 @@ interface Props extends RouteProps {
 	params: RouteProps;
 	navigate: NavigateFunction;
 }
+
 interface State {
 	loading: boolean;
 	dataView?: DataView<ClassifierType>;

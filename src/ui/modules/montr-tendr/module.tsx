@@ -27,9 +27,10 @@ export const Api = {
 };
 
 export const Patterns = {
-	searchEvents: "/events/",
+	searchEvents: "/events",
 	addEvent: "/events/new",
-	editEvent: "/events/edit/:uid/:tabKey?",
+	editEvent: "/events/edit/:uid",
+	editEventTab: "/events/edit/:uid/:tabKey",
 };
 
 export const EntityTypeCode = {
@@ -42,7 +43,7 @@ export const Views = {
 
 export const RouteBuilder = {
 	editEvent: (uid: string, tabKey = "info"): string => {
-		return generatePath(Patterns.editEvent, { uid, tabKey });
+		return generatePath(Patterns.editEventTab, { uid, tabKey });
 	},
 };
 
