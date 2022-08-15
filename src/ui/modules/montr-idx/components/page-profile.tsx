@@ -1,7 +1,8 @@
-import { DataBreadcrumb, DataMenu, Page, RouteList, Toolbar } from "@montr-core/components";
+import { DataBreadcrumb, DataMenu, Page, Toolbar } from "@montr-core/components";
 import React from "react";
 import { Translation } from "react-i18next";
-import { Locale, ProfileRoutes } from "../module";
+import { Outlet } from "react-router-dom";
+import { Locale } from "../module";
 
 interface State {
 	mode: "inline" | "horizontal";
@@ -73,7 +74,7 @@ export default class PageProfile extends React.Component<unknown, State> {
 								<DataMenu menuId="ProfileMenu" mode={mode} />
 							</div>
 							<div className="content">
-								<RouteList routes={ProfileRoutes} />
+								<Outlet />
 							</div>
 						</div>
 					</div>

@@ -5,7 +5,7 @@ import { RouteBuilder } from "@montr-docs/module";
 import { CompanyContextProps, withCompanyContext } from "@montr-kompany/components";
 import { Button, List, Space, Spin, Typography } from "antd";
 import React from "react";
-import { Redirect } from "react-router";
+import { Navigate } from "react-router-dom";
 import { CompanyRegistrationRequestService } from "../services";
 
 interface Props extends UserContextProps, CompanyContextProps {
@@ -57,7 +57,7 @@ class _StepRegisterCompany extends React.Component<Props, State> {
 	};
 
 	openRequest = async (item: IDocument) => {
-		this.setState({ redirectTo: RouteBuilder.viewDocument(item.uid) });
+		this.setState({ redirectTo: RouteBuilder.viewDocument(item.uid, "form") });
 	};
 
 	deleteRequest = async (item: IDocument) => {
@@ -79,7 +79,7 @@ class _StepRegisterCompany extends React.Component<Props, State> {
 			{ redirectTo, loading, documents } = this.state;
 
 		if (redirectTo) {
-			return <Redirect to={redirectTo} push={true} />;
+			return <Navigate to={redirectTo} />;
 		}
 
 		return (

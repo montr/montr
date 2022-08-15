@@ -1,13 +1,10 @@
 import { ErrorBoundary, Footer } from "@montr-core/components";
 import { Breadcrumb, Layout } from "antd";
 import * as React from "react";
+import { Outlet } from "react-router-dom";
 import { MainMenu } from "./main-menu";
 
-interface Props {
-	children: React.ReactNode;
-}
-
-export class PublicLayout extends React.Component<Props> {
+export default class PublicLayout extends React.Component {
 
 	render = () => {
 		return (
@@ -35,7 +32,7 @@ export class PublicLayout extends React.Component<Props> {
 
 						<div style={{ minHeight: 280 }}>
 
-							{this.props.children}
+							<Outlet />
 
 						</div>
 					</ErrorBoundary>

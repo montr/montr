@@ -1,34 +1,37 @@
-import * as React from "react";
 import { Page } from "@montr-core/components";
-import { Spin, Button } from "antd";
-import { RouteComponentProps } from "react-router-dom";
+import { Patterns } from "@montr-core/module";
+import { Button, Spin } from "antd";
+import * as React from "react";
 import { Translation } from "react-i18next";
-import { AccountService } from "../services/account-service";
+import { Navigate, useParams } from "react-router-dom";
 import { Locale } from "../module";
+import { AccountService } from "../services/account-service";
 
 interface RouteProps {
-	userId: string;
-	code: string;
-}
-
-interface Props extends RouteComponentProps<RouteProps> {
+	userId?: string;
+	code?: string;
 }
 
 interface State {
 	loading: boolean;
+	navigateTo?: string;
 }
 
-export default class ConfirmEmail extends React.Component<Props, State> {
+export default class ConfirmEmail extends React.Component<unknown, State> {
 
 	private _accountService = new AccountService();
 
-	constructor(props: Props) {
+	constructor(props: unknown) {
 		super(props);
 
 		this.state = {
 			loading: true
 		};
 	}
+
+	getRouteProps = (): RouteProps => {
+		return useParams();
+	};
 
 	componentDidMount = async () => {
 		await this.fetchData();
@@ -39,7 +42,7 @@ export default class ConfirmEmail extends React.Component<Props, State> {
 	};
 
 	fetchData = async () => {
-		const { userId, code } = this.props.match.params;
+		const { userId, code } = this.getRouteProps();
 
 		const result = await this._accountService.confirmEmail({ userId, code });
 
@@ -49,12 +52,15 @@ export default class ConfirmEmail extends React.Component<Props, State> {
 	};
 
 	handleContinue = async () => {
-		// todo: use route const, redirect to profile
-		this.props.history.push("/dashboard");
+		this.setState({ navigateTo: Patterns.dashboard });
 	};
 
 	render = () => {
-		const { loading } = this.state;
+		const { loading, navigateTo } = this.state;
+
+		if (navigateTo) {
+			return <Navigate to={navigateTo} />;
+		}
 
 		return (
 			<Translation ns={Locale.Namespace}>

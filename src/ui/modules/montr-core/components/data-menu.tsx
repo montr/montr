@@ -2,21 +2,29 @@ import { NavigationService } from "@montr-core/services";
 import { Menu } from "antd";
 import { MenuProps } from "antd/lib/menu";
 import * as React from "react";
-import { RouteComponentProps, withRouter } from "react-router-dom";
+import { Navigate, NavigateFunction } from "react-router-dom";
 import { IMenu } from "../models";
 import { ContentService } from "../services/content-service";
 import { Icon } from "./";
+import { withNavigate } from "./react-router-wrappers";
 
-interface Props extends MenuProps, RouteComponentProps {
-	menuId: string;
+interface Props extends MenuProps {
+	menuId?: string;
 	// head?: React.ReactElement<MenuProps>;
 	tail?: IMenu[];
+	navigate: NavigateFunction;
 }
 
 interface State {
 	menu?: IMenu;
 	openKeys?: string[];
 	selectedKeys?: string[];
+	navigateTo?: NavigateLocation;
+}
+
+interface NavigateLocation {
+	path: string;
+	navigated?: boolean;
 }
 
 type MenuItem = Required<MenuProps>['items'][number];
@@ -34,16 +42,22 @@ class WrappedDataMenu extends React.Component<Props, State> {
 	}
 
 	componentDidMount = async (): Promise<void> => {
+		await this.fetchData();
+	};
+
+	fetchData = async (): Promise<void> => {
 		const { menuId } = this.props;
 
-		const menu = await this.contentService.getMenu(menuId),
-			path = this.navigation.getPathname(),
-			openKeys: string[] = [],
-			selectedKeys: string[] = [];
+		if (menuId) {
+			const menu = await this.contentService.getMenu(menuId),
+				path = this.navigation.getPathname(),
+				openKeys: string[] = [],
+				selectedKeys: string[] = [];
 
-		this.collectOpenAndSelectedItems(menu, path, openKeys, selectedKeys);
+			this.collectOpenAndSelectedItems(menu, path, openKeys, selectedKeys);
 
-		this.setState({ menu, openKeys, selectedKeys });
+			this.setState({ menu, openKeys, selectedKeys });
+		}
 	};
 
 	// returns true, if parent item contains selected menu item
@@ -91,7 +105,7 @@ class WrappedDataMenu extends React.Component<Props, State> {
 	};
 
 	componentWillUnmount = async (): Promise<void> => {
-		// await this.contentService.abort();
+		await this.contentService.abort();
 	};
 
 	buildItems = (items: IMenu[], keyPrefix = ""): MenuItem[] => {
@@ -123,7 +137,9 @@ class WrappedDataMenu extends React.Component<Props, State> {
 					? item.route as string
 					: item.route();
 
-			this.props.history.push(route);
+			// this.setState({ navigateTo: { path: route } });
+
+			this.props.navigate(route);
 		}
 		else if (item.url) {
 			window.location.href = item.url;
@@ -131,9 +147,14 @@ class WrappedDataMenu extends React.Component<Props, State> {
 	};
 
 	render = (): React.ReactNode => {
+		const { menuId, /* head, */ tail, navigate: _, ...props } = this.props,
+			{ menu, openKeys, selectedKeys, navigateTo } = this.state;
 
-		const { menuId, /* head, */ tail, staticContext: _, ...props } = this.props,
-			{ menu, openKeys, selectedKeys } = this.state;
+		if (navigateTo && !navigateTo.navigated) {
+			navigateTo.navigated = true;
+			this.setState({ navigateTo: undefined });
+			return <Navigate to={navigateTo.path} />;
+		}
 
 		let menus: IMenu[] = [];
 
@@ -142,15 +163,14 @@ class WrappedDataMenu extends React.Component<Props, State> {
 
 		const items = this.buildItems(menus, menuId);
 
-		return (<>
-			{menu && <Menu
+		return (
+			<Menu
 				defaultOpenKeys={openKeys}
 				defaultSelectedKeys={selectedKeys}
 				items={items}
 				{...props} />
-			}
-		</>);
+		);
 	};
 }
 
-export const DataMenu = withRouter(WrappedDataMenu);
+export const DataMenu = withNavigate(WrappedDataMenu);

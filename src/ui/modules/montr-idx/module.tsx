@@ -79,26 +79,38 @@ export const Views = {
 	userRolesGrid: "UserRoles/Grid",
 };
 
-AppRouteRegistry.add([
-	{ path: Patterns.register, layout: Layout.auth, exact: true, component: React.lazy(() => import("./components/page-register")) },
-	{ path: Patterns.confirmEmail, layout: Layout.auth, exact: true, component: React.lazy(() => import("./components/page-confirm-email")) },
-	{ path: Patterns.confirmEmailChange, layout: Layout.auth, exact: true, component: React.lazy(() => import("./components/page-confirm-email-change")) },
-	{ path: Patterns.sendEmailConfirmation, layout: Layout.auth, exact: true, component: React.lazy(() => import("./components/page-send-email-confirmation")) },
-	{ path: Patterns.login, layout: Layout.auth, exact: true, component: React.lazy(() => import("./components/page-login")) },
-	{ path: Patterns.logout, layout: Layout.auth, exact: true, component: React.lazy(() => import("./components/page-logout")) },
-	{ path: Patterns.externalLogin, layout: Layout.auth, exact: true, component: React.lazy(() => import("./components/page-external-login")) },
-	{ path: Patterns.forgotPassword, layout: Layout.auth, exact: true, component: React.lazy(() => import("./components/page-forgot-password")) },
-	{ path: Patterns.resetPassword, layout: Layout.auth, exact: true, component: React.lazy(() => import("./components/page-reset-password")) },
+const PageRegister = React.lazy(() => import("./components/page-register"));
+const PageConfirmEmail = React.lazy(() => import("./components/page-confirm-email"));
+const PageConfirmEmailChange = React.lazy(() => import("./components/page-confirm-email-change"));
+const PageSendEmailConfirmation = React.lazy(() => import("./components/page-send-email-confirmation"));
+const PageLogin = React.lazy(() => import("./components/page-login"));
+const PageLogout = React.lazy(() => import("./components/page-logout"));
+const PageExternalLogin = React.lazy(() => import("./components/page-external-login"));
+const PageForgotPassword = React.lazy(() => import("./components/page-forgot-password"));
+const PageResetPassword = React.lazy(() => import("./components/page-reset-password"));
+const PaneEditProfile = React.lazy(() => import("./components/pane-edit-profile"));
+const PaneSecurity = React.lazy(() => import("./components/pane-security"));
+const PaneExternalLogins = React.lazy(() => import("./components/pane-external-logins"));
+const PaneExternalLoginLink = React.lazy(() => import("./components/pane-external-login-link"));
 
-	{ path: Patterns.profile, component: React.lazy(() => import("./components/page-profile")) }
+AppRouteRegistry.add(Layout.auth, [
+	{ path: Patterns.register, element: <PageRegister /> },
+	{ path: Patterns.confirmEmail, element: <PageConfirmEmail /> },
+	{ path: Patterns.confirmEmailChange, element: <PageConfirmEmailChange /> },
+	{ path: Patterns.sendEmailConfirmation, element: <PageSendEmailConfirmation /> },
+	{ path: Patterns.login, element: <PageLogin /> },
+	{ path: Patterns.logout, element: <PageLogout /> },
+	{ path: Patterns.externalLogin, element: <PageExternalLogin /> },
+	{ path: Patterns.forgotPassword, element: <PageForgotPassword /> },
+	{ path: Patterns.resetPassword, element: <PageResetPassword /> },
 ]);
 
-export const ProfileRoutes = [
-	{ path: Patterns.profile, exact: true, component: React.lazy(() => import("./components/pane-edit-profile")) },
-	{ path: Patterns.profileSecurity, exact: true, component: React.lazy(() => import("./components/pane-security")) },
-	{ path: Patterns.profileExternalLogin, exact: true, component: React.lazy(() => import("./components/pane-external-logins")) },
-	{ path: Patterns.profileExternalLoginLink, exact: true, component: React.lazy(() => import("./components/pane-external-login-link")) },
-];
+AppRouteRegistry.add(Layout.profile, [
+	{ path: Patterns.profile, element: <PaneEditProfile /> },
+	{ path: Patterns.profileSecurity, element: <PaneSecurity /> },
+	{ path: Patterns.profileExternalLogin, element: <PaneExternalLogins /> },
+	{ path: Patterns.profileExternalLoginLink, element: <PaneExternalLoginLink /> },
+]);
 
 ComponentRegistry.add([
 	{ path: "@montr-idx/components/tab-edit-role-permissions", component: React.lazy(() => import("./components/tab-edit-role-permissions")) },

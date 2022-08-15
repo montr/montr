@@ -1,7 +1,7 @@
 import { DataTable, Page } from "@montr-core/components";
 import { ApiResult, Guid, IMenu } from "@montr-core/models";
 import * as React from "react";
-import { Redirect } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import { IEvent } from "../models";
 import { Api, RouteBuilder } from "../module";
 import { EventService } from "../services";
@@ -41,7 +41,7 @@ export default class SelectEventTemplate extends React.Component<Props, State> {
 		const { newUid } = this.state;
 
 		if (newUid) {
-			return <Redirect to={RouteBuilder.editEvent(newUid.toString())} />;
+			return <Navigate to={RouteBuilder.editEvent(newUid.toString())} />;
 		}
 
 		const rowActions: IMenu[] = [

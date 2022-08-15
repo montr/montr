@@ -1,8 +1,8 @@
+import { Breadcrumb, Dropdown } from "antd";
 import * as React from "react";
-import { Breadcrumb, Dropdown, Menu } from "antd";
-import { IMenu } from "../models";
 import { Link } from "react-router-dom";
-import { Icon } from ".";
+import { DataMenu, Icon } from ".";
+import { IMenu } from "../models";
 
 interface Props {
 	items: IMenu[];
@@ -22,13 +22,7 @@ export class DataBreadcrumb extends React.Component<Props> {
 
 		if (value.items) {
 
-			const overlay = (
-				<Menu>
-					{value.items.map((x, idx) => <Menu.Item key={`$${index}.${idx}`}>
-						<Link to={this.getItemRoute(x)}>{x.name}</Link>
-					</Menu.Item>)}
-				</Menu>
-			);
+			const overlay = <DataMenu tail={value.items} />;
 
 			return (
 				<Breadcrumb.Item key={index}>
@@ -60,4 +54,4 @@ export class DataBreadcrumb extends React.Component<Props> {
 			</Breadcrumb>
 		);
 	};
-};
+}

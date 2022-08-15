@@ -1,18 +1,16 @@
 import * as React from "react";
-import { RouteComponentProps } from "react-router";
+import { useParams } from "react-router-dom";
 import { PaneSearchClassifier } from ".";
 
 interface RouteProps {
-	typeCode: string;
+	typeCode?: string;
 }
 
-interface Props extends RouteComponentProps<RouteProps> {
-}
+export default function SearchClassifier() {
 
-export default class SearchClassifier extends React.Component<Props> {
-	render(): React.ReactNode {
-		return (
-			<PaneSearchClassifier mode="page" typeCode={this.props.match.params.typeCode} />
-		);
-	}
+	const { typeCode } = useParams();
+
+	return (
+		<PaneSearchClassifier mode="page" typeCode={typeCode} />
+	);
 }

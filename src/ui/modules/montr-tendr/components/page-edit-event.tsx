@@ -1,12 +1,13 @@
 import { DataBreadcrumb, DataTabs, Page, PageHeader, PaneComponent, Toolbar } from "@montr-core/components";
+import { withNavigate, withParams } from "@montr-core/components/react-router-wrappers";
 import { DataPaneProps, DataView } from "@montr-core/models";
 import { MetadataService, OperationService } from "@montr-core/services";
 import { Button, Spin, Tag } from "antd";
 import i18next from "i18next";
 import * as React from "react";
-import { RouteComponentProps } from "react-router";
+import { NavigateFunction, useMatch } from "react-router-dom";
 import { IEvent } from "../models";
-import { EntityTypeCode, Locale, RouteBuilder } from "../module";
+import { EntityTypeCode, Locale, Patterns, RouteBuilder } from "../module";
 import { EventService, EventTemplateService } from "../services";
 
 interface RouteProps {
@@ -14,7 +15,9 @@ interface RouteProps {
 	tabKey?: string;
 }
 
-interface Props extends RouteComponentProps<RouteProps> {
+interface Props {
+	params: RouteProps;
+	navigate: NavigateFunction;
 }
 
 interface State {
@@ -24,7 +27,7 @@ interface State {
 	configCodes: IEvent[];
 }
 
-export default class PageEditEvent extends React.Component<Props, State> {
+class PageEditEvent extends React.Component<Props, State> {
 
 	private readonly operation = new OperationService();
 	private readonly metadataService = new MetadataService();
@@ -43,6 +46,10 @@ export default class PageEditEvent extends React.Component<Props, State> {
 		};
 	}
 
+	getRouteProps = (): RouteProps => {
+		return this.props.params;
+	};
+
 	componentDidMount = async (): Promise<void> => {
 		await this.fetchData();
 	};
@@ -59,7 +66,9 @@ export default class PageEditEvent extends React.Component<Props, State> {
 		// todo: get metadata key from server
 		const dataView = await this.metadataService.load("PrivateEvent/Edit");
 
-		const data = await this.eventService.get(this.props.match.params.uid);
+		const match = useMatch(Patterns.editEvent);
+
+		const data = await this.eventService.get(match.params.uid);
 
 		this.setState({ loading: false, configCodes: templates.rows, dataView, data });
 	};
@@ -85,8 +94,8 @@ export default class PageEditEvent extends React.Component<Props, State> {
 		return result;
 	}
 
-	createRefForKey(key: string): React.RefObject<Props> {
-		const ref: React.RefObject<Props> = React.createRef();
+	createRefForKey(key: string): React.RefObject<unknown> {
+		const ref: React.RefObject<unknown> = React.createRef();
 		this._refsByKey.set(key, ref);
 		return ref;
 	}
@@ -103,7 +112,9 @@ export default class PageEditEvent extends React.Component<Props, State> {
 		const t = (key: string) => i18next.getFixedT(null, Locale.Namespace)(key);
 
 		const result = await this.operation.confirm(async () => {
-			return await this.eventService.publish(this.props.match.params.uid);
+			const { uid } = this.getRouteProps();
+
+			return await this.eventService.publish(uid);
 		}, t("publish.confirm.content"));
 
 		if (result.success) {
@@ -116,7 +127,9 @@ export default class PageEditEvent extends React.Component<Props, State> {
 		const t = (key: string) => i18next.getFixedT(null, Locale.Namespace)(key);
 
 		const result = await this.operation.confirm(async () => {
-			return await this.eventService.cancel(this.props.match.params.uid);
+			const { uid } = this.getRouteProps();
+
+			return await this.eventService.cancel(uid);
 		}, t("cancel.confirm.content"));
 
 		if (result.success) {
@@ -125,16 +138,16 @@ export default class PageEditEvent extends React.Component<Props, State> {
 	};
 
 	handleTabChange = (tabKey: string): void => {
-		const { uid } = this.props.match.params;
+		const { uid } = this.getRouteProps();
 
 		const path = RouteBuilder.editEvent(uid, tabKey);
 
-		this.props.history.replace(path);
+		this.props.navigate(path);
 	};
 
 	render = (): React.ReactNode => {
 		const t = (key: string) => i18next.getFixedT(null, Locale.Namespace)(key),
-			{ tabKey } = this.props.match.params,
+			{ tabKey } = this.getRouteProps(),
 			{ loading, data, dataView } = this.state;
 
 		if (data.id == null) return null;
@@ -193,3 +206,5 @@ export default class PageEditEvent extends React.Component<Props, State> {
 		);
 	};
 }
+
+export default withNavigate(withParams(PageEditEvent));

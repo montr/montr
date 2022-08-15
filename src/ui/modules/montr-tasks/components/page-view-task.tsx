@@ -1,9 +1,10 @@
 import { DataSider, DataTabs, DataToolbar, PageContextProps, StatusTag, withPageContext } from "@montr-core/components";
+import { withNavigate, withParams } from "@montr-core/components/react-router-wrappers";
 import { ConfigurationItemProps, DataPaneProps, DataView } from "@montr-core/models";
 import { Layout, Modal, PageHeader, Spin } from "antd";
 import { Location } from "history";
 import React from "react";
-import { Prompt, Redirect, RouteComponentProps } from "react-router";
+import { Navigate, NavigateFunction } from "react-router-dom";
 import { Task } from "../models";
 import { EntityTypeCode, RouteBuilder, Views } from "../module";
 import { TaskService } from "../services";
@@ -13,7 +14,9 @@ interface RouteProps {
 	tabKey?: string;
 }
 
-interface Props extends RouteComponentProps<RouteProps>, PageContextProps {
+interface Props extends PageContextProps {
+	params: RouteProps;
+	navigate: NavigateFunction;
 }
 
 interface State {
@@ -39,6 +42,10 @@ class PageViewTask extends React.Component<Props, State> {
 			task: {}
 		};
 	}
+
+	getRouteProps = (): RouteProps => {
+		return this.props.params;
+	};
 
 	componentDidMount = async (): Promise<void> => {
 		const { addPageEventListener } = this.props;
@@ -81,11 +88,11 @@ class PageViewTask extends React.Component<Props, State> {
 	};
 
 	fetchData = async (): Promise<void> => {
-		const { uid } = this.props.match.params;
+		const { uid } = this.getRouteProps();
 
 		const task = await this.taskService.get(uid);
 
-		const dataView = await this.taskService.metadata(Views.taskPage, task.uid);
+		const dataView = await this.taskService.metadata(Views.taskPage, uid);
 
 		this.setState({ loading: false, task, dataView });
 	};
@@ -95,11 +102,11 @@ class PageViewTask extends React.Component<Props, State> {
 	};
 
 	handleTabChange = (tabKey: string): void => {
-		const { uid } = this.props.match.params;
+		const { uid } = this.getRouteProps();
 
 		const path = RouteBuilder.viewTask(uid, tabKey);
 
-		this.props.history.replace(path);
+		this.props.navigate(path);
 	};
 
 	// https://v5.reactrouter.com/core/api/Prompt/message-func
@@ -117,13 +124,15 @@ class PageViewTask extends React.Component<Props, State> {
 	};
 
 	render = (): React.ReactNode => {
-		const { tabKey } = this.props.match.params,
+		const { tabKey } = this.getRouteProps(),
 			{ loading, modalVisible, confirmedNavigation, nextLocation, task = {}, dataView } = this.state;
 
 		if (confirmedNavigation && nextLocation) {
 			this.setState({ confirmedNavigation: null, nextLocation: null });
-			return <Redirect to={nextLocation.pathname} push={true} />;
+			return <Navigate to={nextLocation.pathname} replace={true} />;
 		}
+
+		if (!task) return null;
 
 		const buttonProps: ConfigurationItemProps = {
 			onDataChange: this.handleDataChange,
@@ -138,7 +147,8 @@ class PageViewTask extends React.Component<Props, State> {
 		return (
 			<Spin spinning={loading}>
 
-				<Prompt message={this.handleNavigation} />
+				{/* https://reactrouter.com/docs/en/v6/upgrading/v5#prompt-is-not-currently-supported */}
+				{/* <Prompt message={this.handleNavigation} /> */}
 
 				<Modal
 					visible={modalVisible}
@@ -148,7 +158,7 @@ class PageViewTask extends React.Component<Props, State> {
 				<PageHeader
 					onBack={() => window.history.back()}
 					title={task.name}
-					subTitle={<>task.uid</>}
+					subTitle={<>{task.uid}</>}
 					tags={<StatusTag statusCode={task.statusCode} />}
 					// breadcrumb={<TaskBreadcrumb />}
 					extra={<DataToolbar buttons={dataView?.toolbar} buttonProps={buttonProps} />}
@@ -179,4 +189,4 @@ class PageViewTask extends React.Component<Props, State> {
 	};
 }
 
-export default withPageContext(PageViewTask);
+export default withPageContext(withNavigate(withParams(PageViewTask)));

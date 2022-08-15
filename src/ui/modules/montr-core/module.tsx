@@ -32,13 +32,13 @@ export const Api = {
 
 export const Patterns = {
 	home: "/",
-	setup: "/setup/",
-	dashboard: "/dashboard/",
-	locales: "/locales/",
-	settings: "/settings/",
+	setup: "/setup",
+	dashboard: "/dashboard",
+	locales: "/locales",
+	settings: "/settings",
 
-	profile: "/profile/",
-	accountRegister: "/account/register/",
+	profile: "/profile",
+	accountRegister: "/account/register",
 };
 
 export const Views = {
@@ -62,13 +62,24 @@ import("./components").then(x => {
 	x.DataFieldFactory.register("date", new x.DateFieldFactory());
 });
 
-AppRouteRegistry.add([
-	{ path: Patterns.home, layout: Layout.public, exact: true, component: React.lazy(() => import("./components/page-home")) },
-	{ path: Patterns.setup, layout: Layout.auth, exact: true, component: React.lazy(() => import("./components/page-setup")) },
+const PageSetup = React.lazy(() => import("./components/page-setup"));
+const PageHome = React.lazy(() => import("./components/page-home"));
+const PageDashboard = React.lazy(() => import("./components/page-dashboard"));
+const PageSearchLocaleString = React.lazy(() => import("./components/page-search-locale-string"));
+const PageSettings = React.lazy(() => import("./components/page-settings"));
 
-	{ path: Patterns.dashboard, exact: true, component: React.lazy(() => import("./components/page-dashboard")) },
-	{ path: Patterns.locales, exact: true, component: React.lazy(() => import("./components/page-search-locale-string")) },
-	{ path: Patterns.settings, exact: true, component: React.lazy(() => import("./components/page-settings")) },
+AppRouteRegistry.add(Layout.auth, [
+	{ path: Patterns.setup, element: <PageSetup /> }
+]);
+
+AppRouteRegistry.add(Layout.public, [
+	{ path: Patterns.home, element: <PageHome /> },
+]);
+
+AppRouteRegistry.add(Layout.private, [
+	{ path: Patterns.dashboard, element: <PageDashboard /> },
+	{ path: Patterns.locales, element: <PageSearchLocaleString /> },
+	{ path: Patterns.settings, element: <PageSettings /> },
 ]);
 
 ComponentRegistry.add([

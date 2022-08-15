@@ -1,13 +1,10 @@
-import { ErrorBoundary, Footer } from "@montr-core/components";
+import { ErrorBoundary, Footer, SuspenseFallback } from "@montr-core/components";
 import { Layout } from "antd";
 import * as React from "react";
+import { Outlet } from "react-router-dom";
 import { MainMenu } from "./main-menu";
 
-interface Props {
-	children: React.ReactNode;
-}
-
-export class PrivateLayout extends React.Component<Props> {
+export default class PrivateLayout extends React.Component {
 
 	render = () => {
 
@@ -33,9 +30,9 @@ export class PrivateLayout extends React.Component<Props> {
 				<Layout>
 					<Layout.Content className="bg-white">
 						<ErrorBoundary>
-
-							{this.props.children}
-
+							<React.Suspense fallback={<SuspenseFallback />}>
+								<Outlet />
+							</React.Suspense>
 						</ErrorBoundary>
 					</Layout.Content>
 					<Layout.Footer className="bg-white">

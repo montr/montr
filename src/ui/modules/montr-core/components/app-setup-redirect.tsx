@@ -1,22 +1,23 @@
-import { useHistory } from "react-router";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Constants } from "..";
-import { Patterns } from "../module";
 import { AppState } from "../models";
+import { Patterns } from "../module";
 
 interface Props {
-    children: JSX.Element;
+	children: JSX.Element;
 }
 
 export function AppSetupRedirect({ children }: Props): JSX.Element {
 
-    const appState = Constants.appState,
-        redirectTo = Patterns.setup,
-        history = useHistory();
+	const appState = Constants.appState,
+		redirectTo = Patterns.setup,
+		location = useLocation();
 
-    if (appState == AppState.None && history.location.pathname != redirectTo) {
-        history.push(redirectTo);
-    }
+	if (appState == AppState.None && location.pathname != redirectTo) {
+		const navigate = useNavigate();
 
-    return children;
+		navigate(redirectTo);
+	}
 
-};
+	return children;
+}

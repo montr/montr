@@ -19,7 +19,7 @@ export class ClassifierBreadcrumb extends React.Component<Props> {
 			{ name: "Classifiers", route: Patterns.searchClassifierType }
 		];
 
-		if (type) {
+		if (type && type.code) {
 			const typeItem: IMenu = { name: type.name, route: RouteBuilder.searchClassifier(type.code) };
 
 			if (types) {

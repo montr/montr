@@ -1,11 +1,12 @@
 import { DataTabs, DataToolbar, StatusTag } from "@montr-core/components";
+import { withNavigate, withParams } from "@montr-core/components/react-router-wrappers";
 import { ConfigurationItemProps, DataPaneProps, DataView } from "@montr-core/models";
 import { DateHelper } from "@montr-core/services";
 import { Classifier } from "@montr-master-data/models";
 import { ClassifierService } from "@montr-master-data/services";
 import { PageHeader, Spin } from "antd";
 import React from "react";
-import { RouteComponentProps } from "react-router";
+import { NavigateFunction } from "react-router-dom";
 import { DocumentBreadcrumb } from ".";
 import { IDocument } from "../models";
 import { ClassifierTypeCode, EntityTypeCode, RouteBuilder, Views } from "../module";
@@ -16,7 +17,9 @@ interface RouteProps {
 	tabKey?: string;
 }
 
-interface Props extends RouteComponentProps<RouteProps> {
+interface Props {
+	params: RouteProps;
+	navigate: NavigateFunction;
 }
 
 interface State {
@@ -26,7 +29,7 @@ interface State {
 	dataView?: DataView<Classifier>;
 }
 
-export default class PageViewDocument extends React.Component<Props, State> {
+class WrappedPageViewDocument extends React.Component<Props, State> {
 
 	private readonly documentService = new DocumentService();
 	private readonly classifierService = new ClassifierService();
@@ -41,6 +44,10 @@ export default class PageViewDocument extends React.Component<Props, State> {
 		};
 	}
 
+	getRouteProps = (): RouteProps => {
+		return this.props.params;
+	};
+
 	componentDidMount = async (): Promise<void> => {
 		await this.fetchData();
 	};
@@ -51,7 +58,7 @@ export default class PageViewDocument extends React.Component<Props, State> {
 	};
 
 	fetchData = async (): Promise<void> => {
-		const { uid } = this.props.match.params;
+		const { uid } = this.getRouteProps();
 
 		const document = await this.documentService.get(uid);
 
@@ -68,15 +75,15 @@ export default class PageViewDocument extends React.Component<Props, State> {
 	};
 
 	handleTabChange = (tabKey: string): void => {
-		const { uid } = this.props.match.params;
+		const { uid } = this.getRouteProps();
 
 		const path = RouteBuilder.viewDocument(uid, tabKey);
 
-		this.props.history.replace(path);
+		this.props.navigate(path);
 	};
 
 	render = (): React.ReactNode => {
-		const { tabKey } = this.props.match.params,
+		const { tabKey } = this.getRouteProps(),
 			{ loading, document, documentType, dataView } = this.state;
 
 		if (!document || !document.documentTypeUid) return null;
@@ -122,3 +129,7 @@ export default class PageViewDocument extends React.Component<Props, State> {
 		);
 	};
 }
+
+const PageViewDocument = withNavigate(withParams(WrappedPageViewDocument));
+
+export default PageViewDocument;

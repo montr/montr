@@ -1,12 +1,9 @@
 import { ErrorBoundary, Footer, Logo } from "@montr-core/components";
 import { Layout } from "antd";
 import * as React from "react";
+import { Outlet } from "react-router-dom";
 
-interface Props {
-	children: React.ReactNode;
-}
-
-export class AuthLayout extends React.Component<Props> {
+export default class AuthLayout extends React.Component {
 	render = () => {
 		return (
 			<Layout className="public-layout auth-layout">
@@ -14,7 +11,7 @@ export class AuthLayout extends React.Component<Props> {
 					<ErrorBoundary>
 						<div style={{ width: "480px", margin: "0 auto" }}>
 							<Logo />
-							{this.props.children}
+							<Outlet />
 						</div>
 					</ErrorBoundary>
 				</Layout.Content>

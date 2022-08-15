@@ -1,25 +1,23 @@
-import React from "react";
-import { RouteComponentProps } from "react-router";
-import { Spin } from "antd";
-import { Translation } from "react-i18next";
 import { Page } from "@montr-core/components";
 import { OperationService } from "@montr-core/services";
-import { ProfileService } from "../services";
+import { Spin } from "antd";
+import React from "react";
+import { Translation } from "react-i18next";
+import { Navigate } from "react-router-dom";
 import { Locale, Patterns } from "../module";
-
-interface Props extends RouteComponentProps {
-}
+import { ProfileService } from "../services";
 
 interface State {
 	loading: boolean;
+	navigateTo?: string;
 }
 
-export default class PaneExternalLoginLink extends React.Component<Props, State> {
+export default class PaneExternalLoginLink extends React.Component<unknown, State> {
 
-	private _operation = new OperationService();
-	private _profileService = new ProfileService();
+	private readonly operation = new OperationService();
+	private readonly profileService = new ProfileService();
 
-	constructor(props: Props) {
+	constructor(props: unknown) {
 		super(props);
 
 		this.state = {
@@ -32,22 +30,24 @@ export default class PaneExternalLoginLink extends React.Component<Props, State>
 	};
 
 	componentWillUnmount = async () => {
-		await this._profileService.abort();
+		await this.profileService.abort();
 	};
 
 	fetchData = async () => {
 
-		await this._operation.execute(() => {
-			return this._profileService.linkLoginCallback();
+		await this.operation.execute(() => {
+			return this.profileService.linkLoginCallback();
 		});
 
-		this.setState({ loading: false });
-
-		this.props.history.push(Patterns.profileExternalLogin);
+		this.setState({ loading: false, navigateTo: Patterns.profileExternalLogin });
 	};
 
 	render = () => {
-		const { loading } = this.state;
+		const { loading, navigateTo } = this.state;
+
+		if (navigateTo) {
+			return <Navigate to={navigateTo} />;
+		}
 
 		return (
 			<Translation ns={Locale.Namespace}>

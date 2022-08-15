@@ -1,3 +1,4 @@
+import { Layout } from "@montr-core/constants";
 import { AppRouteRegistry, ComponentRegistry } from "@montr-core/services/";
 import React from "react";
 import { generatePath } from "react-router";
@@ -26,9 +27,10 @@ export const Api = {
 };
 
 export const Patterns = {
-	searchEvents: "/events/",
+	searchEvents: "/events",
 	addEvent: "/events/new",
-	editEvent: "/events/edit/:uid/:tabKey?",
+	editEvent: "/events/edit/:uid",
+	editEventTab: "/events/edit/:uid/:tabKey",
 };
 
 export const EntityTypeCode = {
@@ -40,15 +42,19 @@ export const Views = {
 };
 
 export const RouteBuilder = {
-	editEvent: (uid: string, tabKey?: string): string => {
-		return generatePath(Patterns.editEvent, { uid, tabKey });
+	editEvent: (uid: string, tabKey = "info"): string => {
+		return generatePath(Patterns.editEventTab, { uid, tabKey });
 	},
 };
 
-AppRouteRegistry.add([
-	{ path: Patterns.searchEvents, exact: true, component: React.lazy(() => import("./components/page-search-events")) },
-	{ path: Patterns.addEvent, exact: true, component: React.lazy(() => import("./components/page-select-event-template")) },
-	{ path: Patterns.editEvent, exact: true, component: React.lazy(() => import("./components/page-edit-event")) }
+const PageSearchEvents = React.lazy(() => import("./components/page-search-events"));
+const PageSelectEventTemplate = React.lazy(() => import("./components/page-select-event-template"));
+const PageEditEvent = React.lazy(() => import("./components/page-edit-event"));
+
+AppRouteRegistry.add(Layout.private, [
+	{ path: Patterns.searchEvents, element: <PageSearchEvents /> },
+	{ path: Patterns.addEvent, element: <PageSelectEventTemplate /> },
+	{ path: Patterns.editEvent, element: <PageEditEvent /> }
 ]);
 
 ComponentRegistry.add([

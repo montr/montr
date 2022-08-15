@@ -1,8 +1,9 @@
 import { DataTabs, Page, PageHeader } from "@montr-core/components";
+import { withNavigate, withParams } from "@montr-core/components/react-router-wrappers";
 import { DataView } from "@montr-core/models";
 import { Spin } from "antd";
 import * as React from "react";
-import { RouteComponentProps } from "react-router";
+import { NavigateFunction } from "react-router-dom";
 import { ClassifierBreadcrumb } from ".";
 import { ClassifierType } from "../models";
 import { RouteBuilder, Views } from "../module";
@@ -13,7 +14,9 @@ interface RouteProps {
 	tabKey?: string;
 }
 
-interface Props extends RouteComponentProps<RouteProps> {
+interface Props extends RouteProps {
+	params: RouteProps;
+	navigate: NavigateFunction;
 }
 
 interface State {
@@ -23,7 +26,7 @@ interface State {
 	data?: ClassifierType;
 }
 
-export default class EditClassifierType extends React.Component<Props, State> {
+class PageEditClassifierType extends React.Component<Props, State> {
 
 	private readonly classifierTypeService = new ClassifierTypeService();
 
@@ -35,12 +38,19 @@ export default class EditClassifierType extends React.Component<Props, State> {
 		};
 	}
 
+	getRouteProps = (): RouteProps => {
+		return this.props.params;
+	};
+
 	componentDidMount = async (): Promise<void> => {
 		await this.fetchData();
 	};
 
-	componentDidUpdate = async (prevProps: Props): Promise<void> => {
-		if (this.props.match.params.uid !== prevProps.match.params.uid) {
+	componentDidUpdate = async (prevProps: RouteProps): Promise<void> => {
+		/* if (this.props.match.params.uid !== prevProps.match.params.uid) {
+			await this.fetchData();
+		} */
+		if (this.props.uid !== prevProps.uid) {
 			await this.fetchData();
 		}
 	};
@@ -50,7 +60,7 @@ export default class EditClassifierType extends React.Component<Props, State> {
 	};
 
 	fetchData = async (): Promise<void> => {
-		const { uid } = this.props.match.params;
+		const { uid } = this.getRouteProps();
 
 		const types = await this.classifierTypeService.list({ skipPaging: true });
 
@@ -68,15 +78,15 @@ export default class EditClassifierType extends React.Component<Props, State> {
 	};
 
 	handleTabChange = (tabKey: string): void => {
-		const { uid } = this.props.match.params;
+		const { uid } = this.getRouteProps();
 
 		const path = RouteBuilder.editClassifierType(uid, tabKey);
 
-		this.props.history.replace(path);
+		this.props.navigate(path);
 	};
 
 	render = (): React.ReactNode => {
-		const { uid, tabKey } = this.props.match.params,
+		const { uid, tabKey } = this.getRouteProps(),
 			{ loading, dataView, data, types } = this.state;
 
 		let title;
@@ -90,8 +100,8 @@ export default class EditClassifierType extends React.Component<Props, State> {
 		else {
 			title = <>
 				{(uid)
-					? <ClassifierBreadcrumb types={types} type={data} item={{ name: "Настройка" }} />
-					: <ClassifierBreadcrumb item={{ name: "Добавление" }} />
+					? <ClassifierBreadcrumb types={types} type={data} item={{ name: "Settings" }} />
+					: <ClassifierBreadcrumb item={{ name: "Add new type" }} />
 				}
 				<PageHeader>{data.name}</PageHeader>
 			</>;
@@ -119,3 +129,5 @@ export default class EditClassifierType extends React.Component<Props, State> {
 		);
 	};
 }
+
+export default withNavigate(withParams(PageEditClassifierType));

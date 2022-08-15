@@ -1,28 +1,30 @@
-import * as React from "react";
-import { Spin, Button } from "antd";
-import { Patterns } from "@montr-core/module";
 import { Page } from "@montr-core/components";
-import { RouteComponentProps } from "react-router-dom";
+import { withNavigate, withParams } from "@montr-core/components/react-router-wrappers";
+import { Patterns } from "@montr-core/module";
+import { Button, Spin } from "antd";
+import * as React from "react";
 import { Translation } from "react-i18next";
-import { AccountService } from "../services/account-service";
+import { NavigateFunction } from "react-router-dom";
 import { Locale } from "../module";
+import { AccountService } from "../services/account-service";
 
 interface RouteProps {
-	userId: string;
-	email: string;
-	code: string;
+	userId?: string;
+	email?: string;
+	code?: string;
 }
 
-interface Props extends RouteComponentProps<RouteProps> {
+interface Props {
+	params: RouteProps;
+	navigate: NavigateFunction;
 }
-
 interface State {
 	loading: boolean;
 }
 
-export default class ConfirmEmailChange extends React.Component<Props, State> {
+class ConfirmEmailChange extends React.Component<Props, State> {
 
-	private _accountService = new AccountService();
+	private readonly accountService = new AccountService();
 
 	constructor(props: Props) {
 		super(props);
@@ -32,18 +34,22 @@ export default class ConfirmEmailChange extends React.Component<Props, State> {
 		};
 	}
 
+	getRouteProps = (): RouteProps => {
+		return this.props.params;
+	};
+
 	componentDidMount = async () => {
 		await this.fetchData();
 	};
 
 	componentWillUnmount = async () => {
-		await this._accountService.abort();
+		await this.accountService.abort();
 	};
 
 	fetchData = async () => {
-		const { userId, email, code } = this.props.match.params;
+		const { userId, email, code } = this.getRouteProps();
 
-		const result = await this._accountService.confirmEmailChange({ userId, email, code });
+		const result = await this.accountService.confirmEmailChange({ userId, email, code });
 
 		if (result.success) {
 			this.setState({ loading: false });
@@ -51,7 +57,7 @@ export default class ConfirmEmailChange extends React.Component<Props, State> {
 	};
 
 	handleContinue = async () => {
-		this.props.history.push(Patterns.dashboard);
+		this.props.navigate(Patterns.dashboard);
 	};
 
 	render = () => {
@@ -71,3 +77,5 @@ export default class ConfirmEmailChange extends React.Component<Props, State> {
 		);
 	};
 }
+
+export default withNavigate(withParams(ConfirmEmailChange));

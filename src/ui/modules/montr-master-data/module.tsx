@@ -1,4 +1,5 @@
 import { DataFieldFactory } from "@montr-core/components";
+import { Layout } from "@montr-core/constants";
 import { Guid } from "@montr-core/models";
 import { ComponentRegistry } from "@montr-core/services";
 import { AppRouteRegistry } from "@montr-core/services/app-route-registry";
@@ -72,39 +73,51 @@ export const Views = {
 };
 
 export const Patterns = {
-	searchClassifierType: "/classifiers/",
-	addClassifierType: "/classifiers/add/",
-	editClassifierType: "/classifiers/edit/:uid/:tabKey?",
+	searchClassifierType: "/classifiers",
+	addClassifierType: "/classifiers/add",
+	editClassifierType: "/classifiers/edit/:uid",
+	editClassifierTypeTab: "/classifiers/edit/:uid/:tabKey",
 
-	searchClassifier: "/classifiers/:typeCode/",
-	addClassifier: "/classifiers/:typeCode/add/:parentUid?",
-	editClassifier: "/classifiers/:typeCode/edit/:uid/:tabKey?",
+	searchClassifier: "/classifiers/:typeCode",
+	addClassifier: "/classifiers/:typeCode/add",
+	addClassifierParent: "/classifiers/:typeCode/add/:parentUid",
+	editClassifier: "/classifiers/:typeCode/edit/:uid",
+	editClassifierTab: "/classifiers/:typeCode/edit/:uid/:tabKey",
 };
 
 export const RouteBuilder = {
-	editClassifierType: (uid: Guid | string, tabKey?: string): string => {
-		return generatePath(Patterns.editClassifierType, { uid: uid.toString(), tabKey });
+	editClassifierType: (uid: Guid | string, tabKey = "info"): string => {
+		return generatePath(Patterns.editClassifierTypeTab, { uid: uid.toString(), tabKey });
 	},
-
 	searchClassifier: (typeCode: string): string => {
 		return generatePath(Patterns.searchClassifier, { typeCode });
 	},
-	addClassifier: (typeCode: string, parentUid: Guid | string): string => {
-		return generatePath(Patterns.addClassifier, { typeCode, parentUid: parentUid ? parentUid.toString() : null });
+	addClassifier: (typeCode: string, parentUid?: Guid | string): string => {
+		return parentUid
+			? generatePath(Patterns.addClassifierParent, { typeCode, parentUid: parentUid.toString() })
+			: generatePath(Patterns.addClassifier, { typeCode });
 	},
-	editClassifier: (typeCode: string, uid: Guid | string, tabKey?: string): string => {
-		return generatePath(Patterns.editClassifier, { typeCode, uid: uid.toString(), tabKey });
+	editClassifier: (typeCode: string, uid: Guid | string, tabKey = "info"): string => {
+		return generatePath(Patterns.editClassifierTab, { typeCode, uid: uid.toString(), tabKey });
 	},
 };
 
-AppRouteRegistry.add([
-	{ path: Patterns.searchClassifierType, exact: true, component: React.lazy(() => import("./components/page-search-classifier-type")) },
-	{ path: Patterns.addClassifierType, exact: true, component: React.lazy(() => import("./components/page-edit-classifier-type")) },
-	{ path: Patterns.editClassifierType, exact: true, component: React.lazy(() => import("./components/page-edit-classifier-type")) },
+const PageSearchClassifierType = React.lazy(() => import("./components/page-search-classifier-type"));
+const PageEditClassifierType = React.lazy(() => import("./components/page-edit-classifier-type"));
+const PageSearchClassifier = React.lazy(() => import("./components/page-search-classifier"));
+const PageEditClassifier = React.lazy(() => import("./components/page-edit-classifier"));
 
-	{ path: Patterns.searchClassifier, exact: true, component: React.lazy(() => import("./components/page-search-classifier")) },
-	{ path: Patterns.addClassifier, exact: true, component: React.lazy(() => import("./components/page-edit-classifier")) },
-	{ path: Patterns.editClassifier, exact: true, component: React.lazy(() => import("./components/page-edit-classifier")) },
+AppRouteRegistry.add(Layout.private, [
+	{ path: Patterns.searchClassifierType, element: <PageSearchClassifierType /> },
+	{ path: Patterns.addClassifierType, element: <PageEditClassifierType /> },
+	{ path: Patterns.editClassifierType, element: <PageEditClassifierType /> },
+	{ path: Patterns.editClassifierTypeTab, element: <PageEditClassifierType /> },
+
+	{ path: Patterns.searchClassifier, element: <PageSearchClassifier /> },
+	{ path: Patterns.addClassifier, element: <PageEditClassifier /> },
+	{ path: Patterns.addClassifierParent, element: <PageEditClassifier /> },
+	{ path: Patterns.editClassifier, element: <PageEditClassifier /> },
+	{ path: Patterns.editClassifierTab, element: <PageEditClassifier /> },
 ]);
 
 ComponentRegistry.add([

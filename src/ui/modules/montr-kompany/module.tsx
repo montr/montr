@@ -10,12 +10,14 @@ export const Api = {
 };
 
 export const Patterns = {
-	registerCompany: "/register/company/"
+	registerCompany: "/register/company"
 };
 
 export const Views = {
 };
 
-AppRouteRegistry.add([
-	{ path: Patterns.registerCompany, layout: Layout.public, exact: true, component: React.lazy(() => import("./components/page-register-company")) },
+const PageRegisterCompany = React.lazy(() => import("./components/page-register-company"));
+
+AppRouteRegistry.add(Layout.public, [
+	{ path: Patterns.registerCompany, element: <PageRegisterCompany /> },
 ]);

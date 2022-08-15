@@ -1,3 +1,4 @@
+import { Layout } from "@montr-core/constants";
 import { Guid } from "@montr-core/models";
 import { AppRouteRegistry, ComponentNameConvention, ComponentRegistry } from "@montr-core/services";
 import React from "react";
@@ -14,8 +15,9 @@ export const Api = {
 };
 
 export const Patterns = {
-	searchDocuments: "/documents/",
-	viewDocument: "/documents/view/:uid/:tabKey?",
+	searchDocuments: "/documents",
+	viewDocument: "/documents/view/:uid",
+	viewDocumentTab: "/documents/view/:uid/:tabKey",
 };
 
 export const EntityTypeCode = {
@@ -34,14 +36,18 @@ export const Views = {
 };
 
 export const RouteBuilder = {
-	viewDocument: (uid: Guid | string, tabKey?: string): string => {
-		return generatePath(Patterns.viewDocument, { uid: uid.toString(), tabKey });
+	viewDocument: (uid: Guid | string, tabKey = "info"): string => {
+		return generatePath(Patterns.viewDocumentTab, { uid: uid.toString(), tabKey });
 	}
 };
 
-AppRouteRegistry.add([
-	{ path: Patterns.searchDocuments, exact: true, component: React.lazy(() => import("./components/page-search-documents")) },
-	{ path: Patterns.viewDocument, exact: true, component: React.lazy(() => import("./components/page-view-document")) },
+const PageSearchDocuments = React.lazy(() => import("./components/page-search-documents"));
+const PageViewDocument = React.lazy(() => import("./components/page-view-document"));
+
+AppRouteRegistry.add(Layout.private, [
+	{ path: Patterns.searchDocuments, element: <PageSearchDocuments /> },
+	{ path: Patterns.viewDocument, element: <PageViewDocument /> },
+	{ path: Patterns.viewDocumentTab, element: <PageViewDocument /> },
 ]);
 
 ComponentRegistry.add([
@@ -51,4 +57,3 @@ ComponentRegistry.add([
 
 	{ path: ComponentNameConvention.entityPane("document"), component: React.lazy(() => import("./components/pane-view-document")) }
 ]);
-

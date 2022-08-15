@@ -1,33 +1,30 @@
-import * as React from "react";
-import { Page, DataForm, Icon } from "@montr-core/components";
-import { Spin } from "antd";
-import { Translation, Trans } from "react-i18next";
-import { AccountService } from "../services/account-service";
-import { ExternalRegisterModel } from "../models";
-import { MetadataService, NavigationService, OperationService } from "@montr-core/services";
-import { RouteComponentProps } from "react-router";
-import { Locale, Patterns, Views } from "../module";
-import { IDataField, ApiResult } from "@montr-core/models";
+import { DataForm, Icon, Page } from "@montr-core/components";
 import { Constants } from "@montr-core/constants";
-import { Link } from "react-router-dom";
-
-interface Props extends RouteComponentProps {
-}
+import { ApiResult, IDataField } from "@montr-core/models";
+import { MetadataService, NavigationService, OperationService } from "@montr-core/services";
+import { Spin } from "antd";
+import * as React from "react";
+import { Trans, Translation } from "react-i18next";
+import { Link, Navigate } from "react-router-dom";
+import { ExternalRegisterModel } from "../models";
+import { Locale, Patterns, Views } from "../module";
+import { AccountService } from "../services/account-service";
 
 interface State {
 	loading: boolean;
+	navigateTo?: string;
 	data?: ExternalRegisterModel;
 	fields?: IDataField[];
 }
 
-export default class ExternalLogin extends React.Component<Props, State> {
+export default class ExternalLogin extends React.Component<unknown, State> {
 
-	private _operation = new OperationService();
-	private _navigation = new NavigationService();
-	private _metadataService = new MetadataService();
-	private _accountService = new AccountService();
+	private readonly operation = new OperationService();
+	private readonly navigation = new NavigationService();
+	private readonly metadataService = new MetadataService();
+	private readonly accountService = new AccountService();
 
-	constructor(props: Props) {
+	constructor(props: unknown) {
 		super(props);
 
 		this.state = {
@@ -40,26 +37,26 @@ export default class ExternalLogin extends React.Component<Props, State> {
 	};
 
 	componentWillUnmount = async () => {
-		await this._metadataService.abort();
-		await this._accountService.abort();
+		await this.metadataService.abort();
+		await this.accountService.abort();
 	};
 
 	fetchData = async () => {
-		await this._operation.execute(async () => {
-			const result = await this._accountService.externalLoginCallback({
-				returnUrl: this._navigation.getUrlParameter(Constants.returnUrlParamLower),
-				remoteError: this._navigation.getUrlParameter("remoteError")
+		await this.operation.execute(async () => {
+			const result = await this.accountService.externalLoginCallback({
+				returnUrl: this.navigation.getUrlParameter(Constants.returnUrlParamLower),
+				remoteError: this.navigation.getUrlParameter("remoteError")
 			});
 
 			// this.setState({ loading: false });
 
 			if (result.success && result.data) {
-				const dataView = await this._metadataService.load(Views.formExternalRegister);
+				const dataView = await this.metadataService.load(Views.formExternalRegister);
 
 				this.setState({ loading: false, data: result.data, fields: dataView.fields });
 			}
 			else {
-				this.props.history.push(Patterns.login);
+				this.setState({ navigateTo: Patterns.login });
 			}
 
 			return result;
@@ -69,14 +66,18 @@ export default class ExternalLogin extends React.Component<Props, State> {
 	handleSubmit = async (values: ExternalRegisterModel): Promise<ApiResult> => {
 		const { data } = this.state;
 
-		return await this._accountService.externalRegister({
+		return await this.accountService.externalRegister({
 			returnUrl: data.returnUrl,
 			...values
 		});
 	};
 
 	render = () => {
-		const { loading, fields, data } = this.state;
+		const { loading, navigateTo, fields, data } = this.state;
+
+		if (navigateTo) {
+			return <Navigate to={navigateTo} />;
+		}
 
 		return (
 			<Translation ns={Locale.Namespace}>

@@ -1,13 +1,13 @@
-import * as React from "react";
-import { useLocalStorage, Page, DataForm, Icon } from "@montr-core/components";
-import { IDataField, ApiResult } from "@montr-core/models";
-import { Spin } from "antd";
+import { DataForm, Icon, Page, useLocalStorage } from "@montr-core/components";
+import { ApiResult, IDataField } from "@montr-core/models";
 import { MetadataService } from "@montr-core/services";
-import { LoginModel } from "../models";
+import { Spin } from "antd";
+import * as React from "react";
 import { useTranslation } from "react-i18next";
-import { AccountService } from "../services/account-service";
-import { Views, Patterns, StorageNames, Locale } from "../module";
 import { Link } from "react-router-dom";
+import { LoginModel } from "../models";
+import { Locale, Patterns, StorageNames, Views } from "../module";
+import { AccountService } from "../services/account-service";
 
 interface State {
 	loading: boolean;
@@ -41,11 +41,11 @@ export default function ForgotPassword() {
 
 	async function handleChange(values: LoginModel) {
 		setEmail(values.email);
-	};
+	}
 
 	async function handleSubmit(values: LoginModel): Promise<ApiResult> {
 		return await accountService.forgotPassword(values);
-	};
+	}
 
 	const { loading, fields } = state;
 

@@ -1,21 +1,24 @@
-import * as React from "react";
 import { DataTabs, Page, PageHeader } from "@montr-core/components";
+import { withNavigate, withParams } from "@montr-core/components/react-router-wrappers";
 import { DataView } from "@montr-core/models";
-import { RouteComponentProps } from "react-router";
 import { Spin } from "antd";
-import { ClassifierService, ClassifierTypeService, ClassifierMetadataService } from "../services";
-import { Classifier, ClassifierType } from "../models";
+import * as React from "react";
+import { NavigateFunction } from "react-router-dom";
 import { ClassifierBreadcrumb } from ".";
+import { Classifier, ClassifierType } from "../models";
 import { EntityTypeCode, RouteBuilder, Views } from "../module";
+import { ClassifierMetadataService, ClassifierService, ClassifierTypeService } from "../services";
 
 interface RouteProps {
-	typeCode: string;
+	typeCode?: string;
 	uid?: string;
 	parentUid?: string;
 	tabKey?: string;
 }
 
-interface Props extends RouteComponentProps<RouteProps> {
+interface Params {
+	params: RouteProps;
+	navigate: NavigateFunction;
 }
 
 interface State {
@@ -25,13 +28,13 @@ interface State {
 	data?: Classifier;
 }
 
-export default class PageEditClassifier extends React.Component<Props, State> {
+class PageEditClassifier extends React.Component<Params, State> {
 
 	private readonly classifierMetadataService = new ClassifierMetadataService();
 	private readonly classifierTypeService = new ClassifierTypeService();
 	private readonly classifierService = new ClassifierService();
 
-	constructor(props: Props) {
+	constructor(props: Params) {
 		super(props);
 
 		this.state = {
@@ -39,13 +42,21 @@ export default class PageEditClassifier extends React.Component<Props, State> {
 		};
 	}
 
+	getRouteProps = (): RouteProps => {
+		return this.props.params;
+	};
+
 	componentDidMount = async (): Promise<void> => {
 		await this.fetchData();
 	};
 
-	componentDidUpdate = async (prevProps: Props): Promise<void> => {
-		if (this.props.match.params.typeCode !== prevProps.match.params.typeCode ||
+	componentDidUpdate = async (prevProps: Params): Promise<void> => {
+		/* if (this.props.match.params.typeCode !== prevProps.match.params.typeCode ||
 			this.props.match.params.uid !== prevProps.match.params.uid) {
+			await this.fetchData();
+		} */
+		if (this.props.params.typeCode !== prevProps.params.typeCode ||
+			this.props.params.uid !== prevProps.params.uid) {
 			await this.fetchData();
 		}
 	};
@@ -57,7 +68,7 @@ export default class PageEditClassifier extends React.Component<Props, State> {
 	};
 
 	fetchData = async (): Promise<void> => {
-		const { typeCode, uid, parentUid } = this.props.match.params;
+		const { typeCode, uid, parentUid } = this.getRouteProps();
 
 		const dataView = await this.classifierMetadataService.view(typeCode, Views.classifierTabs);
 
@@ -71,7 +82,7 @@ export default class PageEditClassifier extends React.Component<Props, State> {
 	};
 
 	handleDataChange = (data: Classifier): void => {
-		const { typeCode, uid } = this.props.match.params;
+		const { typeCode, uid } = this.getRouteProps();
 
 		if (uid) {
 			this.setState({ data });
@@ -79,20 +90,20 @@ export default class PageEditClassifier extends React.Component<Props, State> {
 		else {
 			const path = RouteBuilder.editClassifier(typeCode, data.uid);
 
-			this.props.history.push(path);
+			this.props.navigate(path);
 		}
 	};
 
 	handleTabChange = (tabKey: string): void => {
-		const { typeCode, uid } = this.props.match.params;
+		const { typeCode, uid } = this.getRouteProps();
 
 		const path = RouteBuilder.editClassifier(typeCode, uid, tabKey);
 
-		this.props.history.replace(path);
+		this.props.navigate(path);
 	};
 
 	render = (): React.ReactNode => {
-		const { tabKey } = this.props.match.params,
+		const { tabKey } = this.getRouteProps(),
 			{ loading, dataView, type, data } = this.state;
 
 		return (
@@ -121,3 +132,5 @@ export default class PageEditClassifier extends React.Component<Props, State> {
 		);
 	};
 }
+
+export default withNavigate(withParams(PageEditClassifier));
