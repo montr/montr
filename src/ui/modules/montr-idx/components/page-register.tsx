@@ -1,17 +1,14 @@
-import * as React from "react";
-import { Page, DataForm, Icon } from "@montr-core/components";
-import { IDataField, ApiResult } from "@montr-core/models";
-import { Spin, Divider } from "antd";
+import { DataForm, Icon, Page } from "@montr-core/components";
+import { ApiResult, IDataField } from "@montr-core/models";
 import { MetadataService } from "@montr-core/services";
-import { RegisterModel } from "../models";
+import { Divider, Spin } from "antd";
+import * as React from "react";
 import { Translation } from "react-i18next";
-import { AccountService } from "../services/account-service";
-import { ExternalLoginForm } from ".";
-import { Views, Patterns, Locale } from "../module";
 import { Link } from "react-router-dom";
-
-interface Props {
-}
+import { ExternalLoginForm } from ".";
+import { RegisterModel } from "../models";
+import { Locale, Patterns, Views } from "../module";
+import { AccountService } from "../services/account-service";
 
 interface State {
 	loading: boolean;
@@ -19,12 +16,12 @@ interface State {
 	fields?: IDataField[];
 }
 
-export default class Register extends React.Component<Props, State> {
+export default class Register extends React.Component<unknown, State> {
 
-	private _metadataService = new MetadataService();
-	private _accountService = new AccountService();
+	private readonly metadataService = new MetadataService();
+	private readonly accountService = new AccountService();
 
-	constructor(props: Props) {
+	constructor(props: unknown) {
 		super(props);
 
 		this.state = {
@@ -38,18 +35,18 @@ export default class Register extends React.Component<Props, State> {
 	};
 
 	componentWillUnmount = async () => {
-		await this._metadataService.abort();
-		await this._accountService.abort();
+		await this.metadataService.abort();
+		await this.accountService.abort();
 	};
 
 	fetchData = async () => {
-		const dataView = await this._metadataService.load(Views.formRegister);
+		const dataView = await this.metadataService.load(Views.formRegister);
 
 		this.setState({ loading: false, fields: dataView.fields });
 	};
 
 	save = async (values: RegisterModel): Promise<ApiResult> => {
-		return await this._accountService.register(values);
+		return await this.accountService.register(values);
 	};
 
 	render = () => {

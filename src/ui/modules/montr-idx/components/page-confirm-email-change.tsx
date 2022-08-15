@@ -1,9 +1,10 @@
 import { Page } from "@montr-core/components";
+import { withNavigate, withParams } from "@montr-core/components/react-router-wrappers";
 import { Patterns } from "@montr-core/module";
 import { Button, Spin } from "antd";
 import * as React from "react";
 import { Translation } from "react-i18next";
-import { useNavigate, useParams } from "react-router-dom";
+import { NavigateFunction } from "react-router-dom";
 import { Locale } from "../module";
 import { AccountService } from "../services/account-service";
 
@@ -13,15 +14,19 @@ interface RouteProps {
 	code?: string;
 }
 
+interface Props {
+	params: RouteProps;
+	navigate: NavigateFunction;
+}
 interface State {
 	loading: boolean;
 }
 
-export default class ConfirmEmailChange extends React.Component<unknown, State> {
+class ConfirmEmailChange extends React.Component<Props, State> {
 
-	private _accountService = new AccountService();
+	private readonly accountService = new AccountService();
 
-	constructor(props: unknown) {
+	constructor(props: Props) {
 		super(props);
 
 		this.state = {
@@ -30,7 +35,7 @@ export default class ConfirmEmailChange extends React.Component<unknown, State> 
 	}
 
 	getRouteProps = (): RouteProps => {
-		return useParams();
+		return this.props.params;
 	};
 
 	componentDidMount = async () => {
@@ -38,13 +43,13 @@ export default class ConfirmEmailChange extends React.Component<unknown, State> 
 	};
 
 	componentWillUnmount = async () => {
-		await this._accountService.abort();
+		await this.accountService.abort();
 	};
 
 	fetchData = async () => {
 		const { userId, email, code } = this.getRouteProps();
 
-		const result = await this._accountService.confirmEmailChange({ userId, email, code });
+		const result = await this.accountService.confirmEmailChange({ userId, email, code });
 
 		if (result.success) {
 			this.setState({ loading: false });
@@ -52,9 +57,7 @@ export default class ConfirmEmailChange extends React.Component<unknown, State> 
 	};
 
 	handleContinue = async () => {
-		const navigate = useNavigate();
-
-		navigate(Patterns.dashboard);
+		this.props.navigate(Patterns.dashboard);
 	};
 
 	render = () => {
@@ -74,3 +77,5 @@ export default class ConfirmEmailChange extends React.Component<unknown, State> 
 		);
 	};
 }
+
+export default withNavigate(withParams(ConfirmEmailChange));

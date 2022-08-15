@@ -4,7 +4,7 @@ import { MetadataService } from "@montr-core/services";
 import { Button, Spin } from "antd";
 import * as React from "react";
 import { Translation } from "react-i18next";
-import { useNavigate, useParams } from "react-router-dom";
+import { Navigate, useParams } from "react-router-dom";
 import { ResetPasswordModel } from "../models";
 import { Locale, Patterns, Views } from "../module";
 import { AccountService } from "../services/account-service";
@@ -15,6 +15,7 @@ interface RouteProps {
 
 interface State {
 	loading: boolean;
+	navigateTo?: string;
 	fields?: IDataField[];
 }
 
@@ -57,13 +58,15 @@ export default class ResetPassword extends React.Component<unknown, State> {
 	};
 
 	handleContinue = async () => {
-		const navigate = useNavigate();
-
-		navigate(Patterns.login);
+		this.setState({ navigateTo: Patterns.login });
 	};
 
 	render = () => {
-		const { fields, loading } = this.state;
+		const { fields, loading, navigateTo } = this.state;
+
+		if (navigateTo) {
+			return <Navigate to={navigateTo} />;
+		}
 
 		return (
 			<Translation ns={Locale.Namespace}>
