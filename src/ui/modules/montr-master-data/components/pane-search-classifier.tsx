@@ -4,8 +4,7 @@ import { OperationService } from "@montr-core/services";
 import { CompanyContextProps, withCompanyContext } from "@montr-kompany/components";
 import { Button, Layout, Modal, Radio, Select, Spin, Tree } from "antd";
 import { RadioChangeEvent } from "antd/lib/radio";
-import { TreeNodeNormal } from "antd/lib/tree/Tree";
-import { EventDataNode } from "rc-tree/lib/interface";
+import { DataNode, EventDataNode } from "antd/lib/tree";
 import * as React from "react";
 import { Translation } from "react-i18next";
 import { Link } from "react-router-dom";
@@ -37,19 +36,19 @@ interface State {
 	updateTableToken: DataTableUpdateToken;
 }
 
-interface ITreeNode extends EventDataNode /* AntTreeNode */ {
+interface TreeNode extends EventDataNode<ClassifierGroup> {
 	dataRef: ClassifierGroup;
 }
 
-interface ITreeNodeSelectEvent {
+interface TreeNodeSelectEvent {
 	// event: 'select';
 	selected: boolean;
-	node: EventDataNode;
-	// selectedNodes: DataNode[];
-	nativeEvent: MouseEvent;
+	node: EventDataNode<ClassifierGroup>;
+	// selectedNodes: TreeDataType[];
+	// nativeEvent: MouseEvent;
 }
 
-class _PaneSearchClassifier extends React.Component<Props, State> {
+class WrappedPaneSearchClassifier extends React.Component<Props, State> {
 
 	private readonly operation = new OperationService();
 	private readonly classifierTypeService = new ClassifierTypeService();
@@ -102,11 +101,11 @@ class _PaneSearchClassifier extends React.Component<Props, State> {
 	};
 
 	loadClassifierTypes = async () => {
-		const types = (await this.classifierTypeService.list({ skipPaging: true })).rows;
+		const result = await this.classifierTypeService.list({ skipPaging: true });
 
-		this.setState({ types });
-
-		await this.loadClassifierType();
+		if (result) {
+			this.setState({ types: result.rows }, async () => await this.loadClassifierType());
+		}
 	};
 
 	loadClassifierType = async () => {
@@ -114,9 +113,7 @@ class _PaneSearchClassifier extends React.Component<Props, State> {
 
 		const type = await this.classifierTypeService.get({ typeCode });
 
-		this.setState({ type });
-
-		await this.loadClassifierTrees();
+		this.setState({ type }, async () => await this.loadClassifierTrees());
 	};
 
 	loadClassifierTrees = async () => {
@@ -137,9 +134,7 @@ class _PaneSearchClassifier extends React.Component<Props, State> {
 			this.setState({
 				trees,
 				selectedTree
-			});
-
-			await this.loadClassifierGroups();
+			}, async () => await this.loadClassifierGroups());
 		}
 	};
 
@@ -215,7 +210,7 @@ class _PaneSearchClassifier extends React.Component<Props, State> {
 		}
 	};
 
-	onTreeLoadData = async (node: ITreeNode /* AntTreeNode */) => {
+	onTreeLoadData = async (node: TreeNode) => {
 		return new Promise<void>(async (resolve) => {
 			const group: ClassifierGroup = node.dataRef;
 
@@ -241,14 +236,14 @@ class _PaneSearchClassifier extends React.Component<Props, State> {
 		});
 	};
 
-	onTreeNodeSelect = async (selectedKeys: string[], e: ITreeNodeSelectEvent /* AntTreeNodeSelectedEvent */) => {
-		const node = e.node as ITreeNode;
+	onTreeNodeSelect = async (selectedKeys: string[], e: TreeNodeSelectEvent) => {
+		const node = e.node as TreeNode;
 		this.setState({
 			selectedGroup: (e.selected) ? node?.dataRef : null
 		}, async () => await this.refreshTable());
 	};
 
-	onTreeExpand = (expandedKeys: string[]) => {
+	onTreeNodeExpand = (expandedKeys: string[]) => {
 		this.setState({ expandedKeys });
 	};
 
@@ -260,7 +255,7 @@ class _PaneSearchClassifier extends React.Component<Props, State> {
 		await this.refreshTable();
 	};
 
-	buildGroupsTree = (groups: ClassifierGroup[], expanded?: string[]): TreeNodeNormal[] => {
+	buildGroupsTree = (groups: ClassifierGroup[], expanded?: string[]): DataNode[] => {
 		return groups && groups.map(x => {
 
 			if (expanded && x.children) {
@@ -268,12 +263,14 @@ class _PaneSearchClassifier extends React.Component<Props, State> {
 			}
 
 			// todo: convert to component (?)
-			return {
+			const result = {
 				title: <span><span style={{ color: "silver" }}>{x.code}</span> {x.name}</span>,
 				key: `${x.uid}`,
 				dataRef: x,
 				children: x.children && this.buildGroupsTree(x.children, expanded)
 			};
+
+			return result;
 		});
 	};
 
@@ -438,7 +435,7 @@ class _PaneSearchClassifier extends React.Component<Props, State> {
 						expandedKeys={expandedKeys}
 						loadData={this.onTreeLoadData}
 						onSelect={this.onTreeNodeSelect}
-						onExpand={this.onTreeExpand} />
+						onExpand={this.onTreeNodeExpand} />
 				);
 			}
 			else {
@@ -543,4 +540,4 @@ class _PaneSearchClassifier extends React.Component<Props, State> {
 	};
 }
 
-export const PaneSearchClassifier = withCompanyContext(_PaneSearchClassifier);
+export const PaneSearchClassifier = withCompanyContext(WrappedPaneSearchClassifier);
