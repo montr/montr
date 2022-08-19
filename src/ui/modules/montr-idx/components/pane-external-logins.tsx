@@ -1,11 +1,12 @@
+import { Icon, PageHeader } from "@montr-core/components";
+import { Constants } from "@montr-core/constants";
+import { OperationService } from "@montr-core/services";
+import { Avatar, Button, List, Spin } from "antd";
 import React from "react";
 import { Translation } from "react-i18next";
-import { PageHeader, Icon } from "@montr-core/components";
-import { OperationService } from "@montr-core/services";
-import { ProfileModel, UserLoginInfo, AuthScheme } from "../models";
-import { ProfileService, AccountService } from "../services";
-import { Spin, List, Button, Avatar } from "antd";
+import { AuthScheme, ProfileModel, UserLoginInfo } from "../models";
 import { Api, Locale } from "../module";
+import { AccountService, ProfileService } from "../services";
 
 interface Props {
 }
@@ -19,9 +20,9 @@ interface State {
 
 export default class PaneExternalLogins extends React.Component<Props, State> {
 
-	private _operation = new OperationService();
-	private _accountService = new AccountService();
-	private _profileService = new ProfileService();
+	private readonly operation = new OperationService();
+	private readonly accountService = new AccountService();
+	private readonly profileService = new ProfileService();
 
 	constructor(props: Props) {
 		super(props);
@@ -39,22 +40,22 @@ export default class PaneExternalLogins extends React.Component<Props, State> {
 	};
 
 	componentWillUnmount = async () => {
-		await this._accountService.abort();
-		await this._profileService.abort();
+		await this.accountService.abort();
+		await this.profileService.abort();
 	};
 
 	fetchData = async () => {
-		const profile = await this._profileService.get();
+		const profile = await this.profileService.get();
 
-		const authSchemes = await this._accountService.authSchemes();
-		const externalLogins = await this._profileService.externalLogins();
+		const authSchemes = await this.accountService.authSchemes();
+		const externalLogins = await this.profileService.externalLogins();
 
 		this.setState({ loading: false, profile, authSchemes, externalLogins });
 	};
 
 	handleRemoveLogin = async (info: UserLoginInfo) => {
-		await this._operation.execute(async () => {
-			const result = await this._profileService.removeLogin(info);
+		await this.operation.execute(async () => {
+			const result = await this.profileService.removeLogin(info);
 			if (result.success) {
 				await this.fetchData();
 			}
@@ -77,7 +78,7 @@ export default class PaneExternalLogins extends React.Component<Props, State> {
 					<p>{t("page.externalLogins.subtitle")}</p>
 
 					<Spin spinning={loading}>
-						<form method="post" action={Api.authLinkLogin}>
+						<form method="post" action={Constants.apiURL + Api.authLinkLogin}>
 
 							{/* <input type="hidden" name={Constants.returnUrlParam} value={this._navigation.getReturnUrlParameter() || ""} /> */}
 
