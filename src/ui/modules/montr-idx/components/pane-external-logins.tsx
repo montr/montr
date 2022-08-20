@@ -1,5 +1,4 @@
 import { Icon, PageHeader } from "@montr-core/components";
-import { Constants } from "@montr-core/constants";
 import { OperationService } from "@montr-core/services";
 import { Avatar, Button, List, Spin } from "antd";
 import React from "react";
@@ -78,7 +77,7 @@ export default class PaneExternalLogins extends React.Component<Props, State> {
 					<p>{t("page.externalLogins.subtitle")}</p>
 
 					<Spin spinning={loading}>
-						<form method="post" action={Constants.apiURL + Api.authLinkLogin}>
+						<form method="post" action={Api.authLinkLogin}>
 
 							{/* <input type="hidden" name={Constants.returnUrlParam} value={this._navigation.getReturnUrlParameter() || ""} /> */}
 

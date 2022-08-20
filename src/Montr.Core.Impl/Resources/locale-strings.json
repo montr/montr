@@ -107,7 +107,7 @@
       "button.search": "Искать",
       "button.select": "Выбрать",
       "dataForm.rule.required": "Поле «{{name}}» обязательно для заполнения",
-      "dataForm.submit.error": "Ошибка при сохранении данных.",
+      "dataForm.submit.error": "Ошибка при отправке данных.",
       "dataForm.submit.success": "Данные успешно сохранены.",
       "operation.confirm.content": "Вы действительно хотите выполнить операцию?",
       "operation.confirm.deleteSelected.content": "Вы действительно хотите удалить выбранные записи?",

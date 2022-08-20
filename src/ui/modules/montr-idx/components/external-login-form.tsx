@@ -15,8 +15,8 @@ interface State {
 
 export class ExternalLoginForm extends React.Component<unknown, State> {
 
-	private _navigation = new NavigationService();
-	private _accountService = new AccountService();
+	private readonly navigation = new NavigationService();
+	private readonly accountService = new AccountService();
 
 	constructor(props: unknown) {
 		super(props);
@@ -32,11 +32,11 @@ export class ExternalLoginForm extends React.Component<unknown, State> {
 	};
 
 	componentWillUnmount = async () => {
-		await this._accountService.abort();
+		await this.accountService.abort();
 	};
 
 	fetchData = async () => {
-		const authSchemes = await this._accountService.authSchemes();
+		const authSchemes = await this.accountService.authSchemes();
 
 		this.setState({ loading: false, authSchemes });
 	};
@@ -51,7 +51,7 @@ export class ExternalLoginForm extends React.Component<unknown, State> {
 					{/* {authSchemes.length == 3 && <p>{t("page.login.noExternalLogins")}</p>} */}
 
 					{authSchemes.length > 0 && <form method="post" action={Api.authExternalLogin} className="external-logins">
-						<input type="hidden" name={Constants.returnUrlParam} value={this._navigation.getReturnUrlParameter() || ""} />
+						<input type="hidden" name={Constants.returnUrlParam} value={this.navigation.getReturnUrlParameter() || ""} />
 						{authSchemes.map(x => (
 							<Button
 								title={t("button.externalLogin.title", { provider: x.displayName })}

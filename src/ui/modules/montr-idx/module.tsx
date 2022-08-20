@@ -1,4 +1,4 @@
-import { Layout } from "@montr-core/constants";
+import { Constants, Layout } from "@montr-core/constants";
 import { AppRouteRegistry, ComponentRegistry } from "@montr-core/services/";
 import React from "react";
 
@@ -33,8 +33,8 @@ export const Api = {
 	profileLinkLoginCallback: "/profile/linkLoginCallback",
 	profileRemoveLogin: "/profile/removeLogin",
 
-	authLinkLogin: "/authentication/linkLogin",
-	authExternalLogin: "/authentication/externalLogin",
+	authLinkLogin: Constants.apiURL + "/authentication/linkLogin",
+	authExternalLogin: Constants.apiURL + "/authentication/externalLogin",
 
 	rolePermissionList: "/rolePermission/list",
 	rolePermissionUpdate: "/rolePermission/update",
