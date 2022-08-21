@@ -45,19 +45,28 @@ class WrappedDataMenu extends React.Component<Props, State> {
 		await this.fetchData();
 	};
 
-	fetchData = async (): Promise<void> => {
-		const { menuId } = this.props;
-
-		if (menuId) {
-			const menu = await this.contentService.getMenu(menuId),
-				path = this.navigation.getPathname(),
-				openKeys: string[] = [],
-				selectedKeys: string[] = [];
-
-			this.collectOpenAndSelectedItems(menu, path, openKeys, selectedKeys);
-
-			this.setState({ menu, openKeys, selectedKeys });
+	componentDidUpdate = async (prevProps: Props): Promise<void> => {
+		if (this.props.tail !== prevProps.tail) {
+			await this.fetchData();
 		}
+	};
+
+	fetchData = async (): Promise<void> => {
+		const { menuId, tail } = this.props;
+
+		const menu = (menuId && await this.contentService.getMenu(menuId)) || {};
+
+		menu.items = menu.items || [];
+
+		if (tail) menu.items = menu.items.concat(tail);
+
+		const path = this.navigation.getPathname(),
+			openKeys: string[] = [],
+			selectedKeys: string[] = [];
+
+		this.collectOpenAndSelectedItems(menu, path, openKeys, selectedKeys);
+
+		this.setState({ menu, openKeys, selectedKeys });
 	};
 
 	// returns true, if parent item contains selected menu item
@@ -68,6 +77,8 @@ class WrappedDataMenu extends React.Component<Props, State> {
 
 			for (let i = 0; i < parent.items.length; i++) {
 				const item = parent.items[i];
+
+				if (!item.id) item.id = `${parent.id}_${i}`;
 
 				if (this.collectOpenAndSelectedItems(item, path, openKeys, selectedKeys)) {
 					openKeys.push(item.id);
@@ -111,7 +122,7 @@ class WrappedDataMenu extends React.Component<Props, State> {
 	buildItems = (items: IMenu[], keyPrefix = ""): MenuItem[] => {
 		return items?.map((item, index) => {
 
-			const key = item.id ?? (keyPrefix + "_" + index);
+			const key: string = item.id ?? (keyPrefix + "_" + index);
 
 			return {
 				key: key,
@@ -137,38 +148,41 @@ class WrappedDataMenu extends React.Component<Props, State> {
 					? item.route as string
 					: item.route();
 
-			// this.setState({ navigateTo: { path: route } });
+			const { menu, openKeys } = this.state,
+				selectedKeys: string[] = [];
 
-			this.props.navigate(route);
+			this.collectOpenAndSelectedItems(menu, route, openKeys, selectedKeys);
+
+			this.setState({ navigateTo: { path: route }, openKeys, selectedKeys });
 		}
 		else if (item.url) {
 			window.location.href = item.url;
 		}
 	};
 
+	onOpenChange = (openKeys: string[]): void => {
+		this.setState({ openKeys });
+	};
+
 	render = (): React.ReactNode => {
-		const { menuId, /* head, */ tail, navigate: _, ...props } = this.props,
+		const { menuId, navigate: _, ...props } = this.props,
 			{ menu, openKeys, selectedKeys, navigateTo } = this.state;
 
 		if (navigateTo && !navigateTo.navigated) {
 			navigateTo.navigated = true;
-			this.setState({ navigateTo: undefined });
 			return <Navigate to={navigateTo.path} />;
 		}
 
-		let menus: IMenu[] = [];
-
-		if (menu?.items) menus = menus.concat(menu?.items);
-		if (tail) menus = menus.concat(tail);
-
-		const items = this.buildItems(menus, menuId);
+		const items = this.buildItems(menu?.items, menuId);
 
 		return (
 			<Menu
-				defaultOpenKeys={openKeys}
-				defaultSelectedKeys={selectedKeys}
+				onOpenChange={this.onOpenChange}
+				openKeys={openKeys}
+				selectedKeys={selectedKeys}
 				items={items}
-				{...props} />
+				{...props}
+			/>
 		);
 	};
 }
