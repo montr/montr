@@ -20,7 +20,7 @@ export class DataSider<TModel> extends React.Component<Props<TModel>> {
 		return (
 			<Collapse
 				ghost
-				expandIconPosition={"right"}
+				expandIconPosition={"end"}
 				defaultActiveKey={panes[0].key}>
 				{panes.map((pane, _) => {
 					return (
