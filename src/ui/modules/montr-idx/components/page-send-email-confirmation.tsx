@@ -41,11 +41,11 @@ export default function SendEmailConfirmation() {
 
 	async function handleChange(values: SendEmailConfirmationModel) {
 		setEmail(values.email);
-	};
+	}
 
 	async function handleSubmit(values: SendEmailConfirmationModel): Promise<ApiResult> {
 		return await accountService.sendEmailConfirmation(values);
-	};
+	}
 
 	const { loading, fields } = state;
 

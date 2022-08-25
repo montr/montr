@@ -1,10 +1,11 @@
 import { DataForm, Page } from "@montr-core/components";
+import { withParams } from "@montr-core/components/react-router-wrappers";
 import { ApiResult, IDataField } from "@montr-core/models";
 import { MetadataService } from "@montr-core/services";
 import { Button, Spin } from "antd";
 import * as React from "react";
 import { Translation } from "react-i18next";
-import { Navigate, useParams } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import { ResetPasswordModel } from "../models";
 import { Locale, Patterns, Views } from "../module";
 import { AccountService } from "../services/account-service";
@@ -13,18 +14,22 @@ interface RouteProps {
 	code?: string;
 }
 
+interface Props {
+	params: RouteProps;
+}
+
 interface State {
 	loading: boolean;
 	navigateTo?: string;
 	fields?: IDataField[];
 }
 
-export default class ResetPassword extends React.Component<unknown, State> {
+class ResetPassword extends React.Component<Props, State> {
 
 	private readonly metadataService = new MetadataService();
 	private readonly accountService = new AccountService();
 
-	constructor(props: unknown) {
+	constructor(props: Props) {
 		super(props);
 
 		this.state = {
@@ -33,7 +38,7 @@ export default class ResetPassword extends React.Component<unknown, State> {
 	}
 
 	getRouteProps = (): RouteProps => {
-		return useParams();
+		return this.props.params;
 	};
 
 	componentDidMount = async () => {
@@ -91,3 +96,5 @@ export default class ResetPassword extends React.Component<unknown, State> {
 		);
 	};
 }
+
+export default withParams(ResetPassword);

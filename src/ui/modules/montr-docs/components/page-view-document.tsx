@@ -29,7 +29,7 @@ interface State {
 	dataView?: DataView<Classifier>;
 }
 
-class WrappedPageViewDocument extends React.Component<Props, State> {
+class PageViewDocument extends React.Component<Props, State> {
 
 	private readonly documentService = new DocumentService();
 	private readonly classifierService = new ClassifierService();
@@ -130,6 +130,4 @@ class WrappedPageViewDocument extends React.Component<Props, State> {
 	};
 }
 
-const PageViewDocument = withNavigate(withParams(WrappedPageViewDocument));
-
-export default PageViewDocument;
+export default withNavigate(withParams(PageViewDocument));

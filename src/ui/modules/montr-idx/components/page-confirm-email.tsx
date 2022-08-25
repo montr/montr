@@ -1,9 +1,10 @@
 import { Page } from "@montr-core/components";
+import { withParams } from "@montr-core/components/react-router-wrappers";
 import { Patterns } from "@montr-core/module";
 import { Button, Spin } from "antd";
 import * as React from "react";
 import { Translation } from "react-i18next";
-import { Navigate, useParams } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import { Locale } from "../module";
 import { AccountService } from "../services/account-service";
 
@@ -12,16 +13,20 @@ interface RouteProps {
 	code?: string;
 }
 
+interface Props {
+	params: RouteProps;
+}
+
 interface State {
 	loading: boolean;
 	navigateTo?: string;
 }
 
-export default class ConfirmEmail extends React.Component<unknown, State> {
+class ConfirmEmail extends React.Component<Props, State> {
 
-	private _accountService = new AccountService();
+	private readonly accountService = new AccountService();
 
-	constructor(props: unknown) {
+	constructor(props: Props) {
 		super(props);
 
 		this.state = {
@@ -30,7 +35,7 @@ export default class ConfirmEmail extends React.Component<unknown, State> {
 	}
 
 	getRouteProps = (): RouteProps => {
-		return useParams();
+		return this.props.params;
 	};
 
 	componentDidMount = async () => {
@@ -38,13 +43,13 @@ export default class ConfirmEmail extends React.Component<unknown, State> {
 	};
 
 	componentWillUnmount = async () => {
-		await this._accountService.abort();
+		await this.accountService.abort();
 	};
 
 	fetchData = async () => {
 		const { userId, code } = this.getRouteProps();
 
-		const result = await this._accountService.confirmEmail({ userId, code });
+		const result = await this.accountService.confirmEmail({ userId, code });
 
 		if (result.success) {
 			this.setState({ loading: false });
@@ -76,3 +81,5 @@ export default class ConfirmEmail extends React.Component<unknown, State> {
 		);
 	};
 }
+
+export default withParams(ConfirmEmail);
