@@ -8,7 +8,11 @@ interface RouteProps {
 
 export default function SearchClassifier() {
 
-	const { typeCode } = useParams();
+	function getRouteProps(): RouteProps {
+		return useParams();
+	}
+
+	const { typeCode } = getRouteProps();
 
 	return (
 		<PaneSearchClassifier mode="page" typeCode={typeCode} />
