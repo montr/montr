@@ -9,6 +9,9 @@ using Montr.Core.Services;
 
 namespace Montr.Automate.Impl.CommandHandlers
 {
+	/// <summary>
+	/// Typically executes as background task.
+	/// </summary>
 	public class RunAutomationsHandler : IRequestHandler<RunAutomations, ApiResult>
 	{
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;

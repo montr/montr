@@ -34,6 +34,13 @@ namespace Montr.Docs.Impl.EventHandlers
 				EntityUid = document.Uid.Value
 			}, cancellationToken));
 
+			if (_logger.IsEnabled(LogLevel.Information))
+			{
+				_logger.LogInformation(
+					"Enqueued automation job {jobId} for document {documentUid} status changed to {statusCode}",
+					jobId, document.Uid, notification.StatusCode);
+			}
+
 			return Task.CompletedTask;
 		}
 	}

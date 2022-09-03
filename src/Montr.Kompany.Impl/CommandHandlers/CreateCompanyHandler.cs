@@ -17,6 +17,7 @@ using Montr.MasterData.Services;
 using Montr.Metadata.Models;
 using Montr.Metadata.Services;
 using Montr.Worker.Services;
+using EntityTypeCode = Montr.Docs.EntityTypeCode;
 
 namespace Montr.Kompany.Impl.CommandHandlers
 {
@@ -141,6 +142,7 @@ namespace Montr.Kompany.Impl.CommandHandlers
 				{
 					MetadataEntityTypeCode = DocumentType.EntityTypeCode,
 					MetadataEntityUid = documentType.Uid.Value,
+					EntityTypeCode = EntityTypeCode.Document,
 					EntityUid = documentUid
 				}, cancellationToken));
 

@@ -28,7 +28,9 @@ namespace Montr.Kompany.Registration.Services
 						x.Name = "Submit";
 						x.Type = ButtonType.Primary;
 						x.Action = "/companyRegistrationRequest/submit";
-						x.Props = document.Uid.HasValue ? new SubmitCompanyRegistrationRequest { DocumentUid = document.Uid.Value } : null;
+						x.Props = document.Uid.HasValue
+							? new SubmitCompanyRegistrationRequest { DocumentUid = document.Uid.Value }
+							: null;
 					});
 
 				config.When(document => document.StatusCode != DocumentStatusCode.Draft)

@@ -1,4 +1,4 @@
-import { ButtonCreate, ButtonDelete, StatusTag, UserContextProps, withUserContext } from "@montr-core/components";
+import { ButtonCreate, ButtonDelete, EmptyFieldView, StatusTag, UserContextProps, withUserContext } from "@montr-core/components";
 import { OperationService } from "@montr-core/services";
 import { IDocument } from "@montr-docs/models";
 import { RouteBuilder } from "@montr-docs/module";
@@ -104,9 +104,10 @@ class _StepRegisterCompany extends React.Component<Props, State> {
 								<List.Item.Meta
 									description={
 										<Space>
-											Number: <Typography.Text>{item.documentNumber || "n/a"}</Typography.Text>
-											Date: <Typography.Text>{<>item.documentDate</>}</Typography.Text>
-
+											<Typography.Text type="secondary">Number:</Typography.Text>
+											{item.documentNumber ? <Typography.Text>{item.documentNumber}</Typography.Text> : <EmptyFieldView />}
+											<Typography.Text type="secondary">Date:</Typography.Text>
+											<Typography.Text>{<>{item.documentDate}</>}</Typography.Text>
 											<StatusTag statusCode={item.statusCode} />
 										</Space>}
 								/>

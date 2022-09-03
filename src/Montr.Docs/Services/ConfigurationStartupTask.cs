@@ -74,7 +74,7 @@ namespace Montr.Docs.Services
 
 			_configurationManager.Configure<Document>(config =>
 			{
-				config //.When(document => document.StatusCode == DocumentStatusCode.Draft)
+				config
 					.Add<DataPane>((_, x) =>
 					{
 						x.Key = "info";
@@ -89,26 +89,7 @@ namespace Montr.Docs.Services
 						x.Name = "Form";
 						x.Component = ComponentCode.PaneViewDocumentForm;
 						x.Props = new {mode = document.StatusCode == DocumentStatusCode.Draft ? "edit" : "view"};
-					});
-
-				config.When(document => document.StatusCode == DocumentStatusCode.Draft)
-					/*.Add<Button>((document, x) =>
-					{
-						x.Key = "submit";
-						x.Name = "Submit";
-						x.Type = ButtonType.Primary;
-						x.Action = "/companyRegistrationRequest/submit";
-						x.Props = new SubmitDocument { DocumentUid = document.Uid };
-					})*/;
-
-				config.When(document => document.StatusCode != DocumentStatusCode.Draft)
-					/*.Add<Button>((_, x) =>
-					{
-						x.Name = "Accept or Reject";
-					})*/;
-
-				// for any status
-				config
+					})
 					.Add<DataPane>((_, x) =>
 					{
 						x.Key = "history";

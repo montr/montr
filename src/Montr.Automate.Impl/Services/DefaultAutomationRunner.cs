@@ -29,6 +29,7 @@ namespace Montr.Automate.Impl.Services
 
 			var automations = await classifierRepository.Search(new AutomationSearchRequest
 			{
+				TypeCode = ClassifierTypeCode.Automation,
 				EntityTypeCode = context.MetadataEntityTypeCode,
 				// EntityUid = context.MetadataEntityUid,
 				IsActive = true,
