@@ -31,9 +31,11 @@ public class DefaultAutomationContextProvider : IAutomationContextProvider
 		return entity;
 	}
 
+	// todo: change AutomationContext to something other - GetFields should be used in automation design time,
+	// and AutomationContext is not accessible yet. Maybe use Automation or automation uid
 	public async Task<IList<FieldMetadata>> GetFields(AutomationContext context, CancellationToken cancellationToken)
 	{
-		var contextProvider = _serviceFactory.GetRequiredService(context.MetadataEntityTypeCode);
+		var contextProvider = _serviceFactory.GetRequiredService(context.EntityTypeCode);
 
 		return await contextProvider.GetFields(context, cancellationToken);
 	}

@@ -206,10 +206,10 @@ namespace Montr.Automate.Impl.Services
 
 			if (result.Success)
 			{
-				/*await db.GetTable<DbAutomation>()
+				await db.GetTable<DbAutomation>()
 					.Where(x => x.Uid == item.Uid)
 					.Set(x => x.EntityTypeCode, automation.EntityTypeCode)
-					.UpdateAsync(cancellationToken);*/
+					.UpdateAsync(cancellationToken);
 
 				await db.GetTable<DbAutomationAction>()
 					.Where(x => x.AutomationUid == item.Uid).DeleteAsync(cancellationToken);

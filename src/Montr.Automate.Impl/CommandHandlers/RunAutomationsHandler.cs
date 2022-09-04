@@ -29,8 +29,6 @@ namespace Montr.Automate.Impl.CommandHandlers
 			{
 				var result = await _automationRunner.Run(new AutomationContext
 				{
-					MetadataEntityTypeCode = request.MetadataEntityTypeCode,
-					MetadataEntityUid = request.MetadataEntityUid,
 					EntityTypeCode = request.EntityTypeCode,
 					EntityUid = request.EntityUid
 				}, cancellationToken);

@@ -3,6 +3,7 @@ import { MenuProps } from "antd/lib/menu";
 import * as React from "react";
 import { CompanyContextProps, CompanyMenu, withCompanyContext } from ".";
 
+// todo: remove, all code in MainMenu
 class _UserWithCompanyMenu extends React.Component<MenuProps & CompanyContextProps> {
 	render = () => {
 

@@ -55,7 +55,7 @@ export const Patterns = {
 	forgotPassword: "/account/forgot-password",
 	resetPassword: "/account/reset-password/:code",
 
-	profile: "/profile",
+	profile: "/profile/",
 	profileSecurity: "/profile/security",
 	profileExternalLogin: "/profile/external-login",
 	profileExternalLoginLink: "/profile/external-login/link"

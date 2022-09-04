@@ -18,6 +18,7 @@ interface State {
 	updateTableToken?: DataTableUpdateToken;
 }
 
+// todo: remove (after moving to classifiers),
 export default class PaneSearchAutomation extends React.Component<Props, State> {
 
 	operation = new OperationService();

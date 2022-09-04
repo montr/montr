@@ -19,7 +19,8 @@ namespace Montr.Automate.Services
 
 		public Task Run(CancellationToken cancellationToken)
 		{
-			_registrator.Register(ViewCode.AutomationList, _ => new DataView
+			// todo: remove?
+			/*_registrator.Register(ViewCode.AutomationList, _ => new DataView
 			{
 				Columns = new List<DataColumn>
 				{
@@ -29,10 +30,10 @@ namespace Montr.Automate.Services
 					new() { Key = "active", Name = "Active", Width = 10, Sortable = true, Type = BooleanField.TypeCode },
 					new() { Key = "system", Name = "System", Width = 10, Sortable = true, Type = BooleanField.TypeCode }
 				}
-			});
+			});*/
 
 			// todo: remove
-			_registrator.Register(ViewCode.AutomationForm, _ => new DataView
+			/*_registrator.Register(ViewCode.AutomationForm, _ => new DataView
 			{
 				Fields = new List<FieldMetadata>
 				{
@@ -42,7 +43,7 @@ namespace Montr.Automate.Services
 					new AutomationConditionListField { Key = "conditions", Name = "Conditions" },
 					new AutomationActionListField { Key = "actions", Name = "Actions" }
 				}
-			});
+			});*/
 
 			return Task.CompletedTask;
 		}

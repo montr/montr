@@ -79,7 +79,7 @@ namespace Montr.Kompany.Impl.CommandHandlers
 
 			var manageFieldDataRequest = new ManageFieldDataRequest
 			{
-				EntityTypeCode = Docs.EntityTypeCode.Document,
+				EntityTypeCode = EntityTypeCode.Document,
 				EntityUid = documentUid,
 				Metadata = metadata.Rows,
 				Item = company
@@ -140,8 +140,6 @@ namespace Montr.Kompany.Impl.CommandHandlers
 				// todo: auto-approve request, notifications
 				_jobManager.Enqueue<ISender>(x => x.Send(new RunAutomations
 				{
-					MetadataEntityTypeCode = DocumentType.EntityTypeCode,
-					MetadataEntityUid = documentType.Uid.Value,
 					EntityTypeCode = EntityTypeCode.Document,
 					EntityUid = documentUid
 				}, cancellationToken));

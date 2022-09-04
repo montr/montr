@@ -11,6 +11,7 @@ interface Props {
 	// tail?: React.ReactElement<MenuProps>;
 }
 
+// todo: remove, all code in MainMenu
 class _UserMenu extends React.Component<MenuProps & UserContextProps & Props> {
 
 	render = () => {

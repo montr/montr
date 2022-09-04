@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using Montr.Automate.Models;
 using Montr.Automate.Services;
 using Montr.Core.Models;
@@ -12,13 +13,16 @@ namespace Montr.Automate.Impl.Services
 {
 	public class DefaultAutomationRunner : IAutomationRunner
 	{
+		private readonly ILogger<DefaultAutomationRunner> _logger;
 		private readonly INamedServiceFactory<IClassifierRepository> _classifierRepositoryFactory;
 		private readonly IAutomationProviderRegistry _providerRegistry;
 
 		public DefaultAutomationRunner(
+			ILogger<DefaultAutomationRunner> logger,
 			INamedServiceFactory<IClassifierRepository> classifierRepositoryFactory,
 			IAutomationProviderRegistry providerRegistry)
 		{
+			_logger = logger;
 			_classifierRepositoryFactory = classifierRepositoryFactory;
 			_providerRegistry = providerRegistry;
 		}
@@ -27,10 +31,10 @@ namespace Montr.Automate.Impl.Services
 		{
 			var classifierRepository = _classifierRepositoryFactory.GetService(ClassifierTypeCode.Automation);
 
-			var automations = await classifierRepository.Search(new AutomationSearchRequest
+			var searchResult = await classifierRepository.Search(new AutomationSearchRequest
 			{
 				TypeCode = ClassifierTypeCode.Automation,
-				EntityTypeCode = context.MetadataEntityTypeCode,
+				EntityTypeCode = context.EntityTypeCode,
 				// EntityUid = context.MetadataEntityUid,
 				IsActive = true,
 				IncludeRules = true,
@@ -39,7 +43,9 @@ namespace Montr.Automate.Impl.Services
 
 			var affected = 0;
 
-			foreach (var automation in automations.Rows.Cast<Automation>())
+			var automations = searchResult.Rows.Cast<Automation>();
+
+			foreach (var automation in automations)
 			{
 				if (await MeetAll(automation.Conditions, context, cancellationToken))
 				{

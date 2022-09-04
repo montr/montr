@@ -32,13 +32,13 @@ export const Api = {
 
 export const Patterns = {
 	home: "/",
-	setup: "/setup",
-	dashboard: "/dashboard",
-	locales: "/locales",
-	settings: "/settings",
+	setup: "/setup/",
+	dashboard: "/dashboard/",
+	locales: "/locales/",
+	settings: "/settings/",
 
-	profile: "/profile",
-	accountRegister: "/account/register",
+	profile: "/profile/",
+	accountRegister: "/account/register/",
 };
 
 export const Views = {
