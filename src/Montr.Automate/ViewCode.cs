@@ -4,6 +4,6 @@
 	{
 		// public static readonly string AutomationList = "automation-list";
 
-		// public static readonly string AutomationForm = "automation-form";
+		public static readonly string AutomationForm = "automation-form";
 	}
 }

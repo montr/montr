@@ -4,9 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using LinqToDB;
-using LinqToDB.Data;
 using Montr.Automate.Impl.Entities;
-using Montr.Automate.Impl.Models;
 using Montr.Automate.Models;
 using Montr.Automate.Services;
 using Montr.Core.Models;
@@ -173,8 +171,8 @@ namespace Montr.Automate.Impl.Services
 		{
 			var automation = (Automation)item;
 
-			var dbConditions = CollectDbConditions(automation);
-			var dbActions = CollectDbActions(automation);
+			// var dbConditions = CollectDbConditions(automation);
+			// var dbActions = CollectDbActions(automation);
 
 			var result = await base.InsertInternal(db, type, item, cancellationToken);
 
@@ -186,9 +184,8 @@ namespace Montr.Automate.Impl.Services
 					.Value(x => x.TypeCode, AutomationTypeCode.Trigger) // todo: ask user
 					.InsertAsync(cancellationToken);
 
-				await db.GetTable<DbAutomationAction>().BulkCopyAsync(dbActions, cancellationToken);
-
-				await db.GetTable<DbAutomationCondition>().BulkCopyAsync(dbConditions, cancellationToken);
+				// await db.GetTable<DbAutomationCondition>().BulkCopyAsync(dbConditions, cancellationToken);
+				// await db.GetTable<DbAutomationAction>().BulkCopyAsync(dbActions, cancellationToken);
 			}
 
 			return result;
@@ -199,8 +196,8 @@ namespace Montr.Automate.Impl.Services
 		{
 			var automation = (Automation)item;
 
-			var dbConditions = CollectDbConditions(automation);
-			var dbActions = CollectDbActions(automation);
+			// var dbConditions = CollectDbConditions(automation);
+			// var dbActions = CollectDbActions(automation);
 
 			var result = await base.UpdateInternal(db, type, tree, item, cancellationToken);
 
@@ -211,15 +208,13 @@ namespace Montr.Automate.Impl.Services
 					.Set(x => x.EntityTypeCode, automation.EntityTypeCode)
 					.UpdateAsync(cancellationToken);
 
+				/*await db.GetTable<DbAutomationCondition>()
+					.Where(x => x.AutomationUid == item.Uid).DeleteAsync(cancellationToken);
+				await db.GetTable<DbAutomationCondition>().BulkCopyAsync(dbConditions, cancellationToken);
+
 				await db.GetTable<DbAutomationAction>()
 					.Where(x => x.AutomationUid == item.Uid).DeleteAsync(cancellationToken);
-
-				await db.GetTable<DbAutomationAction>().BulkCopyAsync(dbActions, cancellationToken);
-
-				await db.GetTable<DbAutomationCondition>()
-					.Where(x => x.AutomationUid == item.Uid).DeleteAsync(cancellationToken);
-
-				await db.GetTable<DbAutomationCondition>().BulkCopyAsync(dbConditions, cancellationToken);
+				await db.GetTable<DbAutomationAction>().BulkCopyAsync(dbActions, cancellationToken);*/
 			}
 
 			return result;
@@ -241,79 +236,6 @@ namespace Montr.Automate.Impl.Services
 				.DeleteAsync(cancellationToken);
 
 			return await base.DeleteInternal(db, type, request, cancellationToken);
-		}
-
-		private IEnumerable<DbAutomationCondition> CollectDbConditions(Automation automation)
-		{
-			var result = new List<DbAutomationCondition>();
-
-			CollectDbConditionsRecursively(result, automation.Conditions, automation.Uid.Value, null);
-
-			return result;
-		}
-
-		private void CollectDbConditionsRecursively(
-			ICollection<DbAutomationCondition> result, IList<AutomationCondition> items, Guid automationUid, Guid? parentUid)
-		{
-			if (items != null)
-			{
-				var order = 0;
-
-				foreach (var item in items)
-				{
-					var dbCondition = new DbAutomationCondition
-					{
-						Uid = Guid.NewGuid(),
-						AutomationUid = automationUid,
-						TypeCode = item.Type,
-						DisplayOrder = order++,
-						ParentUid = parentUid
-					};
-
-					var properties = item.GetProperties();
-
-					if (properties != null)
-					{
-						dbCondition.Props = _jsonSerializer.Serialize(properties);
-					}
-
-					result.Add(dbCondition);
-
-					if (item is GroupAutomationCondition groupCondition)
-					{
-						CollectDbConditionsRecursively(result, groupCondition.Props.Conditions, automationUid, dbCondition.Uid);
-					}
-				}
-			}
-		}
-
-		private IEnumerable<DbAutomationAction> CollectDbActions(Automation automation)
-		{
-			var result = new List<DbAutomationAction>();
-
-			if (automation.Actions != null)
-			{
-				var order = 0;
-
-				foreach (var item in automation.Actions)
-				{
-					var properties = item.GetProperties();
-
-					if (properties != null)
-					{
-						result.Add(new DbAutomationAction
-						{
-							Uid = Guid.NewGuid(),
-							AutomationUid = automation.Uid.Value,
-							TypeCode = item.Type,
-							DisplayOrder = order++,
-							Props = _jsonSerializer.Serialize(properties)
-						});
-					}
-				}
-			}
-
-			return result;
 		}
 
 		private class DbItem

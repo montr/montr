@@ -25,6 +25,7 @@ namespace Montr.Automate.Impl.CommandHandlers
 
 		public async Task<ApiResult> Handle(RunAutomations request, CancellationToken cancellationToken)
 		{
+			// Automations should be run in transaction to prevent db trails
 			using (var scope = _unitOfWorkFactory.Create())
 			{
 				var result = await _automationRunner.Run(new AutomationContext

@@ -33,17 +33,17 @@ namespace Montr.Automate.Services
 			});*/
 
 			// todo: remove
-			/*_registrator.Register(ViewCode.AutomationForm, _ => new DataView
+			_registrator.Register(ViewCode.AutomationForm, _ => new DataView
 			{
 				Fields = new List<FieldMetadata>
 				{
-					new NumberField { Key = "displayOrder", Name = "#", Required = true, Props = { Min = 0, Max = 256 } },
-					new TextField { Key = "name", Name = "Наименование", Required = true },
-					new TextAreaField { Key = "description", Name = "Описание", Props = new TextAreaField.Properties { Rows = 1 } },
+					// new NumberField { Key = "displayOrder", Name = "#", Required = true, Props = { Min = 0, Max = 256 } },
+					// new TextField { Key = "name", Name = "Наименование", Required = true },
+					// new TextAreaField { Key = "description", Name = "Описание", Props = new TextAreaField.Properties { Rows = 1 } },
 					new AutomationConditionListField { Key = "conditions", Name = "Conditions" },
 					new AutomationActionListField { Key = "actions", Name = "Actions" }
 				}
-			});*/
+			});
 
 			return Task.CompletedTask;
 		}

@@ -54,6 +54,7 @@ namespace Montr.Docs.Services
 						x.DisplayOrder = 25;
 						x.Component = Core.ComponentCode.PaneSearchEntityStatuses;
 					})
+					// todo: remove or replace with filtered list of automations for selected document type
 					.Add<DataPane>((_, x) =>
 					{
 						x.Key = "automation";

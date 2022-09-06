@@ -12,6 +12,7 @@ namespace Montr.Automate
 		{
 			appBuilder.Services.AddTransient<IStartupTask, RegisterClassifierTypeStartupTask>();
 			appBuilder.Services.AddTransient<IStartupTask, RegisterMetadataStartupTask>();
+			appBuilder.Services.AddTransient<IStartupTask, ConfigurationStartupTask>();
 		}
 	}
 }

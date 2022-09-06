@@ -6,7 +6,6 @@ import { Translation } from "react-i18next";
 import { Automation } from "../models/automation";
 import { Api, Views } from "../module";
 import { AutomationService } from "../services/automation-service";
-import { PaneEditAutomation } from "./pane-edit-automation";
 
 interface Props extends DataPaneProps<unknown> {
 }
@@ -110,14 +109,14 @@ export default class PaneSearchAutomation extends React.Component<Props, State> 
 				skipPaging={true}
 			/>
 
-			{showPane &&
+			{/* {showPane &&
 				<PaneEditAutomation
 					entityTypeCode={entityTypeCode}
 					entityUid={entityUid}
 					uid={editUid}
 					onSuccess={this.handleSuccess}
 					onClose={this.closePane}
-				/>}
+				/>} */}
 
 		</>}</Translation>);
 	};

@@ -14,6 +14,7 @@ import("./components").then(x => {
 });
 
 export const Api = {
+	// todo: remove classifier methods
 	automationList: "/automation/list/",
 	automationMetadata: "/automation/metadata/",
 	automationGet: "/automation/get/",
@@ -22,6 +23,8 @@ export const Api = {
 	automationInsert: "/automation/insert/",
 	automationUpdate: "/automation/update/",
 	automationDelete: "/automation/delete/",
+
+	automationUpdateRules: "/automation/updateRules/",
 
 	fieldAutomationConditionFields: "/fieldAutomationCondition/fields/"
 };
@@ -32,5 +35,6 @@ export const Views = {
 };
 
 ComponentRegistry.add([
+	{ path: "@montr-automate/components/pane-edit-automation", component: React.lazy(() => import("./components/pane-edit-automation")) },
 	{ path: "@montr-automate/components/pane-search-automation", component: React.lazy(() => import("./components/pane-search-automation")) }
 ]);

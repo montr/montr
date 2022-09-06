@@ -16,7 +16,7 @@ public class GetEntityRelationListHandler : IRequestHandler<GetEntityRelationLis
 	{
 		_entityRelationService = entityRelationService;
 	}
-		
+
 	public async Task<IList<EntityRelation>> Handle(GetEntityRelationList request, CancellationToken cancellationToken)
 	{
 		return await _entityRelationService.List(request, cancellationToken);

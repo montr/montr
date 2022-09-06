@@ -3,6 +3,7 @@ import { Guid } from "@montr-core/models";
 export interface Automation {
 	uid?: Guid;
 	name?: string;
+	typeCode?: string;
 	description?: string;
 	conditions?: AutomationCondition[];
 	actions?: AutomationAction[];

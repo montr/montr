@@ -44,4 +44,8 @@ export class AutomationService extends Fetcher {
 	conditionTypes = async (): Promise<AutomationRuleType[]> => {
 		return this.post(Api.automationConditionTypes, {});
 	};
+
+	updateRules = async (request: IManageAutomationRequest): Promise<ApiResult> => {
+		return this.post(Api.automationUpdateRules, request);
+	};
 }

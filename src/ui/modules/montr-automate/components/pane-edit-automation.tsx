@@ -1,7 +1,7 @@
-import { ButtonCancel, ButtonSave, DataForm, Toolbar } from "@montr-core/components";
+import { DataForm } from "@montr-core/components";
 import { ApiResult, Guid, IDataField } from "@montr-core/models";
 import { MetadataService } from "@montr-core/services";
-import { Drawer, Spin } from "antd";
+import { Spin } from "antd";
 import { FormInstance } from "antd/lib/form";
 import React from "react";
 import { Automation } from "../models";
@@ -11,7 +11,8 @@ import { AutomationContextProvider } from "./automation-context";
 
 interface Props {
 	entityTypeCode: string;
-	entityUid: Guid | string;
+	entityUid: Guid;
+	data?: Automation;
 	uid?: Guid;
 	onSuccess?: () => void;
 	onClose?: () => void;
@@ -25,7 +26,7 @@ interface State {
 
 // todo: remove (after moving to classifiers),
 // rename AutomationContextProvider to ClassifierContextProvider and use in classifier edit page
-export class PaneEditAutomation extends React.Component<Props, State> {
+export default class PaneEditAutomation extends React.Component<Props, State> {
 
 	private readonly metadataService = new MetadataService();
 	private readonly automationService = new AutomationService();
@@ -51,13 +52,8 @@ export class PaneEditAutomation extends React.Component<Props, State> {
 	fetchData = async (): Promise<void> => {
 		const { entityTypeCode, entityUid, uid } = this.props;
 
-		const data: Automation = (uid)
-			? await this.automationService.get(entityTypeCode, entityUid, uid)
-			// todo: load defaults from server
-			: {
-				conditions: [],
-				actions: []
-			};
+		const data: Automation = this.props.data;
+		// await this.automationService.get(entityTypeCode, entityUid, uid);
 
 		const dataView = await this.metadataService.load(Views.automationForm);
 
@@ -77,14 +73,11 @@ export class PaneEditAutomation extends React.Component<Props, State> {
 
 		const item = { ...values };
 
-		let result;
-
-		if (uid) {
-			result = await this.automationService.update({ entityTypeCode, entityUid, item: { uid, ...item } });
-		}
-		else {
-			result = await this.automationService.insert({ entityTypeCode, entityUid, item });
-		}
+		const result = await this.automationService.updateRules({
+			entityTypeCode,
+			entityUid,
+			item: { uid: entityUid, typeCode: "temp", ...item }
+		});
 
 		if (result.success && onSuccess) {
 			onSuccess();
@@ -99,7 +92,7 @@ export class PaneEditAutomation extends React.Component<Props, State> {
 
 		return (<>
 			<Spin spinning={loading}>
-				<Drawer
+				{/* <Drawer
 					title="Automation"
 					closable={true}
 					onClose={onClose}
@@ -109,19 +102,18 @@ export class PaneEditAutomation extends React.Component<Props, State> {
 						<Toolbar clear size="small" float="right">
 							<ButtonCancel onClick={onClose} />
 							<ButtonSave onClick={this.handleSubmitClick} />
-						</Toolbar>}>
+						</Toolbar>}> */}
 
-					{/* todo: pass Automation to context? */}
-					<AutomationContextProvider entityTypeCode={entityTypeCode} entityUid={entityUid}>
-						<DataForm
-							formRef={this.formRef}
-							hideButtons={true}
-							fields={fields}
-							data={data}
-							onSubmit={this.handleSubmit} />
-					</AutomationContextProvider>
+				{/* todo: pass Automation to context? */}
+				<AutomationContextProvider entityTypeCode={entityTypeCode} entityUid={entityUid}>
+					<DataForm
+						formRef={this.formRef}
+						fields={fields}
+						data={data}
+						onSubmit={this.handleSubmit} />
+				</AutomationContextProvider>
 
-				</Drawer>
+				{/* </Drawer> */}
 			</Spin>
 		</>);
 	};

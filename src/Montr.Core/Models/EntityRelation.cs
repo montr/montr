@@ -7,7 +7,7 @@ public class EntityRelation
 	public string EntityTypeCode { get; set; }
 
 	public Guid EntityUid { get; set; }
-		
+
 	public string RelatedEntityTypeCode { get; set; }
 
 	public Guid RelatedEntityUid { get; set; }

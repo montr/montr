@@ -42,8 +42,8 @@ namespace Montr.Automate.Impl
 		{
 			app.ConfigureMetadata(options =>
 			{
-				options.Registry.AddFieldType(typeof(AutomationActionListField));
 				options.Registry.AddFieldType(typeof(AutomationConditionListField));
+				options.Registry.AddFieldType(typeof(AutomationActionListField));
 			});
 		}
 	}

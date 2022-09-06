@@ -3,8 +3,11 @@ using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Montr.Automate.Commands;
 using Montr.Automate.Models;
+using Montr.Automate.Permissions;
 using Montr.Automate.Queries;
+using Montr.Core.Models;
 using Montr.Metadata.Models;
 
 namespace Montr.Automate.Controllers
@@ -35,6 +38,12 @@ namespace Montr.Automate.Controllers
 		public async Task<IList<AutomationRuleType>> ConditionTypes()
 		{
 			return await _mediator.Send(new GetAutomationConditionTypeList());
+		}
+
+		[HttpPost, Permission(typeof(ManageAutomationRules))]
+		public async Task<ApiResult> UpdateRules(UpdateAutomationRules request)
+		{
+			return await _mediator.Send(request);
 		}
 	}
 }
