@@ -6,41 +6,42 @@ using Montr.Core.Commands;
 using Montr.Core.Models;
 using Montr.Core.Queries;
 
-namespace Montr.Core.Controllers;
-
-[ApiController, Route("api/[controller]/[action]")]
-public class LocaleController : ControllerBase
+namespace Montr.Core.Controllers
 {
-	private readonly ISender _mediator;
-
-	public LocaleController(ISender mediator)
+	[ApiController, Route("api/[controller]/[action]")]
+	public class LocaleController : ControllerBase
 	{
-		_mediator = mediator;
-	}
+		private readonly ISender _mediator;
 
-	[HttpGet, Route("{locale}/{module}")]
-	public async Task<IDictionary<string, string>> Strings([FromRoute]string locale, [FromRoute]string module)
-	{
-		return await _mediator.Send(new GetAllLocaleStrings { Locale = locale, Module = module });
-	}
+		public LocaleController(ISender mediator)
+		{
+			_mediator = mediator;
+		}
 
-	[HttpPost, Permission(typeof(Permissions.ViewLocales))]
-	public async Task<SearchResult<LocaleString>> List(GetLocaleStringList request)
-	{
-		return await _mediator.Send(request);
-	}
+		[HttpGet, Route("{locale}/{module}")]
+		public async Task<IDictionary<string, string>> Strings([FromRoute]string locale, [FromRoute]string module)
+		{
+			return await _mediator.Send(new GetAllLocaleStrings { Locale = locale, Module = module });
+		}
 
-	[HttpPost, Permission(typeof(Permissions.ViewLocales))]
-	public async Task<FileStreamResult> Export(ExportLocaleStringList request)
-	{
-		var result = await _mediator.Send(request);
+		[HttpPost, Permission(typeof(Permissions.ViewLocales))]
+		public async Task<SearchResult<LocaleString>> List(GetLocaleStringList request)
+		{
+			return await _mediator.Send(request);
+		}
 
-		return File(result.Stream, result.ContentType, result.FileName);
-	}
+		[HttpPost, Permission(typeof(Permissions.ViewLocales))]
+		public async Task<FileStreamResult> Export(ExportLocaleStringList request)
+		{
+			var result = await _mediator.Send(request);
 
-	[HttpPost, Permission(typeof(Permissions.ManageLocales))]
-	public async Task<ApiResult> Import([FromForm]ImportLocaleStringList request)
-	{
-		return await _mediator.Send(request);
+			return File(result.Stream, result.ContentType, result.FileName);
+		}
+
+		[HttpPost, Permission(typeof(Permissions.ManageLocales))]
+		public async Task<ApiResult> Import([FromForm]ImportLocaleStringList request)
+		{
+			return await _mediator.Send(request);
+		}
 	}
 }

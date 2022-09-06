@@ -1,10 +1,11 @@
 ﻿using System;
 
-namespace Montr.Core.Models;
-
-public class EntityRelationSearchRequest
+namespace Montr.Core.Models
 {
-	public string EntityTypeCode { get; set; }
+	public class EntityRelationSearchRequest
+	{
+		public string EntityTypeCode { get; set; }
 
-	public Guid EntityUid { get; set; }
+		public Guid EntityUid { get; set; }
+	}
 }

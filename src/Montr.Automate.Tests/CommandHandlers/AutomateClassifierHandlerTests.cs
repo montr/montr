@@ -20,210 +20,211 @@ using Montr.Metadata.Models;
 using Moq;
 using NUnit.Framework;
 
-namespace Montr.Automate.Tests.CommandHandlers;
-
-public class AutomateClassifierHandlerTests
+namespace Montr.Automate.Tests.CommandHandlers
 {
-	private static readonly string AutomationTypeCode = "automation_for_test";
-
-	private static INamedServiceFactory<IClassifierRepository> CreateClassifierRepositoryFactory(IDbContextFactory dbContextFactory)
+	public class AutomateClassifierHandlerTests
 	{
-		var jsonSerializer = new NewtonsoftJsonSerializer();
-		var classifierTypeRepository = new DbClassifierTypeRepository(dbContextFactory);
-		var classifierTypeService = new DbClassifierTypeService(dbContextFactory, classifierTypeRepository);
+		private static readonly string AutomationTypeCode = "automation_for_test";
 
-		var fieldProviderRegistry = new DefaultFieldProviderRegistry();
-		fieldProviderRegistry.AddFieldType(typeof(NumberField));
-		fieldProviderRegistry.AddFieldType(typeof(TextField));
-		fieldProviderRegistry.AddFieldType(typeof(TextAreaField));
-		fieldProviderRegistry.AddFieldType(typeof(SelectField));
-		fieldProviderRegistry.AddFieldType(typeof(AutomationConditionListField));
-		fieldProviderRegistry.AddFieldType(typeof(AutomationActionListField));
-		var dbFieldDataRepository = new DbFieldDataRepository(dbContextFactory, fieldProviderRegistry);
+		private static INamedServiceFactory<IClassifierRepository> CreateClassifierRepositoryFactory(IDbContextFactory dbContextFactory)
+		{
+			var jsonSerializer = new NewtonsoftJsonSerializer();
+			var classifierTypeRepository = new DbClassifierTypeRepository(dbContextFactory);
+			var classifierTypeService = new DbClassifierTypeService(dbContextFactory, classifierTypeRepository);
 
-		var metadataServiceMock = new Mock<IClassifierTypeMetadataService>();
-		metadataServiceMock
-			.Setup(x => x.GetMetadata(It.IsAny<ClassifierType>(), It.IsAny<CancellationToken>()))
-			.ReturnsAsync(() => Automation.GetDefaultMetadata().Fields.ToArray());
+			var fieldProviderRegistry = new DefaultFieldProviderRegistry();
+			fieldProviderRegistry.AddFieldType(typeof(NumberField));
+			fieldProviderRegistry.AddFieldType(typeof(TextField));
+			fieldProviderRegistry.AddFieldType(typeof(TextAreaField));
+			fieldProviderRegistry.AddFieldType(typeof(SelectField));
+			fieldProviderRegistry.AddFieldType(typeof(AutomationConditionListField));
+			fieldProviderRegistry.AddFieldType(typeof(AutomationActionListField));
+			var dbFieldDataRepository = new DbFieldDataRepository(dbContextFactory, fieldProviderRegistry);
 
-		var acpfMock = new Mock<INamedServiceFactory<IAutomationConditionProvider>>();
-		acpfMock.Setup(x => x.GetRequiredService(FieldAutomationCondition.TypeCode))
-			.Returns(new NoopAutomationConditionProvider { RuleType = new AutomationRuleType { Type = typeof(FieldAutomationCondition) } });
+			var metadataServiceMock = new Mock<IClassifierTypeMetadataService>();
+			metadataServiceMock
+				.Setup(x => x.GetMetadata(It.IsAny<ClassifierType>(), It.IsAny<CancellationToken>()))
+				.ReturnsAsync(() => Automation.GetDefaultMetadata().Fields.ToArray());
 
-		var aapfMock = new Mock<INamedServiceFactory<IAutomationActionProvider>>();
-		aapfMock.Setup(x => x.GetRequiredService(NotifyByEmailAutomationAction.TypeCode))
-			.Returns(new NoopAutomationActionProvider { RuleType = new AutomationRuleType { Type =  typeof(NotifyByEmailAutomationAction) } });
+			var acpfMock = new Mock<INamedServiceFactory<IAutomationConditionProvider>>();
+			acpfMock.Setup(x => x.GetRequiredService(FieldAutomationCondition.TypeCode))
+				.Returns(new NoopAutomationConditionProvider { RuleType = new AutomationRuleType { Type = typeof(FieldAutomationCondition) } });
 
-		var automationRepository = new DbAutomationRepository(dbContextFactory,
-			classifierTypeService, null, metadataServiceMock.Object, dbFieldDataRepository, null,
-			jsonSerializer, acpfMock.Object, aapfMock.Object);
+			var aapfMock = new Mock<INamedServiceFactory<IAutomationActionProvider>>();
+			aapfMock.Setup(x => x.GetRequiredService(NotifyByEmailAutomationAction.TypeCode))
+				.Returns(new NoopAutomationActionProvider { RuleType = new AutomationRuleType { Type =  typeof(NotifyByEmailAutomationAction) } });
 
-		var classifierRepositoryFactoryMock = new Mock<INamedServiceFactory<IClassifierRepository>>();
+			var automationRepository = new DbAutomationRepository(dbContextFactory,
+				classifierTypeService, null, metadataServiceMock.Object, dbFieldDataRepository, null,
+				jsonSerializer, acpfMock.Object, aapfMock.Object);
 
-		classifierRepositoryFactoryMock
-			.Setup(x => x.GetNamedOrDefaultService(It.Is<string>(name => name == AutomationTypeCode)))
-			.Returns(() => automationRepository);
+			var classifierRepositoryFactoryMock = new Mock<INamedServiceFactory<IClassifierRepository>>();
 
-		classifierRepositoryFactoryMock
-			.Setup(x => x.GetNamedOrDefaultService(It.Is<string>(name => name != AutomationTypeCode)))
-			.Throws<InvalidOperationException>();
+			classifierRepositoryFactoryMock
+				.Setup(x => x.GetNamedOrDefaultService(It.Is<string>(name => name == AutomationTypeCode)))
+				.Returns(() => automationRepository);
 
-		return classifierRepositoryFactoryMock.Object;
-	}
+			classifierRepositoryFactoryMock
+				.Setup(x => x.GetNamedOrDefaultService(It.Is<string>(name => name != AutomationTypeCode)))
+				.Throws<InvalidOperationException>();
 
-	[Test]
-	public async Task ManageAutomation_NormalValues_ManageItems()
-	{
-		// arrange
-		var cancellationToken = new CancellationToken();
-		var unitOfWorkFactory = new TransactionScopeUnitOfWorkFactory();
-		var dbContextFactory = new DefaultDbContextFactory();
-		var generator = new MasterDataDbGenerator(unitOfWorkFactory, dbContextFactory);
-		var classifierRepositoryFactory = CreateClassifierRepositoryFactory(dbContextFactory);
-		var insertHandler = new InsertClassifierHandler(unitOfWorkFactory, classifierRepositoryFactory);
-		var updateHandler = new UpdateClassifierHandler(unitOfWorkFactory, classifierRepositoryFactory);
-		var deleteHandler = new DeleteClassifierHandler(unitOfWorkFactory, classifierRepositoryFactory);
+			return classifierRepositoryFactoryMock.Object;
+		}
 
-		using (var _ = unitOfWorkFactory.Create())
+		[Test]
+		public async Task ManageAutomation_NormalValues_ManageItems()
 		{
 			// arrange
-			generator.TypeCode = AutomationTypeCode;
+			var cancellationToken = new CancellationToken();
+			var unitOfWorkFactory = new TransactionScopeUnitOfWorkFactory();
+			var dbContextFactory = new DefaultDbContextFactory();
+			var generator = new MasterDataDbGenerator(unitOfWorkFactory, dbContextFactory);
+			var classifierRepositoryFactory = CreateClassifierRepositoryFactory(dbContextFactory);
+			var insertHandler = new InsertClassifierHandler(unitOfWorkFactory, classifierRepositoryFactory);
+			var updateHandler = new UpdateClassifierHandler(unitOfWorkFactory, classifierRepositoryFactory);
+			var deleteHandler = new DeleteClassifierHandler(unitOfWorkFactory, classifierRepositoryFactory);
 
-			await generator.InsertType(HierarchyType.None, cancellationToken);
-
-			// act - insert
-			var insertedIds = new List<Guid>();
-			for (var i = 0; i < 5; i++)
+			using (var _ = unitOfWorkFactory.Create())
 			{
-				var insertResult = await insertHandler.Handle(new InsertClassifier
+				// arrange
+				generator.TypeCode = AutomationTypeCode;
+
+				await generator.InsertType(HierarchyType.None, cancellationToken);
+
+				// act - insert
+				var insertedIds = new List<Guid>();
+				for (var i = 0; i < 5; i++)
 				{
-					UserUid = generator.UserUid,
-					Item = new Automation
+					var insertResult = await insertHandler.Handle(new InsertClassifier
 					{
-						Type = generator.TypeCode,
-						Code = "00" + i,
-						Name = "00" + i + " - Test Automation",
-						EntityTypeCode = "DocumentType",
-						Conditions = new List<AutomationCondition>
+						UserUid = generator.UserUid,
+						Item = new Automation
 						{
-							new FieldAutomationCondition
+							Type = generator.TypeCode,
+							Code = "00" + i,
+							Name = "00" + i + " - Test Automation",
+							EntityTypeCode = "DocumentType",
+							Conditions = new List<AutomationCondition>
 							{
-								Props = new FieldAutomationCondition.Properties
+								new FieldAutomationCondition
 								{
-									Field = "Status",
-									Operator = AutomationConditionOperator.Equal,
-									Value = "Published"
+									Props = new FieldAutomationCondition.Properties
+									{
+										Field = "Status",
+										Operator = AutomationConditionOperator.Equal,
+										Value = "Published"
+									}
 								}
-							}
-						},
-						Actions = new List<AutomationAction>
-						{
-							new NotifyByEmailAutomationAction
+							},
+							Actions = new List<AutomationAction>
 							{
-								Props = new NotifyByEmailAutomationAction.Properties
+								new NotifyByEmailAutomationAction
 								{
-									Recipient = "operator",
-									Subject = "Test message #1",
-									Body = "Hello"
+									Props = new NotifyByEmailAutomationAction.Properties
+									{
+										Recipient = "operator",
+										Subject = "Test message #1",
+										Body = "Hello"
+									}
 								}
 							}
 						}
-					}
-				}, cancellationToken);
+					}, cancellationToken);
 
-				Assert.IsNotNull(insertResult);
-				Assert.AreEqual(true, insertResult.Success);
+					Assert.IsNotNull(insertResult);
+					Assert.AreEqual(true, insertResult.Success);
 
-				// ReSharper disable once PossibleInvalidOperationException
-				insertedIds.Add(insertResult.Uid.Value);
-			}
+					// ReSharper disable once PossibleInvalidOperationException
+					insertedIds.Add(insertResult.Uid.Value);
+				}
 
-			var searchResult = await classifierRepositoryFactory.GetNamedOrDefaultService(generator.TypeCode)
-				.Search(new ClassifierSearchRequest {TypeCode = generator.TypeCode}, cancellationToken);
+				var searchResult = await classifierRepositoryFactory.GetNamedOrDefaultService(generator.TypeCode)
+					.Search(new ClassifierSearchRequest {TypeCode = generator.TypeCode}, cancellationToken);
 
-			// assert
-			Assert.IsNotNull(searchResult);
-			Assert.AreEqual(insertedIds.Count, searchResult.Rows.Count);
+				// assert
+				Assert.IsNotNull(searchResult);
+				Assert.AreEqual(insertedIds.Count, searchResult.Rows.Count);
 
-			// act - update
-			foreach (var classifier in searchResult.Rows.Cast<Automation>())
-			{
-				// todo: update automation specific properties
-				classifier.Name = classifier.Name.Replace("Test", "Updated");
+				// act - update
+				foreach (var classifier in searchResult.Rows.Cast<Automation>())
+				{
+					// todo: update automation specific properties
+					classifier.Name = classifier.Name.Replace("Test", "Updated");
 
-				var updateCommand = new UpdateClassifier
+					var updateCommand = new UpdateClassifier
+					{
+						UserUid = generator.UserUid,
+						Item = classifier
+					};
+
+					var updateResult = await updateHandler.Handle(updateCommand, cancellationToken);
+
+					Assert.IsNotNull(updateResult);
+					Assert.AreEqual(true, updateResult.Success);
+				}
+
+				searchResult = await classifierRepositoryFactory.GetNamedOrDefaultService(generator.TypeCode)
+					.Search(new ClassifierSearchRequest {TypeCode = generator.TypeCode}, cancellationToken);
+
+				// assert
+				Assert.IsNotNull(searchResult);
+				Assert.AreEqual(insertedIds.Count, searchResult.Rows.Count);
+				Assert.AreEqual(0, searchResult.Rows.Count(x => x.Name.Contains("Test")));
+				Assert.AreEqual(insertedIds.Count, searchResult.Rows.Count(x => x.Name.Contains("Updated")));
+				// Assert.AreEqual(insertedIds.Count, searchResult.Rows.Cast<Automation>().Count(x => x.Pattern.Contains("No.")));
+
+				// act - delete
+				var command = new DeleteClassifier
 				{
 					UserUid = generator.UserUid,
-					Item = classifier
+					TypeCode = generator.TypeCode,
+					Uids = insertedIds.ToArray()
 				};
 
-				var updateResult = await updateHandler.Handle(updateCommand, cancellationToken);
+				var result = await deleteHandler.Handle(command, cancellationToken);
 
-				Assert.IsNotNull(updateResult);
-				Assert.AreEqual(true, updateResult.Success);
+				// assert
+				Assert.IsNotNull(result);
+				Assert.IsTrue(result.Success);
+				Assert.AreEqual(insertedIds.Count, result.AffectedRows);
+
+				searchResult = await classifierRepositoryFactory.GetNamedOrDefaultService(generator.TypeCode)
+					.Search(new ClassifierSearchRequest {TypeCode = generator.TypeCode}, cancellationToken);
+
+				// assert
+				Assert.IsNotNull(searchResult);
+				Assert.AreEqual(0, searchResult.Rows.Count);
+			}
+		}
+
+		private class NoopAutomationActionProvider : IAutomationActionProvider
+		{
+			public AutomationRuleType RuleType { get; init; }
+
+			public IList<FieldMetadata> GetMetadata()
+			{
+				return null;
 			}
 
-			searchResult = await classifierRepositoryFactory.GetNamedOrDefaultService(generator.TypeCode)
-				.Search(new ClassifierSearchRequest {TypeCode = generator.TypeCode}, cancellationToken);
-
-			// assert
-			Assert.IsNotNull(searchResult);
-			Assert.AreEqual(insertedIds.Count, searchResult.Rows.Count);
-			Assert.AreEqual(0, searchResult.Rows.Count(x => x.Name.Contains("Test")));
-			Assert.AreEqual(insertedIds.Count, searchResult.Rows.Count(x => x.Name.Contains("Updated")));
-			// Assert.AreEqual(insertedIds.Count, searchResult.Rows.Cast<Automation>().Count(x => x.Pattern.Contains("No.")));
-
-			// act - delete
-			var command = new DeleteClassifier
+			public Task Execute(AutomationAction automationAction, AutomationContext context, CancellationToken cancellationToken)
 			{
-				UserUid = generator.UserUid,
-				TypeCode = generator.TypeCode,
-				Uids = insertedIds.ToArray()
-			};
-
-			var result = await deleteHandler.Handle(command, cancellationToken);
-
-			// assert
-			Assert.IsNotNull(result);
-			Assert.IsTrue(result.Success);
-			Assert.AreEqual(insertedIds.Count, result.AffectedRows);
-
-			searchResult = await classifierRepositoryFactory.GetNamedOrDefaultService(generator.TypeCode)
-				.Search(new ClassifierSearchRequest {TypeCode = generator.TypeCode}, cancellationToken);
-
-			// assert
-			Assert.IsNotNull(searchResult);
-			Assert.AreEqual(0, searchResult.Rows.Count);
-		}
-	}
-
-	private class NoopAutomationActionProvider : IAutomationActionProvider
-	{
-		public AutomationRuleType RuleType { get; init; }
-
-		public IList<FieldMetadata> GetMetadata()
-		{
-			return null;
+				return Task.CompletedTask;
+			}
 		}
 
-		public Task Execute(AutomationAction automationAction, AutomationContext context, CancellationToken cancellationToken)
+		private class NoopAutomationConditionProvider : IAutomationConditionProvider
 		{
-			return Task.CompletedTask;
-		}
-	}
+			public AutomationRuleType RuleType { get; init; }
 
-	private class NoopAutomationConditionProvider : IAutomationConditionProvider
-	{
-		public AutomationRuleType RuleType { get; init; }
+			public IList<FieldMetadata> GetMetadata()
+			{
+				return null;
+			}
 
-		public IList<FieldMetadata> GetMetadata()
-		{
-			return null;
-		}
-
-		public Task<bool> Meet(AutomationCondition automationCondition, AutomationContext context, CancellationToken cancellationToken)
-		{
-			return Task.FromResult(false);
+			public Task<bool> Meet(AutomationCondition automationCondition, AutomationContext context, CancellationToken cancellationToken)
+			{
+				return Task.FromResult(false);
+			}
 		}
 	}
 }

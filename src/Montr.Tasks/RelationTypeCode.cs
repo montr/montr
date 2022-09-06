@@ -1,6 +1,7 @@
-﻿namespace Montr.Tasks;
-
-public static class RelationTypeCode
+﻿namespace Montr.Tasks
 {
-	public static readonly string Context = "context";
+	public static class RelationTypeCode
+	{
+		public static readonly string Context = "context";
+	}
 }

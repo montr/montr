@@ -1,6 +1,7 @@
-﻿namespace Montr.Tasks;
-
-public static class EntityTypeCode
+﻿namespace Montr.Tasks
 {
-	public static readonly string Task = "task";
+	public static class EntityTypeCode
+	{
+		public static readonly string Task = "task";
+	}
 }

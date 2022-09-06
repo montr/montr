@@ -2,8 +2,9 @@
 using MediatR;
 using Montr.Core.Models;
 
-namespace Montr.Core.Queries;
-
-public class GetEntityRelationList : EntityRelationSearchRequest, IRequest<IList<EntityRelation>>
+namespace Montr.Core.Queries
 {
+	public class GetEntityRelationList : EntityRelationSearchRequest, IRequest<IList<EntityRelation>>
+	{
+	}
 }

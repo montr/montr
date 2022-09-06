@@ -4,23 +4,24 @@ using Microsoft.AspNetCore.Mvc;
 using Montr.Core.Models;
 using Montr.Core.Queries;
 
-namespace Montr.Core.Controllers;
-
-[ApiController, Route("api/[controller]/[action]")]
-public class ContentController : ControllerBase
+namespace Montr.Core.Controllers
 {
-	private readonly ISender _mediator;
-
-	public ContentController(ISender mediator)
+	[ApiController, Route("api/[controller]/[action]")]
+	public class ContentController : ControllerBase
 	{
-		_mediator = mediator;
-	}
+		private readonly ISender _mediator;
 
-	[HttpPost]
-	public async Task<ActionResult<Menu>> Menu(GetMenu request)
-	{
-		request.Principal = User;
+		public ContentController(ISender mediator)
+		{
+			_mediator = mediator;
+		}
 
-		return await _mediator.Send(request);
+		[HttpPost]
+		public async Task<ActionResult<Menu>> Menu(GetMenu request)
+		{
+			request.Principal = User;
+
+			return await _mediator.Send(request);
+		}
 	}
 }

@@ -1,6 +1,7 @@
-﻿namespace Montr.Automate.Models;
-
-public static class ClassifierTypeCode
+﻿namespace Montr.Automate.Models
 {
-	public static readonly string Automation = "automation";
+	public static class ClassifierTypeCode
+	{
+		public static readonly string Automation = "automation";
+	}
 }

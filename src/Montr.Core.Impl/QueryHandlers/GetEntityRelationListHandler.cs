@@ -6,19 +6,20 @@ using Montr.Core.Models;
 using Montr.Core.Queries;
 using Montr.Core.Services;
 
-namespace Montr.Core.Impl.QueryHandlers;
-
-public class GetEntityRelationListHandler : IRequestHandler<GetEntityRelationList, IList<EntityRelation>>
+namespace Montr.Core.Impl.QueryHandlers
 {
-	private readonly IEntityRelationService _entityRelationService;
-
-	public GetEntityRelationListHandler(IEntityRelationService entityRelationService)
+	public class GetEntityRelationListHandler : IRequestHandler<GetEntityRelationList, IList<EntityRelation>>
 	{
-		_entityRelationService = entityRelationService;
-	}
+		private readonly IEntityRelationService _entityRelationService;
 
-	public async Task<IList<EntityRelation>> Handle(GetEntityRelationList request, CancellationToken cancellationToken)
-	{
-		return await _entityRelationService.List(request, cancellationToken);
+		public GetEntityRelationListHandler(IEntityRelationService entityRelationService)
+		{
+			_entityRelationService = entityRelationService;
+		}
+
+		public async Task<IList<EntityRelation>> Handle(GetEntityRelationList request, CancellationToken cancellationToken)
+		{
+			return await _entityRelationService.List(request, cancellationToken);
+		}
 	}
 }
