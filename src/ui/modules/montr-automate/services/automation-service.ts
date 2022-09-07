@@ -1,6 +1,6 @@
 import { ApiResult, Guid, IDataField } from "@montr-core/models";
 import { Fetcher } from "@montr-core/services/fetcher";
-import { Automation, AutomationRuleType } from "../models/automation";
+import { Automation, AutomationAction, AutomationCondition, AutomationRuleType } from "../models/automation";
 import { Api } from "../module";
 
 interface IManageAutomationRequest {
@@ -13,6 +13,12 @@ interface IDeleteAutomationRequest {
 	entityTypeCode: string;
 	entityUid: Guid | string;
 	uids: string[] | number[];
+}
+
+interface IUpdateAutomationRulesRequest {
+	automationUid: Guid;
+	conditions?: AutomationCondition[];
+	actions?: AutomationAction[];
 }
 
 export class AutomationService extends Fetcher {
@@ -45,7 +51,7 @@ export class AutomationService extends Fetcher {
 		return this.post(Api.automationConditionTypes, {});
 	};
 
-	updateRules = async (request: IManageAutomationRequest): Promise<ApiResult> => {
+	updateRules = async (request: IUpdateAutomationRulesRequest): Promise<ApiResult> => {
 		return this.post(Api.automationUpdateRules, request);
 	};
 }

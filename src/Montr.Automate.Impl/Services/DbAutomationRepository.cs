@@ -94,7 +94,7 @@ namespace Montr.Automate.Impl.Services
 			var dbAutomation = dbItem.Automation;
 
 			item.EntityTypeCode = dbAutomation.EntityTypeCode;
-			item.TypeCode = dbAutomation.TypeCode;
+			item.AutomationTypeCode = dbAutomation.AutomationTypeCode;
 
 			return item;
 		}
@@ -181,7 +181,7 @@ namespace Montr.Automate.Impl.Services
 				await db.GetTable<DbAutomation>()
 					.Value(x => x.Uid, item.Uid)
 					.Value(x => x.EntityTypeCode, automation.EntityTypeCode)
-					.Value(x => x.TypeCode, AutomationTypeCode.Trigger) // todo: ask user
+					.Value(x => x.AutomationTypeCode, AutomationTypeCode.Trigger) // todo: ask user
 					.InsertAsync(cancellationToken);
 
 				// await db.GetTable<DbAutomationCondition>().BulkCopyAsync(dbConditions, cancellationToken);

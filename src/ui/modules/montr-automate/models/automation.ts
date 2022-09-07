@@ -1,10 +1,8 @@
-import { Guid } from "@montr-core/models";
+import { Classifier } from "@montr-master-data/models";
 
-export interface Automation {
-	uid?: Guid;
-	name?: string;
-	typeCode?: string;
-	description?: string;
+export interface Automation extends Classifier {
+	entityTypeCode?: string;
+	automationTypeCode?: string;
 	conditions?: AutomationCondition[];
 	actions?: AutomationAction[];
 }

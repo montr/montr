@@ -76,7 +76,14 @@ namespace Montr.Core
 					// options.AllowAreas = true;
 					// options.Conventions.AuthorizeAreaFolder("Identity", "/Account/Manage");
 					// options.Conventions.AuthorizeAreaPage("Identity", "/Account/Logout");
-				});
+				})
+				/*.ConfigureApiBehaviorOptions(options =>
+				{
+					options.InvalidModelStateResponseFactory = context =>
+					{
+						return null;
+					};
+				})*/;
 
 			AddJsonOptions(mvcBuilder);
 

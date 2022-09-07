@@ -20,7 +20,7 @@ namespace Montr.Automate.Models
 		/// <summary>
 		/// trigger | monitor | schedule (date-based)
 		/// </summary>
-		public string TypeCode { get; set; }
+		public string AutomationTypeCode { get; set; }
 
 		/// <summary>
 		/// Meet all conditions...

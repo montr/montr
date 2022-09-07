@@ -34,10 +34,8 @@ namespace Montr.Automate.Impl.CommandHandlers
 
 		public async Task<ApiResult> Handle(UpdateAutomationRules request, CancellationToken cancellationToken)
 		{
-			var item = request.Item ?? throw new ArgumentNullException(nameof(request.Item));
-
-			var dbConditions = CollectDbConditions(item);
-			var dbActions = CollectDbActions(item);
+			var dbConditions = CollectDbConditions(request);
+			var dbActions = CollectDbActions(request);
 
 			using (var scope = _unitOfWorkFactory.Create())
 			{
@@ -46,8 +44,8 @@ namespace Montr.Automate.Impl.CommandHandlers
 					var dbAutomationConditions = db.GetTable<DbAutomationCondition>();
 					var dbAutomationActions = db.GetTable<DbAutomationAction>();
 
-					await dbAutomationConditions.Where(x => x.AutomationUid == item.Uid).DeleteAsync(cancellationToken);
-					await dbAutomationActions.Where(x => x.AutomationUid == item.Uid).DeleteAsync(cancellationToken);
+					await dbAutomationConditions.Where(x => x.AutomationUid == request.AutomationUid).DeleteAsync(cancellationToken);
+					await dbAutomationActions.Where(x => x.AutomationUid == request.AutomationUid).DeleteAsync(cancellationToken);
 
 					await dbAutomationConditions.BulkCopyAsync(dbConditions, cancellationToken);
 					await dbAutomationActions.BulkCopyAsync(dbActions, cancellationToken);
@@ -59,11 +57,11 @@ namespace Montr.Automate.Impl.CommandHandlers
 			}
 		}
 
-		private IEnumerable<DbAutomationCondition> CollectDbConditions(Automation automation)
+		private IEnumerable<DbAutomationCondition> CollectDbConditions(UpdateAutomationRules request)
 		{
 			var result = new List<DbAutomationCondition>();
 
-			CollectDbConditionsRecursively(result, automation.Conditions, automation.Uid.Value, null);
+			CollectDbConditionsRecursively(result, request.Conditions, request.AutomationUid, null);
 
 			return result;
 		}
@@ -103,15 +101,15 @@ namespace Montr.Automate.Impl.CommandHandlers
 			}
 		}
 
-		private IEnumerable<DbAutomationAction> CollectDbActions(Automation automation)
+		private IEnumerable<DbAutomationAction> CollectDbActions(UpdateAutomationRules request)
 		{
 			var result = new List<DbAutomationAction>();
 
-			if (automation.Actions != null)
+			if (request.Actions != null)
 			{
 				var order = 0;
 
-				foreach (var item in automation.Actions)
+				foreach (var item in request.Actions)
 				{
 					var properties = item.GetProperties();
 
@@ -120,7 +118,7 @@ namespace Montr.Automate.Impl.CommandHandlers
 						result.Add(new DbAutomationAction
 						{
 							Uid = Guid.NewGuid(),
-							AutomationUid = automation.Uid.Value,
+							AutomationUid = request.AutomationUid,
 							TypeCode = item.Type,
 							DisplayOrder = order++,
 							Props = _jsonSerializer.Serialize(properties)
