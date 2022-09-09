@@ -17,18 +17,17 @@ export class DataTabs<TModel> extends React.Component<Props<TModel>> {
 	render = (): React.ReactNode => {
 		const { tabKey, panes, onTabChange, disabled, paneProps } = this.props;
 
-		if (!panes) return null;
-
-		return <Tabs size="small" activeKey={tabKey} onChange={onTabChange}>
-			{panes.map((pane, index) => {
-				return (
-					<Tabs.TabPane key={pane.key}
-						tab={<>{pane.icon && Icon.get(pane.icon)}{pane.name}</>}
-						disabled={disabled ? disabled(pane, index) : false}>
-						{ComponentFactory.createComponent(pane.component, { ...paneProps, ...pane.props })}
-					</Tabs.TabPane>
-				);
-			})}
-		</Tabs>;
+		return <Tabs
+			size="small"
+			activeKey={tabKey}
+			onChange={onTabChange}
+			items={panes?.map((pane, index) => {
+				return ({
+					key: pane.key,
+					label: <>{pane.icon && Icon.get(pane.icon)}{pane.name}</>,
+					disabled: disabled ? disabled(pane, index) : false,
+					children: ComponentFactory.createComponent(pane.component, { ...paneProps, ...pane.props })
+				});
+			})} />;
 	};
 }

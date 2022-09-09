@@ -21,7 +21,7 @@ interface Props extends PageContextProps {
 
 interface State {
 	loading: boolean;
-	modalVisible: boolean;
+	modalOpen: boolean;
 	confirmedNavigation: boolean;
 	nextLocation?: Location;
 	task?: Task;
@@ -37,7 +37,7 @@ class PageViewTask extends React.Component<Props, State> {
 
 		this.state = {
 			loading: true,
-			modalVisible: false,
+			modalOpen: false,
 			confirmedNavigation: false,
 			task: {}
 		};
@@ -80,11 +80,11 @@ class PageViewTask extends React.Component<Props, State> {
 
 		setEditMode(false);
 
-		this.setState({ modalVisible: false, confirmedNavigation: true });
+		this.setState({ modalOpen: false, confirmedNavigation: true });
 	};
 
 	onModalClose = () => {
-		this.setState({ modalVisible: false });
+		this.setState({ modalOpen: false });
 	};
 
 	fetchData = async (): Promise<void> => {
@@ -115,7 +115,7 @@ class PageViewTask extends React.Component<Props, State> {
 			{ confirmedNavigation } = this.state;
 
 		if (isDirty && !confirmedNavigation) {
-			this.setState({ modalVisible: true, nextLocation: location });
+			this.setState({ modalOpen: true, nextLocation: location });
 			return false;
 		} else {
 			setEditMode(false);
@@ -125,7 +125,7 @@ class PageViewTask extends React.Component<Props, State> {
 
 	render = (): React.ReactNode => {
 		const { tabKey } = this.getRouteProps(),
-			{ loading, modalVisible, confirmedNavigation, nextLocation, task = {}, dataView } = this.state;
+			{ loading, modalOpen, confirmedNavigation, nextLocation, task = {}, dataView } = this.state;
 
 		if (confirmedNavigation && nextLocation) {
 			this.setState({ confirmedNavigation: null, nextLocation: null });
@@ -151,7 +151,7 @@ class PageViewTask extends React.Component<Props, State> {
 				{/* <Prompt message={this.handleNavigation} /> */}
 
 				<Modal
-					visible={modalVisible}
+					open={modalOpen}
 					onOk={this.onModalConfirm}
 					onCancel={this.onModalClose}>Are you sure you want to ...</Modal>
 
