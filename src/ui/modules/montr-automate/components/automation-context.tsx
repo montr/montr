@@ -1,15 +1,13 @@
-import { Guid } from "@montr-core/models";
 import React from "react";
+import { Automation } from "../models";
 
 export interface AutomationContextProps {
-	entityTypeCode: string;
-	entityUid: Guid | string;
+	data: Automation;
 	children: React.ReactNode;
 }
 
 const defaultState: AutomationContextProps = {
-	entityTypeCode: undefined,
-	entityUid: undefined,
+	data: undefined,
 	children: undefined
 };
 
@@ -25,6 +23,9 @@ export function withAutomationContext<P extends AutomationContextProps>(Componen
 	);
 }
 
+/**
+ * @todo: use ClassifierContext or EntityContext instead?
+ */
 export class AutomationContextProvider extends React.Component<AutomationContextProps> {
 	render = (): React.ReactNode => {
 		return (

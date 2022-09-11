@@ -15,6 +15,10 @@ interface State {
 	fields?: IDataField[];
 }
 
+/**
+ * Generic automation item component.
+ * Simple load action type metadata and displays form fields.
+ */
 export class AutomationActionItem extends React.Component<Props, State> {
 
 	private readonly automationService = new AutomationService();

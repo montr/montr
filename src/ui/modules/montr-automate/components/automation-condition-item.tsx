@@ -1,10 +1,10 @@
+import { AutomationCondition } from "@montr-automate/models/automation";
 import { DataFieldFactory, DataFormOptions } from "@montr-core/components";
 import { IDataField } from "@montr-core/models";
 import { Space } from "antd";
 import React from "react";
-import { AutomationItemProps } from ".";
-import { AutomationCondition } from "../models";
 import { AutomationService } from "../services";
+import { AutomationItemProps } from "./automation-field-factory";
 
 interface Props extends AutomationItemProps {
 	condition: AutomationCondition;
@@ -15,6 +15,10 @@ interface State {
 	fields?: IDataField[];
 }
 
+
+/**
+ * todo: merge with @see {@link AutomationActionItem}
+ */
 export class AutomationConditionItem extends React.Component<Props, State> {
 
 	private readonly automationService = new AutomationService();

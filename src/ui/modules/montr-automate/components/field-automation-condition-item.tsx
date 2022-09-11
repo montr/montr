@@ -1,10 +1,9 @@
-import { FieldAutomationConditionService } from "@montr-automate/services";
 import { IDataField } from "@montr-core/models";
 import { Form, Select, Space } from "antd";
 import React from "react";
-import { AutomationItemProps, withAutomationContext } from ".";
+import { AutomationContextProps, AutomationItemProps, withAutomationContext } from ".";
 import { FieldAutomationCondition } from "../models";
-import { AutomationContextProps } from "./automation-context";
+import { FieldAutomationConditionService } from "../services";
 
 interface Props extends AutomationItemProps, AutomationContextProps {
 	condition: FieldAutomationCondition;
@@ -35,11 +34,13 @@ class WrappedFieldAutomationConditionItem extends React.Component<Props, State> 
 	};
 
 	fetchData = async () => {
-		const { entityTypeCode, entityUid } = this.props;
+		const { data } = this.props;
 
-		const fields = await this.automationConditionService.fields(entityTypeCode, entityUid);
+		if (data) {
+			const fields = await this.automationConditionService.fields(data.entityTypeCode, data.Uid);
 
-		this.setState({ fields });
+			this.setState({ fields });
+		}
 	};
 
 	render = (): React.ReactNode => {

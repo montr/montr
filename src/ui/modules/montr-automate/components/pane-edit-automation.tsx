@@ -72,14 +72,13 @@ export default class PaneEditAutomation extends React.Component<Props, State> {
 	};
 
 	render = (): React.ReactNode => {
-		const { entityTypeCode, entityUid, data } = this.props,
+		const { data } = this.props,
 			{ loading, fields } = this.state;
 
 		return (<>
 			<Spin spinning={loading}>
 
-				{/* todo: pass Automation to context? */}
-				<AutomationContextProvider entityTypeCode={entityTypeCode} entityUid={entityUid}>
+				<AutomationContextProvider data={data}>
 					<DataForm
 						formRef={this.formRef}
 						fields={fields}
