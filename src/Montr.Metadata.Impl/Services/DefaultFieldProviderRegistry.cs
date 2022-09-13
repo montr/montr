@@ -10,8 +10,8 @@ namespace Montr.Metadata.Impl.Services
 {
 	public class DefaultFieldProviderRegistry : IFieldProviderRegistry
 	{
-		private readonly ConcurrentDictionary<string, Type> _providerMap = new ConcurrentDictionary<string, Type>();
-		private readonly ConcurrentDictionary<string, FieldType> _typeMap = new ConcurrentDictionary<string, FieldType>();
+		private readonly ConcurrentDictionary<string, Type> _providerMap = new();
+		private readonly ConcurrentDictionary<string, FieldType> _typeMap = new();
 
 		public void AddFieldType(Type fieldType)
 		{

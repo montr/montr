@@ -15,12 +15,15 @@ namespace Montr.Docs.Models
 
 		public Guid DocumentTypeUid { get; set; }
 
+		[Field(SelectField.TypeCode)]
 		public string StatusCode { get; set; }
 
 		public DocumentDirection Direction { get; set; }
 
+		[Field(TextField.TypeCode)]
 		public string DocumentNumber { get; set; }
 
+		[Field(DateField.TypeCode)]
 		public DateTime DocumentDate { get; set; }
 
 		public string Name { get; set; }

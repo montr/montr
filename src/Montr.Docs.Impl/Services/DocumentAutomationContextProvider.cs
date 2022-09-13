@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -7,16 +8,21 @@ using Montr.Automate.Services;
 using Montr.Core.Services;
 using Montr.Docs.Models;
 using Montr.Metadata.Models;
+using Montr.Metadata.Services;
 
 namespace Montr.Docs.Impl.Services
 {
 	public class DocumentAutomationContextProvider : IAutomationContextProvider
 	{
 		private readonly IRepository<Document> _documentRepository;
+		private readonly IFieldProviderRegistry _fieldProviderRegistry;
 
-		public DocumentAutomationContextProvider(IRepository<Document> documentRepository)
+		public DocumentAutomationContextProvider(
+			IRepository<Document> documentRepository,
+			IFieldProviderRegistry fieldProviderRegistry)
 		{
 			_documentRepository = documentRepository;
+			_fieldProviderRegistry = fieldProviderRegistry;
 		}
 
 		public async Task<object> GetEntity(AutomationContext context, CancellationToken cancellationToken)
@@ -35,13 +41,28 @@ namespace Montr.Docs.Impl.Services
 			// todo: combine document fields + fields from document questionnaire
 			var entityType = typeof(Document);
 
-			var fields = entityType
-				.GetProperties()
-				.Select(x => new TextField { Key = x.Name, Name = x.Name })
-				.Cast<FieldMetadata>()
-				.ToList();
+			var result = new List<FieldMetadata>();
 
-			return await Task.FromResult(fields);
+			foreach (var property in entityType.GetProperties())
+			{
+				var attribute = (FieldAttribute)property.GetCustomAttributes(typeof(FieldAttribute), false).FirstOrDefault();
+
+				if (attribute != null)
+				{
+					var fieldTypeProvider = _fieldProviderRegistry.GetFieldTypeProvider(attribute.TypeCode);
+
+					var fieldMetadata = (FieldMetadata) Activator.CreateInstance(fieldTypeProvider.FieldType);
+
+					if (fieldMetadata != null)
+					{
+						fieldMetadata.Key = fieldMetadata.Name = property.Name;
+
+						result.Add(fieldMetadata);
+					}
+				}
+			}
+
+			return await Task.FromResult(result);
 		}
 	}
 }

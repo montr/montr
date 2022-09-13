@@ -164,7 +164,7 @@ export class SelectFieldFactory extends DataFieldFactory<ISelectField> {
 			showSearch
 			placeholder={field?.placeholder}
 			style={{ minWidth: 200, width: "auto" }}>
-			{props?.options.map(x => {
+			{props?.options?.map(x => {
 				return <Select.Option key={x.value} value={x.value}>{x.name || x.value}</Select.Option>;
 			})}
 		</Select>;
