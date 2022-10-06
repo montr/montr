@@ -24,7 +24,7 @@
 		"react": "^18.2.0",
 		"react-dom": "^18.2.0",
 		"react-i18next": "^11.18.6",
-		"react-router-dom": "^6.3.0",
+		"react-router-dom": "^6.4.2",
 		"universal-cookie": "^4.0.4"
 	},
 	"devDependencies": {
