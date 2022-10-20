@@ -17,7 +17,7 @@
 		"ansi-regex": ">=5.0.1",
 		"antd": "^4.23.1",
 		"axios": "^0.27.2",
-		"i18next": "^21.9.1",
+		"i18next": "^22.0.1",
 		"i18next-browser-languagedetector": "^6.1.5",
 		"i18next-xhr-backend": "^3.2.2",
 		"oidc-client": "^1.11.5",
