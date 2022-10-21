@@ -60,6 +60,16 @@ class WrappedFieldAutomationConditionItem extends React.Component<Props, State> 
 			valueComponent = factory?.createFormItem(selectedField, item, { hideLabels: true, ...options });
 		}
 
+		{/* <Select placeholder="Select value" style={{ minWidth: 100 }}>
+						<Select.Option value="draft">Draft</Select.Option>
+						<Select.Option value="submitted">Submitted</Select.Option>
+						<Select.Option value="published">Published</Select.Option>
+						<Select.Option value="completed">Completed</Select.Option>
+						<Select.Option value="closed">Closed</Select.Option>
+					</Select> */}
+
+		console.log(item);
+
 		return (
 			<Space align="start">
 
@@ -100,13 +110,6 @@ class WrappedFieldAutomationConditionItem extends React.Component<Props, State> 
 
 					{valueComponent}
 
-					{/* <Select placeholder="Select value" style={{ minWidth: 100 }}>
-						<Select.Option value="draft">Draft</Select.Option>
-						<Select.Option value="submitted">Submitted</Select.Option>
-						<Select.Option value="published">Published</Select.Option>
-						<Select.Option value="completed">Completed</Select.Option>
-						<Select.Option value="closed">Closed</Select.Option>
-					</Select> */}
 				</Form.Item>
 
 			</Space>

@@ -63,7 +63,7 @@ export class AutomationActionList extends React.Component<Props, State> {
 							);
 
 							return (
-								<div key={item.key}>
+								<div key={item.key + '_' + index}>
 
 									<FormListItemToolbar
 										item={item}
