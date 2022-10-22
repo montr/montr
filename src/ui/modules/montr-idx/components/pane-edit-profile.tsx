@@ -56,8 +56,8 @@ export default class PaneEditProfile extends React.Component<unknown, State> {
 			<Translation ns={Locale.Namespace}>
 				{(t) => <>
 
-					<PageHeader>{t("page.profile.title")}</PageHeader>
-					<h3>{t("page.profile.subtitle")}</h3>
+					<PageHeader>{t("page.profile.title") as string}</PageHeader>
+					<h3>{t("page.profile.subtitle") as string}</h3>
 
 					<Spin spinning={loading}>
 						<DataForm

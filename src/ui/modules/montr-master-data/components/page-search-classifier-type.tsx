@@ -79,7 +79,7 @@ class WrappedSearchClassifierType extends React.Component<Props, State> {
 						</Toolbar>
 
 						<ClassifierBreadcrumb />
-						<PageHeader>{t("page.searchClassifierTypes.title")}</PageHeader>
+						<PageHeader>{t("page.searchClassifierTypes.title") as string}</PageHeader>
 					</>}>
 
 					<DataTable

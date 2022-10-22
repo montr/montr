@@ -54,9 +54,9 @@ export default class Register extends React.Component<unknown, State> {
 
 		return (
 			<Translation ns={Locale.Namespace}>
-				{(t) => <Page title={t("page.register.title")}>
+				{(t) => <Page title={t("page.register.title") as string}>
 
-					<p>{t("page.register.subtitle")}</p>
+					<p>{t("page.register.subtitle") as string}</p>
 
 					<Spin spinning={loading}>
 						<DataForm
@@ -68,11 +68,11 @@ export default class Register extends React.Component<unknown, State> {
 					</Spin>
 
 					{/* todo: move link to separate component */}
-					<p><Link to={Patterns.login}>{Icon.ArrowLeft} {t("page.register.link.login")}</Link></p>
+					<p><Link to={Patterns.login}>{Icon.ArrowLeft} {t("page.register.link.login") as string}</Link></p>
 
 					<Divider />
 
-					<p>{t("page.register.section.registerExternal")}</p>
+					<p>{t("page.register.section.registerExternal") as string}</p>
 
 					<ExternalLoginForm />
 

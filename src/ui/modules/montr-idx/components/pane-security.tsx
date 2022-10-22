@@ -1,12 +1,12 @@
+import { Icon, PageHeader } from "@montr-core/components";
+import { OperationService } from "@montr-core/services";
+import { Button, List, Tooltip } from "antd";
 import React from "react";
 import { Translation } from "react-i18next";
-import { Button, List, Tooltip } from "antd";
-import { PageHeader, Icon } from "@montr-core/components";
-import { OperationService } from "@montr-core/services";
 import { ProfileModel } from "../models";
-import { ModalChangePassword, ModalSetPassword, ModalChangeEmail, ModalChangePhone } from "./";
-import { ProfileService, AccountService } from "../services";
 import { Locale } from "../module";
+import { AccountService, ProfileService } from "../services";
+import { ModalChangeEmail, ModalChangePassword, ModalChangePhone, ModalSetPassword } from "./";
 
 declare const ModalTypes: ["changePassword", "setPassword", "changeEmail", "changePhone"];
 
@@ -82,8 +82,8 @@ export default class PaneSecurity extends React.Component<Props, State> {
 		return (
 			<Translation ns={Locale.Namespace}>
 				{(t) => <>
-					<PageHeader>{t("page.security.title")}</PageHeader>
-					<h3>{t("page.security.subtitle")}</h3>
+					<PageHeader>{t("page.security.title") as string}</PageHeader>
+					<h3>{t("page.security.subtitle") as string}</h3>
 
 					{displayModal == "changePassword" &&
 						<ModalChangePassword
@@ -113,7 +113,7 @@ export default class PaneSecurity extends React.Component<Props, State> {
 					<List>
 						{data.hasPassword &&
 							<List.Item actions={[
-								<Button onClick={() => this.handleDisplayModal("changePassword")}>{t("button.changePassword")}</Button>]}>
+								<Button onClick={() => this.handleDisplayModal("changePassword")}>{t("button.changePassword") as string}</Button>]}>
 								<List.Item.Meta
 									title="Password"
 									description="Last changed Feb 21, 2017" // todo: add real dates
@@ -123,7 +123,7 @@ export default class PaneSecurity extends React.Component<Props, State> {
 
 						{data.hasPassword == false &&
 							<List.Item actions={[
-								<Button onClick={() => this.handleDisplayModal("setPassword")}>{t("button.setPassword")}</Button>]}>
+								<Button onClick={() => this.handleDisplayModal("setPassword")}>{t("button.setPassword") as string}</Button>]}>
 								<List.Item.Meta
 									title="Password"
 									description="Account does not have a password"
@@ -135,8 +135,8 @@ export default class PaneSecurity extends React.Component<Props, State> {
 							!data.isEmailConfirmed &&
 							<Button type="link"
 								disabled={sendEmailConfirmationDisabled}
-								onClick={() => this.sendEmailConfirmation()}>{t("button.sendVerificationEmail")}</Button>,
-							<Button onClick={() => this.handleDisplayModal("changeEmail")}>{t("button.changeEmail")}</Button>
+								onClick={() => this.sendEmailConfirmation()}>{t("button.sendVerificationEmail") as string}</Button>,
+							<Button onClick={() => this.handleDisplayModal("changeEmail")}>{t("button.changeEmail") as string}</Button>
 						].filter(x => x)}>
 							<List.Item.Meta
 								title="Email"
@@ -147,8 +147,8 @@ export default class PaneSecurity extends React.Component<Props, State> {
 						<List.Item actions={[
 							!data.isPhoneNumberConfirmed &&
 							<Button type="link"
-								disabled={sendPhoneConfirmationDisabled}>{t("button.sendVerificationSms")}</Button>,
-							<Button onClick={() => this.handleDisplayModal("changePhone")}>{t("button.changePhone")}</Button>
+								disabled={sendPhoneConfirmationDisabled}>{t("button.sendVerificationSms") as string}</Button>,
+							<Button onClick={() => this.handleDisplayModal("changePhone")}>{t("button.changePhone") as string}</Button>
 						].filter(x => x)}>
 							<List.Item.Meta
 								title="Phone"

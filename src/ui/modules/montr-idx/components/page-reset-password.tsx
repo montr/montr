@@ -75,9 +75,9 @@ class ResetPassword extends React.Component<Props, State> {
 
 		return (
 			<Translation ns={Locale.Namespace}>
-				{(t) => <Page title={t("page.resetPassword.title")}>
+				{(t) => <Page title={t("page.resetPassword.title") as string}>
 
-					<p>{t("page.resetPassword.subtitle")}</p>
+					<p>{t("page.resetPassword.subtitle") as string}</p>
 
 					<Spin spinning={loading}>
 						<DataForm
@@ -89,7 +89,7 @@ class ResetPassword extends React.Component<Props, State> {
 
 						{!loading && <p>Your password has been reset.</p>}
 
-						<Button disabled={loading} onClick={this.handleContinue}>{t("button.continue")}</Button>
+						<Button disabled={loading} onClick={this.handleContinue}>{t("button.continue") as string}</Button>
 					</Spin>
 				</Page>}
 			</Translation>

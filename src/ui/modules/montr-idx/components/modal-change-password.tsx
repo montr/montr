@@ -1,13 +1,13 @@
-import React from "react";
-import { Modal, Spin } from "antd";
-import { Translation } from "react-i18next";
-import { IDataField, ApiResult } from "@montr-core/models";
 import { DataForm } from "@montr-core/components";
+import { ApiResult, IDataField } from "@montr-core/models";
 import { MetadataService } from "@montr-core/services";
-import { ProfileService } from "../services";
-import { ProfileModel, ChangePasswordModel } from "../models";
-import { Locale, Views } from "../module";
+import { Modal, Spin } from "antd";
 import { FormInstance } from "antd/lib/form";
+import React from "react";
+import { Translation } from "react-i18next";
+import { ChangePasswordModel, ProfileModel } from "../models";
+import { Locale, Views } from "../module";
+import { ProfileService } from "../services";
 
 interface Props {
 	onSuccess?: () => void;
@@ -78,7 +78,7 @@ export class ModalChangePassword extends React.Component<Props, State> {
 
 		return (
 			<Translation ns={Locale.Namespace}>
-				{(t) => <Modal visible={!loading} title={t("page.changePassword.title")}
+				{(t) => <Modal visible={!loading} title={t("page.changePassword.title") as string}
 					onOk={this.onOk} onCancel={this.onCancel}
 					okText="Update password" /* width="640px" */>
 

@@ -56,9 +56,9 @@ export default function Login() {
 	const data: LoginModel = { email, rememberMe: true };
 
 	return (
-		<Page title={t("page.login.title")}>
+		<Page title={t("page.login.title") as string}>
 
-			<p>{t("page.login.section.loginLocal")}</p>
+			<p>{t("page.login.section.loginLocal") as string}</p>
 
 			<Spin spinning={loading}>
 				<DataForm
@@ -73,15 +73,15 @@ export default function Login() {
 				/>
 			</Spin>
 
-			<Link to={Patterns.forgotPassword}>{t("page.login.link.forgotPassword")}</Link>
+			<Link to={Patterns.forgotPassword}>{t("page.login.link.forgotPassword") as string}</Link>
 			<Divider type="vertical" />
-			<Link to={Patterns.register}>{t("page.login.link.register")}</Link>
+			<Link to={Patterns.register}>{t("page.login.link.register") as string}</Link>
 			<Divider type="vertical" />
-			<Link to={Patterns.sendEmailConfirmation}>{t("page.login.link.resendEmailConfirmation")}</Link>
+			<Link to={Patterns.sendEmailConfirmation}>{t("page.login.link.resendEmailConfirmation") as string}</Link>
 
 			<Divider />
 
-			<p>{t("page.login.section.loginExternal")}</p>
+			<p>{t("page.login.section.loginExternal") as string}</p>
 
 			<ExternalLoginForm />
 

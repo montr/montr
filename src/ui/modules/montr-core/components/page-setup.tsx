@@ -8,76 +8,76 @@ import { Views } from "../module";
 import { MetadataService, SetupService } from "../services";
 
 interface State {
-    loading: boolean;
-    fields?: IDataField[];
+	loading: boolean;
+	fields?: IDataField[];
 }
 
 export default class PageSetup extends React.Component<unknown, State> {
 
-    private _metadataService = new MetadataService();
-    private _setupService = new SetupService();
+	private _metadataService = new MetadataService();
+	private _setupService = new SetupService();
 
-    constructor(props: unknown) {
-        super(props);
+	constructor(props: unknown) {
+		super(props);
 
-        this.state = {
-            loading: true
-        };
-    }
+		this.state = {
+			loading: true
+		};
+	}
 
-    componentDidMount = async (): Promise<void> => {
-        await this.fetchData();
-    };
+	componentDidMount = async (): Promise<void> => {
+		await this.fetchData();
+	};
 
-    componentWillUnmount = async (): Promise<void> => {
-        await this._metadataService.abort();
-        await this._setupService.abort();
-    };
+	componentWillUnmount = async (): Promise<void> => {
+		await this._metadataService.abort();
+		await this._setupService.abort();
+	};
 
-    fetchData = async (): Promise<void> => {
-        const dataView = await this._metadataService.load(Views.setupForm);
+	fetchData = async (): Promise<void> => {
+		const dataView = await this._metadataService.load(Views.setupForm);
 
-        this.setState({ loading: false, fields: dataView.fields });
-    };
+		this.setState({ loading: false, fields: dataView.fields });
+	};
 
-    save = async (values: IIndexer): Promise<ApiResult> => {
-        return await this._setupService.save(values);
-    };
+	save = async (values: IIndexer): Promise<ApiResult> => {
+		return await this._setupService.save(values);
+	};
 
-    render = (): React.ReactNode => {
-        const { loading, fields } = this.state,
-            appState = Constants.appState,
-            data = {};
+	render = (): React.ReactNode => {
+		const { loading, fields } = this.state,
+			appState = Constants.appState,
+			data = {};
 
-        if (appState == AppState.Initialized) {
-            return (
-                <Translation>
-                    {(t) => <Page title={t("page.setup.title")}>
+		if (appState == AppState.Initialized) {
+			return (
+				<Translation>
+					{(t) => <Page title={t("page.setup.title") as string}>
 
-                        <Alert type="warning" message={t("page.setup.initializedMessage")} />
+						<Alert type="warning" message={t("page.setup.initializedMessage") as string} />
 
-                    </Page>}
-                </Translation>
-            );
-        }
+					</Page>}
+				</Translation>
+			);
+		}
 
-        return (
-            <Translation>
-                {(t) => <Page title={t("page.setup.title")}>
+		return (
+			<Translation>
+				{(t) => <Page title={t("page.setup.title") as string}>
 
-                    <p>{t("page.setup.subtitle")}</p>
+					<p>{t("page.setup.subtitle") as string}</p>
 
-                    <Spin spinning={loading}>
-                        <DataForm
-                            layout="vertical"
-                            fields={fields}
-                            data={data}
-                            onSubmit={this.save}
-                        />
-                    </Spin>
+					<Spin spinning={loading}>
+						<DataForm
+							layout="vertical"
+							fields={fields}
+							data={data}
+							onSubmit={this.save}
+						/>
+					</Spin>
 
-                </Page>}
-            </Translation>
-        );
-    };
+				</Page>}
+			</Translation>
+		);
+	};
 }

@@ -1,9 +1,9 @@
-import * as React from "react";
 import { Page } from "@montr-core/components";
 import { Spin } from "antd";
+import * as React from "react";
 import { Translation } from "react-i18next";
-import { AccountService } from "../services/account-service";
 import { Locale } from "../module";
+import { AccountService } from "../services/account-service";
 
 interface Props {
 }
@@ -45,9 +45,9 @@ export default class Logout extends React.Component<Props, State> {
 
 		return (
 			<Translation ns={Locale.Namespace}>
-				{(t) => <Page title={t("page.logout.title")}>
+				{(t) => <Page title={t("page.logout.title") as string}>
 					<Spin spinning={loading}>
-						<p>{t("page.logout.message")}</p>
+						<p>{t("page.logout.message") as string}</p>
 					</Spin>
 				</Page>}
 			</Translation>

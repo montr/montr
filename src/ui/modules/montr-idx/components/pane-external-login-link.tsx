@@ -51,7 +51,7 @@ export default class PaneExternalLoginLink extends React.Component<unknown, Stat
 
 		return (
 			<Translation ns={Locale.Namespace}>
-				{(t) => <Page title={t("page.linkLogin.title")}>
+				{(t) => <Page title={t("page.linkLogin.title") as string}>
 					<Spin spinning={loading}>
 
 					</Spin>

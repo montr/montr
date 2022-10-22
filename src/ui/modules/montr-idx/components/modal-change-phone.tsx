@@ -1,13 +1,13 @@
-import React from "react";
-import { Modal, Spin } from "antd";
-import { Translation } from "react-i18next";
-import { IDataField, ApiResult } from "@montr-core/models";
 import { DataForm } from "@montr-core/components";
+import { ApiResult, IDataField } from "@montr-core/models";
 import { MetadataService } from "@montr-core/services";
-import { ProfileService } from "../services";
+import { Modal, Spin } from "antd";
+import { FormInstance } from "antd/lib/form";
+import React from "react";
+import { Translation } from "react-i18next";
 import { ProfileModel } from "../models";
 import { Locale, Views } from "../module";
-import { FormInstance } from "antd/lib/form";
+import { ProfileService } from "../services";
 
 interface Props {
 	onSuccess?: () => void;
@@ -78,9 +78,9 @@ export class ModalChangePhone extends React.Component<Props, State> {
 
 		return (
 			<Translation ns={Locale.Namespace}>
-				{(t) => <Modal visible={!loading} title={t("page.changePhone.title")}
+				{(t) => <Modal visible={!loading} title={t("page.changePhone.title") as string}
 					onOk={this.onOk} onCancel={this.onCancel}
-					okText={t("button.updatePhone")} /* width="640px" */>
+					okText={t("button.updatePhone") as string} /* width="640px" */>
 
 					<Spin spinning={loading}>
 						<DataForm

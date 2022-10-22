@@ -50,9 +50,9 @@ export default function SendEmailConfirmation() {
 	const { loading, fields } = state;
 
 	return (
-		<Page title={t("page.sendEmailConfirmation.title")}>
+		<Page title={t("page.sendEmailConfirmation.title") as string}>
 
-			<p>{t("page.sendEmailConfirmation.subtitle")}</p>
+			<p>{t("page.sendEmailConfirmation.subtitle") as string}</p>
 
 			<Spin spinning={loading}>
 				<DataForm
@@ -64,7 +64,7 @@ export default function SendEmailConfirmation() {
 				/>
 			</Spin>
 
-			<p><Link to={Patterns.login}>{Icon.ArrowLeft} {t("page.register.link.login")}</Link></p>
+			<p><Link to={Patterns.login}>{Icon.ArrowLeft} {t("page.register.link.login") as string}</Link></p>
 
 		</Page>
 	);

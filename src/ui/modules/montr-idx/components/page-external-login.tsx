@@ -81,7 +81,7 @@ export default class ExternalLogin extends React.Component<unknown, State> {
 
 		return (
 			<Translation ns={Locale.Namespace}>
-				{(t) => <Page title={t("page.externalLogin.title")}>
+				{(t) => <Page title={t("page.externalLogin.title") as string}>
 					<Spin spinning={loading}>
 
 						{data && <>
@@ -98,7 +98,7 @@ export default class ExternalLogin extends React.Component<unknown, State> {
 								submitButton={t("button.register")}
 							/>
 
-							<p><Link to={Patterns.login}>{Icon.ArrowLeft} {t("page.register.link.login")}</Link></p>
+							<p><Link to={Patterns.login}>{Icon.ArrowLeft} {t("page.register.link.login") as string}</Link></p>
 
 						</>}
 

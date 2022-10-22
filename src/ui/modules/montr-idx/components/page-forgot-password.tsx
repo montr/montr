@@ -50,9 +50,9 @@ export default function ForgotPassword() {
 	const { loading, fields } = state;
 
 	return (
-		<Page title={t("page.forgotPassword.title")}>
+		<Page title={t("page.forgotPassword.title") as string}>
 
-			<p>{t("page.forgotPassword.subtitle")}</p>
+			<p>{t("page.forgotPassword.subtitle") as string}</p>
 
 			<Spin spinning={loading}>
 				<DataForm
@@ -64,7 +64,7 @@ export default function ForgotPassword() {
 				/>
 			</Spin>
 
-			<p><Link to={Patterns.login}>{Icon.ArrowLeft} {t("page.register.link.login")}</Link></p>
+			<p><Link to={Patterns.login}>{Icon.ArrowLeft} {t("page.register.link.login") as string}</Link></p>
 
 		</Page>
 	);

@@ -73,8 +73,8 @@ export default class PaneExternalLogins extends React.Component<Props, State> {
 			<Translation ns={Locale.Namespace}>
 				{(t) => <>
 
-					<PageHeader>{t("page.externalLogins.title")}</PageHeader>
-					<p>{t("page.externalLogins.subtitle")}</p>
+					<PageHeader>{t("page.externalLogins.title") as string}</PageHeader>
+					<p>{t("page.externalLogins.subtitle") as string}</p>
 
 					<Spin spinning={loading}>
 						<form method="post" action={Api.authLinkLogin}>
@@ -92,7 +92,7 @@ export default class PaneExternalLogins extends React.Component<Props, State> {
 												showRemoveButton ? [
 													<Button
 														onClick={() => this.handleRemoveLogin(x)}>
-														{t("button.removeLogin")}
+														{t("button.removeLogin") as string}
 													</Button>
 												] : null}>
 											<List.Item.Meta
@@ -113,7 +113,7 @@ export default class PaneExternalLogins extends React.Component<Props, State> {
 													htmlType="submit"
 													name="provider"
 													value={x.name}>
-													{t("button.addLogin")}
+													{t("button.addLogin") as string}
 												</Button>
 											]}>
 											<List.Item.Meta

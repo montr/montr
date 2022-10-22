@@ -130,7 +130,7 @@ export default class PageSearchLocaleString extends React.Component<Props, State
 								</Select>
 							</Form.Item>
 							<Form.Item>
-								<Button type="primary" htmlType="submit" icon={Icon.Search}>{t("button.search")}</Button>
+								<Button type="primary" htmlType="submit" icon={Icon.Search}>{t("button.search") as string}</Button>
 							</Form.Item>
 						</Form>
 

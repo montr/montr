@@ -69,12 +69,12 @@ class ConfirmEmail extends React.Component<Props, State> {
 
 		return (
 			<Translation ns={Locale.Namespace}>
-				{(t) => <Page title={t("page.confirmEmail.title")}>
+				{(t) => <Page title={t("page.confirmEmail.title") as string}>
 					<Spin spinning={loading}>
 
 						{!loading && <p>Thank you for confirming your email.</p>}
 
-						<Button disabled={loading} onClick={this.handleContinue}>{t("button.continue")}</Button>
+						<Button disabled={loading} onClick={this.handleContinue}>{t("button.continue") as string}</Button>
 					</Spin>
 				</Page>}
 			</Translation>
