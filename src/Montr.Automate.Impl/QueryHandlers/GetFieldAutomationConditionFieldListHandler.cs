@@ -22,8 +22,7 @@ namespace Montr.Automate.Impl.QueryHandlers
 		{
 			return await _automationContextProvider.GetFields(new AutomationContext
 			{
-				EntityTypeCode = request.EntityTypeCode,
-				// EntityUid = request.EntityUid
+				EntityTypeCode = request.EntityTypeCode
 			}, cancellationToken);
 		}
 	}

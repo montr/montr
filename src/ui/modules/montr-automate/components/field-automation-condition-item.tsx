@@ -1,4 +1,4 @@
-import { DataFieldFactory } from "@montr-core/components";
+import { DataFieldFactory, DataFormOptions } from "@montr-core/components";
 import { IDataField } from "@montr-core/models";
 import { Form, Select, Space } from "antd";
 import React from "react";
@@ -17,7 +17,7 @@ interface State {
 
 class WrappedFieldAutomationConditionItem extends React.Component<Props, State> {
 
-	private readonly automationConditionService = new FieldAutomationConditionService();
+	private readonly facService = new FieldAutomationConditionService();
 
 	constructor(props: Props) {
 		super(props);
@@ -32,16 +32,18 @@ class WrappedFieldAutomationConditionItem extends React.Component<Props, State> 
 	};
 
 	componentWillUnmount = async () => {
-		await this.automationConditionService.abort();
+		await this.facService.abort();
 	};
 
 	fetchData = async () => {
-		const { data } = this.props;
+		const { data, condition } = this.props;
 
 		if (data) {
-			const fields = await this.automationConditionService.fields(data.entityTypeCode, data.Uid);
+			const fields = await this.facService.fields(data.entityTypeCode);
 
-			this.setState({ fields });
+			const selectedField = fields.find(x => x.key == condition.props.field);
+
+			this.setState({ fields, selectedField });
 		}
 	};
 
@@ -57,7 +59,12 @@ class WrappedFieldAutomationConditionItem extends React.Component<Props, State> 
 
 		if (selectedField) {
 			const factory = DataFieldFactory.get(selectedField.type);
-			valueComponent = factory?.createFormItem(selectedField, item, { hideLabels: true, ...options });
+
+			if (factory) {
+				const innerField: IDataField = { ...selectedField, key: "value" };
+				const innerOptions: DataFormOptions = { namePathPrefix: [item.name, "props"], ...options };
+				valueComponent = factory?.createFormItem(innerField, item, { hideLabels: true, ...innerOptions });
+			}
 		}
 
 		{/* <Select placeholder="Select value" style={{ minWidth: 100 }}>
@@ -68,8 +75,6 @@ class WrappedFieldAutomationConditionItem extends React.Component<Props, State> 
 						<Select.Option value="closed">Closed</Select.Option>
 					</Select> */}
 
-		console.log(item);
-
 		return (
 			<Space align="start">
 
@@ -78,7 +83,7 @@ class WrappedFieldAutomationConditionItem extends React.Component<Props, State> 
 				<Form.Item
 					{...item}
 					name={[item.name, "props", "field"]}
-					/* fieldKey={[item.fieldKey, "field"]} */
+					// fieldKey={[item.fieldKey, "field"]}
 					rules={[{ required: true }]}>
 					<Select placeholder="Select field" style={{ minWidth: 200 }}
 						onChange={this.onFieldChange}>
@@ -90,7 +95,7 @@ class WrappedFieldAutomationConditionItem extends React.Component<Props, State> 
 				<Form.Item
 					{...item}
 					name={[item.name, "props", "operator"]}
-					/* fieldKey={[item.fieldKey, "operator"]} */
+					// fieldKey={[item.fieldKey, "operator"]}
 					rules={[{ required: true }]}>
 					<Select style={{ minWidth: 50 }}>
 						<Select.Option value="Equal">=</Select.Option>
@@ -102,15 +107,17 @@ class WrappedFieldAutomationConditionItem extends React.Component<Props, State> 
 					</Select>
 				</Form.Item>
 
-				<Form.Item
+				{valueComponent}
+
+				{/* <Form.Item
 					{...item}
 					name={[item.name, "props", "value"]}
-					/* fieldKey={[item.fieldKey, "value"]} */
+					// fieldKey={[item.fieldKey, "value"]}
 					rules={[{ required: true }]}>
 
 					{valueComponent}
 
-				</Form.Item>
+				</Form.Item> */}
 
 			</Space>
 		);

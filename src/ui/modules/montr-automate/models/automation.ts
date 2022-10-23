@@ -27,8 +27,8 @@ export interface GroupAutomationCondition extends AutomationCondition {
 }
 
 export interface FieldAutomationCondition extends AutomationCondition {
-	field?: string;
 	props?: {
+		field?: string;
 		operator?: string;
 		value?: string;
 	};
