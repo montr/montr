@@ -11,8 +11,8 @@ namespace Montr.Automate.Services
 	/// </summary>
 	public interface IAutomationContextProvider
 	{
-		Task<object> GetEntity(AutomationContext context, CancellationToken cancellationToken);
+		Task<object> GetEntity(AutomationContext context, CancellationToken cancellationToken = default);
 
-		Task<IList<FieldMetadata>> GetFields(AutomationContext context, CancellationToken cancellationToken);
+		Task<IList<FieldMetadata>> GetFields(AutomationContext context, CancellationToken cancellationToken = default);
 	}
 }

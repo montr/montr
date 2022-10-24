@@ -216,7 +216,7 @@ namespace Montr.Automate.Tests.CommandHandlers
 		{
 			public AutomationRuleType RuleType { get; init; }
 
-			public IList<FieldMetadata> GetMetadata()
+			public Task<IList<FieldMetadata>> GetMetadata(AutomationContext context, CancellationToken cancellationToken)
 			{
 				return null;
 			}

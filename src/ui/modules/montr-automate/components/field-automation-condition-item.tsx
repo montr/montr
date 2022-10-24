@@ -76,7 +76,7 @@ class WrappedFieldAutomationConditionItem extends React.Component<Props, State> 
 					</Select> */}
 
 		return (
-			<Space align="start">
+			<Space>
 
 				{typeSelector}
 

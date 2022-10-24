@@ -2,11 +2,12 @@ import { DataFieldFactory, DataFormOptions } from "@montr-core/components";
 import { IDataField } from "@montr-core/models";
 import { Space } from "antd";
 import React from "react";
-import { AutomationItemProps } from ".";
+import { AutomationContextProps, AutomationItemProps } from ".";
 import { AutomationAction } from "../models";
 import { AutomationService } from "../services";
+import { withAutomationContext } from "./automation-context";
 
-interface Props extends AutomationItemProps {
+interface Props extends AutomationItemProps, AutomationContextProps {
 	action: AutomationAction;
 }
 
@@ -17,9 +18,10 @@ interface State {
 
 /**
  * Generic automation item component.
+ * Used if specific component for action is not registered with AutomationActionFactory.register method.
  * Simple load action type metadata and displays form fields.
  */
-export class AutomationActionItem extends React.Component<Props, State> {
+class WrappedAutomationActionItem extends React.Component<Props, State> {
 
 	private readonly automationService = new AutomationService();
 
@@ -46,10 +48,10 @@ export class AutomationActionItem extends React.Component<Props, State> {
 	};
 
 	fetchMetadata = async (): Promise<void> => {
-		const { action } = this.props;
+		const { data, action } = this.props;
 
 		if (action?.type) {
-			const fields = await this.automationService.metadata(action.type, null);
+			const fields = await this.automationService.metadata(data.entityTypeCode, action.type, null);
 
 			this.setState({ loading: false, fields });
 		} else {
@@ -64,7 +66,7 @@ export class AutomationActionItem extends React.Component<Props, State> {
 		const innerOptions: DataFormOptions = { namePathPrefix: [item.name, "props"], ...options };
 
 		return (<>
-			<Space align="start">
+			<Space>
 				{typeSelector}
 			</Space>
 
@@ -76,3 +78,5 @@ export class AutomationActionItem extends React.Component<Props, State> {
 		</>);
 	};
 }
+
+export const AutomationActionItem = withAutomationContext(WrappedAutomationActionItem);

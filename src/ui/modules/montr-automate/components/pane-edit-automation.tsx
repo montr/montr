@@ -20,7 +20,6 @@ interface State {
 	fields?: IDataField[];
 }
 
-// todo: remove (after moving to classifiers),
 // rename AutomationContextProvider to ClassifierContextProvider and use in classifier edit page
 export default class PaneEditAutomation extends React.Component<Props, State> {
 

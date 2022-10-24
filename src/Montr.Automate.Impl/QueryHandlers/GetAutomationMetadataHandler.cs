@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
+using Montr.Automate.Models;
 using Montr.Automate.Queries;
 using Montr.Automate.Services;
 using Montr.Metadata.Models;
@@ -17,9 +18,11 @@ namespace Montr.Automate.Impl.QueryHandlers
 			_providerRegistry = providerRegistry;
 		}
 
-		public Task<IList<FieldMetadata>> Handle(GetAutomationMetadata request, CancellationToken cancellationToken)
+		public async Task<IList<FieldMetadata>> Handle(GetAutomationMetadata request, CancellationToken cancellationToken)
 		{
 			IList<FieldMetadata> metadata = null;
+
+			var context = new AutomationContext { EntityTypeCode = request.EntityTypeCode };
 
 			if (request.ActionTypeCode != null)
 			{
@@ -31,10 +34,10 @@ namespace Montr.Automate.Impl.QueryHandlers
 			{
 				var conditionProvider = _providerRegistry.GetConditionProvider(request.ConditionTypeCode);
 
-				metadata = conditionProvider.GetMetadata();
+				metadata = await conditionProvider.GetMetadata(context, cancellationToken);
 			}
 
-			return Task.FromResult(metadata);
+			return metadata;
 		}
 	}
 }

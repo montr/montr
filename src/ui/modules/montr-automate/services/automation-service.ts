@@ -1,19 +1,7 @@
 import { ApiResult, Guid, IDataField } from "@montr-core/models";
 import { Fetcher } from "@montr-core/services/fetcher";
-import { Automation, AutomationAction, AutomationCondition, AutomationRuleType } from "../models/automation";
+import { AutomationAction, AutomationCondition, AutomationRuleType } from "../models/automation";
 import { Api } from "../module";
-
-interface IManageAutomationRequest {
-	entityTypeCode: string;
-	entityUid: Guid | string;
-	item: Automation;
-}
-
-interface IDeleteAutomationRequest {
-	entityTypeCode: string;
-	entityUid: Guid | string;
-	uids: string[] | number[];
-}
 
 interface IUpdateAutomationRulesRequest {
 	automationUid: Guid;
@@ -23,24 +11,8 @@ interface IUpdateAutomationRulesRequest {
 
 export class AutomationService extends Fetcher {
 
-	metadata = async (actionTypeCode: string, conditionTypeCode: string): Promise<IDataField[]> => {
-		return this.post(Api.automationMetadata, { actionTypeCode, conditionTypeCode });
-	};
-
-	get = async (entityTypeCode: string, entityUid: Guid | string, uid: Guid): Promise<Automation> => {
-		return this.post(Api.automationGet, { entityTypeCode, entityUid, uid });
-	};
-
-	insert = async (request: IManageAutomationRequest): Promise<ApiResult> => {
-		return this.post(Api.automationInsert, request);
-	};
-
-	update = async (request: IManageAutomationRequest): Promise<ApiResult> => {
-		return this.post(Api.automationUpdate, request);
-	};
-
-	delete = async (request: IDeleteAutomationRequest): Promise<ApiResult> => {
-		return this.post(Api.automationDelete, request);
+	metadata = async (entityTypeCode: string, actionTypeCode: string, conditionTypeCode: string): Promise<IDataField[]> => {
+		return this.post(Api.automationMetadata, { entityTypeCode, actionTypeCode, conditionTypeCode });
 	};
 
 	actionTypes = async (): Promise<AutomationRuleType[]> => {

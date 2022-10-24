@@ -1,12 +1,13 @@
-import { AutomationCondition } from "@montr-automate/models/automation";
 import { DataFieldFactory, DataFormOptions } from "@montr-core/components";
 import { IDataField } from "@montr-core/models";
 import { Space } from "antd";
 import React from "react";
+import { AutomationContextProps, AutomationItemProps } from ".";
+import { AutomationCondition } from "../models";
 import { AutomationService } from "../services";
-import { AutomationItemProps } from "./automation-field-factory";
+import { withAutomationContext } from "./automation-context";
 
-interface Props extends AutomationItemProps {
+interface Props extends AutomationItemProps, AutomationContextProps {
 	condition: AutomationCondition;
 }
 
@@ -15,11 +16,10 @@ interface State {
 	fields?: IDataField[];
 }
 
-
 /**
  * todo: merge with @see {@link AutomationActionItem}
  */
-export class AutomationConditionItem extends React.Component<Props, State> {
+class WrappedAutomationConditionItem extends React.Component<Props, State> {
 
 	private readonly automationService = new AutomationService();
 
@@ -46,10 +46,10 @@ export class AutomationConditionItem extends React.Component<Props, State> {
 	};
 
 	fetchMetadata = async (): Promise<void> => {
-		const { condition } = this.props;
+		const { data, condition } = this.props;
 
 		if (condition?.type) {
-			const fields = await this.automationService.metadata(null, condition.type);
+			const fields = await this.automationService.metadata(data.entityTypeCode, null, condition.type);
 
 			this.setState({ loading: false, fields });
 		} else {
@@ -64,7 +64,7 @@ export class AutomationConditionItem extends React.Component<Props, State> {
 		const innerOptions: DataFormOptions = { namePathPrefix: [item.name, "props"], ...options };
 
 		return (<>
-			<Space align="start">
+			<Space>
 				{typeSelector}
 			</Space>
 
@@ -73,6 +73,9 @@ export class AutomationConditionItem extends React.Component<Props, State> {
 
 				return factory?.createFormItem(field, null, innerOptions);
 			})}
+
 		</>);
 	};
 }
+
+export const AutomationConditionItem = withAutomationContext(WrappedAutomationConditionItem);

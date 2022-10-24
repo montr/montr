@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Montr.Automate.Impl.Models;
@@ -25,9 +26,30 @@ namespace Montr.Automate.Impl.Services
 			Type = typeof(FieldAutomationCondition)
 		};
 
-		public IList<FieldMetadata> GetMetadata()
+		public async Task<IList<FieldMetadata>> GetMetadata(AutomationContext context, CancellationToken cancellationToken)
 		{
-			throw new NotImplementedException();
+			var fields = await _automationContextProvider.GetFields(context, cancellationToken);
+
+			var fieldOptions = fields
+				.Select(x => new SelectFieldOption { Value = x.Key, Name = x.Name })
+				.ToArray();
+
+			var operators = new[]
+			{
+				new SelectFieldOption { Value = "Equal", Name = "=" },
+				new SelectFieldOption { Value = "NotEqual", Name = "≠" },
+				new SelectFieldOption { Value = "LessThan", Name = "<" },
+				new SelectFieldOption { Value = "LessThanEqual", Name = "≤" },
+				new SelectFieldOption { Value = "GreaterThan", Name = ">" },
+				new SelectFieldOption { Value = "GreaterThanEqual", Name = "≥" }
+			};
+
+			return new FieldMetadata[]
+			{
+				new SelectField { Key = "field", Name = "Select field", Required = true, Props = { Options = fieldOptions } },
+				new SelectField { Key = "operator", Name = "Operator", Required = true, Props = { Options = operators } },
+				new TextField { Key = "value", Name = "Value", Required = true }
+			};
 		}
 
 		public async Task<bool> Meet(AutomationCondition automationCondition, AutomationContext context, CancellationToken cancellationToken)
