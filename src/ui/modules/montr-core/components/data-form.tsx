@@ -138,7 +138,8 @@ class WrappedDataForm extends React.Component<Props, State> {
 					colon={false}
 					className={`data-form-mode-${mode}`}
 					initialValues={data}
-					scrollToFirstError={true}
+					scrollToFirstError
+					labelWrap
 					layout={layout}
 					onValuesChange={this.handleValuesChange}
 					onFinish={this.handleSubmit}>

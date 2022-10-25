@@ -3,7 +3,9 @@
 // @import (css) url('//fonts.googleapis.com/css?family=Nunito&display=swap');
 // @import (css) url('//fonts.googleapis.com/css?family=Inter');
 
-h2, .ant-modal-header .ant-modal-title, .ant-drawer-title {
+h2,
+.ant-modal-header .ant-modal-title,
+.ant-drawer-title {
 	font-weight: bold;
 }
 
@@ -12,9 +14,9 @@ h2, .ant-modal-header .ant-modal-title, .ant-drawer-title {
 	font-size: 20px;
 	color: #1890ff;
 	/* padding: 8px 0 0 22px; */
-    line-height: 64px;
+	line-height: 64px;
 	height: 64px;
-    vertical-align: baseline;
+	vertical-align: baseline;
 }
 
 .ant-layout.private-layout {
@@ -32,6 +34,7 @@ h2, .ant-modal-header .ant-modal-title, .ant-drawer-title {
 	.ant-menu-vertical .user-menu .ant-menu-submenu-title {
 		height: 64px;
 	}
+
 	.ant-layout-footer {
 		padding: 24px;
 	}
@@ -40,8 +43,7 @@ h2, .ant-modal-header .ant-modal-title, .ant-drawer-title {
 .ant-layout.public-layout {
 	background-color: inherit;
 
-	.logo {
-	}
+	.logo {}
 
 	.ant-layout-header {
 		background-color: inherit;
@@ -103,7 +105,10 @@ h2, .ant-modal-header .ant-modal-title, .ant-drawer-title {
 	&.toolbar-left {
 		float: left;
 
-		.ant-btn, .ant-btn-group, .ant-radio-group, .ant-select {
+		.ant-btn,
+		.ant-btn-group,
+		.ant-radio-group,
+		.ant-select {
 			margin-right: 6px;
 			margin-bottom: 4px;
 		}
@@ -116,7 +121,10 @@ h2, .ant-modal-header .ant-modal-title, .ant-drawer-title {
 	&.toolbar-right {
 		float: right;
 
-		.ant-btn, .ant-btn-group, .ant-radio-group, .ant-select {
+		.ant-btn,
+		.ant-btn-group,
+		.ant-radio-group,
+		.ant-select {
 			margin-left: 6px;
 			margin-bottom: 4px;
 		}
@@ -137,7 +145,10 @@ h2, .ant-modal-header .ant-modal-title, .ant-drawer-title {
 		background: #fff;
 		text-align: right;
 
-		.ant-btn, .ant-btn-group, .ant-radio-group, .ant-select {
+		.ant-btn,
+		.ant-btn-group,
+		.ant-radio-group,
+		.ant-select {
 			margin-left: 6px;
 			margin-bottom: 4px;
 		}
@@ -147,7 +158,8 @@ h2, .ant-modal-header .ant-modal-title, .ant-drawer-title {
 		}
 	}
 
-	.ant-btn-group, .ant-radio-group {
+	.ant-btn-group,
+	.ant-radio-group {
 		line-height: 1.5;
 	}
 }
@@ -161,7 +173,8 @@ h2, .ant-modal-header .ant-modal-title, .ant-drawer-title {
 	}
 }
 
-.ant-layout.ant-page-layout, .ant-layout-sider.ant-page-layout-sider {
+.ant-layout.ant-page-layout,
+.ant-layout-sider.ant-page-layout-sider {
 	background-color: transparent;
 }
 
@@ -196,15 +209,6 @@ h2, .ant-modal-header .ant-modal-title, .ant-drawer-title {
 	}
 }
 
-.ant-form {
-	.ant-form-item-label {
-		label {
-			height: auto;
-			white-space: normal;
-		}
-	}
-}
-
 .empty-field {
 	color: @disabled-color;
 }
@@ -213,63 +217,84 @@ h2, .ant-modal-header .ant-modal-title, .ant-drawer-title {
 	.adn {
 		background-color: #D87A68
 	}
+
 	.bitbucket {
 		background-color: #205081
 	}
+
 	.dropbox {
 		background-color: #1087DD
 	}
+
 	.facebook {
 		background-color: #3B5998
 	}
+
 	.flickr {
 		background-color: #2BA9E1
 	}
+
 	.foursquare {
 		background-color: #f94877
 	}
+
 	.github {
 		background-color: #444444
 	}
+
 	.google {
 		background-color: #DD4B39
 	}
+
 	.instagram {
 		background-color: #3F729B
 	}
+
 	.linkedin {
 		background-color: #007BB6
 	}
-	.microsoft, .windows {
+
+	.microsoft,
+	.windows {
 		background-color: #2672EC
 	}
+
 	.odnoklassniki {
 		background-color: #F4731C
 	}
+
 	.openid {
 		background-color: #F7931E
 	}
+
 	.pinterest {
 		background-color: #CB2027
 	}
+
 	.reddit {
 		background-color: #EFF7FF
 	}
+
 	.soundcloud {
 		background-color: #FF5500
 	}
+
 	.tumblr {
 		background-color: #CB2027
 	}
+
 	.twitter {
 		background-color: #55ACEE
 	}
+
 	.vimeo {
 		background-color: #1AB7EA
 	}
+
 	.vk {
 		background-color: #587EA3
 	}
+
 	.yahoo {
 		background-color: #720E9E
 	}
@@ -277,7 +302,7 @@ h2, .ant-modal-header .ant-modal-title, .ant-drawer-title {
 
 .grid-content {
 	width: 100%;
-    height: 100%;
+	height: 100%;
 	min-height: 100%;
 
 	.page-with-menu {
@@ -285,13 +310,16 @@ h2, .ant-modal-header .ant-modal-title, .ant-drawer-title {
 		width: 100%;
 		height: 100%;
 		overflow: auto;
+
 		.menu {
 			width: 180px;
 			border-right: @border-width-base @border-style-base @border-color-split;
+
 			.ant-menu-inline {
 				border: none;
 			}
 		}
+
 		.content {
 			flex: 1;
 			padding: 8px 40px;
@@ -299,10 +327,12 @@ h2, .ant-modal-header .ant-modal-title, .ant-drawer-title {
 
 		@media screen and (max-width: @screen-md) {
 			flex-direction: column;
+
 			.menu {
 				width: 100%;
 				border: none;
 			}
+
 			.content {
 				padding: 40px;
 			}
