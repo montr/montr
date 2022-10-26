@@ -1,8 +1,10 @@
+import { DataFormChanges } from "@montr-core/models/data-form-changes";
 import React from "react";
 import { Automation } from "../models";
 
 export interface AutomationContextProps {
 	data: Automation;
+	dataFormChanges?: DataFormChanges;
 	children: React.ReactNode;
 }
 

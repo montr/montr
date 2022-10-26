@@ -23,7 +23,8 @@ interface Props extends DataFormOptions {
 	resetButton?: string;
 	successMessage?: string;
 	errorMessage?: string;
-	onChange?: (values: IIndexer, changedValues: IIndexer) => void;
+	onFieldsChange?: (changedFields: FieldData[], allFields: FieldData[]) => void;
+	onValuesChange?: (values: IIndexer, changedValues: IIndexer) => void;
 	onSubmit?: (values: unknown /* IIndexer */) => Promise<ApiResult>;
 	formRef?: React.RefObject<FormInstance>;
 }
@@ -52,11 +53,19 @@ class WrappedDataForm extends React.Component<Props, State> {
 		return (this.props.formRef ?? this.formRef);
 	};
 
-	handleValuesChange = async (changedValues: Store, values: Store): Promise<void> => {
-		const { onChange } = this.props;
+	handleFieldsChange = async (changedFields: FieldData[], allFields: FieldData[]): Promise<void> => {
+		const { onFieldsChange } = this.props;
 
-		if (onChange) {
-			onChange(values, changedValues);
+		if (onFieldsChange) {
+			onFieldsChange(changedFields, allFields);
+		}
+	};
+
+	handleValuesChange = async (changedValues: Store, values: Store): Promise<void> => {
+		const { onValuesChange } = this.props;
+
+		if (onValuesChange) {
+			onValuesChange(changedValues, values);
 		}
 	};
 
@@ -141,6 +150,7 @@ class WrappedDataForm extends React.Component<Props, State> {
 					scrollToFirstError
 					labelWrap
 					layout={layout}
+					onFieldsChange={this.handleFieldsChange}
 					onValuesChange={this.handleValuesChange}
 					onFinish={this.handleSubmit}>
 

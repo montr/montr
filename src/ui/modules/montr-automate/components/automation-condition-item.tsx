@@ -41,7 +41,11 @@ class WrappedAutomationConditionItem extends React.Component<Props, State> {
 
 	componentDidUpdate = async (prevProps: Props): Promise<void> => {
 		if (this.props.condition !== prevProps.condition) {
-			await this.fetchMetadata();
+			// await this.fetchMetadata();
+		}
+
+		if (this.props.dataFormChanges !== prevProps.dataFormChanges) {
+			console.log("dataFormChanges", this.props.dataFormChanges, this.props, this.state);
 		}
 	};
 

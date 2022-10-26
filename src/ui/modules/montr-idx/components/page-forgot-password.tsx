@@ -39,7 +39,7 @@ export default function ForgotPassword() {
 		};
 	}, []);
 
-	async function handleChange(values: LoginModel) {
+	async function handleChange(changedValues: LoginModel, values: LoginModel) {
 		setEmail(values.email);
 	}
 
@@ -58,7 +58,7 @@ export default function ForgotPassword() {
 				<DataForm
 					fields={fields}
 					data={{ email }}
-					onChange={handleChange}
+					onValuesChange={handleChange}
 					onSubmit={handleSubmit}
 					submitButton={t("button.forgotPassword")}
 				/>

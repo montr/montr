@@ -39,7 +39,7 @@ export default function SendEmailConfirmation() {
 		};
 	}, []);
 
-	async function handleChange(values: SendEmailConfirmationModel) {
+	async function handleChange(changedValues: SendEmailConfirmationModel, values: SendEmailConfirmationModel) {
 		setEmail(values.email);
 	}
 
@@ -58,7 +58,7 @@ export default function SendEmailConfirmation() {
 				<DataForm
 					fields={fields}
 					data={{ email }}
-					onChange={handleChange}
+					onValuesChange={handleChange}
 					onSubmit={handleSubmit}
 					submitButton={t("button.sendEmailConfirmation")}
 				/>

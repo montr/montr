@@ -113,7 +113,7 @@ class PaneViewTaskInfo extends React.Component<Props, State> implements PageEven
                     mode={isEditMode ? "edit" : "view"} // todo: use mode from props too
                     fields={fields}
                     data={data}
-                    onChange={this.handleChange}
+                    onValuesChange={this.handleChange}
                     onSubmit={this.handleSubmit}
                     hideButtons={true}
                 />
@@ -122,4 +122,4 @@ class PaneViewTaskInfo extends React.Component<Props, State> implements PageEven
     };
 }
 
-export default withPageContext(PaneViewTaskInfo); 
+export default withPageContext(PaneViewTaskInfo);

@@ -104,7 +104,7 @@ export class PaneEditMetadataItem extends React.Component<Props, State> {
 		this.setState({ typeFieldMap, optionalFields, visibleFields });
 	};
 
-	handleTypeChange = async (values: IDataField): Promise<void> => {
+	handleTypeChange = async (changedValues: IDataField, values: IDataField): Promise<void> => {
 		// todo: save/restore data between switching fields
 		this.setState({ typeData: { type: values.type } }, () => this.setVisibleFields(true));
 	};
@@ -191,7 +191,7 @@ export class PaneEditMetadataItem extends React.Component<Props, State> {
 						hideButtons={true}
 						fields={typeFields}
 						data={typeData}
-						onChange={this.handleTypeChange} />
+						onValuesChange={this.handleTypeChange} />
 
 					<DataForm
 						formRef={this.formRef}

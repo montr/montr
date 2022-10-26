@@ -43,7 +43,7 @@ class WrappedAutomationActionItem extends React.Component<Props, State> {
 
 	componentDidUpdate = async (prevProps: Props): Promise<void> => {
 		if (this.props.action !== prevProps.action) {
-			await this.fetchMetadata();
+			// await this.fetchMetadata();
 		}
 	};
 

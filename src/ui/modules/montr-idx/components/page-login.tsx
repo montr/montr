@@ -40,7 +40,7 @@ export default function Login() {
 		};
 	}, []);
 
-	async function handleChange(values: LoginModel) {
+	async function handleChange(changedValues: LoginModel, values: LoginModel) {
 		setEmail(values.email);
 	}
 
@@ -66,7 +66,7 @@ export default function Login() {
 					hideLabels
 					fields={fields}
 					data={data}
-					onChange={handleChange}
+					onValuesChange={handleChange}
 					onSubmit={handleSubmit}
 					submitButton={t("button.login")}
 					successMessage={t("page.login.successMessage")}

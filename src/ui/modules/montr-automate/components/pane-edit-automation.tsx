@@ -1,5 +1,6 @@
 import { DataForm } from "@montr-core/components";
-import { ApiResult, Guid, IDataField } from "@montr-core/models";
+import { ApiResult, FieldData, Guid, IDataField } from "@montr-core/models";
+import { DataFormChanges } from "@montr-core/models/data-form-changes";
 import { MetadataService } from "@montr-core/services";
 import { Spin } from "antd";
 import { FormInstance } from "antd/lib/form";
@@ -18,6 +19,7 @@ interface Props {
 interface State {
 	loading: boolean;
 	fields?: IDataField[];
+	dataFormChanges?: DataFormChanges;
 }
 
 // rename AutomationContextProvider to ClassifierContextProvider and use in classifier edit page
@@ -58,6 +60,18 @@ export default class PaneEditAutomation extends React.Component<Props, State> {
 		await this.formRef.current.submit();
 	};
 
+	handleFieldsChange = async (changedFields: FieldData[], allFields: FieldData[]): Promise<void> => {
+		this.setState({
+			dataFormChanges: { changedFields, allFields }
+		});
+	};
+
+	handleValuesChange = async (changedValues: Automation, values: Automation): Promise<void> => {
+		this.setState({
+			dataFormChanges: { values, changedValues }
+		});
+	};
+
 	handleSubmit = async (values: Automation): Promise<ApiResult> => {
 		const { entityUid } = this.props;
 
@@ -72,17 +86,20 @@ export default class PaneEditAutomation extends React.Component<Props, State> {
 
 	render = (): React.ReactNode => {
 		const { data } = this.props,
-			{ loading, fields } = this.state;
+			{ loading, fields, dataFormChanges } = this.state;
 
 		return (<>
 			<Spin spinning={loading}>
 
-				<AutomationContextProvider data={data}>
+				<AutomationContextProvider data={data} dataFormChanges={dataFormChanges}>
 					<DataForm
 						formRef={this.formRef}
 						fields={fields}
 						data={data}
-						onSubmit={this.handleSubmit} />
+						onFieldsChange={this.handleFieldsChange}
+						// onValuesChange={this.handleValuesChange}
+						onSubmit={this.handleSubmit}
+					/>
 				</AutomationContextProvider>
 
 			</Spin>
