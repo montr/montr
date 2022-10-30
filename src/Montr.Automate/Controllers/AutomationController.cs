@@ -23,7 +23,13 @@ namespace Montr.Automate.Controllers
 		}
 
 		[HttpPost]
-		public async Task<IList<FieldMetadata>> Metadata(GetAutomationMetadata request)
+		public async Task<IList<FieldMetadata>> ActionMetadata(GetAutomationActionMetadata request)
+		{
+			return await _mediator.Send(request);
+		}
+
+		[HttpPost]
+		public async Task<IList<FieldMetadata>> ConditionMetadata(GetAutomationConditionMetadata request)
 		{
 			return await _mediator.Send(request);
 		}

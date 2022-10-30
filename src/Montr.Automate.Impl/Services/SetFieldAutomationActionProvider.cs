@@ -17,7 +17,8 @@ namespace Montr.Automate.Impl.Services
 			Type = typeof(SetFieldAutomationAction)
 		};
 
-		public IList<FieldMetadata> GetMetadata()
+		public Task<IList<FieldMetadata>> GetMetadata(
+			AutomationContext context, AutomationAction action, CancellationToken cancellationToken = default)
 		{
 			throw new System.NotImplementedException();
 		}

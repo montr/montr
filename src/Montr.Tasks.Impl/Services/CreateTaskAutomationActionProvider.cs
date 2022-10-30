@@ -35,15 +35,16 @@ namespace Montr.Tasks.Impl.Services
 			Type = typeof(CreateTaskAutomationAction)
 		};
 
-		public IList<FieldMetadata> GetMetadata()
+		public async Task<IList<FieldMetadata>> GetMetadata(
+			AutomationContext context, AutomationAction action, CancellationToken cancellationToken = default)
 		{
-			return new List<FieldMetadata>
+			return await Task.FromResult(new List<FieldMetadata>
 			{
 				new ClassifierField { Key = "taskTypeUid", Name = "Task type", Required = true, Props = { TypeCode = Models.ClassifierTypeCode.TaskType } },
 				new ClassifierField { Key = "assigneeUid", Name = "Assignee", Required = true, Props = { TypeCode = Idx.ClassifierTypeCode.User } },
 				new TextField { Key = "name", Name = "Name", Placeholder = "Name", Required = true },
 				new TextAreaField { Key = "description", Name = "Description", Placeholder = "Description", Props = new TextAreaField.Properties { Rows = 2 } }
-			};
+			});
 		}
 
 		public async Task Execute(AutomationAction automationAction, AutomationContext context, CancellationToken cancellationToken)

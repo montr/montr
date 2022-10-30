@@ -17,6 +17,7 @@ export * from "./error-boundary";
 export * from "./footer";
 export * from "./form-defaults";
 export * from "./form-list-item-toolbar";
+export * from "./form-utils";
 export * from "./icon";
 export * from "./language-selector";
 export * from "./logo";

@@ -24,7 +24,8 @@ namespace Montr.Automate.Impl.Services
 			Type = typeof(GroupAutomationCondition)
 		};
 
-		public Task<IList<FieldMetadata>> GetMetadata(AutomationContext context, CancellationToken cancellationToken)
+		public Task<IList<FieldMetadata>> GetMetadata(
+			AutomationContext context, AutomationCondition condition, CancellationToken cancellationToken)
 		{
 			throw new System.NotImplementedException();
 		}

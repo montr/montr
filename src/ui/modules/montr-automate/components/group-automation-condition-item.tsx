@@ -1,4 +1,4 @@
-import { DataFieldFactory, DataFormOptions } from "@montr-core/components";
+import { DataFieldFactory, DataFormOptions, extendNamePath } from "@montr-core/components";
 import { Form, Radio, Space } from "antd";
 import React from "react";
 import { AutomationItemProps } from ".";
@@ -19,7 +19,10 @@ export class GroupAutomationConditionItem extends React.Component<Props> {
 			key: "conditions"
 		};
 
-		const innerOptions: DataFormOptions = { namePathPrefix: [item.name, "props", "conditions"], ...options };
+		const innerOptions: DataFormOptions = {
+			namePathPrefix: extendNamePath(item.name, ["props", "conditions"]),
+			...options
+		};
 
 		const factory = DataFieldFactory.get(field.type);
 
@@ -32,7 +35,7 @@ export class GroupAutomationConditionItem extends React.Component<Props> {
 
 				<Form.Item
 					{...item}
-					name={[item.name, "props", "meet"]}
+					name={extendNamePath(item.name, ["props", "meet"])}
 					/* fieldKey={[item.fieldKey, "meet"]} */
 					rules={[{ required: true }]}>
 					<Radio.Group buttonStyle="solid">

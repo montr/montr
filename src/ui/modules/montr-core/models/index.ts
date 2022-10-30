@@ -9,7 +9,6 @@ export * from "./data-result";
 export * from "./data-view";
 export * from "./entity-relation";
 export * from "./entity-status";
-export * from "./field-data";
 export * from "./guid";
 export * from "./indexer";
 export * from "./locale-string";

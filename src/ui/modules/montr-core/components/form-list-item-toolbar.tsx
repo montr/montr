@@ -1,10 +1,11 @@
 import { Button } from "antd";
+import { NamePath } from "antd/lib/form/interface";
+import { FieldData } from "rc-field-form/lib/interface";
 import React from "react";
 import { Icon, Toolbar } from ".";
-import { FieldData } from "../models";
 
 interface Operations {
-	remove: (index: number) => void;
+	remove: (index: NamePath) => void;
 	move: (from: number, to: number) => void;
 }
 

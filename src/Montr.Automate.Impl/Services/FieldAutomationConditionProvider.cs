@@ -26,7 +26,8 @@ namespace Montr.Automate.Impl.Services
 			Type = typeof(FieldAutomationCondition)
 		};
 
-		public async Task<IList<FieldMetadata>> GetMetadata(AutomationContext context, CancellationToken cancellationToken)
+		public async Task<IList<FieldMetadata>> GetMetadata(
+			AutomationContext context, AutomationCondition condition, CancellationToken cancellationToken)
 		{
 			var fields = await _automationContextProvider.GetFields(context, cancellationToken);
 
@@ -34,22 +35,52 @@ namespace Montr.Automate.Impl.Services
 				.Select(x => new SelectFieldOption { Value = x.Key, Name = x.Name })
 				.ToArray();
 
-			var operators = new[]
+			var result = new List<FieldMetadata>
 			{
-				new SelectFieldOption { Value = "Equal", Name = "=" },
-				new SelectFieldOption { Value = "NotEqual", Name = "≠" },
-				new SelectFieldOption { Value = "LessThan", Name = "<" },
-				new SelectFieldOption { Value = "LessThanEqual", Name = "≤" },
-				new SelectFieldOption { Value = "GreaterThan", Name = ">" },
-				new SelectFieldOption { Value = "GreaterThanEqual", Name = "≥" }
+				new SelectField { Key = "field", Name = "Select field", Required = true, Props = { Options = fieldOptions } }
 			};
 
-			return new FieldMetadata[]
+			if (condition is FieldAutomationCondition fieldCondition)
 			{
-				new SelectField { Key = "field", Name = "Select field", Required = true, Props = { Options = fieldOptions } },
-				new SelectField { Key = "operator", Name = "Operator", Required = true, Props = { Options = operators } },
-				new TextField { Key = "value", Name = "Value", Required = true }
-			};
+				if (fieldCondition.Props?.Field != null)
+				{
+					var operators = new[]
+					{
+						new SelectFieldOption { Value = "Equal", Name = "=" },
+						new SelectFieldOption { Value = "NotEqual", Name = "≠" },
+						new SelectFieldOption { Value = "LessThan", Name = "<" },
+						new SelectFieldOption { Value = "LessThanEqual", Name = "≤" },
+						new SelectFieldOption { Value = "GreaterThan", Name = ">" },
+						new SelectFieldOption { Value = "GreaterThanEqual", Name = "≥" }
+					};
+
+					result.Add(new SelectField { Key = "operator", Name = "Operator", Required = true, Props = { Options = operators } });
+				}
+
+				FieldMetadata valueMetadata = null;
+
+				if (fieldCondition.Props?.Field == "DocumentNumber")
+				{
+					valueMetadata = new TextField { Key = "value", Name = "Value", Required = true };
+				}
+				else if (fieldCondition.Props?.Field == "StatusCode")
+				{
+					var statusCodes = new[]
+					{
+						new SelectFieldOption { Value = "draft", Name = "Draft" },
+						new SelectFieldOption { Value = "submitted", Name = "Submitted" },
+						new SelectFieldOption { Value = "published", Name = "Published" },
+						new SelectFieldOption { Value = "completed", Name = "Completed" },
+						new SelectFieldOption { Value = "closed", Name = "Closed" }
+					};
+
+					valueMetadata = new SelectField { Key = "value", Name = "Value", Required = true, Props = { Options = statusCodes } };
+				}
+
+				if (valueMetadata != null) result.Add(valueMetadata);
+			}
+
+			return result;
 		}
 
 		public async Task<bool> Meet(AutomationCondition automationCondition, AutomationContext context, CancellationToken cancellationToken)

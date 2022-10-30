@@ -11,8 +11,12 @@ interface IUpdateAutomationRulesRequest {
 
 export class AutomationService extends Fetcher {
 
-	metadata = async (entityTypeCode: string, actionTypeCode: string, conditionTypeCode: string): Promise<IDataField[]> => {
-		return this.post(Api.automationMetadata, { entityTypeCode, actionTypeCode, conditionTypeCode });
+	actionMetadata = async (entityTypeCode: string, action: AutomationAction): Promise<IDataField[]> => {
+		return this.post(Api.automationActionMetadata, { entityTypeCode, action });
+	};
+
+	conditionMetadata = async (entityTypeCode: string, condition: AutomationCondition): Promise<IDataField[]> => {
+		return this.post(Api.automationConditionMetadata, { entityTypeCode, condition });
 	};
 
 	actionTypes = async (): Promise<AutomationRuleType[]> => {

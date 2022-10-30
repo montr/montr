@@ -14,7 +14,8 @@ import("./components").then(x => {
 });
 
 export const Api = {
-	automationMetadata: "/automation/metadata/",
+	automationActionMetadata: "/automation/actionMetadata/",
+	automationConditionMetadata: "/automation/conditionMetadata/",
 	automationActionTypes: "/automation/actionTypes/",
 	automationConditionTypes: "/automation/conditionTypes/",
 

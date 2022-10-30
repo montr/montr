@@ -1,4 +1,4 @@
-import { DataFieldFactory, DataFormOptions } from "@montr-core/components";
+import { DataFieldFactory, DataFormOptions, extendNamePath } from "@montr-core/components";
 import { IDataField } from "@montr-core/models";
 import { Form, Select, Space } from "antd";
 import React from "react";
@@ -62,7 +62,10 @@ class WrappedFieldAutomationConditionItem extends React.Component<Props, State> 
 
 			if (factory) {
 				const innerField: IDataField = { ...selectedField, key: "value" };
-				const innerOptions: DataFormOptions = { namePathPrefix: [item.name, "props"], ...options };
+				const innerOptions: DataFormOptions = {
+					namePathPrefix: extendNamePath(item.name, ["props"]),
+					...options
+				};
 				valueComponent = factory?.createFormItem(innerField, item, { hideLabels: true, ...innerOptions });
 			}
 		}
@@ -82,7 +85,7 @@ class WrappedFieldAutomationConditionItem extends React.Component<Props, State> 
 
 				<Form.Item
 					{...item}
-					name={[item.name, "props", "field"]}
+					name={extendNamePath(item.name, ["props", "field"])}
 					// fieldKey={[item.fieldKey, "field"]}
 					rules={[{ required: true }]}>
 					<Select placeholder="Select field" style={{ minWidth: 200 }}
@@ -94,7 +97,7 @@ class WrappedFieldAutomationConditionItem extends React.Component<Props, State> 
 
 				<Form.Item
 					{...item}
-					name={[item.name, "props", "operator"]}
+					name={extendNamePath(item.name, ["props", "operator"])}
 					// fieldKey={[item.fieldKey, "operator"]}
 					rules={[{ required: true }]}>
 					<Select style={{ minWidth: 50 }}>

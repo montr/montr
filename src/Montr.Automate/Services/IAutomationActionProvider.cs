@@ -11,8 +11,9 @@ namespace Montr.Automate.Services
 		AutomationRuleType RuleType { get; }
 
 		// todo: merge with RuleType property (?)
-		IList<FieldMetadata> GetMetadata();
+		Task<IList<FieldMetadata>> GetMetadata(
+			AutomationContext context, AutomationAction action, CancellationToken cancellationToken = default);
 
-		Task Execute(AutomationAction automationAction, AutomationContext context, CancellationToken cancellationToken);
+		Task Execute(AutomationAction automationAction, AutomationContext context, CancellationToken cancellationToken = default);
 	}
 }

@@ -36,14 +36,15 @@ namespace Montr.Automate.Impl.Services
 			Type = typeof(NotifyByEmailAutomationAction)
 		};
 
-		public IList<FieldMetadata> GetMetadata()
+		public async Task<IList<FieldMetadata>> GetMetadata(
+			AutomationContext context, AutomationAction action, CancellationToken cancellationToken = default)
 		{
-			return new List<FieldMetadata>
+			return await Task.FromResult(new List<FieldMetadata>
 			{
 				new TextField { Key = "recipient", Name = "Recipient", Required = true },
 				new TextField { Key = "subject", Name = "Subject", Required = true },
 				new TextAreaField { Key = "body", Name = "Body", Required = true, Props = new TextAreaField.Properties { Rows = 2 } }
-			};
+			});
 		}
 
 		public async Task Execute(AutomationAction automationAction, AutomationContext context, CancellationToken cancellationToken)

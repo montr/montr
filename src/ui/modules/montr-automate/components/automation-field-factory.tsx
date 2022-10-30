@@ -1,5 +1,6 @@
 import { DataFieldFactory, DataFormOptions } from "@montr-core/components";
-import { FieldData, IIndexer } from "@montr-core/models";
+import { IIndexer } from "@montr-core/models";
+import { FieldData } from "rc-field-form/lib/interface";
 import React from "react";
 import { AutomationActionList, AutomationConditionList, FieldAutomationConditionItem, GroupAutomationConditionItem, SetFieldAutomationActionItem } from ".";
 import { AutomationAction, AutomationActionListField, AutomationCondition, AutomationConditionListField, FieldAutomationCondition, GroupAutomationCondition, SetFieldAutomationAction } from "../models/";

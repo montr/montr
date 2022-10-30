@@ -1,9 +1,10 @@
 import { DataForm } from "@montr-core/components";
-import { ApiResult, FieldData, Guid, IDataField } from "@montr-core/models";
+import { ApiResult, Guid, IDataField } from "@montr-core/models";
 import { DataFormChanges } from "@montr-core/models/data-form-changes";
 import { MetadataService } from "@montr-core/services";
 import { Spin } from "antd";
 import { FormInstance } from "antd/lib/form";
+import { FieldData } from "rc-field-form/lib/interface";
 import React from "react";
 import { Automation } from "../models";
 import { Views } from "../module";

@@ -1,3 +1,4 @@
+import { extendNamePath } from "@montr-core/components";
 import { Form, Input, Select, Space } from "antd";
 import React from "react";
 import { SetFieldAutomationAction } from "../models/automation";
@@ -19,7 +20,7 @@ export class SetFieldAutomationActionItem extends React.Component<Props> {
 
 				<Form.Item
 					{...item}
-					name={[item.name, "field"]}
+					name={extendNamePath(item.name, ["field"])}
 					/* fieldKey={[item.fieldKey, "field"]} */
 					rules={[{ required: true }]}>
 					<Select placeholder="Field" />
@@ -27,7 +28,7 @@ export class SetFieldAutomationActionItem extends React.Component<Props> {
 
 				<Form.Item
 					{...item}
-					name={[item.name, "value"]}
+					name={extendNamePath(item.name, ["value"])}
 					/* fieldKey={[item.fieldKey, "value"]} */
 					rules={[{ required: true }]}>
 					<Input placeholder="Value" />

@@ -1,4 +1,4 @@
-import { DataFieldFactory, DataFormOptions } from "@montr-core/components";
+import { DataFieldFactory, DataFormOptions, extendNamePath } from "@montr-core/components";
 import { IDataField } from "@montr-core/models";
 import { Space } from "antd";
 import React from "react";
@@ -42,8 +42,8 @@ class WrappedAutomationActionItem extends React.Component<Props, State> {
 	};
 
 	componentDidUpdate = async (prevProps: Props): Promise<void> => {
-		if (this.props.action !== prevProps.action) {
-			// await this.fetchMetadata();
+		if (this.props.action?.type != prevProps.action?.type) {
+			await this.fetchMetadata();
 		}
 	};
 
@@ -51,7 +51,7 @@ class WrappedAutomationActionItem extends React.Component<Props, State> {
 		const { data, action } = this.props;
 
 		if (action?.type) {
-			const fields = await this.automationService.metadata(data.entityTypeCode, action.type, null);
+			const fields = await this.automationService.actionMetadata(data.entityTypeCode, action);
 
 			this.setState({ loading: false, fields });
 		} else {
@@ -63,7 +63,10 @@ class WrappedAutomationActionItem extends React.Component<Props, State> {
 		const { typeSelector, item, options } = this.props,
 			{ fields } = this.state;
 
-		const innerOptions: DataFormOptions = { namePathPrefix: [item.name, "props"], ...options };
+		const innerOptions: DataFormOptions = {
+			namePathPrefix: extendNamePath(item.name, ["props"]),
+			...options
+		};
 
 		return (<>
 			<Space>

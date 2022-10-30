@@ -1,4 +1,4 @@
-import { DataFieldFactory, DataFormOptions } from "@montr-core/components";
+import { DataFieldFactory, DataFormOptions, extendNamePath, joinNamePath } from "@montr-core/components";
 import { IDataField } from "@montr-core/models";
 import { Space } from "antd";
 import React from "react";
@@ -8,6 +8,7 @@ import { AutomationService } from "../services";
 import { withAutomationContext } from "./automation-context";
 
 interface Props extends AutomationItemProps, AutomationContextProps {
+	id?: string; // fixit: passed by antd form?
 	condition: AutomationCondition;
 }
 
@@ -40,12 +41,20 @@ class WrappedAutomationConditionItem extends React.Component<Props, State> {
 	};
 
 	componentDidUpdate = async (prevProps: Props): Promise<void> => {
-		if (this.props.condition !== prevProps.condition) {
-			// await this.fetchMetadata();
+		if (this.props.condition?.type !== prevProps.condition?.type) {
+			await this.fetchMetadata();
 		}
 
 		if (this.props.dataFormChanges !== prevProps.dataFormChanges) {
-			console.log("dataFormChanges", this.props.dataFormChanges, this.props, this.state);
+			for (const field of this.props.dataFormChanges.changedFields) {
+				const joinedName = joinNamePath(field.name);
+				if (joinedName.startsWith(this.props.id)) {
+					// todo: remove hardcoded field names to preload metadata
+					if (joinedName.endsWith("field") || joinedName.endsWith("operator")) {
+						await this.fetchMetadata();
+					}
+				}
+			}
 		}
 	};
 
@@ -53,7 +62,7 @@ class WrappedAutomationConditionItem extends React.Component<Props, State> {
 		const { data, condition } = this.props;
 
 		if (condition?.type) {
-			const fields = await this.automationService.metadata(data.entityTypeCode, null, condition.type);
+			const fields = await this.automationService.conditionMetadata(data.entityTypeCode, condition);
 
 			this.setState({ loading: false, fields });
 		} else {
@@ -65,7 +74,11 @@ class WrappedAutomationConditionItem extends React.Component<Props, State> {
 		const { typeSelector, item, options } = this.props,
 			{ fields } = this.state;
 
-		const innerOptions: DataFormOptions = { namePathPrefix: [item.name, "props"], ...options };
+		const innerOptions: DataFormOptions = {
+			// todo: return valid names with metadata
+			namePathPrefix: extendNamePath(item.name, ["props"]),
+			...options
+		};
 
 		return (<>
 			<Space>
