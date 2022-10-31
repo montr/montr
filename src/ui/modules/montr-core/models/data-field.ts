@@ -16,10 +16,11 @@ export interface IDataField {
 	placeholder?: string;
 	icon?: string;
 	// multiple?: boolean;
-	active?: boolean;
-	readonly?: boolean;
-	required?: boolean;
-	displayOrder?: number;
+	active: boolean;
+	readonly: boolean;
+	required: boolean;
+	displayOrder: number;
+	reloadMetadataOnChange: boolean;
 }
 
 export interface IDataFieldWithProps<TProps> extends IDataField {

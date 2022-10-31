@@ -37,7 +37,14 @@ namespace Montr.Automate.Impl.Services
 
 			var result = new List<FieldMetadata>
 			{
-				new SelectField { Key = "field", Name = "Select field", Required = true, Props = { Options = fieldOptions } }
+				new SelectField
+				{
+					Key = "field",
+					Name = "Select field",
+					Required = true,
+					ReloadMetadataOnChange = true,
+					Props = {Options = fieldOptions}
+				}
 			};
 
 			if (condition is FieldAutomationCondition fieldCondition)
@@ -54,7 +61,14 @@ namespace Montr.Automate.Impl.Services
 						new SelectFieldOption { Value = "GreaterThanEqual", Name = "≥" }
 					};
 
-					result.Add(new SelectField { Key = "operator", Name = "Operator", Required = true, Props = { Options = operators } });
+					result.Add(new SelectField
+					{
+						Key = "operator",
+						Name = "Operator",
+						Required = true,
+						ReloadMetadataOnChange = true,
+						Props = { Options = operators }
+					});
 				}
 
 				FieldMetadata valueMetadata = null;

@@ -41,16 +41,18 @@ class WrappedAutomationConditionItem extends React.Component<Props, State> {
 	};
 
 	componentDidUpdate = async (prevProps: Props): Promise<void> => {
+		const { fields } = this.state;
+
 		if (this.props.condition?.type !== prevProps.condition?.type) {
 			await this.fetchMetadata();
 		}
 
-		if (this.props.dataFormChanges !== prevProps.dataFormChanges) {
+		if (fields && this.props.dataFormChanges !== prevProps.dataFormChanges) {
 			for (const field of this.props.dataFormChanges.changedFields) {
 				const joinedName = joinNamePath(field.name);
 				if (joinedName.startsWith(this.props.id)) {
-					// todo: remove hardcoded field names to preload metadata
-					if (joinedName.endsWith("field") || joinedName.endsWith("operator")) {
+					const dataField = fields.find(x => joinedName.endsWith("_" + x.key));
+					if (dataField?.reloadMetadataOnChange) {
 						await this.fetchMetadata();
 					}
 				}

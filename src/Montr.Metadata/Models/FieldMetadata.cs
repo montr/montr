@@ -38,6 +38,8 @@ namespace Montr.Metadata.Models
 
 		public int DisplayOrder { get; set; }
 
+		public bool ReloadMetadataOnChange { get; set; }
+
 		public virtual Type GetPropertiesType()
 		{
 			return null;
@@ -173,6 +175,7 @@ namespace Montr.Metadata.Models
 		}
 	}
 
+	// todo: merge with date
 	[FieldType(TypeCode, typeof(TimeFieldProvider))]
 	public class TimeField : FieldMetadata<TimeField.Properties>
 	{

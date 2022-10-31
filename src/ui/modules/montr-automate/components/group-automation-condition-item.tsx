@@ -14,7 +14,7 @@ export class GroupAutomationConditionItem extends React.Component<Props> {
 	render = () => {
 		const { condition, options, typeSelector, item } = this.props;
 
-		const field: AutomationConditionListField = {
+		const field: Partial<AutomationConditionListField> = {
 			type: "automation-condition-list",
 			key: "conditions"
 		};

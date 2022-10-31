@@ -18,10 +18,10 @@ interface Props {
 interface State {
 	loading: boolean;
 	typeFieldMap: { [key: string]: IDataField[]; };
-	typeData?: IDataField;
+	typeData?: Partial<IDataField>;
 	data?: IDataField;
 	typeFields?: IDataField[];
-	optionalFields?: IDataField[];
+	optionalFields?: Partial<IDataField>[];
 	visibleFields?: IDataField[];
 }
 
@@ -68,7 +68,7 @@ export class PaneEditMetadataItem extends React.Component<Props, State> {
 		}, () => this.setVisibleFields(true));
 	};
 
-	rebuildOptionalFields = (fields: IDataField[], currentOptionalFields: IDataField[], data: IDataField): IDataField[] => {
+	rebuildOptionalFields = (fields: IDataField[], currentOptionalFields: Partial<IDataField>[], data: IDataField): Partial<IDataField>[] => {
 		// todo: read optional field types from server
 		return fields
 			.filter(x => !x.required && (x.type == "text" || x.type == "textarea"))
@@ -147,7 +147,9 @@ export class PaneEditMetadataItem extends React.Component<Props, State> {
 		return result;
 	};
 
-	renderPopover = (optionalFields: IDataField[]): React.ReactNode => {
+	renderPopover = (): React.ReactNode => {
+		const { optionalFields } = this.state;
+
 		return (
 			<List size="small" bordered={false}>
 				{optionalFields && optionalFields.map(x => {
@@ -168,7 +170,7 @@ export class PaneEditMetadataItem extends React.Component<Props, State> {
 
 	render = (): React.ReactNode => {
 		const { onClose } = this.props,
-			{ loading, typeFields, visibleFields, optionalFields, typeData, data } = this.state;
+			{ loading, typeFields, visibleFields, typeData, data } = this.state;
 
 		return (<>
 			<Spin spinning={loading}>
@@ -180,7 +182,7 @@ export class PaneEditMetadataItem extends React.Component<Props, State> {
 					width={720}
 					footer={
 						<Toolbar clear size="small" float="right">
-							<Popover content={this.renderPopover(optionalFields)} trigger="click" placement="topLeft">
+							<Popover content={this.renderPopover()} trigger="click" placement="topLeft">
 								<Button type="link" icon={Icon.Setting} />
 							</Popover>
 							<ButtonCancel onClick={onClose} />

@@ -28,7 +28,7 @@ export abstract class DataFieldFactory<TField extends IDataField> {
 
 	shouldFormatValue = false;
 
-	createFormItem = (field: TField, data: IIndexer, options: DataFormOptions): React.ReactNode => {
+	createFormItem = (field: Partial<TField>, data: IIndexer, options: DataFormOptions): React.ReactNode => {
 		const { t, layout, mode, hideLabels } = options;
 
 		if (this.shouldFormatValue) {
@@ -80,7 +80,7 @@ export abstract class DataFieldFactory<TField extends IDataField> {
 		);
 	};
 
-	createFormItemRules(field: TField, options: DataFormOptions): Rule[] {
+	createFormItemRules(field: Partial<TField>, options: DataFormOptions): Rule[] {
 		const { t } = options;
 
 		const required: Rule = {
@@ -95,17 +95,17 @@ export abstract class DataFieldFactory<TField extends IDataField> {
 		return [required];
 	}
 
-	formatValue(field: TField, data: IIndexer, value: any): any {
+	formatValue(field: Partial<TField>, data: IIndexer, value: any): any {
 		return value;
 	}
 
-	createViewNode(field: TField, data: IIndexer): React.ReactElement {
+	createViewNode(field: Partial<TField>, data: IIndexer): React.ReactElement {
 		const value = DataHelper.indexer(data, field.key, undefined);
 
 		return (value != undefined) ? value : <EmptyFieldView />;
 	}
 
-	abstract createEditNode(field: TField, data: IIndexer): React.ReactElement;
+	abstract createEditNode(field: Partial<TField>, data: IIndexer): React.ReactElement;
 }
 
 export class BooleanFieldFactory extends DataFieldFactory<IBooleanField> {
