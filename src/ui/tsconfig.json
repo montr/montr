@@ -4,6 +4,9 @@
 			"dom",
 			"esnext"
 		],
+		"types": [
+			"node"
+		],
 		"sourceMap": true,
 		"noImplicitAny": true,
 		// "strict": true,
