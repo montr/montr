@@ -73,7 +73,7 @@ export const Views = {
 };
 
 export const Patterns = {
-	searchClassifierType: "/classifiers",
+	searchClassifierType: "/classifiers/",
 	addClassifierType: "/classifiers/add",
 	editClassifierType: "/classifiers/edit/:uid",
 	editClassifierTypeTab: "/classifiers/edit/:uid/:tabKey",
