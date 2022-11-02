@@ -20,7 +20,8 @@ namespace Montr.Docs.Services
 		{
 			_configurationManager.Configure<Classifier>(config =>
 			{
-				config.When(classifier => classifier.Type == ClassifierTypeCode.Questionnaire)
+				config
+					.When(classifier => classifier.Type == ClassifierTypeCode.Questionnaire)
 					.Add<DataPane>((_, x) =>
 					{
 						x.Key = "form";
@@ -29,7 +30,16 @@ namespace Montr.Docs.Services
 						x.Component = Core.ComponentCode.PaneEditFormMetadata;
 					});
 
-				config.When(classifier => classifier.Type == ClassifierTypeCode.DocumentType)
+				config
+					.When(classifier => classifier.Type == ClassifierTypeCode.DocumentType)
+					.Add<DataPane>((_, x) =>
+					{
+						x.Key = "fields";
+						x.Name = "Fields";
+						x.Description = "Configure document fields";
+						x.DisplayOrder = 10;
+						x.Component = Core.ComponentCode.PaneEditFieldsMetadata;
+					})
 					.Add<DataPane>((_, x) =>
 					{
 						x.Key = "form";
@@ -37,7 +47,6 @@ namespace Montr.Docs.Services
 						x.DisplayOrder = 15;
 						x.Component = Core.ComponentCode.PaneEditFormMetadata;
 					})
-
 					.Add<DataPane>((_, x) =>
 					{
 						x.Key = "numeration";
@@ -45,7 +54,6 @@ namespace Montr.Docs.Services
 						x.DisplayOrder = 20;
 						x.Component = MasterData.ComponentCode.TabEditNumeration;
 					})
-
 					// todo: move to processes (?)
 					.Add<DataPane>((_, x) =>
 					{

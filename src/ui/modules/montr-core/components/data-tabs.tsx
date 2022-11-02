@@ -1,4 +1,4 @@
-import { Tabs } from "antd";
+import { Tabs, Tooltip } from "antd";
 import React from "react";
 import { Icon } from ".";
 import { DataPane, DataPaneProps } from "../models";
@@ -24,7 +24,10 @@ export class DataTabs<TModel> extends React.Component<Props<TModel>> {
 			items={panes?.map((pane, index) => {
 				return ({
 					key: pane.key,
-					label: <>{pane.icon && Icon.get(pane.icon)}{pane.name}</>,
+					label: <span>
+						{pane.icon && Icon.get(pane.icon)}
+						{pane.description ? <>&#xA0;<Tooltip title={pane.description}>{pane.name}</Tooltip></> : pane.name}
+					</span>,
 					disabled: disabled ? disabled(pane, index) : false,
 					children: ComponentFactory.createComponent(pane.component, { ...paneProps, ...pane.props })
 				});
