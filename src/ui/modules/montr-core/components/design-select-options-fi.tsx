@@ -1,7 +1,8 @@
+import { Form, Input, Space } from "antd";
 import React from "react";
-import { Input, Form, Space } from "antd";
+import { ButtonAdd, Toolbar } from ".";
 import { IDesignSelectOptionsField } from "../models";
-import { ButtonAdd, FormListItemToolbar, Toolbar } from ".";
+import { FormListItemToolbar } from "./form-list-item-toolbar";
 
 interface IProps {
 	field: IDesignSelectOptionsField;

@@ -1,11 +1,13 @@
 import { Api } from "@montr-core/module";
+import { LocaleStringService } from "@montr-core/services/locale-string-service";
 import { Button, Form, Select, Upload } from "antd";
 import { UploadChangeParam } from "antd/lib/upload";
 import React from "react";
 import { Translation } from "react-i18next";
-import { ButtonExport, ButtonImport, DataBreadcrumb, DataTable, DataTableUpdateToken, Icon, Page, PageHeader, Toolbar } from ".";
+import { ButtonExport, ButtonImport, DataTable, DataTableUpdateToken, Icon, Page, PageHeader, Toolbar } from ".";
 import { DataResult, IMenu, LocaleString } from "../models";
-import { LocaleStringService, NotificationService } from "../services";
+import { NotificationService } from "../services";
+import { DataBreadcrumb } from "./data-breadcrumb";
 
 interface Props {
 }
@@ -18,8 +20,8 @@ interface State {
 
 export default class PageSearchLocaleString extends React.Component<Props, State> {
 
-	_notification = new NotificationService();
-	_localeService = new LocaleStringService();
+	private readonly notification = new NotificationService();
+	private readonly localeService = new LocaleStringService();
 
 	constructor(props: Props) {
 		super(props);
@@ -32,7 +34,7 @@ export default class PageSearchLocaleString extends React.Component<Props, State
 	}
 
 	componentWillUnmount = async () => {
-		await this._localeService.abort();
+		await this.localeService.abort();
 	};
 
 	onLoadTableData = async (loadUrl: string, postParams: any): Promise<DataResult<{}>> => {
@@ -43,7 +45,7 @@ export default class PageSearchLocaleString extends React.Component<Props, State
 			...postParams
 		};
 
-		return await this._localeService.post(loadUrl, params);
+		return await this.localeService.post(loadUrl, params);
 	};
 
 	handleSubmit = async (values: any) => {
@@ -61,16 +63,16 @@ export default class PageSearchLocaleString extends React.Component<Props, State
 	handleExport = async (e: React.SyntheticEvent) => {
 		const { locale, module } = this.state;
 
-		await this._localeService.export({ locale, module });
+		await this.localeService.export({ locale, module });
 	};
 
 	handleUploadChange = async (info: UploadChangeParam) => {
 		if (info.file.status === "done") {
-			this._notification.success(`File "${info.file.name}" uploaded successfully.`);
+			this.notification.success(`File "${info.file.name}" uploaded successfully.`);
 
 			this.refreshTable();
 		} else if (info.file.status === "error") {
-			this._notification.error(`File "${info.file.name}" upload failed.`);
+			this.notification.error(`File "${info.file.name}" upload failed.`);
 		}
 	};
 

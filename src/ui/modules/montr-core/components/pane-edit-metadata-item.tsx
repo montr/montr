@@ -30,8 +30,8 @@ const DefaultFieldType = "text";
 
 export class PaneEditMetadataItem extends React.Component<Props, State> {
 
-	private metadataService = new MetadataService();
-	private formRef = React.createRef<FormInstance>();
+	private readonly metadataService = new MetadataService();
+	private readonly formRef = React.createRef<FormInstance>();
 
 	constructor(props: Props) {
 		super(props);

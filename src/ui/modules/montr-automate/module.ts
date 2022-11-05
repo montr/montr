@@ -1,4 +1,4 @@
-import { DataFieldFactory } from "@montr-core/components";
+import { DataFieldFactory } from "@montr-core/components/data-field-factory";
 import { ComponentRegistry } from "@montr-core/services";
 import React from "react";
 import { AutomationActionFactory, AutomationConditionFactory } from "./components";

@@ -1,4 +1,5 @@
-import { ComponentNameConvention, EntityRelationService } from "@montr-core/services";
+import { ComponentNameConvention } from "@montr-core/services";
+import { EntityRelationService } from "@montr-core/services/entity-relation-service";
 import { Empty, Spin } from "antd";
 import React from "react";
 import { EntityRelation, Guid } from "../models";

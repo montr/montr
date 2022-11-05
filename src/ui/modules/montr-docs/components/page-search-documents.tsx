@@ -1,9 +1,9 @@
 import { DataTable, Page, PageHeader } from "@montr-core/components";
 import { DataColumn } from "@montr-core/models";
 import React from "react";
-import { DocumentBreadcrumb } from ".";
 import { Api, Views } from "../module";
 import { DocumentService } from "../services";
+import { DocumentBreadcrumb } from "./document-breadcrumb";
 
 interface State {
 	loading: boolean;

@@ -1,8 +1,8 @@
-import React, { ChangeEvent } from "react";
-import { Input, Row, Col, Typography, Button } from "antd";
+import { Button, Col, Input, Row, Typography } from "antd";
 import { Gutter } from "antd/lib/grid/row";
-import { IOption, IIndexer, IDesignSelectOptionsField } from "../models";
+import React, { ChangeEvent } from "react";
 import { ButtonAdd } from ".";
+import { IDesignSelectOptionsField, IIndexer, IOption } from "../models";
 import { Icon } from "./icon";
 
 interface Props {

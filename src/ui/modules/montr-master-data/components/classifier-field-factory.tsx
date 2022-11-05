@@ -1,8 +1,8 @@
-import * as React from "react";
-import { DataFieldFactory } from "@montr-core/components";
+import { DataFieldFactory } from "@montr-core/components/data-field-factory";
 import { IIndexer } from "@montr-core/models";
+import * as React from "react";
 import { ClassifierGroupSelect, ClassifierSelect, ClassifierTypeSelect } from ".";
-import { IClassifierTypeField, IClassifierField, IClassifierGroupField } from "../models";
+import { IClassifierField, IClassifierGroupField, IClassifierTypeField } from "../models";
 import { ClassifierView } from "./classifier-view";
 
 export class ClassifierFieldFactory extends DataFieldFactory<IClassifierField> {

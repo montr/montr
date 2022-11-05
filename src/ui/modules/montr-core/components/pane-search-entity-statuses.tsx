@@ -1,9 +1,11 @@
+import { EntityStatusService } from "@montr-core/services/entity-status-service";
 import React from "react";
 import { Translation, WithTranslation, withTranslation } from "react-i18next";
-import { ButtonAdd, ButtonDelete, DataTable, DataTableUpdateToken, ModalEditEntityStatus, Toolbar } from ".";
+import { ButtonAdd, ButtonDelete, DataTable, DataTableUpdateToken, Toolbar } from ".";
 import { DataResult, EntityStatus, Guid } from "../models";
 import { Api, Views } from "../module";
-import { EntityStatusService, MetadataService, OperationService } from "../services";
+import { MetadataService, OperationService } from "../services";
+import { ModalEditEntityStatus } from "./modal-edit-entity-status";
 
 interface Props extends WithTranslation {
 	entityTypeCode: string;

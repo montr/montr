@@ -1,4 +1,6 @@
-import { DataBreadcrumb, DataTabs, Page, PageHeader, Toolbar } from "@montr-core/components";
+import { Page, PageHeader, Toolbar } from "@montr-core/components";
+import { DataBreadcrumb } from "@montr-core/components/data-breadcrumb";
+import { DataTabs } from "@montr-core/components/data-tabs";
 import { withNavigate, withParams } from "@montr-core/components/react-router-wrappers";
 import { DataPaneProps, DataView, PaneComponent } from "@montr-core/models";
 import { MetadataService, OperationService } from "@montr-core/services";

@@ -1,7 +1,8 @@
 import { UserMenu } from "@montr-core/components";
 import { MenuProps } from "antd/lib/menu";
 import * as React from "react";
-import { CompanyContextProps, CompanyMenu, withCompanyContext } from ".";
+import { CompanyContextProps, withCompanyContext } from ".";
+import { CompanyMenu } from "./company-menu";
 
 // todo: remove, all code in MainMenu
 class _UserWithCompanyMenu extends React.Component<MenuProps & CompanyContextProps> {

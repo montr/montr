@@ -1,4 +1,5 @@
-import { ButtonAdd, DataFormOptions, FormListItemToolbar, Toolbar } from "@montr-core/components";
+import { ButtonAdd, DataFormOptions, Toolbar } from "@montr-core/components";
+import { FormListItemToolbar } from "@montr-core/components/form-list-item-toolbar";
 import { Divider, Form, Select } from "antd";
 import React from "react";
 import { AutomationActionItemWrapper } from ".";

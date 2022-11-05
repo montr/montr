@@ -1,6 +1,7 @@
 import React from "react";
 import { Translation } from "react-i18next";
-import { DataBreadcrumb, DataMenu, Page, PageHeader, Toolbar } from ".";
+import { DataMenu, Page, PageHeader, Toolbar } from ".";
+import { DataBreadcrumb } from "./data-breadcrumb";
 
 export default class PageSettings extends React.Component {
 

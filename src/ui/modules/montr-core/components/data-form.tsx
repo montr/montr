@@ -3,10 +3,11 @@ import { FormInstance } from "antd/lib/form";
 import { FieldData, Store } from "rc-field-form/lib/interface";
 import * as React from "react";
 import { withTranslation, WithTranslation } from "react-i18next";
-import { ButtonSave, DataFieldFactory, FormDefaults, Toolbar } from ".";
+import { ButtonSave, FormDefaults, Toolbar } from ".";
 import { ApiResult, IDataField, IIndexer } from "../models";
 import { DataHelper, OperationService } from "../services";
 import { NotificationService } from "../services/notification-service";
+import { DataFieldFactory } from "./data-field-factory";
 
 export interface DataFormOptions extends WithTranslation {
 	mode?: "edit" | "view";

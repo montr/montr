@@ -1,4 +1,6 @@
-import { ErrorBoundary, Footer, Logo } from "@montr-core/components";
+import { ErrorBoundary } from "@montr-core/components";
+import { Footer } from "@montr-core/components/footer";
+import { Logo } from "@montr-core/components/logo";
 import { Layout } from "antd";
 import * as React from "react";
 import { Outlet } from "react-router-dom";

@@ -1,4 +1,5 @@
-import { DataFieldFactory, DataFormOptions } from "@montr-core/components";
+import { DataFormOptions } from "@montr-core/components";
+import { DataFieldFactory } from "@montr-core/components/data-field-factory";
 import { IIndexer } from "@montr-core/models";
 import { FieldData } from "rc-field-form/lib/interface";
 import React from "react";

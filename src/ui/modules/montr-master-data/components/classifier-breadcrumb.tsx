@@ -1,4 +1,4 @@
-import { DataBreadcrumb } from "@montr-core/components";
+import { DataBreadcrumb } from "@montr-core/components/data-breadcrumb";
 import { IMenu } from "@montr-core/models";
 import * as React from "react";
 import { Classifier, ClassifierType } from "../models";

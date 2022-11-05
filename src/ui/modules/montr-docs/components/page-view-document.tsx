@@ -1,4 +1,6 @@
-import { DataTabs, DataToolbar, StatusTag } from "@montr-core/components";
+import { StatusTag } from "@montr-core/components";
+import { DataTabs } from "@montr-core/components/data-tabs";
+import { DataToolbar } from "@montr-core/components/data-toolbar";
 import { withNavigate, withParams } from "@montr-core/components/react-router-wrappers";
 import { ConfigurationItemProps, DataPaneProps, DataView } from "@montr-core/models";
 import { DateHelper } from "@montr-core/services";
@@ -7,10 +9,10 @@ import { ClassifierService } from "@montr-master-data/services";
 import { PageHeader, Spin } from "antd";
 import React from "react";
 import { NavigateFunction } from "react-router-dom";
-import { DocumentBreadcrumb } from ".";
 import { IDocument } from "../models";
 import { ClassifierTypeCode, EntityTypeCode, RouteBuilder, Views } from "../module";
 import { DocumentService } from "../services";
+import { DocumentBreadcrumb } from "./document-breadcrumb";
 
 interface RouteProps {
 	uid?: string;

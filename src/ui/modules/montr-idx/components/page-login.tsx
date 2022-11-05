@@ -1,4 +1,5 @@
-import { DataForm, Page, useLocalStorage } from "@montr-core/components";
+import { DataForm, Page } from "@montr-core/components";
+import { useLocalStorage } from "@montr-core/components/use-local-storage";
 import { ApiResult, IDataField } from "@montr-core/models";
 import { MetadataService, NavigationService } from "@montr-core/services";
 import { Divider, Spin } from "antd";

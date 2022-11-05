@@ -1,4 +1,4 @@
-import { DataFieldFactory } from "@montr-core/components";
+import { DataFieldFactory } from "@montr-core/components/data-field-factory";
 import { Layout } from "@montr-core/constants";
 import { Guid } from "@montr-core/models";
 import { ComponentRegistry } from "@montr-core/services";

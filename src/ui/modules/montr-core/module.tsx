@@ -51,7 +51,7 @@ export const Views = {
 	entityStatusForm: "EntityStatus/Form",
 };
 
-import("./components").then(x => {
+import("./components/data-field-factory").then(x => {
 	x.DataFieldFactory.register("boolean", new x.BooleanFieldFactory());
 	x.DataFieldFactory.register("number", new x.NumberFieldFactory());
 	x.DataFieldFactory.register("text", new x.TextFieldFactory());

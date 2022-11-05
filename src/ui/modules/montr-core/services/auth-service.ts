@@ -1,4 +1,4 @@
-import { Log, User, UserManager, SignoutResponse, UserManagerSettings } from "oidc-client";
+import { Log, SignoutResponse, User, UserManager, UserManagerSettings } from "oidc-client";
 import { Constants } from "../constants";
 import { NavigationService } from "./navigation-service";
 
@@ -16,8 +16,8 @@ class AuthConstants {
 export class AuthService {
 	private static instance: AuthService;
 
-	private _userManager!: UserManager;
-	private _navigator: NavigationService = new NavigationService();
+	private readonly _userManager!: UserManager;
+	private readonly navigator: NavigationService = new NavigationService();
 
 	constructor() {
 		if (AuthService.instance) {
@@ -76,7 +76,7 @@ export class AuthService {
 	}
 
 	public isCallback(): boolean {
-		const url = this._navigator.getUrl();
+		const url = this.navigator.getUrl();
 
 		return (
 			url.indexOf(AuthConstants.RedirectUri) !== -1 ||
@@ -86,7 +86,7 @@ export class AuthService {
 	}
 
 	public processCallback(): void {
-		const url = this._navigator.getUrl();
+		const url = this.navigator.getUrl();
 
 		// console.log("processCallback()", window.frameElement, url);
 
@@ -145,7 +145,7 @@ export class AuthService {
 	private getRedirectArgs() {
 		return {
 			state: {
-				return_uri: this._navigator.getUrl()
+				return_uri: this.navigator.getUrl()
 			}
 		};
 	}
@@ -158,7 +158,7 @@ export class AuthService {
 
 		// console.log("signinRedirectCallback()", value);
 
-		this._navigator.navigate(return_uri || "/");
+		this.navigator.navigate(return_uri || "/");
 	}
 
 	private signoutRedirectCallback(value: SignoutResponse) {
@@ -169,7 +169,7 @@ export class AuthService {
 
 		// console.log("signoutRedirectCallback()", value);
 
-		this._navigator.navigate(return_uri || "/");
+		this.navigator.navigate(return_uri || "/");
 	}
 
 	public onAuthenticated(callback: (user: User) => void): void {

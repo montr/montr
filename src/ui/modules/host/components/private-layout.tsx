@@ -1,4 +1,5 @@
-import { ErrorBoundary, Footer, SuspenseFallback } from "@montr-core/components";
+import { ErrorBoundary, SuspenseFallback } from "@montr-core/components";
+import { Footer } from "@montr-core/components/footer";
 import { Layout } from "antd";
 import * as React from "react";
 import { Outlet } from "react-router-dom";

@@ -1,4 +1,5 @@
-import { DataTabs, Page, PageHeader } from "@montr-core/components";
+import { Page, PageHeader } from "@montr-core/components";
+import { DataTabs } from "@montr-core/components/data-tabs";
 import { withNavigate, withParams } from "@montr-core/components/react-router-wrappers";
 import { DataView } from "@montr-core/models";
 import { Spin } from "antd";

@@ -1,4 +1,5 @@
-import { DataFieldFactory, DataFormOptions, extendNamePath, joinNamePath } from "@montr-core/components";
+import { DataFormOptions, extendNamePath, joinNamePath } from "@montr-core/components";
+import { DataFieldFactory } from "@montr-core/components/data-field-factory";
 import { IDataField } from "@montr-core/models";
 import { Space } from "antd";
 import React from "react";
