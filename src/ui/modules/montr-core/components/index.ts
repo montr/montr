@@ -26,7 +26,6 @@ export * from "./notification-content";
 export * from "./page";
 export * from "./page-context";
 export * from "./page-header";
-export * from "./pane-component";
 export * from "./pane-edit-metadata";
 export * from "./pane-edit-metadata-item";
 export * from "./status-tag";

@@ -13,5 +13,6 @@ export * from "./guid";
 export * from "./indexer";
 export * from "./locale-string";
 export * from "./menu";
+export * from "./pane-component";
 export * from "./search-request";
 
