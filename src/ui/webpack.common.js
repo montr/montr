@@ -22,6 +22,7 @@ const options = {
 			"@montr-kompany": path.resolve(__dirname, "modules/montr-kompany/"),
 			"@montr-kompany-registration": path.resolve(__dirname, "modules/montr-kompany-registration/"),
 			"@montr-master-data": path.resolve(__dirname, "modules/montr-master-data/"),
+			"@montr-settings": path.resolve(__dirname, "modules/montr-settings/"),
 			"@montr-tasks": path.resolve(__dirname, "modules/montr-tasks/"),
 			"@montr-tendr": path.resolve(__dirname, "modules/montr-tendr/"),
 		},

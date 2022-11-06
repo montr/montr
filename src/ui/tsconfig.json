@@ -36,6 +36,9 @@
 			"@montr-master-data/*": [
 				"modules/montr-master-data/*"
 			],
+			"@montr-settings/*": [
+				"modules/montr-settings/*"
+			],
 			"@montr-tasks/*": [
 				"modules/montr-tasks/*"
 			],

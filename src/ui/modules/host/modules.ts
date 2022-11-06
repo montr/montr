@@ -5,6 +5,6 @@ import "@montr-idx/module";
 import "@montr-kompany-registration/module";
 import "@montr-kompany/module";
 import "@montr-master-data/module";
+import "@montr-settings/module";
 import "@montr-tasks/module";
 import "@montr-tendr/module";
-

@@ -42,6 +42,13 @@ namespace Montr.Docs.Services
 					})
 					.Add<DataPane>((_, x) =>
 					{
+						x.Key = "settings";
+						x.Name = "Settings";
+						x.DisplayOrder = 12;
+						x.Component = Settings.ComponentCode.PaneSettings;
+					})
+					.Add<DataPane>((_, x) =>
+					{
 						x.Key = "form";
 						x.Name = "Form";
 						x.DisplayOrder = 15;

@@ -87,6 +87,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Montr.Tasks.Tests", "Montr.
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Montr.Worker.Hangfire.Tests", "Montr.Worker.Hangfire.Tests\Montr.Worker.Hangfire.Tests.csproj", "{6FC61B14-E0C1-4FCA-844C-29714CD05538}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Montr.Settings", "Montr.Settings\Montr.Settings.csproj", "{AC67EB88-1F8A-48A4-9871-2610C68183F4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -261,6 +263,10 @@ Global
 		{6FC61B14-E0C1-4FCA-844C-29714CD05538}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6FC61B14-E0C1-4FCA-844C-29714CD05538}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6FC61B14-E0C1-4FCA-844C-29714CD05538}.Release|Any CPU.Build.0 = Release|Any CPU
+		{AC67EB88-1F8A-48A4-9871-2610C68183F4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{AC67EB88-1F8A-48A4-9871-2610C68183F4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{AC67EB88-1F8A-48A4-9871-2610C68183F4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{AC67EB88-1F8A-48A4-9871-2610C68183F4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
