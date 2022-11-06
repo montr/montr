@@ -7,7 +7,7 @@ using Montr.Automate.Services;
 using Montr.Automate.Services.Impl;
 using Montr.Core;
 using Montr.Core.Services;
-using Montr.Core.Services.Impl;
+using Montr.Core.Services.Implementations;
 using Montr.MasterData.Services;
 using Montr.Metadata.Services;
 using ConfigurationStartupTask = Montr.Automate.Services.Impl.ConfigurationStartupTask;

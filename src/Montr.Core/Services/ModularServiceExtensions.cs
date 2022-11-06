@@ -4,7 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Montr.Core.Services.Impl;
+using Montr.Core.Services.Implementations;
 
 namespace Montr.Core.Services
 {

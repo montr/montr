@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Montr.Core.Services.Impl;
+using Montr.Core.Services.Implementations;
 using Montr.Tendr.Queries;
 using Montr.Tendr.QueryHandlers;
 using NUnit.Framework;

@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Montr.Core.Services.Impl;
+using Montr.Core.Services.Implementations;
 using Moq;
 using NUnit.Framework;
 

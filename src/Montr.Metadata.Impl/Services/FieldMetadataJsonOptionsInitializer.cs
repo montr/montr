@@ -3,7 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Montr.Core.Services;
-using Montr.Core.Services.Impl;
+using Montr.Core.Services.Implementations;
 using Montr.Metadata.Models;
 using Montr.Metadata.Services;
 

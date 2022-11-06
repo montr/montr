@@ -8,7 +8,7 @@ using MediatR;
 using Microsoft.Extensions.Logging.Abstractions;
 using Montr.Core.Models;
 using Montr.Core.Services;
-using Montr.Core.Services.Impl;
+using Montr.Core.Services.Implementations;
 using Montr.Docs.Entities;
 using Montr.Docs.Models;
 using Montr.Docs.Services.Implementations;

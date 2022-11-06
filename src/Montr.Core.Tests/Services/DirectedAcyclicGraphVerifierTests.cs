@@ -1,5 +1,5 @@
 ﻿using System;
-using Montr.Core.Services.Impl;
+using Montr.Core.Services.Implementations;
 using NUnit.Framework;
 
 namespace Montr.Core.Tests.Services

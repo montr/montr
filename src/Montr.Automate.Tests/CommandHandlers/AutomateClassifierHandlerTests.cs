@@ -8,7 +8,7 @@ using Montr.Automate.Models;
 using Montr.Automate.Services;
 using Montr.Automate.Services.Impl;
 using Montr.Core.Services;
-using Montr.Core.Services.Impl;
+using Montr.Core.Services.Implementations;
 using Montr.MasterData.Commands;
 using Montr.MasterData.Impl.CommandHandlers;
 using Montr.MasterData.Impl.Services;

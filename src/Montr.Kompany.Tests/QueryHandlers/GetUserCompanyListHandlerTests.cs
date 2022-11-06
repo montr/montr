@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using LinqToDB;
 using Montr.Core.Services;
-using Montr.Core.Services.Impl;
+using Montr.Core.Services.Implementations;
 using Montr.Idx.Models;
 using Montr.Kompany.Impl.Entities;
 using Montr.Kompany.Impl.QueryHandlers;

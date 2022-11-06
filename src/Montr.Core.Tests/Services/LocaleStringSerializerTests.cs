@@ -3,7 +3,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Montr.Core.Services.Impl;
+using Montr.Core.Services.Implementations;
 using NUnit.Framework;
 
 namespace Montr.Core.Tests.Services

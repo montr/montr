@@ -4,9 +4,9 @@ using System.Threading;
 using System.Threading.Tasks;
 using Montr.Core.Models;
 using Montr.Core.Queries;
-using Montr.Core.QueryHandlers;
 using Montr.Core.Services;
-using Montr.Core.Services.Impl;
+using Montr.Core.Services.Implementations;
+using Montr.Core.Services.QueryHandlers;
 using Moq;
 using NUnit.Framework;
 

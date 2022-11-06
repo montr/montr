@@ -5,7 +5,7 @@ using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using Montr.Core;
 using Montr.Core.Services;
-using Montr.Core.Services.Impl;
+using Montr.Core.Services.Implementations;
 using Montr.Idx.Commands;
 using Montr.Idx.Impl.CommandHandlers;
 using Montr.Idx.Impl.Services;

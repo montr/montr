@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using Montr.Core.CommandHandlers;
 using Montr.Core.Commands;
 using Montr.Core.Models;
-using Montr.Core.Services.Impl;
+using Montr.Core.Services.CommandHandlers;
+using Montr.Core.Services.Implementations;
 using Montr.Core.Tests.Services;
 using NUnit.Framework;
 

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Montr.Core.Services.Impl;
+using Montr.Core.Services.Implementations;
 using Montr.MasterData.Impl.Services;
 using Montr.MasterData.Models;
 using Montr.MasterData.Services;

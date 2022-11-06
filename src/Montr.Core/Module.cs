@@ -16,7 +16,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Primitives;
 using Montr.Core.Models;
 using Montr.Core.Services;
-using Montr.Core.Services.Impl;
+using Montr.Core.Services.Implementations;
 using Newtonsoft.Json.Converters;
 using Newtonsoft.Json.Serialization;
 

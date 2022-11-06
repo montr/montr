@@ -1,5 +1,5 @@
 ﻿using LinqToDB.Mapping;
-using Montr.Core.Services.Impl;
+using Montr.Core.Services.Implementations;
 using Montr.Idx.Impl.Services;
 using NUnit.Framework;
 
