@@ -1,6 +1,4 @@
-﻿using Montr.Automate.Models;
-
-namespace Montr.Automate.Impl.Models
+﻿namespace Montr.Automate.Models
 {
 	public class FieldAutomationCondition : AutomationCondition<FieldAutomationCondition.Properties>
 	{

@@ -1,11 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Montr.Automate.Impl.Models;
 using Montr.Automate.Models;
 using Montr.Metadata.Models;
 
-namespace Montr.Automate.Services.Impl
+namespace Montr.Automate.Services.Implementations
 {
 	public class GroupAutomationConditionProvider : IAutomationConditionProvider
 	{

@@ -6,7 +6,7 @@ using Montr.Core.Services;
 using Montr.MasterData.Commands;
 using Montr.MasterData.Services;
 
-namespace Montr.Automate.Services.Impl
+namespace Montr.Automate.Services.Implementations
 {
 	public class RegisterClassifierTypeStartupTask : IStartupTask
 	{

@@ -4,7 +4,7 @@ using Montr.Automate.Models;
 using Montr.Core.Services;
 using Montr.Core.Services.Implementations;
 
-namespace Montr.Automate.Services.Impl
+namespace Montr.Automate.Services.Implementations
 {
 	public class AutomationJsonOptionsConfigurator : IConfigureOptions<MvcNewtonsoftJsonOptions>
 	{

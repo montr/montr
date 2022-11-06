@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Montr.Automate.Models;
 using Montr.Core.Services;
 
-namespace Montr.Automate.Services.Impl
+namespace Montr.Automate.Services.Implementations
 {
 	public class DefaultRecipientResolver : IRecipientResolver
 	{

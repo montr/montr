@@ -3,11 +3,10 @@ using System.Threading.Tasks;
 using MediatR;
 using Montr.Automate.Commands;
 using Montr.Automate.Models;
-using Montr.Automate.Services;
 using Montr.Core.Models;
 using Montr.Core.Services;
 
-namespace Montr.Automate.Impl.CommandHandlers
+namespace Montr.Automate.Services.CommandHandlers
 {
 	/// <summary>
 	/// Typically executes as background task.

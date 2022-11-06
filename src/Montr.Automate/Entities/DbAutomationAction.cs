@@ -2,7 +2,7 @@
 using LinqToDB;
 using LinqToDB.Mapping;
 
-namespace Montr.Automate.Impl.Entities
+namespace Montr.Automate.Entities
 {
 	[Table(Schema = "montr", Name = "automation_action")]
 	public class DbAutomationAction

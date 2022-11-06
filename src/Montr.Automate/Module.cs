@@ -1,17 +1,16 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
-using Montr.Automate.Impl.Models;
 using Montr.Automate.Models;
 using Montr.Automate.Services;
-using Montr.Automate.Services.Impl;
+using Montr.Automate.Services.Implementations;
 using Montr.Core;
 using Montr.Core.Services;
 using Montr.Core.Services.Implementations;
 using Montr.MasterData.Services;
 using Montr.Metadata.Services;
-using ConfigurationStartupTask = Montr.Automate.Services.Impl.ConfigurationStartupTask;
-using RegisterClassifierTypeStartupTask = Montr.Automate.Services.Impl.RegisterClassifierTypeStartupTask;
+using ConfigurationStartupTask = Montr.Automate.Services.Implementations.ConfigurationStartupTask;
+using RegisterClassifierTypeStartupTask = Montr.Automate.Services.Implementations.RegisterClassifierTypeStartupTask;
 
 namespace Montr.Automate
 {

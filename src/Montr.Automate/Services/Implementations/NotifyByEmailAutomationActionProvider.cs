@@ -1,12 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
-using Montr.Automate.Impl.Models;
 using Montr.Automate.Models;
 using Montr.Messages.Services;
 using Montr.Metadata.Models;
 
-namespace Montr.Automate.Services.Impl
+namespace Montr.Automate.Services.Implementations
 {
 	// todo: move to -Messages- separate project and remove reference to Messages?
 	public class NotifyByEmailAutomationActionProvider : IAutomationActionProvider

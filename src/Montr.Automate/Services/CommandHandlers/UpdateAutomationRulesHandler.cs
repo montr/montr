@@ -7,13 +7,12 @@ using LinqToDB;
 using LinqToDB.Data;
 using MediatR;
 using Montr.Automate.Commands;
-using Montr.Automate.Impl.Entities;
-using Montr.Automate.Impl.Models;
+using Montr.Automate.Entities;
 using Montr.Automate.Models;
 using Montr.Core.Models;
 using Montr.Core.Services;
 
-namespace Montr.Automate.Impl.CommandHandlers
+namespace Montr.Automate.Services.CommandHandlers
 {
 	public class UpdateAutomationRulesHandler: IRequestHandler<UpdateAutomationRules, ApiResult>
 	{

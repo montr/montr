@@ -5,7 +5,7 @@ using Montr.Automate.Models;
 using Montr.Core.Services;
 using Montr.Metadata.Models;
 
-namespace Montr.Automate.Services.Impl
+namespace Montr.Automate.Services.Implementations
 {
 	public class DefaultAutomationContextProvider : IAutomationContextProvider
 	{

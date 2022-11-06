@@ -8,7 +8,7 @@ using Montr.Core.Models;
 using Montr.Core.Services;
 using Montr.MasterData.Services;
 
-namespace Montr.Automate.Services.Impl
+namespace Montr.Automate.Services.Implementations
 {
 	public class DefaultAutomationRunner : IAutomationRunner
 	{

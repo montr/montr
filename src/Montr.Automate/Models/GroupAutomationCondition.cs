@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
-using Montr.Automate.Models;
 
-namespace Montr.Automate.Impl.Models
+namespace Montr.Automate.Models
 {
 	public class GroupAutomationCondition : AutomationCondition<GroupAutomationCondition.Properties>
 	{

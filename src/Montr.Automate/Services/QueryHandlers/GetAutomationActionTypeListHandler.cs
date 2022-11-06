@@ -5,10 +5,9 @@ using System.Threading.Tasks;
 using MediatR;
 using Montr.Automate.Models;
 using Montr.Automate.Queries;
-using Montr.Automate.Services;
 using Montr.Core.Services;
 
-namespace Montr.Automate.Impl.QueryHandlers
+namespace Montr.Automate.Services.QueryHandlers
 {
 	public class GetAutomationActionTypeListHandler : IRequestHandler<GetAutomationActionTypeList, IList<AutomationRuleType>>
 	{
