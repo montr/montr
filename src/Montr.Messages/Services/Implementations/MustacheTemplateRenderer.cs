@@ -4,10 +4,9 @@ using System.Threading.Tasks;
 using Montr.Core.Services;
 using Montr.MasterData.Services;
 using Montr.Messages.Models;
-using Montr.Messages.Services;
 using Stubble.Core.Builders;
 
-namespace Montr.Messages.Impl.Services
+namespace Montr.Messages.Services.Implementations
 {
 	public class MustacheTemplateRenderer : ITemplateRenderer
 	{

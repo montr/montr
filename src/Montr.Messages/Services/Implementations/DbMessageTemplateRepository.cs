@@ -9,11 +9,11 @@ using Montr.MasterData.Entities;
 using Montr.MasterData.Models;
 using Montr.MasterData.Services;
 using Montr.MasterData.Services.Implementations;
-using Montr.Messages.Impl.Entities;
+using Montr.Messages.Entities;
 using Montr.Messages.Models;
 using Montr.Metadata.Services;
 
-namespace Montr.Messages.Impl.Services
+namespace Montr.Messages.Services.Implementations
 {
 	public class DbMessageTemplateRepository : DbClassifierRepository<MessageTemplate>
 	{

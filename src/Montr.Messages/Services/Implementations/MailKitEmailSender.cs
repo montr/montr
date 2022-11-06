@@ -5,9 +5,8 @@ using MailKit.Security;
 using Microsoft.Extensions.Options;
 using MimeKit;
 using MimeKit.Text;
-using Montr.Messages.Services;
 
-namespace Montr.Messages.Impl.Services
+namespace Montr.Messages.Services.Implementations
 {
 	public class MailKitEmailSender : IEmailSender
 	{
