@@ -5,12 +5,12 @@ using System.Threading.Tasks;
 using LinqToDB;
 using MediatR;
 using Montr.Core.Services;
-using Montr.Kompany.Impl.Entities;
+using Montr.Kompany.Entities;
 using Montr.Kompany.Models;
 using Montr.Kompany.Queries;
 using Montr.MasterData.Impl.Entities;
 
-namespace Montr.Kompany.Impl.QueryHandlers
+namespace Montr.Kompany.Services.QueryHandlers
 {
 	public class GetUserCompanyListHandler : IRequestHandler<GetUserCompanyList, ICollection<Company>>
 	{

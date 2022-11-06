@@ -7,7 +7,7 @@ using Montr.Kompany.Models;
 using Montr.MasterData.Models;
 using Montr.MasterData.Services;
 
-namespace Montr.Kompany.Registration.Services
+namespace Montr.Kompany.Registration.Services.Implementations
 {
 	public class RegisterClassifiersStartupTask : IStartupTask
 	{

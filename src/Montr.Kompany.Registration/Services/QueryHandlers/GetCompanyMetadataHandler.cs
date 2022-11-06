@@ -8,11 +8,10 @@ using Montr.Core.Services;
 using Montr.Kompany.Models;
 using Montr.Kompany.Queries;
 using Montr.MasterData;
-using Montr.MasterData.Models;
 using Montr.MasterData.Services;
 using Montr.Metadata.Models;
 
-namespace Montr.Kompany.Impl.QueryHandlers
+namespace Montr.Kompany.Registration.Services.QueryHandlers
 {
 	// todo: why named GetCompanyMetadata, if returns metadata of "company registration request" document?
 	// fixme: rename to GetClassifierMetadataProvider (?)

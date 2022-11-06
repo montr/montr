@@ -9,7 +9,7 @@ using Montr.Kompany.Models;
 using Montr.Kompany.Registration.Commands;
 using Montr.MasterData.Services;
 
-namespace Montr.Kompany.Registration.Impl.CommandHandlers
+namespace Montr.Kompany.Registration.Services.CommandHandlers
 {
 	public class CreateCompanyRegistrationRequestHandler : IRequestHandler<CreateCompanyRegistrationRequest, ApiResult>
 	{

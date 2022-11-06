@@ -1,8 +1,7 @@
 ﻿namespace Montr.Kompany
 {
-	public class ClassifierTypeCode
+	public static class ClassifierTypeCode
 	{
 		public static readonly string Company = "company";
-
 	}
 }

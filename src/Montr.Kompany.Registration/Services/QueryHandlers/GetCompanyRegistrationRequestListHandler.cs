@@ -6,7 +6,7 @@ using Montr.Core.Services;
 using Montr.Docs.Models;
 using Montr.Kompany.Registration.Queries;
 
-namespace Montr.Kompany.Registration.Impl.QueryHandlers
+namespace Montr.Kompany.Registration.Services.QueryHandlers
 {
 	public class GetCompanyRegistrationRequestListHandler : IRequestHandler<GetCompanyRegistrationRequestList, ICollection<Document>>
 	{

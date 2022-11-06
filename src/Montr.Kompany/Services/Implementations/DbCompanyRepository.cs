@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using LinqToDB;
 using Montr.Core.Models;
 using Montr.Core.Services;
-using Montr.Kompany.Impl.Entities;
+using Montr.Kompany.Entities;
 using Montr.Kompany.Models;
 using Montr.MasterData.Commands;
 using Montr.MasterData.Impl.Entities;
@@ -13,7 +13,7 @@ using Montr.MasterData.Models;
 using Montr.MasterData.Services;
 using Montr.Metadata.Services;
 
-namespace Montr.Kompany.Impl.Services
+namespace Montr.Kompany.Services.Implementations
 {
 	public class DbCompanyRepository : DbClassifierRepository<Company>
 	{

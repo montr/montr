@@ -4,10 +4,9 @@ using System.Threading.Tasks;
 using LinqToDB;
 using Microsoft.AspNetCore.Http;
 using Montr.Core.Services;
-using Montr.Kompany.Impl.Entities;
-using Montr.Kompany.Services;
+using Montr.Kompany.Entities;
 
-namespace Montr.Kompany.Impl.Services
+namespace Montr.Kompany.Services.Implementations
 {
 	public class DefaultCurrentCompanyProvider : ICurrentCompanyProvider
 	{

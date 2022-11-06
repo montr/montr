@@ -10,15 +10,14 @@ using Montr.Docs;
 using Montr.Docs.Models;
 using Montr.Docs.Services;
 using Montr.Kompany.Commands;
-using Montr.Kompany.Impl.Entities;
+using Montr.Kompany.Entities;
 using Montr.Kompany.Models;
 using Montr.MasterData.Services;
 using Montr.Metadata.Models;
 using Montr.Metadata.Services;
 using Montr.Worker.Services;
-using EntityTypeCode = Montr.Docs.EntityTypeCode;
 
-namespace Montr.Kompany.Impl.CommandHandlers
+namespace Montr.Kompany.Registration.Services.CommandHandlers
 {
 	// todo: remove with old registration ui
 	public class CreateCompanyHandler : IRequestHandler<CreateCompany, ApiResult>
@@ -78,7 +77,7 @@ namespace Montr.Kompany.Impl.CommandHandlers
 
 			var manageFieldDataRequest = new ManageFieldDataRequest
 			{
-				EntityTypeCode = EntityTypeCode.Document,
+				EntityTypeCode = Docs.EntityTypeCode.Document,
 				EntityUid = documentUid,
 				Metadata = metadata.Rows,
 				Item = company
@@ -139,7 +138,7 @@ namespace Montr.Kompany.Impl.CommandHandlers
 				// todo: auto-approve request, notifications
 				_jobManager.Enqueue<ISender>(x => x.Send(new RunAutomations
 				{
-					EntityTypeCode = EntityTypeCode.Document,
+					EntityTypeCode = Docs.EntityTypeCode.Document,
 					EntityUid = documentUid
 				}, cancellationToken));
 

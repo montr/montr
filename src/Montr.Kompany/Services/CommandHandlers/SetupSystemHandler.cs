@@ -10,13 +10,13 @@ using Montr.Core.Services;
 using Montr.Idx.Models;
 using Montr.Idx.Services;
 using Montr.Kompany.Commands;
-using Montr.Kompany.Impl.Entities;
+using Montr.Kompany.Entities;
 using Montr.Kompany.Models;
 using Montr.MasterData.Services;
 using Montr.Settings.Services;
 using ClientRoutes = Montr.Core.ClientRoutes;
 
-namespace Montr.Kompany.Impl.CommandHandlers
+namespace Montr.Kompany.Services.CommandHandlers
 {
 	public class SetupSystemHandler : IRequestHandler<SetupSystem, ApiResult>
 	{

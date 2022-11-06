@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Montr.Core.Services;
 using Montr.Docs.Models;
 
-namespace Montr.Kompany.Registration.Impl.Services
+namespace Montr.Kompany.Registration.Services.Implementations
 {
 	public class CompanyRequestValidationHelper
 	{

@@ -3,20 +3,20 @@ using System.Threading.Tasks;
 using MediatR;
 using Montr.Core.Models;
 using Montr.Core.Services;
-using Montr.Docs.Commands;
+using Montr.Docs;
 using Montr.Docs.Services;
 using Montr.Kompany.Registration.Commands;
-using Montr.Kompany.Registration.Impl.Services;
+using Montr.Kompany.Registration.Services.Implementations;
 
-namespace Montr.Kompany.Registration.Impl.CommandHandlers
+namespace Montr.Kompany.Registration.Services.CommandHandlers
 {
-	public class DeleteCompanyRegistrationRequestHandler : IRequestHandler<DeleteCompanyRegistrationRequest, ApiResult>
+	public class SubmitCompanyRegistrationRequestHandler : IRequestHandler<SubmitCompanyRegistrationRequest, ApiResult>
 	{
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly CompanyRequestValidationHelper _validationHelper;
 		private readonly IDocumentService _documentService;
 
-		public DeleteCompanyRegistrationRequestHandler(IUnitOfWorkFactory unitOfWorkFactory,
+		public SubmitCompanyRegistrationRequestHandler(IUnitOfWorkFactory unitOfWorkFactory,
 			CompanyRequestValidationHelper validationHelper, IDocumentService documentService)
 		{
 			_unitOfWorkFactory = unitOfWorkFactory;
@@ -24,17 +24,13 @@ namespace Montr.Kompany.Registration.Impl.CommandHandlers
 			_documentService = documentService;
 		}
 
-		public async Task<ApiResult> Handle(DeleteCompanyRegistrationRequest request, CancellationToken cancellationToken)
+		public async Task<ApiResult> Handle(SubmitCompanyRegistrationRequest request, CancellationToken cancellationToken)
 		{
 			await _validationHelper.EnsureCreatedByCurrentUser(request.DocumentUid, request.UserUid, cancellationToken);
 
 			using (var scope = _unitOfWorkFactory.Create())
 			{
-				var result = await _documentService.Delete(new DeleteDocument
-				{
-					UserUid = request.UserUid,
-					Uids = new[] { request.DocumentUid }
-				}, cancellationToken);
+				var result = await _documentService.ChangeStatus(request.DocumentUid, DocumentStatusCode.Submitted, cancellationToken);
 
 				if (result.Success) scope.Commit();
 

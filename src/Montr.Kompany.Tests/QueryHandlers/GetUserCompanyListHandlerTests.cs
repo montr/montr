@@ -1,13 +1,12 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using LinqToDB;
-using Montr.Core.Services;
 using Montr.Core.Services.Implementations;
 using Montr.Idx.Models;
-using Montr.Kompany.Impl.Entities;
-using Montr.Kompany.Impl.QueryHandlers;
+using Montr.Kompany.Entities;
 using Montr.Kompany.Models;
 using Montr.Kompany.Queries;
+using Montr.Kompany.Services.QueryHandlers;
 using Montr.Kompany.Tests.Services;
 using Montr.MasterData.Tests.Services;
 using NUnit.Framework;

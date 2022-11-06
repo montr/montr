@@ -6,7 +6,7 @@ using Montr.Docs.Models;
 using Montr.Kompany.Registration.Commands;
 using Montr.Metadata.Models;
 
-namespace Montr.Kompany.Registration.Services
+namespace Montr.Kompany.Registration.Services.Implementations
 {
 	public class ConfigurationStartupTask : IStartupTask
 	{

@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Montr.Core;
 using Montr.Core.Services;
-using Montr.Kompany.Registration.Services;
+using Montr.Kompany.Registration.Services.Implementations;
 
 namespace Montr.Kompany.Registration
 {
@@ -12,6 +12,7 @@ namespace Montr.Kompany.Registration
 		{
 			appBuilder.Services.AddTransient<IStartupTask, RegisterClassifiersStartupTask>();
 			appBuilder.Services.AddTransient<IStartupTask, ConfigurationStartupTask>();
+			appBuilder.Services.AddTransient<CompanyRequestValidationHelper, CompanyRequestValidationHelper>();
 		}
 	}
 }
