@@ -1,6 +1,6 @@
 ﻿using LinqToDB.Mapping;
 using Montr.Core.Services.Implementations;
-using Montr.Idx.Impl.Services;
+using Montr.Idx.Services.Implementations;
 using NUnit.Framework;
 
 namespace Montr.Idx.Tests

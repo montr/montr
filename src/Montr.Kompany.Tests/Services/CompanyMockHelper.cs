@@ -2,7 +2,7 @@
 using Montr.Core.Services;
 using Montr.Core.Services.Implementations;
 using Montr.Docs.Services.Implementations;
-using Montr.Idx.Impl.Services;
+using Montr.Idx.Services.Implementations;
 using Montr.Idx.Tests.Services;
 using Montr.Kompany.Impl.Services;
 using Montr.MasterData.Impl.Services;

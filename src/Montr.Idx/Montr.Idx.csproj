@@ -1,17 +1,27 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net6.0</TargetFramework>
+	</PropertyGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="MediatR" Version="11.0.0" />
+		<PackageReference Include="linq2db" Version="3.7.0" />
+		<PackageReference Include="linq2db.Identity" Version="3.3.0" />
+		<PackageReference Include="MediatR" Version="11.0.0" />
+		<PackageReference Include="OpenIddict.AspNetCore" Version="3.1.1" />
+		<PackageReference Include="OpenIddict.EntityFrameworkCore" Version="3.1.1" />
+		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="6.0.7" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\Montr.Core\Montr.Core.csproj" />
-	  <ProjectReference Include="..\Montr.MasterData\Montr.MasterData.csproj" />
-	  <ProjectReference Include="..\Montr.Messages\Montr.Messages.csproj" />
+		<ProjectReference Include="..\Montr.Core\Montr.Core.csproj" />
+		<ProjectReference Include="..\Montr.MasterData.Impl\Montr.MasterData.Impl.csproj" />
+		<ProjectReference Include="..\Montr.MasterData\Montr.MasterData.csproj" />
+		<ProjectReference Include="..\Montr.Messages\Montr.Messages.csproj" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<Folder Include="Services\EventHandlers" />
 	</ItemGroup>
 
 </Project>

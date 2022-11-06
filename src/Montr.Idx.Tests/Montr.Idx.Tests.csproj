@@ -13,7 +13,6 @@
 	</ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Montr.Idx.Impl\Montr.Idx.Impl.csproj" />
     <ProjectReference Include="..\Montr.Idx\Montr.Idx.csproj" />
     <ProjectReference Include="..\Montr.MasterData.Tests\Montr.MasterData.Tests.csproj" />
     <ProjectReference Include="..\Montr.Messages.Impl\Montr.Messages.Impl.csproj" />

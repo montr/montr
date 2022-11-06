@@ -34,7 +34,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Montr.Docs\Montr.Docs.csproj" />
-    <ProjectReference Include="..\Montr.Idx.Impl\Montr.Idx.Impl.csproj" />
     <ProjectReference Include="..\Montr.Idx.Plugin.Facebook\Montr.Idx.Plugin.Facebook.csproj" />
     <ProjectReference Include="..\Montr.Idx.Plugin.Google\Montr.Idx.Plugin.Google.csproj" />
     <ProjectReference Include="..\Montr.Idx.Plugin.MicrosoftAccount\Montr.Idx.Plugin.MicrosoftAccount.csproj" />

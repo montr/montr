@@ -8,8 +8,8 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
-using Montr.Idx.Impl.Entities;
-using Montr.Idx.Impl.Services;
+using Montr.Idx.Entities;
+using Montr.Idx.Services.Implementations;
 using Moq;
 
 namespace Montr.Idx.Tests.Services

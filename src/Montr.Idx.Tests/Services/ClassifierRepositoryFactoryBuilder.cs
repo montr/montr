@@ -2,7 +2,7 @@
 using System.Threading;
 using Microsoft.Extensions.Logging.Abstractions;
 using Montr.Core.Services;
-using Montr.Idx.Impl.Services;
+using Montr.Idx.Services.Implementations;
 using Montr.MasterData.Impl.Services;
 using Montr.MasterData.Models;
 using Montr.MasterData.Services;
