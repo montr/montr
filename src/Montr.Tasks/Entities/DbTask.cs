@@ -3,7 +3,7 @@ using System.Diagnostics;
 using LinqToDB;
 using LinqToDB.Mapping;
 
-namespace Montr.Tasks.Impl.Entities
+namespace Montr.Tasks.Entities
 {
 	[Table(Schema = "montr", Name = "task")]
 	[DebuggerDisplay("{" + nameof(DebuggerDisplay) + ",nq}")]

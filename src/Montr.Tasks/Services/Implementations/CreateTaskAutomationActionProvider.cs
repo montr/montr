@@ -10,9 +10,8 @@ using Montr.Core.Services;
 using Montr.MasterData.Models;
 using Montr.Metadata.Models;
 using Montr.Tasks.Models;
-using Montr.Tasks.Services;
 
-namespace Montr.Tasks.Impl.Services
+namespace Montr.Tasks.Services.Implementations
 {
 	public class CreateTaskAutomationActionProvider : IAutomationActionProvider
 	{

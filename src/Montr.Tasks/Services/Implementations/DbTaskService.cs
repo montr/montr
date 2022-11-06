@@ -5,11 +5,10 @@ using System.Threading.Tasks;
 using LinqToDB;
 using Montr.Core.Models;
 using Montr.Core.Services;
-using Montr.Tasks.Impl.Entities;
+using Montr.Tasks.Entities;
 using Montr.Tasks.Models;
-using Montr.Tasks.Services;
 
-namespace Montr.Tasks.Impl.Services
+namespace Montr.Tasks.Services.Implementations
 {
 	public class DbTaskService : ITaskService
 	{

@@ -6,7 +6,7 @@ using Montr.Core.Services;
 using Montr.Tasks.Models;
 using Montr.Tasks.Queries;
 
-namespace Montr.Tasks.Impl.QueryHandlers
+namespace Montr.Tasks.Services.QueryHandlers
 {
 	public class GetTaskHandler : IRequestHandler<GetTask, TaskModel>
 	{

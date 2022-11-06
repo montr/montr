@@ -6,10 +6,10 @@ using LinqToDB;
 using Montr.Core.Models;
 using Montr.Core.Services;
 using Montr.MasterData.Entities;
-using Montr.Tasks.Impl.Entities;
+using Montr.Tasks.Entities;
 using Montr.Tasks.Models;
 
-namespace Montr.Tasks.Impl.Services
+namespace Montr.Tasks.Services.Implementations
 {
 	public class DbTaskRepository : IRepository<TaskModel>
 	{

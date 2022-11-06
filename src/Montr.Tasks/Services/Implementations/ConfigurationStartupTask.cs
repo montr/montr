@@ -4,7 +4,7 @@ using Montr.Core.Services;
 using Montr.Metadata.Models;
 using Montr.Tasks.Models;
 
-namespace Montr.Tasks.Services
+namespace Montr.Tasks.Services.Implementations
 {
 	public class ConfigurationStartupTask : IStartupTask
 	{

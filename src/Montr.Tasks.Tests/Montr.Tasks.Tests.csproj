@@ -6,7 +6,6 @@
     </PropertyGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\Montr.Tasks.Impl\Montr.Tasks.Impl.csproj" />
       <ProjectReference Include="..\Montr.Tasks\Montr.Tasks.csproj" />
     </ItemGroup>
 

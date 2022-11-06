@@ -10,10 +10,10 @@ using Montr.MasterData.Models;
 using Montr.MasterData.Services;
 using Montr.MasterData.Services.Implementations;
 using Montr.Metadata.Services;
-using Montr.Tasks.Impl.Entities;
+using Montr.Tasks.Entities;
 using Montr.Tasks.Models;
 
-namespace Montr.Tasks.Impl.Services
+namespace Montr.Tasks.Services.Implementations
 {
 	public class DbTaskTypeRepository : DbClassifierRepository<TaskType>
 	{

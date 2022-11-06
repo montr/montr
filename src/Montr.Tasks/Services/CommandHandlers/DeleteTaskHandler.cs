@@ -5,31 +5,30 @@ using MediatR;
 using Montr.Core.Models;
 using Montr.Core.Services;
 using Montr.Tasks.Commands;
-using Montr.Tasks.Services;
 
-namespace Montr.Tasks.Impl.CommandHandlers
+namespace Montr.Tasks.Services.CommandHandlers
 {
-	public class UpdateTaskHandler : IRequestHandler<UpdateTask, ApiResult>
+	public class DeleteTaskHandler : IRequestHandler<DeleteTask, ApiResult>
 	{
 		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly ITaskService _taskService;
 
-		public UpdateTaskHandler(IUnitOfWorkFactory unitOfWorkFactory, ITaskService taskService)
+		public DeleteTaskHandler(IUnitOfWorkFactory unitOfWorkFactory, ITaskService taskService)
 		{
 			_unitOfWorkFactory = unitOfWorkFactory;
 			_taskService = taskService;
 		}
 
-		public async Task<ApiResult> Handle(UpdateTask request, CancellationToken cancellationToken)
+		public async Task<ApiResult> Handle(DeleteTask request, CancellationToken cancellationToken)
 		{
-			var item = request.Item ?? throw new ArgumentNullException(nameof(request.Item));
+			var uids = request.Uids ?? throw new ArgumentNullException(nameof(request.Uids));
 
 			using (var scope = _unitOfWorkFactory.Create())
 			{
-				var result = await _taskService.Update(item, cancellationToken);
-
+				var result = await _taskService.Delete(uids, cancellationToken);
+				
 				if (result.Success) scope.Commit();
-
+				
 				return result;
 			}
 		}
