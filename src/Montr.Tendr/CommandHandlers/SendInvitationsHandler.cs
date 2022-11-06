@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -11,10 +10,10 @@ using Montr.Kompany.Impl.Entities;
 using Montr.MasterData.Impl.Entities;
 using Montr.Messages.Services;
 using Montr.Tendr.Commands;
-using Montr.Tendr.Impl.Entities;
+using Montr.Tendr.Entities;
 using Montr.Tendr.Models;
 
-namespace Montr.Tendr.Impl.CommandHandlers
+namespace Montr.Tendr.CommandHandlers
 {
 	public class SendInvitationsHandler : IRequestHandler<SendInvitations, ApiResult>
 	{

@@ -7,13 +7,12 @@ using MediatR;
 using Montr.Core.Models;
 using Montr.Core.Services;
 using Montr.MasterData.Impl.Entities;
-using Montr.MasterData.Models;
 using Montr.MasterData.Services;
-using Montr.Tendr.Impl.Entities;
+using Montr.Tendr.Entities;
 using Montr.Tendr.Models;
 using Montr.Tendr.Queries;
 
-namespace Montr.Tendr.Impl.QueryHandlers
+namespace Montr.Tendr.QueryHandlers
 {
 	public class GetInvitationListHandler : IRequestHandler<GetInvitationList, SearchResult<InvitationListItem>>
 	{

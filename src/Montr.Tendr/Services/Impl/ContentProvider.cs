@@ -2,7 +2,7 @@
 using Montr.Core.Models;
 using Montr.Core.Services;
 
-namespace Montr.Tendr.Impl.Services
+namespace Montr.Tendr.Services.Impl
 {
 	public class ContentProvider : IContentProvider
 	{

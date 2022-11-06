@@ -17,7 +17,7 @@
     <ProjectReference Include="..\Montr.MasterData.Impl\Montr.MasterData.Impl.csproj" />
     <ProjectReference Include="..\Montr.MasterData.Tests\Montr.MasterData.Tests.csproj" />
     <ProjectReference Include="..\Montr.Metadata.Impl\Montr.Metadata.Impl.csproj" />
-    <ProjectReference Include="..\Montr.Tendr.Impl\Montr.Tendr.Impl.csproj" />
+    <ProjectReference Include="..\Montr.Tendr\Montr.Tendr.csproj" />
   </ItemGroup>
 
   <ItemGroup>

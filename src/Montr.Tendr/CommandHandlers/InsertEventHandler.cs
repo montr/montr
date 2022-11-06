@@ -9,10 +9,10 @@ using Montr.Core.Models;
 using Montr.Core.Services;
 using Montr.Core.Services.Impl;
 using Montr.Tendr.Commands;
-using Montr.Tendr.Impl.Entities;
+using Montr.Tendr.Entities;
 using Montr.Tendr.Models;
 
-namespace Montr.Tendr.Impl.CommandHandlers
+namespace Montr.Tendr.CommandHandlers
 {
 	public class InsertEventHandler : IRequestHandler<InsertEvent, ApiResult>
 	{

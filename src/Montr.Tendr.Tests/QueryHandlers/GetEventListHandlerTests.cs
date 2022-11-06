@@ -2,8 +2,8 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Montr.Core.Services.Impl;
-using Montr.Tendr.Impl.QueryHandlers;
 using Montr.Tendr.Queries;
+using Montr.Tendr.QueryHandlers;
 using NUnit.Framework;
 
 namespace Montr.Tendr.Tests.QueryHandlers

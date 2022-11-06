@@ -7,8 +7,8 @@ using Montr.MasterData.Models;
 using Montr.MasterData.Services;
 using Montr.Metadata.Impl.Services;
 using Montr.Metadata.Models;
-using Montr.Tendr.Impl.QueryHandlers;
 using Montr.Tendr.Queries;
+using Montr.Tendr.QueryHandlers;
 using Moq;
 using NUnit.Framework;
 

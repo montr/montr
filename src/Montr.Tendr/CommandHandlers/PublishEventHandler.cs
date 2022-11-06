@@ -6,11 +6,11 @@ using MediatR;
 using Montr.Core.Models;
 using Montr.Core.Services;
 using Montr.Tendr.Commands;
-using Montr.Tendr.Impl.Entities;
+using Montr.Tendr.Entities;
 using Montr.Tendr.Models;
 using Montr.Worker.Services;
 
-namespace Montr.Tendr.Impl.CommandHandlers
+namespace Montr.Tendr.CommandHandlers
 {
 	public class PublishEventHandler : IRequestHandler<PublishEvent, ApiResult>
 	{

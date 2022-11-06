@@ -7,9 +7,9 @@ using MediatR;
 using Montr.Core.Models;
 using Montr.Core.Services;
 using Montr.Tendr.Commands;
-using Montr.Tendr.Impl.Entities;
+using Montr.Tendr.Entities;
 
-namespace Montr.Tendr.Impl.CommandHandlers
+namespace Montr.Tendr.CommandHandlers
 {
 	public class UpdateInvitationHandler : IRequestHandler<UpdateInvitation, ApiResult>
 	{

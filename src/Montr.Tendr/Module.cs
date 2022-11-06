@@ -2,6 +2,7 @@
 using Montr.Core;
 using Montr.Core.Services;
 using Montr.Tendr.Services;
+using Montr.Tendr.Services.Impl;
 
 namespace Montr.Tendr
 {
@@ -12,6 +13,8 @@ namespace Montr.Tendr
 		{
 			appBuilder.Services.AddTransient<IStartupTask, RegisterMessageTemplateStartupTask>();
 			appBuilder.Services.AddTransient<IStartupTask, ConfigurationStartupTask>();
+
+			appBuilder.Services.AddSingleton<IContentProvider, ContentProvider>();
 		}
 	}
 }

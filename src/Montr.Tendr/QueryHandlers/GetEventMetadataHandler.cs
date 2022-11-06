@@ -7,7 +7,7 @@ using Montr.Metadata.Models;
 using Montr.Tendr.Models;
 using Montr.Tendr.Queries;
 
-namespace Montr.Tendr.Impl.QueryHandlers
+namespace Montr.Tendr.QueryHandlers
 {
 	public class GetEventMetadataHandler : IRequestHandler<GetEventMetadata, DataView>
 	{
