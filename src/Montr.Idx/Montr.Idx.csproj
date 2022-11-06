@@ -20,8 +20,4 @@
 		<ProjectReference Include="..\Montr.Messages\Montr.Messages.csproj" />
 	</ItemGroup>
 
-	<ItemGroup>
-		<Folder Include="Services\EventHandlers" />
-	</ItemGroup>
-
 </Project>
