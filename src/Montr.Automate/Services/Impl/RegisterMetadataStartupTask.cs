@@ -6,7 +6,7 @@ using Montr.Core.Services;
 using Montr.Metadata.Models;
 using Montr.Metadata.Services;
 
-namespace Montr.Automate.Services
+namespace Montr.Automate.Services.Impl
 {
 	public class RegisterMetadataStartupTask : IStartupTask
 	{

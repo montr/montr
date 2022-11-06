@@ -1,6 +1,6 @@
 ﻿namespace Montr.Automate
 {
-	public class ViewCode
+	public static class ViewCode
 	{
 		// public static readonly string AutomationList = "automation-list";
 

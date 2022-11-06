@@ -1,7 +1,6 @@
-﻿using Montr.Automate.Services;
-using Montr.Core.Services;
+﻿using Montr.Core.Services;
 
-namespace Montr.Automate.Impl.Services
+namespace Montr.Automate.Services.Impl
 {
 	public class DefaultAutomationProviderRegistry : IAutomationProviderRegistry
 	{

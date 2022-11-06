@@ -1,7 +1,7 @@
 ﻿using Montr.Automate.Models;
 using Montr.Metadata.Services;
 
-namespace Montr.Automate.Services
+namespace Montr.Automate.Services.Impl
 {
 	// todo: remove attribute, move to impl
 	public class AutomationConditionListFieldProvider : DefaultFieldProvider<AutomationConditionListField, AutomationCondition[]>

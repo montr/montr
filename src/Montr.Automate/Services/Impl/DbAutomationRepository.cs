@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using LinqToDB;
 using Montr.Automate.Impl.Entities;
 using Montr.Automate.Models;
-using Montr.Automate.Services;
 using Montr.Core.Models;
 using Montr.Core.Services;
 using Montr.MasterData.Commands;
@@ -16,7 +15,7 @@ using Montr.MasterData.Models;
 using Montr.MasterData.Services;
 using Montr.Metadata.Services;
 
-namespace Montr.Automate.Impl.Services
+namespace Montr.Automate.Services.Impl
 {
 	public class DbAutomationRepository : DbClassifierRepository<Automation>
 	{

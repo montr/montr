@@ -33,7 +33,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\Montr.Automate.Impl\Montr.Automate.Impl.csproj" />
     <ProjectReference Include="..\Montr.Docs.Impl\Montr.Docs.Impl.csproj" />
     <ProjectReference Include="..\Montr.Docs\Montr.Docs.csproj" />
     <ProjectReference Include="..\Montr.Idx.Impl\Montr.Idx.Impl.csproj" />

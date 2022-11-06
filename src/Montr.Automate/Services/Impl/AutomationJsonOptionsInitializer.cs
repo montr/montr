@@ -3,11 +3,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Montr.Automate.Models;
-using Montr.Automate.Services;
 using Montr.Core.Services;
 using Montr.Core.Services.Impl;
 
-namespace Montr.Automate.Impl.Services
+namespace Montr.Automate.Services.Impl
 {
 	public class AutomationJsonOptionsInitializer : IStartupTask
 	{

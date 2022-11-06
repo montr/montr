@@ -4,12 +4,11 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Montr.Automate.Models;
-using Montr.Automate.Services;
 using Montr.Core.Models;
 using Montr.Core.Services;
 using Montr.MasterData.Services;
 
-namespace Montr.Automate.Impl.Services
+namespace Montr.Automate.Services.Impl
 {
 	public class DefaultAutomationRunner : IAutomationRunner
 	{

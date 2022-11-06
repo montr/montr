@@ -3,13 +3,12 @@ using System.Threading;
 using System.Threading.Tasks;
 using Montr.Automate.Impl.Models;
 using Montr.Automate.Models;
-using Montr.Automate.Services;
 using Montr.Messages.Services;
 using Montr.Metadata.Models;
 
-namespace Montr.Automate.Impl.Services
+namespace Montr.Automate.Services.Impl
 {
-	// todo: move to Messages?
+	// todo: move to -Messages- separate project and remove reference to Messages?
 	public class NotifyByEmailAutomationActionProvider : IAutomationActionProvider
 	{
 		private readonly IAutomationContextProvider _automationContextProvider;

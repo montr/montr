@@ -2,11 +2,10 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Montr.Automate.Models;
-using Montr.Automate.Services;
 using Montr.Core.Services;
 using Montr.Metadata.Models;
 
-namespace Montr.Automate.Impl.Services
+namespace Montr.Automate.Services.Impl
 {
 	public class DefaultAutomationContextProvider : IAutomationContextProvider
 	{

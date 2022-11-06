@@ -5,7 +5,6 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\Montr.Automate.Impl\Montr.Automate.Impl.csproj" />
 		<ProjectReference Include="..\Montr.Automate\Montr.Automate.csproj" />
 		<ProjectReference Include="..\Montr.MasterData.Tests\Montr.MasterData.Tests.csproj" />
 		<ProjectReference Include="..\Montr.Metadata.Impl\Montr.Metadata.Impl.csproj" />
