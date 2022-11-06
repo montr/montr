@@ -1,6 +1,6 @@
 ﻿using System.Linq;
-using Montr.MasterData.Impl.Services;
 using Montr.MasterData.Models;
+using Montr.MasterData.Services.Implementations;
 using NUnit.Framework;
 
 namespace Montr.MasterData.Tests.Services

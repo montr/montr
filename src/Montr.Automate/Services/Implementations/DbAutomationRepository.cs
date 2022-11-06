@@ -9,10 +9,10 @@ using Montr.Automate.Models;
 using Montr.Core.Models;
 using Montr.Core.Services;
 using Montr.MasterData.Commands;
-using Montr.MasterData.Impl.Entities;
-using Montr.MasterData.Impl.Services;
+using Montr.MasterData.Entities;
 using Montr.MasterData.Models;
 using Montr.MasterData.Services;
+using Montr.MasterData.Services.Implementations;
 using Montr.Metadata.Services;
 
 namespace Montr.Automate.Services.Implementations

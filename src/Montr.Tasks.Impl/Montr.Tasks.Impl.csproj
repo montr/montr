@@ -8,7 +8,6 @@
     <ItemGroup>
       <ProjectReference Include="..\Montr.Automate\Montr.Automate.csproj" />
       <ProjectReference Include="..\Montr.Idx\Montr.Idx.csproj" />
-      <ProjectReference Include="..\Montr.MasterData.Impl\Montr.MasterData.Impl.csproj" />
       <ProjectReference Include="..\Montr.Tasks\Montr.Tasks.csproj" />
     </ItemGroup>
 

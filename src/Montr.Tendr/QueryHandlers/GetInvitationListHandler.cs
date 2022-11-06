@@ -6,7 +6,7 @@ using LinqToDB;
 using MediatR;
 using Montr.Core.Models;
 using Montr.Core.Services;
-using Montr.MasterData.Impl.Entities;
+using Montr.MasterData.Entities;
 using Montr.MasterData.Services;
 using Montr.Tendr.Entities;
 using Montr.Tendr.Models;

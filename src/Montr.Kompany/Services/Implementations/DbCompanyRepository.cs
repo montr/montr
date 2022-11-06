@@ -7,10 +7,10 @@ using Montr.Core.Services;
 using Montr.Kompany.Entities;
 using Montr.Kompany.Models;
 using Montr.MasterData.Commands;
-using Montr.MasterData.Impl.Entities;
-using Montr.MasterData.Impl.Services;
+using Montr.MasterData.Entities;
 using Montr.MasterData.Models;
 using Montr.MasterData.Services;
+using Montr.MasterData.Services.Implementations;
 using Montr.Metadata.Services;
 
 namespace Montr.Kompany.Services.Implementations

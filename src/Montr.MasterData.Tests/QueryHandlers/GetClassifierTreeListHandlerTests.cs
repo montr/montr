@@ -2,10 +2,10 @@
 using System.Threading.Tasks;
 using Montr.Core.Services;
 using Montr.Core.Services.Implementations;
-using Montr.MasterData.Impl.QueryHandlers;
-using Montr.MasterData.Impl.Services;
 using Montr.MasterData.Models;
 using Montr.MasterData.Queries;
+using Montr.MasterData.Services.Implementations;
+using Montr.MasterData.Services.QueryHandlers;
 using Montr.MasterData.Tests.Services;
 using NUnit.Framework;
 

@@ -7,7 +7,7 @@ using MediatR;
 using Montr.Core.Models;
 using Montr.Core.Services;
 using Montr.Kompany.Entities;
-using Montr.MasterData.Impl.Entities;
+using Montr.MasterData.Entities;
 using Montr.Messages.Services;
 using Montr.Tendr.Commands;
 using Montr.Tendr.Entities;

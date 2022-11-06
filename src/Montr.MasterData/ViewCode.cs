@@ -1,6 +1,6 @@
 ﻿namespace Montr.MasterData
 {
-	public class ViewCode
+	public static class ViewCode
 	{
 		public static readonly string ClassifierTypeTabs = "ClassifierType/Tabs";
 

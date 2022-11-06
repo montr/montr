@@ -17,7 +17,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <ProjectReference Include="..\Montr.MasterData.Impl\Montr.MasterData.Impl.csproj" />
 	  <ProjectReference Include="..\Montr.MasterData.Plugin.GovRu\Montr.MasterData.Plugin.GovRu.csproj" />
 	</ItemGroup>
 

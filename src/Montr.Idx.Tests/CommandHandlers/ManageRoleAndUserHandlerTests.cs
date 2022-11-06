@@ -8,8 +8,8 @@ using Montr.Core.Services.Implementations;
 using Montr.Idx.Models;
 using Montr.Idx.Tests.Services;
 using Montr.MasterData.Commands;
-using Montr.MasterData.Impl.CommandHandlers;
 using Montr.MasterData.Models;
+using Montr.MasterData.Services.CommandHandlers;
 using Montr.MasterData.Tests.Services;
 using NUnit.Framework;
 

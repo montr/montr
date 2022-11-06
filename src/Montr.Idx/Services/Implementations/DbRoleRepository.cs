@@ -8,9 +8,9 @@ using Montr.Core.Services;
 using Montr.Idx.Entities;
 using Montr.Idx.Models;
 using Montr.MasterData.Commands;
-using Montr.MasterData.Impl.Services;
 using Montr.MasterData.Models;
 using Montr.MasterData.Services;
+using Montr.MasterData.Services.Implementations;
 using Montr.Metadata.Services;
 
 namespace Montr.Idx.Services.Implementations

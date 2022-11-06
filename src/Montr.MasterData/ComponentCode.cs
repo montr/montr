@@ -1,6 +1,6 @@
 ﻿namespace Montr.MasterData
 {
-	public class ComponentCode
+	public static class ComponentCode
 	{
 		public static readonly string TabEditClassifierType = "@montr-master-data/components/tab-edit-classifier-type";
 

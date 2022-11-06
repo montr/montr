@@ -8,7 +8,7 @@ using Montr.Core.Services;
 using Montr.Kompany.Entities;
 using Montr.Kompany.Models;
 using Montr.Kompany.Queries;
-using Montr.MasterData.Impl.Entities;
+using Montr.MasterData.Entities;
 
 namespace Montr.Kompany.Services.QueryHandlers
 {

@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 using Montr.Core.Services;
 using Montr.Core.Services.Implementations;
 using Montr.MasterData.Commands;
-using Montr.MasterData.Impl.CommandHandlers;
-using Montr.MasterData.Impl.Services;
 using Montr.MasterData.Models;
 using Montr.MasterData.Plugin.GovRu.Services;
 using Montr.MasterData.Services;
+using Montr.MasterData.Services.CommandHandlers;
+using Montr.MasterData.Services.Implementations;
 using NUnit.Framework;
 
 namespace Montr.MasterData.Plugin.GovRu.Tests.Services
