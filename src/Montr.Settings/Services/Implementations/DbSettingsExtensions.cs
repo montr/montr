@@ -12,7 +12,7 @@ using Montr.Core.Services;
 using Montr.Core.Services.Implementations;
 using Montr.Settings.Entities;
 
-namespace Montr.Settings.Services.Impl
+namespace Montr.Settings.Services.Implementations
 {
 	public static class DbSettingsExtensions
 	{

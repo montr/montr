@@ -12,7 +12,7 @@ using Montr.Core.Events;
 using Montr.Core.Services;
 using Montr.Settings.Entities;
 
-namespace Montr.Settings.Services.Impl
+namespace Montr.Settings.Services.Implementations
 {
 	public class DbSettingsRepository : ISettingsRepository
 	{

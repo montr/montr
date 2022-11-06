@@ -9,7 +9,7 @@ using Microsoft.Extensions.Logging;
 using Montr.Core;
 using Montr.Core.Services;
 using Montr.Core.Services.Implementations;
-using Montr.Settings.Services.Impl;
+using Montr.Settings.Services.Implementations;
 
 namespace Host
 {

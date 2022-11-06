@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Montr.Core;
 using Montr.Settings.Services;
-using Montr.Settings.Services.Impl;
+using Montr.Settings.Services.Implementations;
 
 namespace Montr.Settings
 {
