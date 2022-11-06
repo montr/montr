@@ -1,7 +1,7 @@
 ﻿using LinqToDB;
 using LinqToDB.Mapping;
 
-namespace Montr.Metadata.Impl.Entities
+namespace Montr.Metadata.Entities
 {
 	[Table(Schema = "montr", Name = "field_metadata")]
 	public class DbFieldMetadata

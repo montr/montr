@@ -6,9 +6,9 @@ using MediatR;
 using Montr.Core.Models;
 using Montr.Core.Services;
 using Montr.Metadata.Commands;
-using Montr.Metadata.Impl.Entities;
+using Montr.Metadata.Entities;
 
-namespace Montr.Metadata.Impl.CommandHandlers
+namespace Montr.Metadata.Services.CommandHandlers
 {
 	public class DeleteDataFieldHandler : IRequestHandler<DeleteDataField, ApiResult>
 	{

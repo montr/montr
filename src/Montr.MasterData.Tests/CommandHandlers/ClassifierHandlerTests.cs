@@ -12,9 +12,9 @@ using Montr.MasterData.Services;
 using Montr.MasterData.Services.CommandHandlers;
 using Montr.MasterData.Services.Implementations;
 using Montr.MasterData.Tests.Services;
-using Montr.Metadata.Impl.Entities;
-using Montr.Metadata.Impl.Services;
+using Montr.Metadata.Entities;
 using Montr.Metadata.Models;
+using Montr.Metadata.Services.Implementations;
 using Moq;
 using NUnit.Framework;
 

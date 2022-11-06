@@ -1,6 +1,6 @@
 ﻿namespace Montr.Metadata
 {
-	public class ViewCode
+	public static class ViewCode
 	{
 		public static readonly string FieldMetadataList = "field-metadata-list";
 

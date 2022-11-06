@@ -41,8 +41,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Montr.Idx.Tests", "Montr.Id
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Montr.Metadata", "Montr.Metadata\Montr.Metadata.csproj", "{8059C7A6-CAFB-4EC5-816C-93C6D91C4EC1}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Montr.Metadata.Impl", "Montr.Metadata.Impl\Montr.Metadata.Impl.csproj", "{22BECA8F-D6B9-42C9-9D0A-A0F581C7C224}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Montr.Metadata.Tests", "Montr.Metadata.Tests\Montr.Metadata.Tests.csproj", "{1FAC2AA6-FC56-4D05-9148-F35231C5270C}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Montr.Idx.Plugin.Google", "Montr.Idx.Plugin.Google\Montr.Idx.Plugin.Google.csproj", "{E45F0893-28AC-4695-972C-8E420996E41C}"
@@ -151,10 +149,6 @@ Global
 		{8059C7A6-CAFB-4EC5-816C-93C6D91C4EC1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{8059C7A6-CAFB-4EC5-816C-93C6D91C4EC1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{8059C7A6-CAFB-4EC5-816C-93C6D91C4EC1}.Release|Any CPU.Build.0 = Release|Any CPU
-		{22BECA8F-D6B9-42C9-9D0A-A0F581C7C224}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{22BECA8F-D6B9-42C9-9D0A-A0F581C7C224}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{22BECA8F-D6B9-42C9-9D0A-A0F581C7C224}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{22BECA8F-D6B9-42C9-9D0A-A0F581C7C224}.Release|Any CPU.Build.0 = Release|Any CPU
 		{1FAC2AA6-FC56-4D05-9148-F35231C5270C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{1FAC2AA6-FC56-4D05-9148-F35231C5270C}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1FAC2AA6-FC56-4D05-9148-F35231C5270C}.Release|Any CPU.ActiveCfg = Release|Any CPU

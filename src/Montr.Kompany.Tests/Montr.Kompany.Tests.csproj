@@ -16,7 +16,6 @@
     <ProjectReference Include="..\Montr.Kompany.Registration\Montr.Kompany.Registration.csproj" />
     <ProjectReference Include="..\Montr.Kompany\Montr.Kompany.csproj" />
     <ProjectReference Include="..\Montr.MasterData.Tests\Montr.MasterData.Tests.csproj" />
-    <ProjectReference Include="..\Montr.Metadata.Impl\Montr.Metadata.Impl.csproj" />
   </ItemGroup>
 
   <ItemGroup>

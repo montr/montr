@@ -4,7 +4,7 @@ using System.Linq;
 using Montr.Core.Services;
 using Montr.Metadata.Models;
 
-namespace Montr.Metadata.Services
+namespace Montr.Metadata.Services.Implementations
 {
 	// todo: rewrite all this sh*t
 	public class DefaultFieldProvider<TFieldType, TClrType> : IFieldProvider

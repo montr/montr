@@ -4,7 +4,7 @@ using Montr.Core.Services;
 using Montr.Core.Services.Implementations;
 using Montr.Metadata.Models;
 
-namespace Montr.Metadata.Impl.Services
+namespace Montr.Metadata.Services.Implementations
 {
 	public class FieldMetadataJsonOptionsConfigurator : IConfigureOptions<MvcNewtonsoftJsonOptions>
 	{

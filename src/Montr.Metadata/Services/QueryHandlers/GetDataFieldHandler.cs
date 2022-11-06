@@ -6,7 +6,7 @@ using Montr.Core.Services;
 using Montr.Metadata.Models;
 using Montr.Metadata.Queries;
 
-namespace Montr.Metadata.Impl.QueryHandlers
+namespace Montr.Metadata.Services.QueryHandlers
 {
 	public class GetDataFieldHandler : IRequestHandler<GetDataField, FieldMetadata>
 	{

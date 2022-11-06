@@ -17,8 +17,8 @@ using Montr.MasterData.Services;
 using Montr.MasterData.Services.CommandHandlers;
 using Montr.MasterData.Services.Implementations;
 using Montr.MasterData.Services.QueryHandlers;
-using Montr.Metadata.Impl.Services;
 using Montr.Metadata.Models;
+using Montr.Metadata.Services.Implementations;
 using NUnit.Framework;
 
 namespace Montr.MasterData.Tests.Services

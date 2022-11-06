@@ -12,7 +12,6 @@
 
 	<ItemGroup>
 		<ProjectReference Include="..\Montr.Core\Montr.Core.csproj" />
-		<ProjectReference Include="..\Montr.Metadata.Impl\Montr.Metadata.Impl.csproj" />
 		<ProjectReference Include="..\Montr.Metadata\Montr.Metadata.csproj" />
 	</ItemGroup>
 

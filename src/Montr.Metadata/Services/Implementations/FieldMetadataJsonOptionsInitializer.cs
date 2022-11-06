@@ -5,9 +5,8 @@ using Microsoft.Extensions.DependencyInjection;
 using Montr.Core.Services;
 using Montr.Core.Services.Implementations;
 using Montr.Metadata.Models;
-using Montr.Metadata.Services;
 
-namespace Montr.Metadata.Impl.Services
+namespace Montr.Metadata.Services.Implementations
 {
 	public class FieldMetadataJsonOptionsInitializer : IStartupTask
 	{

@@ -1,6 +1,7 @@
 ﻿using Montr.MasterData.Services.Implementations;
 using Montr.Metadata.Models;
 using Montr.Metadata.Services;
+using Montr.Metadata.Services.Implementations;
 
 namespace Montr.MasterData.Models
 {

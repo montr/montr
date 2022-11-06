@@ -6,9 +6,8 @@ using Montr.Core.Models;
 using Montr.Core.Services;
 using Montr.Metadata.Commands;
 using Montr.Metadata.Models;
-using Montr.Metadata.Services;
 
-namespace Montr.Metadata.Impl.CommandHandlers
+namespace Montr.Metadata.Services.CommandHandlers
 {
 	public class InsertDataFieldHandler : IRequestHandler<InsertDataField, ApiResult>
 	{

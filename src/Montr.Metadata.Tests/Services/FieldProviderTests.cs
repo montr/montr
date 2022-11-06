@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Globalization;
 using Montr.Metadata.Services;
+using Montr.Metadata.Services.Implementations;
 using NUnit.Framework;
 
 namespace Montr.Metadata.Tests.Services

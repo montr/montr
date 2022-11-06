@@ -3,9 +3,8 @@ using System.Threading.Tasks;
 using MediatR;
 using Montr.Metadata.Models;
 using Montr.Metadata.Queries;
-using Montr.Metadata.Services;
 
-namespace Montr.Metadata.Impl.QueryHandlers
+namespace Montr.Metadata.Services.QueryHandlers
 {
 	public class GetMetadataHandler : IRequestHandler<GetMetadata, DataView>
 	{

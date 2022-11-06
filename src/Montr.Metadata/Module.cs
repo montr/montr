@@ -1,15 +1,14 @@
-﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Montr.Core;
 using Montr.Core.Services;
 using Montr.Core.Services.Implementations;
-using Montr.Metadata.Impl.Services;
 using Montr.Metadata.Models;
 using Montr.Metadata.Services;
+using Montr.Metadata.Services.Implementations;
 
-namespace Montr.Metadata.Impl
+namespace Montr.Metadata
 {
 	// ReSharper disable once UnusedType.Global
 	public class Module : IModule, IAppConfigurator

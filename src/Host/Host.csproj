@@ -44,7 +44,6 @@
     <ProjectReference Include="..\Montr.MasterData.Plugin.GovRu\Montr.MasterData.Plugin.GovRu.csproj" />
     <ProjectReference Include="..\Montr.MasterData\Montr.MasterData.csproj" />
     <ProjectReference Include="..\Montr.Messages\Montr.Messages.csproj" />
-    <ProjectReference Include="..\Montr.Metadata.Impl\Montr.Metadata.Impl.csproj" />
     <ProjectReference Include="..\Montr.Metadata\Montr.Metadata.csproj" />
     <ProjectReference Include="..\Montr.Tasks.Impl\Montr.Tasks.Impl.csproj" />
     <ProjectReference Include="..\Montr.Tasks\Montr.Tasks.csproj" />

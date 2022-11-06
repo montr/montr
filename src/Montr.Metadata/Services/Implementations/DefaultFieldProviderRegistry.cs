@@ -4,9 +4,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using Montr.Metadata.Models;
-using Montr.Metadata.Services;
 
-namespace Montr.Metadata.Impl.Services
+namespace Montr.Metadata.Services.Implementations
 {
 	public class DefaultFieldProviderRegistry : IFieldProviderRegistry
 	{

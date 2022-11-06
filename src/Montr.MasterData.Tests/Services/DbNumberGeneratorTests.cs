@@ -8,8 +8,8 @@ using Montr.Core.Services.Implementations;
 using Montr.MasterData.Models;
 using Montr.MasterData.Services;
 using Montr.MasterData.Services.Implementations;
-using Montr.Metadata.Impl.Services;
 using Montr.Metadata.Models;
+using Montr.Metadata.Services.Implementations;
 using Moq;
 using NUnit.Framework;
 
