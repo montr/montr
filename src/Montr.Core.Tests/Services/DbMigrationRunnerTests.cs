@@ -2,8 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Montr.Core.Impl.Services;
-using Montr.Data.Linq2Db;
+using Montr.Core.Services.Impl;
 using Moq;
 using NUnit.Framework;
 

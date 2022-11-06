@@ -12,7 +12,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Montr.Core\Montr.Core.csproj" />
-    <ProjectReference Include="..\Montr.Data\Montr.Data.csproj" />
     <ProjectReference Include="..\Montr.Idx\Montr.Idx.csproj" />
     <ProjectReference Include="..\Montr.Worker\Montr.Worker.csproj" />
   </ItemGroup>

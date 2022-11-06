@@ -7,7 +7,6 @@ using LinqToDB;
 using MediatR;
 using Montr.Core.Models;
 using Montr.Core.Services;
-using Montr.Data.Linq2Db;
 using Montr.Kompany.Impl.Entities;
 using Montr.MasterData.Impl.Entities;
 using Montr.Messages.Services;

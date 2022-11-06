@@ -7,7 +7,6 @@ using Microsoft.Extensions.Options;
 using Montr.Core;
 using Montr.Core.Models;
 using Montr.Core.Services;
-using Montr.Data.Linq2Db;
 using Montr.Idx.Models;
 using Montr.Idx.Services;
 using Montr.Kompany.Commands;

@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using LinqToDB;
 using Montr.Core.Models;
 using Montr.Core.Services;
-using Montr.Data.Linq2Db;
 using Montr.Metadata.Impl.Entities;
 using Montr.Metadata.Models;
 using Montr.Metadata.Services;

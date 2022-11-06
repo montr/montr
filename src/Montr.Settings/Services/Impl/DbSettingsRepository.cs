@@ -10,7 +10,6 @@ using LinqToDB;
 using MediatR;
 using Montr.Core.Events;
 using Montr.Core.Services;
-using Montr.Data.Linq2Db;
 using Montr.Settings.Entities;
 
 namespace Montr.Settings.Services.Impl

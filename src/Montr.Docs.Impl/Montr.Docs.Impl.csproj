@@ -11,7 +11,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Montr.Automate\Montr.Automate.csproj" />
-    <ProjectReference Include="..\Montr.Data.Linq2Db\Montr.Data.Linq2Db.csproj" />
     <ProjectReference Include="..\Montr.Docs\Montr.Docs.csproj" />
     <ProjectReference Include="..\Montr.MasterData.Impl\Montr.MasterData.Impl.csproj" />
     <ProjectReference Include="..\Montr.Worker\Montr.Worker.csproj" />

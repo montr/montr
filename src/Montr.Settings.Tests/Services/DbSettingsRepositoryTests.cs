@@ -6,7 +6,7 @@ using LinqToDB;
 using MediatR;
 using Montr.Core;
 using Montr.Core.Services;
-using Montr.Data.Linq2Db;
+using Montr.Core.Services.Impl;
 using Montr.Settings.Entities;
 using Montr.Settings.Services.Impl;
 using Moq;

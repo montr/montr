@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Montr.Automate.Models;
 using Montr.Automate.Services;
 using Montr.Core.Services;
+using Montr.Core.Services.Impl;
 
 namespace Montr.Automate.Impl.Services
 {

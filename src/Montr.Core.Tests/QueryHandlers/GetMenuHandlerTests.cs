@@ -4,11 +4,11 @@ using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
-using Montr.Core.Impl.QueryHandlers;
-using Montr.Core.Impl.Services;
 using Montr.Core.Models;
 using Montr.Core.Queries;
+using Montr.Core.QueryHandlers;
 using Montr.Core.Services;
+using Montr.Core.Services.Impl;
 using Moq;
 using NUnit.Framework;
 

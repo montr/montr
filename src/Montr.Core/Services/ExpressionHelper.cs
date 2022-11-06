@@ -3,7 +3,7 @@ using System.Linq.Expressions;
 
 namespace Montr.Core.Services
 {
-	public class ExpressionHelper
+	public static class ExpressionHelper
 	{
 		public static string GetFullName<T>(Expression<Func<T, string>> expr)
 		{

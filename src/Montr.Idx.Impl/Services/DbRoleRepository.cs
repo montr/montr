@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Logging;
 using Montr.Core.Models;
-using Montr.Data.Linq2Db;
+using Montr.Core.Services;
 using Montr.Idx.Impl.Entities;
 using Montr.Idx.Models;
 using Montr.MasterData.Commands;

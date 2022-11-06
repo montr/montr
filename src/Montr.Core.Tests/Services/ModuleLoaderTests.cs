@@ -1,5 +1,5 @@
 ﻿using Microsoft.Extensions.Logging;
-using Montr.Core.Services;
+using Montr.Core.Services.Impl;
 using NUnit.Framework;
 
 namespace Montr.Core.Tests.Services

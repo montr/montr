@@ -1,7 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using Montr.Core.Services;
-using Montr.Data.Linq2Db;
+using Montr.Core.Services.Impl;
 using Montr.MasterData.Commands;
 using Montr.MasterData.Impl.CommandHandlers;
 using Montr.MasterData.Impl.Services;

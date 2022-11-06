@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Montr.Core.Services;
-using Montr.Data.Linq2Db;
+using Montr.Core.Services.Impl;
 using Montr.Idx.Models;
 using Montr.Idx.Tests.Services;
 using Montr.MasterData.Commands;

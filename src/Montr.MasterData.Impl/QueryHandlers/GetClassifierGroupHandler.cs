@@ -3,7 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using LinqToDB;
 using MediatR;
-using Montr.Data.Linq2Db;
+using Montr.Core.Services;
 using Montr.MasterData.Impl.Entities;
 using Montr.MasterData.Models;
 using Montr.MasterData.Queries;

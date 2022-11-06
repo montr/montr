@@ -1,6 +1,7 @@
 ﻿using Hangfire;
 using Hangfire.PostgreSql;
 using Microsoft.Extensions.Configuration;
+using Montr.Core;
 using Newtonsoft.Json;
 
 namespace Montr.Worker.Hangfire.Services
@@ -9,7 +10,7 @@ namespace Montr.Worker.Hangfire.Services
 	{
 		public static void UseDefaults(this IGlobalConfiguration config, IConfiguration configuration)
 		{
-			var connectionString = configuration.GetConnectionString(Data.Constants.DefaultConnectionStringName);
+			var connectionString = configuration.GetConnectionString(Constants.DefaultConnectionStringName);
 
 			config.UsePostgreSqlStorage(
 				connectionString,

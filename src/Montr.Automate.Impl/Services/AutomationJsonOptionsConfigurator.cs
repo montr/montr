@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Options;
 using Montr.Automate.Models;
 using Montr.Core.Services;
+using Montr.Core.Services.Impl;
 
 namespace Montr.Automate.Impl.Services
 {

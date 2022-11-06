@@ -6,12 +6,4 @@ namespace Montr.Core.Services
 	{
 		DateTime GetUtcNow();
 	}
-
-	public class DefaultDateTimeProvider : IDateTimeProvider
-	{
-		public DateTime GetUtcNow()
-		{
-			return DateTime.UtcNow;
-		}
-	}
 }

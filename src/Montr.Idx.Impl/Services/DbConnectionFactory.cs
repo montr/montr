@@ -2,6 +2,7 @@
 using LinqToDB;
 using LinqToDB.Data;
 using LinqToDB.Identity;
+using Montr.Core.Services;
 using Montr.Idx.Impl.Entities;
 
 namespace Montr.Idx.Impl.Services
@@ -10,7 +11,7 @@ namespace Montr.Idx.Impl.Services
 	{
 		public IDataContext GetContext()
 		{
-			return new Data.Linq2Db.DbContext();
+			return new DbContext();
 		}
 
 		public DataConnection GetConnection()

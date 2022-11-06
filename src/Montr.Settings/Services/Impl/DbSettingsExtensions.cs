@@ -8,7 +8,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Primitives;
 using Montr.Core.Events;
-using Montr.Data.Linq2Db;
+using Montr.Core.Services;
+using Montr.Core.Services.Impl;
 using Montr.Settings.Entities;
 
 namespace Montr.Settings.Services.Impl

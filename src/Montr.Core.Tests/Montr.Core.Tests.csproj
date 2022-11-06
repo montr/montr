@@ -12,7 +12,6 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\Montr.Core.Impl\Montr.Core.Impl.csproj" />
 		<ProjectReference Include="..\Montr.Core\Montr.Core.csproj" />
 	</ItemGroup>
 

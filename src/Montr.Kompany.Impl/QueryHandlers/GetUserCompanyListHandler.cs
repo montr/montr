@@ -4,7 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using LinqToDB;
 using MediatR;
-using Montr.Data.Linq2Db;
+using Montr.Core.Services;
 using Montr.Kompany.Impl.Entities;
 using Montr.Kompany.Models;
 using Montr.Kompany.Queries;

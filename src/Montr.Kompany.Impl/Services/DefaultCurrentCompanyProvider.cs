@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using LinqToDB;
 using Microsoft.AspNetCore.Http;
 using Montr.Core.Services;
-using Montr.Data.Linq2Db;
 using Montr.Kompany.Impl.Entities;
 using Montr.Kompany.Services;
 

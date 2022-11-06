@@ -3,12 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Montr.Core.CommandHandlers;
 using Montr.Core.Commands;
-using Montr.Core.Impl.CommandHandlers;
 using Montr.Core.Models;
-using Montr.Core.Services;
+using Montr.Core.Services.Impl;
 using Montr.Core.Tests.Services;
-using Montr.Data.Linq2Db;
 using NUnit.Framework;
 
 namespace Montr.Core.Tests.CommandHandlers

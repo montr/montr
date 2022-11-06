@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Logging.Abstractions;
 using Montr.Core.Services;
-using Montr.Data.Linq2Db;
+using Montr.Core.Services.Impl;
 using Montr.Docs.Impl.Services;
 using Montr.Idx.Impl.Services;
 using Montr.Idx.Tests.Services;

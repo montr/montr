@@ -1,4 +1,4 @@
-﻿using Montr.Data.Linq2Db;
+﻿using Montr.Core.Services.Impl;
 using NUnit.Framework;
 
 namespace Montr.Kompany.Tests

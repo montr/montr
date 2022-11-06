@@ -4,10 +4,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Montr.Core;
 using Montr.Core.Services;
+using Montr.Core.Services.Impl;
 using Montr.MasterData.Impl.Services;
 using Montr.MasterData.Models;
 using Montr.MasterData.Services;
 using Montr.Metadata.Services;
+using PermissionProvider = Montr.MasterData.Impl.Services.PermissionProvider;
 
 namespace Montr.MasterData.Impl
 {

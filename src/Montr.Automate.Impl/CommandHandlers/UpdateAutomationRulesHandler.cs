@@ -12,7 +12,6 @@ using Montr.Automate.Impl.Models;
 using Montr.Automate.Models;
 using Montr.Core.Models;
 using Montr.Core.Services;
-using Montr.Data.Linq2Db;
 
 namespace Montr.Automate.Impl.CommandHandlers
 {

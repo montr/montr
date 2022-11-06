@@ -1,6 +1,6 @@
 ﻿using System.Linq;
-using Montr.Core.Impl.Services;
 using Montr.Core.Models;
+using Montr.Core.Services.Impl;
 using NUnit.Framework;
 
 namespace Montr.Core.Tests.Services

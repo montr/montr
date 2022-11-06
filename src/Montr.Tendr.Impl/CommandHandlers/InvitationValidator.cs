@@ -5,7 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using LinqToDB;
 using Montr.Core.Models;
-using Montr.Data.Linq2Db;
+using Montr.Core.Services;
 using Montr.Tendr.Impl.Entities;
 using Montr.Tendr.Models;
 

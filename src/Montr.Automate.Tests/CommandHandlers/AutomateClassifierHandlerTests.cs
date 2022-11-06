@@ -8,7 +8,7 @@ using Montr.Automate.Impl.Services;
 using Montr.Automate.Models;
 using Montr.Automate.Services;
 using Montr.Core.Services;
-using Montr.Data.Linq2Db;
+using Montr.Core.Services.Impl;
 using Montr.MasterData.Commands;
 using Montr.MasterData.Impl.CommandHandlers;
 using Montr.MasterData.Impl.Services;
