@@ -8,10 +8,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Primitives;
 using Montr.Core.Events;
-using Montr.Core.Impl.Entities;
 using Montr.Data.Linq2Db;
+using Montr.Settings.Entities;
 
-namespace Montr.Core.Impl.Services
+namespace Montr.Settings.Services.Impl
 {
 	public static class DbSettingsExtensions
 	{

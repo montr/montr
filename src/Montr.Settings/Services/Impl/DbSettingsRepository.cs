@@ -9,11 +9,11 @@ using System.Transactions;
 using LinqToDB;
 using MediatR;
 using Montr.Core.Events;
-using Montr.Core.Impl.Entities;
 using Montr.Core.Services;
 using Montr.Data.Linq2Db;
+using Montr.Settings.Entities;
 
-namespace Montr.Core.Impl.Services
+namespace Montr.Settings.Services.Impl
 {
 	public class DbSettingsRepository : ISettingsRepository
 	{

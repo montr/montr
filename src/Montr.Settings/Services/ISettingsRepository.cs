@@ -4,7 +4,7 @@ using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace Montr.Core.Services
+namespace Montr.Settings.Services
 {
 	public interface ISettingsRepository
 	{

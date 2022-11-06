@@ -25,7 +25,6 @@ namespace Montr.Core.Impl
 			appBuilder.Services.AddSingleton<ILocaleStringImporter, DbLocaleStringImporter>();
 			appBuilder.Services.AddSingleton<IRepository<LocaleString>, DbLocaleStringRepository>();
 			appBuilder.Services.AddSingleton<IAuditLogService, DbAuditLogService>();
-			appBuilder.Services.AddSingleton<ISettingsRepository, DbSettingsRepository>();
 
 			appBuilder.Services.AddSingleton<IRepository<EntityStatus>, DbEntityStatusRepository>();
 			appBuilder.Services.AddSingleton<IEntityStatusProvider, DefaultEntityStatusProvider>();

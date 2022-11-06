@@ -10,6 +10,7 @@ using Montr.Core;
 using Montr.Core.Impl.Services;
 using Montr.Core.Services;
 using Montr.Data.Linq2Db;
+using Montr.Settings.Services.Impl;
 
 namespace Host
 {

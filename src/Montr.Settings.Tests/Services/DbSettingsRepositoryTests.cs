@@ -4,14 +4,15 @@ using System.Threading;
 using System.Threading.Tasks;
 using LinqToDB;
 using MediatR;
-using Montr.Core.Impl.Entities;
-using Montr.Core.Impl.Services;
+using Montr.Core;
 using Montr.Core.Services;
 using Montr.Data.Linq2Db;
+using Montr.Settings.Entities;
+using Montr.Settings.Services.Impl;
 using Moq;
 using NUnit.Framework;
 
-namespace Montr.Core.Tests.Services
+namespace Montr.Settings.Tests.Services
 {
 	[TestFixture]
 	public class DbSettingsRepositoryTests
@@ -42,9 +43,9 @@ namespace Montr.Core.Tests.Services
 
 				var allSettings = await LoadSettings(dbContextFactory, cancellationToken);
 
-				var s1 = allSettings.SingleOrDefault(x => x.Id == "Montr.Core.Tests.Services.TestOptions:Number");
-				var s2 = allSettings.SingleOrDefault(x => x.Id == "Montr.Core.Tests.Services.TestOptions:Value");
-				var s3 = allSettings.SingleOrDefault(x => x.Id == "Montr.Core.Tests.Services.TestOptions:State");
+				var s1 = allSettings.SingleOrDefault(x => x.Id == "Montr.Settings.Tests.Services.TestOptions:Number");
+				var s2 = allSettings.SingleOrDefault(x => x.Id == "Montr.Settings.Tests.Services.TestOptions:Value");
+				var s3 = allSettings.SingleOrDefault(x => x.Id == "Montr.Settings.Tests.Services.TestOptions:State");
 
 				Assert.IsNotNull(s1);
 				Assert.AreEqual("42", s1.Value);
@@ -66,7 +67,7 @@ namespace Montr.Core.Tests.Services
 
 				allSettings = await LoadSettings(dbContextFactory, cancellationToken);
 
-				s3 = allSettings.SingleOrDefault(x => x.Id == "Montr.Core.Tests.Services.TestOptions:State");
+				s3 = allSettings.SingleOrDefault(x => x.Id == "Montr.Settings.Tests.Services.TestOptions:State");
 
 				Assert.IsNotNull(s3);
 				Assert.AreEqual("None", s3.Value);

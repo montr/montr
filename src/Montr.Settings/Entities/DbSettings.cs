@@ -1,7 +1,7 @@
 ﻿using LinqToDB;
 using LinqToDB.Mapping;
 
-namespace Montr.Core.Impl.Entities
+namespace Montr.Settings.Entities
 {
 	[Table(Schema = "montr", Name = "settings")]
 	public class DbSettings

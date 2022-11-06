@@ -14,6 +14,7 @@ using Montr.Kompany.Commands;
 using Montr.Kompany.Impl.Entities;
 using Montr.Kompany.Models;
 using Montr.MasterData.Services;
+using Montr.Settings.Services;
 using ClientRoutes = Montr.Core.ClientRoutes;
 
 namespace Montr.Kompany.Impl.CommandHandlers
