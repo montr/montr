@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.Logging.Abstractions;
 using Montr.Core.Services;
 using Montr.Core.Services.Impl;
-using Montr.Docs.Impl.Services;
+using Montr.Docs.Services.Implementations;
 using Montr.Idx.Impl.Services;
 using Montr.Idx.Tests.Services;
 using Montr.Kompany.Impl.Services;

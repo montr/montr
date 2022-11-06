@@ -2,10 +2,9 @@
 using MediatR;
 using Montr.Core.Models;
 
-namespace Montr.Docs.Commands
+namespace Montr.Docs.Commands;
+
+public class SubmitDocument : IRequest<ApiResult>
 {
-	public class SubmitDocument : IRequest<ApiResult>
-	{
-		public Guid? DocumentUid { get; set; }
-	}
+	public Guid? DocumentUid { get; set; }
 }

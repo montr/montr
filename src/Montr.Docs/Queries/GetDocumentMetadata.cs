@@ -2,10 +2,9 @@
 using MediatR;
 using Montr.Metadata.Models;
 
-namespace Montr.Docs.Queries
+namespace Montr.Docs.Queries;
+
+public class GetDocumentMetadata : MetadataRequest, IRequest<DataView>
 {
-	public class GetDocumentMetadata : MetadataRequest, IRequest<DataView>
-	{
-		public Guid DocumentUid { get; set; }
-	}
+	public Guid DocumentUid { get; set; }
 }

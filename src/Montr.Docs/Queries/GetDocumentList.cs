@@ -2,9 +2,8 @@
 using Montr.Core.Models;
 using Montr.Docs.Models;
 
-namespace Montr.Docs.Queries
+namespace Montr.Docs.Queries;
+
+public class GetDocumentList : DocumentSearchRequest, IRequest<SearchResult<Document>>
 {
-	public class GetDocumentList : DocumentSearchRequest, IRequest<SearchResult<Document>>
-	{
-	}
 }

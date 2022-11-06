@@ -15,8 +15,6 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Montr.Kompany.Tests", "Mont
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Montr.Docs", "Montr.Docs\Montr.Docs.csproj", "{3E554A67-A136-4E19-866E-EF200690CF64}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Montr.Docs.Impl", "Montr.Docs.Impl\Montr.Docs.Impl.csproj", "{C49077CD-D40F-4062-99AA-C5E651DD5CF0}"
-EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Montr.Core", "Montr.Core\Montr.Core.csproj", "{4E860925-DDA8-4EC9-868F-6CF729E4F3A0}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Montr.Data.Npgsql", "Montr.Data.Npgsql\Montr.Data.Npgsql.csproj", "{0675050C-E84F-46F0-81F1-A65D877C3E9C}"
@@ -111,10 +109,6 @@ Global
 		{3E554A67-A136-4E19-866E-EF200690CF64}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{3E554A67-A136-4E19-866E-EF200690CF64}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{3E554A67-A136-4E19-866E-EF200690CF64}.Release|Any CPU.Build.0 = Release|Any CPU
-		{C49077CD-D40F-4062-99AA-C5E651DD5CF0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{C49077CD-D40F-4062-99AA-C5E651DD5CF0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{C49077CD-D40F-4062-99AA-C5E651DD5CF0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{C49077CD-D40F-4062-99AA-C5E651DD5CF0}.Release|Any CPU.Build.0 = Release|Any CPU
 		{4E860925-DDA8-4EC9-868F-6CF729E4F3A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{4E860925-DDA8-4EC9-868F-6CF729E4F3A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4E860925-DDA8-4EC9-868F-6CF729E4F3A0}.Release|Any CPU.ActiveCfg = Release|Any CPU

@@ -14,6 +14,7 @@
 		<ProjectReference Include="..\Montr.MasterData\Montr.MasterData.csproj" />
 		<ProjectReference Include="..\Montr.Metadata\Montr.Metadata.csproj" />
 		<ProjectReference Include="..\Montr.Settings\Montr.Settings.csproj" />
+		<ProjectReference Include="..\Montr.Worker\Montr.Worker.csproj" />
 	</ItemGroup>
 
 	<ItemGroup>
