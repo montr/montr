@@ -1,9 +1,9 @@
-import React from "react";
-import { Fetcher } from "@montr-core/services";
-import { DataTableUpdateToken, DataTable } from "@montr-core/components";
-import { Views, Api } from "../module";
+import { DataTable, DataTableUpdateToken } from "@montr-core/components/data-table";
 import { DataResult } from "@montr-core/models";
+import { Fetcher } from "@montr-core/services";
+import React from "react";
 import { Numerator } from "../models";
+import { Api, Views } from "../module";
 
 interface Props {
 	data: Numerator;

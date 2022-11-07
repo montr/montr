@@ -1,4 +1,5 @@
-import { ButtonAdd, ButtonDelete, DataTable, DataTableUpdateToken, Page, PageHeader, Toolbar } from "@montr-core/components";
+import { ButtonAdd, ButtonDelete, Page, PageHeader, Toolbar } from "@montr-core/components";
+import { DataTable, DataTableUpdateToken } from "@montr-core/components/data-table";
 import { IMenu } from "@montr-core/models";
 import { OperationService } from "@montr-core/services";
 import * as React from "react";

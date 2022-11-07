@@ -1,4 +1,5 @@
-import { ButtonAdd, ButtonDelete, ButtonExport, ButtonSelect, DataTable, DataTableUpdateToken, Icon, Page, PageHeader, Toolbar } from "@montr-core/components";
+import { ButtonAdd, ButtonDelete, ButtonExport, ButtonSelect, Icon, Page, PageHeader, Toolbar } from "@montr-core/components";
+import { DataTable, DataTableUpdateToken } from "@montr-core/components/data-table";
 import { DataResult, Guid } from "@montr-core/models";
 import { OperationService } from "@montr-core/services";
 import { CompanyContextProps, withCompanyContext } from "@montr-kompany/components/company-context";

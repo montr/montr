@@ -4,10 +4,11 @@ import { Button, Form, Select, Upload } from "antd";
 import { UploadChangeParam } from "antd/lib/upload";
 import React from "react";
 import { Translation } from "react-i18next";
-import { ButtonExport, ButtonImport, DataTable, DataTableUpdateToken, Icon, Page, PageHeader, Toolbar } from ".";
+import { ButtonExport, ButtonImport, Icon, Page, PageHeader, Toolbar } from ".";
 import { DataResult, IMenu, LocaleString } from "../models";
 import { NotificationService } from "../services";
 import { DataBreadcrumb } from "./data-breadcrumb";
+import { DataTable, DataTableUpdateToken } from "./data-table";
 
 interface Props {
 }

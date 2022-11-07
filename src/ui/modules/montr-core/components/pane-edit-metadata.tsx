@@ -1,9 +1,10 @@
 import * as React from "react";
 import { Translation, WithTranslation, withTranslation } from "react-i18next";
-import { ButtonAdd, ButtonDelete, DataTable, DataTableUpdateToken } from ".";
+import { ButtonAdd, ButtonDelete } from ".";
 import { DataResult, Guid, IDataField } from "../models";
 import { Api, Views } from "../module";
 import { MetadataService, OperationService } from "../services";
+import { DataTable, DataTableUpdateToken } from "./data-table";
 import { PaneEditMetadataItem } from "./pane-edit-metadata-item";
 import { Toolbar } from "./toolbar";
 

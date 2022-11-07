@@ -1,10 +1,11 @@
-import { ButtonAdd, ButtonDelete, DataTable, DataTableUpdateToken, Icon, Toolbar } from "@montr-core/components";
+import { ButtonAdd, ButtonDelete, Icon, Toolbar } from "@montr-core/components";
+import { DataTable, DataTableUpdateToken } from "@montr-core/components/data-table";
 import { DataPaneProps, DataResult, Guid, IMenu } from "@montr-core/models";
 import { OperationService } from "@montr-core/services";
 import { PaneSelectClassifier } from "@montr-master-data/components";
 import { Alert, Button } from "antd";
 import * as React from "react";
-import { ModalEditInvitation } from "../components";
+import { ModalEditInvitation } from "../components/modal-edit-invitation";
 import { IEvent, Invitation } from "../models";
 import { Api, Views } from "../module";
 import { InvitationService } from "../services";

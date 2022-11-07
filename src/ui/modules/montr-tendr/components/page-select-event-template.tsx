@@ -1,4 +1,5 @@
-import { DataTable, Page } from "@montr-core/components";
+import { DataTable } from "@montr-core/components/data-table";
+import { Page } from "@montr-core/components/page";
 import { ApiResult, Guid, IMenu } from "@montr-core/models";
 import * as React from "react";
 import { Navigate } from "react-router-dom";

@@ -1,4 +1,5 @@
-import { DataTable, Page, PageHeader } from "@montr-core/components";
+import { Page, PageHeader } from "@montr-core/components";
+import { DataTable } from "@montr-core/components/data-table";
 import { DataColumn } from "@montr-core/models";
 import React from "react";
 import { Api, Views } from "../module";

@@ -1,11 +1,12 @@
-import { ButtonCreate, DataTable, Icon, Page, PageHeader, Toolbar } from "@montr-core/components";
+import { ButtonCreate, Icon, Page, PageHeader, Toolbar } from "@montr-core/components";
 import { DataBreadcrumb } from "@montr-core/components/data-breadcrumb";
+import { DataTable } from "@montr-core/components/data-table";
 import { Button, DatePicker, Form, Select } from "antd";
 import * as React from "react";
 import { Link } from "react-router-dom";
 import { IEvent } from "../models";
 import { Api } from "../module";
-import { EventTemplateService } from "../services";
+import { EventTemplateService } from "../services/event-template-service";
 
 interface Props {
 }

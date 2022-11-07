@@ -1,4 +1,5 @@
-import { ButtonAdd, DataTable, DataTableUpdateToken, Toolbar } from "@montr-core/components";
+import { ButtonAdd, Toolbar } from "@montr-core/components";
+import { DataTable, DataTableUpdateToken } from "@montr-core/components/data-table";
 import { DataResult, Guid, IMenu } from "@montr-core/models";
 import { Alert, Modal } from "antd";
 import * as React from "react";
