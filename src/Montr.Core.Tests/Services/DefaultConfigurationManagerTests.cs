@@ -12,9 +12,9 @@ namespace Montr.Core.Tests.Services
 		public void GetItems_ForTestItem_ShouldReturnList()
 		{
 			// arrange
-			var manager = new DefaultConfigurationManager();
+			var registry = new DefaultConfigurationRegistry();
 
-			manager.Configure<Person>(config =>
+			registry.Configure<Person>(config =>
 			{
 				config.When(x => x.StatusCode == "draft")
 					.Add<Block>((_, block) => block.Url = "/do");
@@ -25,7 +25,7 @@ namespace Montr.Core.Tests.Services
 					.Add<HistoryBlock>((entity, block) => block.Url = "/to?status=" + entity.StatusCode);
 			});
 
-			manager.Configure<Entrepreneur>(config =>
+			registry.Configure<Entrepreneur>(config =>
 			{
 				config.Add<InfoItem>();
 			});
@@ -35,14 +35,14 @@ namespace Montr.Core.Tests.Services
 			var company = new Entrepreneur();
 
 			// act
-			var userDraftItems = manager.GetItems<Person, InfoItem>(userDraft).ToList();
-			var userDraftBlocks = manager.GetItems<Person, Block>(userDraft).ToList();
+			var userDraftItems = registry.GetItems<Person, InfoItem>(userDraft).ToList();
+			var userDraftBlocks = registry.GetItems<Person, Block>(userDraft).ToList();
 
-			var userBlockedItems = manager.GetItems<Person, InfoItem>(userBlocked).ToList();
-			var userBlockedBlocks = manager.GetItems<Person, Block>(userBlocked).ToList();
+			var userBlockedItems = registry.GetItems<Person, InfoItem>(userBlocked).ToList();
+			var userBlockedBlocks = registry.GetItems<Person, Block>(userBlocked).ToList();
 
-			var companyItems = manager.GetItems<Entrepreneur, InfoItem>(company).ToList();
-			var companyBlocks = manager.GetItems<Entrepreneur, Block>(company).ToList();
+			var companyItems = registry.GetItems<Entrepreneur, InfoItem>(company).ToList();
+			var companyBlocks = registry.GetItems<Entrepreneur, Block>(company).ToList();
 
 			// assert
 			Assert.AreEqual(0, userDraftItems.Count);

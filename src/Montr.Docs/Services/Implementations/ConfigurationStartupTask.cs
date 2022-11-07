@@ -9,16 +9,16 @@ namespace Montr.Docs.Services.Implementations;
 
 public class ConfigurationStartupTask : IStartupTask
 {
-	private readonly IConfigurationManager _configurationManager;
+	private readonly IConfigurationRegistry _registry;
 
-	public ConfigurationStartupTask(IConfigurationManager configurationManager)
+	public ConfigurationStartupTask(IConfigurationRegistry registry)
 	{
-		_configurationManager = configurationManager;
+		_registry = registry;
 	}
 
 	public Task Run(CancellationToken cancellationToken)
 	{
-		_configurationManager.Configure<Classifier>(config =>
+		_registry.Configure<Classifier>(config =>
 		{
 			config
 				.When(classifier => classifier.Type == ClassifierTypeCode.Questionnaire)
@@ -88,7 +88,7 @@ public class ConfigurationStartupTask : IStartupTask
 				});
 		});
 
-		_configurationManager.Configure<Document>(config =>
+		_registry.Configure<Document>(config =>
 		{
 			config
 				.Add<DataPane>((_, x) =>

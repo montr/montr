@@ -9,16 +9,16 @@ namespace Montr.Automate.Services.Implementations
 {
 	public class ConfigurationStartupTask: IStartupTask
 	{
-		private readonly IConfigurationManager _configurationManager;
+		private readonly IConfigurationRegistry _configurationRegistry;
 
-		public ConfigurationStartupTask(IConfigurationManager configurationManager)
+		public ConfigurationStartupTask(IConfigurationRegistry configurationRegistry)
 		{
-			_configurationManager = configurationManager;
+			_configurationRegistry = configurationRegistry;
 		}
 
 		public Task Run(CancellationToken cancellationToken)
 		{
-			_configurationManager.Configure<Classifier>(config =>
+			_configurationRegistry.Configure<Classifier>(config =>
 			{
 				config.When(classifier => classifier.Type == ClassifierTypeCode.Automation)
 					.Add<DataPane>((_, x) =>

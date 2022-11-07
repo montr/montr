@@ -8,16 +8,16 @@ namespace Montr.Tendr.Services
 {
 	public class ConfigurationStartupTask : IStartupTask
 	{
-		private readonly IConfigurationManager _configurationManager;
+		private readonly IConfigurationRegistry _registry;
 
-		public ConfigurationStartupTask(IConfigurationManager configurationManager)
+		public ConfigurationStartupTask(IConfigurationRegistry registry)
 		{
-			_configurationManager = configurationManager;
+			_registry = registry;
 		}
 
 		public Task Run(CancellationToken cancellationToken)
 		{
-			_configurationManager.Configure<Event>(config =>
+			_registry.Configure<Event>(config =>
 			{
 				config
 					.Add<DataPane>((_, x) =>

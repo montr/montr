@@ -14,12 +14,12 @@ namespace Montr.Tasks.Services.QueryHandlers
 	public class GetTaskMetadataHandler : IRequestHandler<GetTaskMetadata, DataView>
 	{
 		private readonly IRepository<TaskModel> _taskRepository;
-		private readonly IConfigurationService _configurationService;
+		private readonly IConfigurationProvider _configurationProvider;
 
-		public GetTaskMetadataHandler(IRepository<TaskModel> taskRepository, IConfigurationService configurationService)
+		public GetTaskMetadataHandler(IRepository<TaskModel> taskRepository, IConfigurationProvider configurationProvider)
 		{
 			_taskRepository = taskRepository;
-			_configurationService = configurationService;
+			_configurationProvider = configurationProvider;
 		}
 
 		public async Task<DataView> Handle(GetTaskMetadata request, CancellationToken cancellationToken)
@@ -62,9 +62,9 @@ namespace Montr.Tasks.Services.QueryHandlers
 					SkipPaging = true
 				}, cancellationToken)).Rows.SingleOrDefault();
 
-				result.Toolbar = await _configurationService.GetItems<TaskModel, Button>(task, request.Principal);
-				result.Panes = await _configurationService.GetItems<TaskModel, DataPane>(task, request.Principal);
-				result.Panels = await _configurationService.GetItems<TaskModel, DataPanel>(task, request.Principal);
+				result.Toolbar = await _configurationProvider.GetItems<TaskModel, Button>(task, request.Principal);
+				result.Panes = await _configurationProvider.GetItems<TaskModel, DataPane>(task, request.Principal);
+				result.Panels = await _configurationProvider.GetItems<TaskModel, DataPanel>(task, request.Principal);
 			}
 
 			return result;

@@ -11,11 +11,11 @@ namespace Montr.Tendr.QueryHandlers
 {
 	public class GetEventMetadataHandler : IRequestHandler<GetEventMetadata, DataView>
 	{
-		private readonly IConfigurationService _configurationService;
+		private readonly IConfigurationProvider _configurationProvider;
 
-		public GetEventMetadataHandler(IConfigurationService configurationService)
+		public GetEventMetadataHandler(IConfigurationProvider configurationProvider)
 		{
-			_configurationService = configurationService;
+			_configurationProvider = configurationProvider;
 		}
 
 		public async Task<DataView> Handle(GetEventMetadata request, CancellationToken cancellationToken)
@@ -27,7 +27,7 @@ namespace Montr.Tendr.QueryHandlers
 				// todo: preload event from service
 				var @event = new Event { Uid = request.EventUid };
 
-				result.Panes = await _configurationService.GetItems<Event, DataPane>(@event, request.Principal);
+				result.Panes = await _configurationProvider.GetItems<Event, DataPane>(@event, request.Principal);
 			}
 
 			if (request.ViewId == "Event/Edit")

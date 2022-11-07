@@ -6,7 +6,7 @@ using Montr.Core.Models;
 
 namespace Montr.Core.Services.Implementations
 {
-	public class DefaultConfigurationManager : IConfigurationManager
+	public class DefaultConfigurationRegistry : IConfigurationRegistry
 	{
 		private readonly ConcurrentDictionary<Type, object> _entityConfigs = new();
 

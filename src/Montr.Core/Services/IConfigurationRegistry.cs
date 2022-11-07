@@ -4,7 +4,7 @@ using Montr.Core.Models;
 
 namespace Montr.Core.Services
 {
-	public interface IConfigurationManager
+	public interface IConfigurationRegistry
 	{
 		void Configure<TEntity>(Action<IConditionalEntityConfiguration<TEntity>> config);
 

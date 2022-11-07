@@ -14,16 +14,16 @@ namespace Montr.MasterData.Services.QueryHandlers
 	public class GetClassifierMetadataHandler : IRequestHandler<GetClassifierMetadata, DataView>
 	{
 		private readonly IClassifierTypeService _classifierTypeService;
-		private readonly IConfigurationService _configurationService;
+		private readonly IConfigurationProvider _configurationProvider;
 		private readonly IRepository<FieldMetadata> _metadataRepository;
 
 		public GetClassifierMetadataHandler(
 			IClassifierTypeService classifierTypeService,
-			IConfigurationService configurationService,
+			IConfigurationProvider configurationProvider,
 			IRepository<FieldMetadata> metadataRepository)
 		{
 			_classifierTypeService = classifierTypeService;
-			_configurationService = configurationService;
+			_configurationProvider = configurationProvider;
 			_metadataRepository = metadataRepository;
 		}
 
@@ -45,7 +45,7 @@ namespace Montr.MasterData.Services.QueryHandlers
 
 				return new DataView
 				{
-					Panes = await _configurationService.GetItems<Classifier, DataPane>(classifier, request.Principal)
+					Panes = await _configurationProvider.GetItems<Classifier, DataPane>(classifier, request.Principal)
 				};
 			}
 

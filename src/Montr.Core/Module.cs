@@ -137,7 +137,7 @@ namespace Montr.Core
 
 			appBuilder.Services.AddTransient<IStartupTask, ImportDefaultLocaleStringListStartupTask>();
 
-			appBuilder.Services.AddSingleton<IConfigurationManager, DefaultConfigurationManager>();
+			appBuilder.Services.AddSingleton<IConfigurationRegistry, DefaultConfigurationRegistry>();
 			appBuilder.Services.AddSingleton<IContentService, DefaultContentService>();
 			appBuilder.Services.AddSingleton<IContentProvider, DefaultContentProvider>();
 			appBuilder.Services.AddTransient<IPermissionProvider, PermissionProvider>();
@@ -156,7 +156,7 @@ namespace Montr.Core
 			appBuilder.Services.AddSingleton<IPermissionResolver, DefaultPermissionResolver>();
 			appBuilder.Services.AddSingleton<IAuthorizationPolicyProvider, AuthorizationPolicyProvider>();
 
-			appBuilder.Services.AddTransient<IConfigurationService, DefaultConfigurationService>();
+			appBuilder.Services.AddTransient<IConfigurationProvider, DefaultConfigurationProvider>();
 			appBuilder.Services.AddTransient<IRecipeExecutor, DefaultRecipeExecutor>();
 			appBuilder.Services.AddTransient<IEntityRelationService, DbEntityRelationService>();
 		}

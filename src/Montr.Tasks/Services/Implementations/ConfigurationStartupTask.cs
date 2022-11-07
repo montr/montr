@@ -8,16 +8,16 @@ namespace Montr.Tasks.Services.Implementations
 {
 	public class ConfigurationStartupTask : IStartupTask
 	{
-		private readonly IConfigurationManager _configurationManager;
+		private readonly IConfigurationRegistry _registry;
 
-		public ConfigurationStartupTask(IConfigurationManager configurationManager)
+		public ConfigurationStartupTask(IConfigurationRegistry registry)
 		{
-			_configurationManager = configurationManager;
+			_registry = registry;
 		}
 
 		public Task Run(CancellationToken cancellationToken)
 		{
-			_configurationManager.Configure<TaskModel>(config =>
+			_registry.Configure<TaskModel>(config =>
 			{
 				config
 					//.When(task => task.StatusCode == TaskStatusCode.Open)

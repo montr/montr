@@ -8,16 +8,16 @@ namespace Montr.MasterData.Services.Implementations
 {
 	public class ConfigurationStartupTask : IStartupTask
 	{
-		private readonly IConfigurationManager _configurationManager;
+		private readonly IConfigurationRegistry _registry;
 
-		public ConfigurationStartupTask(IConfigurationManager configurationManager)
+		public ConfigurationStartupTask(IConfigurationRegistry registry)
 		{
-			_configurationManager = configurationManager;
+			_registry = registry;
 		}
 
 		public Task Run(CancellationToken cancellationToken)
 		{
-			_configurationManager.Configure<ClassifierType>(config =>
+			_registry.Configure<ClassifierType>(config =>
 			{
 				config
 					.Add<DataPane>((_, x) =>
@@ -53,7 +53,7 @@ namespace Montr.MasterData.Services.Implementations
 					});
 			});
 
-			_configurationManager.Configure<Classifier>(config =>
+			_registry.Configure<Classifier>(config =>
 			{
 				config
 					.Add<DataPane>((_, x) =>

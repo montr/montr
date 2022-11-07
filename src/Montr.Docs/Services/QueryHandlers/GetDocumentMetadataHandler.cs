@@ -15,16 +15,16 @@ namespace Montr.Docs.Services.QueryHandlers;
 public class GetDocumentMetadataHandler : IRequestHandler<GetDocumentMetadata, DataView>
 {
 	private readonly IRepository<Document> _documentRepository;
-	private readonly IConfigurationService _configurationService;
+	private readonly IConfigurationProvider _configurationProvider;
 	private readonly IRepository<FieldMetadata> _metadataRepository;
 
 	public GetDocumentMetadataHandler(
 		IRepository<Document> documentRepository,
-		IConfigurationService configurationService,
+		IConfigurationProvider configurationProvider,
 		IRepository<FieldMetadata> metadataRepository)
 	{
 		_documentRepository = documentRepository;
-		_configurationService = configurationService;
+		_configurationProvider = configurationProvider;
 		_metadataRepository = metadataRepository;
 	}
 
@@ -55,8 +55,8 @@ public class GetDocumentMetadataHandler : IRequestHandler<GetDocumentMetadata, D
 
 		if (request.ViewId == ViewCode.DocumentPage)
 		{
-			result.Toolbar = await _configurationService.GetItems<Document, Button>(document, request.Principal);
-			result.Panes = await _configurationService.GetItems<Document, DataPane>(document, request.Principal);
+			result.Toolbar = await _configurationProvider.GetItems<Document, Button>(document, request.Principal);
+			result.Panes = await _configurationProvider.GetItems<Document, DataPane>(document, request.Principal);
 		}
 		else if (request.ViewId == ViewCode.DocumentInfo)
 		{

@@ -11,14 +11,14 @@ namespace Montr.MasterData.Services.QueryHandlers
 	public class GetClassifierTypeMetadataHandler : IRequestHandler<GetClassifierTypeMetadata, DataView>
 	{
 		private readonly IClassifierTypeService _classifierTypeService;
-		private readonly IConfigurationService _configurationService;
+		private readonly IConfigurationProvider _configurationProvider;
 
 		public GetClassifierTypeMetadataHandler(
 			IClassifierTypeService classifierTypeService,
-			IConfigurationService configurationService)
+			IConfigurationProvider configurationProvider)
 		{
 			_classifierTypeService = classifierTypeService;
-			_configurationService = configurationService;
+			_configurationProvider = configurationProvider;
 		}
 
 		public async Task<DataView> Handle(GetClassifierTypeMetadata request, CancellationToken cancellationToken)
@@ -31,7 +31,7 @@ namespace Montr.MasterData.Services.QueryHandlers
 					? await _classifierTypeService.Get(request.TypeCode, cancellationToken)
 					: new ClassifierType(); // for new classifier types
 
-				result.Panes = await _configurationService.GetItems<ClassifierType, DataPane>(entity, request.Principal);
+				result.Panes = await _configurationProvider.GetItems<ClassifierType, DataPane>(entity, request.Principal);
 			}
 
 			return result;

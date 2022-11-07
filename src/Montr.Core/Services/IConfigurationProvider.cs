@@ -6,9 +6,9 @@ using Montr.Core.Models;
 namespace Montr.Core.Services
 {
 	/// <summary>
-	/// Returns items, configured in <see cref="IConfigurationManager"/>  with authorisation checks.
+	/// Returns items, configured in <see cref="IConfigurationRegistry"/> with authorisation checks.
 	/// </summary>
-	public interface IConfigurationService
+	public interface IConfigurationProvider
 	{
 		Task<ICollection<T>> GetItems<TEntity, T>(TEntity entity, ClaimsPrincipal principal) where T : IConfigurationItem, new();
 	}

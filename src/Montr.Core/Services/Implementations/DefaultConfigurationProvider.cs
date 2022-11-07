@@ -8,14 +8,14 @@ using Montr.Core.Models;
 
 namespace Montr.Core.Services.Implementations
 {
-	public class DefaultConfigurationService : IConfigurationService
+	public class DefaultConfigurationProvider : IConfigurationProvider
 	{
-		private readonly IConfigurationManager _configurationManager;
+		private readonly IConfigurationRegistry _configurationRegistry;
 		private readonly IAuthorizationService _authorizationService;
 
-		public DefaultConfigurationService(IConfigurationManager configurationManager, IAuthorizationService authorizationService)
+		public DefaultConfigurationProvider(IConfigurationRegistry configurationRegistry, IAuthorizationService authorizationService)
 		{
-			_configurationManager = configurationManager;
+			_configurationRegistry = configurationRegistry;
 			_authorizationService = authorizationService;
 		}
 
@@ -24,7 +24,7 @@ namespace Montr.Core.Services.Implementations
 			var result = new List<T>();
 
 			// todo: check authorization before instantiating items
-			foreach (var item in _configurationManager.GetItems<TEntity, T>(entity))
+			foreach (var item in _configurationRegistry.GetItems<TEntity, T>(entity))
 			{
 				if (await Authorize(item, principal) != false)
 				{

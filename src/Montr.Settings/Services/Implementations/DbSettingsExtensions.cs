@@ -11,6 +11,7 @@ using Montr.Core.Events;
 using Montr.Core.Services;
 using Montr.Core.Services.Implementations;
 using Montr.Settings.Entities;
+using IConfigurationProvider = Microsoft.Extensions.Configuration.IConfigurationProvider;
 
 namespace Montr.Settings.Services.Implementations
 {
