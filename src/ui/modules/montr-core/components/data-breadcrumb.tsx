@@ -1,8 +1,9 @@
 import { Breadcrumb, Dropdown } from "antd";
 import * as React from "react";
 import { Link } from "react-router-dom";
-import { DataMenu, Icon } from ".";
 import { IMenu } from "../models";
+import { DataMenu } from "./data-menu";
+import { Icon } from "./icon";
 
 interface Props {
 	items: IMenu[];
@@ -26,7 +27,8 @@ export class DataBreadcrumb extends React.Component<Props> {
 
 			return (
 				<Breadcrumb.Item key={index}>
-					<Dropdown overlay={overlay} trigger={['click']}>
+					<Dropdown trigger={['click']}
+						overlay={overlay} >
 						<a className="ant-dropdown-link">
 							{value.name} {Icon.Down}
 						</a>

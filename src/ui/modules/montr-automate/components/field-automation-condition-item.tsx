@@ -3,9 +3,10 @@ import { DataFieldFactory } from "@montr-core/components/data-field-factory";
 import { IDataField } from "@montr-core/models";
 import { Form, Select, Space } from "antd";
 import React from "react";
-import { AutomationContextProps, AutomationItemProps, withAutomationContext } from ".";
 import { FieldAutomationCondition } from "../models";
 import { FieldAutomationConditionService } from "../services";
+import { AutomationContextProps, withAutomationContext } from "./automation-context";
+import { AutomationItemProps } from "./automation-field-factory";
 
 interface Props extends AutomationItemProps, AutomationContextProps {
 	condition: FieldAutomationCondition;

@@ -3,8 +3,12 @@ import { DataFieldFactory } from "@montr-core/components/data-field-factory";
 import { IIndexer } from "@montr-core/models";
 import { FieldData } from "rc-field-form/lib/interface";
 import React from "react";
-import { AutomationActionList, AutomationConditionList, FieldAutomationConditionItem, GroupAutomationConditionItem, SetFieldAutomationActionItem } from ".";
 import { AutomationAction, AutomationActionListField, AutomationCondition, AutomationConditionListField, FieldAutomationCondition, GroupAutomationCondition, SetFieldAutomationAction } from "../models/";
+import { AutomationActionList } from "./automation-action-list";
+import { AutomationConditionList } from "./automation-condition-list";
+import { FieldAutomationConditionItem } from "./field-automation-condition-item";
+import { GroupAutomationConditionItem } from "./group-automation-condition-item";
+import { SetFieldAutomationActionItem } from "./set-field-automation-action-item";
 
 export class AutomationConditionListFieldFactory extends DataFieldFactory<AutomationConditionListField> {
 

@@ -1,4 +1,3 @@
-import { DataFieldFactory } from "@montr-core/components/data-field-factory";
 import { Layout } from "@montr-core/constants";
 import { Guid } from "@montr-core/models";
 import { ComponentRegistry } from "@montr-core/services";
@@ -6,10 +5,12 @@ import { AppRouteRegistry } from "@montr-core/services/app-route-registry";
 import React from "react";
 import { generatePath } from "react-router";
 
-import("./components").then(x => {
-	DataFieldFactory.register("classifier-group", new x.ClassifierGroupFieldFactory());
-	DataFieldFactory.register("classifier", new x.ClassifierFieldFactory());
-	DataFieldFactory.register("select-classifier-type", new x.SelectClassifierTypeFieldFactory());
+import("@montr-core/components/data-field-factory").then(core => {
+	import("./components/classifier-field-factory").then(x => {
+		core.DataFieldFactory.register("classifier-group", new x.ClassifierGroupFieldFactory());
+		core.DataFieldFactory.register("classifier", new x.ClassifierFieldFactory());
+		core.DataFieldFactory.register("select-classifier-type", new x.SelectClassifierTypeFieldFactory());
+	});
 });
 
 export const EntityTypeCode = {

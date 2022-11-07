@@ -2,18 +2,13 @@ import { ComponentRegistry } from "@montr-core/services";
 import React from "react";
 
 import("@montr-core/components/data-field-factory").then(core => {
-	import("./components").then(x => {
+	import("./components/automation-field-factory").then(x => {
 		core.DataFieldFactory.register("automation-condition-list", new x.AutomationConditionListFieldFactory());
 		core.DataFieldFactory.register("automation-action-list", new x.AutomationActionListFieldFactory());
-	});
-});
 
-import("./components/automation-field-factory").then(ff => {
-	import("./components").then(x => {
-		ff.AutomationConditionFactory.register("group", new x.GroupAutomationConditionFactory());
+		x.AutomationConditionFactory.register("group", new x.GroupAutomationConditionFactory());
 		// ff.AutomationConditionFactory.register("field", new x.FieldAutomationConditionFactory());
-
-		ff.AutomationActionFactory.register("set-field", new x.SetFieldAutomationActionFactory());
+		x.AutomationActionFactory.register("set-field", new x.SetFieldAutomationActionFactory());
 	});
 });
 

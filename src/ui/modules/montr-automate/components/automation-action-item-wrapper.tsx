@@ -1,6 +1,7 @@
 import React from "react";
-import { AutomationActionFactory, AutomationActionItem, AutomationItemProps } from ".";
 import { AutomationAction } from "../models/automation";
+import { AutomationActionItem } from "./automation-action-item";
+import { AutomationActionFactory, AutomationItemProps } from "./automation-field-factory";
 
 interface Props extends AutomationItemProps {
 	value?: AutomationAction;

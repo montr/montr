@@ -2,9 +2,9 @@ import { ButtonAdd, DataFormOptions, Toolbar } from "@montr-core/components";
 import { FormListItemToolbar } from "@montr-core/components/form-list-item-toolbar";
 import { Divider, Form, Select } from "antd";
 import React from "react";
-import { AutomationActionItemWrapper } from ".";
 import { AutomationActionListField, AutomationRuleType } from "../models";
 import { AutomationService } from "../services";
+import { AutomationActionItemWrapper } from "./automation-action-item-wrapper";
 
 interface Props {
 	field: AutomationActionListField;

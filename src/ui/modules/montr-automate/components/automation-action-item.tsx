@@ -3,10 +3,10 @@ import { DataFieldFactory } from "@montr-core/components/data-field-factory";
 import { IDataField } from "@montr-core/models";
 import { Space } from "antd";
 import React from "react";
-import { AutomationContextProps, AutomationItemProps } from ".";
 import { AutomationAction } from "../models";
 import { AutomationService } from "../services";
-import { withAutomationContext } from "./automation-context";
+import { AutomationContextProps, withAutomationContext } from "./automation-context";
+import { AutomationItemProps } from "./automation-field-factory";
 
 interface Props extends AutomationItemProps, AutomationContextProps {
 	action: AutomationAction;

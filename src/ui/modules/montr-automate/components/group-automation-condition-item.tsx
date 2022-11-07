@@ -2,8 +2,8 @@ import { DataFormOptions, extendNamePath } from "@montr-core/components";
 import { DataFieldFactory } from "@montr-core/components/data-field-factory";
 import { Form, Radio, Space } from "antd";
 import React from "react";
-import { AutomationItemProps } from ".";
 import { AutomationConditionListField, GroupAutomationCondition } from "../models";
+import { AutomationItemProps } from "./automation-field-factory";
 
 interface Props extends AutomationItemProps {
 	// todo: rename to value here in other conditions and actions?

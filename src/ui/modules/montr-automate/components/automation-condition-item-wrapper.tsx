@@ -1,6 +1,7 @@
 import React from "react";
-import { AutomationConditionFactory, AutomationConditionItem, AutomationItemProps } from ".";
 import { AutomationCondition } from "../models";
+import { AutomationConditionItem } from "./automation-condition-item";
+import { AutomationConditionFactory, AutomationItemProps } from "./automation-field-factory";
 
 interface Props extends AutomationItemProps {
 	value?: AutomationCondition;
