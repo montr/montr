@@ -1,11 +1,13 @@
 import { Page } from "@montr-core/components";
 import { UserContextProps, withUserContext } from "@montr-core/components/";
-import { CompanyContextProps, withCompanyContext } from "@montr-kompany/components";
+import { CompanyContextProps, withCompanyContext } from "@montr-kompany/components/company-context";
 import { Steps } from "antd";
 import * as React from "react";
-import { StepRegisterCompany, StepRegisterFinish, StepRegisterUser } from ".";
+import { StepRegisterCompany } from "./step-register-company";
+import { StepRegisterFinish } from "./step-register-finish";
+import { StepRegisterUser } from "./step-register-user";
 
-class _PageRegistration extends React.Component<UserContextProps & CompanyContextProps> {
+class WrappedPageRegistration extends React.Component<UserContextProps & CompanyContextProps> {
 	render() {
 		const { user, currentCompany: company } = this.props;
 
@@ -27,4 +29,4 @@ class _PageRegistration extends React.Component<UserContextProps & CompanyContex
 	}
 }
 
-export default withCompanyContext(withUserContext(_PageRegistration));
+export default withCompanyContext(withUserContext(WrappedPageRegistration));

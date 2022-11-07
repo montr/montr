@@ -1,5 +1,7 @@
-import { AppSetupRedirect, AuthCallbackHandler, ErrorBoundary, PageContextProvider, SuspenseFallback, UserContextProvider } from "@montr-core/components";
-import { CompanyContextProvider } from "@montr-kompany/components";
+import { ErrorBoundary, PageContextProvider, SuspenseFallback, UserContextProvider } from "@montr-core/components";
+import { AppSetupRedirect } from "@montr-core/components/app-setup-redirect";
+import { AuthCallbackHandler } from "@montr-core/components/auth-callback-handler";
+import { CompanyContextProvider } from "@montr-kompany/components/company-context-provider";
 import { ConfigProvider } from "antd";
 import { Locale } from "antd/lib/locale-provider";
 import en_US from "antd/lib/locale-provider/en_US";

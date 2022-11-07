@@ -1,5 +1,6 @@
-import { DataMenu, Page, Toolbar } from "@montr-core/components";
+import { Page, Toolbar } from "@montr-core/components";
 import { DataBreadcrumb } from "@montr-core/components/data-breadcrumb";
+import { DataMenu } from "@montr-core/components/data-menu";
 import React from "react";
 import { Translation } from "react-i18next";
 import { Outlet } from "react-router-dom";

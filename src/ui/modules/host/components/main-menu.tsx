@@ -1,7 +1,8 @@
-import { DataMenu, UserContextProps, withUserContext } from "@montr-core/components";
-import { IMenu } from "@montr-core/models";
+import { UserContextProps, withUserContext } from "@montr-core/components";
+import { DataMenu } from "@montr-core/components/data-menu";
+import { IMenu } from "@montr-core/models/menu";
 import { Patterns } from "@montr-idx/module";
-import { CompanyContextProps, withCompanyContext } from "@montr-kompany/components";
+import { CompanyContextProps, withCompanyContext } from "@montr-kompany/components/company-context";
 import React from "react";
 
 interface Props extends UserContextProps, CompanyContextProps {

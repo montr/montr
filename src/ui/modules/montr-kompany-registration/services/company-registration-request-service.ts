@@ -5,16 +5,16 @@ import { Api } from "../module";
 
 export class CompanyRegistrationRequestService extends Fetcher {
 
-    search = async (): Promise<IDocument[]> => {
-        return await this.post(Api.companyRegistrationRequestList);
-    };
+	search = async (): Promise<IDocument[]> => {
+		return await this.post(Api.companyRegistrationRequestList);
+	};
 
-    create = async (): Promise<ApiResult> => {
-        return await this.post(Api.companyRegistrationRequestCreate);
-    };
+	create = async (): Promise<ApiResult> => {
+		return await this.post(Api.companyRegistrationRequestCreate);
+	};
 
-    delete = async (uid: string | Guid): Promise<ApiResult> => {
-        return await this.post(Api.companyRegistrationRequestDelete, { documentUid: uid });
-    };
+	delete = async (uid: string | Guid): Promise<ApiResult> => {
+		return await this.post(Api.companyRegistrationRequestDelete, { documentUid: uid });
+	};
 
 }

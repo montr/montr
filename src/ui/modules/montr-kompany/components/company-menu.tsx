@@ -1,8 +1,8 @@
 import Menu from "antd/lib/menu";
 import { MenuItemProps } from "antd/lib/menu/MenuItem";
 import * as React from "react";
-import { CompanyContextProps, withCompanyContext } from ".";
-import { Company } from "../models";
+import { Company } from "../models/company";
+import { CompanyContextProps, withCompanyContext } from "./company-context";
 
 class WrappedCompanyMenu extends React.Component<MenuItemProps & CompanyContextProps> {
 

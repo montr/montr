@@ -1,6 +1,6 @@
 import { ApiResult } from "@montr-core/models";
 import { Fetcher } from "@montr-core/services";
-import { Company } from "../models";
+import { Company } from "../models/company";
 import { Api } from "../module";
 
 interface CreateCompanyRequest {

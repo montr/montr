@@ -1,14 +1,14 @@
-import * as React from "react";
-import { Form, Input, Checkbox, Button, Radio, Modal, message, Spin } from "antd";
-import { UserCompanyService, CompanyMetadataService } from "../services";
-import { Company } from "../models";
-import { RadioChangeEvent } from "antd/lib/radio/interface";
-import { NavigationService } from "@montr-core/services";
 import { Constants } from "@montr-core/.";
-import { withCompanyContext, CompanyContextProps } from ".";
-import { FormInstance } from "antd/lib/form";
 import { DataForm } from "@montr-core/components";
-import { IDataField, ApiResult } from "@montr-core/models";
+import { ApiResult, IDataField } from "@montr-core/models";
+import { NavigationService } from "@montr-core/services";
+import { Button, Checkbox, Form, Input, message, Modal, Radio, Spin } from "antd";
+import { FormInstance } from "antd/lib/form";
+import { RadioChangeEvent } from "antd/lib/radio/interface";
+import * as React from "react";
+import { Company } from "../models/company";
+import { CompanyMetadataService, UserCompanyService } from "../services";
+import { CompanyContextProps, withCompanyContext } from "./company-context";
 
 interface Props extends CompanyContextProps {
 }

@@ -1,4 +1,4 @@
-import { ErrorBoundary } from "@montr-core/components";
+import { ErrorBoundary } from "@montr-core/components/error-boundary";
 import { Footer } from "@montr-core/components/footer";
 import { Breadcrumb, Layout } from "antd";
 import * as React from "react";

@@ -1,16 +1,20 @@
-import { DataFieldFactory } from "@montr-core/components/data-field-factory";
 import { ComponentRegistry } from "@montr-core/services";
 import React from "react";
-import { AutomationActionFactory, AutomationConditionFactory } from "./components";
 
-import("./components").then(x => {
-	DataFieldFactory.register("automation-condition-list", new x.AutomationConditionListFieldFactory());
-	DataFieldFactory.register("automation-action-list", new x.AutomationActionListFieldFactory());
+import("@montr-core/components/data-field-factory").then(core => {
+	import("./components").then(x => {
+		core.DataFieldFactory.register("automation-condition-list", new x.AutomationConditionListFieldFactory());
+		core.DataFieldFactory.register("automation-action-list", new x.AutomationActionListFieldFactory());
+	});
+});
 
-	AutomationConditionFactory.register("group", new x.GroupAutomationConditionFactory());
-	// AutomationConditionFactory.register("field", new x.FieldAutomationConditionFactory());
+import("./components/automation-field-factory").then(ff => {
+	import("./components").then(x => {
+		ff.AutomationConditionFactory.register("group", new x.GroupAutomationConditionFactory());
+		// ff.AutomationConditionFactory.register("field", new x.FieldAutomationConditionFactory());
 
-	AutomationActionFactory.register("set-field", new x.SetFieldAutomationActionFactory());
+		ff.AutomationActionFactory.register("set-field", new x.SetFieldAutomationActionFactory());
+	});
 });
 
 export const Api = {

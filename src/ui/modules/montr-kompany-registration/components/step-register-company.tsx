@@ -2,11 +2,11 @@ import { ButtonCreate, ButtonDelete, EmptyFieldView, StatusTag, UserContextProps
 import { OperationService } from "@montr-core/services";
 import { IDocument } from "@montr-docs/models";
 import { RouteBuilder } from "@montr-docs/module";
-import { CompanyContextProps, withCompanyContext } from "@montr-kompany/components";
+import { CompanyContextProps, withCompanyContext } from "@montr-kompany/components/company-context";
 import { Button, List, Space, Spin, Typography } from "antd";
 import React from "react";
 import { Navigate } from "react-router-dom";
-import { CompanyRegistrationRequestService } from "../services";
+import { CompanyRegistrationRequestService } from "../services/company-registration-request-service";
 
 interface Props extends UserContextProps, CompanyContextProps {
 }
@@ -17,7 +17,7 @@ interface State {
 	redirectTo?: string;
 }
 
-class _StepRegisterCompany extends React.Component<Props, State> {
+class WrappedStepRegisterCompany extends React.Component<Props, State> {
 
 	private readonly operation = new OperationService();
 	private readonly companyRegistrationRequestService = new CompanyRegistrationRequestService();
@@ -146,4 +146,4 @@ class _StepRegisterCompany extends React.Component<Props, State> {
 	};
 }
 
-export const StepRegisterCompany = withCompanyContext(withUserContext(_StepRegisterCompany));
+export const StepRegisterCompany = withCompanyContext(withUserContext(WrappedStepRegisterCompany));

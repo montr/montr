@@ -4,9 +4,9 @@ import { AuthService, NavigationService, NotificationService } from "@montr-core
 import { User } from "oidc-client";
 import * as React from "react";
 import Cookies from "universal-cookie";
-import { Company } from "../models";
+import { Company } from "../models/company";
 import { UserCompanyService } from "../services";
-import { CompanyContext, CompanyContextProps } from "./";
+import { CompanyContext, CompanyContextProps } from "./company-context";
 
 interface Props {
 	children: React.ReactNode;

@@ -1,7 +1,7 @@
 import { ButtonAdd, ButtonDelete, ButtonExport, ButtonSelect, DataTable, DataTableUpdateToken, Icon, Page, PageHeader, Toolbar } from "@montr-core/components";
 import { DataResult, Guid } from "@montr-core/models";
 import { OperationService } from "@montr-core/services";
-import { CompanyContextProps, withCompanyContext } from "@montr-kompany/components";
+import { CompanyContextProps, withCompanyContext } from "@montr-kompany/components/company-context";
 import { Button, Layout, Modal, Radio, Select, Spin, Tree } from "antd";
 import { RadioChangeEvent } from "antd/lib/radio";
 import { DataNode, EventDataNode } from "antd/lib/tree";
