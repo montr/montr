@@ -6,7 +6,8 @@ import { Link } from "react-router-dom";
 import { Icon, StatusTag } from ".";
 import { Constants } from "..";
 import { DataColumn, DataResult, IIndexer, IMenu, Paging } from "../models";
-import { DateHelper, Fetcher, MetadataService, NotificationService } from "../services";
+import { Fetcher, MetadataService, NotificationService } from "../services";
+import { DateHelper } from "../services/date-helper";
 
 interface Props<TModel> {
 	rowKey?: string | ((record: TModel, index: number) => string);

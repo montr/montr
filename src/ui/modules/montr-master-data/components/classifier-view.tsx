@@ -1,9 +1,9 @@
-import * as React from "react";
-import { IClassifierField, Classifier } from "../models";
-import { IIndexer } from "@montr-core/models";
-import { DataHelper } from "@montr-core/services";
-import { ClassifierService } from "@montr-master-data/services";
 import { EmptyFieldView } from "@montr-core/components";
+import { IIndexer } from "@montr-core/models";
+import { DataHelper } from "@montr-core/services/data-helper";
+import { ClassifierService } from "@montr-master-data/services";
+import * as React from "react";
+import { Classifier, IClassifierField } from "../models";
 
 interface Props {
 	value?: string;

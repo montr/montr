@@ -4,7 +4,8 @@ import React from "react";
 import { ButtonCancel, ButtonSave, DataForm, Icon, Toolbar } from ".";
 import { ApiResult, Guid, IDataField } from "../models";
 import { Views } from "../module";
-import { DataHelper, MetadataService } from "../services";
+import { DataHelper } from "../services/data-helper";
+import { MetadataService } from "../services/metadata-service";
 
 interface Props {
 	mode: "field" | "form";

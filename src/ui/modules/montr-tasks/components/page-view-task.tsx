@@ -4,7 +4,7 @@ import { DataTabs } from "@montr-core/components/data-tabs";
 import { DataToolbar } from "@montr-core/components/data-toolbar";
 import { withNavigate, withParams } from "@montr-core/components/react-router-wrappers";
 import { ConfigurationItemProps, DataPaneProps, DataView } from "@montr-core/models";
-import { Layout, Modal, PageHeader, Spin } from "antd";
+import { Layout, PageHeader, Spin } from "antd";
 import { Location } from "history";
 import React from "react";
 import { Navigate, NavigateFunction } from "react-router-dom";
@@ -153,10 +153,10 @@ class PageViewTask extends React.Component<Props, State> {
 				{/* https://reactrouter.com/docs/en/v6/upgrading/v5#prompt-is-not-currently-supported */}
 				{/* <Prompt message={this.handleNavigation} /> */}
 
-				<Modal
+				{/* <Modal
 					open={modalOpen}
 					onOk={this.onModalConfirm}
-					onCancel={this.onModalClose}>Are you sure you want to ...</Modal>
+					onCancel={this.onModalClose}>Are you sure you want to ...</Modal> */}
 
 				<PageHeader
 					onBack={() => window.history.back()}

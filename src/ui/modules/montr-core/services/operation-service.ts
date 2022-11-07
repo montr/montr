@@ -1,6 +1,6 @@
 import i18next from "i18next";
 import { NavigationService, NotificationService } from ".";
-import { NotificationContent } from "../components";
+import { NotificationContent } from "../components/notification-content";
 import { ApiResult, ApiResultError, ValidationProblemDetails } from "../models";
 
 interface OperationExecuteOptions {

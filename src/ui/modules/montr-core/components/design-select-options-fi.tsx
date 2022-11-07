@@ -60,7 +60,6 @@ export class DesignSelectOptionsFI extends React.Component<IProps, IState> {
 
 						})}
 
-
 						<Toolbar>
 							<ButtonAdd type="dashed" onClick={() => add({ conditions: [] })} />
 						</Toolbar>

@@ -3,7 +3,7 @@ import { DataTabs } from "@montr-core/components/data-tabs";
 import { DataToolbar } from "@montr-core/components/data-toolbar";
 import { withNavigate, withParams } from "@montr-core/components/react-router-wrappers";
 import { ConfigurationItemProps, DataPaneProps, DataView } from "@montr-core/models";
-import { DateHelper } from "@montr-core/services";
+import { DateHelper } from "@montr-core/services/date-helper";
 import { Classifier } from "@montr-master-data/models";
 import { ClassifierService } from "@montr-master-data/services";
 import { PageHeader, Spin } from "antd";

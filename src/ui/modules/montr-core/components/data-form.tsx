@@ -5,8 +5,9 @@ import * as React from "react";
 import { withTranslation, WithTranslation } from "react-i18next";
 import { ButtonSave, FormDefaults, Toolbar } from ".";
 import { ApiResult, IDataField, IIndexer } from "../models";
-import { DataHelper, OperationService } from "../services";
+import { DataHelper } from "../services/data-helper";
 import { NotificationService } from "../services/notification-service";
+import { OperationService } from "../services/operation-service";
 import { DataFieldFactory } from "./data-field-factory";
 
 export interface DataFormOptions extends WithTranslation {

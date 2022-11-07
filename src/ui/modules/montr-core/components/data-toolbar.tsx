@@ -1,8 +1,9 @@
 
 import React from "react";
-import { DataButton } from ".";
 import { Button, ConfigurationItemProps } from "../models";
 import { ComponentFactory } from "./component-factory";
+import { DataButton } from "./data-button";
+import { Toolbar } from "./toolbar";
 
 interface Props {
 	buttons: Button[];
@@ -15,7 +16,7 @@ export class DataToolbar extends React.Component<Props> {
 
 		if (!buttons) return null;
 
-		return <>
+		return <Toolbar>
 			{buttons.map((button, index) => {
 
 				const key = button.key || `btn-${index}`;
@@ -25,6 +26,6 @@ export class DataToolbar extends React.Component<Props> {
 				return ComponentFactory.createComponent(button.component, props)
 					?? <DataButton {...props} />;
 			})}
-		</>;
+		</Toolbar>;
 	};
 }

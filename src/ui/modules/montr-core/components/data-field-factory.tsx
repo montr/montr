@@ -4,7 +4,7 @@ import { Rule } from "rc-field-form/lib/interface";
 import * as React from "react";
 import { DataFormOptions, EmptyFieldView, FormDefaults, Icon } from ".";
 import { IBooleanField, IDataField, IDateField, IDesignSelectOptionsField, IIndexer, INumberField, IPasswordField, ISelectField, ITextAreaField, ITextField } from "../models";
-import { DataHelper } from "../services";
+import { DataHelper } from "../services/data-helper";
 import { DesignSelectOptions } from "./design-select-options";
 
 export abstract class DataFieldFactory<TField extends IDataField> {
