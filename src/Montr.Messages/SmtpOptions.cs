@@ -2,7 +2,7 @@
 
 namespace Montr.Messages
 {
-	public class Options
+	public class SmtpOptions
 	{
 		[Required]
 		public string From { get; set; }

@@ -1,11 +1,10 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using Montr.Automate.Models;
+using Montr.Core.Models;
 using Montr.Core.Services;
-using Montr.MasterData.Models;
 using Montr.Metadata.Models;
 
-namespace Montr.Automate.Services.Implementations
+namespace Montr.Messages.Services.Implementations
 {
 	public class ConfigurationStartupTask : IStartupTask
 	{
@@ -18,16 +17,9 @@ namespace Montr.Automate.Services.Implementations
 
 		public Task Run(CancellationToken cancellationToken)
 		{
-			_registry.Configure<Classifier>(config =>
+			_registry.Configure<Application>(config =>
 			{
-				config.When(classifier => classifier.Type == ClassifierTypeCode.Automation)
-					.Add<DataPane>((_, x) =>
-					{
-						x.Key = "automation";
-						x.Name = "Automation";
-						x.DisplayOrder = 15;
-						x.Component = ComponentCode.PaneEditAutomation;
-					});
+				config.Add<Settings<SmtpOptions>>();
 			});
 
 			return Task.CompletedTask;

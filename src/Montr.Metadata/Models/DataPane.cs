@@ -30,4 +30,8 @@ namespace Montr.Metadata.Models
 	public class DataPanel : ConfigurationItem
 	{
 	}
+
+	public class Settings<TOptions> : ConfigurationItem
+	{
+	}
 }

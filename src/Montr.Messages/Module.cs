@@ -12,14 +12,15 @@ namespace Montr.Messages
 	{
 		public void Configure(IAppBuilder appBuilder)
 		{
-			appBuilder.Services.BindOptions<Options>(appBuilder.Configuration);
+			appBuilder.Services.BindOptions<SmtpOptions>(appBuilder.Configuration);
 
 			appBuilder.Services.AddTransient<IStartupTask, RegisterClassifierTypeStartupTask>();
-			appBuilder.Services.AddNamedTransient<IClassifierRepository, DbMessageTemplateRepository>(ClassifierTypeCode.MessageTemplate);
+			appBuilder.Services.AddTransient<IStartupTask, ConfigurationStartupTask>();
 
 			appBuilder.Services.AddSingleton<IEmailSender, MailKitEmailSender>();
 			appBuilder.Services.AddSingleton<ITemplateRenderer, MustacheTemplateRenderer>();
 
+			appBuilder.Services.AddNamedTransient<IClassifierRepository, DbMessageTemplateRepository>(ClassifierTypeCode.MessageTemplate);
 		}
 	}
 }

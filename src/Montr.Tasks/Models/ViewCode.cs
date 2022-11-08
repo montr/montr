@@ -1,6 +1,6 @@
 ﻿namespace Montr.Tasks.Models
 {
-	public class ViewCode
+	public static class ViewCode
 	{
 		public static readonly string TaskList = "task-list";
 
