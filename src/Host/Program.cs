@@ -75,16 +75,13 @@ namespace Host
 			}
 
 			// todo: run on event "app configured"
-			app.UseEndpoints(endpoints =>
-			{
-				endpoints.MapRazorPages();
-				endpoints.MapControllers();
-				endpoints.MapFallbackToController("Index", "Home");
-				// endpoints.MapFallbackToFile("Home/Index.cshtml");
-				// endpoints.MapHub<MyChatHub>()
-				// endpoints.MapGrpcService<MyCalculatorService>()
-				endpoints.MapDefaultControllerRoute();
-			});
+			app.MapRazorPages();
+			app.MapControllers();
+			app.MapFallbackToController("Index", "Home");
+			// app.MapFallbackToFile("Home/Index.cshtml");
+			// app.MapHub<MyChatHub>()
+			// app.MapGrpcService<MyCalculatorService>()
+			app.MapDefaultControllerRoute();
 
 			await app.RunAsync();
 		}
