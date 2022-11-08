@@ -31,9 +31,9 @@ jobs:
     steps:
       - uses: actions/checkout@v3
 
-      - uses: actions/setup-dotnet@v3.0.3
+      - uses: actions/setup-dotnet@v3
         with:
-          dotnet-version: '6.x'
+          dotnet-version: '7.x'
 
       - run: dotnet build ./src/Montr.sln
 
@@ -44,7 +44,9 @@ jobs:
       - run: dotnet test ./src/Montr.MasterData.Tests
       - run: dotnet test ./src/Montr.MasterData.Plugin.GovRu.Tests
       - run: dotnet test ./src/Montr.Kompany.Tests
+      - run: dotnet test ./src/Montr.Settings.Tests
       #- run: dotnet test ./src/Montr.Tendr.Tests
+      - run: dotnet test ./src/Montr.Worker.Hangfire.Tests
 
       - uses: actions/setup-node@v3
         with:
