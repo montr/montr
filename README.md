@@ -19,7 +19,7 @@ These instructions will get you a copy of the project up and running on your loc
 
 ### Prerequisites
 
-* [.NET 6.0](https://dotnet.microsoft.com/download)
+* [.NET 7.0](https://dotnet.microsoft.com/download)
 * [PostgreSQL](https://www.postgresql.org/download/)
 * [Node.js](https://nodejs.org/en/download/) (only for development)
 
