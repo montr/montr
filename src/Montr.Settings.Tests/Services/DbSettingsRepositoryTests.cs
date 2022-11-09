@@ -84,6 +84,7 @@ namespace Montr.Settings.Tests.Services
 	}
 
 	// ReSharper disable once ClassNeverInstantiated.Local
+	// ReSharper disable once ClassNeverInstantiated.Global
 	internal class TestOptions
 	{
 		public int Number { get; set; }

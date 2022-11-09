@@ -10,7 +10,7 @@ import React from "react";
 import { Navigate, NavigateFunction } from "react-router-dom";
 import { Task } from "../models";
 import { EntityTypeCode, RouteBuilder, Views } from "../module";
-import { TaskService } from "../services";
+import { TaskService } from "../services/task-service";
 
 interface RouteProps {
 	uid?: string;

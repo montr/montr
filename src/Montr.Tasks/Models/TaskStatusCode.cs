@@ -1,6 +1,6 @@
 ﻿namespace Montr.Tasks.Models
 {
-	public class TaskStatusCode
+	public static class TaskStatusCode
 	{
 		public static readonly string Open = "open";
 

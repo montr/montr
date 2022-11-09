@@ -4,7 +4,7 @@ import { FormInstance, Spin } from "antd";
 import React from "react";
 import { Task } from "../models";
 import { Api, Views } from "../module";
-import { TaskService } from "../services";
+import { TaskService } from "../services/task-service";
 
 interface Props extends DataPaneProps<Task>, PageContextProps {
 	mode?: "edit" | "view";

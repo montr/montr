@@ -11,6 +11,7 @@ namespace Montr.Settings
 		public void Configure(IAppBuilder appBuilder)
 		{
 			appBuilder.Services.AddSingleton<ISettingsRepository, DbSettingsRepository>();
+			appBuilder.Services.AddTransient<ISettingsMetadataProvider, DefaultSettingsMetadataProvider>();
 		}
 	}
 }

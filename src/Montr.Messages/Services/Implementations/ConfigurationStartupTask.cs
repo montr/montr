@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Montr.Core.Models;
 using Montr.Core.Services;
-using Montr.Metadata.Models;
+using Montr.Settings.Models;
 
 namespace Montr.Messages.Services.Implementations
 {
@@ -19,7 +19,10 @@ namespace Montr.Messages.Services.Implementations
 		{
 			_registry.Configure<Application>(config =>
 			{
-				config.Add<Settings<SmtpOptions>>();
+				config.Add<SettingsPane>((_, settings) =>
+				{
+					settings.OptionsType = typeof(SmtpOptions);
+				});
 			});
 
 			return Task.CompletedTask;
