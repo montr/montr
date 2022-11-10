@@ -4,12 +4,10 @@
 		"default": {
 			"commandName": "Project",
 			"launchBrowser": false,
-			// "hotReloadEnabled": false,
 			"launchUrl": "",
 			"applicationUrl": "https://+:5001;http://+:5002;",
 			"environmentVariables": {
 				"ASPNETCORE_ENVIRONMENT": "Development"
-			  	// "DOTNET_WATCH_SUPPRESS_BROWSER_REFRESH": "true"
 			}
 		}
 	}
