@@ -1,5 +1,4 @@
-﻿using Montr.Automate.Services;
-using Montr.Automate.Services.Implementations;
+﻿using Montr.Automate.Services.Implementations;
 using Montr.Metadata.Models;
 
 namespace Montr.Automate.Models

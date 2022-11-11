@@ -93,7 +93,7 @@ namespace Montr.Metadata.Services.Implementations
 
 				var fieldProvider = _fieldProviderRegistry.GetFieldTypeProvider(fieldType);
 
-				result.Fields = fieldProvider.GetMetadata();
+				result.Fields = fieldProvider.GetDesignerMetadata();
 			}
 
 			if (viewId == "UserRoles/Grid")

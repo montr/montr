@@ -2,16 +2,15 @@
 using System.Linq;
 using Montr.MasterData.Models;
 using Montr.Metadata.Models;
-using Montr.Metadata.Services;
 using Montr.Metadata.Services.Implementations;
 
 namespace Montr.MasterData.Services.Implementations
 {
 	public class ClassifierFieldProvider : DefaultFieldProvider<ClassifierField, string>
 	{
-		public override IList<FieldMetadata> GetMetadata()
+		public override IList<FieldMetadata> GetDesignerMetadata()
 		{
-			var baseFields = base.GetMetadata();
+			var baseFields = base.GetDesignerMetadata();
 
 			var additionalFields = new List<FieldMetadata>
 			{
@@ -24,9 +23,9 @@ namespace Montr.MasterData.Services.Implementations
 
 	public class ClassifierGroupFieldProvider : DefaultFieldProvider<ClassifierGroupField, string>
 	{
-		public override IList<FieldMetadata> GetMetadata()
+		public override IList<FieldMetadata> GetDesignerMetadata()
 		{
-			var baseFields = base.GetMetadata();
+			var baseFields = base.GetDesignerMetadata();
 
 			var additionalFields = new List<FieldMetadata>
 			{

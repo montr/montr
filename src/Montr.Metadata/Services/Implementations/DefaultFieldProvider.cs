@@ -16,7 +16,7 @@ namespace Montr.Metadata.Services.Implementations
 
 		public Type FieldType => typeof(TFieldType);
 
-		public virtual IList<FieldMetadata> GetMetadata()
+		public virtual IList<FieldMetadata> GetDesignerMetadata()
 		{
 			var result = new List<FieldMetadata>
 			{
@@ -108,9 +108,9 @@ namespace Montr.Metadata.Services.Implementations
 
 	public class TextAreaFieldProvider : DefaultFieldProvider<TextAreaField, string>
 	{
-		public override IList<FieldMetadata> GetMetadata()
+		public override IList<FieldMetadata> GetDesignerMetadata()
 		{
-			var baseFields = base.GetMetadata();
+			var baseFields = base.GetDesignerMetadata();
 
 			var additionalFields = new List<FieldMetadata>
 			{
@@ -123,9 +123,9 @@ namespace Montr.Metadata.Services.Implementations
 
 	public class NumberFieldProvider : DefaultFieldProvider<NumberField, long>
 	{
-		public override IList<FieldMetadata> GetMetadata()
+		public override IList<FieldMetadata> GetDesignerMetadata()
 		{
-			var baseFields = base.GetMetadata();
+			var baseFields = base.GetDesignerMetadata();
 
 			var additionalFields = new List<FieldMetadata>
 			{
@@ -139,9 +139,9 @@ namespace Montr.Metadata.Services.Implementations
 
 	public class DecimalFieldProvider : DefaultFieldProvider<DecimalField, decimal>
 	{
-		public override IList<FieldMetadata> GetMetadata()
+		public override IList<FieldMetadata> GetDesignerMetadata()
 		{
-			var baseFields = base.GetMetadata();
+			var baseFields = base.GetDesignerMetadata();
 
 			var additionalFields = new List<FieldMetadata>
 			{
@@ -157,9 +157,9 @@ namespace Montr.Metadata.Services.Implementations
 	// todo: add support of utc and localization
 	public class DateFieldProvider : DefaultFieldProvider<DateField, DateTime>
 	{
-		public override IList<FieldMetadata> GetMetadata()
+		public override IList<FieldMetadata> GetDesignerMetadata()
 		{
-			var baseFields = base.GetMetadata();
+			var baseFields = base.GetDesignerMetadata();
 
 			var additionalFields = new List<FieldMetadata>
 			{
@@ -201,9 +201,9 @@ namespace Montr.Metadata.Services.Implementations
 
 	public class SelectFieldProvider : DefaultFieldProvider<SelectField, string>
 	{
-		public override IList<FieldMetadata> GetMetadata()
+		public override IList<FieldMetadata> GetDesignerMetadata()
 		{
-			var baseFields = base.GetMetadata();
+			var baseFields = base.GetDesignerMetadata();
 
 			var additionalFields = new List<FieldMetadata>
 			{

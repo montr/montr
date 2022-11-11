@@ -12,7 +12,7 @@ namespace Montr.Metadata.Services
 		/// Get metadata to edit properties of fields of this type.
 		/// </summary>
 		/// <returns></returns>
-		IList<FieldMetadata> GetMetadata();
+		IList<FieldMetadata> GetDesignerMetadata();
 
 		// todo:
 		// move to other service?

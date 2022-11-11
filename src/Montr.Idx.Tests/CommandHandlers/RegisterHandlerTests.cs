@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging.Abstractions;
 using Microsoft.Extensions.Options;
 using Montr.Core;
-using Montr.Core.Services;
 using Montr.Core.Services.Implementations;
 using Montr.Idx.Commands;
 using Montr.Idx.Models;
