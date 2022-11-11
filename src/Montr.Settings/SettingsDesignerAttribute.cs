@@ -1,12 +1,11 @@
 ﻿using System;
 
-namespace Montr.Metadata.Models
+namespace Montr.Settings
 {
-	// todo: remove
 	[AttributeUsage(AttributeTargets.Property)]
-	public class FieldAttribute : Attribute
+	public class SettingsDesignerAttribute : Attribute
 	{
-		public FieldAttribute(string typeCode)
+		public SettingsDesignerAttribute(string typeCode)
 		{
 			TypeCode = typeCode;
 		}

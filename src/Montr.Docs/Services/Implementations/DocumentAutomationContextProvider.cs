@@ -51,7 +51,7 @@ public class DocumentAutomationContextProvider : IAutomationContextProvider
 			{
 				var fieldTypeProvider = _fieldProviderRegistry.GetFieldTypeProvider(attribute.TypeCode);
 
-				var fieldMetadata = (FieldMetadata) Activator.CreateInstance(fieldTypeProvider.FieldType);
+				var fieldMetadata = (FieldMetadata)Activator.CreateInstance(fieldTypeProvider.FieldType);
 
 				if (fieldMetadata != null)
 				{

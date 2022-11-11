@@ -4,7 +4,6 @@ using MediatR;
 using Montr.Core.Models;
 using Montr.Core.Services;
 using Montr.Metadata.Models;
-using Montr.Settings.Models;
 using Montr.Settings.Queries;
 
 namespace Montr.Settings.Services.QueryHandlers

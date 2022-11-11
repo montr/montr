@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Montr.Core.Models;
 using Montr.Core.Services;
-using Montr.Settings.Models;
+using Montr.Settings;
 
 namespace Montr.Messages.Services.Implementations
 {

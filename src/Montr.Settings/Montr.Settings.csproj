@@ -19,4 +19,8 @@
 	  <ProjectReference Include="..\Montr.Metadata\Montr.Metadata.csproj" />
 	</ItemGroup>
 
+	<ItemGroup>
+	  <Folder Include="Models" />
+	</ItemGroup>
+
 </Project>

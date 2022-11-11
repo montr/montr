@@ -32,6 +32,7 @@ namespace Montr.Settings.Services.Implementations
 			return new UpdatableSettings<TSettings>(this);
 		}
 
+		// todo: change first parameter to ICollection<(string, string)> and convert outside of method
 		public async Task<int> Update<TSettings>(ICollection<(string, object)> values, CancellationToken cancellationToken)
 		{
 			var affected = 0;

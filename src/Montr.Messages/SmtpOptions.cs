@@ -1,4 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Montr.Metadata.Models;
+using Montr.Settings;
 
 namespace Montr.Messages
 {
@@ -18,6 +20,7 @@ namespace Montr.Messages
 		public string UserName { get; set; }
 
 		[Required]
+		[SettingsDesigner(PasswordField.TypeCode)]
 		public string Password { get; set; }
 
 		public bool TestMode { get; set; }
