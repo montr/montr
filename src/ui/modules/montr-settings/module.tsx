@@ -10,5 +10,6 @@ export const Locale = {
 };
 
 export const Api = {
-	settingsMetadata: "/settings/metadata"
+	settingsMetadata: "/settings/metadata",
+	settingsUpdate: "/settings/update"
 };

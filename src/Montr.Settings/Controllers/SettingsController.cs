@@ -1,7 +1,9 @@
 ﻿using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Montr.Core.Models;
 using Montr.Metadata.Models;
+using Montr.Settings.Commands;
 using Montr.Settings.Queries;
 
 namespace Montr.Settings.Controllers
@@ -22,6 +24,14 @@ namespace Montr.Settings.Controllers
 			request.Principal = User;
 
 			return await _mediator.Send(request);
+		}
+
+		[HttpPost]
+		public async Task<ApiResult> Update(UpdateSettings request)
+		{
+			request.Principal = User;
+
+			return await _mediator.Send(new UpdateSettings());
 		}
 	}
 }

@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Security.Claims;
 using MediatR;
-using Montr.Metadata.Models;
+using Montr.Core.Models;
 
-namespace Montr.Settings.Queries
+namespace Montr.Settings.Commands
 {
-	public class GetSettingsMetadata : IRequest<DataView>
+	public class UpdateSettings : IRequest<ApiResult>
 	{
 		public ClaimsPrincipal Principal { get; set; }
 
@@ -14,5 +14,7 @@ namespace Montr.Settings.Queries
 		public Guid EntityUid { get; set; }
 
 		public string OptionsTypeCode { get; set; }
+
+		public object Values { get; set; }
 	}
 }

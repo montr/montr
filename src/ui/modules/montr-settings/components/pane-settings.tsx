@@ -1,4 +1,5 @@
 import { DataForm } from "@montr-core/components/data-form";
+import { ApiResult } from "@montr-core/models/api-result";
 import { IDataField } from "@montr-core/models/data-field";
 import { Guid } from "@montr-core/models/guid";
 import { SettingsService } from "@montr-settings/services/settings-service";
@@ -18,7 +19,7 @@ interface State {
 
 export default class PaneSettings extends React.Component<Props, State> {
 
-	private readonly taskService = new SettingsService();
+	private readonly settingsService = new SettingsService();
 
 	constructor(props: Props) {
 		super(props);
@@ -36,9 +37,23 @@ export default class PaneSettings extends React.Component<Props, State> {
 
 		const { entityTypeCode, entityUid } = this.props;
 
-		const dataView = await this.taskService.metadata(entityTypeCode, entityUid);
+		const dataView = await this.settingsService.metadata(entityTypeCode, entityUid);
 
 		this.setState({ loading: false, fields: dataView?.fields });
+	};
+
+	handleSubmit = async (values: unknown): Promise<ApiResult> => {
+		const { entityTypeCode, entityUid } = this.props;
+
+		const result: ApiResult = await this.settingsService.update(
+			entityTypeCode, entityUid, values
+		);
+
+		if (result.success) {
+			await this.fetchData();
+		}
+
+		return result;
 	};
 
 	render = (): React.ReactNode => {
@@ -49,6 +64,7 @@ export default class PaneSettings extends React.Component<Props, State> {
 				<DataForm
 					fields={fields}
 					data={data}
+					onSubmit={this.handleSubmit}
 				/>
 			</Spin>
 		);
