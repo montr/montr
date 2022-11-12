@@ -80,7 +80,7 @@ export class FormEditClassifier extends React.Component<Props, State> {
 
 				const links = await this.classifierLinkService.list({ typeCode: type.code, itemUid: uid });
 
-				const defaultLink = links.rows.find(x => x.tree.code == "default");
+				const defaultLink = links?.rows.find(x => x.tree.code == "default");
 
 				if (defaultLink) data.parentUid = defaultLink.group.uid;
 			}

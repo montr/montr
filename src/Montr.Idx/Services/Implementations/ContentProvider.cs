@@ -12,11 +12,11 @@ namespace Montr.Idx.Services.Implementations
 			{
 				return new[]
 				{
-					new Menu { Id = "p.0", Name = "Profile", Route = "/profile/" },
-					new Menu { Id = "p.1", Name = "Security", Route = "/profile/security/" },
-					new Menu { Id = "p.2", Name = "External Logins", Route = "/profile/external-login/" },
-					new Menu { Id = "p.3", Name = "Notifications", Route = "/profile/notifications/" },
-					new Menu { Id = "p.4", Name = "History", Route = "/profile/history/" }
+					new Menu { Name = "Profile", Route = "/profile/" },
+					new Menu { Name = "Security", Route = "/profile/security/" },
+					new Menu { Name = "External Logins", Route = "/profile/external-login/" },
+					new Menu { Name = "Notifications", Route = "/profile/notifications/" },
+					new Menu { Name = "History", Route = "/profile/history/" }
 				};
 			}
 
@@ -24,8 +24,8 @@ namespace Montr.Idx.Services.Implementations
 			{
 				return new[]
 				{
-					new Menu { Id = "p.1", Name = "SSO Applications", Route = "/settings/sso-applications/" },
-					new Menu { Id = "p.2", Name = "SSO Providers", Route = "/settings/sso-providers/" }
+					new Menu { Name = "SSO Applications", Route = "/settings/sso-applications/" },
+					new Menu { Name = "SSO Providers", Route = "/settings/sso-providers/" }
 				};
 			}
 

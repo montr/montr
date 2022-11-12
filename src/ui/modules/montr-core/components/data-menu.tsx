@@ -10,7 +10,6 @@ import { withNavigate } from "./react-router-wrappers";
 
 interface Props extends MenuProps {
 	menuId?: string;
-	// head?: React.ReactElement<MenuProps>;
 	tail?: IMenu[];
 	navigate: NavigateFunction;
 }
@@ -22,7 +21,7 @@ interface State {
 	navigateTo?: NavigateLocation;
 }
 
-interface NavigateLocation {
+export interface NavigateLocation {
 	path: string;
 	navigated?: boolean;
 }
@@ -64,11 +63,14 @@ class WrappedDataMenu extends React.Component<Props, State> {
 			openKeys: string[] = [],
 			selectedKeys: string[] = [];
 
+		buildMenuIds(menu.items);
+
 		this.collectOpenAndSelectedItems(menu, path, openKeys, selectedKeys);
 
 		this.setState({ menu, openKeys, selectedKeys });
 	};
 
+	// note: items ids should be set
 	// returns true, if parent item contains selected menu item
 	collectOpenAndSelectedItems = (parent: IMenu, path: string, openKeys: string[], selectedKeys: string[]): boolean => {
 		if (parent?.items) {
@@ -77,8 +79,6 @@ class WrappedDataMenu extends React.Component<Props, State> {
 
 			for (let i = 0; i < parent.items.length; i++) {
 				const item = parent.items[i];
-
-				if (!item.id) item.id = `${parent.id}_${i}`;
 
 				if (this.collectOpenAndSelectedItems(item, path, openKeys, selectedKeys)) {
 					openKeys.push(item.id);
@@ -119,17 +119,14 @@ class WrappedDataMenu extends React.Component<Props, State> {
 		await this.contentService.abort();
 	};
 
-	buildItems = (items: IMenu[], keyPrefix = ""): MenuItem[] => {
-		return items?.map((item, index) => {
-
-			const key: string = item.id ?? (keyPrefix + "_" + index);
-
+	buildItems = (items: IMenu[]): MenuItem[] => {
+		return items?.map((item) => {
 			return {
-				key: key,
+				key: item.id,
 				label: item.name,
 				icon: item.icon && Icon.get(item.icon),
 				disabled: item.disabled,
-				children: (item.items?.length > 0) ? this.buildItems(item.items, key + "_") : null,
+				children: (item.items?.length > 0) ? this.buildItems(item.items) : null,
 				onClick: (mi) => this.onClick(mi.domEvent, item)
 			} as MenuItem;
 		});
@@ -139,24 +136,15 @@ class WrappedDataMenu extends React.Component<Props, State> {
 
 		e.preventDefault();
 
-		if (item.onClick) {
-			item.onClick();
-		}
-		else if (item.route) {
-			const route =
-				(typeof item.route == "string")
-					? item.route as string
-					: item.route();
+		const navigateTo = handleMenuClick(item);
 
+		if (navigateTo) {
 			const { menu, openKeys } = this.state,
 				selectedKeys: string[] = [];
 
-			this.collectOpenAndSelectedItems(menu, route, openKeys, selectedKeys);
+			this.collectOpenAndSelectedItems(menu, navigateTo.path, openKeys, selectedKeys);
 
-			this.setState({ navigateTo: { path: route }, openKeys, selectedKeys });
-		}
-		else if (item.url) {
-			window.location.href = item.url;
+			this.setState({ navigateTo, openKeys, selectedKeys });
 		}
 	};
 
@@ -165,7 +153,7 @@ class WrappedDataMenu extends React.Component<Props, State> {
 	};
 
 	render = (): React.ReactNode => {
-		const { menuId, navigate: _, ...props } = this.props,
+		const { menuId: _, navigate: __, ...props } = this.props,
 			{ menu, openKeys, selectedKeys, navigateTo } = this.state;
 
 		if (navigateTo && !navigateTo.navigated) {
@@ -173,7 +161,7 @@ class WrappedDataMenu extends React.Component<Props, State> {
 			return <Navigate to={navigateTo.path} />;
 		}
 
-		const items = this.buildItems(menu?.items, menuId);
+		const items = this.buildItems(menu?.items);
 
 		return (
 			<Menu
@@ -185,6 +173,40 @@ class WrappedDataMenu extends React.Component<Props, State> {
 			/>
 		);
 	};
+}
+
+export function buildMenuIds(items: IMenu[], keyPrefix = "M"): void {
+	if (items) {
+		for (let i = 0; i < items.length; i++) {
+			const item = items[i];
+
+			if (!item.id) item.id = keyPrefix + "_" + i;
+
+			if (item.items?.length > 0) buildMenuIds(item.items, item.id);
+		}
+	}
+}
+
+export function handleMenuClick(item: IMenu): NavigateLocation {
+
+	if (item) {
+		if (item.onClick) {
+			item.onClick();
+		}
+		else if (item.route) {
+			const route =
+				(typeof item.route == "string")
+					? item.route as string
+					: item.route();
+
+			return { path: route };
+		}
+		else if (item.url) {
+			window.location.href = item.url;
+		}
+	}
+
+	return null;
 }
 
 export const DataMenu = withNavigate(WrappedDataMenu);

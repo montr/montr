@@ -12,11 +12,11 @@ namespace Montr.Core.Services.Implementations
 			{
 				return new[]
 				{
-					new Menu { Id = "p.0", Icon = "home", Route = "/" },
+					new Menu { Icon = "home", Route = "/" },
 					// new Menu { Id = "login", Name = "Login", Icon = "login", Route = "/account/login/" },
 					// new Menu { Id = "register", Name = "Registration", Icon = "user-add", Route = "/account/register/" },
-					new Menu { Id = "p.1", Name = "Registration", Icon = "user-add", Route = "/registration/" },
-					// new Menu { Id = "p.2", Name = "Dashboard", Icon = "dashboard", Route = "/dashboard/" }
+					new Menu { Name = "Registration", Icon = "user-add", Route = "/registration/" },
+					// new Menu { Name = "Dashboard", Icon = "dashboard", Route = "/dashboard/" }
 				};
 			}
 
@@ -24,7 +24,7 @@ namespace Montr.Core.Services.Implementations
 			{
 				return new[]
 				{
-					new Menu { Id = "p.0", Name = "SMTP", Route = "/settings/smtp/" },
+					new Menu { Name = "SMTP", Route = "/settings/smtp/" },
 				};
 			}
 
