@@ -5,11 +5,11 @@ namespace Montr.Settings
 	[AttributeUsage(AttributeTargets.Property)]
 	public class SettingsDesignerAttribute : Attribute
 	{
-		public SettingsDesignerAttribute(string typeCode)
+		public SettingsDesignerAttribute(Type designerType)
 		{
-			TypeCode = typeCode;
+			DesignerType = designerType;
 		}
 
-		public string TypeCode { get; }
+		public Type DesignerType { get; }
 	}
 }

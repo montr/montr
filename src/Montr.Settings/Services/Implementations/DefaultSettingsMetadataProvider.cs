@@ -1,28 +1,28 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 using System.Reflection;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 using Montr.Metadata.Models;
-using Montr.Metadata.Services;
+using Montr.Settings.Services.Designers;
 
 namespace Montr.Settings.Services.Implementations
 {
 	public class DefaultSettingsMetadataProvider : ISettingsMetadataProvider
 	{
-		private readonly IFieldProviderRegistry _fieldProviderRegistry;
+		private readonly IServiceProvider _serviceProvider;
 
-		private static readonly Dictionary<Type, string> DefaultDesignerTypeCodes = new Dictionary<Type, string>
+		private static readonly Dictionary<Type, Type> DefaultDesignerTypes = new Dictionary<Type, Type>
 		{
-			{ typeof(int), NumberField.TypeCode },
-			{ typeof(bool), BooleanField.TypeCode },
+			{ typeof(int), typeof(NumberFieldDesigner) },
+			{ typeof(bool), typeof(BooleanFieldDesigner) },
 		};
 
-		private static readonly string DefaultDesignerTypeCode = TextField.TypeCode;
+		private static readonly Type DefaultDesignerType = typeof(TextFieldDesigner);
 
-		public DefaultSettingsMetadataProvider(IFieldProviderRegistry fieldProviderRegistry)
+		public DefaultSettingsMetadataProvider(IServiceProvider serviceProvider)
 		{
-			_fieldProviderRegistry = fieldProviderRegistry;
+			_serviceProvider = serviceProvider;
 		}
 
 		public async Task<ICollection<FieldMetadata>> GetMetadata(Type type)
@@ -33,40 +33,33 @@ namespace Montr.Settings.Services.Implementations
 
 			foreach (var property in properties)
 			{
-				var typeCode = GetDesignerTypeCode(property);
+				var designerType = GetDesignerType(property);
 
-				var fieldTypeProvider = _fieldProviderRegistry.GetFieldTypeProvider(typeCode);
+				var designer = (ISettingsDesigner)ActivatorUtilities.CreateInstance(_serviceProvider, designerType);
 
-				var field = (FieldMetadata)Activator.CreateInstance(fieldTypeProvider.FieldType);
+				var metadata = await designer.GetMetadata(property);
 
-				if (field != null)
-				{
-					field.Key = property.Name;
-					field.Name = property.Name;
-					field.Required = property.GetCustomAttribute<RequiredAttribute>() != null;
-
-					result.Add(field);
-				}
+				result.Add(metadata);
 			}
 
 			return await Task.FromResult(result);
 		}
 
-		private static string GetDesignerTypeCode(PropertyInfo property)
+		private static Type GetDesignerType(PropertyInfo property)
 		{
 			var designerAttribute = property.GetCustomAttribute<SettingsDesignerAttribute>();
 
 			if (designerAttribute != null)
 			{
-				return designerAttribute.TypeCode;
+				return designerAttribute.DesignerType;
 			}
 
-			if (DefaultDesignerTypeCodes.TryGetValue(property.PropertyType, out var result))
+			if (DefaultDesignerTypes.TryGetValue(property.PropertyType, out var result))
 			{
 				return result;
 			}
 
-			return DefaultDesignerTypeCode;
+			return DefaultDesignerType;
 		}
 	}
 }
