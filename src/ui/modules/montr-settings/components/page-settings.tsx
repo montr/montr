@@ -1,8 +1,9 @@
+import { Page, PageHeader, Toolbar } from "@montr-core/components";
+import { DataBreadcrumb } from "@montr-core/components/data-breadcrumb";
+import { DataMenu } from "@montr-core/components/data-menu";
 import React from "react";
 import { Translation } from "react-i18next";
-import { Page, PageHeader, Toolbar } from ".";
-import { DataBreadcrumb } from "./data-breadcrumb";
-import { DataMenu } from "./data-menu";
+import { Outlet } from "react-router-dom";
 
 export default class PageSettings extends React.Component {
 
@@ -27,7 +28,7 @@ export default class PageSettings extends React.Component {
 								<DataMenu menuId="SettingsMenu" />
 							</div>
 							<div className="content">
-								{/* <RouteList routes={SettingsRoutes} /> */}
+								<Outlet />
 							</div>
 						</div>
 					</div>

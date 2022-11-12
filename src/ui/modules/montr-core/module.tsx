@@ -66,7 +66,6 @@ const PageSetup = React.lazy(() => import("./components/page-setup"));
 const PageHome = React.lazy(() => import("./components/page-home"));
 const PageDashboard = React.lazy(() => import("./components/page-dashboard"));
 const PageSearchLocaleString = React.lazy(() => import("./components/page-search-locale-string"));
-const PageSettings = React.lazy(() => import("./components/page-settings"));
 
 AppRouteRegistry.add(Layout.auth, [
 	{ path: Patterns.setup, element: <PageSetup /> }
@@ -78,8 +77,7 @@ AppRouteRegistry.add(Layout.public, [
 
 AppRouteRegistry.add(Layout.private, [
 	{ path: Patterns.dashboard, element: <PageDashboard /> },
-	{ path: Patterns.locales, element: <PageSearchLocaleString /> },
-	{ path: Patterns.settings, element: <PageSettings /> },
+	{ path: Patterns.locales, element: <PageSearchLocaleString /> }
 ]);
 
 ComponentRegistry.add([

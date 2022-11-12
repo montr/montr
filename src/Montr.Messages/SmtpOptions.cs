@@ -29,6 +29,8 @@ namespace Montr.Messages
 
 		public bool TestMode { get; set; }
 
+		[EmailAddress]
+		[StringLength(320)]
 		public string TestAddress { get; set; }
 	}
 }

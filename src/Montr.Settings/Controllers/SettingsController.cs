@@ -2,6 +2,7 @@
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Montr.Core.Models;
+using Montr.Core.Services;
 using Montr.Metadata.Models;
 using Montr.Settings.Commands;
 using Montr.Settings.Queries;
@@ -29,6 +30,8 @@ namespace Montr.Settings.Controllers
 		[HttpPost]
 		public async Task<ApiResult> Update(UpdateSettings request)
 		{
+			if (ModelState.IsValid == false) return ModelState.ToApiResult();
+
 			request.Principal = User;
 
 			return await _mediator.Send(new UpdateSettings());
