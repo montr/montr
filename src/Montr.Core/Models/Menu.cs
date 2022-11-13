@@ -26,7 +26,7 @@ namespace Montr.Core.Models
 
 		public Menu Clone()
 		{
-			return new Menu()
+			return new Menu
 			{
 				Id = Id,
 				Name = Name,
@@ -39,7 +39,7 @@ namespace Montr.Core.Models
 		}
 	}
 
-	public class MenuCode
+	public static class MenuCode
 	{
 		public static readonly string TopMenu = "TopMenu";
 

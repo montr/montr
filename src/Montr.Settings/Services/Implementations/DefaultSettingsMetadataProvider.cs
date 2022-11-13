@@ -8,6 +8,7 @@ using Montr.Settings.Services.Designers;
 
 namespace Montr.Settings.Services.Implementations
 {
+	// todo: move to GetSettingsMetadataHandler
 	public class DefaultSettingsMetadataProvider : ISettingsMetadataProvider
 	{
 		private readonly IServiceProvider _serviceProvider;

@@ -9,7 +9,7 @@ export class SettingsService extends Fetcher {
 		return await this.post(Api.settingsMetadata, { entityTypeCode, entityUid });
 	};
 
-	update = async (entityTypeCode: string, entityUid: Guid, values: unknown): Promise<ApiResult> => {
-		return await this.post(Api.settingsUpdate, { entityTypeCode, entityUid, values });
+	update = async (entityTypeCode: string, entityUid: Guid, typeCode: string, values: any): Promise<ApiResult> => {
+		return await this.post(Api.settingsUpdate, { entityTypeCode, entityUid, values: { typeCode, ...values } });
 	};
 }

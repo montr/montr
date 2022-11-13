@@ -1,7 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Montr.Automate.Models;
-using Montr.Core.Services;
 using Montr.Core.Services.Implementations;
 
 namespace Montr.Automate.Services.Implementations
@@ -20,8 +19,11 @@ namespace Montr.Automate.Services.Implementations
 
 		public void Configure(MvcNewtonsoftJsonOptions options)
 		{
-			options.SerializerSettings.Converters.Add(new PolymorphicNewtonsoftJsonConverter<AutomationCondition>(x => x.Type, _conditionTypeProvider.Map));
-			options.SerializerSettings.Converters.Add(new PolymorphicNewtonsoftJsonConverter<AutomationAction>(x => x.Type, _actionTypeProvider.Map));
+			options.SerializerSettings.Converters.Add(
+				new PolymorphicNewtonsoftJsonConverter<AutomationCondition>(x => x.Type, _conditionTypeProvider));
+
+			options.SerializerSettings.Converters.Add(
+				new PolymorphicNewtonsoftJsonConverter<AutomationAction>(x => x.Type, _actionTypeProvider));
 		}
 	}
 }

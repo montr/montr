@@ -2,6 +2,7 @@
 using System.Security.Claims;
 using MediatR;
 using Montr.Core.Models;
+using Montr.Settings.Services.Implementations;
 
 namespace Montr.Settings.Commands
 {
@@ -15,6 +16,7 @@ namespace Montr.Settings.Commands
 
 		public string OptionsTypeCode { get; set; }
 
+		[Newtonsoft.Json.JsonConverter(typeof(SettingsJsonConverterWrapper))]
 		public object Values { get; set; }
 	}
 }

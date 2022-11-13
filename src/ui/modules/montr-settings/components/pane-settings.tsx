@@ -46,7 +46,7 @@ export default class PaneSettings extends React.Component<Props, State> {
 		const { entityTypeCode, entityUid } = this.props;
 
 		const result: ApiResult = await this.settingsService.update(
-			entityTypeCode, entityUid, values
+			entityTypeCode, entityUid, "Montr.Messages.SmtpOptions", values
 		);
 
 		if (result.success) {

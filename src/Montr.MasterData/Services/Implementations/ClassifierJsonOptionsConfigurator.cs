@@ -1,6 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using Montr.Core.Services;
 using Montr.Core.Services.Implementations;
 using Montr.MasterData.Models;
 
@@ -17,7 +16,14 @@ namespace Montr.MasterData.Services.Implementations
 
 		public void Configure(MvcNewtonsoftJsonOptions options)
 		{
-			options.SerializerSettings.Converters.Add(new PolymorphicNewtonsoftJsonConverterWithPopulate<Classifier>(x => x.Type, _typeProvider.Map));
+			var converter = new PolymorphicNewtonsoftJsonConverter<Classifier>(x => x.Type, _typeProvider)
+			{
+				ConvertMode = PolymorphicJsonConvertMode.BaseAndInheritors,
+				UseBaseTypeIfTypeNotFound = true,
+				UsePopulate = true
+			};
+
+			options.SerializerSettings.Converters.Add(converter);
 		}
 	}
 }

@@ -2,7 +2,7 @@
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace Montr.Core.Services
+namespace Montr.Core.Services.Implementations
 {
 	public class PolymorphicWriteOnlyJsonConverter<T> : JsonConverter<T>
 	{

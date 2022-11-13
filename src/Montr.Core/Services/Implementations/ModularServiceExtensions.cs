@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using Montr.Core.Services.Implementations;
 
-namespace Montr.Core.Services
+namespace Montr.Core.Services.Implementations
 {
 	public static class ModularServiceExtensions
 	{
@@ -48,11 +48,24 @@ namespace Montr.Core.Services
 			{
 				foreach (var task in scope.ServiceProvider.GetServices<IStartupTask>())
 				{
+					cancellationToken.ThrowIfCancellationRequested();
+
 					app.Logger.LogInformation("Running startup task {task}", task);
 
 					await task.Run(cancellationToken);
 				}
+
+				foreach (var task in scope.ServiceProvider.GetServices<IPostStartupTask>().Reverse())
+				{
+					cancellationToken.ThrowIfCancellationRequested();
+
+					app.Logger.LogInformation("Running post-startup task {task}", task);
+
+					await task.Run(cancellationToken);
+				}
 			}
+
+			app.Logger.LogInformation("All startup tasks completed.");
 		}
 	}
 }

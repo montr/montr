@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Montr.Core.Services;
+﻿using Montr.Core.Services.Implementations;
 using NUnit.Framework;
 
 namespace Montr.Core.Tests.Services
@@ -13,7 +11,7 @@ namespace Montr.Core.Tests.Services
 		public void CanConvert_InExactMode_CheckExactType()
 		{
 			// arrange
-			var converter = new PolymorphicNewtonsoftJsonConverter<Base>("", new Dictionary<string, Type>());
+			var converter = new PolymorphicNewtonsoftJsonConverter<Base>(x => x.TypeCode, new JsonTypeProvider<Base>());
 
 			// act && assert
 			Assert.AreEqual(true, converter.CanConvert(typeof(Base)));
@@ -38,6 +36,7 @@ namespace Montr.Core.Tests.Services
 
 		private class Base
 		{
+			public string TypeCode { get; set; }
 		}
 
 		private class Inheritor : Base
