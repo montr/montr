@@ -15,7 +15,7 @@ namespace Montr.Settings.Services.Implementations
 
 		public void Configure(MvcNewtonsoftJsonOptions options)
 		{
-			var converter = new PolymorphicNewtonsoftJsonConverter<ISettingsType>(x => x.TypeCode, _typeProvider)
+			var converter = new PolymorphicNewtonsoftJsonConverter<ISettingsType>(x => x.__TypeCode, _typeProvider)
 			{
 				UsePopulate = true
 			};

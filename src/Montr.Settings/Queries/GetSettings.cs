@@ -2,11 +2,10 @@
 using System.Security.Claims;
 using MediatR;
 using Montr.Core.Models;
-using Montr.Settings.Services.Implementations;
 
-namespace Montr.Settings.Commands
+namespace Montr.Settings.Queries
 {
-	public class UpdateSettings : IRequest<ApiResult>
+	public class GetSettings : IRequest<ApiResult<object>>
 	{
 		public ClaimsPrincipal Principal { get; set; }
 
@@ -15,8 +14,5 @@ namespace Montr.Settings.Commands
 		public Guid EntityUid { get; set; }
 
 		public string SettingsTypeCode { get; set; }
-
-		[Newtonsoft.Json.JsonConverter(typeof(SettingsJsonConverterWrapper))]
-		public object Values { get; set; }
 	}
 }

@@ -5,11 +5,15 @@ import { Fetcher } from "@montr-core/services";
 import { Api } from "../module";
 
 export class SettingsService extends Fetcher {
-	metadata = async<TEntity>(entityTypeCode: string, entityUid: Guid): Promise<DataView<TEntity>> => {
-		return await this.post(Api.settingsMetadata, { entityTypeCode, entityUid });
+	metadata = async<TEntity>(entityTypeCode: string, entityUid: Guid, settingsTypeCode: string): Promise<DataView<TEntity>> => {
+		return await this.post(Api.settingsMetadata, { entityTypeCode, entityUid, settingsTypeCode });
 	};
 
-	update = async (entityTypeCode: string, entityUid: Guid, typeCode: string, values: any): Promise<ApiResult> => {
-		return await this.post(Api.settingsUpdate, { entityTypeCode, entityUid, values: { typeCode, ...values } });
+	get = async (entityTypeCode: string, entityUid: Guid, settingsTypeCode: string): Promise<ApiResult<unknown>> => {
+		return await this.post(Api.settingsGet, { entityTypeCode, entityUid, settingsTypeCode });
+	};
+
+	update = async (entityTypeCode: string, entityUid: Guid, settingsTypeCode: string, values: any): Promise<ApiResult> => {
+		return await this.post(Api.settingsUpdate, { entityTypeCode, entityUid, values: { __typeCode: settingsTypeCode, ...values } });
 	};
 }

@@ -5,6 +5,7 @@ using Montr.Core.Models;
 using Montr.Core.Services;
 using Montr.Metadata.Models;
 using Montr.Settings.Commands;
+using Montr.Settings.Permissions;
 using Montr.Settings.Queries;
 
 namespace Montr.Settings.Controllers
@@ -19,7 +20,7 @@ namespace Montr.Settings.Controllers
 			_mediator = mediator;
 		}
 
-		[HttpPost]
+		[HttpPost, Permission(typeof(ViewSettings))]
 		public async Task<DataView> Metadata(GetSettingsMetadata request)
 		{
 			request.Principal = User;
@@ -27,7 +28,15 @@ namespace Montr.Settings.Controllers
 			return await _mediator.Send(request);
 		}
 
-		[HttpPost]
+		[HttpPost, Permission(typeof(ViewSettings))]
+		public async Task<ApiResult<object>> Get(GetSettings request)
+		{
+			request.Principal = User;
+
+			return await _mediator.Send(request);
+		}
+
+		[HttpPost, Permission(typeof(ManageSettings))]
 		public async Task<ApiResult> Update(UpdateSettings request)
 		{
 			if (ModelState.IsValid == false) return ModelState.ToApiResult();

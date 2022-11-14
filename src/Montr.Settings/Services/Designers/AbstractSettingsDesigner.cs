@@ -14,11 +14,15 @@ namespace Montr.Settings.Services.Designers
 
 		protected virtual Task<TField> GetMetadataInternal(PropertyInfo property)
 		{
+			var key = property.Name[..1].ToLowerInvariant() + property.Name[1..];
+
+			var required = property.GetCustomAttribute<RequiredAttribute>() != null;
+
 			var result = new TField
 			{
-				Key = property.Name,
+				Key = key,
 				Name = property.Name,
-				Required = property.GetCustomAttribute<RequiredAttribute>() != null
+				Required = required
 			};
 
 			// todo: add support for [DefaultValue]

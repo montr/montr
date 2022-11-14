@@ -17,6 +17,9 @@ interface State {
 	fields?: IDataField[];
 }
 
+// todo: remove hardcoded value
+const settingsTypeCode = "Montr.Messages.SmtpOptions";
+
 export default class PaneSettings extends React.Component<Props, State> {
 
 	private readonly settingsService = new SettingsService();
@@ -37,17 +40,20 @@ export default class PaneSettings extends React.Component<Props, State> {
 
 		const { entityTypeCode, entityUid } = this.props;
 
-		const dataView = await this.settingsService.metadata(entityTypeCode, entityUid);
+		const dataView = await this.settingsService
+			.metadata(entityTypeCode, entityUid, settingsTypeCode);
 
-		this.setState({ loading: false, fields: dataView?.fields });
+		const data = await this.settingsService
+			.get(entityTypeCode, entityUid, settingsTypeCode);
+
+		this.setState({ loading: false, data: data?.data, fields: dataView?.fields });
 	};
 
 	handleSubmit = async (values: unknown): Promise<ApiResult> => {
 		const { entityTypeCode, entityUid } = this.props;
 
-		const result: ApiResult = await this.settingsService.update(
-			entityTypeCode, entityUid, "Montr.Messages.SmtpOptions", values
-		);
+		const result: ApiResult = await this.settingsService
+			.update(entityTypeCode, entityUid, settingsTypeCode, values);
 
 		if (result.success) {
 			await this.fetchData();
@@ -57,7 +63,7 @@ export default class PaneSettings extends React.Component<Props, State> {
 	};
 
 	render = (): React.ReactNode => {
-		const { loading, data = {}, fields } = this.state;
+		const { loading, data, fields } = this.state;
 
 		return (
 			<Spin spinning={loading}>

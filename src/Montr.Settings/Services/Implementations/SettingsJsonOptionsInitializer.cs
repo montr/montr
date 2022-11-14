@@ -20,9 +20,9 @@ namespace Montr.Settings.Services.Implementations
 
 		public Task Run(CancellationToken cancellationToken)
 		{
-			foreach (var type in _settingsTypeRegistry.GetRegisteredTypes())
+			foreach (var (typeCode, type) in _settingsTypeRegistry.GetRegisteredTypes())
 			{
-				_settingsTypeProvider.Register(type.FullName, type);
+				_settingsTypeProvider.Register(typeCode, type);
 			}
 
 			return Task.CompletedTask;

@@ -1,20 +1,33 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace Montr.Settings.Services.Implementations
 {
 	public class DefaultSettingsTypeRegistry : ISettingsTypeRegistry
 	{
-		private readonly List<Type> _types = new();
-		
-		public void Register(Type type)
+		private readonly Dictionary<string, Type> _types = new();
+
+		public string GetTypeCode(Type type)
 		{
-			_types.Add(type);
+			return type.FullName;
 		}
 
-		public IEnumerable<Type> GetRegisteredTypes()
+		public void Register(Type type)
 		{
-			return _types;
+			var typeCode = GetTypeCode(type);
+
+			_types[typeCode] = type;
+		}
+
+		public bool TryGetType(string typeCode, out Type type)
+		{
+			return _types.TryGetValue(typeCode, out type);
+		}
+
+		public IEnumerable<(string, Type)> GetRegisteredTypes()
+		{
+			return _types.Select(x => (x.Key, x.Value));
 		}
 	}
 }

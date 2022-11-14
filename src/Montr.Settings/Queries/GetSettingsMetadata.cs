@@ -13,6 +13,6 @@ namespace Montr.Settings.Queries
 
 		public Guid EntityUid { get; set; }
 
-		public string OptionsTypeCode { get; set; }
+		public string SettingsTypeCode { get; set; }
 	}
 }

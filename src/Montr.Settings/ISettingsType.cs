@@ -6,6 +6,7 @@
 	/// </summary>
 	public interface ISettingsType
 	{
-		string TypeCode { get; }
+		// ReSharper disable once InconsistentNaming
+		string __TypeCode { get; }
 	}
 }
