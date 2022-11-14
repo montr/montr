@@ -27,13 +27,18 @@ namespace Montr.Settings.Services.Implementations
 			_mediator = mediator;
 		}
 
+		public IUpdatableSettings GetSettings(Type ofSettings)
+		{
+			return new UpdatableSettings(ofSettings, this);
+		}
+
 		public IUpdatableSettings<TSettings> GetSettings<TSettings>()
 		{
 			return new UpdatableSettings<TSettings>(this);
 		}
 
 		// todo: change first parameter to ICollection<(string, string)> and convert outside of method
-		public async Task<int> Update<TSettings>(ICollection<(string, object)> values, CancellationToken cancellationToken)
+		public async Task<int> Update(ICollection<(string, object)> values, CancellationToken cancellationToken)
 		{
 			var affected = 0;
 
@@ -76,29 +81,45 @@ namespace Montr.Settings.Services.Implementations
 			return affected;
 		}
 
-		private class UpdatableSettings<TSettings> : IUpdatableSettings<TSettings>
+		private class UpdatableSettings : IUpdatableSettings
 		{
+			private readonly Type _ofSettings;
 			private readonly ISettingsRepository _repository;
 
 			private readonly ICollection<(string, object)> _values = new List<(string, object)>();
 
-			public UpdatableSettings(ISettingsRepository repository)
+			public UpdatableSettings(Type ofSettings, ISettingsRepository repository)
 			{
+				_ofSettings = ofSettings;
 				_repository = repository;
 			}
 
-			public IUpdatableSettings<TSettings> Set<TValue>(Expression<Func<TSettings, TValue>> keyExpr, TValue value)
+			public IUpdatableSettings Set(string key, object value)
 			{
-				var key = typeof(TSettings).FullName + ":" + ExpressionHelper.GetMemberName(keyExpr);
+				var fullKey = _ofSettings.FullName + ":" + key;
 
-				_values.Add((key, value));
+				_values.Add((fullKey, value));
 
 				return this;
 			}
 
 			public async Task<int> Update(CancellationToken cancellationToken)
 			{
-				return await _repository.Update<TSettings>(_values, cancellationToken);
+				return await _repository.Update(_values, cancellationToken);
+			}
+		}
+
+		private class UpdatableSettings<TSettings> : UpdatableSettings, IUpdatableSettings<TSettings>
+		{
+			public UpdatableSettings(ISettingsRepository repository) : base(typeof(TSettings), repository)
+			{
+			}
+
+			public IUpdatableSettings<TSettings> Set<TValue>(Expression<Func<TSettings, TValue>> keyExpr, TValue value)
+			{
+				base.Set(ExpressionHelper.GetMemberName(keyExpr), value);
+
+				return this;
 			}
 		}
 	}

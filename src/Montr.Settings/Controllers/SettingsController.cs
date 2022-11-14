@@ -43,7 +43,7 @@ namespace Montr.Settings.Controllers
 
 			request.Principal = User;
 
-			return await _mediator.Send(new UpdateSettings());
+			return await _mediator.Send(request);
 		}
 	}
 }

@@ -32,7 +32,7 @@ namespace Montr.Settings.Services.QueryHandlers
 			}
 			else
 			{
-				result =  new ApiResult<object> { Success = false };
+				result = new ApiResult<object> { Success = false };
 			}
 
 			return Task.FromResult(result);
