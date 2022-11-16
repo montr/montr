@@ -3,7 +3,7 @@ import { ApiResult } from "@montr-core/models/api-result";
 import { IDataField } from "@montr-core/models/data-field";
 import { Guid } from "@montr-core/models/guid";
 import { SettingsService } from "@montr-settings/services/settings-service";
-import { Spin } from "antd";
+import { Divider, Spin } from "antd";
 import React from "react";
 
 interface Props {
@@ -67,6 +67,8 @@ export default class PaneSettings extends React.Component<Props, State> {
 
 		return (
 			<Spin spinning={loading}>
+				<Divider orientation="left">{settingsTypeCode}</Divider>
+
 				<DataForm
 					fields={fields}
 					data={data}

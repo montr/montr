@@ -7,7 +7,7 @@ using Montr.Kompany.Commands;
 namespace Montr.Kompany.Controllers
 {
 	[ApiController, Route("api/[controller]/[action]")]
-	public class SetupController : Controller
+	public class SetupController : ControllerBase
 	{
 		private readonly ISender _mediator;
 
