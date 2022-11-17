@@ -169,6 +169,16 @@ namespace Montr.Metadata.Services.Implementations
 			return baseFields.Union(additionalFields).ToList();
 		}
 
+		public override DateTime ReadInternal(string value)
+		{
+			if (DateTime.TryParse(value, out var dateTime))
+			{
+				return dateTime;
+			}
+
+			return base.ReadInternal(value);
+		}
+
 		public override string WriteInternal(DateTime value)
 		{
 			return value.ToString("o");

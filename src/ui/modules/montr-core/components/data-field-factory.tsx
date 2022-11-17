@@ -208,7 +208,7 @@ export class PasswordFieldFactory extends DataFieldFactory<IPasswordField> {
 export class DateFieldFactory extends DataFieldFactory<IDateField> {
 	constructor() {
 		super();
-		// this.shouldFormatValue = true;
+		this.shouldFormatValue = true;
 	}
 
 	formatValue(field: IDateField, data: IIndexer, value: any): any {
@@ -219,7 +219,7 @@ export class DateFieldFactory extends DataFieldFactory<IDateField> {
 		const props = field?.props;
 
 		return <DatePicker
-			allowClear
+			// allowClear
 			showTime={props?.includeTime}
 			disabled={field.readonly}
 			placeholder={field.placeholder}

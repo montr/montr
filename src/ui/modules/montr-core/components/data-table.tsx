@@ -334,7 +334,7 @@ DataTableTemplateRegistry.add([
 	{ name: "type:date", template: (value: string | Date) => DateHelper.toLocaleDateString(value) },
 	{ name: "type:time", template: (value: string | Date) => DateHelper.toLocaleTimeString(value) },
 	{ name: "type:datetime", template: (value: string | Date) => DateHelper.toLocaleDateTimeString(value) },
-	{ name: "code", template: (value: string) => <Typography.Text code>{value}</Typography.Text> },
+	{ name: "code", template: (value: string) => <Typography.Text code ellipsis>{value}</Typography.Text> },
 	{ name: "status", template: (value: string) => <StatusTag statusCode={value} /> },
 
 	{

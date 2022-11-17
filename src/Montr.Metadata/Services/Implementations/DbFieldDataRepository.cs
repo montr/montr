@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using LinqToDB;
 using LinqToDB.Data;
+using Microsoft.Extensions.Logging;
 using Montr.Core.Models;
 using Montr.Core.Services;
 using Montr.Metadata.Entities;
@@ -14,11 +15,14 @@ namespace Montr.Metadata.Services.Implementations
 {
 	public class DbFieldDataRepository : IFieldDataRepository
 	{
+		private readonly ILogger<DbFieldDataRepository> _logger;
 		private readonly IDbContextFactory _dbContextFactory;
 		private readonly IFieldProviderRegistry _fieldProviderRegistry;
 
-		public DbFieldDataRepository(IDbContextFactory dbContextFactory, IFieldProviderRegistry fieldProviderRegistry)
+		public DbFieldDataRepository(ILogger<DbFieldDataRepository> logger,
+			IDbContextFactory dbContextFactory, IFieldProviderRegistry fieldProviderRegistry)
 		{
+			_logger = logger;
 			_dbContextFactory = dbContextFactory;
 			_fieldProviderRegistry = fieldProviderRegistry;
 		}
@@ -51,7 +55,15 @@ namespace Montr.Metadata.Services.Implementations
 							{
 								var fieldProvider = _fieldProviderRegistry.GetFieldTypeProvider(field.Type);
 
-								data[dbData.Key] = fieldProvider.ReadFromStorage(dbData.Value);
+								try
+								{
+									data[dbData.Key] = fieldProvider.ReadFromStorage(dbData.Value);
+								}
+								catch (Exception ex)
+								{
+									// todo: display error to user? it can be db migration problems and should be fixed
+									_logger.LogError($"Failed to read \"{dbData.Key}\" value \"{dbData.Value}\"", ex);
+								}
 							}
 						}
 
