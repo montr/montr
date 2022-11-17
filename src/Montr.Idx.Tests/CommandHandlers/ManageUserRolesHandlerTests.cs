@@ -33,8 +33,8 @@ namespace Montr.Idx.Tests.CommandHandlers
 
 			var generator = new MasterDataDbGenerator(unitOfWorkFactory, dbContextFactory);
 
-			var addHandler = new AddUserRolesHandler(new NullLogger<AddUserRolesHandler>(), unitOfWorkFactory, identityServiceFactory.UserManager);
-			var removeHandler = new RemoveUserRolesHandler(new NullLogger<RemoveUserRolesHandler>(), unitOfWorkFactory, identityServiceFactory.UserManager);
+			var addHandler = new AddUserRolesHandler(NullLogger<AddUserRolesHandler>.Instance, unitOfWorkFactory, identityServiceFactory.UserManager);
+			var removeHandler = new RemoveUserRolesHandler(NullLogger<RemoveUserRolesHandler>.Instance, unitOfWorkFactory, identityServiceFactory.UserManager);
 
 			var roles = new[] { "test_role_1", "test_role_2", "test_role_3" };
 

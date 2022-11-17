@@ -1,5 +1,6 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging.Abstractions;
 using Montr.Core.Services;
 using Montr.Core.Services.Implementations;
 using Montr.MasterData.Models;
@@ -30,7 +31,7 @@ namespace Montr.MasterData.Tests.QueryHandlers
 
 			var fieldProviderRegistry = new DefaultFieldProviderRegistry();
 			fieldProviderRegistry.AddFieldType(typeof(TextField));
-			var dbFieldDataRepository = new DbFieldDataRepository(dbContextFactory, fieldProviderRegistry);
+			var dbFieldDataRepository = new DbFieldDataRepository(NullLogger<DbFieldDataRepository>.Instance, dbContextFactory, fieldProviderRegistry);
 
 			var metadataServiceMock = new Mock<IClassifierTypeMetadataService>();
 			metadataServiceMock

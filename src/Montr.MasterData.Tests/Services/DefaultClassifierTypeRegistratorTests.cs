@@ -27,8 +27,7 @@ namespace Montr.MasterData.Tests.Services
 			var classifierTypeService = new DbClassifierTypeService(dbContextFactory, classifierTypeRepository);
 			var dbFieldMetadataService = new DbFieldMetadataService(dbContextFactory, new DefaultDateTimeProvider(), new NewtonsoftJsonSerializer());
 
-			var handler = new DefaultClassifierTypeRegistrator(
-				new NullLogger<DefaultClassifierTypeRegistrator>(),
+			var handler = new DefaultClassifierTypeRegistrator(NullLogger<DefaultClassifierTypeRegistrator>.Instance,
 				unitOfWorkFactory, classifierTypeService, dbFieldMetadataService);
 
 			using (var _ = unitOfWorkFactory.Create())

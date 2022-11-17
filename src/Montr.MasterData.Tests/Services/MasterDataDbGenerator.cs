@@ -53,7 +53,7 @@ namespace Montr.MasterData.Tests.Services
 			fieldProviderRegistry.AddFieldType(typeof(TextAreaField));
 
 			var dbFieldMetadataRepository = new DbFieldMetadataRepository(dbContextFactory, fieldProviderRegistry, jsonSerializer);
-			var dbFieldDataRepository = new DbFieldDataRepository(dbContextFactory, fieldProviderRegistry);
+			var dbFieldDataRepository = new DbFieldDataRepository(NullLogger<DbFieldDataRepository>.Instance, dbContextFactory, fieldProviderRegistry);
 			var dbFieldMetadataService = new DbFieldMetadataService(dbContextFactory, dateTimeProvider, jsonSerializer);
 
 			_classifierTypeService = new DbClassifierTypeService(dbContextFactory, classifierTypeRepository);
@@ -62,7 +62,7 @@ namespace Montr.MasterData.Tests.Services
 			_insertClassifierTypeHandler = new InsertClassifierTypeHandler(unitOfWorkFactory, _classifierTypeService, dbFieldMetadataService);
 			_insertClassifierGroupHandler = new InsertClassifierGroupHandler(unitOfWorkFactory, dbContextFactory, _classifierTypeService);
 
-			_classifierTypeRegistrator = new DefaultClassifierTypeRegistrator(new NullLogger<DefaultClassifierTypeRegistrator>(),
+			_classifierTypeRegistrator = new DefaultClassifierTypeRegistrator(NullLogger<DefaultClassifierTypeRegistrator>.Instance,
 				unitOfWorkFactory, _classifierTypeService, dbFieldMetadataService);
 
 			var classifierTypeMetadataService = new ClassifierTypeMetadataService(dbFieldMetadataRepository);

@@ -1,11 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Security.Claims;
 using MediatR;
-using Montr.Metadata.Models;
+using Montr.Settings.Models;
 
 namespace Montr.Settings.Queries
 {
-	public class GetSettingsMetadata : IRequest<DataView>
+	public class GetSettingsMetadata : IRequest<ICollection<SettingsBlock>>
 	{
 		public ClaimsPrincipal Principal { get; set; }
 

@@ -70,13 +70,13 @@ public class ConfigurationStartupTask : IStartupTask
 					x.Component = Core.ComponentCode.PaneSearchEntityStatuses;
 				})
 				// todo: remove or replace with filtered list of automations for selected document type
-				.Add<DataPane>((_, x) =>
+				/*.Add<DataPane>((_, x) =>
 				{
 					x.Key = "automation";
 					x.Name = "Automations";
 					x.DisplayOrder = 30;
 					x.Component = Automate.ComponentCode.PaneSearchAutomation;
-				});
+				})*/;
 
 			config.When(classifier => classifier.Type == ClassifierTypeCode.Process)
 				.Add<DataPane>((_, x) =>

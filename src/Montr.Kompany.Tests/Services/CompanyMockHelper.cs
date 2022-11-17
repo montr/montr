@@ -24,7 +24,7 @@ namespace Montr.Kompany.Tests.Services
     		var fieldProviderRegistry = new DefaultFieldProviderRegistry();
     		fieldProviderRegistry.AddFieldType(typeof(TextField));
     		fieldProviderRegistry.AddFieldType(typeof(TextAreaField));
-    		var dbFieldDataRepository = new DbFieldDataRepository(dbContextFactory, fieldProviderRegistry);
+    		var dbFieldDataRepository = new DbFieldDataRepository(NullLogger<DbFieldDataRepository>.Instance, dbContextFactory, fieldProviderRegistry);
 
     		var metadataService = new ClassifierTypeMetadataService(new DbFieldMetadataRepository(
     			dbContextFactory, fieldProviderRegistry, new NewtonsoftJsonSerializer()));

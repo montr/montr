@@ -32,7 +32,7 @@ namespace Montr.Idx.Tests.Services
 
 			var fieldProviderRegistry = new DefaultFieldProviderRegistry();
 			fieldProviderRegistry.AddFieldType(typeof(TextField));
-			var dbFieldDataRepository = new DbFieldDataRepository(_dbContextFactory, fieldProviderRegistry);
+			var dbFieldDataRepository = new DbFieldDataRepository(NullLogger<DbFieldDataRepository>.Instance, _dbContextFactory, fieldProviderRegistry);
 
 			var metadataServiceMock = new Mock<IClassifierTypeMetadataService>();
 			metadataServiceMock
@@ -46,10 +46,10 @@ namespace Montr.Idx.Tests.Services
 
 			var identityServiceFactory = new IdentityServiceFactory();
 
-			var roleRepository = new DbRoleRepository(new NullLogger<DbRoleRepository>(), _dbContextFactory,
+			var roleRepository = new DbRoleRepository(NullLogger<DbRoleRepository>.Instance, _dbContextFactory,
 				classifierTypeService, null, metadataServiceMock.Object, dbFieldDataRepository, null, identityServiceFactory.RoleManager);
 
-			var userRepository = new DbUserRepository(new NullLogger<DbUserRepository>(), _dbContextFactory,
+			var userRepository = new DbUserRepository(NullLogger<DbUserRepository>.Instance, _dbContextFactory,
 				classifierTypeService, null, metadataServiceMock.Object, dbFieldDataRepository, null, identityServiceFactory.UserManager);
 
 			var classifierRepositoryFactoryMock = new Mock<INamedServiceFactory<IClassifierRepository>>();

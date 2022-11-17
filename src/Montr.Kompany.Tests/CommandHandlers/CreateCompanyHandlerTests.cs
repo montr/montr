@@ -49,7 +49,7 @@ namespace Montr.Kompany.Tests.CommandHandlers
 			fieldProviderRegistry.AddFieldType(typeof(TextField));
 
 			// var dbFieldMetadataRepository = new DbFieldMetadataRepository(dbContextFactory, fieldProviderRegistry, new NewtonsoftJsonSerializer());
-			var dbFieldDataRepository = new DbFieldDataRepository(dbContextFactory, fieldProviderRegistry);
+			var dbFieldDataRepository = new DbFieldDataRepository(NullLogger<DbFieldDataRepository>.Instance, dbContextFactory, fieldProviderRegistry);
 			var classifierRepositoryFactory = CompanyMockHelper.CreateClassifierRepositoryFactory(dbContextFactory);
 			var dbNumberGenerator = new DbNumberGenerator(dbContextFactory, classifierRepositoryFactory, dateTimeProvider, Array.Empty<INumberTagResolver>());
 			var dbDocumentService = new DbDocumentService(dbContextFactory, null, dbNumberGenerator, mediatorMock.Object, null, null);

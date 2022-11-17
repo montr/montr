@@ -30,7 +30,7 @@ namespace Montr.Idx.Tests.CommandHandlers
 			// todo: test EmailConfirmationService
 			var emailConfirmationServiceMock = new Mock<IEmailConfirmationService>();
 
-			var handler = new ExternalRegisterHandler(new NullLogger<ExternalRegisterHandler>(), classifierRepositoryFactory,
+			var handler = new ExternalRegisterHandler(NullLogger<ExternalRegisterHandler>.Instance, classifierRepositoryFactory,
 				identityServiceFactory.UserManager, identityServiceFactory.SignInManager, emailConfirmationServiceMock.Object);
 
 			using (var _ = unitOfWorkFactory.Create())

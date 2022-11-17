@@ -1,10 +1,11 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Montr.Core.Models;
 using Montr.Core.Services;
-using Montr.Metadata.Models;
 using Montr.Settings.Commands;
+using Montr.Settings.Models;
 using Montr.Settings.Permissions;
 using Montr.Settings.Queries;
 
@@ -21,7 +22,7 @@ namespace Montr.Settings.Controllers
 		}
 
 		[HttpPost, Permission(typeof(ViewSettings))]
-		public async Task<DataView> Metadata(GetSettingsMetadata request)
+		public async Task<ICollection<SettingsBlock>> Metadata(GetSettingsMetadata request)
 		{
 			request.Principal = User;
 

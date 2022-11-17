@@ -25,7 +25,7 @@ namespace Montr.Idx.Tests.Services
 		public IdentityServiceFactory()
 		{
 			var dataProtectorTokenProvider = new DataProtectorTokenProvider<DbUser>(
-				new EphemeralDataProtectionProvider(new NullLoggerFactory()), null, new NullLogger<DataProtectorTokenProvider<DbUser>>());
+				new EphemeralDataProtectionProvider(new NullLoggerFactory()), null, NullLogger<DataProtectorTokenProvider<DbUser>>.Instance);
 
 			// service provider
 			var serviceProviderMock = new Mock<IServiceProvider>();
@@ -76,14 +76,14 @@ namespace Montr.Idx.Tests.Services
 			var roleStore = new RoleStore<Guid, DbRole>(connectionFactory, identityErrorDescriber);
 
 			var userManager = new UserManager<DbUser>(userStore, identityOptionsAccessor, new PasswordHasher<DbUser>(), null, null,
-				lookupNormalizer, identityErrorDescriber, serviceProviderMock.Object, new NullLogger<UserManager<DbUser>>());
+				lookupNormalizer, identityErrorDescriber, serviceProviderMock.Object, NullLogger<UserManager<DbUser>>.Instance);
 			userManager.RegisterTokenProvider(TokenOptions.DefaultProvider, dataProtectorTokenProvider);
 
 			var roleManager = new AspNetRoleManager<DbRole>(roleStore, null, lookupNormalizer, identityErrorDescriber,
-				new NullLogger<RoleManager<DbRole>>(), httpContextAccessor);
+				NullLogger<RoleManager<DbRole>>.Instance, httpContextAccessor);
 			var userClaimsPrincipalFactory = new UserClaimsPrincipalFactory<DbUser,DbRole>(userManager, roleManager, identityOptionsAccessor);
 			var signInManager = new SignInManager<DbUser>(userManager, httpContextAccessor, userClaimsPrincipalFactory, identityOptionsAccessor,
-				new NullLogger<SignInManager<DbUser>>(), null, null);
+				NullLogger<SignInManager<DbUser>>.Instance, null, null);
 
 			UserManager = userManager;
 			RoleManager = roleManager;

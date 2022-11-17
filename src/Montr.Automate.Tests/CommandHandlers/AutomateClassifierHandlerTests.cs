@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging.Abstractions;
 using Montr.Automate.Models;
 using Montr.Automate.Services;
 using Montr.Automate.Services.Implementations;
@@ -38,7 +39,7 @@ namespace Montr.Automate.Tests.CommandHandlers
 			fieldProviderRegistry.AddFieldType(typeof(SelectField));
 			fieldProviderRegistry.AddFieldType(typeof(AutomationConditionListField));
 			fieldProviderRegistry.AddFieldType(typeof(AutomationActionListField));
-			var dbFieldDataRepository = new DbFieldDataRepository(dbContextFactory, fieldProviderRegistry);
+			var dbFieldDataRepository = new DbFieldDataRepository(NullLogger<DbFieldDataRepository>.Instance, dbContextFactory, fieldProviderRegistry);
 
 			var metadataServiceMock = new Mock<IClassifierTypeMetadataService>();
 			metadataServiceMock
