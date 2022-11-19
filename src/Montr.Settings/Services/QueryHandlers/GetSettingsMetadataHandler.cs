@@ -2,7 +2,6 @@
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
-using Montr.Core.Models;
 using Montr.Core.Services;
 using Montr.Settings.Models;
 using Montr.Settings.Queries;
@@ -11,24 +10,31 @@ namespace Montr.Settings.Services.QueryHandlers
 {
 	public class GetSettingsMetadataHandler : IRequestHandler<GetSettingsMetadata, ICollection<SettingsBlock>>
 	{
+		private readonly INamedServiceFactory<IEntityProvider> _entityProviderFactory;
 		private readonly IConfigurationProvider _configurationProvider;
 		private readonly ISettingsTypeRegistry _settingsTypeRegistry;
 		private readonly ISettingsMetadataProvider _settingsMetadataProvider;
 
-		public GetSettingsMetadataHandler(IConfigurationProvider configurationProvider,
-			ISettingsTypeRegistry settingsTypeRegistry, ISettingsMetadataProvider settingsMetadataProvider)
+		public GetSettingsMetadataHandler(INamedServiceFactory<IEntityProvider> entityProviderFactory,
+			IConfigurationProvider configurationProvider, ISettingsMetadataProvider settingsMetadataProvider,
+			ISettingsTypeRegistry settingsTypeRegistry)
 		{
+			_entityProviderFactory = entityProviderFactory;
 			_configurationProvider = configurationProvider;
-			_settingsTypeRegistry = settingsTypeRegistry;
+
 			_settingsMetadataProvider = settingsMetadataProvider;
+			_settingsTypeRegistry = settingsTypeRegistry;
 		}
 
 		public async Task<ICollection<SettingsBlock>> Handle(GetSettingsMetadata request, CancellationToken cancellationToken)
 		{
 			var result = new List<SettingsBlock>();
 
-			var items = await _configurationProvider
-				.GetItems<Application, SettingsPane>(new Application(), request.Principal);
+			var entityProvider = _entityProviderFactory.GetRequiredService(request.EntityTypeCode);
+
+			var entity = await entityProvider.GetEntity(request.EntityTypeCode, request.EntityUid, cancellationToken);
+
+			var items = await _configurationProvider.GetItems<SettingsPane>(entity.GetType(), entity, request.Principal);
 
 			foreach (var item in items)
 			{

@@ -95,7 +95,7 @@ namespace Montr.Core.Services
 
 			if (service == null)
 			{
-				throw new ArgumentException($"Service with name \"{name}\" is not registered.");
+				throw new ArgumentException($"Service \"{typeof(TService)}\" with name \"{name}\" is not registered.");
 			}
 
 			return service;

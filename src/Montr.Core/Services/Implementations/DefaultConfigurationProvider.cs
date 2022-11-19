@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Collections.Immutable;
 using System.Linq;
 using System.Security.Claims;
@@ -19,12 +20,12 @@ namespace Montr.Core.Services.Implementations
 			_authorizationService = authorizationService;
 		}
 
-		public async Task<ICollection<T>> GetItems<TEntity, T>(TEntity entity, ClaimsPrincipal principal) where T : IConfigurationItem, new()
+		public async Task<ICollection<TItem>> GetItems<TItem>(Type ofEntity, object entity, ClaimsPrincipal principal) where TItem : IConfigurationItem, new()
 		{
-			var result = new List<T>();
+			var result = new List<TItem>();
 
 			// todo: check authorization before instantiating items
-			foreach (var item in _configurationRegistry.GetItems<TEntity, T>(entity))
+			foreach (var item in _configurationRegistry.GetItems<TItem>(ofEntity, entity))
 			{
 				if (await Authorize(item, principal) != false)
 				{
@@ -33,6 +34,11 @@ namespace Montr.Core.Services.Implementations
 			}
 
 			return result.OrderBy(x => x.DisplayOrder).ToImmutableList();
+		}
+
+		public async Task<ICollection<TItem>> GetItems<TEntity, TItem>(TEntity entity, ClaimsPrincipal principal) where TItem : IConfigurationItem, new()
+		{
+			return await GetItems<TItem>(typeof(TEntity), entity, principal);
 		}
 
 		private async Task<bool?> Authorize(IConfigurationItem item, ClaimsPrincipal principal)

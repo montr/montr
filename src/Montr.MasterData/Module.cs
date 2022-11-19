@@ -32,6 +32,7 @@ namespace Montr.MasterData
 			appBuilder.Services.AddNamedTransient<IClassifierRepository, DbNumeratorRepository>(ClassifierTypeCode.Numerator);
 
 			appBuilder.Services.AddNamedTransient<IEntityNameResolver, ClassifierTypeNameResolver>(ClassifierType.TypeCode);
+			appBuilder.Services.AddNamedTransient<IEntityProvider, ClassifierEntityProvider>(EntityTypeCode.Classifier);
 
 			appBuilder.Services.AddNamedTransient<IRecipeStepHandler, RegisterClassifierTypeStep>(RegisterClassifierTypeStep.Name);
 

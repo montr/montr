@@ -8,7 +8,9 @@ namespace Montr.Core.Services
 	{
 		void Configure<TEntity>(Action<IConditionalEntityConfiguration<TEntity>> config);
 
-		IEnumerable<T> GetItems<TEntity, T>(TEntity entity) where T : IConfigurationItem, new();
+		IEnumerable<TItem> GetItems<TItem>(Type ofEntity, object entity) where TItem : IConfigurationItem, new();
+
+		IEnumerable<TItem> GetItems<TEntity, TItem>(TEntity entity) where TItem : IConfigurationItem, new();
 	}
 
 	public interface IConditionalEntityConfiguration<out TEntity> : IEntityConfiguration<TEntity>
@@ -18,6 +20,6 @@ namespace Montr.Core.Services
 
 	public interface IEntityConfiguration<out TEntity>
 	{
-		IEntityConfiguration<TEntity> Add<T>(Action<TEntity, T> init = null) where T : IConfigurationItem, new();
+		IEntityConfiguration<TEntity> Add<TItem>(Action<TEntity, TItem> init = null) where TItem : IConfigurationItem, new();
 	}
 }

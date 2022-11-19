@@ -159,6 +159,8 @@ namespace Montr.Core
 			appBuilder.Services.AddTransient<IConfigurationProvider, DefaultConfigurationProvider>();
 			appBuilder.Services.AddTransient<IRecipeExecutor, DefaultRecipeExecutor>();
 			appBuilder.Services.AddTransient<IEntityRelationService, DbEntityRelationService>();
+
+			appBuilder.Services.AddNamedTransient<IEntityProvider, ApplicationEntityProvider>(Application.EntityTypeCode);
 		}
 
 		private static void AddJsonOptions(IMvcBuilder mvcBuilder)
