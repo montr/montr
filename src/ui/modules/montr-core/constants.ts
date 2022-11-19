@@ -28,5 +28,6 @@ export const Layout = {
 	auth: "auth",
 	public: "public",
 	private: "private",
-	profile: "profile"
+	profile: "profile",
+	setttings: "settings"
 };

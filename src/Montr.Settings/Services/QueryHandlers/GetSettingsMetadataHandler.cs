@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
@@ -36,7 +37,7 @@ namespace Montr.Settings.Services.QueryHandlers
 
 			var items = await _configurationProvider.GetItems<SettingsPane>(entity.GetType(), entity, request.Principal);
 
-			foreach (var item in items)
+			foreach (var item in items.Where(x => x.Category == request.Category))
 			{
 				var metadata = await _settingsMetadataProvider.GetMetadata(item.Type);
 

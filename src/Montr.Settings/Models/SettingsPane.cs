@@ -6,5 +6,7 @@ namespace Montr.Settings.Models
 	public class SettingsPane : ConfigurationItem
 	{
 		public Type Type { get; set; }
+
+		public string Category { get; set; }
 	}
 }

@@ -3,12 +3,13 @@ import { ApiResult } from "@montr-core/models/api-result";
 import { Guid } from "@montr-core/models/guid";
 import { SettingsBlock } from "@montr-settings/models/settings-block";
 import { SettingsService } from "@montr-settings/services/settings-service";
-import { Divider, Spin } from "antd";
+import { Spin } from "antd";
 import React from "react";
 
 interface Props {
 	entityTypeCode: string;
-	entityUid: Guid;
+	entityUid: string | Guid;
+	category: string;
 }
 
 interface State {
@@ -32,10 +33,16 @@ export default class PaneSettings extends React.Component<Props, State> {
 		await this.fetchMetadata();
 	};
 
-	fetchMetadata = async (): Promise<void> => {
-		const { entityTypeCode, entityUid } = this.props;
+	componentDidUpdate = async (prevProps: Props): Promise<void> => {
+		if (this.props.category !== prevProps.category) {
+			await this.fetchMetadata();
+		}
+	};
 
-		const blocks = await this.settingsService.metadata(entityTypeCode, entityUid);
+	fetchMetadata = async (): Promise<void> => {
+		const { entityTypeCode, entityUid, category } = this.props;
+
+		const blocks = await this.settingsService.metadata(entityTypeCode, entityUid, category);
 
 		this.setState({ loading: false, blocks });
 	};
@@ -63,7 +70,7 @@ export default class PaneSettings extends React.Component<Props, State> {
 
 interface SettingsFormProps {
 	entityTypeCode: string;
-	entityUid: Guid;
+	entityUid: string | Guid;
 	block: SettingsBlock;
 }
 
@@ -116,7 +123,7 @@ class SettingsForm extends React.Component<SettingsFormProps, SettingsFormState>
 
 		return (
 			<Spin spinning={loading}>
-				<Divider orientation="left">{block?.displayName}</Divider>
+				<h3>{block?.displayName}</h3>
 
 				{data && <DataForm
 					fields={block?.fields}

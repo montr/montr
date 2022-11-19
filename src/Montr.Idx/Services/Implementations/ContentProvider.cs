@@ -24,8 +24,8 @@ namespace Montr.Idx.Services.Implementations
 			{
 				return new[]
 				{
-					new Menu { Name = "SSO Applications", Route = "/settings/sso-applications/" },
-					new Menu { Name = "SSO Providers", Route = "/settings/sso-providers/" }
+					new Menu { Name = "SSO Applications", Route = "/settings/sso-applications" },
+					new Menu { Name = "SSO Providers", Route = "/settings/sso-providers" }
 				};
 			}
 

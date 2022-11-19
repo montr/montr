@@ -4,9 +4,9 @@ import { MetadataService } from "@montr-core/services";
 import { Spin } from "antd";
 import React from "react";
 import { Translation } from "react-i18next";
-import { ProfileModel } from "../models";
+import { ProfileModel } from "../models/profile-model";
 import { Locale, Views } from "../module";
-import { ProfileService } from "../services";
+import { ProfileService } from "../services/profile-service";
 
 interface State {
 	loading: boolean;

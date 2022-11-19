@@ -1,11 +1,11 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
+using Montr.Core;
 using Montr.Core.Models;
 using Montr.Core.Services;
 using Montr.Settings.Models;
-using Montr.Settings.Services;
 
-namespace Montr.Messages.Services.Implementations
+namespace Montr.Settings.Services.Implementations
 {
 	public class ConfigurationStartupTask : IStartupTask
 	{
@@ -20,14 +20,13 @@ namespace Montr.Messages.Services.Implementations
 
 		public Task Run(CancellationToken cancellationToken)
 		{
-			_settingsTypeRegistry.Register(typeof(SmtpOptions));
+			_settingsTypeRegistry.Register(typeof(AppOptions));
 
 			_registry.Configure<Application>(config =>
 			{
 				config.Add<SettingsPane>((_, settings) =>
 				{
-					settings.Type = typeof(SmtpOptions);
-					settings.Category = SettingsCategory.Smtp;
+					settings.Type = typeof(AppOptions);
 				});
 			});
 

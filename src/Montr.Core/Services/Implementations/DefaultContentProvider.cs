@@ -25,7 +25,7 @@ namespace Montr.Core.Services.Implementations
 				return new[]
 				{
 					new Menu { Name = "Common", Route = "/settings/" },
-					new Menu { Name = "SMTP", Route = "/settings/smtp/" },
+					new Menu { Name = "SMTP", Route = "/settings/smtp" },
 				};
 			}
 

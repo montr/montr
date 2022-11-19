@@ -1,4 +1,4 @@
-import { Tabs, Tooltip } from "antd";
+import { Tabs } from "antd";
 import React from "react";
 import { Icon } from ".";
 import { DataPane, DataPaneProps } from "../models";
@@ -26,7 +26,7 @@ export class DataTabs<TModel> extends React.Component<Props<TModel>> {
 					key: pane.key,
 					label: <span>
 						{pane.icon && Icon.get(pane.icon)}
-						{pane.description ? <>&#xA0;<Tooltip title={pane.description}>{pane.name}</Tooltip></> : pane.name}
+						{pane.name}
 					</span>,
 					disabled: disabled ? disabled(pane, index) : false,
 					children: ComponentFactory.createComponent(pane.component, { ...paneProps, ...pane.props })

@@ -16,5 +16,7 @@ namespace Montr.Settings.Queries
 
 		[Required]
 		public Guid EntityUid { get; set; }
+
+		public string Category { get; set; }
 	}
 }

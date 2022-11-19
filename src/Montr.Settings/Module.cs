@@ -14,6 +14,7 @@ namespace Montr.Settings
 	{
 		public void Configure(IAppBuilder appBuilder)
 		{
+			appBuilder.Services.AddTransient<IStartupTask, ConfigurationStartupTask>();
 			appBuilder.Services.AddSingleton<IPostStartupTask, SettingsJsonOptionsInitializer>();
 
 			appBuilder.Services.AddSingleton<ISettingsTypeRegistry, DefaultSettingsTypeRegistry>();

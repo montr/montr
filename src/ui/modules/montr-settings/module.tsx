@@ -14,13 +14,15 @@ export const Api = {
 };
 
 export const Patterns = {
-	settings: "/settings/"
+	settings: "/settings/",
+	settingsCategory: "/settings/:category",
 };
 
-const PageSettings = React.lazy(() => import("./components/page-settings"));
+const PaneSettingsCategory = React.lazy(() => import("./components/pane-settings-category"));
 
-AppRouteRegistry.add(Layout.private, [
-	{ path: Patterns.settings, element: <PageSettings /> },
+AppRouteRegistry.add(Layout.setttings, [
+	{ path: Patterns.settings, element: <PaneSettingsCategory /> },
+	{ path: Patterns.settingsCategory, element: <PaneSettingsCategory /> },
 ]);
 
 ComponentRegistry.add([

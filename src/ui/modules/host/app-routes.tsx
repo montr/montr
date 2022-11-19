@@ -8,6 +8,7 @@ const PrivateLayout = React.lazy(() => import("./components/private-layout"));
 const AuthLayout = React.lazy(() => import("./components/auth-layout"));
 
 const PageProfile = React.lazy(() => import("@montr-idx/components/page-profile"));
+const PageSettings = React.lazy(() => import("@montr-settings/components/page-settings"));
 const PageError404 = React.lazy(() => import("@montr-core/components/page-error-404"));
 
 export function AppRoutes() {
@@ -21,8 +22,12 @@ export function AppRoutes() {
 			element: <PrivateLayout />,
 			children: [
 				{
-					element: < PageProfile />,
+					element: <PageProfile />,
 					children: AppRouteRegistry.get(Layout.profile)
+				},
+				{
+					element: <PageSettings />,
+					children: AppRouteRegistry.get(Layout.setttings)
 				},
 				...AppRouteRegistry.get(Layout.private)
 			]
