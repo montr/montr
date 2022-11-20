@@ -34,9 +34,9 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Montr.Docs\Montr.Docs.csproj" />
-    <ProjectReference Include="..\Montr.Idx.Plugin.Facebook\Montr.Idx.Plugin.Facebook.csproj" />
-    <ProjectReference Include="..\Montr.Idx.Plugin.Google\Montr.Idx.Plugin.Google.csproj" />
-    <ProjectReference Include="..\Montr.Idx.Plugin.MicrosoftAccount\Montr.Idx.Plugin.MicrosoftAccount.csproj" />
+    <ProjectReference Include="..\Montr.Idx.Auth.Facebook\Montr.Idx.Auth.Facebook.csproj" />
+    <ProjectReference Include="..\Montr.Idx.Auth.Google\Montr.Idx.Auth.Google.csproj" />
+    <ProjectReference Include="..\Montr.Idx.Auth.MicrosoftAccount\Montr.Idx.Auth.MicrosoftAccount.csproj" />
     <ProjectReference Include="..\Montr.Idx\Montr.Idx.csproj" />
     <ProjectReference Include="..\Montr.Kompany.Registration\Montr.Kompany.Registration.csproj" />
     <ProjectReference Include="..\Montr.Kompany\Montr.Kompany.csproj" />

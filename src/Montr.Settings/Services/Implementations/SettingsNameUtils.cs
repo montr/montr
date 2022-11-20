@@ -7,7 +7,7 @@ namespace Montr.Settings.Services.Implementations
 {
 	public static class SettingsNameUtils
 	{
-		private static readonly List<string> IgnoredWords = new() { "id" };
+		private static readonly List<string> IgnoredWords = new() { "uid" };
 
 		public static string BuildSettingsName(string source)
 		{

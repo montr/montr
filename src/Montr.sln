@@ -43,11 +43,11 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Montr.Metadata", "Montr.Met
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Montr.Metadata.Tests", "Montr.Metadata.Tests\Montr.Metadata.Tests.csproj", "{1FAC2AA6-FC56-4D05-9148-F35231C5270C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Montr.Idx.Plugin.Google", "Montr.Idx.Plugin.Google\Montr.Idx.Plugin.Google.csproj", "{E45F0893-28AC-4695-972C-8E420996E41C}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Montr.Idx.Auth.Google", "Montr.Idx.Auth.Google\Montr.Idx.Auth.Google.csproj", "{E45F0893-28AC-4695-972C-8E420996E41C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Montr.Idx.Plugin.Facebook", "Montr.Idx.Plugin.Facebook\Montr.Idx.Plugin.Facebook.csproj", "{50509355-01BB-4AF1-99C0-1A82442446A1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Montr.Idx.Auth.Facebook", "Montr.Idx.Auth.Facebook\Montr.Idx.Auth.Facebook.csproj", "{50509355-01BB-4AF1-99C0-1A82442446A1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Montr.Idx.Plugin.MicrosoftAccount", "Montr.Idx.Plugin.MicrosoftAccount\Montr.Idx.Plugin.MicrosoftAccount.csproj", "{7C8D0559-2CD6-4D81-B9CA-1B8679BF2CB2}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Montr.Idx.Auth.MicrosoftAccount", "Montr.Idx.Auth.MicrosoftAccount\Montr.Idx.Auth.MicrosoftAccount.csproj", "{7C8D0559-2CD6-4D81-B9CA-1B8679BF2CB2}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Montr.Automate", "Montr.Automate\Montr.Automate.csproj", "{ADA37321-8329-4765-BB16-8A4474EECDF0}"
 EndProject
