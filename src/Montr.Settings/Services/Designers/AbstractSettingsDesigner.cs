@@ -2,6 +2,7 @@
 using System.Reflection;
 using System.Threading.Tasks;
 using Montr.Metadata.Models;
+using Montr.Settings.Services.Implementations;
 
 namespace Montr.Settings.Services.Designers
 {
@@ -21,7 +22,7 @@ namespace Montr.Settings.Services.Designers
 			var result = new TField
 			{
 				Key = key,
-				Name = property.Name,
+				Name = SettingsNameUtils.BuildSettingsName(property.Name),
 				Required = required
 			};
 

@@ -132,12 +132,14 @@ export class ClassifierSelect extends React.Component<Props, State> {
 			dropdownRender={menu => (
 				<div>
 					{menu}
-					<Divider style={{ margin: "1px 0" }} />
-					<div onMouseDown={e => e.preventDefault()}>
-						<Link to={RouteBuilder.addClassifier(field.props.typeCode, null)}>
-							<Button type="link" icon={Icon.Plus}>Добавить элемент</Button>
-						</Link>
-					</div >
+					{field.props.typeCode && <>
+						<Divider style={{ margin: "1px 0" }} />
+						<div onMouseDown={e => e.preventDefault()}>
+							<Link to={RouteBuilder.addClassifier(field.props.typeCode, null)}>
+								<Button type="link" icon={Icon.Plus}>Добавить элемент</Button>
+							</Link>
+						</div>
+					</>}
 				</div>
 			)}>
 			{options}

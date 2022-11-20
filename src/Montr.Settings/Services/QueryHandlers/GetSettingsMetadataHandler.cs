@@ -6,6 +6,7 @@ using MediatR;
 using Montr.Core.Services;
 using Montr.Settings.Models;
 using Montr.Settings.Queries;
+using Montr.Settings.Services.Implementations;
 
 namespace Montr.Settings.Services.QueryHandlers
 {
@@ -44,7 +45,7 @@ namespace Montr.Settings.Services.QueryHandlers
 				result.Add(new SettingsBlock
 				{
 					TypeCode = _settingsTypeRegistry.GetTypeCode(item.Type),
-					DisplayName = item.Type.Name,
+					DisplayName = SettingsNameUtils.BuildSettingsName(item.Type.Name),
 					Fields = metadata
 				});
 			}

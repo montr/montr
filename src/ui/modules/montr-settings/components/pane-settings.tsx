@@ -101,7 +101,7 @@ class SettingsForm extends React.Component<SettingsFormProps, SettingsFormState>
 
 		const data = await this.settingsService.get(entityTypeCode, entityUid, block.typeCode);
 
-		this.setState({ loading: false, data: data?.data });
+		this.setState({ loading: false, data: data?.data || {} });
 	};
 
 	handleSubmit = async (values: unknown): Promise<ApiResult> => {

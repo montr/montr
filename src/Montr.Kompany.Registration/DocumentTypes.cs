@@ -1,6 +1,5 @@
-﻿namespace Montr.Kompany.Models
+﻿namespace Montr.Kompany.Registration
 {
-	// todo: move to Kompany.Registration
 	public static class DocumentTypes
 	{
 		// todo: use settings for active type

@@ -5,7 +5,6 @@ using Montr.Core.Models;
 using Montr.Core.Services;
 using Montr.Docs.Models;
 using Montr.Docs.Services;
-using Montr.Kompany.Models;
 using Montr.Kompany.Registration.Commands;
 using Montr.MasterData.Services;
 
