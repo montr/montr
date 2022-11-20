@@ -121,7 +121,7 @@ namespace Montr.Kompany.Services.CommandHandlers
 
 				_logger.LogInformation("Updating application initialization options");
 
-				await _settingsRepository.GetSettings<AppOptions>()
+				await _settingsRepository.GetApplicationSettings<AppOptions>()
 					.Set(x => x.State, AppState.Initialized)
 					.Set(x => x.SuperUserId, userUid)
 					.Set(x => x.OperatorCompanyId, companyUid)

@@ -6,8 +6,14 @@ namespace Montr.Settings.Entities
 	[Table(Schema = "montr", Name = "settings")]
 	public class DbSettings
 	{
-		[Column(Name = "id"), DataType(DataType.VarChar), NotNull, PrimaryKey]
-		public string Id { get; set; }
+		[Column(Name = "entity_type_code", Length = 32), DataType(DataType.VarChar), NotNull, PrimaryKey(0)]
+		public string EntityTypeCode { get; set; }
+
+		[Column(Name = "entity_uid"), DataType(DataType.Guid), NotNull, PrimaryKey(1)]
+		public System.Guid EntityUid { get; set; }
+
+		[Column(Name = "key"), DataType(DataType.VarChar), NotNull, PrimaryKey(2)]
+		public string Key { get; set; }
 
 		[Column(Name = "value"), DataType(DataType.VarChar)]
 		public string Value { get; set; }

@@ -29,7 +29,7 @@ namespace Montr.Settings.Services.CommandHandlers
 			{
 				using (var scope = _unitOfWorkFactory.Create())
 				{
-					var settings = _settingsRepository.GetSettings(type);
+					var settings = _settingsRepository.GetSettings(request.EntityTypeCode, request.EntityUid, type);
 
 					foreach (var property in type.GetProperties())
 					{

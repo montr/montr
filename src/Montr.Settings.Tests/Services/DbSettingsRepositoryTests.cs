@@ -5,9 +5,11 @@ using System.Threading.Tasks;
 using LinqToDB;
 using MediatR;
 using Montr.Core;
+using Montr.Core.Models;
 using Montr.Core.Services;
 using Montr.Core.Services.Implementations;
 using Montr.Settings.Entities;
+using Montr.Settings.Services;
 using Montr.Settings.Services.Implementations;
 using Moq;
 using NUnit.Framework;
@@ -31,7 +33,7 @@ namespace Montr.Settings.Tests.Services
 			using (var _ = unitOfWorkFactory.Create())
 			{
 				// act (insert)
-				var options =  repository.GetSettings<TestOptions>()
+				var options =  repository.GetApplicationSettings<TestOptions>()
 					.Set(x => x.Number, 42)
 					.Set(x => x.Value, null)
 					.Set(x => x.State, AppState.Initialized);
@@ -43,9 +45,9 @@ namespace Montr.Settings.Tests.Services
 
 				var allSettings = await LoadSettings(dbContextFactory, cancellationToken);
 
-				var s1 = allSettings.SingleOrDefault(x => x.Id == "Montr.Settings.Tests.Services.TestOptions:Number");
-				var s2 = allSettings.SingleOrDefault(x => x.Id == "Montr.Settings.Tests.Services.TestOptions:Value");
-				var s3 = allSettings.SingleOrDefault(x => x.Id == "Montr.Settings.Tests.Services.TestOptions:State");
+				var s1 = allSettings.SingleOrDefault(x => x.Key == "Montr.Settings.Tests.Services.TestOptions:Number");
+				var s2 = allSettings.SingleOrDefault(x => x.Key == "Montr.Settings.Tests.Services.TestOptions:Value");
+				var s3 = allSettings.SingleOrDefault(x => x.Key == "Montr.Settings.Tests.Services.TestOptions:State");
 
 				Assert.IsNotNull(s1);
 				Assert.AreEqual("42", s1.Value);
@@ -57,7 +59,7 @@ namespace Montr.Settings.Tests.Services
 				Assert.AreEqual("Initialized", s3.Value);
 
 				// act (update)
-				options =  repository.GetSettings<TestOptions>()
+				options =  repository.GetApplicationSettings<TestOptions>()
 					.Set(x => x.State, AppState.None);
 
 				affected = await options.Update(cancellationToken);
@@ -67,7 +69,7 @@ namespace Montr.Settings.Tests.Services
 
 				allSettings = await LoadSettings(dbContextFactory, cancellationToken);
 
-				s3 = allSettings.SingleOrDefault(x => x.Id == "Montr.Settings.Tests.Services.TestOptions:State");
+				s3 = allSettings.SingleOrDefault(x => x.Key == "Montr.Settings.Tests.Services.TestOptions:State");
 
 				Assert.IsNotNull(s3);
 				Assert.AreEqual("None", s3.Value);
@@ -78,7 +80,10 @@ namespace Montr.Settings.Tests.Services
 		{
 			await using (var db = dbContextFactory.Create())
 			{
-				return await db.GetTable<DbSettings>().ToListAsync(cancellationToken);
+				return await db.GetTable<DbSettings>()
+					.Where(x => x.EntityTypeCode == Application.EntityTypeCode &&
+					            x.EntityUid == Application.EntityUid)
+					.ToListAsync(cancellationToken);
 			}
 		}
 	}

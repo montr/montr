@@ -3,16 +3,25 @@ using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Threading;
 using System.Threading.Tasks;
+using Montr.Core.Models;
 
 namespace Montr.Settings.Services
 {
 	public interface ISettingsRepository
 	{
-		IUpdatableSettings GetSettings(Type ofSettings);
+		IUpdatableSettings GetSettings(string entityTypeCode, Guid entityUid, Type ofSettings);
 
-		IUpdatableSettings<TSettings> GetSettings<TSettings>();
+		IUpdatableSettings<TSettings> GetSettings<TSettings>(string entityTypeCode, Guid entityUid);
 
-		Task<int> Update(ICollection<(string, object)> values, CancellationToken cancellationToken);
+		Task<int> Update(string entityTypeCode, Guid entityUid, ICollection<(string, object)> values, CancellationToken cancellationToken);
+	}
+
+	public static class SettingsRepositoryExtensions
+	{
+		public static IUpdatableSettings<TSettings> GetApplicationSettings<TSettings>(this ISettingsRepository repository)
+		{
+			return repository.GetSettings<TSettings>(Application.EntityTypeCode, Application.EntityUid);
+		}
 	}
 
 	public interface IUpdatableSettings

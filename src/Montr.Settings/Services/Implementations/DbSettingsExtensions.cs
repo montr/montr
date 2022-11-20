@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Primitives;
 using Montr.Core.Events;
+using Montr.Core.Models;
 using Montr.Core.Services;
 using Montr.Core.Services.Implementations;
 using Montr.Settings.Entities;
@@ -89,8 +90,11 @@ namespace Montr.Settings.Services.Implementations
 		{
 			using (var db = _dbContextFactory.Create())
 			{
+				// only Application settings available in DbConfigurationProvider
 				Data = db.GetTable<DbSettings>()
-					.ToDictionary(x => x.Id, x => x.Value, StringComparer.OrdinalIgnoreCase);
+					.Where(x => x.EntityTypeCode == Application.EntityTypeCode &&
+					            x.EntityUid == Application.EntityUid)
+					.ToDictionary(x => x.Key, x => x.Value, StringComparer.OrdinalIgnoreCase);
 			}
 
 			OnReload();

@@ -27,18 +27,19 @@ namespace Montr.Settings.Services.Implementations
 			_mediator = mediator;
 		}
 
-		public IUpdatableSettings GetSettings(Type ofSettings)
+		public IUpdatableSettings GetSettings(string entityTypeCode, Guid entityUid, Type ofSettings)
 		{
-			return new UpdatableSettings(ofSettings, this);
+			return new UpdatableSettings(ofSettings, this, entityTypeCode, entityUid);
 		}
 
-		public IUpdatableSettings<TSettings> GetSettings<TSettings>()
+		public IUpdatableSettings<TSettings> GetSettings<TSettings>(string entityTypeCode, Guid entityUid)
 		{
-			return new UpdatableSettings<TSettings>(this);
+			return new UpdatableSettings<TSettings>(this, entityTypeCode, entityUid);
 		}
 
 		// todo: change first parameter to ICollection<(string, string)> and convert outside of method
-		public async Task<int> Update(ICollection<(string, object)> values, CancellationToken cancellationToken)
+		public async Task<int> Update(string entityTypeCode, Guid entityUid,
+			ICollection<(string, object)> values, CancellationToken cancellationToken)
 		{
 			var affected = 0;
 
@@ -51,7 +52,9 @@ namespace Montr.Settings.Services.Implementations
 					var stringValue = value != null ? Convert.ToString(value, CultureInfo.InvariantCulture) : null;
 
 					var updated = await db.GetTable<DbSettings>()
-						.Where(x => x.Id == key)
+						.Where(x => x.EntityTypeCode == entityTypeCode &&
+									x.EntityUid == entityUid &&
+						            x.Key == key)
 						.Set(x => x.Value, stringValue)
 						.Set(x => x.ModifiedAtUtc, utcNow)
 						.UpdateAsync(cancellationToken);
@@ -61,7 +64,9 @@ namespace Montr.Settings.Services.Implementations
 					if (updated == 0)
 					{
 						var inserted = await db.GetTable<DbSettings>()
-							.Value(x => x.Id, key)
+							.Value(x => x.EntityTypeCode, entityTypeCode)
+							.Value(x => x.EntityUid, entityUid)
+							.Value(x => x.Key, key)
 							.Value(x => x.Value, stringValue)
 							.Value(x => x.CreatedAtUtc, utcNow)
 							.InsertAsync(cancellationToken);
@@ -85,13 +90,18 @@ namespace Montr.Settings.Services.Implementations
 		{
 			private readonly Type _ofSettings;
 			private readonly ISettingsRepository _repository;
+			private readonly string _entityTypeCode;
+			private readonly Guid _entityUid;
 
 			private readonly ICollection<(string, object)> _values = new List<(string, object)>();
 
-			public UpdatableSettings(Type ofSettings, ISettingsRepository repository)
+			public UpdatableSettings(Type ofSettings,
+				ISettingsRepository repository, string entityTypeCode, Guid entityUid)
 			{
 				_ofSettings = ofSettings;
 				_repository = repository;
+				_entityTypeCode = entityTypeCode;
+				_entityUid = entityUid;
 			}
 
 			public IUpdatableSettings Set(string key, object value)
@@ -105,13 +115,14 @@ namespace Montr.Settings.Services.Implementations
 
 			public async Task<int> Update(CancellationToken cancellationToken)
 			{
-				return await _repository.Update(_values, cancellationToken);
+				return await _repository.Update(_entityTypeCode, _entityUid, _values, cancellationToken);
 			}
 		}
 
 		private class UpdatableSettings<TSettings> : UpdatableSettings, IUpdatableSettings<TSettings>
 		{
-			public UpdatableSettings(ISettingsRepository repository) : base(typeof(TSettings), repository)
+			public UpdatableSettings(ISettingsRepository repository, string entityTypeCode, Guid entityUid)
+				: base(typeof(TSettings), repository, entityTypeCode, entityUid)
 			{
 			}
 
