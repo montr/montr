@@ -1,10 +1,11 @@
+import { PageHeader } from "@ant-design/pro-components";
 import { PageContextProps, StatusTag, withPageContext } from "@montr-core/components";
 import { DataSider } from "@montr-core/components/data-sider";
 import { DataTabs } from "@montr-core/components/data-tabs";
 import { DataToolbar } from "@montr-core/components/data-toolbar";
 import { withNavigate, withParams } from "@montr-core/components/react-router-wrappers";
 import { ConfigurationItemProps, DataPaneProps, DataView } from "@montr-core/models";
-import { Layout, PageHeader, Spin } from "antd";
+import { Layout, Spin } from "antd";
 import { Location } from "history";
 import React from "react";
 import { Navigate, NavigateFunction } from "react-router-dom";

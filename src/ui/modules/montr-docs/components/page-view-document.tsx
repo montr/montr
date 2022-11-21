@@ -1,3 +1,4 @@
+import { PageHeader } from "@ant-design/pro-components";
 import { StatusTag } from "@montr-core/components";
 import { DataTabs } from "@montr-core/components/data-tabs";
 import { DataToolbar } from "@montr-core/components/data-toolbar";
@@ -6,7 +7,7 @@ import { ConfigurationItemProps, DataPaneProps, DataView } from "@montr-core/mod
 import { DateHelper } from "@montr-core/services/date-helper";
 import { Classifier } from "@montr-master-data/models";
 import { ClassifierService } from "@montr-master-data/services";
-import { PageHeader, Spin } from "antd";
+import { Spin } from "antd";
 import React from "react";
 import { NavigateFunction } from "react-router-dom";
 import { IDocument } from "../models";
