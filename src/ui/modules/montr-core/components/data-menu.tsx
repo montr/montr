@@ -1,6 +1,6 @@
 import { NavigationService } from "@montr-core/services";
 import { Menu } from "antd";
-import { MenuProps } from "antd/lib/menu";
+import { MenuProps } from "antd/es/menu";
 import * as React from "react";
 import { Navigate, NavigateFunction } from "react-router-dom";
 import { IMenu } from "../models";

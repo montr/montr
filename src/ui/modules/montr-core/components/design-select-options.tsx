@@ -1,5 +1,5 @@
 import { Button, Col, Input, Row, Typography } from "antd";
-import { Gutter } from "antd/lib/grid/row";
+import { Gutter } from "antd/es/grid/row";
 import React, { ChangeEvent } from "react";
 import { ButtonAdd } from ".";
 import { IDesignSelectOptionsField, IIndexer, IOption } from "../models";

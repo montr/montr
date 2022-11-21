@@ -1,7 +1,7 @@
 import { Api } from "@montr-core/module";
 import { LocaleStringService } from "@montr-core/services/locale-string-service";
 import { Button, Form, Select, Upload } from "antd";
-import { UploadChangeParam } from "antd/lib/upload";
+import { UploadChangeParam } from "antd/es/upload";
 import React from "react";
 import { Translation } from "react-i18next";
 import { ButtonExport, ButtonImport, Icon, Page, PageHeader, Toolbar } from ".";

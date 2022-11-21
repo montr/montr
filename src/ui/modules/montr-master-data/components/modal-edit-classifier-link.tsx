@@ -1,11 +1,11 @@
-import * as React from "react";
+import { DataForm } from "@montr-core/components";
+import { ApiResult, Guid, IDataField } from "@montr-core/models";
+import { MetadataService, NotificationService } from "@montr-core/services";
 import { Modal, Spin } from "antd";
-import { FormInstance } from "antd/lib/form";
+import { FormInstance } from "antd/es/form";
+import * as React from "react";
 import { ClassifierLink, IClassifierField } from "../models";
 import { ClassifierLinkService } from "../services";
-import { IDataField, ApiResult, Guid } from "@montr-core/models";
-import { DataForm } from "@montr-core/components";
-import { NotificationService, MetadataService } from "@montr-core/services";
 
 interface Props {
 	typeCode: string;

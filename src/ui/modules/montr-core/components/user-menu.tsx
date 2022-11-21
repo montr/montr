@@ -1,6 +1,6 @@
 import { Patterns } from "@montr-core/module";
 import { Menu } from "antd";
-import { MenuProps } from "antd/lib/menu";
+import { MenuProps } from "antd/es/menu";
 import * as React from "react";
 import { Link } from "react-router-dom";
 import { Icon, UserContextProps, withUserContext } from "./";

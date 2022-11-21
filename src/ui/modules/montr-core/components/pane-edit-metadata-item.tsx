@@ -1,5 +1,5 @@
 import { Button, Drawer, List, Popover, Spin, Switch } from "antd";
-import { FormInstance } from "antd/lib/form";
+import { FormInstance } from "antd/es/form";
 import React from "react";
 import { ButtonCancel, ButtonSave, DataForm, Icon, Toolbar } from ".";
 import { ApiResult, Guid, IDataField } from "../models";

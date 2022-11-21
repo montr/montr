@@ -1,5 +1,5 @@
 import { message, Modal, notification } from "antd";
-import { MessageType } from "antd/lib/message";
+import { MessageType } from "antd/es/message/interface";
 
 declare type Content = React.ReactNode | string;
 declare type Duration = number | (() => void);

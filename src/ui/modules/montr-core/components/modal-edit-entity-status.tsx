@@ -1,6 +1,6 @@
 import { EntityStatusService } from "@montr-core/services/entity-status-service";
 import { Modal, Spin } from "antd";
-import { FormInstance } from "antd/lib/form";
+import { FormInstance } from "antd/es/form";
 import React from "react";
 import { DataForm } from ".";
 import { ApiResult, EntityStatus, Guid, IDataField } from "../models";

@@ -1,5 +1,5 @@
 import { Button as Btn } from "antd";
-import { ButtonType } from "antd/lib/button";
+import { ButtonType } from "antd/es/button";
 import React from "react";
 import { Button, ConfigurationItemProps } from "../models";
 import { Fetcher, OperationService } from "../services";

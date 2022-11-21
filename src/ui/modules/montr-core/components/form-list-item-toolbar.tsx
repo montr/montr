@@ -1,5 +1,5 @@
 import { Button } from "antd";
-import { NamePath } from "antd/lib/form/interface";
+import { NamePath } from "antd/es/form/interface";
 import { FieldData } from "rc-field-form/lib/interface";
 import React from "react";
 import { Icon, Toolbar } from ".";
