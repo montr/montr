@@ -1,4 +1,4 @@
-import { EmptyFieldView } from "@montr-core/components";
+import { EmptyFieldView } from "@montr-core/components/empty-field-view";
 import { IIndexer } from "@montr-core/models";
 import { DataHelper } from "@montr-core/services/data-helper";
 import { ClassifierService } from "@montr-master-data/services";

@@ -1,10 +1,10 @@
-import { Icon } from "@montr-core/components";
+import { Icon } from "@montr-core/components/icon";
 import { Constants } from "@montr-core/constants";
-import { NavigationService } from "@montr-core/services";
+import { NavigationService } from "@montr-core/services/navigation-service";
 import { Avatar, Button, Spin } from "antd";
 import React from "react";
 import { Translation } from "react-i18next";
-import { AuthScheme } from "../models";
+import { AuthScheme } from "../models/auth-scheme";
 import { Api, Locale } from "../module";
 import { AccountService } from "../services/account-service";
 

@@ -2,10 +2,11 @@ import { Checkbox, DatePicker, Form, Input, InputNumber, Select } from "antd";
 import dayjs from "dayjs";
 import { Rule } from "rc-field-form/lib/interface";
 import * as React from "react";
-import { DataFormOptions, EmptyFieldView, FormDefaults, Icon } from ".";
+import { DataFormOptions, FormDefaults, Icon } from ".";
 import { IBooleanField, IDataField, IDateField, IDesignSelectOptionsField, IIndexer, INumberField, IPasswordField, ISelectField, ITextAreaField, ITextField } from "../models";
 import { DataHelper } from "../services/data-helper";
 import { DesignSelectOptions } from "./design-select-options";
+import { EmptyFieldView } from "./empty-field-view";
 
 export abstract class DataFieldFactory<TField extends IDataField> {
 	private static Map: { [key: string]: DataFieldFactory<IDataField>; } = {};

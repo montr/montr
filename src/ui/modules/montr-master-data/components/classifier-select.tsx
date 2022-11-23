@@ -78,7 +78,7 @@ export class ClassifierSelect extends React.Component<Props, State> {
 			typeCode: field.props.typeCode, focusUid: value, pageSize: 1000
 		});
 
-		this.setState({ loading: false, items: data.rows });
+		this.setState({ loading: false, items: data?.rows });
 	};
 
 	handleChange = (value: any/* , label: any, extra: any */): void => {

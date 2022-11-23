@@ -45,7 +45,10 @@
 			"@montr-tendr/*": [
 				"modules/montr-tendr/*"
 			]
-		}
+		},
+		"types": [
+			"@emotion/react/types/css-prop"
+		]
 	},
 	/* "files": [
 	], */

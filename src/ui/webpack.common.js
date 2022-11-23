@@ -41,7 +41,7 @@ const options = {
 				exclude: [/mutationobserver-shim/g]
 			},
 			{
-				test: /\.less$/,
+				test: /\.(css|less)$/,
 				use: [
 					{
 						loader: "style-loader" // creates style nodes from JS strings
