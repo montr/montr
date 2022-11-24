@@ -1,4 +1,5 @@
-import { ButtonCreate, ButtonDelete, EmptyFieldView, StatusTag, UserContextProps, withUserContext } from "@montr-core/components";
+import { ButtonCreate, ButtonDelete, StatusTag, UserContextProps, withUserContext } from "@montr-core/components";
+import { EmptyFieldView } from "@montr-core/components/empty-field-view";
 import { OperationService } from "@montr-core/services";
 import { IDocument } from "@montr-docs/models";
 import { RouteBuilder } from "@montr-docs/module";

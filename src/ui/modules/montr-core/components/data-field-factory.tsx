@@ -1,11 +1,12 @@
 import { Checkbox, DatePicker, Form, Input, InputNumber, Select } from "antd";
-import moment from "moment";
+import dayjs from "dayjs";
 import { Rule } from "rc-field-form/lib/interface";
 import * as React from "react";
-import { DataFormOptions, EmptyFieldView, FormDefaults, Icon } from ".";
+import { DataFormOptions, FormDefaults, Icon } from ".";
 import { IBooleanField, IDataField, IDateField, IDesignSelectOptionsField, IIndexer, INumberField, IPasswordField, ISelectField, ITextAreaField, ITextField } from "../models";
 import { DataHelper } from "../services/data-helper";
 import { DesignSelectOptions } from "./design-select-options";
+import { EmptyFieldView } from "./empty-field-view";
 
 export abstract class DataFieldFactory<TField extends IDataField> {
 	private static Map: { [key: string]: DataFieldFactory<IDataField>; } = {};
@@ -34,7 +35,7 @@ export abstract class DataFieldFactory<TField extends IDataField> {
 
 		if (this.shouldFormatValue) {
 			const value = DataHelper.indexer(data, field.key, undefined);
-			const formattedValue = this.formatValue(field, data, value);
+			const formattedValue = this.formatValue(field, data, options, value);
 			DataHelper.indexer(data, field.key, formattedValue);
 		}
 
@@ -96,7 +97,7 @@ export abstract class DataFieldFactory<TField extends IDataField> {
 		return [required];
 	}
 
-	formatValue(field: Partial<TField>, data: IIndexer, value: any): any {
+	formatValue(field: Partial<TField>, data: IIndexer, options: DataFormOptions, value: any): any {
 		return value;
 	}
 
@@ -211,8 +212,12 @@ export class DateFieldFactory extends DataFieldFactory<IDateField> {
 		this.shouldFormatValue = true;
 	}
 
-	formatValue(field: IDateField, data: IIndexer, value: any): any {
-		return value ? moment.parseZone(value) : null;
+	formatValue(field: IDateField, data: IIndexer, options: DataFormOptions, value: any): any {
+		const { mode } = options;
+
+		if (mode == "view") return value;
+
+		return value ? dayjs(value) : null;
 	}
 
 	createEditNode(field: IDateField, data: IIndexer): React.ReactElement {

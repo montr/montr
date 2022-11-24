@@ -1,4 +1,4 @@
-import { NamePath } from "antd/lib/form/interface";
+import { NamePath } from "antd/es/form/interface";
 
 export function extendNamePath(name: NamePath, extra: (string | number)[]): (string | number)[] {
 

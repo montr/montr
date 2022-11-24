@@ -3,7 +3,7 @@ import { ApiResult, Guid, IDataField } from "@montr-core/models";
 import { DataFormChanges } from "@montr-core/models/data-form-changes";
 import { MetadataService } from "@montr-core/services";
 import { Spin } from "antd";
-import { FormInstance } from "antd/lib/form";
+import { FormInstance } from "antd/es/form";
 import { FieldData } from "rc-field-form/lib/interface";
 import React from "react";
 import { Automation } from "../models";

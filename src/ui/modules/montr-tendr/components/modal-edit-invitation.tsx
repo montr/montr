@@ -1,11 +1,11 @@
-import * as React from "react";
-import { Guid, IDataField, ApiResult } from "@montr-core/models";
-import { Invitation } from "../models";
-import { Modal, Spin } from "antd";
 import { DataForm } from "@montr-core/components";
-import { NotificationService, MetadataService } from "@montr-core/services";
+import { ApiResult, Guid, IDataField } from "@montr-core/models";
+import { MetadataService, NotificationService } from "@montr-core/services";
+import { Modal, Spin } from "antd";
+import { FormInstance } from "antd/es/form";
+import * as React from "react";
+import { Invitation } from "../models";
 import { InvitationService } from "../services";
-import { FormInstance } from "antd/lib/form";
 
 interface Props {
 	eventUid: Guid;

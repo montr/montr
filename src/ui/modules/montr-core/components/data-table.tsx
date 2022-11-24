@@ -1,6 +1,6 @@
 import LockTwoTone from "@ant-design/icons/lib/icons/LockTwoTone";
 import { Divider, Table, Typography } from "antd";
-import { ColumnType, SorterResult, SortOrder, TablePaginationConfig } from "antd/lib/table/interface";
+import { ColumnType, SorterResult, SortOrder, TablePaginationConfig } from "antd/es/table/interface";
 import * as React from "react";
 import { Link } from "react-router-dom";
 import { Icon, StatusTag } from ".";

@@ -1,6 +1,7 @@
+import { PageHeader } from "@ant-design/pro-components";
 import { DataTable, DataTableUpdateToken } from "@montr-core/components/data-table";
 import { DataColumn } from "@montr-core/models";
-import { PageHeader, Spin } from "antd";
+import { Spin } from "antd";
 import React from "react";
 import { Api, Views } from "../module";
 import { TaskService } from "../services/task-service";

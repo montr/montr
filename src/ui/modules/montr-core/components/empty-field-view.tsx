@@ -1,9 +1,13 @@
+import { css } from "@emotion/react";
+// import { theme } from "antd";
 import React from "react";
 
-export class EmptyFieldView extends React.Component {
-	render = () => {
-		return (
-			<span className="empty-field">No data</span>
-		);
-	};
-}
+// const { token } = theme.useToken();
+
+const style = css({
+	color: '#aaa' // token.colorBgBase
+});
+
+export const EmptyFieldView = () => (
+	<span css={style}>No data</span>
+);

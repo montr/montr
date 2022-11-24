@@ -1,6 +1,6 @@
 import { DataForm } from "@montr-core/components";
 import { ApiResult, DataPaneProps, IDataField } from "@montr-core/models";
-import { FormInstance } from "antd/lib/form";
+import { FormInstance } from "antd/es/form";
 import * as React from "react";
 import { IEvent } from "../models";
 import { EventMetadataService, EventService } from "../services";

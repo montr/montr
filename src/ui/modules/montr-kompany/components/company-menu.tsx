@@ -1,5 +1,5 @@
-import Menu from "antd/lib/menu";
-import { MenuItemProps } from "antd/lib/menu/MenuItem";
+import Menu from "antd/es/menu";
+import { MenuItemProps } from "antd/es/menu/MenuItem";
 import * as React from "react";
 import { Company } from "../models/company";
 import { CompanyContextProps, withCompanyContext } from "./company-context";

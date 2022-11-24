@@ -7,9 +7,6 @@ import { AuthScheme, ProfileModel, UserLoginInfo } from "../models";
 import { Api, Locale } from "../module";
 import { AccountService, ProfileService } from "../services";
 
-interface Props {
-}
-
 interface State {
 	loading: boolean;
 	profile: ProfileModel;
@@ -17,13 +14,13 @@ interface State {
 	externalLogins: UserLoginInfo[];
 }
 
-export default class PaneExternalLogins extends React.Component<Props, State> {
+export default class PaneExternalLogins extends React.Component<unknown, State> {
 
 	private readonly operation = new OperationService();
 	private readonly accountService = new AccountService();
 	private readonly profileService = new ProfileService();
 
-	constructor(props: Props) {
+	constructor(props: unknown) {
 		super(props);
 
 		this.state = {
@@ -77,11 +74,11 @@ export default class PaneExternalLogins extends React.Component<Props, State> {
 					<p>{t("page.externalLogins.subtitle") as string}</p>
 
 					<Spin spinning={loading}>
-						<form method="post" action={Api.authLinkLogin}>
+						<form method="post" action={Api.authLinkLogin} className="external-logins">
 
 							{/* <input type="hidden" name={Constants.returnUrlParam} value={this._navigation.getReturnUrlParameter() || ""} /> */}
 
-							<List className="external-logins">
+							<List>
 
 								{externalLogins.map((x) => {
 									const scheme = authSchemes.find(s => s.name == x.loginProvider);
