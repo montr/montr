@@ -1,4 +1,4 @@
-@import '~antd/es/style/themes/default.less';
+@import "antd/dist/reset.css";
 // @import (css) url("//fonts.googleapis.com/css?family=Open+Sans:400");
 // @import (css) url('//fonts.googleapis.com/css?family=Nunito&display=swap');
 // @import (css) url('//fonts.googleapis.com/css?family=Inter');
@@ -80,7 +80,7 @@ h2,
 			min-width: 100px;
 
 			a {
-				color: @normal-color;
+				/* color: @normal-color; */
 			}
 		}
 
@@ -95,6 +95,12 @@ h2,
 
 .ant-alert {
 	margin-bottom: 16px;
+}
+
+.ant-list-item-meta-content {
+	h4 {
+		margin-top: 0;
+	}
 }
 
 .toolbar {
@@ -200,14 +206,14 @@ h2,
 		margin-bottom: 8px;
 
 		label {
-			color: @text-color-secondary;
+			/* color: @text-color-secondary; */
 		}
 	}
 }
 
-.empty-field {
+/* .empty-field {
 	color: @disabled-color;
-}
+} */
 
 .external-logins {
 	.adn {
@@ -309,7 +315,7 @@ h2,
 
 		.menu {
 			width: 180px;
-			border-right: @border-width-base @border-style-base @border-color-split;
+			/* border-right: @border-width-base @border-style-base @border-color-split; */
 
 			.ant-menu-inline {
 				border: none;
@@ -321,7 +327,7 @@ h2,
 			padding: 8px 40px;
 		}
 
-		@media screen and (max-width: @screen-md) {
+		/* @media screen and (max-width: @screen-md) {
 			flex-direction: column;
 
 			.menu {
@@ -332,6 +338,6 @@ h2,
 			.content {
 				padding: 40px;
 			}
-		}
+		} */
 	}
 }

@@ -1,9 +1,7 @@
 import React from "react";
 import { Layout } from "./constants";
 import "./i18n";
-// import "./index.less";
-import "antd/dist/reset.css";
-import "./index.css";
+import "./index.less";
 import { AppRouteRegistry, ComponentRegistry } from "./services";
 
 export const Api = {
