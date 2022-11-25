@@ -27,8 +27,8 @@ export default class PublicLayout extends React.Component {
 					<ErrorBoundary>
 						<Breadcrumb style={{ margin: "16px 0" }}>
 							<Breadcrumb.Item>Home</Breadcrumb.Item>
-							<Breadcrumb.Item>List</Breadcrumb.Item>
-							<Breadcrumb.Item>App</Breadcrumb.Item>
+							{/* <Breadcrumb.Item>List</Breadcrumb.Item>
+							<Breadcrumb.Item>App</Breadcrumb.Item> */}
 						</Breadcrumb>
 
 						<div style={{ minHeight: 280 }}>

@@ -33,6 +33,8 @@ namespace Montr.Core.Services.Implementations
 			{
 				return new[]
 				{
+					new Menu { Name = "Registration", Icon = "user-add", Route = "/registration/" },
+
 					new Menu { Name = "Dashboard", Icon = "dashboard", Route = "/dashboard/" },
 					new Menu { Name = "Reports", Icon = "bar-chart", Route = "/reports/" },
 

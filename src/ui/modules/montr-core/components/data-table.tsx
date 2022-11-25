@@ -324,7 +324,7 @@ export class DataTable<TModel extends IIndexer> extends React.Component<Props<TM
 			} */
 			/>
 
-			<Typography.Text type="secondary" copyable>{viewId}</Typography.Text>
+			{/* <Typography.Text type="secondary" copyable>{viewId}</Typography.Text> */}
 		</>);
 	};
 }
