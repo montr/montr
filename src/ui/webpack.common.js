@@ -1,6 +1,5 @@
 const path = require("path");
-const ForkTsCheckerWebpackPlugin = require("fork-ts-checker-webpack-plugin");
-const copyPlugin = require("copy-webpack-plugin");
+const webpack = require('webpack');
 
 const options = {
 	// mode: process.env.test,
@@ -8,10 +7,11 @@ const options = {
 		"app": "./modules/host/app.tsx",
 	},
 	output: {
-		path: path.resolve(__dirname, "./assets"),
+		path: path.resolve(__dirname, process.env.CI ? "./assets" : "../Host/wwwroot/assets"),
 		filename: "[name].bundle.js",
 		chunkFilename: "[name].chunk.js",
-		publicPath: "/assets/"
+		publicPath: "/assets/",
+		clean: true
 	},
 	resolve: {
 		alias: {
@@ -57,20 +57,7 @@ const options = {
 						options: {
 							sourceMap: false,
 							lessOptions: {
-								javascriptEnabled: true,
-								modifyVars: {
-									// https://github.com/ant-design/ant-design/blob/master/components/style/themes/default.less
-									// "primary-color": "#1DA57A",
-									// "primary-color": "#357ae8", // (?)
-									// "link-color": "#1DA57A",
-									// "border-radius-base": "4px",
-									// "font-size-base": "13px",
-									// "font-family": "'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif"
-									// "font-family": "'Segoe UI', 'Helvetica Neue', Helvetica, Arial, sans-serif"
-									// "font-family": "Nunito, 'Helvetica Neue', Helvetica, Arial, sans-serif"
-									// "font-family": "Inter, 'Helvetica Neue', Helvetica, Arial, sans-serif"
-									"font-family": "-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Oxygen-Sans,Ubuntu,Cantarell,'Helvetica Neue',sans-serif"
-								}
+								javascriptEnabled: true
 							}
 						}
 					}
@@ -79,18 +66,18 @@ const options = {
 		]
 	},
 	plugins: [
-		new ForkTsCheckerWebpackPlugin()
+		new webpack.optimize.LimitChunkCountPlugin({
+			maxChunks: 5
+		}),
+		new (require("fork-ts-checker-webpack-plugin"))({
+			typescript: {
+				diagnosticOptions: {
+					semantic: true,
+					syntactic: true,
+				},
+			},
+		})
 	]
 };
-
-if (!process.env.CI) {
-	options.plugins.push(
-		new copyPlugin({
-			patterns: [
-				{ from: "./assets/*", to: "../../Host/wwwroot" }
-			]
-		})
-	);
-}
 
 module.exports = options;

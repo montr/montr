@@ -1,13 +1,15 @@
 import { css } from "@emotion/react";
-// import { theme } from "antd";
+import { theme } from "antd";
 import React from "react";
 
-// const { token } = theme.useToken();
+export const EmptyFieldView = () => {
+	const { token } = theme.useToken();
 
-const style = css({
-	color: '#aaa' // token.colorBgBase
-});
+	const style = css({
+		color: token.colorTextDisabled
+	});
 
-export const EmptyFieldView = () => (
-	<span css={style}>No data</span>
-);
+	return (
+		<span css={style}>No data</span>
+	);
+};
