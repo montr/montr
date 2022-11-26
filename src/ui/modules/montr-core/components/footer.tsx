@@ -9,8 +9,6 @@ export const Footer = (): React.ReactElement => {
 			<img alt="GitHub Actions status" src="//github.com/montr/montr/workflows/build/badge.svg" />
 		</a>
 
-		<span className="language-selector">
-			<LanguageSelector />
-		</span>
+		<LanguageSelector />
 	</>;
 };
