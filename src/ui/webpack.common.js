@@ -67,7 +67,7 @@ const options = {
 	},
 	plugins: [
 		new webpack.optimize.LimitChunkCountPlugin({
-			maxChunks: 5
+			maxChunks: 11
 		}),
 		new (require("fork-ts-checker-webpack-plugin"))({
 			typescript: {
