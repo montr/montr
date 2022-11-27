@@ -1,5 +1,4 @@
-import { Page } from "@montr-core/components";
-import { UserContextProps, withUserContext } from "@montr-core/components/";
+import { Page, UserContextProps, withUserContext } from "@montr-core/components/";
 import { CompanyContextProps, withCompanyContext } from "@montr-kompany/components/company-context";
 import { Steps } from "antd";
 import * as React from "react";
@@ -18,12 +17,12 @@ class WrappedPageRegistration extends React.Component<UserContextProps & Company
 		}
 
 		return (
-			<Page title="Регистрация">
-				<Steps current={currenStep} direction="vertical">
-					<Steps.Step title="Регистрация пользователя" description={<StepRegisterUser />} />
-					<Steps.Step title="Регистрация организации" description={<StepRegisterCompany />} />
-					<Steps.Step title="Начало работы" description={<StepRegisterFinish />} />
-				</Steps>
+			<Page title="Регистрация" >
+				<Steps current={currenStep} direction="vertical" items={[
+					{ title: "Регистрация пользователя", description: < StepRegisterUser /> },
+					{ title: "Регистрация организации", description: < StepRegisterCompany /> },
+					{ title: "Начало работы", description: < StepRegisterFinish /> },
+				]} />
 			</Page>
 		);
 	}
