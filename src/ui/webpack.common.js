@@ -66,9 +66,9 @@ const options = {
 		]
 	},
 	plugins: [
-		new webpack.optimize.LimitChunkCountPlugin({
+		/* new webpack.optimize.LimitChunkCountPlugin({
 			maxChunks: 11
-		}),
+		}), */
 		new (require("fork-ts-checker-webpack-plugin"))({
 			typescript: {
 				diagnosticOptions: {
