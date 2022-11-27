@@ -1,13 +1,13 @@
-import { DataForm } from "@montr-core/components";
+import { DataForm } from "@montr-core/components/data-form";
 import { ApiResult, IDataField } from "@montr-core/models";
-import { MetadataService } from "@montr-core/services";
+import { MetadataService } from "@montr-core/services/metadata-service";
 import { Modal, Spin } from "antd";
 import { FormInstance } from "antd/es/form";
 import React from "react";
 import { Translation } from "react-i18next";
-import { ProfileModel } from "../models";
+import { ProfileModel } from "../models/profile-model";
 import { Locale, Views } from "../module";
-import { ProfileService } from "../services";
+import { ProfileService } from "../services/profile-service";
 
 interface Props {
 	onSuccess?: () => void;
@@ -23,8 +23,8 @@ interface State {
 /* todo: extract modal with form component to prevent copying _formRef code */
 export class ModalChangeEmail extends React.Component<Props, State> {
 
-	private _metadataService = new MetadataService();
-	private _profileService = new ProfileService();
+	private readonly metadataService = new MetadataService();
+	private readonly profileService = new ProfileService();
 
 	private _formRef = React.createRef<FormInstance>();
 
@@ -42,14 +42,14 @@ export class ModalChangeEmail extends React.Component<Props, State> {
 	};
 
 	componentWillUnmount = async () => {
-		await this._metadataService.abort();
-		await this._profileService.abort();
+		await this.metadataService.abort();
+		await this.profileService.abort();
 	};
 
 	fetchData = async () => {
-		const data = await this._profileService.get();
+		const data = await this.profileService.get();
 
-		const dataView = await this._metadataService.load(Views.formChangeEmail);
+		const dataView = await this.metadataService.load(Views.formChangeEmail);
 
 		this.setState({ loading: false, data, fields: dataView.fields });
 	};
@@ -65,7 +65,7 @@ export class ModalChangeEmail extends React.Component<Props, State> {
 	handleSubmit = async (values: ProfileModel): Promise<ApiResult> => {
 		const { onSuccess } = this.props;
 
-		const result = await this._profileService.changeEmail(values);
+		const result = await this.profileService.changeEmail(values);
 
 		if (result.success) {
 			if (onSuccess) await onSuccess();
@@ -79,7 +79,7 @@ export class ModalChangeEmail extends React.Component<Props, State> {
 
 		return (
 			<Translation ns={Locale.Namespace}>
-				{(t) => <Modal visible={!loading} title={t("page.changeEmail.title") as string}
+				{(t) => <Modal open={!loading} title={t("page.changeEmail.title") as string}
 					onOk={this.onOk} onCancel={this.onCancel}
 					okText={t("button.updateEmail") as string} /* width="640px" */>
 

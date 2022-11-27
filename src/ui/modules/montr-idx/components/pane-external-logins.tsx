@@ -1,11 +1,12 @@
 import { Icon, PageHeader } from "@montr-core/components";
-import { OperationService } from "@montr-core/services";
+import { OperationService } from "@montr-core/services/operation-service";
 import { Avatar, Button, List, Spin } from "antd";
 import React from "react";
 import { Translation } from "react-i18next";
 import { AuthScheme, ProfileModel, UserLoginInfo } from "../models";
 import { Api, Locale } from "../module";
-import { AccountService, ProfileService } from "../services";
+import { AccountService } from "../services/account-service";
+import { ProfileService } from "../services/profile-service";
 
 interface State {
 	loading: boolean;

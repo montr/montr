@@ -74,8 +74,13 @@ const options = {
 				diagnosticOptions: {
 					semantic: true,
 					syntactic: true,
-				},
+					declaration: true,
+					global: true
+				}
 			},
+			issue: {
+				severity: "warning"
+			}
 		})
 	]
 };

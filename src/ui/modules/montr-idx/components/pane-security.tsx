@@ -1,11 +1,12 @@
 import { Icon, PageHeader } from "@montr-core/components";
-import { OperationService } from "@montr-core/services";
+import { OperationService } from "@montr-core/services/operation-service";
 import { Button, List, Tooltip } from "antd";
 import React from "react";
 import { Translation } from "react-i18next";
-import { ProfileModel } from "../models";
+import { ProfileModel } from "../models/profile-model";
 import { Locale } from "../module";
-import { AccountService, ProfileService } from "../services";
+import { AccountService } from "../services/account-service";
+import { ProfileService } from "../services/profile-service";
 import { ModalChangeEmail, ModalChangePassword, ModalChangePhone, ModalSetPassword } from "./";
 
 declare const ModalTypes: ["changePassword", "setPassword", "changeEmail", "changePhone"];

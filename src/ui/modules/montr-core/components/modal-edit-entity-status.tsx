@@ -2,10 +2,10 @@ import { EntityStatusService } from "@montr-core/services/entity-status-service"
 import { Modal, Spin } from "antd";
 import { FormInstance } from "antd/es/form";
 import React from "react";
-import { DataForm } from ".";
 import { ApiResult, EntityStatus, Guid, IDataField } from "../models";
 import { Views } from "../module";
-import { MetadataService } from "../services";
+import { MetadataService } from "../services/metadata-service";
+import { DataForm } from "./data-form";
 
 interface Props {
 	entityTypeCode: string;
@@ -23,8 +23,8 @@ interface State {
 
 export class ModalEditEntityStatus extends React.Component<Props, State> {
 
-	private _metadataService = new MetadataService();
-	private _entityStatusService = new EntityStatusService();
+	private readonly metadataService = new MetadataService();
+	private readonly entityStatusService = new EntityStatusService();
 
 	private _formRef = React.createRef<FormInstance>();
 
@@ -42,21 +42,21 @@ export class ModalEditEntityStatus extends React.Component<Props, State> {
 	};
 
 	componentWillUnmount = async () => {
-		await this._metadataService.abort();
-		await this._entityStatusService.abort();
+		await this.metadataService.abort();
+		await this.entityStatusService.abort();
 	};
 
 	fetchData = async () => {
 		const { entityTypeCode, entityUid, uid } = this.props;
 
-		const dataView = await this._metadataService.load(Views.entityStatusForm);
+		const dataView = await this.metadataService.load(Views.entityStatusForm);
 
 		const fields = dataView.fields;
 
 		let data;
 
 		if (uid) {
-			data = await this._entityStatusService.get({ entityTypeCode, entityUid, uid });
+			data = await this.entityStatusService.get({ entityTypeCode, entityUid, uid });
 		}
 		else {
 			// todo: load defaults from server
@@ -83,12 +83,12 @@ export class ModalEditEntityStatus extends React.Component<Props, State> {
 		if (uid) {
 			data = { uid: uid, ...values };
 
-			result = await this._entityStatusService.update({
+			result = await this.entityStatusService.update({
 				entityTypeCode, entityUid, item: data
 			});
 		}
 		else {
-			const insertResult = await this._entityStatusService.insert({
+			const insertResult = await this.entityStatusService.insert({
 				entityTypeCode, entityUid, item: values
 			});
 
@@ -109,7 +109,7 @@ export class ModalEditEntityStatus extends React.Component<Props, State> {
 		const { loading, fields, data } = this.state;
 
 		return (
-			<Modal visible={!loading} title={data.name}
+			<Modal open={!loading} title={data.name}
 				onOk={this.onOk} onCancel={this.onCancel}
 				okText="Сохранить" width="640px">
 				<Spin spinning={loading}>

@@ -116,7 +116,7 @@ export class ModalEditInvitation extends React.Component<Props, State> {
 		const { loading, fields, data } = this.state;
 
 		return (
-			<Modal visible={!loading}
+			<Modal open={!loading}
 				// title={data.name}
 				title="Приглашение"
 				onOk={this.onOk}

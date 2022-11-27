@@ -179,7 +179,7 @@ export class PaneEditMetadataItem extends React.Component<Props, State> {
 					title="Metadata"
 					closable={true}
 					onClose={onClose}
-					visible={true}
+					open={true}
 					width={720}
 					footer={
 						<Toolbar clear size="small" float="right">

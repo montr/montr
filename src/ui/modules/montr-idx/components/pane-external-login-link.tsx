@@ -5,7 +5,7 @@ import React from "react";
 import { Translation } from "react-i18next";
 import { Navigate } from "react-router-dom";
 import { Locale, Patterns } from "../module";
-import { ProfileService } from "../services";
+import { ProfileService } from "../services/profile-service";
 
 interface State {
 	loading: boolean;

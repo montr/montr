@@ -1,11 +1,11 @@
-import { DataForm } from "@montr-core/components";
+import { DataForm } from "@montr-core/components/data-form";
 import { ApiResult, Guid, IDataField } from "@montr-core/models";
 import { MetadataService, NotificationService } from "@montr-core/services";
 import { Modal, Spin } from "antd";
 import { FormInstance } from "antd/es/form";
 import * as React from "react";
-import { ClassifierGroup } from "../models";
-import { ClassifierTreeService } from "../services";
+import { ClassifierGroup } from "../models/classifier-group";
+import { ClassifierTreeService } from "../services/classifier-tree-service";
 
 interface Props {
 	typeCode: string;
@@ -21,9 +21,9 @@ interface State {
 }
 
 export class ModalEditClassifierTree extends React.Component<Props, State> {
-	private _notificationService = new NotificationService();
-	private _metadataService = new MetadataService();
-	private _classifierTreeService = new ClassifierTreeService();
+	private readonly notificationService = new NotificationService();
+	private readonly metadataService = new MetadataService();
+	private readonly classifierTreeService = new ClassifierTreeService();
 
 	private _formRef = React.createRef<FormInstance>();
 
@@ -41,8 +41,8 @@ export class ModalEditClassifierTree extends React.Component<Props, State> {
 	};
 
 	componentWillUnmount = async (): Promise<void> => {
-		await this._metadataService.abort();
-		await this._classifierTreeService.abort();
+		await this.metadataService.abort();
+		await this.classifierTreeService.abort();
 	};
 
 	fetchData = async (): Promise<void> => {
@@ -50,14 +50,14 @@ export class ModalEditClassifierTree extends React.Component<Props, State> {
 
 		try {
 
-			const dataView = await this._metadataService.load(`ClassifierTree/Form`);
+			const dataView = await this.metadataService.load(`ClassifierTree/Form`);
 
 			const fields = dataView.fields;
 
 			let data;
 
 			if (uid) {
-				data = await this._classifierTreeService.get(typeCode, uid);
+				data = await this.classifierTreeService.get(typeCode, uid);
 			}
 			else {
 				// todo: load defaults from server
@@ -67,7 +67,7 @@ export class ModalEditClassifierTree extends React.Component<Props, State> {
 			this.setState({ loading: false, fields, data });
 
 		} catch (error) {
-			this._notificationService.error("Ошибка при загрузке данных", error.message);
+			this.notificationService.error("Ошибка при загрузке данных", error.message);
 			// todo: why call onCancel()?
 			this.onCancel();
 		}
@@ -90,10 +90,10 @@ export class ModalEditClassifierTree extends React.Component<Props, State> {
 		if (uid) {
 			data = { uid: uid, ...values };
 
-			result = await this._classifierTreeService.update(typeCode, data);
+			result = await this.classifierTreeService.update(typeCode, data);
 		}
 		else {
-			const insertResult = await this._classifierTreeService.insert(typeCode, values);
+			const insertResult = await this.classifierTreeService.insert(typeCode, values);
 
 			data = { uid: insertResult.uid, ...values };
 
@@ -111,7 +111,7 @@ export class ModalEditClassifierTree extends React.Component<Props, State> {
 		const { loading, fields, data } = this.state;
 
 		return (
-			<Modal visible={!loading} title={data.name}
+			<Modal open={!loading} title={data.name}
 				onOk={this.onOk} onCancel={this.onCancel}
 				okText="Сохранить" width="640px">
 				<Spin spinning={loading}>

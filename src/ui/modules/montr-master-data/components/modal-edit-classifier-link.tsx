@@ -1,11 +1,11 @@
-import { DataForm } from "@montr-core/components";
+import { DataForm } from "@montr-core/components/data-form";
 import { ApiResult, Guid, IDataField } from "@montr-core/models";
 import { MetadataService, NotificationService } from "@montr-core/services";
 import { Modal, Spin } from "antd";
 import { FormInstance } from "antd/es/form";
 import * as React from "react";
 import { ClassifierLink, IClassifierField } from "../models";
-import { ClassifierLinkService } from "../services";
+import { ClassifierLinkService } from "../services/classifier-link-service";
 
 interface Props {
 	typeCode: string;
@@ -21,9 +21,9 @@ interface State {
 }
 
 export class ModalEditClassifierLink extends React.Component<Props, State> {
-	private _notificationService = new NotificationService();
-	private _metadataService = new MetadataService();
-	private _classifierLinkService = new ClassifierLinkService();
+	private readonly notificationService = new NotificationService();
+	private readonly metadataService = new MetadataService();
+	private readonly classifierLinkService = new ClassifierLinkService();
 
 	private _formRef = React.createRef<FormInstance>();
 
@@ -41,15 +41,15 @@ export class ModalEditClassifierLink extends React.Component<Props, State> {
 	};
 
 	componentWillUnmount = async (): Promise<void> => {
-		await this._metadataService.abort();
-		await this._classifierLinkService.abort();
+		await this.metadataService.abort();
+		await this.classifierLinkService.abort();
 	};
 
 	fetchData = async (): Promise<void> => {
 		const { typeCode } = this.props;
 
 		try {
-			const dataView = await this._metadataService.load(`ClassifierLink/Form`);
+			const dataView = await this.metadataService.load(`ClassifierLink/Form`);
 
 			const fields = dataView.fields;
 
@@ -62,7 +62,7 @@ export class ModalEditClassifierLink extends React.Component<Props, State> {
 			this.setState({ loading: false, fields });
 
 		} catch (error) {
-			this._notificationService.error("Ошибка при загрузке данных", error.message);
+			this.notificationService.error("Ошибка при загрузке данных", error.message);
 			this.onCancel();
 		}
 	};
@@ -78,7 +78,7 @@ export class ModalEditClassifierLink extends React.Component<Props, State> {
 	save = async (values: ClassifierLink): Promise<ApiResult> => {
 		const { typeCode, itemUid, onSuccess } = this.props;
 
-		const result = await this._classifierLinkService.insert(typeCode, values.group.uid, itemUid);
+		const result = await this.classifierLinkService.insert(typeCode, values.group.uid, itemUid);
 
 		if (result.success) {
 			if (onSuccess) await onSuccess(values);
@@ -91,7 +91,7 @@ export class ModalEditClassifierLink extends React.Component<Props, State> {
 		const { loading, fields, data } = this.state;
 
 		return (
-			<Modal visible={!loading} title="Добавление ссылки"
+			<Modal open={!loading} title="Добавление ссылки"
 				onOk={this.onOk} onCancel={this.onCancel}
 				okText="Сохранить" width="640px">
 				<Spin spinning={loading}>

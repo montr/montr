@@ -1,11 +1,11 @@
 import { ButtonAdd, ButtonDelete, Toolbar } from "@montr-core/components";
 import { DataTable, DataTableUpdateToken } from "@montr-core/components/data-table";
-import { DataResult } from "@montr-core/models";
-import { OperationService } from "@montr-core/services";
-import { RolePermissionService } from "@montr-idx/services";
-import { PaneSelectClassifier } from "@montr-master-data/components";
+import { DataResult } from "@montr-core/models/data-result";
+import { OperationService } from "@montr-core/services/operation-service";
+import { RolePermissionService } from "@montr-idx/services/role-permission-service";
+import { PaneSelectClassifier } from "@montr-master-data/components/pane-select-classifier";
 import React from "react";
-import { Role } from "../models";
+import { Role } from "../models/role";
 import { Api, Views } from "../module";
 
 interface Props {

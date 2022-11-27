@@ -1,9 +1,9 @@
 import { ButtonCancel, ButtonSave, Toolbar } from "@montr-core/components";
-import { Guid } from "@montr-core/models";
+import { Guid } from "@montr-core/models/guid";
 import { Drawer, FormInstance } from "antd";
 import React from "react";
-import { FormEditClassifier } from ".";
-import { ClassifierType } from "../models";
+import { ClassifierType } from "../models/classifier-type";
+import { FormEditClassifier } from "./form-edit-classifier";
 
 interface Props {
     type: ClassifierType;
@@ -29,7 +29,7 @@ export class PaneEditClassifier extends React.Component<Props> {
                 title="Classifier"
                 closable={true}
                 onClose={onClose}
-                visible={true}
+                open={true}
                 width={720}
                 footer={
                     <Toolbar clear size="small" float="right">

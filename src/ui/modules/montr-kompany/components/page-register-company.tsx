@@ -151,7 +151,7 @@ class _RegistrationForm extends React.Component<Props, State> {
 			<Modal
 				title="Условия использования" footer={null}
 				onCancel={this.handleModalCancel}
-				visible={this.state.modalVisible}>
+				open={this.state.modalVisible}>
 				<p>Some contents...</p>
 				<p>Some contents...</p>
 				<p>Some contents...</p>

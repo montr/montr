@@ -1,7 +1,7 @@
-import React from "react";
 import { Drawer } from "antd";
-import { Classifier } from "../models";
-import { PaneSearchClassifier } from ".";
+import React from "react";
+import { Classifier } from "../models/classifier";
+import { PaneSearchClassifier } from "./pane-search-classifier";
 
 interface Props {
     typeCode: string;
@@ -19,7 +19,7 @@ export class PaneSelectClassifier extends React.Component<Props> {
                 // title="Контрагенты" // todo: load from api
                 closable={false}
                 onClose={onClose}
-                visible={true}
+                open={true}
                 width={1024}>
                 <PaneSearchClassifier
                     mode="drawer"
