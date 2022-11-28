@@ -13,6 +13,6 @@ export interface DataPaneProps<TEntity> {
 	entityTypeCode: string;
 	entityUid: Guid;
 	data?: TEntity;
-	ref?: unknown; // any
+	// ref?: unknown; // any
 	[key: string]: unknown;
 }

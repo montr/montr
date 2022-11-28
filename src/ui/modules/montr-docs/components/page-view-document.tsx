@@ -5,6 +5,7 @@ import { DataToolbar } from "@montr-core/components/data-toolbar";
 import { withNavigate, withParams } from "@montr-core/components/react-router-wrappers";
 import { ConfigurationItemProps, DataPaneProps, DataView } from "@montr-core/models";
 import { DateHelper } from "@montr-core/services/date-helper";
+import { NotificationService } from "@montr-core/services/notification-service";
 import { Classifier } from "@montr-master-data/models";
 import { ClassifierService } from "@montr-master-data/services";
 import { Spin } from "antd";
@@ -36,14 +37,14 @@ class PageViewDocument extends React.Component<Props, State> {
 
 	private readonly documentService = new DocumentService();
 	private readonly classifierService = new ClassifierService();
+	private readonly notificationService = new NotificationService();
 
 	constructor(props: Props) {
 		super(props);
 
 		this.state = {
 			loading: true,
-			document: {},
-			documentType: {}
+			document: {}
 		};
 	}
 
@@ -65,8 +66,13 @@ class PageViewDocument extends React.Component<Props, State> {
 
 		const document = await this.documentService.get(uid);
 
-		const documentType = await this.classifierService
-			.get(ClassifierTypeCode.documentType, document.documentTypeUid);
+		let documentType;
+		try {
+			documentType = await this.classifierService
+				.get(ClassifierTypeCode.documentType, document.documentTypeUid);
+		} catch (error) {
+			this.notificationService.error("Error loading document type", error.message);
+		}
 
 		const dataView = await this.documentService.metadata(Views.documentPage, document.uid);
 
@@ -91,7 +97,8 @@ class PageViewDocument extends React.Component<Props, State> {
 
 		if (!document || !document.documentTypeUid) return null;
 
-		const pageTitle = `${documentType.name} — ${document.documentNumber} — ${DateHelper.toLocaleDateString(document.documentDate)}`;
+		const pageTitle =
+			`${documentType?.name || ""} — ${document.documentNumber} — ${DateHelper.toLocaleDateString(document.documentDate)}`;
 
 		const buttonProps: ConfigurationItemProps = {
 			// document,
@@ -113,7 +120,7 @@ class PageViewDocument extends React.Component<Props, State> {
 				<PageHeader
 					onBack={() => window.history.back()}
 					title={pageTitle}
-					subTitle={<>document.uid</>}
+					subTitle={<>{document.uid}</>}
 					tags={<StatusTag statusCode={document.statusCode} />}
 					breadcrumb={<DocumentBreadcrumb />}
 					extra={<DataToolbar buttons={dataView.toolbar} buttonProps={buttonProps} />}>
