@@ -1,16 +1,13 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authentication.Facebook;
+﻿using Microsoft.AspNetCore.Authentication.Facebook;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Montr.Core;
-using Montr.Core.Models;
 using Montr.Core.Services;
-using Montr.Settings.Models;
-using Montr.Settings.Services;
+using Montr.Idx.Auth.Facebook.Services;
 
 namespace Montr.Idx.Auth.Facebook
 {
+	// ReSharper disable once UnusedType.Global
 	[Module(DependsOn = new [] { typeof(Idx.Module) })]
 	public class Module : IModule
 	{
@@ -39,38 +36,6 @@ namespace Montr.Idx.Auth.Facebook
 					options.AppSecret = authOptions.ClientSecret;
 				});
 			}
-		}
-	}
-
-	public class FacebookAuthOptions : OAuthOptions
-	{
-	}
-
-	public class ConfigurationStartupTask : IStartupTask
-	{
-		private readonly ISettingsTypeRegistry _settingsTypeRegistry;
-		private readonly IConfigurationRegistry _registry;
-
-		public ConfigurationStartupTask(ISettingsTypeRegistry settingsTypeRegistry, IConfigurationRegistry registry)
-		{
-			_settingsTypeRegistry = settingsTypeRegistry;
-			_registry = registry;
-		}
-
-		public Task Run(CancellationToken cancellationToken)
-		{
-			_settingsTypeRegistry.Register(typeof(FacebookAuthOptions));
-
-			_registry.Configure<Application>(config =>
-			{
-				config.Add<SettingsPane>((_, settings) =>
-				{
-					settings.Type = typeof(FacebookAuthOptions);
-					settings.Category = SettingsCategory.OAuthProviders;
-				});
-			});
-
-			return Task.CompletedTask;
 		}
 	}
 }

@@ -12,8 +12,6 @@ using Montr.Idx.Entities;
 using Montr.Idx.Services;
 using Montr.Idx.Services.Implementations;
 using Montr.MasterData.Services;
-using ConfigurationStartupTask = Montr.Idx.Services.Implementations.ConfigurationStartupTask;
-using RegisterClassifierTypeStartupTask = Montr.Idx.Services.Implementations.RegisterClassifierTypeStartupTask;
 using static OpenIddict.Abstractions.OpenIddictConstants;
 
 namespace Montr.Idx
@@ -23,13 +21,16 @@ namespace Montr.Idx
 	{
 		public void Configure(IAppBuilder appBuilder)
 		{
+			appBuilder.Services.BindOptions<IdentitySignInSettings>(appBuilder.Configuration);
+			appBuilder.Services.BindOptions<IdentityPasswordSettings>(appBuilder.Configuration);
+
 			appBuilder.Services.AddTransient<IStartupTask, RegisterClassifierTypeStartupTask>();
 			appBuilder.Services.AddTransient<IStartupTask, RegisterMessageTemplateStartupTask>();
 			appBuilder.Services.AddTransient<IStartupTask, ConfigurationStartupTask>();
 
 			appBuilder.Services.AddTransient<IStartupTask, RegisterPermissionsStartupTask>();
 
-			appBuilder.Services.AddSingleton<IContentProvider, ContentProvider>();
+			appBuilder.Services.AddTransient<IContentProvider, ContentProvider>();
 			appBuilder.Services.AddTransient<IPermissionProvider, PermissionProvider>();
 
 			appBuilder.Services.AddTransient<IEmailConfirmationService, EmailConfirmationService>();
@@ -46,16 +47,16 @@ namespace Montr.Idx
 				.AddAuthentication()
 				.AddCookie();
 
-			// todo: move from impl to idx?
 			appBuilder.Services.Configure<IdentityOptions>(options =>
 			{
-				// todo: move to settings
+				options.User.RequireUniqueEmail = true;
+
+				// todo: read from settings
 				options.SignIn.RequireConfirmedAccount = false;
 				options.SignIn.RequireConfirmedEmail = false;
 				options.SignIn.RequireConfirmedPhoneNumber = false;
 
-				options.User.RequireUniqueEmail = true;
-
+				// todo: read from settings
 				options.Password.RequireDigit = true;
 				options.Password.RequireLowercase = true;
 				options.Password.RequireNonAlphanumeric = true;
@@ -126,6 +127,7 @@ namespace Montr.Idx
 				};*/
 			});
 
+			// todo: move OpenIddict to separate module
 			appBuilder.Services.AddOpenIddict()
 				.AddCore(options =>
 				{

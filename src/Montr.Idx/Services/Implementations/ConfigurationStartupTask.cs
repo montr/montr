@@ -1,22 +1,44 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
+using Montr.Core.Models;
 using Montr.Core.Services;
 using Montr.MasterData.Models;
 using Montr.Metadata.Models;
+using Montr.Settings.Models;
+using Montr.Settings.Services;
 
 namespace Montr.Idx.Services.Implementations
 {
 	public class ConfigurationStartupTask : IStartupTask
 	{
+		private readonly ISettingsTypeRegistry _settingsTypeRegistry;
 		private readonly IConfigurationRegistry _registry;
 
-		public ConfigurationStartupTask(IConfigurationRegistry registry)
+		public ConfigurationStartupTask(ISettingsTypeRegistry settingsTypeRegistry, IConfigurationRegistry registry)
 		{
+			_settingsTypeRegistry = settingsTypeRegistry;
 			_registry = registry;
 		}
 
 		public Task Run(CancellationToken cancellationToken)
 		{
+			_settingsTypeRegistry.Register(typeof(IdentitySignInSettings));
+			_settingsTypeRegistry.Register(typeof(IdentityPasswordSettings));
+
+			_registry.Configure<Application>(config =>
+			{
+				config.Add<SettingsPane>((_, settings) =>
+				{
+					settings.Type = typeof(IdentitySignInSettings);
+					settings.Category = SettingsCategory.Identity;
+				});
+				config.Add<SettingsPane>((_, settings) =>
+				{
+					settings.Type = typeof(IdentityPasswordSettings);
+					settings.Category = SettingsCategory.Identity;
+				});
+			});
+
 			_registry.Configure<Classifier>(config =>
 			{
 				config.When(classifier => classifier.Type == ClassifierTypeCode.Role)

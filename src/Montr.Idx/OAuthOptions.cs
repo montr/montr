@@ -4,7 +4,7 @@ using Montr.Settings.Services.Designers;
 
 namespace Montr.Idx
 {
-	public class OAuthOptions
+	public abstract class OAuthOptions
 	{
 		[Required]
 		public string ClientId { get; set; }

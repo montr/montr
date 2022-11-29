@@ -25,7 +25,8 @@ namespace Montr.Core.Services.Implementations
 				return new[]
 				{
 					new Menu { Name = "Common", Route = "/settings/" },
-					new Menu { Name = "SMTP", Route = "/settings/smtp" },
+					new Menu { Name = "Advanced", Position = 1000 },
+					new Menu { Name = "History", Position = 1001 }
 				};
 			}
 
@@ -46,7 +47,8 @@ namespace Montr.Core.Services.Implementations
 						Position = 100,
 						Items = new[]
 						{
-							// new Menu { Id = "integrations", Name = "Integrations", Route = "/integrations/" },
+							new Menu { Name = "Marketplace", Route = "/marketplace/" },
+							new Menu { Name = "Integrations", Route = "/integrations/" },
 							new Menu { Name = "Settings", Route = "/settings/", Permission = Permission.GetCode(typeof(ManageSettings)) },
 							new Menu { Name = "Localization", Route = "/locales/", Permission = Permission.GetCode(typeof(ViewLocales)) }
 						}

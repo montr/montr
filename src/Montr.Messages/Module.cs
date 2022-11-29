@@ -16,6 +16,7 @@ namespace Montr.Messages
 
 			appBuilder.Services.AddTransient<IStartupTask, RegisterClassifierTypeStartupTask>();
 			appBuilder.Services.AddTransient<IStartupTask, ConfigurationStartupTask>();
+			appBuilder.Services.AddTransient<IContentProvider, ContentProvider>();
 
 			appBuilder.Services.AddSingleton<IEmailSender, MailKitEmailSender>();
 			appBuilder.Services.AddSingleton<ITemplateRenderer, MustacheTemplateRenderer>();

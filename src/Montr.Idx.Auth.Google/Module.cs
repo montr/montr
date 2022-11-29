@@ -1,13 +1,9 @@
-﻿using System.Threading;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authentication.Google;
+﻿using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Montr.Core;
-using Montr.Core.Models;
 using Montr.Core.Services;
-using Montr.Settings.Models;
-using Montr.Settings.Services;
+using Montr.Idx.Auth.Google.Services;
 
 namespace Montr.Idx.Auth.Google
 {
@@ -40,38 +36,6 @@ namespace Montr.Idx.Auth.Google
 					options.ClientSecret = authOptions.ClientSecret;
 				});
 			}
-		}
-	}
-
-	public class GoogleAuthOptions : OAuthOptions
-	{
-	}
-
-	public class ConfigurationStartupTask : IStartupTask
-	{
-		private readonly ISettingsTypeRegistry _settingsTypeRegistry;
-		private readonly IConfigurationRegistry _registry;
-
-		public ConfigurationStartupTask(ISettingsTypeRegistry settingsTypeRegistry, IConfigurationRegistry registry)
-		{
-			_settingsTypeRegistry = settingsTypeRegistry;
-			_registry = registry;
-		}
-
-		public Task Run(CancellationToken cancellationToken)
-		{
-			_settingsTypeRegistry.Register(typeof(GoogleAuthOptions));
-
-			_registry.Configure<Application>(config =>
-			{
-				config.Add<SettingsPane>((_, settings) =>
-				{
-					settings.Type = typeof(GoogleAuthOptions);
-					settings.Category = SettingsCategory.OAuthProviders;
-				});
-			});
-
-			return Task.CompletedTask;
 		}
 	}
 }
