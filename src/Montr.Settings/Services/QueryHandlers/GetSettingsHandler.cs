@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using MediatR;
 using Microsoft.Extensions.Configuration;
 using Montr.Core.Models;
+using Montr.Core.Services;
 using Montr.Settings.Queries;
 
 namespace Montr.Settings.Services.QueryHandlers
@@ -24,11 +25,7 @@ namespace Montr.Settings.Services.QueryHandlers
 
 			if (_settingsTypeRegistry.TryGetType(request.SettingsTypeCode, out var type))
 			{
-				var typeCode = _settingsTypeRegistry.GetTypeCode(type);
-
-				var options = _configuration.GetSection(typeCode).Get(type);
-
-				result = new ApiResult<object> { Data = options };
+				result = new ApiResult<object> { Data = _configuration.GetOptions(type) };
 			}
 			else
 			{

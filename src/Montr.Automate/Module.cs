@@ -23,7 +23,7 @@ namespace Montr.Automate
 			appBuilder.Services.AddTransient<IStartupTask, RegisterMetadataStartupTask>();
 			appBuilder.Services.AddTransient<IStartupTask, ConfigurationStartupTask>();
 
-			appBuilder.Services.AddSingleton<IStartupTask, AutomationJsonOptionsInitializer>();
+			appBuilder.Services.AddTransient<IStartupTask, AutomationJsonOptionsInitializer>();
 
 			appBuilder.Services.AddTransient<IAutomationProviderRegistry, DefaultAutomationProviderRegistry>();
 			appBuilder.Services.AddTransient<IAutomationContextProvider, DefaultAutomationContextProvider>();

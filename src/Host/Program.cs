@@ -35,8 +35,8 @@ namespace Host
 				.UseDefaultConfiguration(args);
 
 			appBuilder.WebHost
-				.UseDbSettings(reloadOnChange: true)
-				.UseSentry();
+				.UseSentry()
+				.UseDbSettings(reloadOnChange: true);
 
 			// todo: create in modules builder
 			var logger = appBuilder.CreateBootstrapLogger();

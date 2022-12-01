@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 using System.Transactions;
 using LinqToDB;
 using MediatR;
-using Montr.Core.Events;
 using Montr.Core.Services;
 using Montr.Settings.Entities;
+using Montr.Settings.Events;
 
 namespace Montr.Settings.Services.Implementations
 {
@@ -80,7 +80,12 @@ namespace Montr.Settings.Services.Implementations
 			// ReSharper disable once PossibleNullReferenceException
 			Transaction.Current.TransactionCompleted += async (sender, args) =>
 			{
-				await _mediator.Publish(new SettingsChanged { Values = values }, cancellationToken);
+				await _mediator.Publish(new SettingsChanged
+				{
+					EntityTypeCode = entityTypeCode,
+					EntityUid = entityUid,
+					Values = values
+				}, cancellationToken);
 			};
 
 			return affected;

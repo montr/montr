@@ -1,21 +1,18 @@
 ﻿using System;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
+using Montr.Core.Services;
 
 namespace Montr.Settings.Services.Implementations
 {
 	public class DefaultSettingsTypeRegistry : ISettingsTypeRegistry
 	{
-		private readonly Dictionary<string, Type> _types = new();
-
-		public string GetTypeCode(Type type)
-		{
-			return type.FullName;
-		}
+		private readonly ConcurrentDictionary<string, Type> _types = new();
 
 		public void Register(Type type)
 		{
-			var typeCode = GetTypeCode(type);
+			var typeCode = OptionsUtils.GetOptionsSectionKey(type);
 
 			_types[typeCode] = type;
 		}

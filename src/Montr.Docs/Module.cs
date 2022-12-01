@@ -27,7 +27,7 @@ public class Module : IModule
 			.AddNamedTransient<IClassifierRepository, DbDocumentTypeRepository>(ClassifierTypeCode.DocumentType);
 
 		appBuilder.Services.AddSingleton<IRepository<Document>, DbDocumentRepository>();
-		appBuilder.Services.AddSingleton<IDocumentService, DbDocumentService>();
+		appBuilder.Services.AddTransient<IDocumentService, DbDocumentService>();
 
 		appBuilder.Services.AddTransient<INumberTagResolver, DocumentNumberTagResolver>();
 

@@ -7,6 +7,7 @@ using Serilog.Extensions.Logging;
 
 namespace Host.Services
 {
+	// https://cheatsheetseries.owasp.org/cheatsheets/Logging_Cheat_Sheet.html
 	public static class LoggingHostBuilderExtensions
 	{
 		public static IHostBuilder UseSerilog(this IHostBuilder builder)

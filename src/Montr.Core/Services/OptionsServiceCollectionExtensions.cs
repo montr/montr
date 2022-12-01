@@ -1,25 +1,35 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using System;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 
 namespace Montr.Core.Services
 {
 	public static class OptionsServiceCollectionExtensions
 	{
-		public static IServiceCollection BindOptions<TOptions>(this IServiceCollection services, IConfiguration configuration) where TOptions : class
+		public static OptionsBuilder<TOptions> BindOptions<TOptions>(
+			this IServiceCollection services, IConfiguration configuration) where TOptions : class
 		{
-			var sectionKey = typeof(TOptions).FullName;
+			var sectionKey = OptionsUtils.GetOptionsSectionKey<TOptions>();
 
-			services
+			return services
 				.AddOptions<TOptions>()
 				.Bind(configuration.GetSection(sectionKey))
 				.ValidateDataAnnotations();
-
-			return services;
 		}
 
-		public static TOptions GetOptions<TOptions>(this IConfiguration configuration) where TOptions : class
+		public static TOptions GetOptions<TOptions>(this IConfiguration configuration) where TOptions : class, new()
 		{
-			return configuration.GetSection(typeof(TOptions).FullName).Get<TOptions>();
+			var sectionKey = OptionsUtils.GetOptionsSectionKey<TOptions>();
+
+			return configuration.GetSection(sectionKey).Get<TOptions>() ?? new TOptions();
+		}
+
+		public static object GetOptions(this IConfiguration configuration, Type ofOptions)
+		{
+			var sectionKey = OptionsUtils.GetOptionsSectionKey(ofOptions);
+
+			return configuration.GetSection(sectionKey).Get(ofOptions) ?? Activator.CreateInstance(ofOptions);
 		}
 	}
 }

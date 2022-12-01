@@ -7,11 +7,11 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Primitives;
-using Montr.Core.Events;
 using Montr.Core.Models;
 using Montr.Core.Services;
 using Montr.Core.Services.Implementations;
 using Montr.Settings.Entities;
+using Montr.Settings.Events;
 using IConfigurationProvider = Microsoft.Extensions.Configuration.IConfigurationProvider;
 
 namespace Montr.Settings.Services.Implementations
@@ -60,7 +60,9 @@ namespace Montr.Settings.Services.Implementations
 
 		public Task Handle(SettingsChanged notification, CancellationToken cancellationToken)
 		{
-			if (ReloadOnChange)
+			if (ReloadOnChange
+			    && notification.EntityTypeCode == Application.EntityTypeCode
+			    && notification.EntityUid == Application.EntityUid)
 			{
 				var previousToken = Interlocked.Exchange(ref _reloadToken, new ConfigurationReloadToken());
 

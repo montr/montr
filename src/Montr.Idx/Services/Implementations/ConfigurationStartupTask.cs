@@ -22,19 +22,27 @@ namespace Montr.Idx.Services.Implementations
 
 		public Task Run(CancellationToken cancellationToken)
 		{
-			_settingsTypeRegistry.Register(typeof(IdentitySignInSettings));
-			_settingsTypeRegistry.Register(typeof(IdentityPasswordSettings));
+			_settingsTypeRegistry.Register(typeof(SignInSettings));
+			_settingsTypeRegistry.Register(typeof(PasswordSettings));
+			_settingsTypeRegistry.Register(typeof(LockoutSettings));
 
 			_registry.Configure<Application>(config =>
 			{
 				config.Add<SettingsPane>((_, settings) =>
 				{
-					settings.Type = typeof(IdentitySignInSettings);
+					settings.Type = typeof(SignInSettings);
 					settings.Category = SettingsCategory.Identity;
 				});
+
 				config.Add<SettingsPane>((_, settings) =>
 				{
-					settings.Type = typeof(IdentityPasswordSettings);
+					settings.Type = typeof(PasswordSettings);
+					settings.Category = SettingsCategory.Identity;
+				});
+
+				config.Add<SettingsPane>((_, settings) =>
+				{
+					settings.Type = typeof(LockoutSettings);
 					settings.Category = SettingsCategory.Identity;
 				});
 			});

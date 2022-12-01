@@ -97,7 +97,7 @@ namespace Montr.Core
 
 			// Microsoft.IdentityModel.Logging.IdentityModelEventSource.ShowPII = true;
 
-			appBuilder.Services.AddMediatR(assemblies);
+			appBuilder.Services.AddMediatR(/*config => config.AsScoped(),*/ assemblies);
 
 			appBuilder.Services.Configure<RequestLocalizationOptions>(options =>
 			{

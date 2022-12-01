@@ -92,7 +92,7 @@ class WrappedDataForm extends React.Component<Props, State> {
 	};
 
 	setFieldErrors = async (result: ApiResult, values: unknown /* IIndexer */): Promise<void> => {
-		const { fields } = this.props;
+		const { t, fields, errorMessage } = this.props;
 
 		const form = this.getFormRef().current;
 
@@ -126,7 +126,9 @@ class WrappedDataForm extends React.Component<Props, State> {
 
 			if (otherErrors.length > 0) {
 				// todo: show as alert before form
-				this.notificationService.error(otherErrors);
+				const message = errorMessage || t("dataForm.submit.error"),
+					description = <ul>{otherErrors.map(x => <li>{x}</li>)}</ul>;
+				this.notificationService.error(message, description);
 			}
 		}
 	};

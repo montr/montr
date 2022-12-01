@@ -13,11 +13,10 @@ namespace Montr.Messages
 		[Required]
 		public string Host { get; set; }
 
-		[DefaultValue(587)]
-		[Range(ushort.MinValue, ushort.MaxValue)]
-		public int Port { get; set; }
+		[Required, Range(ushort.MinValue, ushort.MaxValue)]
+		public int Port { get; set; } = 587;
 
-		[DefaultValue(true)]
+		[Required, DefaultValue(true)]
 		public bool UseSsl { get; set; } = true;
 
 		[Required]

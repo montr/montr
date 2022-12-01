@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Montr.Core;
 using Montr.Core.Services;
 using Montr.Idx.Entities;
@@ -21,14 +22,16 @@ namespace Montr.Idx
 	{
 		public void Configure(IAppBuilder appBuilder)
 		{
-			appBuilder.Services.BindOptions<IdentitySignInSettings>(appBuilder.Configuration);
-			appBuilder.Services.BindOptions<IdentityPasswordSettings>(appBuilder.Configuration);
+			appBuilder.Services.BindOptions<SignInSettings>(appBuilder.Configuration);
+			appBuilder.Services.BindOptions<PasswordSettings>(appBuilder.Configuration);
+			appBuilder.Services.BindOptions<LockoutSettings>(appBuilder.Configuration);
 
 			appBuilder.Services.AddTransient<IStartupTask, RegisterClassifierTypeStartupTask>();
 			appBuilder.Services.AddTransient<IStartupTask, RegisterMessageTemplateStartupTask>();
 			appBuilder.Services.AddTransient<IStartupTask, ConfigurationStartupTask>();
-
 			appBuilder.Services.AddTransient<IStartupTask, RegisterPermissionsStartupTask>();
+
+			appBuilder.Services.AddTransient<IConfigureOptions<IdentityOptions>, IdentityOptionsConfigurator>();
 
 			appBuilder.Services.AddTransient<IContentProvider, ContentProvider>();
 			appBuilder.Services.AddTransient<IPermissionProvider, PermissionProvider>();
@@ -49,24 +52,9 @@ namespace Montr.Idx
 
 			appBuilder.Services.Configure<IdentityOptions>(options =>
 			{
+				// note: other settings are configured in ui and loaded in IdentityOptionsConfigurator
+
 				options.User.RequireUniqueEmail = true;
-
-				// todo: read from settings
-				options.SignIn.RequireConfirmedAccount = false;
-				options.SignIn.RequireConfirmedEmail = false;
-				options.SignIn.RequireConfirmedPhoneNumber = false;
-
-				// todo: read from settings
-				options.Password.RequireDigit = true;
-				options.Password.RequireLowercase = true;
-				options.Password.RequireNonAlphanumeric = true;
-				options.Password.RequireUppercase = true;
-				options.Password.RequiredLength = 6;
-				options.Password.RequiredUniqueChars = 1;
-
-				options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
-				options.Lockout.MaxFailedAccessAttempts = 5;
-				options.Lockout.AllowedForNewUsers = true;
 
 				options.ClaimsIdentity.UserNameClaimType = Claims.Name;
 				options.ClaimsIdentity.UserIdClaimType = Claims.Subject;

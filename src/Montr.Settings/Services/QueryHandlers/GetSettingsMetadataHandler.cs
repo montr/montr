@@ -14,18 +14,14 @@ namespace Montr.Settings.Services.QueryHandlers
 	{
 		private readonly INamedServiceFactory<IEntityProvider> _entityProviderFactory;
 		private readonly IConfigurationProvider _configurationProvider;
-		private readonly ISettingsTypeRegistry _settingsTypeRegistry;
 		private readonly ISettingsMetadataProvider _settingsMetadataProvider;
 
 		public GetSettingsMetadataHandler(INamedServiceFactory<IEntityProvider> entityProviderFactory,
-			IConfigurationProvider configurationProvider, ISettingsMetadataProvider settingsMetadataProvider,
-			ISettingsTypeRegistry settingsTypeRegistry)
+			IConfigurationProvider configurationProvider, ISettingsMetadataProvider settingsMetadataProvider)
 		{
 			_entityProviderFactory = entityProviderFactory;
 			_configurationProvider = configurationProvider;
-
 			_settingsMetadataProvider = settingsMetadataProvider;
-			_settingsTypeRegistry = settingsTypeRegistry;
 		}
 
 		public async Task<ICollection<SettingsBlock>> Handle(GetSettingsMetadata request, CancellationToken cancellationToken)
@@ -40,13 +36,11 @@ namespace Montr.Settings.Services.QueryHandlers
 
 			foreach (var item in items.Where(x => x.Category == request.Category))
 			{
-				var metadata = await _settingsMetadataProvider.GetMetadata(item.Type);
-
 				result.Add(new SettingsBlock
 				{
-					TypeCode = _settingsTypeRegistry.GetTypeCode(item.Type),
+					TypeCode = OptionsUtils.GetOptionsSectionKey(item.Type),
 					DisplayName = SettingsNameUtils.BuildSettingsName(item.Type.Name),
-					Fields = metadata
+					Fields = await _settingsMetadataProvider.GetMetadata(item.Type)
 				});
 			}
 
