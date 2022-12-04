@@ -19,13 +19,20 @@ namespace Montr.Kompany.Registration.Services.QueryHandlers
 
 		public async Task<ICollection<Document>> Handle(GetCompanyRegistrationRequestList request, CancellationToken cancellationToken)
 		{
-			var documents = await _documentRepository.Search(new DocumentSearchRequest
-			{
-				UserUid = request.UserUid,
-				SkipPaging = true
-			}, cancellationToken);
+			ICollection<Document> result = null;
 
-			return documents.Rows;
+			if (request?.UserUid != null)
+			{
+				var documents = await _documentRepository.Search(new DocumentSearchRequest
+				{
+					UserUid = request.UserUid,
+					SkipPaging = true
+				}, cancellationToken);
+
+				result = documents.Rows;
+			}
+
+			return result;
 		}
 	}
 }

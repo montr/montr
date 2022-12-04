@@ -13,10 +13,10 @@ namespace Montr.Core.Services.Implementations
 				return new[]
 				{
 					new Menu { Icon = "home", Route = "/" },
+					new Menu { Name = "Dashboard", Icon = "dashboard", Route = ClientRoutes.Dashboard, Permission = Permission.GetCode(typeof(ViewDashboard)) },
 					// new Menu { Id = "login", Name = "Login", Icon = "login", Route = "/account/login/" },
 					// new Menu { Id = "register", Name = "Registration", Icon = "user-add", Route = "/account/register/" },
 					new Menu { Name = "Registration", Icon = "user-add", Route = "/registration/" },
-					// new Menu { Name = "Dashboard", Icon = "dashboard", Route = "/dashboard/" }
 				};
 			}
 
@@ -36,7 +36,7 @@ namespace Montr.Core.Services.Implementations
 				{
 					new Menu { Name = "Registration", Icon = "user-add", Route = "/registration/" },
 
-					new Menu { Name = "Dashboard", Icon = "dashboard", Route = "/dashboard/" },
+					new Menu { Name = "Dashboard", Icon = "dashboard", Route = ClientRoutes.Dashboard, Permission = Permission.GetCode(typeof(ViewDashboard)) },
 					new Menu { Name = "Reports", Icon = "bar-chart", Route = "/reports/" },
 
 					new Menu

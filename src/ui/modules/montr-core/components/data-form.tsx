@@ -13,6 +13,7 @@ import { DataFieldFactory } from "./data-field-factory";
 export interface DataFormOptions extends WithTranslation {
 	mode?: "edit" | "view";
 	layout?: "horizontal" | "inline" | "vertical";
+	itemLayout?: "default" | "narrow";
 	hideLabels?: boolean;
 	namePathPrefix?: (string | number)[];
 }
@@ -96,11 +97,11 @@ class WrappedDataForm extends React.Component<Props, State> {
 
 		const form = this.getFormRef().current;
 
-		if (form && result && result.errors) {
+		if (form && result && (result.message || result.errors)) {
 
 			const fieldErrors: FieldData[] = [], otherErrors: string[] = [];
 
-			if (fields) {
+			if (fields && result.errors) {
 				result.errors.forEach(error => {
 					// todo: check key exists in state.fields (ignore case + add tests)
 					const field = fields.find(x => x.key && error.key && x.key.toLowerCase() == error.key.toLowerCase());
@@ -124,9 +125,9 @@ class WrappedDataForm extends React.Component<Props, State> {
 
 			form.setFields(fieldErrors);
 
-			if (otherErrors.length > 0) {
+			if (result.message || otherErrors.length > 0) {
 				// todo: show as alert before form
-				const message = errorMessage || t("dataForm.submit.error"),
+				const message = result.message || errorMessage || t("dataForm.submit.error"),
 					description = <ul>{otherErrors.map(x => <li>{x}</li>)}</ul>;
 				this.notificationService.error(message, description);
 			}
@@ -134,11 +135,11 @@ class WrappedDataForm extends React.Component<Props, State> {
 	};
 
 	render = (): React.ReactNode => {
-		const { mode = "edit", layout = "horizontal", hideButtons = false,
+		const { mode = "edit", layout = "horizontal", itemLayout = "default", hideButtons = false,
 			data, fields, submitButton, resetButton, t } = this.props,
 			{ loading } = this.state;
 
-		const itemLayout = layout == "horizontal" ? FormDefaults.tailFormItemLayout : null;
+		const itemLayoutProps = layout == "horizontal" ? FormDefaults.getItemLayoutProps(itemLayout) : null;
 
 		// submit button should be rendered as hidden to allow submit form by pressing enter in modals and side panes
 		const buttonsDisplay = (hideButtons || mode == "view") ? "none" : "block";
@@ -164,7 +165,7 @@ class WrappedDataForm extends React.Component<Props, State> {
 						return factory?.createFormItem(field, data, this.props);
 					})}
 
-					<Form.Item {...itemLayout} style={{ display: buttonsDisplay, clear: "both" }}>
+					<Form.Item {...itemLayoutProps.tail} style={{ display: buttonsDisplay, clear: "both" }}>
 						<Toolbar>
 							<ButtonSave htmlType="submit">{submitButton}</ButtonSave>
 						</Toolbar>

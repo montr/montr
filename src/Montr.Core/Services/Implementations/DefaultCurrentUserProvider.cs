@@ -15,7 +15,7 @@ namespace Montr.Core.Services.Implementations
 			_httpContextAccessor = httpContextAccessor;
 		}
 
-		public T GetUserId<T>()
+		private T GetUserId<T>(bool throwIfNotAuthenticated = true)
 		{
 			var user = _httpContextAccessor.HttpContext?.User;
 
@@ -30,12 +30,22 @@ namespace Montr.Core.Services.Implementations
 				return result;
 			}
 
-			throw new InvalidOperationException("User is not authenticated");
+			if (throwIfNotAuthenticated)
+			{
+				throw new InvalidOperationException("User is not authenticated");
+			}
+
+			return default;
 		}
 
 		public Guid GetUserUid()
 		{
 			return GetUserId<Guid>();
+		}
+
+		public Guid? GetUserUidIfAuthenticated()
+		{
+			return GetUserId<Guid?>(throwIfNotAuthenticated: false);
 		}
 
 		public ClaimsPrincipal GetUser(bool throwIfNotAuthenticated = true)

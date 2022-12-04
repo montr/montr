@@ -31,7 +31,7 @@ export abstract class DataFieldFactory<TField extends IDataField> {
 	shouldFormatValue = false;
 
 	createFormItem = (field: Partial<TField>, data: IIndexer, options: DataFormOptions): React.ReactNode => {
-		const { t, layout, mode, hideLabels } = options;
+		const { t, layout = "horizontal", itemLayout = "default", mode, hideLabels } = options;
 
 		if (this.shouldFormatValue) {
 			const value = DataHelper.indexer(data, field.key, undefined);
@@ -43,8 +43,10 @@ export abstract class DataFieldFactory<TField extends IDataField> {
 			? this.createViewNode(field, data)
 			: this.createEditNode(field, data);
 
-		const itemLayout = (layout == null || layout == "horizontal")
-			? (mode != "view" && field.type == "boolean" ? FormDefaults.tailFormItemLayout : FormDefaults.formItemLayout)
+		const itemLayoutProps = (layout == "horizontal")
+			? (mode != "view" && field.type == "boolean")
+				? FormDefaults.getItemLayoutProps(itemLayout).tail
+				: FormDefaults.getItemLayoutProps(itemLayout).default
 			: {};
 
 		const namePath: (string | number)[] = [];
@@ -61,7 +63,7 @@ export abstract class DataFieldFactory<TField extends IDataField> {
 					label={hideLabels ? null : field.name}
 					extra={field.description}
 					valuePropName={this.valuePropName}
-					{...itemLayout}>
+					{...itemLayoutProps}>
 					{fieldNode}
 				</Form.Item>
 			);
@@ -76,7 +78,7 @@ export abstract class DataFieldFactory<TField extends IDataField> {
 				valuePropName={this.valuePropName}
 				tooltip={field.tooltip}
 				rules={this.createFormItemRules(field, options)}
-				{...itemLayout}>
+				{...itemLayoutProps}>
 				{fieldNode}
 			</Form.Item>
 		);

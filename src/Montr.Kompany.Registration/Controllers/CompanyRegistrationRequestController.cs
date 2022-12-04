@@ -24,7 +24,7 @@ namespace Montr.Kompany.Registration.Controllers
 
 		public async Task<ICollection<Document>> Search(GetCompanyRegistrationRequestList request)
 		{
-			request.UserUid = _currentUserProvider.GetUserUid();
+			request.UserUid = _currentUserProvider.GetUserUidIfAuthenticated();
 
 			return await _mediator.Send(request);
 		}

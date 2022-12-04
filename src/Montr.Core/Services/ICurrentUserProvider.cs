@@ -5,9 +5,9 @@ namespace Montr.Core.Services
 {
 	public interface ICurrentUserProvider
 	{
-		T GetUserId<T>();
-
 		Guid GetUserUid();
+
+		Guid? GetUserUidIfAuthenticated();
 
 		ClaimsPrincipal GetUser(bool throwIfNotAuthenticated = true);
 	}
