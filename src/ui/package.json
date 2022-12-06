@@ -41,7 +41,7 @@
 		"@types/react-dom": "^18.0.9",
 		"@types/react-router": "^5.1.19",
 		"@types/react-router-dom": "^5.3.3",
-		"@typescript-eslint/eslint-plugin": "^5.45.0",
+		"@typescript-eslint/eslint-plugin": "^5.45.1",
 		"@typescript-eslint/parser": "^5.45.0",
 		"babel-loader": "^9.1.0",
 		"copy-webpack-plugin": "^11.0.0",
