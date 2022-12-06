@@ -36,6 +36,7 @@ import SearchOutlined from "@ant-design/icons/SearchOutlined";
 import SelectOutlined from "@ant-design/icons/SelectOutlined";
 import SettingOutlined from "@ant-design/icons/SettingOutlined";
 import SolutionOutlined from "@ant-design/icons/SolutionOutlined";
+import UserAddOutlined from "@ant-design/icons/UserAddOutlined";
 import UserOutlined from "@ant-design/icons/UserOutlined";
 import WindowsOutlined from "@ant-design/icons/WindowsOutlined";
 import * as React from "react";
@@ -86,5 +87,6 @@ export abstract class Icon {
 	static Setting = Icon.Map["setting"] = <SettingOutlined />;
 	static Solution = Icon.Map["solution"] = <SolutionOutlined />;
 	static User = Icon.Map["user"] = <UserOutlined />;
+	static UserAdd = Icon.Map["user-add"] = <UserAddOutlined />;
 	static Windows = Icon.Map["windows"] = <WindowsOutlined />;
 }

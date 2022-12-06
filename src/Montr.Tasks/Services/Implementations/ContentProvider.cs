@@ -12,7 +12,13 @@ namespace Montr.Tasks.Services.Implementations
 			{
 				return new[]
 				{
-					new Menu { Id = "tasks", Name = "Tasks", Icon = "carry-out", Route = "/tasks/" },
+					new Menu
+					{
+						Name = "Tasks",
+						Icon = "carry-out",
+						Route = ClientRoutes.Tasks,
+						Permission = Permission.GetCode(typeof(Permissions.ViewTasks))
+					}
 				};
 			}
 

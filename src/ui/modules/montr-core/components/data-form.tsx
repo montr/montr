@@ -165,7 +165,7 @@ class WrappedDataForm extends React.Component<Props, State> {
 						return factory?.createFormItem(field, data, this.props);
 					})}
 
-					<Form.Item {...itemLayoutProps.tail} style={{ display: buttonsDisplay, clear: "both" }}>
+					<Form.Item {...itemLayoutProps?.tail} style={{ display: buttonsDisplay, clear: "both" }}>
 						<Toolbar>
 							<ButtonSave htmlType="submit">{submitButton}</ButtonSave>
 						</Toolbar>

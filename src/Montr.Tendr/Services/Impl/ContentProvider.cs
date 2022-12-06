@@ -12,7 +12,13 @@ namespace Montr.Tendr.Services.Impl
 			{
 				return new[]
 				{
-					new Menu { Name = "Events", Icon = "project", Route = "/events/" },
+					new Menu
+					{
+						Name = "Events",
+						Icon = "project",
+						Route = ClientRoutes.Events,
+						Permission = Permission.GetCode(typeof(Permissions.ViewEvents))
+					}
 				};
 			}
 

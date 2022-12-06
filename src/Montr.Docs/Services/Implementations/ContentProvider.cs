@@ -12,7 +12,14 @@ public class ContentProvider : IContentProvider
 		{
 			return new[]
 			{
-				new Menu { Id = "documents", Name = "Documents", Icon = "container", Route = "/documents/" },
+				new Menu
+				{
+					Id = "documents",
+					Name = "Documents",
+					Icon = "container",
+					Route = ClientRoutes.Documents,
+					Permission = Permission.GetCode(typeof(Permissions.ViewDocuments))
+				}
 			};
 		}
 
