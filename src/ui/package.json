@@ -14,7 +14,7 @@
 	"license": "AGPL-3.0",
 	"private": true,
 	"dependencies": {
-		"@ant-design/pro-components": "^2.3.39",
+		"@ant-design/pro-components": "^2.3.41",
 		"@emotion/babel-preset-css-prop": "^11.10.0",
 		"@emotion/react": "^11.10.5",
 		"ansi-regex": ">=5.0.1",
