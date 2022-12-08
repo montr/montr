@@ -2,7 +2,9 @@ name: Build
 
 env:
   ConnectionStrings:Default: Server=localhost;Port=5432;Database=host;User Id=postgres;Password=secret;
-  DOTNET_CLI_TELEMETRY_OPTOUT: 1
+  DOTNET_NOLOGO: true
+  DOTNET_CLI_TELEMETRY_OPTOUT: true
+  DOTNET_MULTILEVEL_LOOKUP: false
 
 on: [ push, repository_dispatch ]
 
@@ -18,11 +20,6 @@ jobs:
       fail-fast: false
       # matrix:
       #   language: [ 'csharp', 'typescript', 'javascript' ]
-
-    env:
-      DOTNET_NOLOGO: true
-      DOTNET_CLI_TELEMETRY_OPTOUT: true
-      DOTNET_MULTILEVEL_LOOKUP: false
 
     services:
       db:
