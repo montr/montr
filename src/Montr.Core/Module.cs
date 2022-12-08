@@ -169,6 +169,8 @@ namespace Montr.Core
 			{
 				mvcBuilder.AddJsonOptions(options =>
 				{
+					options.JsonSerializerOptions.MaxDepth = 64;
+
 					options.JsonSerializerOptions.DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull;
 					options.JsonSerializerOptions.WriteIndented = false;
 					options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
@@ -180,6 +182,8 @@ namespace Montr.Core
 			{
 				mvcBuilder.AddNewtonsoftJson(options =>
 				{
+					options.SerializerSettings.MaxDepth = 64;
+
 					// options.SerializerSettings.DefaultValueHandling = DefaultValueHandling.Ignore; // do not use - zeros in numbers ignored also
 					options.SerializerSettings.Converters.Add(new StringEnumConverter());
 					options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
