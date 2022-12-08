@@ -5,12 +5,12 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="linq2db" />
-		<PackageReference Include="linq2db.Identity" />
-		<PackageReference Include="MediatR" />
-		<PackageReference Include="OpenIddict.AspNetCore" />
-		<PackageReference Include="OpenIddict.EntityFrameworkCore" />
-		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" />
+		<PackageReference Include="linq2db" Version="3.7.0" />
+		<PackageReference Include="linq2db.Identity" Version="3.3.0" />
+		<PackageReference Include="MediatR" Version="11.1.0" />
+		<PackageReference Include="OpenIddict.AspNetCore" Version="3.1.1" />
+		<PackageReference Include="OpenIddict.EntityFrameworkCore" Version="3.1.1" />
+		<PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="6.0.7" />
 	</ItemGroup>
 
 	<ItemGroup>

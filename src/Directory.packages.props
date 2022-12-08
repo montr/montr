@@ -1,6 +1,6 @@
 ﻿<Project>
 	<PropertyGroup>
-		<ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
+		<ManagePackageVersionsCentrally>false</ManagePackageVersionsCentrally>
 	</PropertyGroup>
 	<ItemGroup>
 		<PackageVersion Include="linq2db" Version="3.7.0" />
