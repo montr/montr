@@ -19,9 +19,9 @@ class WrappedPageRegistration extends React.Component<UserContextProps & Company
 		return (
 			<Page title="Регистрация" >
 				<Steps current={currenStep} direction="vertical" items={[
-					{ title: "Регистрация пользователя", description: < StepRegisterUser /> },
-					{ title: "Регистрация организации", description: < StepRegisterCompany /> },
-					{ title: "Начало работы", description: < StepRegisterFinish /> },
+					{ title: "Регистрация пользователя", description: <StepRegisterUser /> },
+					{ title: "Регистрация организации", description: <StepRegisterCompany /> },
+					{ title: "Начало работы", description: <StepRegisterFinish /> },
 				]} />
 			</Page>
 		);
