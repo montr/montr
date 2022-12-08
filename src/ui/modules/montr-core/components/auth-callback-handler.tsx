@@ -7,22 +7,20 @@ interface Props {
 
 export class AuthCallbackHandler extends React.Component<Props> {
 
-	private _authService: AuthService;
+	private readonly authService: AuthService = new AuthService();
 
 	constructor(props: Props) {
 		super(props);
-
-		this._authService = new AuthService();
 	}
 
 	public componentDidMount() {
-		if (this._authService.isCallback()) {
-			this._authService.processCallback();
+		if (this.authService.isCallback()) {
+			this.authService.processCallback();
 		}
 	}
 
 	render() {
-		if (this._authService.isCallback() == false) {
+		if (this.authService.isCallback() == false) {
 			return this.props.children;
 		}
 

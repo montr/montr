@@ -17,7 +17,7 @@ export class AuthService {
 	private static instance: AuthService;
 
 	private readonly _userManager!: UserManager;
-	private readonly navigator: NavigationService = new NavigationService();
+	private readonly navigator = new NavigationService();
 
 	constructor() {
 		if (AuthService.instance) {
