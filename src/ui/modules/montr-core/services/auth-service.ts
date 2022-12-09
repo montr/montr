@@ -1,4 +1,4 @@
-import { Log, SignoutResponse, User, UserManager, UserManagerSettings } from "oidc-client";
+import { Log, SigninRedirectArgs, SignoutResponse, User, UserManager, UserManagerSettings } from "oidc-client-ts";
 import { Constants } from "../constants";
 import { NavigationService } from "./navigation-service";
 
@@ -24,8 +24,8 @@ export class AuthService {
 			return AuthService.instance;
 		}
 
-		Log.logger = console;
-		Log.level = Log.WARN;
+		Log.setLogger(console);
+		Log.setLevel(Log.INFO);
 
 		// todo: normal check, to prevent cancelled .well-known/openid-configuration requests in iframe
 		const runTasks = true; // (window.frameElement == null);
@@ -40,7 +40,8 @@ export class AuthService {
 			silent_redirect_uri: AuthConstants.clientRoot + AuthConstants.SilentRedirectUri,
 			post_logout_redirect_uri: AuthConstants.clientRoot + AuthConstants.PostLogoutRedirectUri,
 
-			response_type: "id_token token",
+			// response_type: "id_token token",
+			// response_type: "code",
 			scope: "openid profile email",
 			automaticSilentRenew: runTasks,
 			monitorSession: runTasks
@@ -85,30 +86,31 @@ export class AuthService {
 		);
 	}
 
-	public processCallback(): void {
-		const url = this.navigator.getUrl();
+	public async processCallback(): Promise<void> {
+		try {
+			const url = this.navigator.getUrl();
 
-		// console.log("processCallback()", window.frameElement, url);
+			// console.log("processCallback()", window.frameElement, url);
 
-		if (url.indexOf(AuthConstants.RedirectUri) !== -1) {
-			this._userManager.signinRedirectCallback(url)
-				.then((user: User) => {
-					this.signinRedirectCallback(user);
-				}).catch(function (e) {
-					console.error(e);
-				});
-		} else if (url.indexOf(AuthConstants.SilentRedirectUri) !== -1) {
-			this._userManager.signinSilentCallback(url)
-				.catch(function (e) {
-					console.error(e);
-				});
-		} else if (url.indexOf(AuthConstants.PostLogoutRedirectUri) !== -1) {
-			this._userManager.signoutRedirectCallback(url)
-				.then((value: SignoutResponse) => {
-					this.signoutRedirectCallback(value);
-				}).catch(function (e) {
-					console.error(e);
-				});
+			if (url.indexOf(AuthConstants.RedirectUri) !== -1) {
+
+				const user = await this._userManager.signinRedirectCallback(url);
+
+				this.signinRedirectCallback(user);
+
+			} else if (url.indexOf(AuthConstants.SilentRedirectUri) !== -1) {
+
+				await this._userManager.signinSilentCallback(url);
+
+			} else if (url.indexOf(AuthConstants.PostLogoutRedirectUri) !== -1) {
+
+				const response = await this._userManager.signoutRedirectCallback(url);
+
+				this.signoutRedirectCallback(response);
+			}
+		}
+		catch (e) {
+			console.error(e);
 		}
 	}
 
@@ -142,7 +144,7 @@ export class AuthService {
 		return this._userManager.signoutRedirect(args);
 	}
 
-	private getRedirectArgs() {
+	private getRedirectArgs(): SigninRedirectArgs {
 		return {
 			state: {
 				return_uri: this.navigator.getUrl()
@@ -150,7 +152,10 @@ export class AuthService {
 		};
 	}
 
-	private signinRedirectCallback(value: User) {
+	private signinRedirectCallback(user: User) {
+
+		const value = user?.state as SigninRedirectArgs;
+
 		let return_uri;
 		if (value && value.state) {
 			return_uri = value.state.return_uri;
@@ -162,23 +167,23 @@ export class AuthService {
 	}
 
 	private signoutRedirectCallback(value: SignoutResponse) {
-		let return_uri;
+		/* let return_uri;
 		if (value && value.state) {
 			return_uri = value.state.return_uri;
-		}
+		} */
 
 		// console.log("signoutRedirectCallback()", value);
 
-		this.navigator.navigate(return_uri || "/");
+		this.navigator.navigate(/* return_uri || */ "/");
 	}
 
-	public onAuthenticated(callback: (user: User) => void): void {
+	public onAuthenticated(callback: (user: User) => void): () => void {
 		return this._userManager.events.addUserLoaded((user: User) => {
 			callback(user);
 		});
 	}
 
-	public addUserSignedOut(callback: () => void): void {
+	public addUserSignedOut(callback: () => void): () => void {
 		return this._userManager.events.addUserSignedOut(() => {
 			callback();
 		});

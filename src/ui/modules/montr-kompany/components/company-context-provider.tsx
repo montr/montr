@@ -1,7 +1,7 @@
 import { Constants } from "@montr-core/.";
 import { Guid } from "@montr-core/models";
 import { AuthService, NavigationService, NotificationService } from "@montr-core/services";
-import { User } from "oidc-client";
+import { User } from "oidc-client-ts";
 import * as React from "react";
 import Cookies from "universal-cookie";
 import { Company } from "../models/company";
