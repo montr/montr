@@ -11,7 +11,7 @@ env:
 
 jobs:
   build:
-  
+
     permissions:
       actions: read
       contents: read
@@ -64,16 +64,17 @@ jobs:
       #   uses: github/codeql-action/analyze@v2
 
       - name: Run ${{ matrix.configuration }} tests
-        run: dotnet test ./src/Montr.Core.Tests -c "${{ matrix.configuration }}" --nologo
-        run: dotnet test ./src/Montr.Automate.Tests -c "${{ matrix.configuration }}" --nologo
-        run: dotnet test ./src/Montr.Metadata.Tests -c "${{ matrix.configuration }}" --nologo
-        run: dotnet test ./src/Montr.Idx.Tests -c "${{ matrix.configuration }}" --nologo
-        run: dotnet test ./src/Montr.MasterData.Tests -c "${{ matrix.configuration }}" --nologo
-        run: dotnet test ./src/Montr.MasterData.Plugin.GovRu.Tests -c "${{ matrix.configuration }}" --nologo
-        run: dotnet test ./src/Montr.Kompany.Tests -c "${{ matrix.configuration }}" --nologo
-        run: dotnet test ./src/Montr.Settings.Tests -c "${{ matrix.configuration }}" --nologo
-        # run: dotnet test ./src/Montr.Tendr.Tests -c "${{ matrix.configuration }}" --nologo
-        run: dotnet test ./src/Montr.Worker.Hangfire.Tests -c "${{ matrix.configuration }}" --nologo
+
+      - run: dotnet test ./src/Montr.Core.Tests -c "${{ matrix.configuration }}" --nologo
+      - run: dotnet test ./src/Montr.Automate.Tests -c "${{ matrix.configuration }}" --nologo
+      - run: dotnet test ./src/Montr.Metadata.Tests -c "${{ matrix.configuration }}" --nologo
+      - run: dotnet test ./src/Montr.Idx.Tests -c "${{ matrix.configuration }}" --nologo
+      - run: dotnet test ./src/Montr.MasterData.Tests -c "${{ matrix.configuration }}" --nologo
+      - run: dotnet test ./src/Montr.MasterData.Plugin.GovRu.Tests -c "${{ matrix.configuration }}" --nologo
+      - run: dotnet test ./src/Montr.Kompany.Tests -c "${{ matrix.configuration }}" --nologo
+      - run: dotnet test ./src/Montr.Settings.Tests -c "${{ matrix.configuration }}" --nologo
+      # - run: dotnet test ./src/Montr.Tendr.Tests -c "${{ matrix.configuration }}" --nologo
+      - run: dotnet test ./src/Montr.Worker.Hangfire.Tests -c "${{ matrix.configuration }}" --nologo
 
       - name: Setup node
         uses: actions/setup-node@v3.5.1
