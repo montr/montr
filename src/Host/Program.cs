@@ -74,14 +74,19 @@ namespace Host
 				}
 			}
 
-			// todo: run on event "app configured"
-			app.MapRazorPages();
-			app.MapControllers();
-			app.MapFallbackToController("Index", "Home");
-			// app.MapFallbackToFile("Home/Index.cshtml");
-			// app.MapHub<MyChatHub>()
-			// app.MapGrpcService<MyCalculatorService>()
-			app.MapDefaultControllerRoute();
+			// todo: run on event "app configured" (copied from Core.Module.Configure(IApp) app.UseEndpoints)
+
+			app.UseWhen(context => context.Request.Path.Value.StartsWith("/connect") == false, context =>
+			{
+				app.MapRazorPages();
+				app.MapControllers();
+				app.MapFallbackToController("Index", "Home");
+
+				// app.MapFallbackToFile("Home/Index.cshtml");
+				// app.MapHub<MyChatHub>()
+				// app.MapGrpcService<MyCalculatorService>()
+				app.MapDefaultControllerRoute();
+			});
 
 			await app.RunAsync();
 		}

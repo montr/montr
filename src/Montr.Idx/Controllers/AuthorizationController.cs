@@ -22,6 +22,13 @@ namespace Montr.Idx.Controllers
 			return await _mediator.Send(new OidcAuthorize());
 		}
 
+		[HttpPost("~/connect/token")]
+		[IgnoreAntiforgeryToken]
+		public async Task<IActionResult> Token()
+		{
+			return await _mediator.Send(new OidcToken());
+		}
+
 		[Authorize(/*Constants.OpenIdServerAuthenticationScheme*/)]
 		[HttpGet("~/connect/userinfo"), HttpPost("~/connect/userinfo")]
 		public async Task<IActionResult> Userinfo()

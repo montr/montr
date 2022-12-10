@@ -41,6 +41,7 @@ namespace Montr.Idx.Services.Implementations
 					// ConsentType = ConsentTypes.Explicit,
 					ConsentType = ConsentTypes.Implicit,
 					DisplayName = clientName,
+					DisplayNames = {  },
 					Type = ClientTypes.Public,
 					PostLogoutRedirectUris =
 					{
