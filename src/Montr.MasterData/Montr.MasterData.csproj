@@ -5,8 +5,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="EPPlus" Version="4.5.3.3" />
-    <PackageReference Include="MediatR" Version="11.1.0" />
+    <PackageReference Include="EPPlus" />
+    <PackageReference Include="MediatR" />
   </ItemGroup>
 
   <ItemGroup>
