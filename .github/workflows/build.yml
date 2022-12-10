@@ -21,9 +21,9 @@ jobs:
       fail-fast: false
       matrix:
         configuration: [ Debug ]
-        os: [ macos-latest, ubuntu-latest, windows-latest ]
-      # matrix:
-      #   language: [ 'csharp', 'typescript', 'javascript' ]
+        os: [ ubuntu-latest ]
+        # os: [ macos-latest, ubuntu-latest, windows-latest ]
+        # language: [ 'csharp', 'typescript', 'javascript' ]
 
     runs-on: ${{ matrix.os }}
 
@@ -58,21 +58,22 @@ jobs:
       #     languages: ${{ matrix.language }}
 
       - name: Build ${{ matrix.configuration }} solution
-        run: dotnet build ./src/Montr.sln -c "${{ matrix.configuration }}" --nologo
+        working-directory: ./src
+        run: dotnet build -c "${{ matrix.configuration }}"
 
       # - name: Perform CodeQL Analysis
       #   uses: github/codeql-action/analyze@v2
 
-      - run: dotnet test ./src/Montr.Core.Tests -c "${{ matrix.configuration }}" --nologo
-      - run: dotnet test ./src/Montr.Automate.Tests -c "${{ matrix.configuration }}" --nologo
-      - run: dotnet test ./src/Montr.Metadata.Tests -c "${{ matrix.configuration }}" --nologo
-      - run: dotnet test ./src/Montr.Idx.Tests -c "${{ matrix.configuration }}" --nologo
-      - run: dotnet test ./src/Montr.MasterData.Tests -c "${{ matrix.configuration }}" --nologo
-      - run: dotnet test ./src/Montr.MasterData.Plugin.GovRu.Tests -c "${{ matrix.configuration }}" --nologo
-      - run: dotnet test ./src/Montr.Kompany.Tests -c "${{ matrix.configuration }}" --nologo
-      - run: dotnet test ./src/Montr.Settings.Tests -c "${{ matrix.configuration }}" --nologo
-      # - run: dotnet test ./src/Montr.Tendr.Tests -c "${{ matrix.configuration }}" --nologo
-      - run: dotnet test ./src/Montr.Worker.Hangfire.Tests -c "${{ matrix.configuration }}" --nologo
+      - run: dotnet test ./src/Montr.Core.Tests -c "${{ matrix.configuration }}"
+      - run: dotnet test ./src/Montr.Automate.Tests -c "${{ matrix.configuration }}"
+      - run: dotnet test ./src/Montr.Metadata.Tests -c "${{ matrix.configuration }}"
+      - run: dotnet test ./src/Montr.Idx.Tests -c "${{ matrix.configuration }}"
+      - run: dotnet test ./src/Montr.MasterData.Tests -c "${{ matrix.configuration }}"
+      - run: dotnet test ./src/Montr.MasterData.Plugin.GovRu.Tests -c "${{ matrix.configuration }}"
+      - run: dotnet test ./src/Montr.Kompany.Tests -c "${{ matrix.configuration }}"
+      - run: dotnet test ./src/Montr.Settings.Tests -c "${{ matrix.configuration }}"
+      # - run: dotnet test ./src/Montr.Tendr.Tests -c "${{ matrix.configuration }}"
+      - run: dotnet test ./src/Montr.Worker.Hangfire.Tests -c "${{ matrix.configuration }}"
 
       - name: Setup node
         uses: actions/setup-node@v3.5.1
