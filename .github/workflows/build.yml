@@ -59,11 +59,11 @@ jobs:
 
       - name: Restore packages
         working-directory: ./src
-        run: dotnet restore --verbosity diag
+        run: dotnet restore --verbosity m
 
       - name: Build solution in ${{ matrix.configuration }}
         working-directory: ./src
-        run: dotnet build -c "${{ matrix.configuration }}"
+        run: dotnet build --no-restore --configuration "${{ matrix.configuration }}"
 
       # - name: Perform CodeQL Analysis
       #   uses: github/codeql-action/analyze@v2
