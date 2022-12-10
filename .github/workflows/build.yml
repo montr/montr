@@ -48,7 +48,7 @@ jobs:
         with:
           dotnet-version: '7.x'
 
-      - name: Verify .NET Core
+      - name: Verify dotnet
         run: dotnet --info
 
       # Initializes the CodeQL tools for scanning.
@@ -57,7 +57,11 @@ jobs:
       #   with:
       #     languages: ${{ matrix.language }}
 
-      - name: Build ${{ matrix.configuration }} solution
+      - name: Restore packages
+        working-directory: ./src
+        run: dotnet restore --verbosity diag
+
+      - name: Build solution in ${{ matrix.configuration }}
         working-directory: ./src
         run: dotnet build -c "${{ matrix.configuration }}"
 
