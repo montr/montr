@@ -57,9 +57,11 @@ jobs:
       #   with:
       #     languages: ${{ matrix.language }}
 
+      - uses: nuget/setup-nuget@v1.1.1
+
       - name: Restore packages
         working-directory: ./src
-        run: dotnet restore --verbosity m
+        run: dotnet restore
 
       - name: Build solution in ${{ matrix.configuration }}
         working-directory: ./src
