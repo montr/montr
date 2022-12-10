@@ -63,8 +63,6 @@ jobs:
       # - name: Perform CodeQL Analysis
       #   uses: github/codeql-action/analyze@v2
 
-      - name: Run ${{ matrix.configuration }} tests
-
       - run: dotnet test ./src/Montr.Core.Tests -c "${{ matrix.configuration }}" --nologo
       - run: dotnet test ./src/Montr.Automate.Tests -c "${{ matrix.configuration }}" --nologo
       - run: dotnet test ./src/Montr.Metadata.Tests -c "${{ matrix.configuration }}" --nologo
