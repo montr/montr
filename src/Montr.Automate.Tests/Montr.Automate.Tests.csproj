@@ -14,6 +14,7 @@
 		<PackageReference Include="Npgsql" />
 		<PackageReference Include="Moq" />
 		<PackageReference Include="NUnit" />
+		<PackageReference Include="NUnit3TestAdapter" />
 	</ItemGroup>
 
 	<ItemGroup>
