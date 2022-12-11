@@ -21,7 +21,7 @@
 		"antd": "^5.0.5",
 		"axios": "^1.2.1",
 		"dayjs": "^1.11.7",
-		"i18next": "^22.3.0",
+		"i18next": "^22.4.0",
 		"i18next-browser-languagedetector": "^7.0.1",
 		"i18next-xhr-backend": "^3.2.2",
 		"oidc-client-ts": "^2.2.0",

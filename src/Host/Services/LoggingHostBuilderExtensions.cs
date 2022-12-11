@@ -16,14 +16,14 @@ namespace Host.Services
 				ConfigureLogger(context.Configuration, configuration));
 		}
 
-		public static Microsoft.Extensions.Logging.ILogger CreateBootstrapLogger(this WebApplicationBuilder builder)
+		public static ILogger<T> CreateBootstrapLogger<T>(this WebApplicationBuilder builder)
 		{
 			var logger = ConfigureLogger(builder.Configuration, new LoggerConfiguration())
 				.CreateBootstrapLogger();
 
 			var loggerFactory = new SerilogLoggerFactory(logger);
 
-			return loggerFactory.CreateLogger<Program>();
+			return loggerFactory.CreateLogger<T>();
 		}
 
 		private static LoggerConfiguration ConfigureLogger(IConfiguration configuration, LoggerConfiguration logger)
