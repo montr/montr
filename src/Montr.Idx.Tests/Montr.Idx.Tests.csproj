@@ -18,10 +18,4 @@
     <ProjectReference Include="..\Montr.MasterData.Tests\Montr.MasterData.Tests.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <None Update="appsettings.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-
 </Project>

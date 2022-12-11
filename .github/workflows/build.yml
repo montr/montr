@@ -4,7 +4,6 @@ on: [ push, pull_request, repository_dispatch ]
 
 env:
   ConnectionStrings:Default: Server=localhost;Port=5432;Database=host;User Id=postgres;Password=secret;
-  DOTNET_NOLOGO: true
   DOTNET_CLI_TELEMETRY_OPTOUT: true
   DOTNET_MULTILEVEL_LOOKUP: false
 
@@ -58,19 +57,19 @@ jobs:
       # - name: Perform CodeQL Analysis
       #   uses: github/codeql-action/analyze@v2
 
-      - run: dotnet test ./src/Montr.Core.Tests -c "${{ matrix.configuration }}"
-      - run: dotnet test ./src/Montr.Automate.Tests -c "${{ matrix.configuration }}"
-      - run: dotnet test ./src/Montr.Metadata.Tests -c "${{ matrix.configuration }}"
-      - run: dotnet test ./src/Montr.Idx.Tests -c "${{ matrix.configuration }}"
-      - run: dotnet test ./src/Montr.MasterData.Tests -c "${{ matrix.configuration }}"
-      - run: dotnet test ./src/Montr.MasterData.Plugin.GovRu.Tests -c "${{ matrix.configuration }}"
-      - run: dotnet test ./src/Montr.Kompany.Tests -c "${{ matrix.configuration }}"
-      - run: dotnet test ./src/Montr.Settings.Tests -c "${{ matrix.configuration }}"
-      # - run: dotnet test ./src/Montr.Tendr.Tests -c "${{ matrix.configuration }}"
-      - run: dotnet test ./src/Montr.Worker.Hangfire.Tests -c "${{ matrix.configuration }}"
+      - run: dotnet test ./src/Montr.Migration.Tests --configuration "${{ matrix.configuration }}" --no-build
+      - run: dotnet test ./src/Montr.Core.Tests --configuration "${{ matrix.configuration }}" --no-build
+      - run: dotnet test ./src/Montr.Automate.Tests --configuration "${{ matrix.configuration }}" --no-build
+      - run: dotnet test ./src/Montr.Metadata.Tests --configuration "${{ matrix.configuration }}" --no-build
+      - run: dotnet test ./src/Montr.Idx.Tests --configuration "${{ matrix.configuration }}" --no-build
+      - run: dotnet test ./src/Montr.MasterData.Tests --configuration "${{ matrix.configuration }}" --no-build
+      - run: dotnet test ./src/Montr.MasterData.Plugin.GovRu.Tests --configuration "${{ matrix.configuration }}" --no-build
+      - run: dotnet test ./src/Montr.Kompany.Tests --configuration "${{ matrix.configuration }}" --no-build
+      - run: dotnet test ./src/Montr.Settings.Tests --configuration "${{ matrix.configuration }}" --no-build
+      # - run: dotnet test ./src/Montr.Tendr.Tests --configuration "${{ matrix.configuration }}" --no-build
+      - run: dotnet test ./src/Montr.Worker.Hangfire.Tests --configuration "${{ matrix.configuration }}" --no-build
 
-      - name: Setup node
-        uses: actions/setup-node@v3.5.1
+      - uses: actions/setup-node@v3.5.1
         with:
           node-version: 16
 

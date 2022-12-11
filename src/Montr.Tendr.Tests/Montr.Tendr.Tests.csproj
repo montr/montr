@@ -19,10 +19,4 @@
     <ProjectReference Include="..\Montr.Tendr\Montr.Tendr.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <None Update="appsettings.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-
 </Project>

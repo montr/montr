@@ -17,10 +17,4 @@
     <ProjectReference Include="..\Montr.Metadata\Montr.Metadata.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <None Update="appsettings.json">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </None>
-  </ItemGroup>
-
 </Project>

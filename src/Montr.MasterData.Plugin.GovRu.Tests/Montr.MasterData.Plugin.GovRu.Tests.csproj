@@ -21,10 +21,4 @@
 	  <ProjectReference Include="..\Montr.MasterData.Plugin.GovRu\Montr.MasterData.Plugin.GovRu.csproj" />
 	</ItemGroup>
 
-	<ItemGroup>
-		<None Update="appsettings.json">
-			<CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-		</None>
-	</ItemGroup>
-
 </Project>
