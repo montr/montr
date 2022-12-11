@@ -25,11 +25,11 @@ namespace Montr.Core.Services.Implementations
 		{
 			Errors.Clear();
 
-			PreloadAssemblies(baseDirectory);
+			var assemblies = PreloadAssemblies(baseDirectory);
 
 			var modules = new List<ModuleInfo>();
 
-			foreach (var assembly in GetAssemblies())
+			foreach (var assembly in assemblies)
 			{
 				try
 				{
@@ -101,19 +101,17 @@ namespace Montr.Core.Services.Implementations
 			return sortedModules.Select(x => x.Type).ToArray();
 		}
 
-		public void PreloadAssemblies(string baseDirectory)
+		public IEnumerable<Assembly> PreloadAssemblies(string baseDirectory)
 		{
 			if (_logger.IsEnabled(LogLevel.Information))
 			{
 				_logger.LogInformation("Preloading assemblies from {directory}", baseDirectory);
 			}
 
-			var allAssemblies = GetAssemblies().ToDictionary(x => x.Location);
+			var allAssemblies = GetAssemblies();
 
 			foreach (var file in Directory.EnumerateFiles(baseDirectory, "*.dll"))
 			{
-				if (ExcludeAssembly(file)) continue;
-
 				if (allAssemblies.TryGetValue(file, out _) == false)
 				{
 					if (_logger.IsEnabled(LogLevel.Debug))
@@ -127,19 +125,42 @@ namespace Montr.Core.Services.Implementations
 					}
 					catch (Exception ex)
 					{
-						_logger.LogError(ex, "x Failed to preload assembly from {file}", file);
+						_logger.LogError(ex, "• Failed to preload assembly from {file}", file);
 
 						Errors.Add(ex);
 					}
 				}
 			}
+
+			return allAssemblies.Values;
 		}
 
-		public IEnumerable<Assembly> GetAssemblies()
+		/// <summary>
+		/// Collect map of assembly location and assembly.
+		/// </summary>
+		/// <returns></returns>
+		public IDictionary<string, Assembly> GetAssemblies()
 		{
-			return AppDomain.CurrentDomain.GetAssemblies()
-				.Where(x => x.IsDynamic == false) // exclude dynamic assemblies without location
+			var result = new Dictionary<string, Assembly>();
+
+			// exclude dynamic assemblies and assemblies without location
+			var assemblies = AppDomain.CurrentDomain.GetAssemblies()
+				.Where(x => x.IsDynamic == false && string.IsNullOrEmpty(x.Location) == false)
 				.Where(x => ExcludeAssembly(x.Location) == false);
+
+			foreach (var assembly in assemblies)
+			{
+				if (result.TryGetValue(assembly.Location, out _))
+				{
+					_logger.LogWarning("• Assembly with location {location} already added", assembly.Location);
+					
+					continue;
+				}
+
+				result[assembly.Location] = assembly;
+			}
+
+			return result;
 		}
 
 		public bool ExcludeAssembly(string file)
