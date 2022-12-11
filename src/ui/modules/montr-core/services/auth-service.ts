@@ -12,6 +12,10 @@ class AuthConstants {
 	public static PostLogoutRedirectUri = "/signout-callback-oidc";
 }
 
+interface SigninState {
+	return_uri: string;
+}
+
 // todo: move to idx?
 export class AuthService {
 	private static instance: AuthService;
@@ -145,10 +149,13 @@ export class AuthService {
 	}
 
 	private getRedirectArgs(): SigninRedirectArgs {
+
+		const state: SigninState = {
+			return_uri: this.navigator.getUrl()
+		};
+
 		return {
-			state: {
-				return_uri: this.navigator.getUrl()
-			}
+			state: state
 		};
 	}
 
@@ -158,7 +165,10 @@ export class AuthService {
 
 		let return_uri;
 		if (value && value.state) {
-			return_uri = value.state.return_uri;
+
+			const state = value.state as SigninState;
+
+			return_uri = state?.return_uri;
 		}
 
 		// console.log("signinRedirectCallback()", value);
