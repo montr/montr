@@ -16,7 +16,7 @@
     <PackageVersion Include="Stubble.Core" Version="1.10.8" />
     <PackageVersion Include="LumenWorksCsvReader" Version="4.0.0" />
     <PackageVersion Include="EPPlus" Version="4.5.3.3" />
-    <PackageVersion Include="Npgsql" Version="6.0.7" />
+    <PackageVersion Include="Npgsql" Version="7.0.0" />
     <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="6.0.7" />
     <PackageVersion Include="Moq" Version="4.18.3" />
     <PackageVersion Include="NUnit" Version="3.13.3" />
