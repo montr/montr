@@ -39,7 +39,7 @@ namespace Host
 				.UseDbSettings(reloadOnChange: true);
 
 			// todo: create in modules builder
-			var logger = appBuilder.CreateBootstrapLogger();
+			var logger = appBuilder.CreateBootstrapLogger<Program>();
 
 			var modules = appBuilder.Services.AddModules(logger);
 

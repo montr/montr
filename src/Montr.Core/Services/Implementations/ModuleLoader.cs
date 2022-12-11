@@ -108,11 +108,25 @@ namespace Montr.Core.Services.Implementations
 				_logger.LogInformation("Preloading assemblies from {directory}", baseDirectory);
 			}
 
-			var allAssemblies = GetAssemblies();
+			var assemblies = GetCurrentDomainAssemblies();
+
+			var assemblyMap = new Dictionary<string, Assembly>();
+
+			foreach (var assembly in assemblies)
+			{
+				if (assemblyMap.TryGetValue(assembly.Location, out _))
+				{
+					_logger.LogWarning("• Assembly with location {location} already added", assembly.Location);
+
+					continue;
+				}
+
+				assemblyMap[assembly.Location] = assembly;
+			}
 
 			foreach (var file in Directory.EnumerateFiles(baseDirectory, "*.dll"))
 			{
-				if (allAssemblies.TryGetValue(file, out _) == false)
+				if (assemblyMap.TryGetValue(file, out _) == false)
 				{
 					if (_logger.IsEnabled(LogLevel.Debug))
 					{
@@ -132,35 +146,16 @@ namespace Montr.Core.Services.Implementations
 				}
 			}
 
-			return allAssemblies.Values;
+			// second call to get current domain assemblies to get all assemblies, with currently preloaded
+			return GetCurrentDomainAssemblies();
 		}
 
-		/// <summary>
-		/// Collect map of assembly location and assembly.
-		/// </summary>
-		/// <returns></returns>
-		public IDictionary<string, Assembly> GetAssemblies()
+		public IEnumerable<Assembly> GetCurrentDomainAssemblies()
 		{
-			var result = new Dictionary<string, Assembly>();
-
 			// exclude dynamic assemblies and assemblies without location
-			var assemblies = AppDomain.CurrentDomain.GetAssemblies()
+			return AppDomain.CurrentDomain.GetAssemblies()
 				.Where(x => x.IsDynamic == false && string.IsNullOrEmpty(x.Location) == false)
 				.Where(x => ExcludeAssembly(x.Location) == false);
-
-			foreach (var assembly in assemblies)
-			{
-				if (result.TryGetValue(assembly.Location, out _))
-				{
-					_logger.LogWarning("• Assembly with location {location} already added", assembly.Location);
-					
-					continue;
-				}
-
-				result[assembly.Location] = assembly;
-			}
-
-			return result;
 		}
 
 		public bool ExcludeAssembly(string file)
