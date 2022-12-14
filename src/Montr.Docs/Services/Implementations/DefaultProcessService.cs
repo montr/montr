@@ -13,12 +13,10 @@ namespace Montr.Docs.Services.Implementations;
 public class DefaultProcessService : IProcessService
 {
 	private readonly IDbContextFactory _dbContextFactory;
-	private readonly IJsonSerializer _jsonSerializer;
 
-	public DefaultProcessService(IDbContextFactory dbContextFactory, IJsonSerializer jsonSerializer)
+	public DefaultProcessService(IDbContextFactory dbContextFactory)
 	{
 		_dbContextFactory = dbContextFactory;
-		_jsonSerializer = jsonSerializer;
 	}
 
 	public async Task<ApiResult> Insert(InsertProcessStep request, CancellationToken cancellationToken)

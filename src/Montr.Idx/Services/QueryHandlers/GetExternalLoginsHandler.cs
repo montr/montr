@@ -30,7 +30,7 @@ namespace Montr.Idx.Services.QueryHandlers
 
 			var result = await _userManager.GetLoginsAsync(user);
 
-			return result.Select(x => new Models.ExternalLoginModel
+			return result.Select(x => new ExternalLoginModel
 			{
 				LoginProvider = x.LoginProvider,
 				ProviderKey = x.ProviderKey,

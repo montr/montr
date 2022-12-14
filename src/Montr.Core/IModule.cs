@@ -84,7 +84,7 @@ namespace Montr.Core
 
 		public IApplicationBuilder Use(Func<RequestDelegate, RequestDelegate> middleware)
 		{
-			return ((IApplicationBuilder) _wrapped).Use(middleware);
+			return _wrapped.Use(middleware);
 		}
 
 		public IApplicationBuilder New()

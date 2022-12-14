@@ -36,6 +36,7 @@ namespace Montr.Core.Tests.Services
 
 		private class Base
 		{
+			// ReSharper disable once UnusedAutoPropertyAccessor.Local
 			public string TypeCode { get; set; }
 		}
 
