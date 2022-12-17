@@ -40,7 +40,6 @@
     <ProjectReference Include="..\Montr.Idx\Montr.Idx.csproj" />
     <ProjectReference Include="..\Montr.Kompany.Registration\Montr.Kompany.Registration.csproj" />
     <ProjectReference Include="..\Montr.Kompany\Montr.Kompany.csproj" />
-    <ProjectReference Include="..\Montr.Data.Npgsql\Montr.Data.Npgsql.csproj" />
     <ProjectReference Include="..\Montr.MasterData.Plugin.GovRu\Montr.MasterData.Plugin.GovRu.csproj" />
     <ProjectReference Include="..\Montr.MasterData\Montr.MasterData.csproj" />
     <ProjectReference Include="..\Montr.Messages\Montr.Messages.csproj" />

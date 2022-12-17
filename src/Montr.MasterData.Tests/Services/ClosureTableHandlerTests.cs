@@ -108,19 +108,23 @@ namespace Montr.MasterData.Tests.Services
 				await generator.InsertType(HierarchyType.Groups, cancellationToken);
 				var root = await generator.FindTree(ClassifierTree.DefaultCode, cancellationToken);
 				await generator.InsertGroups(root.Uid, 3, 3, null, null, cancellationToken);
-				await AssertClosureEqual("../../../Content/closure.3x3.txt", generator.PrintClosure(root.Code), cancellationToken);
+				var actualClosure1 = generator.PrintClosure(root.Code);
+				await AssertClosureEqual("../../../Content/closure.3x3.txt", actualClosure1, cancellationToken);
 
 				// act & assert
 				await generator.DeleteGroup(root.Code, "1", cancellationToken);
-				await AssertClosureEqual("../../../Content/closure.3x3-1.txt", generator.PrintClosure(root.Code), cancellationToken);
+				var actualClosure2 = generator.PrintClosure(root.Code);
+				await AssertClosureEqual("../../../Content/closure.3x3-1.txt", actualClosure2, cancellationToken);
 
 				// act & assert
 				await generator.DeleteGroup(root.Code, "2.2", cancellationToken);
-				await AssertClosureEqual("../../../Content/closure.3x3-1-2.2.txt", generator.PrintClosure(root.Code), cancellationToken);
+				var actualClosure3 = generator.PrintClosure(root.Code);
+				await AssertClosureEqual("../../../Content/closure.3x3-1-2.2.txt", actualClosure3, cancellationToken);
 
 				// act & assert
 				await generator.DeleteGroup(root.Code, "3.1.2", cancellationToken);
-				await AssertClosureEqual("../../../Content/closure.3x3-1-2.2-3.1.2.txt", generator.PrintClosure(root.Code), cancellationToken);
+				var actualClosure4 = generator.PrintClosure(root.Code);
+				await AssertClosureEqual("../../../Content/closure.3x3-1-2.2-3.1.2.txt", actualClosure4, cancellationToken);
 			}
 		}
 

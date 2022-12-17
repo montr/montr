@@ -6,7 +6,7 @@ using Montr.Automate.Models;
 using Montr.Automate.Queries;
 using Montr.Metadata.Models;
 
-namespace Montr.Automate.Services.QuıeryHandlers
+namespace Montr.Automate.Services.QueryHandlers
 {
 	public class GetAutomationActionMetadataHandler : IRequestHandler<GetAutomationActionMetadata, IList<FieldMetadata>>
 	{

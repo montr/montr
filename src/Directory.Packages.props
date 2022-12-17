@@ -3,8 +3,8 @@
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
   </PropertyGroup>
   <ItemGroup>
-    <PackageVersion Include="linq2db" Version="3.7.0" />
-    <PackageVersion Include="linq2db.Identity" Version="3.3.0" />
+    <PackageVersion Include="linq2db" Version="4.4.0" />
+    <PackageVersion Include="linq2db.Identity" Version="3.4.0" />
     <PackageVersion Include="MediatR" Version="11.1.0" />
     <PackageVersion Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="11.0.0" />
     <PackageVersion Include="NUnit3TestAdapter" Version="4.3.1" />
@@ -16,12 +16,12 @@
     <PackageVersion Include="Stubble.Core" Version="1.10.8" />
     <PackageVersion Include="LumenWorksCsvReader" Version="4.0.0" />
     <PackageVersion Include="EPPlus" Version="4.5.3.3" />
-    <PackageVersion Include="Npgsql" Version="6.0.7" />
-    <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="6.0.7" />
+    <PackageVersion Include="Npgsql" Version="7.0.1" />
+    <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.1" />
     <PackageVersion Include="Moq" Version="4.18.3" />
     <PackageVersion Include="NUnit" Version="3.13.3" />
-    <PackageVersion Include="Sentry" Version="3.24.0" />
-    <PackageVersion Include="Sentry.AspNetCore" Version="3.24.0" />
+    <PackageVersion Include="Sentry" Version="3.24.1" />
+    <PackageVersion Include="Sentry.AspNetCore" Version="3.24.1" />
     <PackageVersion Include="Serilog" Version="2.12.0" />
     <PackageVersion Include="Serilog.AspNetCore" Version="6.1.0" />
     <PackageVersion Include="Serilog.Enrichers.Environment" Version="2.2.0" />
@@ -33,14 +33,14 @@
     <PackageVersion Include="Hangfire.PostgreSql" Version="1.9.9" />
     <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
     <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
-    <PackageVersion Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="7.0.0" />
+    <PackageVersion Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="7.0.1" />
     <PackageVersion Include="Microsoft.Extensions.Configuration" Version="7.0.0" />
     <PackageVersion Include="Microsoft.Extensions.Configuration.Abstractions" Version="7.0.0" />
     <PackageVersion Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="7.0.0" />
-    <PackageVersion Include="Microsoft.AspNetCore.Authentication.Facebook" Version="7.0.0" />
-    <PackageVersion Include="Microsoft.AspNetCore.Authentication.Google" Version="7.0.0" />
-    <PackageVersion Include="Microsoft.AspNetCore.Authentication.MicrosoftAccount" Version="7.0.0" />
+    <PackageVersion Include="Microsoft.AspNetCore.Authentication.Facebook" Version="7.0.1" />
+    <PackageVersion Include="Microsoft.AspNetCore.Authentication.Google" Version="7.0.1" />
+    <PackageVersion Include="Microsoft.AspNetCore.Authentication.MicrosoftAccount" Version="7.0.1" />
     <PackageVersion Include="System.Text.Encoding.CodePages" Version="7.0.0" />
-    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.4.0" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.4.1" />
   </ItemGroup>
 </Project>

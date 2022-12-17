@@ -18,7 +18,7 @@ namespace Montr.Core.Services.Implementations
 
 		public T Deserialize<T>(string value)
 		{
-			throw new System.NotImplementedException();
+			throw new NotImplementedException();
 		}
 	}
 }
