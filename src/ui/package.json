@@ -46,7 +46,7 @@
 		"babel-loader": "^9.1.0",
 		"copy-webpack-plugin": "^11.0.0",
 		"css-loader": "^6.7.3",
-		"eslint": "^8.29.0",
+		"eslint": "^8.30.0",
 		"fork-ts-checker-webpack-plugin": "^7.2.14",
 		"kind-of": ">=6.0.3",
 		"less": "^4.1.3",
