@@ -1,4 +1,4 @@
-import { Log, SignoutResponse, User, UserManager, UserManagerSettings } from "oidc-client";
+import { Log, SigninRedirectArgs, SignoutResponse, User, UserManager, UserManagerSettings } from "oidc-client-ts";
 import { Constants } from "../constants";
 import { NavigationService } from "./navigation-service";
 
@@ -12,11 +12,15 @@ class AuthConstants {
 	public static PostLogoutRedirectUri = "/signout-callback-oidc";
 }
 
+interface SigninState {
+	return_uri: string;
+}
+
 // todo: move to idx?
 export class AuthService {
 	private static instance: AuthService;
 
-	private readonly _userManager!: UserManager;
+	private readonly userManager!: UserManager;
 	private readonly navigator = new NavigationService();
 
 	constructor() {
@@ -24,8 +28,8 @@ export class AuthService {
 			return AuthService.instance;
 		}
 
-		Log.logger = console;
-		Log.level = Log.WARN;
+		Log.setLogger(console);
+		Log.setLevel(Log.WARN);
 
 		// todo: normal check, to prevent cancelled .well-known/openid-configuration requests in iframe
 		const runTasks = true; // (window.frameElement == null);
@@ -40,13 +44,14 @@ export class AuthService {
 			silent_redirect_uri: AuthConstants.clientRoot + AuthConstants.SilentRedirectUri,
 			post_logout_redirect_uri: AuthConstants.clientRoot + AuthConstants.PostLogoutRedirectUri,
 
-			response_type: "id_token token",
-			scope: "openid profile email",
+			response_type: "code",
+			scope: "openid profile email roles",
 			automaticSilentRenew: runTasks,
-			monitorSession: runTasks
+			monitorSession: runTasks,
+			loadUserInfo: false
 		};
 
-		this._userManager = new UserManager(settings);
+		this.userManager = new UserManager(settings);
 
 		// todo: use logger here and below
 
@@ -85,101 +90,84 @@ export class AuthService {
 		);
 	}
 
-	public processCallback(): void {
-		const url = this.navigator.getUrl();
+	public async processCallback(): Promise<void> {
+		try {
+			const url = this.navigator.getUrl();
 
-		// console.log("processCallback()", window.frameElement, url);
+			// console.log("processCallback()", window.frameElement, url);
 
-		if (url.indexOf(AuthConstants.RedirectUri) !== -1) {
-			this._userManager.signinRedirectCallback(url)
-				.then((user: User) => {
-					this.signinRedirectCallback(user);
-				}).catch(function (e) {
-					console.error(e);
-				});
-		} else if (url.indexOf(AuthConstants.SilentRedirectUri) !== -1) {
-			this._userManager.signinSilentCallback(url)
-				.catch(function (e) {
-					console.error(e);
-				});
-		} else if (url.indexOf(AuthConstants.PostLogoutRedirectUri) !== -1) {
-			this._userManager.signoutRedirectCallback(url)
-				.then((value: SignoutResponse) => {
-					this.signoutRedirectCallback(value);
-				}).catch(function (e) {
-					console.error(e);
-				});
+			if (url.indexOf(AuthConstants.RedirectUri) !== -1) {
+
+				const user = await this.userManager.signinRedirectCallback(url);
+
+				this.signinRedirectCallback(user);
+
+			} else if (url.indexOf(AuthConstants.SilentRedirectUri) !== -1) {
+
+				await this.userManager.signinSilentCallback(url);
+
+			} else if (url.indexOf(AuthConstants.PostLogoutRedirectUri) !== -1) {
+
+				const response = await this.userManager.signoutRedirectCallback(url);
+
+				this.signoutRedirectCallback(response);
+			}
+		}
+		catch (e) {
+			console.error(e);
 		}
 	}
 
-	get userManager(): UserManager {
-		return this._userManager;
+	getUserManager(): UserManager {
+		return this.userManager;
 	}
 
 	public getUser(): Promise<User> {
-		return this._userManager.getUser();
+		return this.userManager.getUser();
 	}
 
 	public login(): Promise<any> {
-		const args = this.getRedirectArgs();
+		const state: SigninState = {
+			return_uri: this.navigator.getUrl()
+		};
 
-		// console.log("login()", args);
+		const args: SigninRedirectArgs = {
+			state: state
+		};
 
-		return this._userManager.signinRedirect(args);
+		return this.userManager.signinRedirect(args);
 	}
 
 	public loginSilent(): Promise<User> {
-		// console.log("loginSilent()");
-
-		return this._userManager.signinSilent();
+		return this.userManager.signinSilent();
 	}
 
 	public logout(): Promise<any> {
-		const args = this.getRedirectArgs();
-
-		// console.log("logout()", args);
-
-		return this._userManager.signoutRedirect(args);
+		return this.userManager.signoutRedirect();
 	}
 
-	private getRedirectArgs() {
-		return {
-			state: {
-				return_uri: this.navigator.getUrl()
-			}
-		};
-	}
+	private signinRedirectCallback(user: User) {
 
-	private signinRedirectCallback(value: User) {
-		let return_uri;
-		if (value && value.state) {
-			return_uri = value.state.return_uri;
-		}
+		const state = user?.state as SigninState;
 
-		// console.log("signinRedirectCallback()", value);
-
-		this.navigator.navigate(return_uri || "/");
+		this.navigator.navigate(state?.return_uri || "/");
 	}
 
 	private signoutRedirectCallback(value: SignoutResponse) {
-		let return_uri;
-		if (value && value.state) {
-			return_uri = value.state.return_uri;
-		}
 
-		// console.log("signoutRedirectCallback()", value);
+		const state = value?.userState as SigninState;
 
-		this.navigator.navigate(return_uri || "/");
+		this.navigator.navigate(state?.return_uri || "/");
 	}
 
-	public onAuthenticated(callback: (user: User) => void): void {
-		return this._userManager.events.addUserLoaded((user: User) => {
+	public onAuthenticated(callback: (user: User) => void): () => void {
+		return this.userManager.events.addUserLoaded((user: User) => {
 			callback(user);
 		});
 	}
 
-	public addUserSignedOut(callback: () => void): void {
-		return this._userManager.events.addUserSignedOut(() => {
+	public addUserSignedOut(callback: () => void): () => void {
+		return this.userManager.events.addUserSignedOut(() => {
 			callback();
 		});
 	}

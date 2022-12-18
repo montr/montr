@@ -9,6 +9,8 @@ namespace Montr.Idx.Services
 	{
 		Task<IActionResult> Authorize(OidcAuthorize request, CancellationToken cancellationToken);
 
+		Task<IActionResult> Token(OidcToken request, CancellationToken cancellationToken);
+
 		Task<IActionResult> UserInfo(OidcUserInfo request, CancellationToken cancellationToken);
 
 		Task<IActionResult> Logout(OidcLogout request, CancellationToken cancellationToken);

@@ -1,7 +1,7 @@
 import { Constants } from "@montr-core/.";
 import { Guid } from "@montr-core/models";
 import { AuthService, NavigationService, NotificationService } from "@montr-core/services";
-import { User } from "oidc-client";
+import { User } from "oidc-client-ts";
 import * as React from "react";
 import Cookies from "universal-cookie";
 import { Company } from "../models/company";
@@ -34,15 +34,19 @@ export class CompanyContextProvider extends React.Component<Props, State> {
 	}
 
 	componentDidMount = async (): Promise<void> => {
-		this.authService.userManager.events.addUserLoaded(this.onUserLoaded);
-		this.authService.userManager.events.addUserUnloaded(this.onUserUnloaded);
+		const userManager = this.authService.getUserManager();
+
+		userManager.events.addUserLoaded(this.onUserLoaded);
+		userManager.events.addUserUnloaded(this.onUserUnloaded);
 
 		await this.switchCompany();
 	};
 
 	componentWillUnmount = async (): Promise<void> => {
-		this.authService.userManager.events.removeUserLoaded(this.onUserLoaded);
-		this.authService.userManager.events.removeUserUnloaded(this.onUserUnloaded);
+		const userManager = this.authService.getUserManager();
+
+		userManager.events.removeUserLoaded(this.onUserLoaded);
+		userManager.events.removeUserUnloaded(this.onUserUnloaded);
 
 		await this.userCompanyService.abort();
 	};

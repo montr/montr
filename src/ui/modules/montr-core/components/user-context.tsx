@@ -1,4 +1,4 @@
-import { User } from "oidc-client";
+import { User } from "oidc-client-ts";
 import * as React from "react";
 
 export interface UserContextProps {
