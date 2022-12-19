@@ -37,6 +37,12 @@ export class WrappedMainMenu extends React.Component<Props, State> {
 		await this.profileService.abort();
 	};
 
+	componentDidUpdate = async (prevProps: UserContextProps): Promise<void> => {
+		if (this.props.user !== prevProps.user) {
+			await this.fetchData();
+		}
+	};
+
 	fetchData = async (): Promise<void> => {
 		const { user } = this.props;
 
