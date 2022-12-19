@@ -16,7 +16,7 @@ interface Props {
 
 interface State {
 	loading: boolean;
-	data: ProfileModel;
+	data: Partial<ProfileModel>;
 	fields?: IDataField[];
 }
 

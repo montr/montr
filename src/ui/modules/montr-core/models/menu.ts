@@ -1,6 +1,6 @@
 export interface IMenu {
 	id?: string;
-	name?: string;
+	name?: string | React.ReactNode;
 	icon?: string;
 	url?: string;
 	route?: string | ((...args: any[]) => string);

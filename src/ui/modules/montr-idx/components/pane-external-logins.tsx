@@ -10,7 +10,7 @@ import { ProfileService } from "../services/profile-service";
 
 interface State {
 	loading: boolean;
-	profile: ProfileModel;
+	profile: Partial<ProfileModel>;
 	authSchemes: AuthScheme[];
 	externalLogins: UserLoginInfo[];
 }

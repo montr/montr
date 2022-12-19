@@ -10,7 +10,7 @@ import { ProfileService } from "../services/profile-service";
 
 interface State {
 	loading: boolean;
-	data: ProfileModel;
+	data: Partial<ProfileModel>;
 	fields?: IDataField[];
 }
 

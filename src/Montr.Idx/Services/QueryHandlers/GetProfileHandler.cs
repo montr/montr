@@ -37,7 +37,8 @@ namespace Montr.Idx.Services.QueryHandlers
 				IsEmailConfirmed = await _userManager.IsEmailConfirmedAsync(user),
 				IsPhoneNumberConfirmed = await _userManager.IsPhoneNumberConfirmedAsync(user),
 				FirstName = user.FirstName,
-				LastName = user.LastName
+				LastName = user.LastName,
+				DisplayName = user.FirstName + " " + user.LastName
 			};
 		}
 	}

@@ -16,7 +16,7 @@ interface Props {
 
 interface State {
 	loading: boolean;
-	data: ProfileModel;
+	data: Partial<ProfileModel>;
 	displayModal: (typeof ModalTypes)[number] | boolean;
 	sendEmailConfirmationDisabled: boolean;
 	sendPhoneConfirmationDisabled: boolean;

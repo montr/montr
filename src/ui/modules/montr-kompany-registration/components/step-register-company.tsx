@@ -83,7 +83,7 @@ class WrappedStepRegisterCompany extends React.Component<Props, State> {
 			return <Navigate to={redirectTo} />;
 		}
 
-		return (
+		const CompanyList = (
 			<Spin spinning={loading}>
 
 				<List
@@ -125,18 +125,22 @@ class WrappedStepRegisterCompany extends React.Component<Props, State> {
 		if (user) {
 
 			if (company) {
-				return (
+				return (<>
 					<p>
 						Организация <strong>{company.name}</strong> зарегистрирована.<br />
 					</p>
-				);
+
+					{CompanyList}
+				</>);
 			}
 
-			return (
+			return (<>
 				<p>
 					Зарегистрируйте организацию пройдя по <a onClick={registerCompany}>ссылке</a>.
 				</p>
-			);
+
+				{CompanyList}
+			</>);
 		}
 
 		return (
