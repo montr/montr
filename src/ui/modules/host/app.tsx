@@ -4,8 +4,8 @@ import { AuthCallbackHandler } from "@montr-core/components/auth-callback-handle
 import { CompanyContextProvider } from "@montr-kompany/components/company-context-provider";
 import { ConfigProvider } from "antd";
 import { Locale } from "antd/es/locale-provider";
-import en_US from "antd/es/locale-provider/en_US";
-import ru_RU from "antd/es/locale-provider/ru_RU";
+import en_US from "antd/locale/en_US";
+import ru_RU from "antd/locale/ru_RU";
 import * as React from "react";
 import { createRoot } from "react-dom/client";
 import { Translation } from "react-i18next";
