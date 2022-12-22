@@ -86,7 +86,21 @@
     "master-data": {
       "page.searchClassifierTypes.title": "Classifiers"
     },
-    "tendr": {
+	"kompany-registration": {
+	  "page-registration.title": "Registration",
+	  "page-registration.step-register-user.title": "User registration",
+	  "page-registration.step-register-user.line1": "Register user using this link",
+	  "page-registration.step-register-user.line2": "If user already registered, sigin using this link",
+	  "page-registration.step-register-user.line3": "User is registered",
+	  "page-registration.step-register-user.line4": "You can change registration data in personal cabinet",
+	  "page-registration.step-register-user.link1": "User registration",
+	  "page-registration.step-register-user.link2": "Signin",
+	  "page-registration.step-register-user.link3": "Personal cabinet",
+	  "page-registration.step-register-company.title": "Company registration",
+	  "page-registration.step-register-company.line1": "Company registration will be available after completed user registration.",
+	  "page-registration.step-finish.title": "Start work"
+	},
+	"tendr": {
       "cancel.confirm.content": "Are you sure you want to cancel the event?",
       "publish.confirm.content": "Are you sure you want to publish the event?"
     }
@@ -180,9 +194,23 @@
       "page.setPassword.info": "У вас нет локального имени пользователя / пароля для этого сайта. Добавьте локальную учетную запись, чтобы вы могли войти без внешнего сервиса.",
       "page.setPassword.title": "Установить пароль"
     },
-    "master-data": {
-      "page.searchClassifierTypes.title": "Классификаторы"
-    },
+	"master-data": {
+	  "page.searchClassifierTypes.title": "Классификаторы"
+	},
+	"kompany-registration": {
+	  "page-registration.title": "Регистрация",
+	  "page-registration.step-register-user.title": "Регистрация пользователя",
+	  "page-registration.step-register-user.line1": "Зарегистрируйте пользователя пройдя по ссылке",
+	  "page-registration.step-register-user.line2": "Если вы уже зарегистрированы, войдите в систему пройдя по ссылке",
+	  "page-registration.step-register-user.line3": "Пользователь зарегистрирован",
+	  "page-registration.step-register-user.line4": "Вы можете изменить регистрационные данные в личном кабинете",
+	  "page-registration.step-register-user.link1": "Регистрация пользователя",
+	  "page-registration.step-register-user.link2": "Вход в систему",
+	  "page-registration.step-register-user.link3": "Личный кабинет",
+	  "page-registration.step-register-company.title": "Регистрация организации",
+	  "page-registration.step-register-company.line1": "После регистрации пользователя будет доступна регистрация организации.",
+	  "page-registration.step-finish.title": "Начало работы"
+	},
     "tendr": {
       "cancel.confirm.content": "Вы действительно хотите отменить событие?",
       "publish.confirm.content": "Вы действительно хотите опубликовать событие?"

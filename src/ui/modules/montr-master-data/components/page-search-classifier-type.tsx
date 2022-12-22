@@ -3,27 +3,24 @@ import { DataTable, DataTableUpdateToken } from "@montr-core/components/data-tab
 import { IMenu } from "@montr-core/models";
 import { OperationService } from "@montr-core/services";
 import * as React from "react";
-import { Translation, withTranslation, WithTranslation } from "react-i18next";
+import { Translation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { ClassifierBreadcrumb } from ".";
 import { ClassifierGroup } from "../models";
 import { Api, Locale, RouteBuilder } from "../module";
 import { ClassifierTypeService } from "../services";
 
-interface Props extends WithTranslation {
-}
-
 interface State {
 	selectedRowKeys: string[] | number[];
 	updateTableToken: DataTableUpdateToken;
 }
 
-class WrappedSearchClassifierType extends React.Component<Props, State> {
+class WrappedSearchClassifierType extends React.Component<unknown, State> {
 
 	private operation = new OperationService();
 	private classifierTypeService = new ClassifierTypeService();
 
-	constructor(props: Props) {
+	constructor(props: unknown) {
 		super(props);
 
 		this.state = {
@@ -69,8 +66,8 @@ class WrappedSearchClassifierType extends React.Component<Props, State> {
 		];
 
 		return (
-			<Translation ns={Locale.Namespace}>
-				{(t) => <Page
+			<Translation ns={Locale.Namespace}>{(t) =>
+				<Page
 					title={<>
 						<Toolbar float="right">
 							<Link to={`/classifiers/add`}>
@@ -80,7 +77,7 @@ class WrappedSearchClassifierType extends React.Component<Props, State> {
 						</Toolbar>
 
 						<ClassifierBreadcrumb />
-						<PageHeader>{t("page.searchClassifierTypes.title") as string}</PageHeader>
+						<PageHeader>{t("page.searchClassifierTypes.title")}</PageHeader>
 					</>}>
 
 					<DataTable
@@ -92,12 +89,12 @@ class WrappedSearchClassifierType extends React.Component<Props, State> {
 						rowActions={rowActions}
 					/>
 
-				</Page>}
-			</Translation>
+				</Page>
+			}</Translation>
 		);
 	};
 }
 
-const SearchClassifierType = withTranslation()(WrappedSearchClassifierType);
+const SearchClassifierType = WrappedSearchClassifierType;
 
 export default SearchClassifierType;

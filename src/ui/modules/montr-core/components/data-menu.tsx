@@ -1,11 +1,11 @@
-import { NavigationService } from "@montr-core/services";
+import { NavigationService } from "@montr-core/services/navigation-service";
 import { Menu } from "antd";
 import { MenuProps } from "antd/es/menu";
 import * as React from "react";
 import { Navigate, NavigateFunction } from "react-router-dom";
-import { IMenu } from "../models";
+import { IMenu } from "../models/menu";
 import { ContentService } from "../services/content-service";
-import { Icon } from "./";
+import { Icon } from "./icon";
 import { withNavigate } from "./react-router-wrappers";
 
 interface Props extends MenuProps {

@@ -2,7 +2,10 @@ import { UserContextProps, withUserContext } from "@montr-core/components";
 import { Patterns } from "@montr-core/module";
 import { ProfileModel } from "@montr-idx/models/profile-model";
 import { ProfileService } from "@montr-idx/services/profile-service";
+import { Locale } from "@montr-kompany-registration/module";
+import { Spin } from "antd";
 import React from "react";
+import { Translation } from "react-i18next";
 import { Link } from "react-router-dom";
 
 interface State {
@@ -46,23 +49,27 @@ class WrappedStepRegisterUser extends React.Component<UserContextProps, State>{
 
     render = (): React.ReactNode => {
         const { user, login } = this.props,
-            { profile } = this.state;
+            { loading, profile } = this.state;
 
-        if (user) {
-            return (
-                <p>
-                    Пользователь <strong>{profile?.displayName} ({profile?.userName})</strong> зарегистрирован.<br />
-                    Вы можете изменить регистрационные данные в <Link to={Patterns.profile}>Личном кабинете</Link>.
-                </p>
-            );
-        }
+        return <Translation ns={Locale.Namespace}>{(t) =>
+            <Spin spinning={loading}>
 
-        return (
-            <p>
-                Зарегистрируйте пользователя пройдя по <Link to={Patterns.accountRegister}> ссылке</Link>.<br />
-                Если вы уже зарегистрированы, войдите в систему пройдя по <a onClick={login}> ссылке</a >.
-            </p>
-        );
+                {!user && <p>
+                    {t("page-registration.step-register-user.line1")}&nbsp;
+                    <Link to={Patterns.accountRegister}>{t("page-registration.step-register-user.link1")}</Link><br />
+                    {t("page-registration.step-register-user.line2")}&nbsp;
+                    <a onClick={login}>{t("page-registration.step-register-user.link2")}</a><br />
+                </p>}
+
+                {user && <p>
+                    {t("page-registration.step-register-user.line3")}&nbsp;
+                    {profile && <strong>{profile.displayName} ({profile.userName})</strong>}<br />
+                    {t("page-registration.step-register-user.line4")}&nbsp;
+                    <Link to={Patterns.profile}>{t("page-registration.step-register-user.link3")}</Link>
+                </p>}
+
+            </Spin>
+        }</Translation>;
     };
 }
 

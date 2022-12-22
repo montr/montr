@@ -3,7 +3,6 @@ import { AppSetupRedirect } from "@montr-core/components/app-setup-redirect";
 import { AuthCallbackHandler } from "@montr-core/components/auth-callback-handler";
 import { CompanyContextProvider } from "@montr-kompany/components/company-context-provider";
 import { ConfigProvider } from "antd";
-import { Locale } from "antd/es/locale-provider";
 import en_US from "antd/locale/en_US";
 import ru_RU from "antd/locale/ru_RU";
 import * as React from "react";
@@ -13,7 +12,7 @@ import { BrowserRouter } from "react-router-dom";
 import { AppRoutes } from "./app-routes";
 import "./modules";
 
-function getLocale(lng: string): Locale {
+function getLocale(lng: string) {
 	if (lng == "ru") return ru_RU;
 	return en_US;
 }

@@ -15,9 +15,7 @@ i18n
 		defaultNS: defaultNS,
 		fallbackNS: defaultNS,
 		fallbackLng: "en",
-		keySeparator: false,
 		debug: false, // todo: use env var
-		saveMissing: false,
 		interpolation: {
 			escapeValue: false,
 		},
@@ -26,13 +24,13 @@ i18n
 		},
 		// https://github.com/i18next/i18next-xhr-backend
 		backend: {
-			loadPath: "/api/locale/strings/{{lng}}/{{ns}}"
+			loadPath: "/api/locale/strings/{{lng}}/{{ns}}",
 		},
 		// https://github.com/i18next/i18next-browser-languageDetector
 		detection: {
 			order: ["cookie", "header"],
 			lookupCookie: "lang",
-			caches: ["cookie"],
+			caches: ["cookie"]
 		}
 	});
 

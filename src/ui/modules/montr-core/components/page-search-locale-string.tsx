@@ -5,6 +5,7 @@ import { UploadChangeParam } from "antd/es/upload";
 import React from "react";
 import { Translation } from "react-i18next";
 import { ButtonExport, ButtonImport, Icon, Page, PageHeader, Toolbar } from ".";
+import { Constants } from "..";
 import { DataResult, IMenu, LocaleString } from "../models";
 import { NotificationService } from "../services";
 import { DataBreadcrumb } from "./data-breadcrumb";
@@ -102,7 +103,7 @@ export default class PageSearchLocaleString extends React.Component<Props, State
 							<Toolbar float="right">
 								<Upload
 									accept=".json"
-									action={Api.localeImport}
+									action={Constants.apiURL + Api.localeImport}
 									name="file"
 									showUploadList={false}
 									style={{ display: "inline-block" }}
