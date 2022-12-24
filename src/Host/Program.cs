@@ -75,18 +75,14 @@ namespace Host
 			}
 
 			// todo: run on event "app configured" (copied from Core.Module.Configure(IApp) app.UseEndpoints)
+			app.MapRazorPages();
+			app.MapControllers();
+			app.MapFallbackToController("Index", "Home");
 
-			app.UseWhen(context => context.Request.Path.Value.StartsWith("/connect") == false, context =>
-			{
-				app.MapRazorPages();
-				app.MapControllers();
-				app.MapFallbackToController("Index", "Home");
-
-				// app.MapFallbackToFile("Home/Index.cshtml");
-				// app.MapHub<MyChatHub>()
-				// app.MapGrpcService<MyCalculatorService>()
-				app.MapDefaultControllerRoute();
-			});
+			// app.MapFallbackToFile("Home/Index.cshtml");
+			// app.MapHub<MyChatHub>()
+			// app.MapGrpcService<MyCalculatorService>()
+			app.MapDefaultControllerRoute();
 
 			await app.RunAsync();
 		}
