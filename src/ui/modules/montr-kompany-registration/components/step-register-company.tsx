@@ -1,11 +1,12 @@
 import { ButtonCreate, ButtonDelete, StatusTag, UserContextProps, withUserContext } from "@montr-core/components";
-import { EmptyFieldView } from "@montr-core/components/empty-field-view";
 import { OperationService } from "@montr-core/services";
 import { IDocument } from "@montr-docs/models";
 import { RouteBuilder } from "@montr-docs/module";
+import { Locale } from "@montr-kompany-registration/module";
 import { CompanyContextProps, withCompanyContext } from "@montr-kompany/components/company-context";
-import { Button, List, Space, Spin, Typography } from "antd";
+import { Button, Spin, Typography } from "antd";
 import React from "react";
+import { Translation } from "react-i18next";
 import { Navigate } from "react-router-dom";
 import { CompanyRegistrationRequestService } from "../services/company-registration-request-service";
 
@@ -14,7 +15,8 @@ interface Props extends UserContextProps, CompanyContextProps {
 
 interface State {
 	loading: boolean;
-	documents: IDocument[];
+	documents?: IDocument[];
+	lastRequest?: IDocument,
 	redirectTo?: string;
 }
 
@@ -27,8 +29,7 @@ class WrappedStepRegisterCompany extends React.Component<Props, State> {
 		super(props);
 
 		this.state = {
-			loading: true,
-			documents: []
+			loading: true
 		};
 	}
 
@@ -42,9 +43,10 @@ class WrappedStepRegisterCompany extends React.Component<Props, State> {
 
 	fetchData = async (): Promise<void> => {
 
-		const documents = await this.companyRegistrationRequestService.search();
+		const documents = await this.companyRegistrationRequestService.search(),
+			lastRequest = documents.length > 0 ? documents[0] : null;
 
-		this.setState({ loading: false, documents });
+		this.setState({ loading: false, documents, lastRequest });
 	};
 
 	createRequest = async () => {
@@ -76,78 +78,53 @@ class WrappedStepRegisterCompany extends React.Component<Props, State> {
 	};
 
 	render = (): React.ReactNode => {
-		const { user, currentCompany: company, registerCompany } = this.props,
-			{ redirectTo, loading, documents } = this.state;
+		const { user, currentCompany: company } = this.props,
+			{ redirectTo, loading, lastRequest } = this.state;
 
 		if (redirectTo) {
 			return <Navigate to={redirectTo} />;
 		}
 
-		const CompanyList = (
+		return <Translation ns={Locale.Namespace}>{(t) =>
 			<Spin spinning={loading}>
 
-				<List
-					size="small"
-					dataSource={documents}
-					renderItem={item => {
+				{!user && !company && <>
+					<p>{t("page-registration.step-register-company.line1")}</p>
+				</>}
 
-						const actions = [];
+				{user && !company && <>
+					<p>{t("page-registration.step-register-company.line2")}</p>
 
-						if (item.statusCode == "draft") {
-							actions.push(<ButtonDelete type="link" onClick={() => this.deleteRequest(item)} />);
-							actions.push(<Button onClick={() => this.openRequest(item)}>Edit</Button>);
-						} else {
-							actions.push(<Button onClick={() => this.openRequest(item)}>View</Button>);
-						}
+					{!lastRequest && <>
+						<p>
+							<ButtonCreate onClick={this.createRequest}>{t("page-registration.step-register-company.createRequest")}</ButtonCreate>
+						</p>
+					</>}
 
-						return (
-							<List.Item actions={actions}>
-								<List.Item.Meta
-									description={
-										<Space>
-											<Typography.Text type="secondary">Number:</Typography.Text>
-											{item.documentNumber ? <Typography.Text>{item.documentNumber}</Typography.Text> : <EmptyFieldView />}
-											<Typography.Text type="secondary">Date:</Typography.Text>
-											<Typography.Text>{<>{item.documentDate}</>}</Typography.Text>
-											<StatusTag statusCode={item.statusCode} />
-										</Space>}
-								/>
-							</List.Item>
-						);
-					}}
-				/>
+					{lastRequest && <>
+						<p>
+							<Typography.Text strong>
+								{lastRequest.documentNumber} &nbsp;
+								{<>{lastRequest.documentDate}</>}
+							</Typography.Text>&nbsp;
+							<StatusTag statusCode={lastRequest.statusCode} />
+						</p>
+						<p>
+							<Button onClick={() => this.openRequest(lastRequest)}>{t("page-registration.step-register-company.openRequest")}</Button>
+							{lastRequest.statusCode == "draft" &&
+								<ButtonDelete type="link" onClick={() => this.deleteRequest(lastRequest)}>{t("page-registration.step-register-company.deleteRequest")}</ButtonDelete>}
+						</p>
+					</>}
 
-				<ButtonCreate onClick={this.createRequest}>Create company registration request</ButtonCreate>
+				</>}
+
+				{(user && company) && <p>
+					<p>{t("page-registration.step-register-company.line9")}</p>
+					<strong>{company.name}</strong>
+				</p>}
 
 			</Spin>
-		);
-
-		if (user) {
-
-			if (company) {
-				return (<>
-					<p>
-						Организация <strong>{company.name}</strong> зарегистрирована.<br />
-					</p>
-
-					{CompanyList}
-				</>);
-			}
-
-			return (<>
-				<p>
-					Зарегистрируйте организацию пройдя по <a onClick={registerCompany}>ссылке</a>.
-				</p>
-
-				{CompanyList}
-			</>);
-		}
-
-		return (
-			<p>
-				После регистрации пользователя будет доступна регистрация организации.
-			</p>
-		);
+		}</Translation>;
 	};
 }
 
