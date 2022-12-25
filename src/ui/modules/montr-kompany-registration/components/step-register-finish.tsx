@@ -14,12 +14,15 @@ class WrappedStepRegisterFinish extends React.Component<UserContextProps & Compa
 		return <Translation ns={Locale.Namespace}>{(t) =>
 			<>
 				{(!user || !company) && <>
-					<p>{t("page-registration.step-finish.line1")}</p>
+					<p>
+						{t("page-registration.step-finish.line1")}
+					</p>
 				</>}
 
 				{(user && company) && <>
-					<p>{t("page-registration.step-finish.line2")}</p>
-
+					<p>
+						{t("page-registration.step-finish.line2")}
+					</p>
 					<p>
 						<Button>
 							<Link to={Patterns.dashboard}>{t("page-registration.step-finish.link1")}</Link>

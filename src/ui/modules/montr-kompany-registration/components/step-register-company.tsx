@@ -93,7 +93,9 @@ class WrappedStepRegisterCompany extends React.Component<Props, State> {
 				</>}
 
 				{user && !company && <>
-					<p>{t("page-registration.step-register-company.line2")}</p>
+					<p>
+						{t("page-registration.step-register-company.line2")}
+					</p>
 
 					{!lastRequest && <>
 						<p>
@@ -118,10 +120,14 @@ class WrappedStepRegisterCompany extends React.Component<Props, State> {
 
 				</>}
 
-				{(user && company) && <p>
-					<p>{t("page-registration.step-register-company.line9")}</p>
-					<strong>{company.name}</strong>
-				</p>}
+				{(user && company) && <>
+					<p>
+						{t("page-registration.step-register-company.line9")}
+					</p>
+					<p>
+						<strong>{company.name}</strong>
+					</p>
+				</>}
 
 			</Spin>
 		}</Translation>;
