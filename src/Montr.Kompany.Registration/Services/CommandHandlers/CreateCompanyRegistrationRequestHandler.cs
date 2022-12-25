@@ -47,6 +47,7 @@ namespace Montr.Kompany.Registration.Services.CommandHandlers
 				CreatedBy = request.UserUid
 			};
 
+			// todo: check if company registration request draft already exists
 			using (var scope = _unitOfWorkFactory.Create())
 			{
 				var result = await _documentService.Create(document, cancellationToken);

@@ -173,9 +173,19 @@ public class DbDocumentService : IDocumentService
 	protected virtual async Task<ApiResult> DeleteInternal(
 		DbContext db, DeleteDocument request, CancellationToken cancellationToken = default)
 	{
-		var affected = await db.GetTable<DbDocument>()
-			.Where(x => request.Uids.Contains(x.Uid))
-			.DeleteAsync(cancellationToken);
+		var documents = db.GetTable<DbDocument>().Where(x => request.Uids.Contains(x.Uid));
+
+		if (request.UserUid != null)
+		{
+			documents = documents.Where(x => x.CreatedBy == request.UserUid);
+		}
+
+		if (request.StatusCode != null)
+		{
+			documents = documents.Where(x => x.StatusCode == request.StatusCode);
+		}
+
+		var affected = await documents.DeleteAsync(cancellationToken);
 
 		return new ApiResult { AffectedRows = affected };
 	}

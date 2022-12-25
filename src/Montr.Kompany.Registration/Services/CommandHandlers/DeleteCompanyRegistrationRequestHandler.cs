@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using MediatR;
 using Montr.Core.Models;
 using Montr.Core.Services;
+using Montr.Docs;
 using Montr.Docs.Commands;
 using Montr.Docs.Services;
 using Montr.Kompany.Registration.Commands;
@@ -32,6 +33,7 @@ namespace Montr.Kompany.Registration.Services.CommandHandlers
 			{
 				var result = await _documentService.Delete(new DeleteDocument
 				{
+					StatusCode = DocumentStatusCode.Draft,
 					UserUid = request.UserUid,
 					Uids = new[] { request.DocumentUid }
 				}, cancellationToken);
