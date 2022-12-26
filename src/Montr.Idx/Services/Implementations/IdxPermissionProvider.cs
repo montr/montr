@@ -3,16 +3,19 @@ using Montr.Core;
 using Montr.Core.Models;
 using Montr.Core.Services;
 
-namespace Montr.Tasks.Services.Implementations
+namespace Montr.Idx.Services.Implementations
 {
-	public class PermissionProvider : IPermissionProvider
+	public class IdxPermissionProvider : IPermissionProvider
 	{
 		public IEnumerable<Permission> GetPermissions()
 		{
 			return new[]
 			{
-				new Permission(typeof(Permissions.ViewTasks)),
-				new Permission(typeof(Permissions.ManageTasks))
+				new Permission(typeof(Permissions.ViewUserRoles)),
+				new Permission(typeof(Permissions.ManageUserRoles)),
+
+				new Permission(typeof(Permissions.ViewRolePermissions)),
+				new Permission(typeof(Permissions.ManageRolePermissions))
 			};
 		}
 

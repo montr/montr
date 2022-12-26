@@ -1,16 +1,18 @@
 ﻿using System.Collections.Generic;
+using Montr.Core;
 using Montr.Core.Models;
+using Montr.Core.Services;
 
-namespace Montr.Core.Services.Implementations
+namespace Montr.Tasks.Services.Implementations
 {
-	public class PermissionProvider : IPermissionProvider
+	public class TasksPermissionProvider : IPermissionProvider
 	{
 		public IEnumerable<Permission> GetPermissions()
 		{
 			return new[]
 			{
-				new Permission(typeof(Permissions.ViewLocales)),
-				new Permission(typeof(Permissions.ManageLocales))
+				new Permission(typeof(Permissions.ViewTasks)),
+				new Permission(typeof(Permissions.ManageTasks))
 			};
 		}
 

@@ -2,27 +2,28 @@
 using Montr.Core.Models;
 using Montr.Core.Services;
 
-namespace Montr.Docs.Services.Implementations;
-
-public class ContentProvider : IContentProvider
+namespace Montr.Docs.Services.Implementations
 {
-	public IList<Menu> GetMenuItems(string menuId)
+	public class ContentProvider : IContentProvider
 	{
-		if (menuId == MenuCode.SideMenu)
+		public IList<Menu> GetMenuItems(string menuId)
 		{
-			return new[]
+			if (menuId == MenuCode.SideMenu)
 			{
-				new Menu
+				return new[]
 				{
-					Id = "documents",
-					Name = "Documents",
-					Icon = "container",
-					Route = ClientRoutes.Documents,
-					Permission = Permission.GetCode(typeof(Permissions.ViewDocuments))
-				}
-			};
-		}
+					new Menu
+					{
+						Id = "documents",
+						Name = "Documents",
+						Icon = "container",
+						Route = ClientRoutes.Documents,
+						Permission = Permission.GetCode(typeof(Permissions.ViewDocuments))
+					}
+				};
+			}
 
-		return null;
+			return null;
+		}
 	}
 }

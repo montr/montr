@@ -7,38 +7,39 @@ using Montr.Core.Events;
 using Montr.Docs.Models;
 using Montr.Worker.Services;
 
-namespace Montr.Docs.Services.EventHandlers;
-
-public class RunAutomationsOnDocumentStatusChangedHandler : INotificationHandler<EntityStatusChanged<Document>>
+namespace Montr.Docs.Services.EventHandlers
 {
-	private readonly ILogger<RunAutomationsOnDocumentStatusChangedHandler> _logger;
-	private readonly IBackgroundJobManager _jobManager;
-
-	public RunAutomationsOnDocumentStatusChangedHandler(
-		ILogger<RunAutomationsOnDocumentStatusChangedHandler> logger, IBackgroundJobManager jobManager)
+	public class RunAutomationsOnDocumentStatusChangedHandler : INotificationHandler<EntityStatusChanged<Document>>
 	{
-		_logger = logger;
-		_jobManager = jobManager;
-	}
+		private readonly ILogger<RunAutomationsOnDocumentStatusChangedHandler> _logger;
+		private readonly IBackgroundJobManager _jobManager;
 
-	public Task Handle(EntityStatusChanged<Document> notification, CancellationToken cancellationToken)
-	{
-		var document = notification.Entity;
-
-		// todo: auto-approve request, notifications
-		var jobId = _jobManager.Enqueue<ISender>(x => x.Send(new RunAutomations
+		public RunAutomationsOnDocumentStatusChangedHandler(
+			ILogger<RunAutomationsOnDocumentStatusChangedHandler> logger, IBackgroundJobManager jobManager)
 		{
-			EntityTypeCode = EntityTypeCode.Document,
-			EntityUid = document.Uid.Value
-		}, cancellationToken));
-
-		if (_logger.IsEnabled(LogLevel.Information))
-		{
-			_logger.LogInformation(
-				"Enqueued automation job {jobId} for document {documentUid} status changed to {statusCode}",
-				jobId, document.Uid, notification.StatusCode);
+			_logger = logger;
+			_jobManager = jobManager;
 		}
 
-		return Task.CompletedTask;
+		public Task Handle(EntityStatusChanged<Document> notification, CancellationToken cancellationToken)
+		{
+			var document = notification.Entity;
+
+			// todo: auto-approve request, notifications
+			var jobId = _jobManager.Enqueue<ISender>(x => x.Send(new RunAutomations
+			{
+				EntityTypeCode = EntityTypeCode.Document,
+				EntityUid = document.Uid.Value
+			}, cancellationToken));
+
+			if (_logger.IsEnabled(LogLevel.Information))
+			{
+				_logger.LogInformation(
+					"Enqueued automation job {jobId} for document {documentUid} status changed to {statusCode}",
+					jobId, document.Uid, notification.StatusCode);
+			}
+
+			return Task.CompletedTask;
+		}
 	}
 }

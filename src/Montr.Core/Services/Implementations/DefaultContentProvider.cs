@@ -68,7 +68,7 @@ namespace Montr.Core.Services.Implementations
 						}
 					},
 
-					new Menu { Name = "Promo", Icon = "global", Position = 200, Route = "/" }
+					// new Menu { Name = "Promo", Icon = "global", Position = 200, Route = "/" }
 				};
 			}
 

@@ -140,7 +140,7 @@ namespace Montr.Core
 			appBuilder.Services.AddSingleton<IConfigurationRegistry, DefaultConfigurationRegistry>();
 			appBuilder.Services.AddSingleton<IContentService, DefaultContentService>();
 			appBuilder.Services.AddSingleton<IContentProvider, DefaultContentProvider>();
-			appBuilder.Services.AddTransient<IPermissionProvider, PermissionProvider>();
+			appBuilder.Services.AddTransient<IPermissionProvider, CorePermissionProvider>();
 
 			appBuilder.Services.AddSingleton<ICurrentUserProvider, DefaultCurrentUserProvider>();
 			appBuilder.Services.AddSingleton<EmbeddedResourceProvider, EmbeddedResourceProvider>();

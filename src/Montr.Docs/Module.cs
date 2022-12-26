@@ -9,31 +9,33 @@ using Montr.MasterData.Services;
 using ConfigurationStartupTask = Montr.Docs.Services.Implementations.ConfigurationStartupTask;
 using RegisterClassifierTypeStartupTask = Montr.Docs.Services.Implementations.RegisterClassifierTypeStartupTask;
 
-namespace Montr.Docs;
-
-// ReSharper disable once UnusedType.Global
-public class Module : IModule
+namespace Montr.Docs
 {
-	public void Configure(IAppBuilder appBuilder)
+	// ReSharper disable once UnusedType.Global
+	public class Module : IModule
 	{
-		appBuilder.Services.AddTransient<IStartupTask, RegisterClassifierTypeStartupTask>();
-		appBuilder.Services.AddTransient<IStartupTask, ConfigurationStartupTask>();
+		public void Configure(IAppBuilder appBuilder)
+		{
+			appBuilder.Services.AddTransient<IStartupTask, RegisterClassifierTypeStartupTask>();
+			appBuilder.Services.AddTransient<IStartupTask, ConfigurationStartupTask>();
 
-		appBuilder.Services.AddSingleton<IContentProvider, ContentProvider>();
+			appBuilder.Services.AddSingleton<IContentProvider, ContentProvider>();
+			appBuilder.Services.AddTransient<IPermissionProvider, DocsPermissionProvider>();
 
-		appBuilder.Services.AddSingleton<IProcessService, DefaultProcessService>();
+			appBuilder.Services.AddSingleton<IProcessService, DefaultProcessService>();
 
-		appBuilder.Services
-			.AddNamedTransient<IClassifierRepository, DbDocumentTypeRepository>(ClassifierTypeCode.DocumentType);
+			appBuilder.Services
+				.AddNamedTransient<IClassifierRepository, DbDocumentTypeRepository>(ClassifierTypeCode.DocumentType);
 
-		appBuilder.Services.AddSingleton<IRepository<Document>, DbDocumentRepository>();
-		appBuilder.Services.AddTransient<IDocumentService, DbDocumentService>();
+			appBuilder.Services.AddSingleton<IRepository<Document>, DbDocumentRepository>();
+			appBuilder.Services.AddTransient<IDocumentService, DbDocumentService>();
 
-		appBuilder.Services.AddTransient<INumberTagResolver, DocumentNumberTagResolver>();
+			appBuilder.Services.AddTransient<INumberTagResolver, DocumentNumberTagResolver>();
 
-		appBuilder.Services.AddNamedTransient<IEntityNameResolver, DocumentTypeNameResolver>(DocumentType.EntityTypeCode);
+			appBuilder.Services.AddNamedTransient<IEntityNameResolver, DocumentTypeNameResolver>(DocumentType.EntityTypeCode);
 
-		appBuilder.Services.AddNamedTransient<IRecipientResolver, DocumentRecipientResolver>(EntityTypeCode.Document);
-		appBuilder.Services.AddNamedTransient<IAutomationContextProvider, DocumentAutomationContextProvider>(EntityTypeCode.Document);
+			appBuilder.Services.AddNamedTransient<IRecipientResolver, DocumentRecipientResolver>(EntityTypeCode.Document);
+			appBuilder.Services.AddNamedTransient<IAutomationContextProvider, DocumentAutomationContextProvider>(EntityTypeCode.Document);
+		}
 	}
 }

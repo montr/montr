@@ -6,30 +6,31 @@ using Montr.Core.Models;
 using Montr.Core.Services;
 using Montr.Docs.Commands;
 
-namespace Montr.Docs.Services.CommandHandlers;
-
-public class SubmitDocumentHandler : IRequestHandler<SubmitDocument, ApiResult>
+namespace Montr.Docs.Services.CommandHandlers
 {
-	private readonly IUnitOfWorkFactory _unitOfWorkFactory;
-	private readonly IDocumentService _documentService;
-
-	public SubmitDocumentHandler(IUnitOfWorkFactory unitOfWorkFactory, IDocumentService documentService)
+	public class SubmitDocumentHandler : IRequestHandler<SubmitDocument, ApiResult>
 	{
-		_unitOfWorkFactory = unitOfWorkFactory;
-		_documentService = documentService;
-	}
+		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+		private readonly IDocumentService _documentService;
 
-	public async Task<ApiResult> Handle(SubmitDocument request, CancellationToken cancellationToken)
-	{
-		var documentUid = request.DocumentUid ?? throw new ArgumentNullException(nameof(request.DocumentUid));
-
-		using (var scope = _unitOfWorkFactory.Create())
+		public SubmitDocumentHandler(IUnitOfWorkFactory unitOfWorkFactory, IDocumentService documentService)
 		{
-			var result = await _documentService.ChangeStatus(documentUid, DocumentStatusCode.Submitted, cancellationToken);
+			_unitOfWorkFactory = unitOfWorkFactory;
+			_documentService = documentService;
+		}
 
-			if (result.Success) scope.Commit();
+		public async Task<ApiResult> Handle(SubmitDocument request, CancellationToken cancellationToken)
+		{
+			var documentUid = request.DocumentUid ?? throw new ArgumentNullException(nameof(request.DocumentUid));
 
-			return result;
+			using (var scope = _unitOfWorkFactory.Create())
+			{
+				var result = await _documentService.ChangeStatus(documentUid, DocumentStatusCode.Submitted, cancellationToken);
+
+				if (result.Success) scope.Commit();
+
+				return result;
+			}
 		}
 	}
 }

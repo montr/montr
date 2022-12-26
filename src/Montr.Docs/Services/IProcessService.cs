@@ -3,13 +3,14 @@ using System.Threading.Tasks;
 using Montr.Core.Models;
 using Montr.Docs.Commands;
 
-namespace Montr.Docs.Services;
-
-public interface IProcessService
+namespace Montr.Docs.Services
 {
-	Task<ApiResult> Insert(InsertProcessStep request, CancellationToken cancellationToken);
+	public interface IProcessService
+	{
+		Task<ApiResult> Insert(InsertProcessStep request, CancellationToken cancellationToken);
 
-	Task<ApiResult> Update(UpdateProcessStep request, CancellationToken cancellationToken);
+		Task<ApiResult> Update(UpdateProcessStep request, CancellationToken cancellationToken);
 
-	Task<ApiResult> Delete(DeleteProcessStep request, CancellationToken cancellationToken);
+		Task<ApiResult> Delete(DeleteProcessStep request, CancellationToken cancellationToken);
+	}
 }

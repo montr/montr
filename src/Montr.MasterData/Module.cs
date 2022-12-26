@@ -8,7 +8,6 @@ using Montr.MasterData.Models;
 using Montr.MasterData.Services;
 using Montr.MasterData.Services.Implementations;
 using Montr.Metadata.Services;
-using PermissionProvider = Montr.MasterData.Services.Implementations.PermissionProvider;
 
 namespace Montr.MasterData
 {
@@ -24,7 +23,7 @@ namespace Montr.MasterData
 			appBuilder.Services.AddSingleton<IStartupTask, ClassifierJsonOptionsInitializer>();
 
 			appBuilder.Services.AddSingleton<IContentProvider, ContentProvider>();
-			appBuilder.Services.AddTransient<IPermissionProvider, PermissionProvider>();
+			appBuilder.Services.AddTransient<IPermissionProvider, MasterDataPermissionProvider>();
 
 			appBuilder.Services.AddTransient<INumberGenerator, DbNumberGenerator>();
 

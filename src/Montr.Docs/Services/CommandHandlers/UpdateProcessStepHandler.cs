@@ -5,28 +5,29 @@ using Montr.Core.Models;
 using Montr.Core.Services;
 using Montr.Docs.Commands;
 
-namespace Montr.Docs.Services.CommandHandlers;
-
-public class UpdateProcessStepHandler : IRequestHandler<UpdateProcessStep, ApiResult>
+namespace Montr.Docs.Services.CommandHandlers
 {
-	private readonly IUnitOfWorkFactory _unitOfWorkFactory;
-	private readonly IProcessService _processService;
-
-	public UpdateProcessStepHandler(IUnitOfWorkFactory unitOfWorkFactory, IProcessService processService)
+	public class UpdateProcessStepHandler : IRequestHandler<UpdateProcessStep, ApiResult>
 	{
-		_unitOfWorkFactory = unitOfWorkFactory;
-		_processService = processService;
-	}
+		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
+		private readonly IProcessService _processService;
 
-	public async Task<ApiResult> Handle(UpdateProcessStep request, CancellationToken cancellationToken)
-	{
-		using (var scope = _unitOfWorkFactory.Create())
+		public UpdateProcessStepHandler(IUnitOfWorkFactory unitOfWorkFactory, IProcessService processService)
 		{
-			var result = await _processService.Update(request, cancellationToken);
+			_unitOfWorkFactory = unitOfWorkFactory;
+			_processService = processService;
+		}
 
-			if (result.Success) scope.Commit();
+		public async Task<ApiResult> Handle(UpdateProcessStep request, CancellationToken cancellationToken)
+		{
+			using (var scope = _unitOfWorkFactory.Create())
+			{
+				var result = await _processService.Update(request, cancellationToken);
 
-			return result;
+				if (result.Success) scope.Commit();
+
+				return result;
+			}
 		}
 	}
 }

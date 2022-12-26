@@ -2,13 +2,14 @@
 using MediatR;
 using Montr.Core.Models;
 
-namespace Montr.Docs.Commands;
-
-public class DeleteDocument : IRequest<ApiResult>
+namespace Montr.Docs.Commands
 {
-	public Guid? UserUid { get; set; }
+	public class DeleteDocument : IRequest<ApiResult>
+	{
+		public Guid? UserUid { get; set; }
 
-	public Guid[] Uids { get; set; }
+		public Guid[] Uids { get; set; }
 
-	public string StatusCode { get; set; }
+		public string StatusCode { get; set; }
+	}
 }

@@ -1,10 +1,11 @@
-﻿namespace Montr.Docs;
-
-public static class ClassifierTypeCode
+﻿namespace Montr.Docs
 {
-	public const string DocumentType = "document_type";
+	public static class ClassifierTypeCode
+	{
+		public const string DocumentType = "document_type";
 
-	public const string Process = "process";
+		public const string Process = "process";
 
-	public const string Questionnaire = "questionnaire";
+		public const string Questionnaire = "questionnaire";
+	}
 }

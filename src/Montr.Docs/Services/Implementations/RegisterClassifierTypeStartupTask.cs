@@ -8,59 +8,60 @@ using Montr.MasterData.Models;
 using Montr.MasterData.Services;
 using Montr.Metadata.Models;
 
-namespace Montr.Docs.Services.Implementations;
-
-public class RegisterClassifierTypeStartupTask : IStartupTask
+namespace Montr.Docs.Services.Implementations
 {
-	private readonly IClassifierTypeRegistrator _classifierTypeRegistrator;
-
-	public RegisterClassifierTypeStartupTask(IClassifierTypeRegistrator classifierTypeRegistrator)
+	public class RegisterClassifierTypeStartupTask : IStartupTask
 	{
-		_classifierTypeRegistrator = classifierTypeRegistrator;
-	}
+		private readonly IClassifierTypeRegistrator _classifierTypeRegistrator;
 
-	public async Task Run(CancellationToken cancellationToken)
-	{
-		foreach (var classifierType in GetClassifierTypes())
+		public RegisterClassifierTypeStartupTask(IClassifierTypeRegistrator classifierTypeRegistrator)
 		{
-			await _classifierTypeRegistrator.Register(classifierType.Item, classifierType.Fields, cancellationToken);
+			_classifierTypeRegistrator = classifierTypeRegistrator;
 		}
-	}
 
-	protected static IEnumerable<RegisterClassifierType> GetClassifierTypes()
-	{
-		yield return DocumentType.GetDefaultMetadata();
-
-		yield return new RegisterClassifierType
+		public async Task Run(CancellationToken cancellationToken)
 		{
-			Item = new ClassifierType
+			foreach (var classifierType in GetClassifierTypes())
 			{
-				Code = ClassifierTypeCode.Questionnaire,
-				Name = "Questionnaires",
-				HierarchyType = HierarchyType.Groups,
-				IsSystem = true
-			},
-			Fields = new List<FieldMetadata>
-			{
-				new TextField { Key = "code", Name = "Code", Required = true, DisplayOrder = 10, System = true },
-				new TextAreaField { Key = "name", Name = "Name", Required = true, DisplayOrder = 20, System = true, Props = new TextAreaField.Properties { Rows = 2 } },
+				await _classifierTypeRegistrator.Register(classifierType.Item, classifierType.Fields, cancellationToken);
 			}
-		};
+		}
 
-		yield return new RegisterClassifierType
+		protected static IEnumerable<RegisterClassifierType> GetClassifierTypes()
 		{
-			Item = new ClassifierType
+			yield return DocumentType.GetDefaultMetadata();
+
+			yield return new RegisterClassifierType
 			{
-				Code = ClassifierTypeCode.Process,
-				Name = "Processes",
-				HierarchyType = HierarchyType.Groups,
-				IsSystem = true
-			},
-			Fields = new List<FieldMetadata>
+				Item = new ClassifierType
+				{
+					Code = ClassifierTypeCode.Questionnaire,
+					Name = "Questionnaires",
+					HierarchyType = HierarchyType.Groups,
+					IsSystem = true
+				},
+				Fields = new List<FieldMetadata>
+				{
+					new TextField { Key = "code", Name = "Code", Required = true, DisplayOrder = 10, System = true },
+					new TextAreaField { Key = "name", Name = "Name", Required = true, DisplayOrder = 20, System = true, Props = new TextAreaField.Properties { Rows = 2 } },
+				}
+			};
+
+			yield return new RegisterClassifierType
 			{
-				new TextField { Key = "code", Name = "Code", Required = true, DisplayOrder = 10, System = true },
-				new TextAreaField { Key = "name", Name = "Name", Required = true, DisplayOrder = 20, System = true, Props = new TextAreaField.Properties { Rows = 2 } },
-			}
-		};
+				Item = new ClassifierType
+				{
+					Code = ClassifierTypeCode.Process,
+					Name = "Processes",
+					HierarchyType = HierarchyType.Groups,
+					IsSystem = true
+				},
+				Fields = new List<FieldMetadata>
+				{
+					new TextField { Key = "code", Name = "Code", Required = true, DisplayOrder = 10, System = true },
+					new TextAreaField { Key = "name", Name = "Name", Required = true, DisplayOrder = 20, System = true, Props = new TextAreaField.Properties { Rows = 2 } },
+				}
+			};
+		}
 	}
 }

@@ -5,7 +5,7 @@ using Montr.Core.Services;
 
 namespace Montr.MasterData.Services.Implementations
 {
-	public class PermissionProvider : IPermissionProvider
+	public class MasterDataPermissionProvider : IPermissionProvider
 	{
 		public IEnumerable<Permission> GetPermissions()
 		{

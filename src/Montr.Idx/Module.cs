@@ -34,7 +34,7 @@ namespace Montr.Idx
 			appBuilder.Services.AddTransient<IConfigureOptions<IdentityOptions>, IdentityOptionsConfigurator>();
 
 			appBuilder.Services.AddTransient<IContentProvider, ContentProvider>();
-			appBuilder.Services.AddTransient<IPermissionProvider, PermissionProvider>();
+			appBuilder.Services.AddTransient<IPermissionProvider, IdxPermissionProvider>();
 
 			appBuilder.Services.AddTransient<IEmailConfirmationService, EmailConfirmationService>();
 			appBuilder.Services.AddTransient<ISignInManager, DefaultSignInManager>();

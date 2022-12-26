@@ -4,28 +4,29 @@ using System.Threading.Tasks;
 using Montr.Core.Services;
 using Montr.MasterData.Services;
 
-namespace Montr.Docs.Services.Implementations;
-
-public class DocumentTypeNameResolver : IEntityNameResolver
+namespace Montr.Docs.Services.Implementations
 {
-	private readonly INamedServiceFactory<IClassifierRepository> _classifierRepositoryFactory;
-
-	public DocumentTypeNameResolver(INamedServiceFactory<IClassifierRepository> classifierRepositoryFactory)
+	public class DocumentTypeNameResolver : IEntityNameResolver
 	{
-		_classifierRepositoryFactory = classifierRepositoryFactory;
-	}
+		private readonly INamedServiceFactory<IClassifierRepository> _classifierRepositoryFactory;
 
-	public async Task<string> Resolve(string entityTypeCode, Guid entityUid, CancellationToken cancellationToken)
-	{
-		var documentTypeRepository = _classifierRepositoryFactory.GetNamedOrDefaultService(ClassifierTypeCode.DocumentType);
-
-		var entity = await documentTypeRepository.Get(ClassifierTypeCode.DocumentType, entityUid, cancellationToken);
-
-		return entity?.Name;
-
-		/*if (entityUid == Process.CompanyRegistrationRequest)
+		public DocumentTypeNameResolver(INamedServiceFactory<IClassifierRepository> classifierRepositoryFactory)
 		{
-			return "Процесс регистрации (по умолчанию)";
-		}*/
+			_classifierRepositoryFactory = classifierRepositoryFactory;
+		}
+
+		public async Task<string> Resolve(string entityTypeCode, Guid entityUid, CancellationToken cancellationToken)
+		{
+			var documentTypeRepository = _classifierRepositoryFactory.GetNamedOrDefaultService(ClassifierTypeCode.DocumentType);
+
+			var entity = await documentTypeRepository.Get(ClassifierTypeCode.DocumentType, entityUid, cancellationToken);
+
+			return entity?.Name;
+
+			/*if (entityUid == Process.CompanyRegistrationRequest)
+			{
+				return "Процесс регистрации (по умолчанию)";
+			}*/
+		}
 	}
 }

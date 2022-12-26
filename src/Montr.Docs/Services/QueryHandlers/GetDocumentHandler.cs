@@ -6,25 +6,26 @@ using Montr.Core.Services;
 using Montr.Docs.Models;
 using Montr.Docs.Queries;
 
-namespace Montr.Docs.Services.QueryHandlers;
-
-public class GetDocumentHandler : IRequestHandler<GetDocument, Document>
+namespace Montr.Docs.Services.QueryHandlers
 {
-	private readonly IRepository<Document> _documentRepository;
-
-	public GetDocumentHandler(IRepository<Document> documentRepository)
+	public class GetDocumentHandler : IRequestHandler<GetDocument, Document>
 	{
-		_documentRepository = documentRepository;
-	}
+		private readonly IRepository<Document> _documentRepository;
 
-	public async Task<Document> Handle(GetDocument request, CancellationToken cancellationToken)
-	{
-		var result = await _documentRepository.Search(new DocumentSearchRequest
+		public GetDocumentHandler(IRepository<Document> documentRepository)
 		{
-			Uid = request.Uid,
-			IncludeFields = true
-		}, cancellationToken);
+			_documentRepository = documentRepository;
+		}
 
-		return result.Rows.Single();
+		public async Task<Document> Handle(GetDocument request, CancellationToken cancellationToken)
+		{
+			var result = await _documentRepository.Search(new DocumentSearchRequest
+			{
+				Uid = request.Uid,
+				IncludeFields = true
+			}, cancellationToken);
+
+			return result.Rows.Single();
+		}
 	}
 }

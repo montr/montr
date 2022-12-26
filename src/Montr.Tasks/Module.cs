@@ -19,7 +19,7 @@ namespace Montr.Tasks
 
 			appBuilder.Services.AddSingleton<IContentProvider, ContentProvider>();
 
-			appBuilder.Services.AddTransient<IPermissionProvider, PermissionProvider>();
+			appBuilder.Services.AddTransient<IPermissionProvider, TasksPermissionProvider>();
 
 			appBuilder.Services.AddTransient<ITaskService, DbTaskService>();
 			appBuilder.Services.AddTransient<IRepository<TaskModel>, DbTaskRepository>();
