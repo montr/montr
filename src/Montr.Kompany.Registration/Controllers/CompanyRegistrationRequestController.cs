@@ -22,6 +22,7 @@ namespace Montr.Kompany.Registration.Controllers
 			_currentUserProvider = currentUserProvider;
 		}
 
+		[HttpPost, Permission(typeof(Docs.Permissions.ViewDocument))]
 		public async Task<ICollection<Document>> Search(GetCompanyRegistrationRequestList request)
 		{
 			request.UserUid = _currentUserProvider.GetUserUidIfAuthenticated();
@@ -29,6 +30,7 @@ namespace Montr.Kompany.Registration.Controllers
 			return await _mediator.Send(request);
 		}
 
+		[HttpPost, Permission(typeof(Docs.Permissions.EditDocument))]
 		public async Task<ApiResult> Create(CreateCompanyRegistrationRequest request)
 		{
 			request.UserUid = _currentUserProvider.GetUserUid();
@@ -36,6 +38,7 @@ namespace Montr.Kompany.Registration.Controllers
 			return await _mediator.Send(request);
 		}
 
+		[HttpPost, Permission(typeof(Docs.Permissions.DeleteDocument))]
 		public async Task<ApiResult> Delete(DeleteCompanyRegistrationRequest request)
 		{
 			request.UserUid = _currentUserProvider.GetUserUid();
@@ -43,8 +46,16 @@ namespace Montr.Kompany.Registration.Controllers
 			return await _mediator.Send(request);
 		}
 
-		[HttpPost]
+		[HttpPost, Permission(typeof(Docs.Permissions.SubmitDocument))]
 		public async Task<ApiResult> Submit(SubmitCompanyRegistrationRequest request)
+		{
+			request.UserUid = _currentUserProvider.GetUserUid();
+
+			return await _mediator.Send(request);
+		}
+
+		[HttpPost, Permission(typeof(Docs.Permissions.AcceptDocument))]
+		public async Task<ApiResult> Accept(AcceptCompanyRegistrationRequest request)
 		{
 			request.UserUid = _currentUserProvider.GetUserUid();
 

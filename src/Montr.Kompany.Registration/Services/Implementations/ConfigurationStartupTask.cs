@@ -1,5 +1,6 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
+using Montr.Core.Models;
 using Montr.Core.Services;
 using Montr.Docs;
 using Montr.Docs.Models;
@@ -43,15 +44,19 @@ namespace Montr.Kompany.Registration.Services.Implementations
 						x.Name = "Submit";
 						x.Type = ButtonType.Primary;
 						x.Action = "/companyRegistrationRequest/submit";
-						x.Props = document.Uid.HasValue
-							? new SubmitCompanyRegistrationRequest { DocumentUid = document.Uid.Value }
-							: null;
+						x.Permission = Permission.GetCode(typeof(Docs.Permissions.SubmitDocument));
+						x.Props = new SubmitCompanyRegistrationRequest { DocumentUid = document.Uid };
 					});
 
-				config.When(document => document.StatusCode != DocumentStatusCode.Draft)
-					.Add<Button>((_, x) =>
+				config.When(document => document.StatusCode == DocumentStatusCode.Submitted)
+					.Add<Button>((document, x) =>
 					{
+						x.Key = "accept";
 						x.Name = "Accept or Reject";
+						x.Type = ButtonType.Primary;
+						x.Action = "/companyRegistrationRequest/accept";
+						x.Permission = Permission.GetCode(typeof(Docs.Permissions.AcceptDocument));
+						x.Props = new AcceptCompanyRegistrationRequest { DocumentUid = document.Uid };
 					});
 			});
 

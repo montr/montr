@@ -1,6 +1,6 @@
 ﻿namespace Montr.Docs.Permissions
 {
-	public class ViewDocuments
+	public class DeleteDocument
 	{
 	}
 }

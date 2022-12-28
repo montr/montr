@@ -11,8 +11,11 @@ namespace Montr.Docs.Services.Implementations
 		{
 			return new[]
 			{
-				new Permission(typeof(Permissions.ViewDocuments)),
-				new Permission(typeof(Permissions.SubmitDocument))
+				new Permission(typeof(Permissions.ViewDocument)),
+				new Permission(typeof(Permissions.EditDocument)),
+				new Permission(typeof(Permissions.DeleteDocument)),
+				new Permission(typeof(Permissions.SubmitDocument)),
+				new Permission(typeof(Permissions.AcceptDocument))
 			};
 		}
 
@@ -30,7 +33,9 @@ namespace Montr.Docs.Services.Implementations
 					RoleCode = DefaultRoleCode.LimitedCompanyAdministrator,
 					Permissions = new []
 					{
-						new Permission(typeof(Permissions.ViewDocuments)),
+						new Permission(typeof(Permissions.ViewDocument)),
+						new Permission(typeof(Permissions.EditDocument)),
+						new Permission(typeof(Permissions.DeleteDocument)),
 						new Permission(typeof(Permissions.SubmitDocument))
 					}
 				}

@@ -31,7 +31,7 @@ namespace Montr.Docs.Controllers
 			return await _mediator.Send(request);
 		}
 
-		[HttpPost, Permission(typeof(Permissions.ViewDocuments))]
+		[HttpPost, Permission(typeof(Permissions.ViewDocument))]
 		public async Task<SearchResult<Document>> List(GetDocumentList request)
 		{
 			request.UserUid =  _currentUserProvider.GetUserUid();
@@ -39,7 +39,7 @@ namespace Montr.Docs.Controllers
 			return await _mediator.Send(request);
 		}
 
-		[HttpPost, Permission(typeof(Permissions.ViewDocuments))]
+		[HttpPost, Permission(typeof(Permissions.ViewDocument))]
 		public async Task<Document> Get(GetDocument request)
 		{
 			return await _mediator.Send(request);

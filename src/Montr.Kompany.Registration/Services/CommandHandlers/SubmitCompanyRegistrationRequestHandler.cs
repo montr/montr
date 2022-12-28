@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using Montr.Core.Models;
@@ -26,11 +27,13 @@ namespace Montr.Kompany.Registration.Services.CommandHandlers
 
 		public async Task<ApiResult> Handle(SubmitCompanyRegistrationRequest request, CancellationToken cancellationToken)
 		{
-			await _validationHelper.EnsureCreatedByCurrentUser(request.DocumentUid, request.UserUid, cancellationToken);
+			var documentUid = request.DocumentUid ?? throw new ArgumentNullException(nameof(request.DocumentUid));
+
+			await _validationHelper.EnsureCreatedByCurrentUser(documentUid, request.UserUid, cancellationToken);
 
 			using (var scope = _unitOfWorkFactory.Create())
 			{
-				var result = await _documentService.ChangeStatus(request.DocumentUid, DocumentStatusCode.Submitted, cancellationToken);
+				var result = await _documentService.ChangeStatus(documentUid, DocumentStatusCode.Submitted, cancellationToken);
 
 				if (result.Success) scope.Commit();
 

@@ -18,7 +18,7 @@ namespace Montr.Docs.Services.Implementations
 						Name = "Documents",
 						Icon = "container",
 						Route = ClientRoutes.Documents,
-						Permission = Permission.GetCode(typeof(Permissions.ViewDocuments))
+						Permission = Permission.GetCode(typeof(Permissions.ViewDocument))
 					}
 				};
 			}
