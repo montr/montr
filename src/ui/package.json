@@ -19,7 +19,7 @@
 		"@emotion/react": "^11.10.5",
 		"ansi-regex": ">=5.0.1",
 		"antd": "^5.1.1",
-		"axios": "^1.2.1",
+		"axios": "^1.2.2",
 		"dayjs": "^1.11.7",
 		"i18next": "^22.4.6",
 		"i18next-browser-languagedetector": "^7.0.1",
