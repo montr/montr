@@ -1,16 +1,17 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
 using Montr.Metadata.Models;
 
-namespace Montr.Settings.Services.Designers
+namespace Montr.Metadata.Services.Designers
 {
-	public class NumberFieldDesigner : AbstractSettingsDesigner<NumberField>
+	public class NumberFieldDesigner : AbstractFieldDesigner<NumberField>
 	{
-		protected override async Task<NumberField> GetMetadataInternal(PropertyInfo property)
+		protected override async Task<NumberField> GetMetadataInternal(PropertyInfo property, CancellationToken cancellationToken)
 		{
-			var result = await base.GetMetadataInternal(property);
+			var result = await base.GetMetadataInternal(property, cancellationToken);
 
 			var rangeAttribute = property.GetCustomAttribute<RangeAttribute>();
 

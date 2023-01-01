@@ -9,9 +9,12 @@
       <ProjectReference Include="..\Montr.Tasks\Montr.Tasks.csproj" />
     </ItemGroup>
 
-    <ItemGroup>
-      <PackageReference Include="Microsoft.NET.Test.Sdk" />
-      <PackageReference Include="NUnit3TestAdapter" />
-    </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="Microsoft.NET.Test.Sdk" />
+		<PackageReference Include="Moq" />
+		<PackageReference Include="Npgsql" />
+		<PackageReference Include="NUnit" />
+		<PackageReference Include="NUnit3TestAdapter" />
+	</ItemGroup>
 
 </Project>

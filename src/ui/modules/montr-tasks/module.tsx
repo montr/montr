@@ -17,10 +17,11 @@ export const Api = {
 	taskList: "/task/list",
 	taskGet: "/task/get",
 	taskUpdate: "/task/update",
+
+	taskSearchMetadata: "/taskMetadata/searchMetadata"
 };
 
 export const Views = {
-	taskList: "task-list",
 	taskPage: "task-page",
 	taskForm: "task-form",
 };

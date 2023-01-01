@@ -1,21 +1,23 @@
 import { PageHeader } from "@ant-design/pro-components";
 import { DataTable, DataTableUpdateToken } from "@montr-core/components/data-table";
-import { DataColumn } from "@montr-core/models";
+import { SearchCriteria } from "@montr-core/components/search-criteria";
+import { DataView } from "@montr-core/models/data-view";
+import { Task } from "@montr-tasks/models/task";
+import { TaskMetadataService } from "@montr-tasks/services/task-metadata-service";
 import { Spin } from "antd";
 import React from "react";
-import { Api, Views } from "../module";
-import { TaskService } from "../services/task-service";
+import { Api } from "../module";
 
 interface State {
 	loading: boolean;
-	columns?: DataColumn[];
+	dataView?: DataView<Task>;
 	selectedRowKeys: string[] | number[];
 	updateTableToken: DataTableUpdateToken;
 }
 
 export default class PageSearchTasks extends React.Component<unknown, State> {
 
-	private readonly taskService = new TaskService();
+	private readonly taskMetdataService = new TaskMetadataService();
 
 	constructor(props: unknown) {
 		super(props);
@@ -32,18 +34,18 @@ export default class PageSearchTasks extends React.Component<unknown, State> {
 	};
 
 	componentWillUnmount = async (): Promise<void> => {
-		await this.taskService.abort();
+		await this.taskMetdataService.abort();
 	};
 
 	fetchMetadata = async (): Promise<void> => {
-		const dataView = await this.taskService.metadata(Views.taskList);
+		const dataView = await this.taskMetdataService.searchMetadata();
 
-		this.setState({ loading: false, columns: dataView.columns });
+		this.setState({ loading: false, dataView });
 	};
 
 	render = (): React.ReactNode => {
 
-		const { loading, columns, updateTableToken } = this.state;
+		const { loading, dataView, updateTableToken } = this.state;
 
 		return (
 
@@ -60,9 +62,13 @@ export default class PageSearchTasks extends React.Component<unknown, State> {
 					{/* <DocumentSignificantInfo document={document} /> */}
 				</PageHeader>
 
+				<SearchCriteria
+					fields={dataView?.fields}
+				/>
+
 				<DataTable
 					rowKey="uid"
-					columns={columns}
+					columns={dataView?.columns}
 					loadUrl={Api.taskList}
 					updateToken={updateTableToken}
 				/>

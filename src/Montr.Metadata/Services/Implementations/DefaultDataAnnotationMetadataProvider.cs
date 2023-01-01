@@ -1,19 +1,19 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Montr.Metadata.Models;
-using Montr.Settings.Services.Designers;
+using Montr.Metadata.Services.Designers;
 
-namespace Montr.Settings.Services.Implementations
+namespace Montr.Metadata.Services.Implementations
 {
-	// todo: move to GetSettingsMetadataHandler
-	public class DefaultSettingsMetadataProvider : ISettingsMetadataProvider
+	public class DefaultDataAnnotationMetadataProvider : IDataAnnotationMetadataProvider
 	{
 		private readonly IServiceProvider _serviceProvider;
 
-		private static readonly Dictionary<Type, Type> DefaultDesignerTypes = new Dictionary<Type, Type>
+		private static readonly Dictionary<Type, Type> DefaultDesignerTypes = new()
 		{
 			{ typeof(int), typeof(NumberFieldDesigner) },
 			{ typeof(bool), typeof(BooleanFieldDesigner) },
@@ -21,12 +21,12 @@ namespace Montr.Settings.Services.Implementations
 
 		private static readonly Type DefaultDesignerType = typeof(TextFieldDesigner);
 
-		public DefaultSettingsMetadataProvider(IServiceProvider serviceProvider)
+		public DefaultDataAnnotationMetadataProvider(IServiceProvider serviceProvider)
 		{
 			_serviceProvider = serviceProvider;
 		}
 
-		public async Task<ICollection<FieldMetadata>> GetMetadata(Type type)
+		public async Task<ICollection<FieldMetadata>> GetMetadata(Type type, CancellationToken cancellationToken)
 		{
 			var result = new List<FieldMetadata>();
 
@@ -36,9 +36,9 @@ namespace Montr.Settings.Services.Implementations
 			{
 				var designerType = GetDesignerType(property);
 
-				var designer = (ISettingsDesigner)ActivatorUtilities.CreateInstance(_serviceProvider, designerType);
+				var designer = (IFieldDesigner)ActivatorUtilities.CreateInstance(_serviceProvider, designerType);
 
-				var metadata = await designer.GetMetadata(property);
+				var metadata = await designer.GetMetadata(property, cancellationToken);
 
 				result.Add(metadata);
 			}
@@ -48,7 +48,7 @@ namespace Montr.Settings.Services.Implementations
 
 		private static Type GetDesignerType(PropertyInfo property)
 		{
-			var designerAttribute = property.GetCustomAttribute<SettingsDesignerAttribute>();
+			var designerAttribute = property.GetCustomAttribute<FieldDesignerAttribute>();
 
 			if (designerAttribute != null)
 			{

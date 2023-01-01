@@ -1,16 +1,17 @@
 ﻿using System;
 using System.Reflection;
+using System.Threading;
 using System.Threading.Tasks;
 using Montr.MasterData.Models;
-using Montr.Settings.Services.Designers;
+using Montr.Metadata.Services.Designers;
 
 namespace Montr.MasterData.Services.Designers
 {
-	public class ClassifierFieldSettingsDesigner : AbstractSettingsDesigner<ClassifierField>
+	public class ClassifierFieldDesigner : AbstractFieldDesigner<ClassifierField>
 	{
-		protected override async Task<ClassifierField> GetMetadataInternal(PropertyInfo property)
+		protected override async Task<ClassifierField> GetMetadataInternal(PropertyInfo property, CancellationToken cancellationToken)
 		{
-			var result = await base.GetMetadataInternal(property);
+			var result = await base.GetMetadataInternal(property, cancellationToken);
 
 			var classifierFieldAttribute = property.GetCustomAttribute<ClassifierFieldAttribute>();
 

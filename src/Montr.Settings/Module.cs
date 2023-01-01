@@ -19,7 +19,6 @@ namespace Montr.Settings
 
 			appBuilder.Services.AddSingleton<ISettingsTypeRegistry, DefaultSettingsTypeRegistry>();
 			appBuilder.Services.AddTransient<ISettingsRepository, DbSettingsRepository>();
-			appBuilder.Services.AddTransient<ISettingsMetadataProvider, DefaultSettingsMetadataProvider>();
 
 			appBuilder.Services.AddSingleton<JsonTypeProvider<ISettingsType>>();
 			appBuilder.Services.AddSingleton<IConfigureOptions<MvcNewtonsoftJsonOptions>, SettingsJsonOptionsConfigurator>();

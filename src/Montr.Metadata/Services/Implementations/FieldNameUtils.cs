@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using Montr.Core.Services;
 
-namespace Montr.Settings.Services.Implementations
+namespace Montr.Metadata.Services.Implementations
 {
-	public static class SettingsNameUtils
+	public static class FieldNameUtils
 	{
 		private static readonly List<string> IgnoredWords = new() { "uid" };
 

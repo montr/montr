@@ -1,6 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
+using Montr.Metadata;
+using Montr.Metadata.Services.Designers;
 using Montr.Settings;
-using Montr.Settings.Services.Designers;
 
 namespace Montr.Idx
 {
@@ -10,7 +11,7 @@ namespace Montr.Idx
 		public string ClientId { get; set; }
 
 		[Required]
-		[SettingsDesigner(typeof(PasswordFieldDesigner))]
+		[FieldDesigner(typeof(PasswordFieldDesigner))]
 		public string ClientSecret { get; set; }
 	}
 }

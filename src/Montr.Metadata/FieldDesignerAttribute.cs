@@ -1,11 +1,11 @@
 ﻿using System;
 
-namespace Montr.Settings
+namespace Montr.Metadata
 {
 	[AttributeUsage(AttributeTargets.Property)]
-	public class SettingsDesignerAttribute : Attribute
+	public class FieldDesignerAttribute : Attribute
 	{
-		public SettingsDesignerAttribute(Type designerType)
+		public FieldDesignerAttribute(Type designerType)
 		{
 			DesignerType = designerType;
 		}

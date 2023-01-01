@@ -66,6 +66,7 @@ jobs:
       - run: dotnet test ./src/Montr.MasterData.Plugin.GovRu.Tests --configuration "${{ matrix.configuration }}" --no-build
       - run: dotnet test ./src/Montr.Kompany.Tests --configuration "${{ matrix.configuration }}" --no-build
       - run: dotnet test ./src/Montr.Settings.Tests --configuration "${{ matrix.configuration }}" --no-build
+      - run: dotnet test ./src/Montr.Tasks.Tests --configuration "${{ matrix.configuration }}" --no-build
       # - run: dotnet test ./src/Montr.Tendr.Tests --configuration "${{ matrix.configuration }}" --no-build
       - run: dotnet test ./src/Montr.Worker.Hangfire.Tests --configuration "${{ matrix.configuration }}" --no-build
 

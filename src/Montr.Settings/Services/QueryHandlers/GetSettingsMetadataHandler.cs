@@ -4,9 +4,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using Montr.Core.Services;
+using Montr.Metadata.Services;
+using Montr.Metadata.Services.Implementations;
 using Montr.Settings.Models;
 using Montr.Settings.Queries;
-using Montr.Settings.Services.Implementations;
 
 namespace Montr.Settings.Services.QueryHandlers
 {
@@ -14,14 +15,14 @@ namespace Montr.Settings.Services.QueryHandlers
 	{
 		private readonly INamedServiceFactory<IEntityProvider> _entityProviderFactory;
 		private readonly IConfigurationProvider _configurationProvider;
-		private readonly ISettingsMetadataProvider _settingsMetadataProvider;
+		private readonly IDataAnnotationMetadataProvider _dataAnnotationMetadataProvider;
 
 		public GetSettingsMetadataHandler(INamedServiceFactory<IEntityProvider> entityProviderFactory,
-			IConfigurationProvider configurationProvider, ISettingsMetadataProvider settingsMetadataProvider)
+			IConfigurationProvider configurationProvider, IDataAnnotationMetadataProvider dataAnnotationMetadataProvider)
 		{
 			_entityProviderFactory = entityProviderFactory;
 			_configurationProvider = configurationProvider;
-			_settingsMetadataProvider = settingsMetadataProvider;
+			_dataAnnotationMetadataProvider = dataAnnotationMetadataProvider;
 		}
 
 		public async Task<ICollection<SettingsBlock>> Handle(GetSettingsMetadata request, CancellationToken cancellationToken)
@@ -39,8 +40,8 @@ namespace Montr.Settings.Services.QueryHandlers
 				result.Add(new SettingsBlock
 				{
 					TypeCode = OptionsUtils.GetOptionsSectionKey(item.Type),
-					DisplayName = SettingsNameUtils.BuildSettingsName(item.Type.Name),
-					Fields = await _settingsMetadataProvider.GetMetadata(item.Type)
+					DisplayName = FieldNameUtils.BuildSettingsName(item.Type.Name),
+					Fields = await _dataAnnotationMetadataProvider.GetMetadata(item.Type, cancellationToken)
 				});
 			}
 

@@ -1,7 +1,8 @@
 ﻿using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
+using Montr.Metadata;
+using Montr.Metadata.Services.Designers;
 using Montr.Settings;
-using Montr.Settings.Services.Designers;
 
 namespace Montr.Messages
 {
@@ -23,7 +24,7 @@ namespace Montr.Messages
 		public string UserName { get; set; }
 
 		[Required]
-		[SettingsDesigner(typeof(PasswordFieldDesigner))]
+		[FieldDesigner(typeof(PasswordFieldDesigner))]
 		public string Password { get; set; }
 
 		public bool TestMode { get; set; }
