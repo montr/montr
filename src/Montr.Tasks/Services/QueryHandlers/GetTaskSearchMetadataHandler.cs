@@ -40,7 +40,7 @@ namespace Montr.Tasks.Services.QueryHandlers
 				Fields = fields,
 				Columns = columns
 			};
-			
+
 			return result;
 		}
 	}

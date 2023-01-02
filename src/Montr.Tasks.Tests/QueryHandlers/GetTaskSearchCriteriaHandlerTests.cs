@@ -26,8 +26,13 @@ namespace Montr.Tasks.Tests.QueryHandlers
 
 			// assert
 			Assert.IsNotNull(result);
-			Assert.IsNotNull(result.Fields);
-			Assert.AreEqual(result.Fields.Count, 8);
+
+			Assert.AreEqual(result.Fields?.Count, 8);
+			Assert.AreEqual(result.Columns?.Count, 9);
+
+			Assert.IsNull(result.Toolbar);
+			Assert.IsNull(result.Panels);
+			Assert.IsNull(result.Panes);
 		}
 	}
 }
