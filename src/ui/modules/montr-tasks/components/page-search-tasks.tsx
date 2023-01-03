@@ -1,6 +1,5 @@
 import { PageHeader } from "@ant-design/pro-components";
 import { DataTable, DataTableUpdateToken } from "@montr-core/components/data-table";
-import { SearchCriteria } from "@montr-core/components/search-criteria";
 import { DataView } from "@montr-core/models/data-view";
 import { Task } from "@montr-tasks/models/task";
 import { TaskMetadataService } from "@montr-tasks/services/task-metadata-service";
@@ -62,9 +61,9 @@ export default class PageSearchTasks extends React.Component<unknown, State> {
 					{/* <DocumentSignificantInfo document={document} /> */}
 				</PageHeader>
 
-				<SearchCriteria
+				{/* <SearchCriteria
 					fields={dataView?.fields}
-				/>
+				/> */}
 
 				<DataTable
 					rowKey="uid"
