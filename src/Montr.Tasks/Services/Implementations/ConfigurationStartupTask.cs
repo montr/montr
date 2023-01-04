@@ -1,22 +1,38 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
+using Montr.Core.Models;
 using Montr.Core.Services;
 using Montr.Metadata.Models;
+using Montr.Settings.Models;
+using Montr.Settings.Services;
 using Montr.Tasks.Models;
 
 namespace Montr.Tasks.Services.Implementations
 {
 	public class ConfigurationStartupTask : IStartupTask
 	{
+		private readonly ISettingsTypeRegistry _settingsTypeRegistry;
 		private readonly IConfigurationRegistry _registry;
 
-		public ConfigurationStartupTask(IConfigurationRegistry registry)
+		public ConfigurationStartupTask(ISettingsTypeRegistry settingsTypeRegistry, IConfigurationRegistry registry)
 		{
+			_settingsTypeRegistry = settingsTypeRegistry;
 			_registry = registry;
 		}
 
 		public Task Run(CancellationToken cancellationToken)
 		{
+			_settingsTypeRegistry.Register(typeof(TasksOptions));
+
+			_registry.Configure<Application>(config =>
+			{
+				config.Add<SettingsPane>((_, settings) =>
+				{
+					settings.Type = typeof(TasksOptions);
+					settings.Category = SettingsCategory.Tasks;
+				});
+			});
+
 			_registry.Configure<TaskModel>(config =>
 			{
 				config

@@ -22,6 +22,14 @@ namespace Montr.Tasks.Services.Implementations
 				};
 			}
 
+			if (menuId == MenuCode.SettingsMenu)
+			{
+				return new[]
+				{
+					new Menu { Name = "Tasks", Route = Core.ClientRoutes.Settings + SettingsCategory.Tasks }
+				};
+			}
+
 			return null;
 		}
 	}

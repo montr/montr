@@ -14,6 +14,8 @@ namespace Montr.Tasks
 	{
 		public void Configure(IAppBuilder appBuilder)
 		{
+			appBuilder.Services.BindOptions<TasksOptions>(appBuilder.Configuration);
+
 			appBuilder.Services.AddTransient<IStartupTask, RegisterClassifierTypeStartupTask>();
 			appBuilder.Services.AddTransient<IStartupTask, ConfigurationStartupTask>();
 

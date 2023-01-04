@@ -32,6 +32,11 @@ namespace Montr.MasterData.Services.Implementations
 
 			var numeratorRequest = request as NumeratorSearchRequest;
 
+			if (numeratorRequest?.NumeratorId != null)
+			{
+				numerators = numerators.Where(x => x.Uid == numeratorRequest.NumeratorId);
+			}
+
 			if (numeratorRequest?.EntityTypeCode != null && numeratorRequest.EntityTypeUid != null)
 			{
 				var numeratorEntities = db.GetTable<DbNumeratorEntity>().Where(x => x.EntityUid == numeratorRequest.EntityTypeUid);

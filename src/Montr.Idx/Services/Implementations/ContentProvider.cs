@@ -24,9 +24,9 @@ namespace Montr.Idx.Services.Implementations
 			{
 				return new[]
 				{
-					new Menu { Name = "Identity", Route = "/settings/" + SettingsCategory.Identity },
-					new Menu { Name = "OAuth Providers", Route = "/settings/" + SettingsCategory.OAuthProviders },
-					new Menu { Name = "Single Sign-On", Route = "/settings/sso" }
+					new Menu { Name = "Identity", Route = Core.ClientRoutes.Settings + SettingsCategory.Identity },
+					new Menu { Name = "OAuth Providers", Route = Core.ClientRoutes.Settings + SettingsCategory.OAuthProviders },
+					new Menu { Name = "Single Sign-On", Route = Core.ClientRoutes.Settings + "sso" }
 				};
 			}
 

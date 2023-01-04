@@ -3,8 +3,11 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using LinqToDB;
+using Microsoft.Extensions.Options;
 using Montr.Core.Models;
 using Montr.Core.Services;
+using Montr.MasterData.Models;
+using Montr.MasterData.Services;
 using Montr.Tasks.Entities;
 using Montr.Tasks.Models;
 
@@ -14,11 +17,16 @@ namespace Montr.Tasks.Services.Implementations
 	{
 		private readonly IDbContextFactory _dbContextFactory;
 		private readonly IDateTimeProvider _dateTimeProvider;
+		private readonly IOptionsMonitor<TasksOptions> _tasksOptionsMonitor;
+		private readonly INumberGenerator _numberGenerator;
 
-		public DbTaskService(IDbContextFactory dbContextFactory, IDateTimeProvider dateTimeProvider)
+		public DbTaskService(IDbContextFactory dbContextFactory, IDateTimeProvider dateTimeProvider,
+			IOptionsMonitor<TasksOptions> tasksOptionsMonitor, INumberGenerator numberGenerator)
 		{
 			_dbContextFactory = dbContextFactory;
 			_dateTimeProvider = dateTimeProvider;
+			_tasksOptionsMonitor = tasksOptionsMonitor;
+			_numberGenerator = numberGenerator;
 		}
 
 		public async Task<ApiResult> Insert(TaskModel item, CancellationToken cancellationToken)
@@ -29,15 +37,17 @@ namespace Montr.Tasks.Services.Implementations
 
 			// todo: validation and limits
 
+			var number = item.Number ?? await GenerateNumber(cancellationToken);
+
 			using (var db = _dbContextFactory.Create())
 			{
 				await db.GetTable<DbTask>()
 					.Value(x => x.Uid, itemUid)
 					.Value(x => x.StatusCode, TaskStatusCode.Open)
+					.Value(x => x.Number, number)
 					.Value(x => x.CompanyUid, item.CompanyUid)
 					.Value(x => x.TaskTypeUid, item.TaskTypeUid)
 					.Value(x => x.AssigneeUid, item.AssigneeUid)
-					.Value(x => x.Number, item.Number)
 					.Value(x => x.Name, item.Name)
 					.Value(x => x.Description, item.Description)
 					.Value(x => x.CreatedAtUtc, now)
@@ -45,6 +55,23 @@ namespace Montr.Tasks.Services.Implementations
 			}
 
 			return new ApiResult { Uid = itemUid };
+		}
+
+		private async Task<string> GenerateNumber(CancellationToken cancellationToken)
+		{
+			var tasksOptions = _tasksOptionsMonitor.CurrentValue;
+
+			if (tasksOptions.DefaultNumeratorId != null)
+			{
+				var request = new GenerateNumberRequest
+				{
+					NumeratorId = tasksOptions.DefaultNumeratorId
+				};
+
+				return await _numberGenerator.GenerateNumber(request, cancellationToken);
+			}
+
+			return null;
 		}
 
 		public async Task<ApiResult> Update(TaskModel item, CancellationToken cancellationToken)

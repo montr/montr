@@ -9,5 +9,7 @@ namespace Montr.MasterData.Models
 		public Guid? EntityTypeUid { get; set; }
 
 		public bool? IsAutoNumbering { get; set; }
+
+		public Guid? NumeratorId { get; set; }
 	}
 }

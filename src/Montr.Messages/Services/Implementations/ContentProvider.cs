@@ -12,7 +12,7 @@ namespace Montr.Messages.Services.Implementations
 			{
 				return new[]
 				{
-					new Menu { Name = "SMTP", Route = "/settings/" + SettingsCategory.Smtp }
+					new Menu { Name = "SMTP", Route = Core.ClientRoutes.Settings + SettingsCategory.Smtp }
 				};
 			}
 

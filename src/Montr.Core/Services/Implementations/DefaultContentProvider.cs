@@ -27,7 +27,7 @@ namespace Montr.Core.Services.Implementations
 			{
 				return new[]
 				{
-					new Menu { Name = "Common", Route = "/settings/" },
+					new Menu { Name = "Common", Route = ClientRoutes.Settings },
 					new Menu { Name = "Advanced", Position = 1000 },
 					new Menu { Name = "History", Position = 1001 }
 				};

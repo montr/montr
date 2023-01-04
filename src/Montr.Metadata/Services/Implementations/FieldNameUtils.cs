@@ -7,7 +7,7 @@ namespace Montr.Metadata.Services.Implementations
 {
 	public static class FieldNameUtils
 	{
-		private static readonly List<string> IgnoredWords = new() { "uid" };
+		private static readonly List<string> IgnoredWords = new() { "id", "uid" };
 
 		public static string BuildSettingsName(string source)
 		{

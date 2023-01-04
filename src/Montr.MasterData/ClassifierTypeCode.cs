@@ -2,6 +2,6 @@
 {
 	public static class ClassifierTypeCode
 	{
-		public static readonly string Numerator = "numerator";
+		public const string Numerator = "numerator";
 	}
 }

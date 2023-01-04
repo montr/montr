@@ -112,6 +112,7 @@ namespace Montr.MasterData.Services.Implementations
 				TypeCode = ClassifierTypeCode.Numerator,
 				EntityTypeCode = request.EntityTypeCode,
 				EntityTypeUid = request.EntityTypeUid,
+				NumeratorId = request.NumeratorId,
 				IsAutoNumbering = true
 			}, cancellationToken);
 
