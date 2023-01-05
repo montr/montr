@@ -54,7 +54,7 @@ namespace Montr.Tasks.Services.Implementations
 					.InsertAsync(cancellationToken);
 			}
 
-			return new ApiResult { Uid = itemUid };
+			return new ApiResult { Uid = itemUid, AffectedRows = 1 };
 		}
 
 		private async Task<string> GenerateNumber(CancellationToken cancellationToken)

@@ -53,9 +53,10 @@ namespace Montr.Tasks.Services.Implementations
 					.Select(x => new TaskModel
 					{
 						Uid = x.Task.Uid,
-						StatusCode = x.Task.StatusCode,
+						CompanyUid = x.Task.CompanyUid,
 						TaskTypeUid = x.Task.TaskTypeUid,
 						TaskTypeName = x.TaskType.Name,
+						StatusCode = x.Task.StatusCode,
 						Number = x.Task.Number,
 						Name = x.Task.Name,
 						Description = x.Task.Description,

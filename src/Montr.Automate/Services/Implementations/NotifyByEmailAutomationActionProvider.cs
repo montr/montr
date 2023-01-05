@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Montr.Automate.Models;
+using Montr.Core.Models;
 using Montr.Messages.Services;
 using Montr.Metadata.Models;
 
@@ -45,7 +46,7 @@ namespace Montr.Automate.Services.Implementations
 			});
 		}
 
-		public async Task Execute(AutomationAction automationAction, AutomationContext context, CancellationToken cancellationToken)
+		public async Task<ApiResult> Execute(AutomationAction automationAction, AutomationContext context, CancellationToken cancellationToken)
 		{
 			var action = (NotifyByEmailAutomationAction)automationAction;
 
@@ -61,6 +62,8 @@ namespace Montr.Automate.Services.Implementations
 
 				await _emailSender.Send(recipient.Email, message.Subject, message.Body, cancellationToken);
 			}
+
+			return new ApiResult { AffectedRows = recipient != null ? 1 : 0 };
 		}
 	}
 }

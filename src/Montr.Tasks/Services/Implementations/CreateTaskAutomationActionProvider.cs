@@ -39,14 +39,14 @@ namespace Montr.Tasks.Services.Implementations
 		{
 			return await Task.FromResult(new List<FieldMetadata>
 			{
-				new ClassifierField { Key = "taskTypeUid", Name = "Task type", Required = true, Props = { TypeCode = Models.ClassifierTypeCode.TaskType } },
+				new ClassifierField { Key = "taskTypeUid", Name = "Task type", Required = true, Props = { TypeCode = ClassifierTypeCode.TaskType } },
 				new ClassifierField { Key = "assigneeUid", Name = "Assignee", Required = true, Props = { TypeCode = Idx.ClassifierTypeCode.User } },
 				new TextField { Key = "name", Name = "Name", Placeholder = "Name", Required = true },
 				new TextAreaField { Key = "description", Name = "Description", Placeholder = "Description", Props = new TextAreaField.Properties { Rows = 2 } }
 			});
 		}
 
-		public async Task Execute(AutomationAction automationAction, AutomationContext context, CancellationToken cancellationToken)
+		public async Task<ApiResult> Execute(AutomationAction automationAction, AutomationContext context, CancellationToken cancellationToken)
 		{
 			var action = (CreateTaskAutomationAction)automationAction;
 
@@ -61,23 +61,27 @@ namespace Montr.Tasks.Services.Implementations
 				Description = action.Props.Description
 			};
 
-			var result = await _taskService.Insert(model, cancellationToken);
+			var taskResult = await _taskService.Insert(model, cancellationToken);
 
-			result.AssertSuccess(() => $"Failed to create task {model}");
+			taskResult.AssertSuccess(() => $"Failed to create task {model}");
 
-			if (result.Uid.HasValue)
+			if (taskResult.Uid.HasValue)
 			{
 				var relation = new EntityRelation
 				{
 					EntityTypeCode = EntityTypeCode.Task,
-					EntityUid = result.Uid.Value,
+					EntityUid = taskResult.Uid.Value,
 					RelatedEntityTypeCode = context.EntityTypeCode,
 					RelatedEntityUid = context.EntityUid,
 					RelationType = RelationTypeCode.Context
 				};
 
-				await _entityRelationService.Insert(relation, cancellationToken);
+				var relationResult = await _entityRelationService.Insert(relation, cancellationToken);
+
+				relationResult.AssertSuccess(() => $"Failed to create task relation {relation}");
 			}
+
+			return taskResult;
 		}
 	}
 }

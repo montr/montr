@@ -7,6 +7,7 @@ using Microsoft.Extensions.Logging.Abstractions;
 using Montr.Automate.Models;
 using Montr.Automate.Services;
 using Montr.Automate.Services.Implementations;
+using Montr.Core.Models;
 using Montr.Core.Services;
 using Montr.Core.Services.Implementations;
 using Montr.MasterData.Commands;
@@ -207,9 +208,11 @@ namespace Montr.Automate.Tests.CommandHandlers
 				return null;
 			}
 
-			public Task Execute(AutomationAction automationAction, AutomationContext context, CancellationToken cancellationToken)
+			public Task<ApiResult> Execute(AutomationAction automationAction, AutomationContext context, CancellationToken cancellationToken)
 			{
-				return Task.CompletedTask;
+				var result = new ApiResult();
+
+				return Task.FromResult(result);
 			}
 		}
 

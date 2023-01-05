@@ -2,6 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Montr.Automate.Models;
+using Montr.Core.Models;
 using Montr.Metadata.Models;
 
 namespace Montr.Automate.Services.Implementations
@@ -21,7 +22,7 @@ namespace Montr.Automate.Services.Implementations
 			throw new System.NotImplementedException();
 		}
 
-		public Task Execute(AutomationAction automationAction, AutomationContext context, CancellationToken cancellationToken)
+		public Task<ApiResult> Execute(AutomationAction automationAction, AutomationContext context, CancellationToken cancellationToken)
 		{
 			throw new System.NotImplementedException();
 		}

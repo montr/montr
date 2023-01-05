@@ -14,7 +14,7 @@ using Moq;
 
 namespace Montr.Kompany.Tests.Services
 {
-	public class CompanyMockHelper
+	public static class CompanyMockHelper
 	{
 		public static INamedServiceFactory<IClassifierRepository> CreateClassifierRepositoryFactory(IDbContextFactory dbContextFactory)
     	{
