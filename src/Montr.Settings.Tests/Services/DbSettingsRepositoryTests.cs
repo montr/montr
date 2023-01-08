@@ -38,10 +38,11 @@ namespace Montr.Settings.Tests.Services
 					.Set(x => x.Value, null)
 					.Set(x => x.State, AppState.Initialized);
 
-				var affected = await options.Update(cancellationToken);
+				var result = await options.Update(cancellationToken);
 
 				// assert (insert)
-				Assert.AreEqual(3, affected);
+				Assert.IsTrue(result.Success);
+				Assert.AreEqual(3, result.AffectedRows);
 
 				var allSettings = await LoadSettings(dbContextFactory, cancellationToken);
 
@@ -62,10 +63,11 @@ namespace Montr.Settings.Tests.Services
 				options =  repository.GetApplicationSettings<TestOptions>()
 					.Set(x => x.State, AppState.None);
 
-				affected = await options.Update(cancellationToken);
+				result = await options.Update(cancellationToken);
 
 				// assert (update)
-				Assert.AreEqual(1, affected);
+				Assert.IsTrue(result.Success);
+				Assert.AreEqual(1, result.AffectedRows);
 
 				allSettings = await LoadSettings(dbContextFactory, cancellationToken);
 
