@@ -36,11 +36,9 @@ namespace Montr.Settings.Services.CommandHandlers
 						settings.Set(property.Name, property.GetValue(request.Values));
 					}
 
-					var affected = await settings.Update(cancellationToken);
+					result = await settings.Update(cancellationToken);
 
-					scope.Commit();
-
-					result = new ApiResult { AffectedRows = affected };
+					if (result.Success) scope.Commit();
 				}
 			}
 			else

@@ -13,7 +13,7 @@ namespace Montr.Settings.Services
 
 		IUpdatableSettings<TSettings> GetSettings<TSettings>(string entityTypeCode, Guid entityUid);
 
-		Task<int> Update(string entityTypeCode, Guid entityUid, ICollection<(string, object)> values, CancellationToken cancellationToken);
+		Task<ApiResult> Update(string entityTypeCode, Guid entityUid, ICollection<(string, object)> values, CancellationToken cancellationToken);
 	}
 
 	public static class SettingsRepositoryExtensions
@@ -28,7 +28,7 @@ namespace Montr.Settings.Services
 	{
 		IUpdatableSettings Set(string key, object value);
 
-		Task<int> Update(CancellationToken cancellationToken);
+		Task<ApiResult> Update(CancellationToken cancellationToken);
 	}
 
 	public interface IUpdatableSettings<TSettings> : IUpdatableSettings

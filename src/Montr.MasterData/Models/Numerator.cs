@@ -38,7 +38,7 @@ namespace Montr.MasterData.Models
 
 		public static RegisterClassifierType GetDefaultMetadata()
 		{
-			return new()
+			return new RegisterClassifierType
 			{
 				Item = new ClassifierType
 				{

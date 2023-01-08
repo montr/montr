@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using System.Transactions;
 using LinqToDB;
 using MediatR;
+using Montr.Core.Models;
 using Montr.Core.Services;
 using Montr.Settings.Entities;
 using Montr.Settings.Events;
@@ -38,7 +39,7 @@ namespace Montr.Settings.Services.Implementations
 		}
 
 		// todo: change first parameter to ICollection<(string, string)> and convert outside of method
-		public async Task<int> Update(string entityTypeCode, Guid entityUid,
+		public async Task<ApiResult> Update(string entityTypeCode, Guid entityUid,
 			ICollection<(string, object)> values, CancellationToken cancellationToken)
 		{
 			var affected = 0;
@@ -88,7 +89,7 @@ namespace Montr.Settings.Services.Implementations
 				}, cancellationToken);
 			};
 
-			return affected;
+			return new ApiResult { AffectedRows = affected };
 		}
 
 		private class UpdatableSettings : IUpdatableSettings
@@ -118,7 +119,7 @@ namespace Montr.Settings.Services.Implementations
 				return this;
 			}
 
-			public async Task<int> Update(CancellationToken cancellationToken)
+			public async Task<ApiResult> Update(CancellationToken cancellationToken)
 			{
 				return await _repository.Update(_entityTypeCode, _entityUid, _values, cancellationToken);
 			}

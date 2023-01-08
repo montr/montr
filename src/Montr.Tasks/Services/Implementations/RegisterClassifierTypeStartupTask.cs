@@ -25,7 +25,7 @@ namespace Montr.Tasks.Services.Implementations
 			}
 		}
 
-		protected static IEnumerable<RegisterClassifierType> GetClassifierTypes()
+		private static IEnumerable<RegisterClassifierType> GetClassifierTypes()
 		{
 			yield return TaskType.GetDefaultMetadata();
 		}

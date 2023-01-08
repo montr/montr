@@ -9,6 +9,7 @@ using Montr.Tasks.Services.Implementations;
 
 namespace Montr.Tasks
 {
+	[Module(DependsOn = new[] { typeof(Core.Module), typeof(MasterData.Module), typeof(Idx.Module), typeof(Automate.Module) })]
 	// ReSharper disable once UnusedType.Global
 	public class Module : IModule
 	{
@@ -17,6 +18,7 @@ namespace Montr.Tasks
 			appBuilder.Services.BindOptions<TasksOptions>(appBuilder.Configuration);
 
 			appBuilder.Services.AddTransient<IStartupTask, RegisterClassifierTypeStartupTask>();
+			appBuilder.Services.AddTransient<IStartupTask, RegisterDefaultNumeratorStartupTask>();
 			appBuilder.Services.AddTransient<IStartupTask, ConfigurationStartupTask>();
 
 			appBuilder.Services.AddSingleton<IContentProvider, ContentProvider>();
