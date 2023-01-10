@@ -43,8 +43,8 @@ namespace Montr.Idx
 			appBuilder.Services.AddNamedTransient<IClassifierRepository, DbRoleRepository>(ClassifierTypeCode.Role);
 			appBuilder.Services.AddNamedTransient<IClassifierRepository, DbUserRepository>(ClassifierTypeCode.User);
 
-			appBuilder.Services.AddScoped<IAuthorizationHandler, UserPermissionAuthorizationHandler>();
 			appBuilder.Services.AddScoped<IAuthorizationHandler, SuperUserAuthorizationHandler>();
+			appBuilder.Services.AddScoped<IAuthorizationHandler, UserPermissionAuthorizationHandler>();
 
 			appBuilder.Services
 				.AddAuthentication()

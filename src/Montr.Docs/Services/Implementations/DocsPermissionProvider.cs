@@ -12,6 +12,7 @@ namespace Montr.Docs.Services.Implementations
 			return new[]
 			{
 				new Permission(typeof(Permissions.ViewDocument)),
+				new Permission(typeof(Permissions.ViewAllDocuments)),
 				new Permission(typeof(Permissions.EditDocument)),
 				new Permission(typeof(Permissions.DeleteDocument)),
 				new Permission(typeof(Permissions.SubmitDocument)),

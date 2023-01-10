@@ -34,6 +34,7 @@ namespace Montr.Docs.Controllers
 		[HttpPost, Permission(typeof(Permissions.ViewDocument))]
 		public async Task<SearchResult<Document>> List(GetDocumentList request)
 		{
+			request.Principal = User;
 			request.UserUid =  _currentUserProvider.GetUserUid();
 
 			return await _mediator.Send(request);

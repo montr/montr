@@ -44,7 +44,7 @@ namespace Montr.Docs.Services.Implementations
 					query = query.Where(x => x.Uid == request.Uid);
 				}
 
-				if (request.UserUid != null)
+				if (request.FilterByUser)
 				{
 					query = query.Where(x => x.CreatedBy == request.UserUid);
 				}
