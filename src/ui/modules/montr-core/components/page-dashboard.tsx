@@ -6,6 +6,7 @@ import { Page } from ".";
 export default class PageDashboard extends React.Component {
 
 	render(): React.ReactNode {
+
 		const data: IMenu[] = [];
 
 		data.push({ name: `Common Actions (Create/Manage)` });
@@ -17,10 +18,10 @@ export default class PageDashboard extends React.Component {
 		return (
 			<Page title="Dashboard">
 				<List
-					grid={{ gutter: 12, column: 3 }}
+					grid={{ column: 3 }}
 					dataSource={data}
 					renderItem={item => (
-						<List.Item>
+						<List.Item style={{ paddingLeft: 0 }}>
 							<Card size="small" title={item.name} extra={<a>Settings</a>} >
 								<Skeleton active />
 							</Card>
