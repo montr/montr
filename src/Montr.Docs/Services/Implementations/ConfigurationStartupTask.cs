@@ -61,14 +61,6 @@ namespace Montr.Docs.Services.Implementations
 						x.DisplayOrder = 20;
 						x.Component = MasterData.ComponentCode.TabEditNumeration;
 					})
-					// todo: move to processes (?)
-					.Add<DataPane>((_, x) =>
-					{
-						x.Key = "statuses";
-						x.Name = "Statuses";
-						x.DisplayOrder = 25;
-						x.Component = Core.ComponentCode.PaneSearchEntityStatuses;
-					})
 					// todo: remove or replace with filtered list of automations for selected document type
 					/*.Add<DataPane>((_, x) =>
 					{
@@ -79,6 +71,13 @@ namespace Montr.Docs.Services.Implementations
 					})*/;
 
 				config.When(classifier => classifier.Type == ClassifierTypeCode.Process)
+					.Add<DataPane>((_, x) =>
+					{
+						x.Key = "statuses";
+						x.Name = "Statuses";
+						x.DisplayOrder = 20;
+						x.Component = Core.ComponentCode.PaneSearchEntityStatuses;
+					})
 					.Add<DataPane>((_, x) =>
 					{
 						x.Key = "steps";
