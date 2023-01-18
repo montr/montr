@@ -1,4 +1,4 @@
-import axios, { AxiosInstance, AxiosRequestConfig, AxiosResponse } from "axios";
+import axios, { AxiosInstance, AxiosResponse, CreateAxiosDefaults } from "axios";
 import { Constants } from "../constants";
 import { AuthService } from "./auth-service";
 
@@ -19,7 +19,7 @@ export class Fetcher {
 
 		this.controller = new AbortController();
 
-		const config: AxiosRequestConfig = {
+		const config: CreateAxiosDefaults = {
 			signal: this.controller.signal,
 			withCredentials: true // https://github.com/axios/axios/issues/191#issuecomment-311069164
 		};
