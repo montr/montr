@@ -11,7 +11,6 @@
 	<ItemGroup>
 		<PackageReference Include="linq2db" />
 		<PackageReference Include="MediatR" />
-		<PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" />
 		<PackageReference Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" />
 		<PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" />
 	</ItemGroup>
