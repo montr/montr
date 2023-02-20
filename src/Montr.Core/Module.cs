@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
-using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
@@ -97,8 +96,10 @@ namespace Montr.Core
 
 			// Microsoft.IdentityModel.Logging.IdentityModelEventSource.ShowPII = true;
 
-			// appBuilder.Services.AddMediatR(/*config => config.AsScoped(),*/ assemblies);
-			appBuilder.Services.AddMediatR(configuration => configuration.RegisterServicesFromAssemblies(assemblies));
+			appBuilder.Services.AddMediatR(configuration =>
+			{
+				configuration.RegisterServicesFromAssemblies(assemblies);
+			});
 
 			appBuilder.Services.Configure<RequestLocalizationOptions>(options =>
 			{
