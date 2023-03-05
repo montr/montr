@@ -110,7 +110,7 @@ namespace Montr.Core.Services.Implementations
 
 			var assemblies = GetCurrentDomainAssemblies();
 
-			var assemblyMap = new Dictionary<string, Assembly>();
+			var assemblyMap = new Dictionary<string, string>();
 
 			foreach (var assembly in assemblies)
 			{
@@ -121,12 +121,12 @@ namespace Montr.Core.Services.Implementations
 					continue;
 				}
 
-				assemblyMap[assembly.Location] = assembly;
+				assemblyMap[Path.GetFileName(assembly.Location)] = assembly.Location;
 			}
 
 			foreach (var file in Directory.EnumerateFiles(baseDirectory, "*.dll"))
 			{
-				if (assemblyMap.TryGetValue(file, out _) == false)
+				if (assemblyMap.TryGetValue(Path.GetFileName(file), out _) == false)
 				{
 					if (_logger.IsEnabled(LogLevel.Debug))
 					{
@@ -152,10 +152,12 @@ namespace Montr.Core.Services.Implementations
 
 		public IEnumerable<Assembly> GetCurrentDomainAssemblies()
 		{
-			// exclude dynamic assemblies and assemblies without location
 			return AppDomain.CurrentDomain.GetAssemblies()
+				// exclude dynamic assemblies and assemblies without location
 				.Where(x => x.IsDynamic == false && string.IsNullOrEmpty(x.Location) == false)
-				.Where(x => ExcludeAssembly(x.Location) == false);
+				// do not exclude system assemblies to prevent errors while Assembly.LoadFrom later
+				// e.g. for Microsoft.Extensions.DependencyModel.dll
+				/*.Where(x => ExcludeAssembly(x.Location) == false)*/;
 		}
 
 		public bool ExcludeAssembly(string file)

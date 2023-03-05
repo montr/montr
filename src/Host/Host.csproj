@@ -19,7 +19,6 @@
 
   <ItemGroup>
     <PackageReference Include="MediatR" />
-    <PackageReference Include="Microsoft.Extensions.DependencyInjection" />
     <PackageReference Include="Npgsql" />
     <PackageReference Include="Sentry" />
     <PackageReference Include="Sentry.AspNetCore" />
