@@ -21,7 +21,7 @@
     <PackageVersion Include="Moq" Version="4.18.4" />
     <PackageVersion Include="NUnit" Version="3.13.3" />
     <PackageVersion Include="Sentry" Version="3.28.1" />
-    <PackageVersion Include="Sentry.AspNetCore" Version="3.28.1" />
+    <PackageVersion Include="Sentry.AspNetCore" Version="3.29.0" />
     <PackageVersion Include="Serilog" Version="2.12.0" />
     <PackageVersion Include="Serilog.AspNetCore" Version="6.1.0" />
     <PackageVersion Include="Serilog.Enrichers.Environment" Version="2.2.0" />
