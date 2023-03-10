@@ -30,7 +30,7 @@
     <PackageVersion Include="Serilog.Sinks.File" Version="5.0.0" />
     <PackageVersion Include="Hangfire.AspNetCore" Version="1.7.33" />
     <PackageVersion Include="HangFire.Core" Version="1.7.33" />
-    <PackageVersion Include="Hangfire.PostgreSql" Version="1.9.10" />
+    <PackageVersion Include="Hangfire.PostgreSql" Version="1.19.11" />
     <PackageVersion Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
     <PackageVersion Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
     <PackageVersion Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="7.0.2" />
