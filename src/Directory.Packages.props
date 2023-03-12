@@ -19,8 +19,8 @@
     <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.3" />
     <PackageVersion Include="Moq" Version="4.18.4" />
     <PackageVersion Include="NUnit" Version="3.13.3" />
-    <PackageVersion Include="Sentry" Version="3.28.1" />
-    <PackageVersion Include="Sentry.AspNetCore" Version="3.28.1" />
+    <PackageVersion Include="Sentry" Version="3.29.1" />
+    <PackageVersion Include="Sentry.AspNetCore" Version="3.29.1" />
     <PackageVersion Include="Serilog" Version="2.12.0" />
     <PackageVersion Include="Serilog.AspNetCore" Version="6.1.0" />
     <PackageVersion Include="Serilog.Enrichers.Environment" Version="2.2.0" />
@@ -29,7 +29,7 @@
     <PackageVersion Include="Serilog.Sinks.File" Version="5.0.0" />
     <PackageVersion Include="Hangfire.AspNetCore" Version="1.7.33" />
     <PackageVersion Include="HangFire.Core" Version="1.7.33" />
-    <PackageVersion Include="Hangfire.PostgreSql" Version="1.9.10" />
+    <PackageVersion Include="Hangfire.PostgreSql" Version="1.19.12" />
     <PackageVersion Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="7.0.3" />
     <PackageVersion Include="Microsoft.Extensions.Configuration" Version="7.0.0" />
     <PackageVersion Include="Microsoft.Extensions.Configuration.Abstractions" Version="7.0.0" />
