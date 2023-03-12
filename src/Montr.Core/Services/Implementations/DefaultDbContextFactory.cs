@@ -4,7 +4,7 @@
 	{
 		public DbContext Create(string connectionName = null)
 		{
-			return new DbContext(connectionName);
+			return new DbContext(connectionName ?? Constants.DefaultConnectionStringName);
 		}
 	}
 }

@@ -1,5 +1,4 @@
 ﻿using System;
-using LinqToDB.Mapping;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Identity;
@@ -70,18 +69,16 @@ namespace Montr.Idx
 				options.UseOpenIddict();
 			});
 
-			IdentitySchemaMapper.MapSchema(MappingSchema.Default);
-
 			appBuilder.Services
 				.AddIdentity<DbUser, DbRole>()
 				.AddErrorDescriber<LocalizedIdentityErrorDescriber>()
 				.AddLinqToDBStores(new DbConnectionFactory(), // todo: why connection factory instance here?
 					typeof(Guid),
-					typeof(LinqToDB.Identity.IdentityUserClaim<Guid>),
-					typeof(LinqToDB.Identity.IdentityUserRole<Guid>),
-					typeof(LinqToDB.Identity.IdentityUserLogin<Guid>),
-					typeof(LinqToDB.Identity.IdentityUserToken<Guid>),
-					typeof(LinqToDB.Identity.IdentityRoleClaim<Guid>))
+					typeof(DbUserClaim),
+					typeof(DbUserRole),
+					typeof(DbUserLogin),
+					typeof(DbUserToken),
+					typeof(DbRoleClaim))
 				.AddDefaultTokenProviders();
 
 			// ConfigureApplicationCookie should be after AddIdentity

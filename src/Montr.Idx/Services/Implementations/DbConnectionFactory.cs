@@ -16,7 +16,8 @@ namespace Montr.Idx.Services.Implementations
 
 		public DataConnection GetConnection()
 		{
-			return new IdentityDataConnection<DbUser, DbRole, Guid>();
+			return new IdentityDataConnection<DbUser, DbRole, Guid,
+				DbUserClaim, DbUserRole, DbUserLogin, DbRoleClaim, DbUserToken>();
 		}
 	}
 }

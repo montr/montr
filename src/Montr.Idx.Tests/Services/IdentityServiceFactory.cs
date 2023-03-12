@@ -72,8 +72,8 @@ namespace Montr.Idx.Tests.Services
 
 			var connectionFactory = new DbConnectionFactory();
 
-			var userStore = new UserStore<Guid, DbUser, DbRole>(connectionFactory, identityErrorDescriber);
-			var roleStore = new RoleStore<Guid, DbRole>(connectionFactory, identityErrorDescriber);
+			var userStore = new UserStore<Guid, DbUser, DbRole, DbUserClaim, DbUserRole, DbUserLogin, DbUserToken>(connectionFactory, identityErrorDescriber);
+			var roleStore = new RoleStore<Guid, DbRole, DbRoleClaim>(connectionFactory, identityErrorDescriber);
 
 			var userManager = new UserManager<DbUser>(userStore, identityOptionsAccessor, new PasswordHasher<DbUser>(), null, null,
 				lookupNormalizer, identityErrorDescriber, serviceProviderMock.Object, NullLogger<UserManager<DbUser>>.Instance);
@@ -81,7 +81,7 @@ namespace Montr.Idx.Tests.Services
 
 			var roleManager = new AspNetRoleManager<DbRole>(roleStore, null, lookupNormalizer, identityErrorDescriber,
 				NullLogger<RoleManager<DbRole>>.Instance, httpContextAccessor);
-			var userClaimsPrincipalFactory = new UserClaimsPrincipalFactory<DbUser,DbRole>(userManager, roleManager, identityOptionsAccessor);
+			var userClaimsPrincipalFactory = new UserClaimsPrincipalFactory<DbUser, DbRole>(userManager, roleManager, identityOptionsAccessor);
 			var signInManager = new SignInManager<DbUser>(userManager, httpContextAccessor, userClaimsPrincipalFactory, identityOptionsAccessor,
 				NullLogger<SignInManager<DbUser>>.Instance, null, null);
 

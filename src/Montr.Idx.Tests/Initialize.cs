@@ -1,6 +1,4 @@
-﻿using LinqToDB.Mapping;
-using Montr.Core.Services.Implementations;
-using Montr.Idx.Services.Implementations;
+﻿using Montr.Core.Services.Implementations;
 using NUnit.Framework;
 
 namespace Montr.Idx.Tests
@@ -11,8 +9,6 @@ namespace Montr.Idx.Tests
 		[OneTimeSetUp]
 		public static void AssemblyInitialize()
 		{
-			IdentitySchemaMapper.MapSchema(MappingSchema.Default);
-
 			DbConfigurationExtensions.SetLinq2DbTestSettings();
 		}
 
