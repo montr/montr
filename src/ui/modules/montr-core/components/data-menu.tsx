@@ -187,6 +187,13 @@ export function buildMenuIds(items: IMenu[], keyPrefix = "M"): void {
 	}
 }
 
+export function canHandleMenuClick(item: IMenu): boolean {
+	if (item && (item?.onClick || item?.route || item?.url))
+		return true;
+
+	return false;
+}
+
 export function handleMenuClick(item: IMenu): NavigateLocation {
 
 	if (item) {

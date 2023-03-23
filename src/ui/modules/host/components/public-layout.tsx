@@ -1,6 +1,7 @@
+import { DataBreadcrumb } from "@montr-core/components/data-breadcrumb";
 import { ErrorBoundary } from "@montr-core/components/error-boundary";
 import { Footer } from "@montr-core/components/footer";
-import { Breadcrumb, Layout } from "antd";
+import { Layout } from "antd";
 import * as React from "react";
 import { Outlet } from "react-router-dom";
 import { MainMenu } from "./main-menu";
@@ -25,11 +26,7 @@ export default class PublicLayout extends React.Component {
 				</Layout.Header>
 				<Layout.Content style={{ padding: "0 50px" }}>
 					<ErrorBoundary>
-						<Breadcrumb style={{ margin: "16px 0" }}>
-							<Breadcrumb.Item>Home</Breadcrumb.Item>
-							{/* <Breadcrumb.Item>List</Breadcrumb.Item>
-							<Breadcrumb.Item>App</Breadcrumb.Item> */}
-						</Breadcrumb>
+						<DataBreadcrumb items={[]} />
 
 						<div style={{ minHeight: 280 }}>
 
