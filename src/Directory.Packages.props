@@ -14,7 +14,7 @@
     <PackageVersion Include="Markdig" Version="0.31.0" />
     <PackageVersion Include="Stubble.Core" Version="1.10.8" />
     <PackageVersion Include="LumenWorksCsvReader" Version="4.0.0" />
-    <PackageVersion Include="EPPlus" Version="4.5.3.3" />
+    <PackageVersion Include="EPPlus" Version="6.2.0" />
     <PackageVersion Include="Npgsql" Version="7.0.2" />
     <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.3" />
     <PackageVersion Include="Moq" Version="4.18.4" />
