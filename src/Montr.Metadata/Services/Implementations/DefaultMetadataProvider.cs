@@ -30,7 +30,7 @@ namespace Montr.Metadata.Services.Implementations
 			{
 				result.Fields = new List<FieldMetadata>
 				{
-					new TextField { Key = "companyName", Name = "Наименование компании", Required = true, Description = "Наименовании компании-оператора системы" },
+					new TextField { Key = "companyName", Name = "Наименование организации", Required = true, Description = "Наименовании организации-оператора системы" },
 					new TextField { Key = "adminEmail", Name = "Email администратора", Required = true },
 					new PasswordField { Key = "adminPassword", Name = "Пароль администратора", Required = true },
 				};
