@@ -7,7 +7,7 @@
     <PackageVersion Include="linq2db.Identity" Version="3.5.0" />
     <PackageVersion Include="MediatR" Version="12.0.1" />
     <PackageVersion Include="NUnit3TestAdapter" Version="4.4.2" />
-    <PackageVersion Include="OpenIddict.AspNetCore" Version="4.1.0" />
+    <PackageVersion Include="OpenIddict.AspNetCore" Version="4.2.0" />
     <PackageVersion Include="OpenIddict.EntityFrameworkCore" Version="4.1.0" />
     <PackageVersion Include="IdentityModel" Version="6.0.0" />
     <PackageVersion Include="MailKit" Version="3.6.0" />
