@@ -26,9 +26,9 @@ export class DataBreadcrumb extends React.Component<Props, State> {
 
 		const result: BreadcrumbItemType = {
 			title: canHandleMenuClick(value) ? <a>{value.name}</a> : value.name,
-			onClick: () => {
+			/* onClick: () => {
 				this.onClick(value);
-			}
+			} */
 		};
 
 		if (value.items) {
@@ -39,6 +39,10 @@ export class DataBreadcrumb extends React.Component<Props, State> {
 				onClick: (info) => {
 					this.onClick(value.items.find(x => x.id == info.key));
 				}
+			};
+		} else {
+			result.onClick = () => {
+				this.onClick(value);
 			};
 		}
 
