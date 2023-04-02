@@ -5,7 +5,5 @@
 		public static readonly string Draft = "draft";
 
 		public static readonly string Submitted = "submitted";
-
-		public static readonly string Published = "published";
 	}
 }

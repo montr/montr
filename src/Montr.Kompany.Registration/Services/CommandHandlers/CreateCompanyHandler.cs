@@ -116,7 +116,7 @@ namespace Montr.Kompany.Registration.Services.CommandHandlers
 					Uid = documentUid,
 					DocumentTypeUid = documentType.Uid.Value,
 					CompanyUid = company.Uid.Value,
-					StatusCode = DocumentStatusCode.Published,
+					StatusCode = DocumentStatusCode.Submitted,
 					Direction = DocumentDirection.Outgoing,
 					DocumentDate = now,
 					// Name = $"Company {company.Name} registration request"
