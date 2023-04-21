@@ -1,4 +1,4 @@
-FROM node:19-alpine AS node
+FROM node:20-alpine AS node
 WORKDIR /ui
 COPY ./src/ui .
 RUN npm install && npm run build-prod
