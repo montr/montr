@@ -51,5 +51,11 @@ namespace Montr.Docs.Controllers
 		{
 			return await _mediator.Send(request);
 		}
+
+		[HttpPost, Permission(typeof(Permissions.SubmitDocument))]
+		public async Task<ApiResult> ChangeStatus(ChangeDocumentStatus request)
+		{
+			return await _mediator.Send(request);
+		}
 	}
 }

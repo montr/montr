@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Montr.Core.Models;
 using Montr.Core.Services;
 using Montr.Docs;
+using Montr.Docs.Commands;
 using Montr.Docs.Models;
 using Montr.Kompany.Registration.Commands;
 using Montr.MasterData.Models;
@@ -47,6 +48,17 @@ namespace Montr.Kompany.Registration.Services.Implementations
 						x.Permission = Permission.GetCode(typeof(Docs.Permissions.SubmitDocument));
 						x.Props = new SubmitCompanyRegistrationRequest { DocumentUid = document.Uid };
 					});
+
+				/*config.When(document => document.StatusCode == DocumentStatusCode.Draft)
+					.Add<ChangeDocumentStatus>((document, x) =>
+					{
+						x.Key = "submit";
+						x.Name = "Submit";
+						x.Type = ButtonType.Primary;
+						x.Action = "/document/changeStatus";
+						// x.Permission = Permission.GetCode(typeof(Docs.Permissions.SubmitDocument));
+						x.Props = new ChangeDocumentStatus { DocumentUid = document.Uid };
+					});*/
 
 				config.When(document => document.StatusCode == DocumentStatusCode.Submitted)
 					.Add<Button>((document, x) =>

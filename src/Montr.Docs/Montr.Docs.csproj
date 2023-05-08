@@ -16,8 +16,4 @@
 		<ProjectReference Include="..\Montr.Settings\Montr.Settings.csproj" />
 		<ProjectReference Include="..\Montr.Worker\Montr.Worker.csproj" />
 	</ItemGroup>
-
-	<ItemGroup>
-	  <Folder Include="Commands\" />
-	</ItemGroup>
 </Project>

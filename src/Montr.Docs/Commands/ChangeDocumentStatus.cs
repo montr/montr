@@ -4,8 +4,10 @@ using Montr.Core.Models;
 
 namespace Montr.Docs.Commands
 {
-	public class SubmitDocument : IRequest<ApiResult>
+	public class ChangeDocumentStatus : IRequest<ApiResult>
 	{
 		public Guid? DocumentUid { get; set; }
+
+		public string StatusCode { get; set; }
 	}
 }
