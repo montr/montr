@@ -1,4 +1,4 @@
-﻿<Project>
+<Project>
   <PropertyGroup>
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
   </PropertyGroup>
@@ -11,7 +11,7 @@
     <PackageVersion Include="OpenIddict.EntityFrameworkCore" Version="4.6.0" />
     <PackageVersion Include="IdentityModel" Version="6.1.0" />
     <PackageVersion Include="MailKit" Version="4.1.0" />
-    <PackageVersion Include="Markdig" Version="0.31.0" />
+    <PackageVersion Include="Markdig" Version="0.32.0" />
     <PackageVersion Include="Stubble.Core" Version="1.10.8" />
     <PackageVersion Include="LumenWorksCsvReader" Version="4.0.0" />
     <PackageVersion Include="EPPlus" Version="4.5.3.3" />
