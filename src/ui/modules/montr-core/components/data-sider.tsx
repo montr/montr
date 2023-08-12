@@ -21,16 +21,17 @@ export class DataSider<TModel> extends React.Component<Props<TModel>> {
 			<Collapse
 				ghost
 				expandIconPosition={"end"}
-				defaultActiveKey={panes[0].key}>
-				{panes.map((pane, _) => {
+				defaultActiveKey={panes[0].key}
+				items={panes.map((pane, _) => {
 					return (
-						<Collapse.Panel
-							key={pane.key}
-							header={<>{pane.icon && Icon.get(pane.icon)}{pane.name}</>}>
-							{ComponentFactory.createComponent(pane.component, { ...paneProps, ...pane.props })}
-						</Collapse.Panel>
+						{
+							key: pane.key,
+							label: <>{pane.icon && Icon.get(pane.icon)}{pane.name}</>,
+							children: ComponentFactory.createComponent(pane.component, { ...paneProps, ...pane.props })
+						}
 					);
-				})}
+				})}>
+
 			</Collapse>
 		);
 	};
