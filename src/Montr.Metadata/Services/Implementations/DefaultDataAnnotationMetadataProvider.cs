@@ -48,6 +48,7 @@ namespace Montr.Metadata.Services.Implementations
 
 		private static Type GetDesignerType(PropertyInfo property)
 		{
+			// first, get designer from type specified in [FieldDesigner] on property
 			var designerAttribute = property.GetCustomAttribute<FieldDesignerAttribute>();
 
 			if (designerAttribute != null)
@@ -55,11 +56,13 @@ namespace Montr.Metadata.Services.Implementations
 				return designerAttribute.DesignerType;
 			}
 
+			// then, get default designer by property type
 			if (DefaultDesignerTypes.TryGetValue(property.PropertyType, out var result))
 			{
 				return result;
 			}
 
+			// otherwise get default designer
 			return DefaultDesignerType;
 		}
 	}
