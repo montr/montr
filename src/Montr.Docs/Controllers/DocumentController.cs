@@ -35,7 +35,7 @@ namespace Montr.Docs.Controllers
 		public async Task<SearchResult<Document>> List(GetDocumentList request)
 		{
 			request.Principal = User;
-			request.UserUid =  _currentUserProvider.GetUserUid();
+			request.UserUid = _currentUserProvider.GetUserUid();
 
 			return await _mediator.Send(request);
 		}
@@ -55,6 +55,15 @@ namespace Montr.Docs.Controllers
 		[HttpPost, Permission(typeof(Permissions.SubmitDocument))]
 		public async Task<ApiResult> ChangeStatus(ChangeDocumentStatus request)
 		{
+			return await _mediator.Send(request);
+		}
+
+		[HttpPost, Permission(typeof(Permissions.SubmitDocument))]
+		public async Task<ApiResult> CreateRelated(CreateRelatedDocument request)
+		{
+			request.Principal = User;
+			request.UserUid = _currentUserProvider.GetUserUid();
+
 			return await _mediator.Send(request);
 		}
 	}

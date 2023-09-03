@@ -17,15 +17,20 @@ export class DataButton extends React.Component<Props> {
         const { button, onDataChange } = this.props;
 
         if (button.action) {
+
             await this.operation.confirm(async () => {
+
                 const url = button.action;
-                const result = await this.fetcher.post(url, button.props);
+                const data = button.props;
+
+                const result = await this.fetcher.post(url, data);
 
                 if (result.success) {
                     onDataChange(result);
                 }
 
                 return result;
+
             });
         }
     };

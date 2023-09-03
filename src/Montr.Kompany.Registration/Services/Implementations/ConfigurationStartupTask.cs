@@ -49,26 +49,28 @@ namespace Montr.Kompany.Registration.Services.Implementations
 						x.Props = new SubmitCompanyRegistrationRequest { DocumentUid = document.Uid };
 					});
 
-				/*config.When(document => document.StatusCode == DocumentStatusCode.Draft)
-					.Add<ChangeDocumentStatus>((document, x) =>
+				config.When(document => document.StatusCode == DocumentStatusCode.Draft)
+					.Add<Button>((document, x) =>
 					{
 						x.Key = "submit";
 						x.Name = "Submit";
 						x.Type = ButtonType.Primary;
 						x.Action = "/document/changeStatus";
 						// x.Permission = Permission.GetCode(typeof(Docs.Permissions.SubmitDocument));
-						x.Props = new ChangeDocumentStatus { DocumentUid = document.Uid };
-					});*/
+						x.Props = new ChangeDocumentStatus { DocumentUid = document.Uid, StatusCode = DocumentStatusCode.Submitted };
+					});
 
 				config.When(document => document.StatusCode == DocumentStatusCode.Submitted)
-					.Add<Button>((document, x) =>
+					.Add<CreateRelatedDocument>((document, x) =>
 					{
 						x.Key = "accept";
 						x.Name = "Accept or Reject";
 						x.Type = ButtonType.Primary;
-						x.Action = "/companyRegistrationRequest/accept";
+						x.Action = "/document/createRelated";
 						x.Permission = Permission.GetCode(typeof(Docs.Permissions.AcceptDocument));
-						x.Props = new AcceptCompanyRegistrationRequest { DocumentUid = document.Uid };
+						x.DocumentTypeCode = DocumentTypes.CompanyRegistrationRequest;
+						x.RelationTypeCode = RelationTypeCode.Approval;
+						x.Props = new CreateRelatedDocument { DocumentUid = document.Uid };
 					});
 			});
 
