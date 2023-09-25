@@ -1,10 +1,10 @@
-import * as React from "react";
-import { TreeSelect, Spin, Select } from "antd";
-import { DataNode } from "rc-tree-select/lib/interface";
-import { Guid } from "@montr-core/models";
-import { ClassifierGroupService, ClassifierTreeService, ClassifierTypeService } from "../services";
-import { ClassifierGroup, ClassifierTree, ClassifierType, IClassifierGroupField } from "../models";
 import { Icon } from "@montr-core/components";
+import { Guid } from "@montr-core/models";
+import { Select, Spin, TreeSelect } from "antd";
+import { LegacyDataNode } from "rc-tree-select/lib/interface";
+import * as React from "react";
+import { ClassifierGroup, ClassifierTree, ClassifierType, IClassifierGroupField } from "../models";
+import { ClassifierGroupService, ClassifierTreeService, ClassifierTypeService } from "../services";
 
 interface Props {
 	// mode: "Tree" | "Group";
@@ -128,7 +128,7 @@ export class ClassifierGroupSelect extends React.Component<Props, State> {
 		// console.log("onSearch", value);
 	};
 
-	onLoadData = (node: DataNode) => {
+	onLoadData = (node: LegacyDataNode) => {
 		return new Promise(async (resolve) => {
 			if (node.dataType == "Tree") {
 				const tree: ClassifierTree = node.dataRef;
@@ -165,16 +165,17 @@ export class ClassifierGroupSelect extends React.Component<Props, State> {
 		});
 	};
 
-	buildTree(trees: ClassifierTree[], groups: ClassifierGroup[]): DataNode[] {
+	buildTree(trees: ClassifierTree[], groups: ClassifierGroup[]): LegacyDataNode[] {
 		if (trees) {
 			return trees.map(tree => {
 
-				const result: DataNode = {
+				const result: LegacyDataNode = {
 					selectable: false,
 					value: tree.uid.toString(),
 					title: <span>{Icon.Folder} {tree.name}</span>,
 					dataRef: tree,
-					dataType: "Tree"
+					dataType: "Tree",
+					props: undefined
 				};
 
 				if (tree.children) {
@@ -187,11 +188,12 @@ export class ClassifierGroupSelect extends React.Component<Props, State> {
 		else if (groups) {
 			return groups.map(group => {
 
-				const result: DataNode = {
+				const result: LegacyDataNode = {
 					value: group.uid.toString(),
 					title: <span>{Icon.File} {group.name} ({group.code})</span>,
 					dataRef: group,
-					dataType: "Group"
+					dataType: "Group",
+					props: undefined
 				};
 
 				if (group.children) {
