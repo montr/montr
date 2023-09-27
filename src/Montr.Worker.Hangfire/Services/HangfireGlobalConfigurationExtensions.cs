@@ -12,13 +12,18 @@ namespace Montr.Worker.Hangfire.Services
 		{
 			var connectionString = configuration.GetConnectionString(Constants.DefaultConnectionStringName);
 
-			config.UsePostgreSqlStorage(
+			config.UsePostgreSqlStorage(options =>
+			{
+				options.UseNpgsqlConnection(connectionString);
+			});
+
+			/*config.UsePostgreSqlStorage(
 				connectionString,
 				new PostgreSqlStorageOptions
 				{
 					PrepareSchemaIfNecessary = false,
 					EnableTransactionScopeEnlistment = true
-				});
+				});*/
 
 			config.UseSerializerSettings(
 				new JsonSerializerSettings
