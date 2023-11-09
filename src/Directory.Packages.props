@@ -1,4 +1,4 @@
-﻿<Project>
+<Project>
   <PropertyGroup>
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
   </PropertyGroup>
@@ -20,7 +20,7 @@
     <PackageVersion Include="Moq" Version="4.20.69" />
     <PackageVersion Include="NUnit" Version="3.13.3" />
     <PackageVersion Include="Sentry" Version="3.36.0" />
-    <PackageVersion Include="Sentry.AspNetCore" Version="3.36.0" />
+    <PackageVersion Include="Sentry.AspNetCore" Version="3.41.0" />
     <PackageVersion Include="Serilog" Version="3.0.1" />
     <PackageVersion Include="Serilog.AspNetCore" Version="7.0.0" />
     <PackageVersion Include="Serilog.Enrichers.Environment" Version="2.2.0" />
