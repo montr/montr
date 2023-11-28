@@ -8,7 +8,7 @@ interface Props {
 	size?: (typeof Sizes)[number];
 	float?: (typeof Floats)[number];
 	clear?: boolean;
-	children: React.ReactNode;
+	children?: React.ReactNode;
 }
 
 export const Toolbar = ({ size = "default", float = "left", clear, children }: Props) => {
