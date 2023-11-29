@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Runtime.Serialization;
 
 namespace Montr.MasterData.Models
 {
@@ -14,10 +13,6 @@ namespace Montr.MasterData.Models
 		}
 
 		public NumberPatternParseException(string message, Exception innerException) : base(message, innerException)
-		{
-		}
-
-		protected NumberPatternParseException(SerializationInfo info, StreamingContext context) : base(info, context)
 		{
 		}
 

@@ -7,17 +7,17 @@
     <PackageVersion Include="linq2db.Identity" Version="3.5.0" />
     <PackageVersion Include="MediatR" Version="12.1.1" />
     <PackageVersion Include="NUnit3TestAdapter" Version="4.5.0" />
-    <PackageVersion Include="OpenIddict.AspNetCore" Version="4.9.0" />
-    <PackageVersion Include="OpenIddict.EntityFrameworkCore" Version="4.9.0" />
+    <PackageVersion Include="OpenIddict.AspNetCore" Version="4.10.0" />
+    <PackageVersion Include="OpenIddict.EntityFrameworkCore" Version="4.10.0" />
     <PackageVersion Include="IdentityModel" Version="6.2.0" />
     <PackageVersion Include="MailKit" Version="4.2.0" />
     <PackageVersion Include="Markdig" Version="0.33.0" />
     <PackageVersion Include="Stubble.Core" Version="1.10.8" />
     <PackageVersion Include="LumenWorksCsvReader" Version="4.0.0" />
     <PackageVersion Include="EPPlus" Version="4.5.3.3" />
-    <PackageVersion Include="Npgsql" Version="7.0.6" />
-    <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="7.0.11" />
-    <PackageVersion Include="Moq" Version="4.20.69" />
+    <PackageVersion Include="Npgsql" Version="8.0.0" />
+    <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.0" />
+    <PackageVersion Include="Moq" Version="4.20.70" />
     <PackageVersion Include="NUnit" Version="3.13.3" />
     <PackageVersion Include="Sentry" Version="3.40.1" />
     <PackageVersion Include="Sentry.AspNetCore" Version="3.40.1" />
@@ -38,6 +38,6 @@
     <PackageVersion Include="Microsoft.AspNetCore.Authentication.Google" Version="7.0.13" />
     <PackageVersion Include="Microsoft.AspNetCore.Authentication.MicrosoftAccount" Version="7.0.13" />
     <PackageVersion Include="System.Text.Encoding.CodePages" Version="7.0.0" />
-    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.7.2" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
   </ItemGroup>
 </Project>
