@@ -23,7 +23,7 @@ namespace Montr.MasterData.Tests.Services
 			var result = parser.Parse(pattern);
 
 			// assert
-			CollectionAssert.AreEqual(expected, result.Tokens.OfType<TagToken>().Select(x => x.Name).ToArray());
+			Assert.That(result.Tokens.OfType<TagToken>().Select(x => x.Name).ToArray(), Is.EqualTo(expected).AsCollection);
 		}
 
 		[Test]
@@ -36,7 +36,7 @@ namespace Montr.MasterData.Tests.Services
 			var result = parser.Parse("P-{Company}-{Number:5}/{Year:4}");
 
 			// assert
-			Assert.AreEqual(6, result.Tokens.Count);
+			Assert.That(result.Tokens, Has.Count.EqualTo(6));
 			AssertTextToken(result.Tokens[0], "P-");
 			AssertTagToken(result.Tokens[1], "Company", new string[0]);
 			AssertTextToken(result.Tokens[2], "-");
@@ -72,21 +72,21 @@ namespace Montr.MasterData.Tests.Services
 			var exception = Assert.Throws<NumberPatternParseException>(() => parser.Parse(pattern));
 
 			// assert
-			Assert.AreEqual(errorPosition, exception.Position);
-			Assert.AreEqual(errorToken, exception.TokenType);
+			Assert.That(exception.Position, Is.EqualTo(errorPosition));
+			Assert.That(exception.TokenType, Is.EqualTo(errorToken));
 		}
 
 		private static void AssertTextToken(Token token, string content)
 		{
-			Assert.AreEqual(typeof(TextToken), token.GetType());
-			Assert.AreEqual(content, ((TextToken)token).Content);
+			Assert.That(token.GetType(), Is.EqualTo(typeof(TextToken)));
+			Assert.That(((TextToken)token).Content, Is.EqualTo(content));
 		}
 
 		private static void AssertTagToken(Token token, string name, string[] args)
 		{
-			Assert.AreEqual(typeof(TagToken), token.GetType());
-			Assert.AreEqual(name, ((TagToken)token).Name);
-			CollectionAssert.AreEqual(args, ((TagToken)token).Args);
+			Assert.That(token.GetType(), Is.EqualTo(typeof(TagToken)));
+			Assert.That(((TagToken)token).Name, Is.EqualTo(name));
+			Assert.That(((TagToken)token).Args, Is.EqualTo(args).AsCollection);
 		}
 	}
 }

@@ -38,8 +38,8 @@ namespace Montr.Core.Tests.Services
 				Item = status
 			}, cancellationToken);
 
-			Assert.IsNotNull(result);
-			Assert.AreEqual(true, result.Success);
+			Assert.That(result, Is.Not.Null);
+			Assert.That(result.Success, Is.EqualTo(true));
 
 			return result;
 		}
@@ -53,7 +53,7 @@ namespace Montr.Core.Tests.Services
 				SkipPaging = true
 			}, cancellationToken);
 
-			Assert.IsNotNull(result);
+			Assert.That(result, Is.Not.Null);
 
 			return result;
 		}

@@ -84,8 +84,8 @@ namespace Montr.MasterData.Tests.Services
 				var number2 = await service.GenerateNumber(request, cancellationToken);
 
 				// assert
-				Assert.AreEqual("MT-00001/2010", number1);
-				Assert.AreEqual("GT-00002/2020", number2);
+				Assert.That(number1, Is.EqualTo("MT-00001/2010"));
+				Assert.That(number2, Is.EqualTo("GT-00002/2020"));
 			}
 		}
 
@@ -124,8 +124,8 @@ namespace Montr.MasterData.Tests.Services
 				var number2 = await service.GenerateNumber(request, cancellationToken);
 
 				// assert
-				Assert.AreEqual("MT-00001-05-02-1-03-2003", number1);
-				Assert.AreEqual("MT-00001-30-10-4-99-1999", number2);
+				Assert.That(number1, Is.EqualTo("MT-00001-05-02-1-03-2003"));
+				Assert.That(number2, Is.EqualTo("MT-00001-30-10-4-99-1999"));
 			}
 		}
 
@@ -166,10 +166,10 @@ namespace Montr.MasterData.Tests.Services
 				var number4 = await service.GenerateNumber(request, cancellationToken);
 
 				// assert
-				Assert.AreEqual("MT-00001", number1);
-				Assert.AreEqual("MT-00002", number2);
-				Assert.AreEqual("GT-00001", number3);
-				Assert.AreEqual("GT-00002", number4);
+				Assert.That(number1, Is.EqualTo("MT-00001"));
+				Assert.That(number2, Is.EqualTo("MT-00002"));
+				Assert.That(number3, Is.EqualTo("GT-00001"));
+				Assert.That(number4, Is.EqualTo("GT-00002"));
 			}
 		}
 
@@ -212,8 +212,8 @@ namespace Montr.MasterData.Tests.Services
 				var number2Of2020 = await service.GenerateNumber(request, cancellationToken);
 
 				// assert - year 2020 - first time
-				Assert.AreEqual("MT-00001/2020", number1Of2020);
-				Assert.AreEqual("MT-00002/2020", number2Of2020);
+				Assert.That(number1Of2020, Is.EqualTo("MT-00001/2020"));
+				Assert.That(number2Of2020, Is.EqualTo("MT-00002/2020"));
 
 				// act - year 2023
 				numeratorTagProvider.Date = new DateTime(2023, 03, 13);
@@ -221,8 +221,8 @@ namespace Montr.MasterData.Tests.Services
 				var number2Of2023 = await service.GenerateNumber(request, cancellationToken);
 
 				// assert - year 2023
-				Assert.AreEqual("MT-00001/2023", number1Of2023);
-				Assert.AreEqual("MT-00002/2023", number2Of2023);
+				Assert.That(number1Of2023, Is.EqualTo("MT-00001/2023"));
+				Assert.That(number2Of2023, Is.EqualTo("MT-00002/2023"));
 
 				// act - year 2020 - second time
 				numeratorTagProvider.Date = new DateTime(2020, 10, 30);
@@ -230,8 +230,8 @@ namespace Montr.MasterData.Tests.Services
 				var number4Of2020 = await service.GenerateNumber(request, cancellationToken);
 
 				// assert - year 2020 - second time
-				Assert.AreEqual("MT-00003/2020", number3Of2020);
-				Assert.AreEqual("MT-00004/2020", number4Of2020);
+				Assert.That(number3Of2020, Is.EqualTo("MT-00003/2020"));
+				Assert.That(number4Of2020, Is.EqualTo("MT-00004/2020"));
 			}
 		}
 
@@ -274,8 +274,8 @@ namespace Montr.MasterData.Tests.Services
 				var number2OfQ1 = await service.GenerateNumber(request, cancellationToken);
 
 				// assert - Q1.2020 - first time
-				Assert.AreEqual("MT-00001/2020", number1OfQ1);
-				Assert.AreEqual("MT-00002/2020", number2OfQ1);
+				Assert.That(number1OfQ1, Is.EqualTo("MT-00001/2020"));
+				Assert.That(number2OfQ1, Is.EqualTo("MT-00002/2020"));
 
 				// act - Q3.2020
 				numeratorTagProvider.Date = new DateTime(2020, 07, 30);
@@ -283,8 +283,8 @@ namespace Montr.MasterData.Tests.Services
 				var number2OfQ3 = await service.GenerateNumber(request, cancellationToken);
 
 				// assert - Q3.2020
-				Assert.AreEqual("MT-00001/2020", number1OfQ3);
-				Assert.AreEqual("MT-00002/2020", number2OfQ3);
+				Assert.That(number1OfQ3, Is.EqualTo("MT-00001/2020"));
+				Assert.That(number2OfQ3, Is.EqualTo("MT-00002/2020"));
 
 				// act - Q1.2020 - second time
 				numeratorTagProvider.Date = new DateTime(2020, 02, 29);
@@ -292,8 +292,8 @@ namespace Montr.MasterData.Tests.Services
 				var number4OfQ1 = await service.GenerateNumber(request, cancellationToken);
 
 				// assert - Q1.2020 - second time
-				Assert.AreEqual("MT-00003/2020", number3OfQ1);
-				Assert.AreEqual("MT-00004/2020", number4OfQ1);
+				Assert.That(number3OfQ1, Is.EqualTo("MT-00003/2020"));
+				Assert.That(number4OfQ1, Is.EqualTo("MT-00004/2020"));
 			}
 		}
 

@@ -21,7 +21,7 @@ namespace Montr.Core.Tests.Services
 		{
 			var actual = StringUtils.SplitUpperCase(source).ToArray();
 
-			Assert.AreEqual(expected, actual);
+			Assert.That(actual, Is.EqualTo(expected));
 		}
 	}
 }

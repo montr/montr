@@ -19,8 +19,8 @@ namespace Montr.Core.Tests.Services
 			var modules = loader.GetSortedModules("../../../../Host/bin/Debug/net7.0/", false);
 
 			// assert
-			Assert.AreEqual(0, loader.Errors.Count); // todo: fix errors in github actions tests
-			Assert.IsTrue(modules.Count > 0);
+			Assert.That(loader.Errors, Is.Empty); // todo: fix errors in github actions tests
+			Assert.That(modules.Count > 0);
 		}
 
 		[Test]
@@ -38,7 +38,7 @@ namespace Montr.Core.Tests.Services
 			var result = loader.ExcludeAssembly(file);
 
 			// assert
-			Assert.AreEqual(expected, result);
+			Assert.That(result, Is.EqualTo(expected));
 		}
 	}
 }

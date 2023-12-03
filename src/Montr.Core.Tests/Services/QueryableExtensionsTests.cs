@@ -22,11 +22,11 @@ namespace Montr.Core.Tests.Services
 			var result = source.OrderBy("prop1").ToArray();
 
 			// assert
-			Assert.IsNotNull(result);
-			Assert.AreEqual(3, result.Length);
-			Assert.AreEqual(1, result[0].Prop1);
-			Assert.AreEqual(2, result[1].Prop1);
-			Assert.AreEqual(3, result[2].Prop1);
+			Assert.That(result, Is.Not.Null);
+			Assert.That(result.Length, Is.EqualTo(3));
+			Assert.That(result[0].Prop1, Is.EqualTo(1));
+			Assert.That(result[1].Prop1, Is.EqualTo(2));
+			Assert.That(result[2].Prop1, Is.EqualTo(3));
 		}
 
 		[Test]
@@ -44,11 +44,11 @@ namespace Montr.Core.Tests.Services
 			var result = source.OrderByDescending("prop1").ToArray();
 
 			// assert
-			Assert.IsNotNull(result);
-			Assert.AreEqual(3, result.Length);
-			Assert.AreEqual(9, result[0].Prop1);
-			Assert.AreEqual(7, result[1].Prop1);
-			Assert.AreEqual(5, result[2].Prop1);
+			Assert.That(result, Is.Not.Null);
+			Assert.That(result.Length, Is.EqualTo(3));
+			Assert.That(result[0].Prop1, Is.EqualTo(9));
+			Assert.That(result[1].Prop1, Is.EqualTo(7));
+			Assert.That(result[2].Prop1, Is.EqualTo(5));
 		}
 
 		[Test]
@@ -67,14 +67,14 @@ namespace Montr.Core.Tests.Services
 				.OrderBy("prop2").ThenByDescending("prop1").ToArray();
 
 			// assert
-			Assert.IsNotNull(result);
-			Assert.AreEqual(3, result.Length);
-			Assert.AreEqual(3, result[0].Prop1);
-			Assert.AreEqual("str1", result[0].Prop2);
-			Assert.AreEqual(2, result[1].Prop1);
-			Assert.AreEqual("str2", result[1].Prop2);
-			Assert.AreEqual(1, result[2].Prop1);
-			Assert.AreEqual("str2", result[2].Prop2);
+			Assert.That(result, Is.Not.Null);
+			Assert.That(result.Length, Is.EqualTo(3));
+			Assert.That(result[0].Prop1, Is.EqualTo(3));
+			Assert.That(result[0].Prop2, Is.EqualTo("str1"));
+			Assert.That(result[1].Prop1, Is.EqualTo(2));
+			Assert.That(result[1].Prop2, Is.EqualTo("str2"));
+			Assert.That(result[2].Prop1, Is.EqualTo(1));
+			Assert.That(result[2].Prop2, Is.EqualTo("str2"));
 		}
 
 		[Test]
@@ -93,14 +93,14 @@ namespace Montr.Core.Tests.Services
 				.OrderByDescending("prop1").ThenBy("prop2").ToArray();
 
 			// assert
-			Assert.IsNotNull(result);
-			Assert.AreEqual(3, result.Length);
-			Assert.AreEqual(3, result[0].Prop1);
-			Assert.AreEqual("str1", result[0].Prop2);
-			Assert.AreEqual(3, result[1].Prop1);
-			Assert.AreEqual("str2", result[1].Prop2);
-			Assert.AreEqual(1, result[2].Prop1);
-			Assert.AreEqual("str0", result[2].Prop2);
+			Assert.That(result, Is.Not.Null);
+			Assert.That(result.Length, Is.EqualTo(3));
+			Assert.That(result[0].Prop1, Is.EqualTo(3));
+			Assert.That(result[0].Prop2, Is.EqualTo("str1"));
+			Assert.That(result[1].Prop1, Is.EqualTo(3));
+			Assert.That(result[1].Prop2, Is.EqualTo("str2"));
+			Assert.That(result[2].Prop1, Is.EqualTo(1));
+			Assert.That(result[2].Prop2, Is.EqualTo("str0"));
 		}
 
 		private class Item

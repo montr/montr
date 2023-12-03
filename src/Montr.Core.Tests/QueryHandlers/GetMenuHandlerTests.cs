@@ -47,14 +47,14 @@ namespace Montr.Core.Tests.QueryHandlers
 			var result1 = await handler.Handle(new GetMenu { MenuId = "m1" }, cancellationToken);
 
 			// assert
-			Assert.IsNotNull(result1?.Items);
-			Assert.AreEqual("m1", result1.Id);
-			Assert.AreEqual(5, result1.Items.Count);
-			Assert.AreEqual("m1.1", result1.Items[0].Id);
-			Assert.AreEqual("m1.2", result1.Items[1].Id);
-			Assert.AreEqual("m1.3", result1.Items[2].Id);
-			Assert.AreEqual("m1.4", result1.Items[3].Id);
-			Assert.AreEqual("m1.5", result1.Items[4].Id);
+			Assert.That(result1?.Items, Is.Not.Null);
+			Assert.That(result1.Id, Is.EqualTo("m1"));
+			Assert.That(result1.Items.Count, Is.EqualTo(5));
+			Assert.That(result1.Items[0].Id, Is.EqualTo("m1.1"));
+			Assert.That(result1.Items[1].Id, Is.EqualTo("m1.2"));
+			Assert.That(result1.Items[2].Id, Is.EqualTo("m1.3"));
+			Assert.That(result1.Items[3].Id, Is.EqualTo("m1.4"));
+			Assert.That(result1.Items[4].Id, Is.EqualTo("m1.5"));
 		}
 
 		[Test]
@@ -90,11 +90,11 @@ namespace Montr.Core.Tests.QueryHandlers
 			var result1 = await handler.Handle(new GetMenu { MenuId = "m1" }, cancellationToken);
 
 			// assert
-			Assert.IsNotNull(result1?.Items);
-			Assert.AreEqual("m1", result1.Id);
-			Assert.AreEqual(2, result1.Items.Count);
-			Assert.AreEqual("m1.1", result1.Items[0].Id);
-			Assert.AreEqual("m1.3", result1.Items[1].Id);
+			Assert.That(result1?.Items, Is.Not.Null);
+			Assert.That(result1.Id, Is.EqualTo("m1"));
+			Assert.That(result1.Items.Count, Is.EqualTo(2));
+			Assert.That(result1.Items[0].Id, Is.EqualTo("m1.1"));
+			Assert.That(result1.Items[1].Id, Is.EqualTo("m1.3"));
 		}
 	}
 }

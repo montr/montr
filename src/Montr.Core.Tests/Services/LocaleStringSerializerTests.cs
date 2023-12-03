@@ -26,10 +26,10 @@ namespace Montr.Core.Tests.Services
 			var result = await serializer.Deserialize(stream, cancellationToken);
 
 			// assert
-			Assert.IsNotNull(result);
-			Assert.IsNotNull(result.Single(x => x.Locale == "en"));
-			Assert.IsNotNull(result.Single(x => x.Locale == "en").Modules.Single(x => x.Module == "common"));
-			Assert.AreEqual(3, result.Single(x => x.Locale == "en").Modules.Single(x => x.Module == "common").Items.Count);
+			Assert.That(result, Is.Not.Null);
+			Assert.That(result.Single(x => x.Locale == "en"), Is.Not.Null);
+			Assert.That(result.Single(x => x.Locale == "en").Modules.Single(x => x.Module == "common"), Is.Not.Null);
+			Assert.That(result.Single(x => x.Locale == "en").Modules.Single(x => x.Module == "common").Items.Count, Is.EqualTo(3));
 		}
 	}
 }

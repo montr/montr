@@ -45,20 +45,20 @@ namespace Montr.Core.Tests.Services
 			var companyBlocks = registry.GetItems<Entrepreneur, Block>(company).ToList();
 
 			// assert
-			Assert.AreEqual(0, userDraftItems.Count);
-			Assert.AreEqual(1, userDraftBlocks.Count);
+			Assert.That(userDraftItems.Count, Is.EqualTo(0));
+			Assert.That(userDraftBlocks.Count, Is.EqualTo(1));
 
-			Assert.AreEqual(1, userBlockedItems.Count);
-			Assert.AreEqual(typeof(InfoItem), userBlockedItems[0].GetType());
+			Assert.That(userBlockedItems.Count, Is.EqualTo(1));
+			Assert.That(userBlockedItems[0].GetType(), Is.EqualTo(typeof(InfoItem)));
 
-			Assert.AreEqual(2, userBlockedBlocks.Count);
-			Assert.AreEqual(typeof(Block), userBlockedBlocks[0].GetType());
-			Assert.AreEqual("/done", userBlockedBlocks[0].Url);
-			Assert.AreEqual(typeof(HistoryBlock), userBlockedBlocks[1].GetType());
-			Assert.AreEqual("/to?status=inactive", userBlockedBlocks[1].Url);
+			Assert.That(userBlockedBlocks.Count, Is.EqualTo(2));
+			Assert.That(userBlockedBlocks[0].GetType(), Is.EqualTo(typeof(Block)));
+			Assert.That(userBlockedBlocks[0].Url, Is.EqualTo("/done"));
+			Assert.That(userBlockedBlocks[1].GetType(), Is.EqualTo(typeof(HistoryBlock)));
+			Assert.That(userBlockedBlocks[1].Url, Is.EqualTo("/to?status=inactive"));
 
-			Assert.AreEqual(1, companyItems.Count);
-			Assert.AreEqual(0, companyBlocks.Count);
+			Assert.That(companyItems.Count, Is.EqualTo(1));
+			Assert.That(companyBlocks.Count, Is.EqualTo(0));
 		}
 
 		private class Person

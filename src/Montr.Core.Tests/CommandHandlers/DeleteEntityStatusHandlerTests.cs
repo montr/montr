@@ -53,16 +53,16 @@ namespace Montr.Core.Tests.CommandHandlers
 				var result = await handler.Handle(request, cancellationToken);
 
 				// assert
-				Assert.IsNotNull(result);
-				Assert.AreEqual(3, result.AffectedRows);
+				Assert.That(result, Is.Not.Null);
+				Assert.That(result.AffectedRows, Is.EqualTo(3));
 
 				var statuses = await generator.GetEntityStatuses(cancellationToken);
 
-				Assert.AreEqual(39, statuses.Rows.Count);
+				Assert.That(statuses.Rows.Count, Is.EqualTo(39));
 
 				foreach (var uid in request.Uids)
 				{
-					Assert.IsNull(statuses.Rows.FirstOrDefault(x => x.Uid == uid));
+					Assert.That(statuses.Rows.FirstOrDefault(x => x.Uid == uid), Is.Null);
 				}
 			}
 		}

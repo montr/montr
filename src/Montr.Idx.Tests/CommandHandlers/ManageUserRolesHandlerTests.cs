@@ -47,24 +47,24 @@ namespace Montr.Idx.Tests.CommandHandlers
 				foreach (var name in roles)
 				{
 					var role = await roleRepository.Insert(new Role { Uid = Guid.NewGuid(), Name = name }, cancellationToken);
-					Assert.IsTrue(role.Success, string.Join(",", role.Errors.SelectMany(x => x.Messages)));
+					Assert.That(role.Success, string.Join(",", role.Errors.SelectMany(x => x.Messages)));
 				}
 
 				// var dbRoles = identityServiceFactory.RoleManager.Roles.ToList();
 
 				var user = await userRepository.Insert(new User { Uid = Guid.NewGuid(), UserName = "test_user" }, cancellationToken);
-				Assert.IsTrue(user.Success, string.Join(",", user.Errors.SelectMany(x => x.Messages)));
+				Assert.That(user.Success, string.Join(",", user.Errors.SelectMany(x => x.Messages)));
 
 				// ReSharper disable once PossibleInvalidOperationException
 				var userUid = user.Uid.Value;
 
 				// act - add roles
 				var addResult = await addHandler.Handle(new AddUserRoles { UserUid = userUid, Roles = roles }, cancellationToken);
-				Assert.IsTrue(addResult.Success, string.Join(",", user.Errors.SelectMany(x => x.Messages)));
+				Assert.That(addResult.Success, string.Join(",", user.Errors.SelectMany(x => x.Messages)));
 
 				// act - remove roles
 				var removeResult = await removeHandler.Handle(new RemoveUserRoles { UserUid = userUid, Roles = roles }, cancellationToken);
-				Assert.IsTrue(removeResult.Success, string.Join(",", user.Errors.SelectMany(x => x.Messages)));
+				Assert.That(removeResult.Success, string.Join(",", user.Errors.SelectMany(x => x.Messages)));
 			}
 		}
 	}

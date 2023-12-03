@@ -100,19 +100,19 @@ namespace Montr.MasterData.Tests.CommandHandlers
 				var result = await handler.Handle(command, cancellationToken);
 
 				// assert
-				Assert.IsNotNull(result);
-				Assert.IsTrue(result.Success);
-				Assert.IsNotNull(result.Uid);
-				Assert.AreNotEqual(Guid.Empty, result.Uid);
+				Assert.That(result, Is.Not.Null);
+				Assert.That(result.Success);
+				Assert.That(result.Uid, Is.Not.Null);
+				Assert.That(result.Uid, Is.Not.EqualTo(Guid.Empty));
 
 				var classifierResult = await classifierRepositoryFactory.GetNamedOrDefaultService(generator.TypeCode)
 					.Search(new ClassifierSearchRequest { TypeCode = generator.TypeCode, Uid = result.Uid, IncludeFields = true }, cancellationToken);
 
-				Assert.AreEqual(1, classifierResult.Rows.Count);
+				Assert.That(classifierResult.Rows, Has.Count.EqualTo(1));
 				var inserted = classifierResult.Rows[0];
 				// todo: figure out why insert.Fields is null
-				Assert.AreEqual(command.Item.Code, inserted.Code);
-				Assert.AreEqual(command.Item.Name, inserted.Name);
+				Assert.That(inserted.Code, Is.EqualTo(command.Item.Code));
+				Assert.That(inserted.Name, Is.EqualTo(command.Item.Name));
 
 				// assert field data inserted
 				IList<DbFieldData> fieldData;
@@ -123,10 +123,10 @@ namespace Montr.MasterData.Tests.CommandHandlers
 						.ToListAsync(cancellationToken);
 				}
 
-				Assert.AreEqual(command.Item.Fields.Count, fieldData.Count);
-				Assert.AreEqual(command.Item.Fields["test1"], fieldData.Single(x => x.Key == "test1").Value);
-				Assert.AreEqual(command.Item.Fields["test2"], fieldData.Single(x => x.Key == "test2").Value);
-				Assert.AreEqual(command.Item.Fields["test3"], fieldData.Single(x => x.Key == "test3").Value);
+				Assert.That(fieldData, Has.Count.EqualTo(command.Item.Fields.Count));
+				Assert.That(fieldData.Single(x => x.Key == "test1").Value, Is.EqualTo(command.Item.Fields["test1"]));
+				Assert.That(fieldData.Single(x => x.Key == "test2").Value, Is.EqualTo(command.Item.Fields["test2"]));
+				Assert.That(fieldData.Single(x => x.Key == "test3").Value, Is.EqualTo(command.Item.Fields["test3"]));
 			}
 		}
 
@@ -161,10 +161,10 @@ namespace Montr.MasterData.Tests.CommandHandlers
 				var result = await handler.Handle(command, cancellationToken);
 
 				// assert
-				Assert.IsNotNull(result);
-				Assert.IsTrue(result.Success);
-				Assert.IsNotNull(result.Uid);
-				Assert.AreNotEqual(Guid.Empty, result.Uid);
+				Assert.That(result, Is.Not.Null);
+				Assert.That(result.Success);
+				Assert.That(result.Uid, Is.Not.Null);
+				Assert.That(result.Uid, Is.Not.EqualTo(Guid.Empty));
 
 				// arrange - 2nd item
 				command.Item.Uid = Guid.NewGuid();
@@ -173,13 +173,13 @@ namespace Montr.MasterData.Tests.CommandHandlers
 				result = await handler.Handle(command, cancellationToken);
 
 				// assert
-				Assert.IsNotNull(result);
-				Assert.IsFalse(result.Success);
-				Assert.IsNull(result.Uid);
-				Assert.AreEqual(1, result.Errors.Count);
-				Assert.AreEqual("code", result.Errors[0].Key);
+				Assert.That(result, Is.Not.Null);
+				Assert.That(result.Success, Is.False);
+				Assert.That(result.Uid, Is.Null);
+				Assert.That(result.Errors, Has.Count.EqualTo(1));
+				Assert.That(result.Errors[0].Key, Is.EqualTo("code"));
 				// todo: use error codes?
-				Assert.AreEqual("Code «001» is already used in item \"Test Classifier\"", result.Errors[0].Messages[0]);
+				Assert.That(result.Errors[0].Messages[0], Is.EqualTo("Code «001» is already used in item \"Test Classifier\""));
 			}
 		}
 
@@ -223,9 +223,9 @@ namespace Montr.MasterData.Tests.CommandHandlers
 				var result = await handler.Handle(command, cancellationToken);
 
 				// assert
-				Assert.IsNotNull(result);
-				Assert.IsTrue(result.Success);
-				Assert.AreEqual(1, result.AffectedRows);
+				Assert.That(result, Is.Not.Null);
+				Assert.That(result.Success);
+				Assert.That(result.AffectedRows, Is.EqualTo(1));
 			}
 		}
 
@@ -256,8 +256,8 @@ namespace Montr.MasterData.Tests.CommandHandlers
 					.Search(new ClassifierSearchRequest { TypeCode = generator.TypeCode }, cancellationToken);
 
 				// assert
-				Assert.IsNotNull(searchResult);
-				Assert.AreEqual(insertedIds.Count, searchResult.Rows.Count);
+				Assert.That(searchResult, Is.Not.Null);
+				Assert.That(searchResult.Rows, Has.Count.EqualTo(insertedIds.Count));
 
 				// act
 				var command = new DeleteClassifier
@@ -269,16 +269,16 @@ namespace Montr.MasterData.Tests.CommandHandlers
 				var result = await handler.Handle(command, cancellationToken);
 
 				// assert
-				Assert.IsNotNull(result);
-				Assert.IsTrue(result.Success);
-				Assert.AreEqual(insertedIds.Count, result.AffectedRows);
+				Assert.That(result, Is.Not.Null);
+				Assert.That(result.Success);
+				Assert.That(result.AffectedRows, Is.EqualTo(insertedIds.Count));
 
 				searchResult = await classifierRepositoryFactory.GetNamedOrDefaultService(generator.TypeCode)
 					.Search(new ClassifierSearchRequest { TypeCode = generator.TypeCode }, cancellationToken);
 
 				// assert
-				Assert.IsNotNull(searchResult);
-				Assert.AreEqual(0, searchResult.Rows.Count);
+				Assert.That(searchResult, Is.Not.Null);
+				Assert.That(searchResult.Rows, Is.Empty);
 			}
 		}
 
@@ -319,8 +319,8 @@ namespace Montr.MasterData.Tests.CommandHandlers
 						}
 					}, cancellationToken);
 
-					Assert.IsNotNull(insertResult);
-					Assert.AreEqual(true, insertResult.Success);
+					Assert.That(insertResult, Is.Not.Null);
+					Assert.That(insertResult.Success, Is.EqualTo(true));
 
 					// ReSharper disable once PossibleInvalidOperationException
 					insertedIds.Add(insertResult.Uid.Value);
@@ -330,8 +330,8 @@ namespace Montr.MasterData.Tests.CommandHandlers
 					.Search(new ClassifierSearchRequest { TypeCode = generator.TypeCode }, cancellationToken);
 
 				// assert
-				Assert.IsNotNull(searchResult);
-				Assert.AreEqual(insertedIds.Count, searchResult.Rows.Count);
+				Assert.That(searchResult, Is.Not.Null);
+				Assert.That(searchResult.Rows, Has.Count.EqualTo(insertedIds.Count));
 
 				// act - update
 				foreach (var classifier in searchResult.Rows.Cast<Numerator>())
@@ -347,19 +347,19 @@ namespace Montr.MasterData.Tests.CommandHandlers
 
 					var updateResult = await updateHandler.Handle(updateCommand, cancellationToken);
 
-					Assert.IsNotNull(updateResult);
-					Assert.AreEqual(true, updateResult.Success);
+					Assert.That(updateResult, Is.Not.Null);
+					Assert.That(updateResult.Success, Is.EqualTo(true));
 				}
 
 				searchResult = await classifierRepositoryFactory.GetNamedOrDefaultService(generator.TypeCode)
 					.Search(new ClassifierSearchRequest { TypeCode = generator.TypeCode }, cancellationToken);
 
 				// assert
-				Assert.IsNotNull(searchResult);
-				Assert.AreEqual(insertedIds.Count, searchResult.Rows.Count);
-				Assert.AreEqual(0, searchResult.Rows.Count(x => x.Name.Contains("Test")));
-				Assert.AreEqual(insertedIds.Count, searchResult.Rows.Count(x => x.Name.Contains("Updated")));
-				Assert.AreEqual(insertedIds.Count, searchResult.Rows.Cast<Numerator>().Count(x => x.Pattern.Contains("No.")));
+				Assert.That(searchResult, Is.Not.Null);
+				Assert.That(searchResult.Rows, Has.Count.EqualTo(insertedIds.Count));
+				Assert.That(searchResult.Rows.Count(x => x.Name.Contains("Test")), Is.EqualTo(0));
+				Assert.That(searchResult.Rows.Count(x => x.Name.Contains("Updated")), Is.EqualTo(insertedIds.Count));
+				Assert.That(searchResult.Rows.Cast<Numerator>().Count(x => x.Pattern.Contains("No.")), Is.EqualTo(insertedIds.Count));
 
 				// act - delete
 				var command = new DeleteClassifier
@@ -372,16 +372,16 @@ namespace Montr.MasterData.Tests.CommandHandlers
 				var result = await deleteHandler.Handle(command, cancellationToken);
 
 				// assert
-				Assert.IsNotNull(result);
-				Assert.IsTrue(result.Success);
-				Assert.AreEqual(insertedIds.Count, result.AffectedRows);
+				Assert.That(result, Is.Not.Null);
+				Assert.That(result.Success);
+				Assert.That(result.AffectedRows, Is.EqualTo(insertedIds.Count));
 
 				searchResult = await classifierRepositoryFactory.GetNamedOrDefaultService(generator.TypeCode)
 					.Search(new ClassifierSearchRequest { TypeCode = generator.TypeCode }, cancellationToken);
 
 				// assert
-				Assert.IsNotNull(searchResult);
-				Assert.AreEqual(0, searchResult.Rows.Count);
+				Assert.That(searchResult, Is.Not.Null);
+				Assert.That(searchResult.Rows, Is.Empty);
 			}
 		}
 	}

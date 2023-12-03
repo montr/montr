@@ -25,14 +25,14 @@ namespace Montr.Tasks.Tests.QueryHandlers
 			var result = await handler.Handle(new GetTaskSearchMetadata(), cancellationToken);
 
 			// assert
-			Assert.IsNotNull(result);
+			Assert.That(result, Is.Not.Null);
 
-			Assert.AreEqual(result.Fields?.Count, 8);
-			Assert.AreEqual(result.Columns?.Count, 9);
+			Assert.That(result.Fields?.Count, Is.EqualTo(8));
+			Assert.That(result.Columns?.Count, Is.EqualTo(9));
 
-			Assert.IsNull(result.Toolbar);
-			Assert.IsNull(result.Panels);
-			Assert.IsNull(result.Panes);
+			Assert.That(result.Toolbar, Is.Null);
+			Assert.That(result.Panels, Is.Null);
+			Assert.That(result.Panes, Is.Null);
 		}
 	}
 }

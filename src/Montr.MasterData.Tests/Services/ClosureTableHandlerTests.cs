@@ -54,11 +54,12 @@ namespace Montr.MasterData.Tests.Services
 
 				// act & assert - cyclic dependency
 				var result = await generator.UpdateGroup(root.Code, "1.1", "1.1.1", cancellationToken, false);
-				Assert.IsNotNull(result);
-				Assert.IsFalse(result.Success);
-				Assert.IsNotNull(result.Errors);
-				Assert.AreEqual("parentUid", result.Errors[0].Key);
-				Assert.AreEqual("Cyclic dependency detected.", result.Errors[0].Messages[0]);
+
+				Assert.That(result, Is.Not.Null);
+				Assert.That(result.Success, Is.False);
+				Assert.That(result.Errors, Is.Not.Null);
+				Assert.That(result.Errors[0].Key, Is.EqualTo("parentUid"));
+				Assert.That(result.Errors[0].Messages[0], Is.EqualTo("Cyclic dependency detected."));
 			}
 		}
 
@@ -132,7 +133,7 @@ namespace Montr.MasterData.Tests.Services
 		{
 			var expected = await File.ReadAllTextAsync(expectedFileName, cancellationToken);
 
-			Assert.AreEqual(expected.Replace("\r\n", "\n"), actual.Replace("\r\n", "\n"), $"Invalid closure table, expected equal to content of {expectedFileName}");
+			Assert.That(actual.Replace("\r\n", "\n"), Is.EqualTo(expected.Replace("\r\n", "\n")), $"Invalid closure table, expected equal to content of {expectedFileName}");
 		}
 	}
 }

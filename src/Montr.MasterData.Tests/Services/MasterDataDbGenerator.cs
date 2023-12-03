@@ -99,8 +99,8 @@ namespace Montr.MasterData.Tests.Services
 				}
 			}, cancellationToken);
 
-			Assert.IsNotNull(result);
-			Assert.AreEqual(true, result.Success);
+			Assert.That(result, Is.Not.Null);
+			Assert.That(result.Success, Is.EqualTo(true));
 
 			return result;
 		}
@@ -118,8 +118,8 @@ namespace Montr.MasterData.Tests.Services
 				}
 			}, cancellationToken);
 
-			Assert.IsNotNull(result);
-			Assert.AreEqual(true, result.Success);
+			Assert.That(result, Is.Not.Null);
+			Assert.That(result.Success, Is.EqualTo(true));
 
 			return result;
 		}
@@ -131,7 +131,7 @@ namespace Montr.MasterData.Tests.Services
 				TypeCode = TypeCode,
 			}, cancellationToken);
 
-			Assert.IsNotNull(result);
+			Assert.That(result, Is.Not.Null);
 
 			return result;
 		}
@@ -188,8 +188,8 @@ namespace Montr.MasterData.Tests.Services
 				Item = new ClassifierGroup { Code = code, Name = $"Test Group {code}", ParentUid = parentUid }
 			}, cancellationToken);
 
-			Assert.IsNotNull(result);
-			Assert.AreEqual(true, result.Success);
+			Assert.That(result, Is.Not.Null);
+			Assert.That(result.Success);
 
 			return result;
 		}
@@ -221,8 +221,8 @@ namespace Montr.MasterData.Tests.Services
 
 			if (assertResult)
 			{
-				Assert.IsNotNull(result);
-				Assert.AreEqual(true, result.Success);
+				Assert.That(result, Is.Not.Null);
+				Assert.That(result.Success);
 			}
 
 			return result;
@@ -239,8 +239,8 @@ namespace Montr.MasterData.Tests.Services
 				Uid = group.Uid
 			}, cancellationToken);
 
-			Assert.IsNotNull(result);
-			Assert.AreEqual(true, result.Success);
+			Assert.That(result, Is.Not.Null);
+			Assert.That(result.Success);
 
 			return result;
 		}
@@ -259,8 +259,8 @@ namespace Montr.MasterData.Tests.Services
 				}
 			}, cancellationToken);
 
-			Assert.IsNotNull(result);
-			Assert.AreEqual(true, result.Success);
+			Assert.That(result, Is.Not.Null);
+			Assert.That(result.Success);
 
 			return result;
 		}
@@ -277,8 +277,8 @@ namespace Montr.MasterData.Tests.Services
 				ItemUid = itemUid.Value
 			}, cancellationToken);
 
-			Assert.IsNotNull(result);
-			Assert.AreEqual(true, result.Success);
+			Assert.That(result, Is.Not.Null);
+			Assert.That(result.Success, Is.EqualTo(true));
 
 			return result;
 		}

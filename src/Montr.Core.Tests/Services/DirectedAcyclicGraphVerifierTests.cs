@@ -25,13 +25,13 @@ namespace Montr.Core.Tests.Services
 				new[] { a, b, c, d, e }, node => node.Name, node => node.DependsOn);
 
 			// assert
-			Assert.IsNotNull(result);
-			Assert.AreEqual(5, result.Count);
-			Assert.AreEqual("C", result[0].Name);
-			Assert.AreEqual("E", result[1].Name);
-			Assert.AreEqual("B", result[2].Name);
-			Assert.AreEqual("D", result[3].Name);
-			Assert.AreEqual("A", result[4].Name);
+			Assert.That(result, Is.Not.Null);
+			Assert.That(result.Count, Is.EqualTo(5));
+			Assert.That(result[0].Name, Is.EqualTo("C"));
+			Assert.That(result[1].Name, Is.EqualTo("E"));
+			Assert.That(result[2].Name, Is.EqualTo("B"));
+			Assert.That(result[3].Name, Is.EqualTo("D"));
+			Assert.That(result[4].Name, Is.EqualTo("A"));
 		}
 
 		[Test]
@@ -52,12 +52,12 @@ namespace Montr.Core.Tests.Services
 				new[] { a, b, c, d }, node => node.Name, node => node.DependsOn);
 
 			// assert
-			Assert.IsNotNull(result);
-			Assert.AreEqual(4, result.Count);
-			Assert.AreEqual("D", result[0].Name);
-			Assert.AreEqual("B", result[1].Name);
-			Assert.AreEqual("C", result[2].Name);
-			Assert.AreEqual("A", result[3].Name);
+			Assert.That(result, Is.Not.Null);
+			Assert.That(result.Count, Is.EqualTo(4));
+			Assert.That(result[0].Name, Is.EqualTo("D"));
+			Assert.That(result[1].Name, Is.EqualTo("B"));
+			Assert.That(result[2].Name, Is.EqualTo("C"));
+			Assert.That(result[3].Name, Is.EqualTo("A"));
 		}
 
 		[Test]
@@ -74,12 +74,12 @@ namespace Montr.Core.Tests.Services
 				new[] { a, b, c, d }, node => node.Name, node => node.DependsOn);
 
 			// assert
-			Assert.IsNotNull(result);
-			Assert.AreEqual(4, result.Count);
-			Assert.AreEqual("A", result[0].Name);
-			Assert.AreEqual("B", result[1].Name);
-			Assert.AreEqual("C", result[2].Name);
-			Assert.AreEqual("D", result[3].Name);
+			Assert.That(result, Is.Not.Null);
+			Assert.That(result.Count, Is.EqualTo(4));
+			Assert.That(result[0].Name, Is.EqualTo("A"));
+			Assert.That(result[1].Name, Is.EqualTo("B"));
+			Assert.That(result[2].Name, Is.EqualTo("C"));
+			Assert.That(result[3].Name, Is.EqualTo("D"));
 		}
 
 		[Test]

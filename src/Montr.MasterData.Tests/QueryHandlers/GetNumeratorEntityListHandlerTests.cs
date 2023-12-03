@@ -54,10 +54,10 @@ namespace Montr.MasterData.Tests.QueryHandlers
 				var result = await handler.Handle(command, cancellationToken);
 
 				// assert
-				Assert.IsNotNull(result);
-				Assert.IsNull(result.TotalCount);
-				Assert.IsTrue(result.Rows.Count > 0);
-				Assert.IsTrue(result.Rows.Count(x => x.EntityTypeCode == "NumeratorTypeCode") == 1);
+				Assert.That(result, Is.Not.Null);
+				Assert.That(result.TotalCount, Is.Null);
+				Assert.That(result.Rows.Count > 0);
+				Assert.That(result.Rows.Count(x => x.EntityTypeCode == "NumeratorTypeCode") == 1);
 			}
 		}
 	}

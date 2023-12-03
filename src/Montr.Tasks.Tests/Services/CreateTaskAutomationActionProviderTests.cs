@@ -135,22 +135,22 @@ namespace Montr.Tasks.Tests.Services
 				var result = await handler.Execute(action, automationContext, cancellationToken);
 
 				// assert
-				Assert.IsNotNull(result);
-				Assert.IsTrue(result.Success);
-				Assert.AreEqual(result.AffectedRows, 1);
-				Assert.IsNotNull(result.Uid);
+				Assert.That(result, Is.Not.Null);
+				Assert.That(result.Success);
+				Assert.That(result.AffectedRows, Is.EqualTo(1));
+				Assert.That(result.Uid, Is.Not.Null);
 
 				var tasks = await dbTaskRepository.Search(new TaskSearchRequest { Uid = result.Uid }, cancellationToken);
-				Assert.IsNotNull(tasks);
-				Assert.AreEqual(tasks.Rows.Count, 1);
+				Assert.That(tasks, Is.Not.Null);
+				Assert.That(tasks.Rows, Has.Count.EqualTo(1));
 
 				var task = tasks.Rows[0];
-				Assert.AreEqual(task.Uid, result.Uid);
-				Assert.AreEqual(task.CompanyUid, operatorCompany.Uid);
-				Assert.AreEqual(task.Name, action.Props.Name);
-				Assert.AreEqual(task.Description, action.Props.Description);
-				Assert.AreEqual(task.TaskTypeUid, taskType.Uid);
-				Assert.IsNotNull(task.Number);
+				Assert.That(result.Uid, Is.EqualTo(task.Uid));
+				Assert.That(operatorCompany.Uid, Is.EqualTo(task.CompanyUid));
+				Assert.That(action.Props.Name, Is.EqualTo(task.Name));
+				Assert.That(action.Props.Description, Is.EqualTo(task.Description));
+				Assert.That(taskType.Uid, Is.EqualTo(task.TaskTypeUid));
+				Assert.That(task.Number, Is.Not.Null);
 			}
 		}
 	}

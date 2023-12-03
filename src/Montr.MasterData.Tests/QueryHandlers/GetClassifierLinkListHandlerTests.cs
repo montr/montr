@@ -44,15 +44,17 @@ namespace Montr.MasterData.Tests.QueryHandlers
 				}, cancellationToken);
 
 				// assert
-				Assert.IsNotNull(result);
-				Assert.AreEqual(2, result.TotalCount);
-				Assert.AreEqual(tree.Uid, result.Rows[0].Tree.Uid);
-				Assert.AreEqual(group1.Uid, result.Rows[0].Group.Uid);
-				Assert.AreEqual(tree.Uid, result.Rows[1].Tree.Uid);
-				Assert.AreEqual(group1.Uid, result.Rows[1].Group.Uid);
+				Assert.That(result, Is.Not.Null);
+				Assert.That(result.TotalCount, Is.EqualTo(2));
+				Assert.That(result.Rows[0].Tree.Uid, Is.EqualTo(tree.Uid));
+				Assert.That(result.Rows[0].Group.Uid, Is.EqualTo(group1.Uid));
+				Assert.That(result.Rows[1].Tree.Uid, Is.EqualTo(tree.Uid));
+				Assert.That(result.Rows[1].Group.Uid, Is.EqualTo(group1.Uid));
+
 				var items = result.Rows.Select(x => x.Item.Uid).ToList();
-				CollectionAssert.Contains(items, item1.Uid);
-				CollectionAssert.Contains(items, item2.Uid);
+
+				Assert.That(items, Has.Member(item1.Uid));
+				Assert.That(items, Has.Member(item2.Uid));
 
 				// act - search by item code
 				result = await handler.Handle(new GetClassifierLinkList
@@ -62,11 +64,11 @@ namespace Montr.MasterData.Tests.QueryHandlers
 				}, cancellationToken);
 
 				// assert
-				Assert.IsNotNull(result);
-				Assert.AreEqual(1, result.TotalCount);
-				Assert.AreEqual(tree.Uid, result.Rows[0].Tree.Uid);
-				Assert.AreEqual(group1.Uid, result.Rows[0].Group.Uid);
-				Assert.AreEqual(item1.Uid, result.Rows[0].Item.Uid);
+				Assert.That(result, Is.Not.Null);
+				Assert.That(result.TotalCount, Is.EqualTo(1));
+				Assert.That(result.Rows[0].Tree.Uid, Is.EqualTo(tree.Uid));
+				Assert.That(result.Rows[0].Group.Uid, Is.EqualTo(group1.Uid));
+				Assert.That(result.Rows[0].Item.Uid, Is.EqualTo(item1.Uid));
 
 				// act - search by both group and item codes
 				result = await handler.Handle(new GetClassifierLinkList
@@ -77,11 +79,11 @@ namespace Montr.MasterData.Tests.QueryHandlers
 				}, cancellationToken);
 
 				// assert
-				Assert.IsNotNull(result);
-				Assert.AreEqual(1, result.TotalCount);
-				Assert.AreEqual(tree.Uid, result.Rows[0].Tree.Uid);
-				Assert.AreEqual(group1.Uid, result.Rows[0].Group.Uid);
-				Assert.AreEqual(item2.Uid, result.Rows[0].Item.Uid);
+				Assert.That(result, Is.Not.Null);
+				Assert.That(result.TotalCount, Is.EqualTo(1));
+				Assert.That(result.Rows[0].Tree.Uid, Is.EqualTo(tree.Uid));
+				Assert.That(result.Rows[0].Group.Uid, Is.EqualTo(group1.Uid));
+				Assert.That(result.Rows[0].Item.Uid, Is.EqualTo(item2.Uid));
 			}
 		}
 	}

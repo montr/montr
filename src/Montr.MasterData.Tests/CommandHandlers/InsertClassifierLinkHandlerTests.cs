@@ -38,9 +38,9 @@ namespace Montr.MasterData.Tests.CommandHandlers
 				// assert - initially new items belongs to default group
 				var links = await generator.GetLinks(null, item1.Uid, cancellationToken);
 
-				Assert.AreEqual(1, links.TotalCount);
-				Assert.AreEqual(group1.Uid, links.Rows[0].Group.Uid);
-				Assert.AreEqual(item1.Uid, links.Rows[0].Item.Uid);
+				Assert.That(links.TotalCount, Is.EqualTo(1));
+				Assert.That(links.Rows[0].Group.Uid, Is.EqualTo(group1.Uid));
+				Assert.That(links.Rows[0].Item.Uid, Is.EqualTo(item1.Uid));
 
 				// act - link with new group in same hierarchy
 				var result = await handler.Handle(new InsertClassifierLink
@@ -54,14 +54,14 @@ namespace Montr.MasterData.Tests.CommandHandlers
 				}, cancellationToken);
 
 				// assert - new link is inserted
-				Assert.IsTrue(result.Success);
+				Assert.That(result.Success);
 
 				// assert - item linked to new group, link with root not exists
 				links = await generator.GetLinks(null, item1.Uid, cancellationToken);
 
-				Assert.AreEqual(1, links.TotalCount);
-				Assert.AreEqual(group2.Uid, links.Rows[0].Group.Uid);
-				Assert.AreEqual(item1.Uid, links.Rows[0].Item.Uid);
+				Assert.That(links.TotalCount, Is.EqualTo(1));
+				Assert.That(links.Rows[0].Group.Uid, Is.EqualTo(group2.Uid));
+				Assert.That(links.Rows[0].Item.Uid, Is.EqualTo(item1.Uid));
 			}
 		}
 
@@ -91,9 +91,9 @@ namespace Montr.MasterData.Tests.CommandHandlers
 				// assert - initially new items belongs to default group
 				var links = await generator.GetLinks(null, item1.Uid, cancellationToken);
 
-				Assert.AreEqual(1, links.TotalCount);
-				Assert.AreEqual(group1.Uid, links.Rows[0].Group.Uid);
-				Assert.AreEqual(item1.Uid, links.Rows[0].Item.Uid);
+				Assert.That(links.TotalCount, Is.EqualTo(1));
+				Assert.That(links.Rows[0].Group.Uid, Is.EqualTo(group1.Uid));
+				Assert.That(links.Rows[0].Item.Uid, Is.EqualTo(item1.Uid));
 
 				// act - link with new group in same hierarchy
 				var result = await handler.Handle(new InsertClassifierLink
@@ -107,15 +107,15 @@ namespace Montr.MasterData.Tests.CommandHandlers
 				}, cancellationToken);
 
 				// assert - new link inserted
-				Assert.IsTrue(result.Success);
+				Assert.That(result.Success);
 
 				// assert - item linked to new group, link with default root still exists
 				links = await generator.GetLinks(null, item1.Uid, cancellationToken);
 
-				Assert.AreEqual(2, links.TotalCount);
+				Assert.That(links.TotalCount, Is.EqualTo(2));
 				var groups = links.Rows.Select(x => x.Group.Uid).ToList();
-				CollectionAssert.Contains(groups, group1.Uid);
-				CollectionAssert.Contains(groups, group2.Uid);
+				Assert.That(groups, Has.Member(group1.Uid));
+				Assert.That(groups, Has.Member(group2.Uid));
 			}
 		}
 	}

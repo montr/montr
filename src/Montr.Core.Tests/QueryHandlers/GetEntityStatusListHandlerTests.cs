@@ -44,9 +44,9 @@ namespace Montr.Core.Tests.QueryHandlers
 				var result = await handler.Handle(request, cancellationToken);
 
 				// assert
-				Assert.IsNotNull(result);
-				Assert.AreEqual(10, result.Rows.Count);
-				Assert.AreEqual(42, result.TotalCount);
+				Assert.That(result, Is.Not.Null);
+				Assert.That(result.Rows.Count, Is.EqualTo(10));
+				Assert.That(result.TotalCount, Is.EqualTo(42));
 			}
 		}
 	}

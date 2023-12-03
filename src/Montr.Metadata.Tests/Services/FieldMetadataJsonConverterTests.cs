@@ -30,7 +30,7 @@ namespace Montr.Metadata.Tests.Services
 			var result = JsonSerializer.Serialize(fields, options);
 
 			// assert
-			Assert.IsNotNull(result);
+			Assert.That(result, Is.Not.Null);
 
 			AssertAllPropertiesSerialized(result, fields);
 		}
@@ -47,7 +47,7 @@ namespace Montr.Metadata.Tests.Services
 			var result = JsonSerializer.Serialize(fields, options);
 
 			// assert
-			Assert.IsNotNull(result);
+			Assert.That(result, Is.Not.Null);
 
 			Assert.Throws<AssertionException>(() => AssertAllPropertiesSerialized(result, fields));
 		}
@@ -56,7 +56,7 @@ namespace Montr.Metadata.Tests.Services
 		{
 			var json = JsonDocument.Parse(result);
 
-			Assert.AreEqual(fields.Count, json.RootElement.GetArrayLength());
+			Assert.That(json.RootElement.GetArrayLength(), Is.EqualTo(fields.Count));
 
 			for (var i = 0; i < fields.Count; i++)
 			{
@@ -85,7 +85,7 @@ namespace Montr.Metadata.Tests.Services
 						}
 						else
 						{
-							Assert.AreEqual(expected, JsonSerializer.Deserialize(actual, property.PropertyType));
+							Assert.That(JsonSerializer.Deserialize(actual, property.PropertyType), Is.EqualTo(expected));
 						}
 					}
 					else

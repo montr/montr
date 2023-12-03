@@ -95,8 +95,8 @@ namespace Montr.Kompany.Tests.CommandHandlers
 
 				var user = await userRepository.Insert(new User { Name = "User 1" }, cancellationToken);
 
-				Assert.IsTrue(user.Success);
-				Assert.IsNotNull(user.Uid);
+				Assert.That(user.Success);
+				Assert.That(user.Uid, Is.Not.Null);
 
 				// act
 				var company = new Company
@@ -115,10 +115,10 @@ namespace Montr.Kompany.Tests.CommandHandlers
 				var result = await handler.Handle(request, cancellationToken);
 
 				// assert
-				Assert.IsNotNull(result);
-				Assert.IsTrue(result.Success);
-				Assert.IsNotNull(result.Uid);
-				Assert.AreNotEqual(Guid.Empty, result.Uid);
+				Assert.That(result, Is.Not.Null);
+				Assert.That(result.Success);
+				Assert.That(result.Uid, Is.Not.Null);
+				Assert.That(result.Uid, Is.Not.EqualTo(Guid.Empty));
 
 				// assert registration request inserted
 				DbDocument dbDocument;
@@ -129,7 +129,7 @@ namespace Montr.Kompany.Tests.CommandHandlers
 						.SingleAsync(cancellationToken);
 				}
 
-				Assert.IsNotNull(dbDocument);
+				Assert.That(dbDocument, Is.Not.Null);
 
 				// assert registration request field data inserted
 				IList<DbFieldData> fieldData;
@@ -142,9 +142,9 @@ namespace Montr.Kompany.Tests.CommandHandlers
 
 				// todo: restore after registration rework
 				// Assert.AreEqual(company.Fields.Count, fieldData.Count);
-				Assert.AreEqual(company.Fields["test1"], fieldData.Single(x => x.Key == "test1").Value);
-				Assert.AreEqual(company.Fields["test2"], fieldData.Single(x => x.Key == "test2").Value);
-				Assert.AreEqual(company.Fields["test3"], fieldData.Single(x => x.Key == "test3").Value);
+				Assert.That(fieldData.Single(x => x.Key == "test1").Value, Is.EqualTo(company.Fields["test1"]));
+				Assert.That(fieldData.Single(x => x.Key == "test2").Value, Is.EqualTo(company.Fields["test2"]));
+				Assert.That(fieldData.Single(x => x.Key == "test3").Value, Is.EqualTo(company.Fields["test3"]));
 			}
 		}
 	}

@@ -77,10 +77,10 @@ namespace Montr.MasterData.Tests.QueryHandlers
 				var result = await handler.Handle(command, cancellationToken);
 
 				// assert
-				Assert.IsNotNull(result);
-				Assert.IsNotNull(result.Stream);
-				Assert.IsNotNull(result.FileName);
-				Assert.IsNotNull(result.ContentType);
+				Assert.That(result, Is.Not.Null);
+				Assert.That(result.Stream, Is.Not.Null);
+				Assert.That(result.FileName, Is.Not.Null);
+				Assert.That(result.ContentType, Is.Not.Null);
 
 				// temp
 				using (var fs = new FileStream(result.FileName, FileMode.OpenOrCreate))

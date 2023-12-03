@@ -45,17 +45,17 @@ namespace Montr.Core.Tests.QueryHandlers
 			}, cancellationToken);
 
 			// assert
-			Assert.IsNotNull(result);
-			Assert.IsNotNull(result.ContentType);
-			Assert.IsNotNull(result.FileName);
+			Assert.That(result, Is.Not.Null);
+			Assert.That(result.ContentType, Is.Not.Null);
+			Assert.That(result.FileName, Is.Not.Null);
 
 			using (var reader = new StreamReader(result.Stream))
 			{
-				var expected = File.ReadAllText("../../../Content/locale-strings-en-common-test-1.json");
+				var expected = await File.ReadAllTextAsync("../../../Content/locale-strings-en-common-test-1.json", cancellationToken);
 
-				var json = reader.ReadToEnd().Replace("\r\n", "\n");
+				var json = (await reader.ReadToEndAsync(cancellationToken)).Replace("\r\n", "\n");
 
-				Assert.AreEqual(expected, json);
+				Assert.That(json, Is.EqualTo(expected));
 			}
 		}
 	}

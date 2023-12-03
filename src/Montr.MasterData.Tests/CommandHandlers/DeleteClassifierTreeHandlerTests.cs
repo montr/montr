@@ -33,7 +33,7 @@ namespace Montr.MasterData.Tests.CommandHandlers
 
 				// assert - default and second trees exists
 				var trees = await generator.GetTrees(cancellationToken);
-				Assert.AreEqual(2, trees.TotalCount);
+				Assert.That(trees.TotalCount, Is.EqualTo(2));
 
 				// act
 				var result = await handler.Handle(new DeleteClassifierTree
@@ -45,13 +45,13 @@ namespace Montr.MasterData.Tests.CommandHandlers
 				}, cancellationToken);
 
 				// assert - link deleted
-				Assert.IsTrue(result.Success);
-				Assert.AreEqual(1, result.AffectedRows);
+				Assert.That(result.Success);
+				Assert.That(result.AffectedRows, Is.EqualTo(1));
 
 				// assert - default hierarchy exists
 				trees = await generator.GetTrees(cancellationToken);
-				Assert.AreEqual(1, trees.TotalCount);
-				Assert.AreEqual(ClassifierTree.DefaultCode, trees.Rows[0].Code);
+				Assert.That(trees.TotalCount, Is.EqualTo(1));
+				Assert.That(trees.Rows[0].Code, Is.EqualTo(ClassifierTree.DefaultCode));
 			}
 		}
 	}

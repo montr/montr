@@ -73,9 +73,9 @@ namespace Montr.Tendr.Tests.CommandHandlers
 				var result = await handler.Handle(command, cancellationToken);
 
 				// assert
-				Assert.IsNotNull(result);
-				Assert.IsTrue(result.Success);
-				Assert.AreEqual(1, result.AffectedRows);
+				Assert.That(result, Is.Not.Null);
+				Assert.That(result.Success);
+				Assert.That(result.AffectedRows, Is.EqualTo(1));
 			}
 		}
 	}

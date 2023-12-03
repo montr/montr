@@ -68,7 +68,7 @@ namespace Montr.Idx.Tests.CommandHandlers
 				var result = await handler.Handle(command, cancellationToken);
 
 				// assert
-				Assert.IsTrue(result.Success);
+				Assert.That(result.Success);
 			}
 		}
 	}

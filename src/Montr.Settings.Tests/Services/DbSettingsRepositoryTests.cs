@@ -41,8 +41,8 @@ namespace Montr.Settings.Tests.Services
 				var result = await options.Update(cancellationToken);
 
 				// assert (insert)
-				Assert.IsTrue(result.Success);
-				Assert.AreEqual(3, result.AffectedRows);
+				Assert.That(result.Success);
+				Assert.That(result.AffectedRows, Is.EqualTo(3));
 
 				var allSettings = await LoadSettings(dbContextFactory, cancellationToken);
 
@@ -50,14 +50,14 @@ namespace Montr.Settings.Tests.Services
 				var s2 = allSettings.SingleOrDefault(x => x.Key == "Montr.Settings.Tests.Services.TestOptions:Value");
 				var s3 = allSettings.SingleOrDefault(x => x.Key == "Montr.Settings.Tests.Services.TestOptions:State");
 
-				Assert.IsNotNull(s1);
-				Assert.AreEqual("42", s1.Value);
+				Assert.That(s1, Is.Not.Null);
+				Assert.That(s1.Value, Is.EqualTo("42"));
 
-				Assert.IsNotNull(s2);
-				Assert.AreEqual(null, s2.Value);
+				Assert.That(s2, Is.Not.Null);
+				Assert.That(s2.Value, Is.EqualTo(null));
 
-				Assert.IsNotNull(s3);
-				Assert.AreEqual("Initialized", s3.Value);
+				Assert.That(s3, Is.Not.Null);
+				Assert.That(s3.Value, Is.EqualTo("Initialized"));
 
 				// act (update)
 				options =  repository.GetApplicationSettings<TestOptions>()
@@ -66,15 +66,15 @@ namespace Montr.Settings.Tests.Services
 				result = await options.Update(cancellationToken);
 
 				// assert (update)
-				Assert.IsTrue(result.Success);
-				Assert.AreEqual(1, result.AffectedRows);
+				Assert.That(result.Success);
+				Assert.That(result.AffectedRows, Is.EqualTo(1));
 
 				allSettings = await LoadSettings(dbContextFactory, cancellationToken);
 
 				s3 = allSettings.SingleOrDefault(x => x.Key == "Montr.Settings.Tests.Services.TestOptions:State");
 
-				Assert.IsNotNull(s3);
-				Assert.AreEqual("None", s3.Value);
+				Assert.That(s3, Is.Not.Null);
+				Assert.That(s3.Value, Is.EqualTo("None"));
 			}
 		}
 

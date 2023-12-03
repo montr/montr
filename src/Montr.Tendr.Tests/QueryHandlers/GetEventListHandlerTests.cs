@@ -29,8 +29,8 @@ namespace Montr.Tendr.Tests.QueryHandlers
 			var result = await handler.Handle(command, cancellationToken);
 
 			// assert
-			Assert.IsNotNull(result);
-			Assert.IsNotNull(result.Rows);
+			Assert.That(result, Is.Not.Null);
+			Assert.That(result.Rows, Is.Not.Null);
 		}
 	}
 }

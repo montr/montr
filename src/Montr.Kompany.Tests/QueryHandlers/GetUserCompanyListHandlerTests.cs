@@ -41,13 +41,13 @@ namespace Montr.Kompany.Tests.QueryHandlers
 					ConfigCode = CompanyConfigCode.Company
 				}, cancellationToken);
 
-				Assert.IsTrue(company.Success);
-				Assert.IsNotNull(company.Uid);
+				Assert.That(company.Success);
+				Assert.That(company.Uid, Is.Not.Null);
 
 				var user = await userRepository.Insert(new User { Name = "User 1" }, cancellationToken);
 
-				Assert.IsTrue(user.Success);
-				Assert.IsNotNull(user.Uid);
+				Assert.That(user.Success);
+				Assert.That(user.Uid, Is.Not.Null);
 
 				using (var db = dbContextFactory.Create())
 				{
@@ -64,8 +64,8 @@ namespace Montr.Kompany.Tests.QueryHandlers
 				}, cancellationToken);
 
 				// assert
-				Assert.IsNotNull(result);
-				Assert.AreEqual(1, result.Count);
+				Assert.That(result, Is.Not.Null);
+				Assert.That(result, Has.Count.EqualTo(1));
 			}
 		}
 	}

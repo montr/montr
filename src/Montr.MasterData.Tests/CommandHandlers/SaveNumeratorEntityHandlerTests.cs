@@ -77,36 +77,36 @@ namespace Montr.MasterData.Tests.CommandHandlers
 				}, cancellationToken);
 
 				// assert
-				Assert.IsTrue(result1.Success);
-				Assert.IsTrue(result2.Success);
-				Assert.IsTrue(result3.Success);
-				Assert.IsTrue(result4.Success);
+				Assert.That(result1.Success);
+				Assert.That(result2.Success);
+				Assert.That(result3.Success);
+				Assert.That(result4.Success);
 
 				var numerator1 = await getNumeratorEntityHandler.Handle(new GetNumeratorEntity { EntityUid = entity1 }, cancellationToken);
 				var numerator2 = await getNumeratorEntityHandler.Handle(new GetNumeratorEntity { EntityUid = entity2 }, cancellationToken);
 				var numerator3 = await getNumeratorEntityHandler.Handle(new GetNumeratorEntity { EntityUid = entity3 }, cancellationToken);
 				var numerator4 = await getNumeratorEntityHandler.Handle(new GetNumeratorEntity { EntityUid = entity4 }, cancellationToken);
 
-				Assert.AreEqual(entity1, numerator1.EntityUid);
-				Assert.AreEqual(numerator.Uid, numerator1.NumeratorUid);
-				Assert.AreEqual(true, numerator1.IsAutoNumbering);
+				Assert.That(numerator1.EntityUid, Is.EqualTo(entity1));
+				Assert.That(numerator1.NumeratorUid, Is.EqualTo(numerator.Uid));
+				Assert.That(numerator1.IsAutoNumbering, Is.EqualTo(true));
 
-				Assert.AreEqual(entity2, numerator2.EntityUid);
-				Assert.AreEqual(numerator.Uid, numerator2.NumeratorUid);
-				Assert.AreEqual(false, numerator2.IsAutoNumbering);
+				Assert.That(numerator2.EntityUid, Is.EqualTo(entity2));
+				Assert.That(numerator2.NumeratorUid, Is.EqualTo(numerator.Uid));
+				Assert.That(numerator2.IsAutoNumbering, Is.EqualTo(false));
 
-				Assert.AreEqual(entity3, numerator3.EntityUid);
-				Assert.AreEqual(null, numerator3.NumeratorUid);
-				Assert.AreEqual(true, numerator3.IsAutoNumbering);
+				Assert.That(numerator3.EntityUid, Is.EqualTo(entity3));
+				Assert.That(numerator3.NumeratorUid, Is.EqualTo(null));
+				Assert.That(numerator3.IsAutoNumbering, Is.EqualTo(true));
 
-				Assert.AreEqual(entity4, numerator4.EntityUid);
-				Assert.AreEqual(null, numerator4.NumeratorUid);
-				Assert.AreEqual(false, numerator4.IsAutoNumbering);
+				Assert.That(numerator4.EntityUid, Is.EqualTo(entity4));
+				Assert.That(numerator4.NumeratorUid, Is.EqualTo(null));
+				Assert.That(numerator4.IsAutoNumbering, Is.EqualTo(false));
 
 				var entityList = await getNumeratorEntityListHandler.Handle(new GetNumeratorEntityList { NumeratorUid = numerator.Uid }, cancellationToken);
-				Assert.AreEqual(2, entityList.Rows.Count);
-				Assert.AreEqual(1, entityList.Rows.Count(x => x.IsAutoNumbering));
-				Assert.AreEqual(1, entityList.Rows.Count(x => x.IsAutoNumbering == false));
+				Assert.That(entityList.Rows, Has.Count.EqualTo(2));
+				Assert.That(entityList.Rows.Count(x => x.IsAutoNumbering), Is.EqualTo(1));
+				Assert.That(entityList.Rows.Count(x => x.IsAutoNumbering == false), Is.EqualTo(1));
 			}
 		}
 	}

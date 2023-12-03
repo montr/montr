@@ -20,7 +20,7 @@ namespace Montr.Metadata.Tests.Services
 			var result = provider.ReadInternal(value);
 
 			// assert
-			Assert.AreEqual(expected, result);
+			Assert.That(result, Is.EqualTo(expected));
 		}
 
 		[Test]
@@ -37,7 +37,7 @@ namespace Montr.Metadata.Tests.Services
 			var result = provider.ReadInternal(value);
 
 			// assert
-			Assert.AreEqual(expected, result);
+			Assert.That(result, Is.EqualTo(expected));
 		}
 
 		[Test]

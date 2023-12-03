@@ -36,8 +36,8 @@ namespace Montr.MasterData.Tests.QueryHandlers
 				}, cancellationToken);
 
 				// assert
-				Assert.IsNotNull(result);
-				Assert.AreEqual(1, result.TotalCount);
+				Assert.That(result, Is.Not.Null);
+				Assert.That(result.TotalCount, Is.EqualTo(1));
 			}
 		}
 	}

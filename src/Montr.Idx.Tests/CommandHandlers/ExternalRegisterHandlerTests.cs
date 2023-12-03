@@ -44,7 +44,7 @@ namespace Montr.Idx.Tests.CommandHandlers
 				var result = await handler.Handle(command, cancellationToken);
 
 				// assert
-				Assert.IsTrue(result.Success, string.Join(",", result.Message));
+				Assert.That(result.Success, string.Join(",", result.Message));
 			}
 		}
 	}

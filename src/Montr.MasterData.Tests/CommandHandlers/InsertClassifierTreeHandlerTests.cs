@@ -44,13 +44,13 @@ namespace Montr.MasterData.Tests.CommandHandlers
 				}, cancellationToken);
 
 				// assert
-				Assert.IsNotNull(result);
-				Assert.IsTrue(result.Success);
-				Assert.IsNotNull(result.Uid);
-				Assert.AreNotEqual(Guid.Empty, result.Uid);
+				Assert.That(result, Is.Not.Null);
+				Assert.That(result.Success);
+				Assert.That(result.Uid, Is.Not.Null);
+				Assert.That(result.Uid, Is.Not.EqualTo(Guid.Empty));
 
 				var trees = await generator.GetTrees(cancellationToken);
-				Assert.AreEqual(2, trees.TotalCount); // one for default tree and second for inserted in test
+				Assert.That(trees.TotalCount, Is.EqualTo(2)); // one for default tree and second for inserted in test
 			}
 		}
 

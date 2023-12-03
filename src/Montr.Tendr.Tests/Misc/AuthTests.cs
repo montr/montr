@@ -27,7 +27,7 @@ namespace Montr.Tendr.Tests.Misc
 				}
 			});
 
-			Assert.IsTrue(disco.IsError == false, disco.Error);
+			Assert.That(disco.IsError == false, disco.Error);
 
 			Console.WriteLine("DiscoveryResponse:\n" + disco.Json + "\n");
 
@@ -41,7 +41,7 @@ namespace Montr.Tendr.Tests.Misc
 				Scope = "tendr"
 			});
 
-			Assert.IsTrue(tokenResponse.IsError == false, tokenResponse.Error);
+			Assert.That(tokenResponse.IsError == false, tokenResponse.Error);
 
 			Console.WriteLine("TokenResponse:\n" + tokenResponse.Json + "\n");
 
@@ -54,7 +54,7 @@ namespace Montr.Tendr.Tests.Misc
 
 			var response = await client.PostAsync("http://app.tendr.montr.io:5000/api/events/load", httpContent);
 
-			Assert.IsTrue(response.IsSuccessStatusCode, "Response status code: " + response.StatusCode);
+			Assert.That(response.IsSuccessStatusCode, "Response status code: " + response.StatusCode);
 
 			var content = await response.Content.ReadAsStringAsync();
 			Console.WriteLine("ApiResponse:\n" + JObject.Parse(content) + "\n");

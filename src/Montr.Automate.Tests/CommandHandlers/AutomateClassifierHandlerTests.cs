@@ -132,8 +132,8 @@ namespace Montr.Automate.Tests.CommandHandlers
 						}
 					}, cancellationToken);
 
-					Assert.IsNotNull(insertResult);
-					Assert.AreEqual(true, insertResult.Success);
+					Assert.That(insertResult, Is.Not.Null);
+					Assert.That(insertResult.Success, Is.EqualTo(true));
 
 					// ReSharper disable once PossibleInvalidOperationException
 					insertedIds.Add(insertResult.Uid.Value);
@@ -143,8 +143,8 @@ namespace Montr.Automate.Tests.CommandHandlers
 					.Search(new ClassifierSearchRequest {TypeCode = generator.TypeCode}, cancellationToken);
 
 				// assert
-				Assert.IsNotNull(searchResult);
-				Assert.AreEqual(insertedIds.Count, searchResult.Rows.Count);
+				Assert.That(searchResult, Is.Not.Null);
+				Assert.That(searchResult.Rows, Has.Count.EqualTo(insertedIds.Count));
 
 				// act - update
 				foreach (var classifier in searchResult.Rows.Cast<Automation>())
@@ -160,18 +160,18 @@ namespace Montr.Automate.Tests.CommandHandlers
 
 					var updateResult = await updateHandler.Handle(updateCommand, cancellationToken);
 
-					Assert.IsNotNull(updateResult);
-					Assert.AreEqual(true, updateResult.Success);
+					Assert.That(updateResult, Is.Not.Null);
+					Assert.That(updateResult.Success, Is.EqualTo(true));
 				}
 
 				searchResult = await classifierRepositoryFactory.GetNamedOrDefaultService(generator.TypeCode)
 					.Search(new ClassifierSearchRequest {TypeCode = generator.TypeCode}, cancellationToken);
 
 				// assert
-				Assert.IsNotNull(searchResult);
-				Assert.AreEqual(insertedIds.Count, searchResult.Rows.Count);
-				Assert.AreEqual(0, searchResult.Rows.Count(x => x.Name.Contains("Test")));
-				Assert.AreEqual(insertedIds.Count, searchResult.Rows.Count(x => x.Name.Contains("Updated")));
+				Assert.That(searchResult, Is.Not.Null);
+				Assert.That(searchResult.Rows, Has.Count.EqualTo(insertedIds.Count));
+				Assert.That(searchResult.Rows.Count(x => x.Name.Contains("Test")), Is.EqualTo(0));
+				Assert.That(searchResult.Rows.Count(x => x.Name.Contains("Updated")), Is.EqualTo(insertedIds.Count));
 				// Assert.AreEqual(insertedIds.Count, searchResult.Rows.Cast<Automation>().Count(x => x.Pattern.Contains("No.")));
 
 				// act - delete
@@ -185,16 +185,16 @@ namespace Montr.Automate.Tests.CommandHandlers
 				var result = await deleteHandler.Handle(command, cancellationToken);
 
 				// assert
-				Assert.IsNotNull(result);
-				Assert.IsTrue(result.Success);
-				Assert.AreEqual(insertedIds.Count, result.AffectedRows);
+				Assert.That(result, Is.Not.Null);
+				Assert.That(result.Success);
+				Assert.That(result.AffectedRows, Is.EqualTo(insertedIds.Count));
 
 				searchResult = await classifierRepositoryFactory.GetNamedOrDefaultService(generator.TypeCode)
 					.Search(new ClassifierSearchRequest {TypeCode = generator.TypeCode}, cancellationToken);
 
 				// assert
-				Assert.IsNotNull(searchResult);
-				Assert.AreEqual(0, searchResult.Rows.Count);
+				Assert.That(searchResult, Is.Not.Null);
+				Assert.That(searchResult.Rows, Is.Empty);
 			}
 		}
 

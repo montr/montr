@@ -17,7 +17,7 @@ namespace Montr.Worker.Hangfire.Tests.Services
 			var jobId = jobManager.Enqueue<JobHandler>(x => x.SumJob(1, 2));
 
 			// assert
-			Assert.IsNotNull(jobId);
+			Assert.That(jobId, Is.Not.Null);
 		}
 
 		[Test]
@@ -33,7 +33,7 @@ namespace Montr.Worker.Hangfire.Tests.Services
 				var jobId = jobManager.Enqueue<JobHandler>(x => x.SumJob(1, 2));
 
 				// assert
-				Assert.IsNotNull(jobId);
+				Assert.That(jobId, Is.Not.Null);
 
 				scope.Commit();
 			}

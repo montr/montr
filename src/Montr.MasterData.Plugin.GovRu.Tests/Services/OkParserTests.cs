@@ -60,10 +60,10 @@ namespace Montr.MasterData.Plugin.GovRu.Tests.Services
 			var result = await Parse(parser, "nsiOkei_*.xml");
 
 			// assert
-			Assert.IsNotNull(result);
-			Assert.AreEqual(561, result.Items.Count);
-			Assert.AreEqual(28, result.Groups.Count);
-			Assert.AreEqual(561, result.Links.Count);
+			Assert.That(result, Is.Not.Null);
+			Assert.That(result.Items, Has.Count.EqualTo(561));
+			Assert.That(result.Groups, Has.Count.EqualTo(28));
+			Assert.That(result.Links, Has.Count.EqualTo(561));
 
 			if (dumpToDb) await DumpToDb(result, "okei");
 		}
@@ -79,9 +79,9 @@ namespace Montr.MasterData.Plugin.GovRu.Tests.Services
 			var result = await Parse(parser, "nsiOkved2_*.xml");
 
 			// assert
-			Assert.IsNotNull(result);
-			Assert.IsNotNull(result.Items);
-			Assert.AreEqual(2794, result.Items.Count);
+			Assert.That(result, Is.Not.Null);
+			Assert.That(result.Items, Is.Not.Null);
+			Assert.That(result.Items, Has.Count.EqualTo(2794));
 			// Assert.AreEqual(2771, result.Items.Count(x => x.ParentCode != null));
 			// Assert.AreEqual("66.19.7", result.Items.Single(x => x.Name == "Рейтинговая деятельность").Code);
 
@@ -99,9 +99,9 @@ namespace Montr.MasterData.Plugin.GovRu.Tests.Services
 			var result = await Parse(parser, "nsiOkpd2_*.xml");
 
 			// assert
-			Assert.IsNotNull(result);
-			Assert.IsNotNull(result.Items);
-			Assert.AreEqual(3000, result.Items.Count);
+			Assert.That(result, Is.Not.Null);
+			Assert.That(result.Items, Is.Not.Null);
+			Assert.That(result.Items, Has.Count.EqualTo(3000));
 			// Assert.AreEqual(57561, result.Items.Count);
 			// Assert.AreEqual(19527, result.Items.Count(x => x.ParentCode != null));
 			// Assert.AreEqual("66.19.7", result.Items.Single(x => x.Name == "Рейтинговая деятельность").Code);
@@ -120,9 +120,9 @@ namespace Montr.MasterData.Plugin.GovRu.Tests.Services
 			var result = await Parse(parser, "nsiOktmo_*.xml");
 
 			// assert
-			Assert.IsNotNull(result);
-			Assert.IsNotNull(result.Items);
-			Assert.AreEqual(3000, result.Items.Count);
+			Assert.That(result, Is.Not.Null);
+			Assert.That(result.Items, Is.Not.Null);
+			Assert.That(result.Items, Has.Count.EqualTo(3000));
 			// Assert.AreEqual(211185, result.Items.Count);
 
 			if (dumpToDb) await DumpToDb(result, "oktmo");
@@ -140,9 +140,9 @@ namespace Montr.MasterData.Plugin.GovRu.Tests.Services
 			var result = await Parse(parser, "data-20190314t000000-structure-20150128t000000.csv");
 
 			// assert
-			Assert.IsNotNull(result);
-			Assert.IsNotNull(result.Items);
-			Assert.AreEqual(200313, result.Items.Count);
+			Assert.That(result, Is.Not.Null);
+			Assert.That(result.Items, Is.Not.Null);
+			Assert.That(result.Items, Has.Count.EqualTo(200313));
 
 			if (dumpToDb) await DumpToDb(result, "oktmo");
 		}
@@ -158,9 +158,9 @@ namespace Montr.MasterData.Plugin.GovRu.Tests.Services
 			var result = await Parse(parser, "nsiOkv_*.xml");
 
 			// assert
-			Assert.IsNotNull(result);
-			Assert.IsNotNull(result.Items);
-			Assert.AreEqual(163, result.Items.Count);
+			Assert.That(result, Is.Not.Null);
+			Assert.That(result.Items, Is.Not.Null);
+			Assert.That(result.Items, Has.Count.EqualTo(163));
 
 			if (dumpToDb) await DumpToDb(result, "okv");
 		}
@@ -176,9 +176,9 @@ namespace Montr.MasterData.Plugin.GovRu.Tests.Services
 			var result = await Parse(parser, "nsiOkopf_*.xml");
 
 			// assert
-			Assert.IsNotNull(result);
-			Assert.IsNotNull(result.Items);
-			Assert.AreEqual(223, result.Items.Count);
+			Assert.That(result, Is.Not.Null);
+			Assert.That(result.Items, Is.Not.Null);
+			Assert.That(result.Items, Has.Count.EqualTo(223));
 
 			if (dumpToDb) await DumpToDb(result, "okopf");
 		}

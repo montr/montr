@@ -44,15 +44,15 @@ namespace Montr.Core.Tests.CommandHandlers
 				var result = await handler.Handle(request, cancellationToken);
 
 				// assert
-				Assert.IsNotNull(result);
-				Assert.AreEqual(1, result.AffectedRows);
+				Assert.That(result, Is.Not.Null);
+				Assert.That(result.AffectedRows, Is.EqualTo(1));
 
 				var statuses = await generator.GetEntityStatuses(cancellationToken);
 
-				Assert.AreEqual(1, statuses.Rows.Count);
-				Assert.AreEqual(12, statuses.Rows[0].DisplayOrder);
-				Assert.AreEqual("draft", statuses.Rows[0].Code);
-				Assert.AreEqual("Draft", statuses.Rows[0].Name);
+				Assert.That(statuses.Rows.Count, Is.EqualTo(1));
+				Assert.That(statuses.Rows[0].DisplayOrder, Is.EqualTo(12));
+				Assert.That(statuses.Rows[0].Code, Is.EqualTo("draft"));
+				Assert.That(statuses.Rows[0].Name, Is.EqualTo("Draft"));
 			}
 		}
 	}

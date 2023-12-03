@@ -40,10 +40,10 @@ namespace Montr.MasterData.Tests.CommandHandlers
 				// assert - links to --default and-- secondary hierarchy exists
 				var links = await dbHelper.GetLinks(null, item1.Uid, cancellationToken);
 
-				Assert.AreEqual(1, links.TotalCount);
+				Assert.That(links.TotalCount, Is.EqualTo(1));
 				var groups = links.Rows.Select(x => x.Group.Uid).ToList();
 				// CollectionAssert.Contains(groups, root.Uid);
-				CollectionAssert.Contains(groups, group2.Uid);
+				Assert.That(groups, Has.Member(group2.Uid));
 
 				// act
 				var result = await handler.Handle(new DeleteClassifierLink
@@ -57,12 +57,12 @@ namespace Montr.MasterData.Tests.CommandHandlers
 				}, cancellationToken);
 
 				// assert - link deleted
-				Assert.IsTrue(result.Success);
+				Assert.That(result.Success);
 
 				// assert - NO link to default hierarchy exists
 				links = await dbHelper.GetLinks(null, item1.Uid, cancellationToken);
 
-				Assert.AreEqual(0, links.TotalCount);
+				Assert.That(links.TotalCount, Is.EqualTo(0));
 				// Assert.AreEqual(root.Uid, links.Rows[0].Group.Uid);
 				// Assert.AreEqual(item1.Uid, links.Rows[0].Item.Uid);
 			}
@@ -92,9 +92,9 @@ namespace Montr.MasterData.Tests.CommandHandlers
 				// assert - links in default hierarchy exists
 				var links = await generator.GetLinks(null, item1.Uid, cancellationToken);
 
-				Assert.AreEqual(1, links.TotalCount);
-				Assert.AreEqual(group1.Uid, links.Rows[0].Group.Uid);
-				Assert.AreEqual(item1.Uid, links.Rows[0].Item.Uid);
+				Assert.That(links.TotalCount, Is.EqualTo(1));
+				Assert.That(links.Rows[0].Group.Uid, Is.EqualTo(group1.Uid));
+				Assert.That(links.Rows[0].Item.Uid, Is.EqualTo(item1.Uid));
 
 				// act
 				var result = await handler.Handle(new DeleteClassifierLink
@@ -108,15 +108,15 @@ namespace Montr.MasterData.Tests.CommandHandlers
 				}, cancellationToken);
 
 				// assert - link not deleted
-				Assert.IsTrue(result.Success);
-				Assert.AreEqual(1, result.Errors.Count);
+				Assert.That(result.Success);
+				Assert.That(result.Errors.Count, Is.EqualTo(1));
 
 				// assert - link to default hierarchy root exists
 				links = await generator.GetLinks(null, item1.Uid, cancellationToken);
 
-				Assert.AreEqual(1, links.TotalCount);
-				Assert.AreEqual(root.Uid, links.Rows[0].Group.Uid);
-				Assert.AreEqual(item1.Uid, links.Rows[0].Item.Uid);
+				Assert.That(links.TotalCount, Is.EqualTo(1));
+				Assert.That(links.Rows[0].Group.Uid, Is.EqualTo(root.Uid));
+				Assert.That(links.Rows[0].Item.Uid, Is.EqualTo(item1.Uid));
 			}
 		}
 	}

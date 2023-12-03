@@ -45,13 +45,13 @@ namespace Montr.MasterData.Tests.CommandHandlers
 				}, cancellationToken);
 
 				// assert
-				Assert.IsNotNull(result);
-				Assert.IsTrue(result.Success);
-				Assert.AreEqual(1, result.AffectedRows);
+				Assert.That(result, Is.Not.Null);
+				Assert.That(result.Success);
+				Assert.That(result.AffectedRows, Is.EqualTo(1));
 
 				trees = await generator.GetTrees(cancellationToken);
-				Assert.AreEqual(1, trees.TotalCount);
-				Assert.AreEqual("Test Classifier Tree", trees.Rows[0].Name);
+				Assert.That(trees.TotalCount, Is.EqualTo(1));
+				Assert.That(trees.Rows[0].Name, Is.EqualTo("Test Classifier Tree"));
 			}
 		}
 

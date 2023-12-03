@@ -52,12 +52,12 @@ namespace Montr.MasterData.Tests.QueryHandlers
 				var result = await handler.Handle(command, cancellationToken);
 
 				// assert
-				Assert.IsNotNull(result);
-				Assert.AreEqual(4, result.Rows.Count);
-				Assert.AreEqual(group1.Uid, result.Rows[0].Uid);
-				Assert.AreEqual(group2.Uid, result.Rows[1].Uid);
-				Assert.AreEqual(group3.Uid, result.Rows[2].Uid);
-				Assert.AreEqual(group4.Uid, result.Rows[3].Uid);
+				Assert.That(result, Is.Not.Null);
+				Assert.That(result.Rows, Has.Count.EqualTo(4));
+				Assert.That(result.Rows[0].Uid, Is.EqualTo(group1.Uid));
+				Assert.That(result.Rows[1].Uid, Is.EqualTo(group2.Uid));
+				Assert.That(result.Rows[2].Uid, Is.EqualTo(group3.Uid));
+				Assert.That(result.Rows[3].Uid, Is.EqualTo(group4.Uid));
 			}
 		}
 
@@ -101,8 +101,8 @@ namespace Montr.MasterData.Tests.QueryHandlers
 				var result = await handler.Handle(command, cancellationToken);
 
 				// assert
-				Assert.IsNotNull(result);
-				Assert.AreEqual(7, result.Rows.Count);
+				Assert.That(result, Is.Not.Null);
+				Assert.That(result.Rows, Has.Count.EqualTo(7));
 			}
 		}
 
@@ -145,8 +145,8 @@ namespace Montr.MasterData.Tests.QueryHandlers
 				var result = await handler.Handle(command, cancellationToken);
 
 				// assert
-				Assert.IsNotNull(result);
-				Assert.AreEqual(21, result.Rows.Count);
+				Assert.That(result, Is.Not.Null);
+				Assert.That(result.Rows, Has.Count.EqualTo(21));
 			}
 		}
 
@@ -184,8 +184,8 @@ namespace Montr.MasterData.Tests.QueryHandlers
 				var result = await handler.Handle(command, cancellationToken);
 
 				// assert
-				Assert.IsNotNull(result);
-				Assert.AreEqual(3, result.Rows.Count);
+				Assert.That(result, Is.Not.Null);
+				Assert.That(result.Rows, Has.Count.EqualTo(3));
 			}
 		}
 
@@ -226,8 +226,8 @@ namespace Montr.MasterData.Tests.QueryHandlers
 				var result = await handler.Handle(command, cancellationToken);
 
 				// assert
-				Assert.IsNotNull(result);
-				Assert.IsTrue(result.Rows.Count <= 1000);
+				Assert.That(result, Is.Not.Null);
+				Assert.That(result.Rows.Count <= 1000);
 			}
 		}
 
@@ -286,21 +286,21 @@ namespace Montr.MasterData.Tests.QueryHandlers
 				var result = await handler.Handle(command, cancellationToken);
 
 				// todo: pretty print and compare by focus.txt
-				Assert.IsNotNull(result);
-				Assert.AreEqual(6, result.Rows.Count);
-				Assert.IsNull(result.Rows[0].Children);
-				Assert.IsNull(result.Rows[1].Children);
-				Assert.IsNull(result.Rows[3].Children);
-				Assert.IsNull(result.Rows[4].Children);
-				Assert.IsNull(result.Rows[5].Children);
+				Assert.That(result, Is.Not.Null);
+				Assert.That(result.Rows, Has.Count.EqualTo(6));
+				Assert.That(result.Rows[0].Children, Is.Null);
+				Assert.That(result.Rows[1].Children, Is.Null);
+				Assert.That(result.Rows[3].Children, Is.Null);
+				Assert.That(result.Rows[4].Children, Is.Null);
+				Assert.That(result.Rows[5].Children, Is.Null);
 
-				Assert.IsNotNull(result.Rows[2].Children);
-				Assert.AreEqual(result.Rows[2].Children.Count, 1); // 0 lvl
-				Assert.AreEqual(result.Rows[2].Children[0].Children.Count, 1);  // 1 lvl
-				Assert.AreEqual(result.Rows[2].Children[0].Children[0].Children.Count, 1);  // 2 lvl
-				Assert.AreEqual(result.Rows[2].Children[0].Children[0].Children[0].Children.Count, 1);  // 3 lvl
-				Assert.AreEqual(result.Rows[2].Children[0].Children[0].Children[0].Children[0].Children.Count, 1);  // 4 lvl
-				Assert.IsNull(result.Rows[2].Children[0].Children[0].Children[0].Children[0].Children[0].Children);
+				Assert.That(result.Rows[2].Children, Is.Not.Null);
+				Assert.That(result.Rows[2].Children, Has.Count.EqualTo(1)); // 0 lvl
+				Assert.That(result.Rows[2].Children[0].Children, Has.Count.EqualTo(1));  // 1 lvl
+				Assert.That(result.Rows[2].Children[0].Children[0].Children, Has.Count.EqualTo(1));  // 2 lvl
+				Assert.That(result.Rows[2].Children[0].Children[0].Children[0].Children, Has.Count.EqualTo(1));  // 3 lvl
+				Assert.That(result.Rows[2].Children[0].Children[0].Children[0].Children[0].Children, Has.Count.EqualTo(1));  // 4 lvl
+				Assert.That(result.Rows[2].Children[0].Children[0].Children[0].Children[0].Children[0].Children, Is.Null);
 
 				// act & assert - focus in scope of selected parent
 				// todo: what is the difference with previous asserts - ParentUid should be set?
@@ -314,21 +314,21 @@ namespace Montr.MasterData.Tests.QueryHandlers
 				result = await handler.Handle(command, cancellationToken);
 
 				// todo: pretty print and compare by focus.txt
-				Assert.IsNotNull(result);
-				Assert.AreEqual(6, result.Rows.Count);
-				Assert.IsNull(result.Rows[0].Children);
-				Assert.IsNull(result.Rows[1].Children);
-				Assert.IsNull(result.Rows[3].Children);
-				Assert.IsNull(result.Rows[4].Children);
-				Assert.IsNull(result.Rows[5].Children);
+				Assert.That(result, Is.Not.Null);
+				Assert.That(result.Rows, Has.Count.EqualTo(6));
+				Assert.That(result.Rows[0].Children, Is.Null);
+				Assert.That(result.Rows[1].Children, Is.Null);
+				Assert.That(result.Rows[3].Children, Is.Null);
+				Assert.That(result.Rows[4].Children, Is.Null);
+				Assert.That(result.Rows[5].Children, Is.Null);
 
-				Assert.IsNotNull(result.Rows[2].Children);
-				Assert.AreEqual(result.Rows[2].Children.Count, 1); // 0 lvl
-				Assert.AreEqual(result.Rows[2].Children[0].Children.Count, 1);  // 1 lvl
-				Assert.AreEqual(result.Rows[2].Children[0].Children[0].Children.Count, 1);  // 2 lvl
-				Assert.AreEqual(result.Rows[2].Children[0].Children[0].Children[0].Children.Count, 1);  // 3 lvl
-				Assert.AreEqual(result.Rows[2].Children[0].Children[0].Children[0].Children[0].Children.Count, 1);  // 4 lvl
-				Assert.IsNull(result.Rows[2].Children[0].Children[0].Children[0].Children[0].Children[0].Children);
+				Assert.That(result.Rows[2].Children, Is.Not.Null);
+				Assert.That(result.Rows[2].Children, Has.Count.EqualTo(1)); // 0 lvl
+				Assert.That(result.Rows[2].Children[0].Children, Has.Count.EqualTo(1));  // 1 lvl
+				Assert.That(result.Rows[2].Children[0].Children[0].Children, Has.Count.EqualTo(1));  // 2 lvl
+				Assert.That(result.Rows[2].Children[0].Children[0].Children[0].Children, Has.Count.EqualTo(1));  // 3 lvl
+				Assert.That(result.Rows[2].Children[0].Children[0].Children[0].Children[0].Children, Has.Count.EqualTo(1));  // 4 lvl
+				Assert.That(result.Rows[2].Children[0].Children[0].Children[0].Children[0].Children[0].Children, Is.Null);
 			}
 		}
 	}

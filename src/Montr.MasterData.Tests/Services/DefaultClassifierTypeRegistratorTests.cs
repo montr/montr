@@ -51,8 +51,8 @@ namespace Montr.MasterData.Tests.Services
 				var result = await handler.Register(command.Item, command.Fields, cancellationToken);
 
 				// assert
-				Assert.IsNotNull(result);
-				Assert.AreNotEqual(Guid.Empty, result.Uid);
+				Assert.That(result, Is.Not.Null);
+				Assert.That(result.Uid, Is.Not.EqualTo(Guid.Empty));
 			}
 		}
 	}

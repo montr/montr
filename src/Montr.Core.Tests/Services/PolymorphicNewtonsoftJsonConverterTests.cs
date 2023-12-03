@@ -14,9 +14,9 @@ namespace Montr.Core.Tests.Services
 			var converter = new PolymorphicNewtonsoftJsonConverter<Base>(x => x.TypeCode, new JsonTypeProvider<Base>());
 
 			// act && assert
-			Assert.AreEqual(true, converter.CanConvert(typeof(Base)));
-			Assert.AreEqual(false, converter.CanConvert(typeof(Inheritor)));
-			Assert.AreEqual(false, converter.CanConvert(typeof(string)));
+			Assert.That(converter.CanConvert(typeof(Base)), Is.EqualTo(true));
+			Assert.That(converter.CanConvert(typeof(Inheritor)), Is.EqualTo(false));
+			Assert.That(converter.CanConvert(typeof(string)), Is.EqualTo(false));
 		}
 
 		/*[Test]

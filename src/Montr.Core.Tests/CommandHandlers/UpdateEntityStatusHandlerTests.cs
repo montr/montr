@@ -49,20 +49,20 @@ namespace Montr.Core.Tests.CommandHandlers
 				var result = await handler.Handle(request, cancellationToken);
 
 				// assert
-				Assert.IsNotNull(result);
-				Assert.AreEqual(1, result.AffectedRows);
+				Assert.That(result, Is.Not.Null);
+				Assert.That(result.AffectedRows, Is.EqualTo(1));
 
 				var statuses = await generator.GetEntityStatuses(cancellationToken);
 
-				Assert.AreEqual(2, statuses.Rows.Count);
+				Assert.That(statuses.Rows.Count, Is.EqualTo(2));
 
-				Assert.AreEqual(2, statuses.Rows[0].DisplayOrder);
-				Assert.AreEqual("published", statuses.Rows[0].Code);
-				Assert.AreEqual("Published", statuses.Rows[0].Name);
+				Assert.That(statuses.Rows[0].DisplayOrder, Is.EqualTo(2));
+				Assert.That(statuses.Rows[0].Code, Is.EqualTo("published"));
+				Assert.That(statuses.Rows[0].Name, Is.EqualTo("Published"));
 
-				Assert.AreEqual(10, statuses.Rows[1].DisplayOrder);
-				Assert.AreEqual("draft", statuses.Rows[1].Code);
-				Assert.AreEqual("The Draft", statuses.Rows[1].Name);
+				Assert.That(statuses.Rows[1].DisplayOrder, Is.EqualTo(10));
+				Assert.That(statuses.Rows[1].Code, Is.EqualTo("draft"));
+				Assert.That(statuses.Rows[1].Name, Is.EqualTo("The Draft"));
 			}
 		}
 	}

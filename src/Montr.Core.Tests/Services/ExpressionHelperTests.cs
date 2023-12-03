@@ -11,7 +11,7 @@ namespace Montr.Core.Tests.Services
 		{
 			var result = ExpressionHelper.GetFullName<Resources>(x => x.Key1);
 
-			Assert.AreEqual("Montr.Core.Tests.Services.ExpressionHelperTests+Resources.Key1", result);
+			Assert.That(result, Is.EqualTo("Montr.Core.Tests.Services.ExpressionHelperTests+Resources.Key1"));
 		}
 
 		private abstract class Resources
