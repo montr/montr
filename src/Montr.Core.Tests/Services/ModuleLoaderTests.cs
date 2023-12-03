@@ -16,7 +16,7 @@ namespace Montr.Core.Tests.Services
 			var loader = new ModuleLoader(loggerFactory.CreateLogger<ModuleLoader>());
 
 			// act
-			var modules = loader.GetSortedModules("../../../../Host/bin/Debug/net7.0/", false);
+			var modules = loader.GetSortedModules("../../../../Host/bin/Debug/net8.0/", false);
 
 			// assert
 			Assert.That(loader.Errors, Is.Empty); // todo: fix errors in github actions tests
