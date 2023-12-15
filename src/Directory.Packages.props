@@ -12,7 +12,7 @@
     <PackageVersion Include="OpenIddict.EntityFrameworkCore" Version="4.10.1" />
     <PackageVersion Include="IdentityModel" Version="6.2.0" />
     <PackageVersion Include="MailKit" Version="4.3.0" />
-    <PackageVersion Include="Markdig" Version="0.33.0" />
+    <PackageVersion Include="Markdig" Version="0.34.0" />
     <PackageVersion Include="Stubble.Core" Version="1.10.8" />
     <PackageVersion Include="LumenWorksCsvReader" Version="4.0.0" />
     <PackageVersion Include="EPPlus" Version="4.5.3.3" />
