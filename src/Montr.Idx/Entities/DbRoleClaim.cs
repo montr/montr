@@ -7,7 +7,7 @@ namespace Montr.Idx.Entities
 	[Table(Schema = "montr", Name = "role_claim")]
 	public class DbRoleClaim : IdentityRoleClaim<Guid>
 	{
-		[Column("id"), PrimaryKey, NotNull]
+		[Column("id"), PrimaryKey, Identity, NotNull]
 		public override int Id { get; set; }
 
 		[Column("role_id"), NotNull]

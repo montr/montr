@@ -109,7 +109,8 @@ namespace Montr.Idx.Services.Implementations
 					// todo: merge with ManageRolePermissionsHandler
 					var existingClaims = (await _roleManager.GetClaimsAsync(dbRole))
 						.Where(x => x.Type == Permission.ClaimType)
-						.Select(x => x.Value);
+						.Select(x => x.Value)
+						.ToList();
 
 					var addPermissions = roleTemplate.Permissions?
 						.Select(x => x.Code)
