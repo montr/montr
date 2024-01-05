@@ -30,7 +30,7 @@ namespace Montr.Core
 		{
 			appBuilder.Services.Configure<CookiePolicyOptions>(options =>
 			{
-				options.CheckConsentNeeded = _ => true;
+				// options.CheckConsentNeeded = _ => true;
 				options.MinimumSameSitePolicy = SameSiteMode.None;
 			});
 

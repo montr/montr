@@ -1,24 +1,33 @@
-﻿@using System.Text.Json
-@using System.Text.Json.Serialization
-@using Microsoft.Extensions.Options
+﻿@using Microsoft.Extensions.Options
 @using Montr.Core
 
 @inject IOptionsMonitor<AppOptions> Options
+@{
+	var options = Options.CurrentValue;
+}
 
 <!DOCTYPE html>
 
-<html>
+<html lang="">
 <head>
 	<meta name="viewport" content="width=device-width" />
+	<meta name="application-name" content="Montr"
+	      data-baseUrl="@options.AppUrl"
+	      data-cookieDomain="@options.CookieDomain"
+	      data-appState="@options.State"
+	/>
+	<meta http-equiv="Content-Security-Policy"
+	      content="base-uri 'self';
+                   default-src 'self' wss:;
+                   img-src data: https:;
+                   object-src 'none';
+                   script-src 'self';
+                   style-src 'unsafe-inline';
+                   upgrade-insecure-requests;" />
 	<title>Montr</title>
 </head>
 <body>
 	<div id="root"></div>
-	<script>
-	var APP_OPTIONS = @Html.Raw(JsonSerializer.Serialize(new { Options.CurrentValue.AppUrl, Options.CurrentValue.CookieDomain, Options.CurrentValue.State },
-		new JsonSerializerOptions { DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull, PropertyNamingPolicy = JsonNamingPolicy.CamelCase, Converters = { new JsonStringEnumConverter() } }));
-	</script>
-	<script>window['_dotnet_watch_ws_injected'] = true;</script>
 	<script src="/assets/app.bundle.js"></script>
 </body>
 </html>

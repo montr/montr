@@ -1,6 +1,6 @@
 export interface AppOptions {
 	appUrl: string;
-	authorityAppUrl: string;
+	authorityAppUrl?: string;
 	cookieDomain: string;
 	state: AppState;
 }
