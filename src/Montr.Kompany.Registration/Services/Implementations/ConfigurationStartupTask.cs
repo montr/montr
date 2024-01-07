@@ -41,7 +41,7 @@ namespace Montr.Kompany.Registration.Services.Implementations
 				config.When(document => document.StatusCode == DocumentStatusCode.Draft)
 					.Add<Button>((document, x) =>
 					{
-						x.Key = "submit";
+						x.Key = "submit_1";
 						x.Name = "Submit";
 						x.Type = ButtonType.Primary;
 						x.Action = "/companyRegistrationRequest/submit";
@@ -52,7 +52,7 @@ namespace Montr.Kompany.Registration.Services.Implementations
 				config.When(document => document.StatusCode == DocumentStatusCode.Draft)
 					.Add<Button>((document, x) =>
 					{
-						x.Key = "submit";
+						x.Key = "submit_2";
 						x.Name = "Submit";
 						x.Type = ButtonType.Primary;
 						x.Action = "/document/changeStatus";

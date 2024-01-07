@@ -120,7 +120,6 @@ export class ClassifierSelect extends React.Component<Props, State> {
 		return (<Select
 			value={value}
 			loading={loading}
-			showArrow={true}
 			showSearch={true}
 			autoClearSearchValue={false}
 			onSearch={this.onSearch}

@@ -19,7 +19,7 @@ export class DataToolbar extends React.Component<Props> {
 		return <Toolbar>
 			{buttons.map((button, index) => {
 
-				const key = button.key || `btn-${index}`;
+				const key = /* button.key || */ `button-${index}`;
 
 				const props = { key, button, ...buttonProps, ...button.props };
 
