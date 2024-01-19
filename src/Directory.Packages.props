@@ -23,7 +23,7 @@
     <PackageVersion Include="Sentry" Version="3.41.3" />
     <PackageVersion Include="Sentry.AspNetCore" Version="3.41.3" />
     <PackageVersion Include="Serilog" Version="3.1.1" />
-    <PackageVersion Include="Serilog.AspNetCore" Version="8.0.0" />
+    <PackageVersion Include="Serilog.AspNetCore" Version="8.0.1" />
     <PackageVersion Include="Serilog.Enrichers.Environment" Version="2.3.0" />
     <PackageVersion Include="Serilog.Enrichers.Thread" Version="3.1.0" />
     <PackageVersion Include="Serilog.Sinks.Console" Version="5.0.1" />
