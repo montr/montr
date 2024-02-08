@@ -70,7 +70,7 @@ jobs:
       # - run: dotnet test ./src/Montr.Tendr.Tests --configuration "${{ matrix.configuration }}" --no-build
       - run: dotnet test ./src/Montr.Worker.Hangfire.Tests --configuration "${{ matrix.configuration }}" --no-build
 
-      - uses: actions/setup-node@v4.0.1
+      - uses: actions/setup-node@v4.0.2
         with:
           node-version: 16
 
