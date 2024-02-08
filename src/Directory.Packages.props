@@ -20,8 +20,8 @@
     <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.0" />
     <PackageVersion Include="Moq" Version="4.20.70" />
     <PackageVersion Include="NUnit" Version="4.0.1" />
-    <PackageVersion Include="Sentry" Version="3.41.3" />
-    <PackageVersion Include="Sentry.AspNetCore" Version="3.41.3" />
+    <PackageVersion Include="Sentry" Version="4.0.3" />
+    <PackageVersion Include="Sentry.AspNetCore" Version="4.0.3" />
     <PackageVersion Include="Serilog" Version="3.1.1" />
     <PackageVersion Include="Serilog.AspNetCore" Version="8.0.0" />
     <PackageVersion Include="Serilog.Enrichers.Environment" Version="2.3.0" />
