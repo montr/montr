@@ -50,7 +50,7 @@ namespace Montr.Idx.Tests.CommandHandlers
 
 			var generator = new MasterDataDbGenerator(unitOfWorkFactory, dbContextFactory);
 
-			var handler = new RegisterHandler(NullLogger<RegisterHandler>.Instance, classifierRepositoryFactory,
+			var handler = new RegisterHandler(NullLogger<RegisterHandler>.Instance, unitOfWorkFactory, classifierRepositoryFactory,
 				identityServiceFactory.UserManager, identityServiceFactory.SignInManager, appUrlBuilder, emailConfirmationServiceMock.Object);
 
 			using (var _ = unitOfWorkFactory.Create())

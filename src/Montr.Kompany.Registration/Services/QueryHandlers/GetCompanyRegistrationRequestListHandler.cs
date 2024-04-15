@@ -25,6 +25,7 @@ namespace Montr.Kompany.Registration.Services.QueryHandlers
 			{
 				var documents = await _documentRepository.Search(new DocumentSearchRequest
 				{
+					FilterByUser = true,
 					UserUid = request.UserUid,
 					SkipPaging = true
 				}, cancellationToken);

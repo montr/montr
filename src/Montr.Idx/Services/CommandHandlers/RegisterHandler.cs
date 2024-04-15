@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
@@ -17,6 +18,7 @@ namespace Montr.Idx.Services.CommandHandlers
 	public class RegisterHandler : IRequestHandler<Register, ApiResult>
 	{
 		private readonly ILogger<RegisterHandler> _logger;
+		private readonly IUnitOfWorkFactory _unitOfWorkFactory;
 		private readonly INamedServiceFactory<IClassifierRepository> _classifierRepositoryFactory;
 		private readonly UserManager<DbUser> _userManager;
 		private readonly SignInManager<DbUser> _signInManager;
@@ -25,6 +27,7 @@ namespace Montr.Idx.Services.CommandHandlers
 
 		public RegisterHandler(
 			ILogger<RegisterHandler> logger,
+			IUnitOfWorkFactory unitOfWorkFactory,
 			INamedServiceFactory<IClassifierRepository> classifierRepositoryFactory,
 			UserManager<DbUser> userManager,
 			SignInManager<DbUser> signInManager,
@@ -32,6 +35,7 @@ namespace Montr.Idx.Services.CommandHandlers
 			IEmailConfirmationService emailConfirmationService)
 		{
 			_logger = logger;
+			_unitOfWorkFactory = unitOfWorkFactory;
 			_classifierRepositoryFactory = classifierRepositoryFactory;
 			_userManager = userManager;
 			_signInManager = signInManager;
@@ -41,6 +45,8 @@ namespace Montr.Idx.Services.CommandHandlers
 
 		public async Task<ApiResult> Handle(Register request, CancellationToken cancellationToken)
 		{
+			cancellationToken.ThrowIfCancellationRequested();
+
 			var user = new User
 			{
 				Name = request.Email,
@@ -51,33 +57,45 @@ namespace Montr.Idx.Services.CommandHandlers
 				Password = request.Password
 			};
 
-			var userRepository = _classifierRepositoryFactory.GetNamedOrDefaultService(ClassifierTypeCode.User);
-
-			var result = await userRepository.Insert(user, cancellationToken);
-
-			if (result.Success)
+			using (var scope = _unitOfWorkFactory.Create())
 			{
-				_logger.LogInformation("User created a new account with password.");
+				var userRepository = _classifierRepositoryFactory.GetNamedOrDefaultService(ClassifierTypeCode.User);
 
-				// todo: remove reload user
-				var dbUser = await _userManager.FindByIdAsync(result.Uid.ToString());
+				var result = await userRepository.Insert(user, cancellationToken);
 
-				await _emailConfirmationService.SendConfirmEmailMessage(dbUser, cancellationToken);
-
-				if (_userManager.Options.SignIn.RequireConfirmedAccount)
+				if (result.Success)
 				{
-					var redirectUrl = _appUrlBuilder.Build(ClientRoutes.RegisterConfirmation,
-						new Dictionary<string, string> { { "email", request.Email } });
+					_logger.LogInformation("User created a new account with password.");
 
-					return new ApiResult { RedirectUrl = redirectUrl };
+					// todo: remove reload user
+					var dbUser = await _userManager.FindByIdAsync(result.Uid.ToString())
+					             ?? throw new InvalidOperationException(
+						             $"Created user with uid {result.Uid} not found.");
+
+					if (_userManager.Options.SignIn.RequireConfirmedEmail)
+					{
+						await _emailConfirmationService.SendConfirmEmailMessage(dbUser, cancellationToken);
+					}
+
+					// todo: add user default roles
+
+					scope.Commit();
+
+					if (_userManager.Options.SignIn.RequireConfirmedAccount)
+					{
+						var redirectUrl = _appUrlBuilder.Build(ClientRoutes.RegisterConfirmation,
+							new Dictionary<string, string> { { "email", request.Email } });
+
+						return new ApiResult { RedirectUrl = redirectUrl };
+					}
+
+					await _signInManager.SignInAsync(dbUser, isPersistent: false);
+
+					return new ApiResult { RedirectUrl = request.ReturnUrl };
 				}
 
-				await _signInManager.SignInAsync(dbUser, isPersistent: false);
-
-				return new ApiResult { RedirectUrl = request.ReturnUrl };
+				return result;
 			}
-
-			return result;
 		}
 	}
 }

@@ -32,6 +32,7 @@ namespace Montr.Idx.Services.CommandHandlers
 			}
 
 			var result = await _userManager.RemoveLoginAsync(user, request.LoginProvider, request.ProviderKey);
+
 			if (result.Succeeded == false)
 			{
 				// StatusMessage = "The external login was not removed.";

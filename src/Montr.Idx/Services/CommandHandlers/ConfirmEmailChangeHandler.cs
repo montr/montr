@@ -38,6 +38,7 @@ namespace Montr.Idx.Services.CommandHandlers
 			}
 
 			var user = await _userManager.FindByIdAsync(request.UserId);
+
 			if (user == null)
 			{
 				// return NotFound($"Unable to load user with ID '{userId}'.");
