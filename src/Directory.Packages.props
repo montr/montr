@@ -3,28 +3,28 @@
     <ManagePackageVersionsCentrally>true</ManagePackageVersionsCentrally>
   </PropertyGroup>
   <ItemGroup>
-    <PackageVersion Include="linq2db" Version="5.3.2" />
+    <PackageVersion Include="linq2db" Version="5.4.1" />
     <PackageVersion Include="linq2db.Identity" Version="3.5.0" />
     <PackageVersion Include="MediatR" Version="12.2.0" />
-    <PackageVersion Include="NUnit.Analyzers" Version="4.0.1">
+    <PackageVersion Include="NUnit.Analyzers" Version="4.1.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageVersion>
     <PackageVersion Include="NUnit3TestAdapter" Version="4.5.0" />
     <PackageVersion Include="OpenIddict.AspNetCore" Version="4.10.1" />
     <PackageVersion Include="OpenIddict.EntityFrameworkCore" Version="4.10.1" />
-    <PackageVersion Include="IdentityModel" Version="6.2.0" />
-    <PackageVersion Include="MailKit" Version="4.3.0" />
-    <PackageVersion Include="Markdig" Version="0.34.0" />
+    <PackageVersion Include="IdentityModel" Version="7.0.0" />
+    <PackageVersion Include="MailKit" Version="4.5.0" />
+    <PackageVersion Include="Markdig" Version="0.37.0" />
     <PackageVersion Include="Stubble.Core" Version="1.10.8" />
     <PackageVersion Include="LumenWorksCsvReader" Version="4.0.0" />
     <PackageVersion Include="EPPlus" Version="4.5.3.3" />
-    <PackageVersion Include="Npgsql" Version="8.0.1" />
-    <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.0" />
+    <PackageVersion Include="Npgsql" Version="8.0.2" />
+    <PackageVersion Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.2" />
     <PackageVersion Include="Moq" Version="4.20.70" />
-    <PackageVersion Include="NUnit" Version="4.0.1" />
-    <PackageVersion Include="Sentry" Version="4.0.0" />
-    <PackageVersion Include="Sentry.AspNetCore" Version="4.0.0" />
+    <PackageVersion Include="NUnit" Version="4.1.0" />
+    <PackageVersion Include="Sentry" Version="4.4.0" />
+    <PackageVersion Include="Sentry.AspNetCore" Version="4.4.0" />
     <PackageVersion Include="Serilog" Version="3.1.1" />
     <PackageVersion Include="Serilog.AspNetCore" Version="8.0.1" />
     <PackageVersion Include="Serilog.Enrichers.Environment" Version="2.3.0" />
@@ -34,14 +34,14 @@
     <PackageVersion Include="Hangfire.AspNetCore" Version="1.8.9" />
     <PackageVersion Include="HangFire.Core" Version="1.8.9" />
     <PackageVersion Include="Hangfire.PostgreSql" Version="1.20.5" />
-    <PackageVersion Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="8.0.1" />
+    <PackageVersion Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="8.0.4" />
     <PackageVersion Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
     <PackageVersion Include="Microsoft.Extensions.Configuration.Abstractions" Version="8.0.0" />
     <PackageVersion Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="8.0.0" />
-    <PackageVersion Include="Microsoft.AspNetCore.Authentication.Facebook" Version="8.0.1" />
-    <PackageVersion Include="Microsoft.AspNetCore.Authentication.Google" Version="8.0.1" />
-    <PackageVersion Include="Microsoft.AspNetCore.Authentication.MicrosoftAccount" Version="8.0.1" />
+    <PackageVersion Include="Microsoft.AspNetCore.Authentication.Facebook" Version="8.0.4" />
+    <PackageVersion Include="Microsoft.AspNetCore.Authentication.Google" Version="8.0.4" />
+    <PackageVersion Include="Microsoft.AspNetCore.Authentication.MicrosoftAccount" Version="8.0.4" />
     <PackageVersion Include="System.Text.Encoding.CodePages" Version="8.0.0" />
-    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.8.0" />
+    <PackageVersion Include="Microsoft.NET.Test.Sdk" Version="17.9.0" />
   </ItemGroup>
 </Project>
