@@ -78,9 +78,7 @@ namespace Montr.Idx.Services.CommandHandlers
 					}
 
 					// todo: add user default roles
-
-					scope.Commit();
-
+					
 					if (_userManager.Options.SignIn.RequireConfirmedAccount)
 					{
 						var redirectUrl = _appUrlBuilder.Build(ClientRoutes.RegisterConfirmation,
@@ -90,6 +88,8 @@ namespace Montr.Idx.Services.CommandHandlers
 					}
 
 					await _signInManager.SignInAsync(dbUser, isPersistent: false);
+
+					scope.Commit();
 
 					return new ApiResult { RedirectUrl = request.ReturnUrl };
 				}
