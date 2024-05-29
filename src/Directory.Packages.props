@@ -34,7 +34,7 @@
     <PackageVersion Include="Hangfire.AspNetCore" Version="1.8.9" />
     <PackageVersion Include="HangFire.Core" Version="1.8.9" />
     <PackageVersion Include="Hangfire.PostgreSql" Version="1.20.5" />
-    <PackageVersion Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="8.0.4" />
+    <PackageVersion Include="Microsoft.AspNetCore.Mvc.NewtonsoftJson" Version="8.0.6" />
     <PackageVersion Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
     <PackageVersion Include="Microsoft.Extensions.Configuration.Abstractions" Version="8.0.0" />
     <PackageVersion Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="8.0.0" />
