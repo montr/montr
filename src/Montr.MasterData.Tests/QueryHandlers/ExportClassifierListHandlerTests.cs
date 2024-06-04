@@ -71,7 +71,11 @@ namespace Montr.MasterData.Tests.QueryHandlers
 				// act
 				var command = new ExportClassifierList
 				{
-					TypeCode = generator.TypeCode
+					TypeCode = generator.TypeCode,
+					// temp removed due to System.DllNotFoundException: Unable to load shared library 'libgdiplus'
+					// or one of its dependencies. In order to help diagnose loading problems,
+					// consider setting the DYLD_PRINT_LIBRARIES environment variable
+					AutoFitColumns = false
 				};
 
 				var result = await handler.Handle(command, cancellationToken);

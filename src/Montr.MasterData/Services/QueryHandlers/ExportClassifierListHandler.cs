@@ -61,7 +61,7 @@ namespace Montr.MasterData.Services.QueryHandlers
 					col++;
 				}
 
-				StyleHeader(ws);
+				StyleHeader(command, ws);
 
 				// data
 				var row = FirstDataRow;
@@ -98,7 +98,7 @@ namespace Montr.MasterData.Services.QueryHandlers
 					row++;
 				}
 
-				StyleData(ws);
+				StyleData(command, ws);
 
 				return new FileResult
 				{
@@ -109,12 +109,16 @@ namespace Montr.MasterData.Services.QueryHandlers
 			}
 		}
 
-		private static void StyleHeader(ExcelWorksheet ws)
+		private static void StyleHeader(ExportClassifierList command, ExcelWorksheet ws)
 		{
 			var row1 = ws.Cells[1, 1, 1, ws.Dimension.Columns];
 			var row2 = ws.Cells[2, 1, 2, ws.Dimension.Columns];
 
-			row1.AutoFitColumns(8, 16);
+			if (command.AutoFitColumns)
+			{
+				row1.AutoFitColumns(8, 16);
+			}
+
 			row1.Style.VerticalAlignment = ExcelVerticalAlignment.Top;
 			row1.Style.WrapText = true;
 			row1.Style.Font.Bold = true;
@@ -125,15 +129,20 @@ namespace Montr.MasterData.Services.QueryHandlers
 			row2.Style.Font.Size = 8;
 		}
 
-		private static void StyleData(ExcelWorksheet ws)
+		private static void StyleData(ExportClassifierList command, ExcelWorksheet ws)
 		{
 			var col1 = ws.Cells[1, 1, ws.Dimension.Rows, 1];
 			col1.Style.Font.Color.SetColor(Color.Gray);
 			col1.Style.Font.Size = 8;
 
 			ws.Column(1).Width = 0; // Id
-			ws.Column(2).AutoFit(12, 24); // Code
-			ws.Column(3).AutoFit(12, 96); // Name
+
+			if (command.AutoFitColumns)
+			{
+				ws.Column(2).AutoFit(12, 24); // Code
+				ws.Column(3).AutoFit(12, 96); // Name
+			}
+
 			ws.View.FreezePanes(3, 3);
 		}
 	}
