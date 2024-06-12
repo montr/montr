@@ -25,6 +25,7 @@ namespace Montr.Idx.Services.Implementations
 			_settingsTypeRegistry.Register(typeof(SignInSettings));
 			_settingsTypeRegistry.Register(typeof(PasswordSettings));
 			_settingsTypeRegistry.Register(typeof(LockoutSettings));
+			_settingsTypeRegistry.Register(typeof(UserRegistrationOptions));
 
 			_registry.Configure<Application>(config =>
 			{
@@ -44,6 +45,12 @@ namespace Montr.Idx.Services.Implementations
 				{
 					settings.Type = typeof(LockoutSettings);
 					settings.Category = SettingsCategory.Identity;
+				});
+
+				config.Add<SettingsPane>((_, settings) =>
+				{
+					settings.Type = typeof(UserRegistrationOptions);
+					settings.Category = SettingsCategory.Registration;
 				});
 			});
 

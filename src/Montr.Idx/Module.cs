@@ -24,6 +24,7 @@ namespace Montr.Idx
 			appBuilder.Services.BindOptions<SignInSettings>(appBuilder.Configuration);
 			appBuilder.Services.BindOptions<PasswordSettings>(appBuilder.Configuration);
 			appBuilder.Services.BindOptions<LockoutSettings>(appBuilder.Configuration);
+			appBuilder.Services.BindOptions<UserRegistrationOptions>(appBuilder.Configuration);
 
 			appBuilder.Services.AddTransient<IStartupTask, RegisterClassifierTypeStartupTask>();
 			appBuilder.Services.AddTransient<IStartupTask, RegisterMessageTemplateStartupTask>();

@@ -20,6 +20,9 @@ namespace Montr.MasterData.Services.Designers
 				result.Props.TypeCode = classifierFieldAttribute.ClassifierTypeCode;
 			}
 
+			// todo: check not only arrays, but also collections
+			result.Props.Multiple = property.PropertyType.IsArray;
+
 			return result;
 		}
 	}

@@ -2,10 +2,10 @@
 {
 	public static class ClassifierTypeCode
 	{
-		public static readonly string Role = "role";
+		public const string Role = "role";
 
-		public static readonly string User = "user";
+		public const string User = "user";
 
-		public static readonly string Permission = "permission";
+		public const string Permission = "permission";
 	}
 }

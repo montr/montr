@@ -26,6 +26,7 @@ namespace Montr.Metadata.Models
 
 		public string Icon { get; set; }
 
+		// todo: remove? already removed in ui
 		public bool Multiple { get; set; }
 
 		public bool Active { get; set; }

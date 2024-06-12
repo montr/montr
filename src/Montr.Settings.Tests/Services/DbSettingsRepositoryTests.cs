@@ -28,7 +28,9 @@ namespace Montr.Settings.Tests.Services
 			var dbContextFactory = new DefaultDbContextFactory();
 			var dateTimeProvider = new DefaultDateTimeProvider();
 			var mediatorMock = new Mock<IPublisher>();
-			var repository = new DbSettingsRepository(dbContextFactory, dateTimeProvider, mediatorMock.Object);
+			var jsonSerializer = new NewtonsoftJsonSerializer();
+
+			var repository = new DbSettingsRepository(dbContextFactory, dateTimeProvider, mediatorMock.Object, jsonSerializer);
 
 			using (var _ = unitOfWorkFactory.Create())
 			{

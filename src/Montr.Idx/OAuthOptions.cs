@@ -1,7 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Montr.Metadata;
 using Montr.Metadata.Services.Designers;
-using Montr.Settings;
 
 namespace Montr.Idx
 {

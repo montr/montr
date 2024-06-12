@@ -1,7 +1,6 @@
 ﻿using System;
 using Montr.MasterData.Services.Designers;
 using Montr.Metadata;
-using Montr.Settings;
 
 namespace Montr.Kompany.Registration
 {

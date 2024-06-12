@@ -1,10 +1,11 @@
-import { IDataField, IDataFieldWithProps, Guid } from "@montr-core/models";
+import { Guid, IDataField, IDataFieldWithProps } from "@montr-core/models";
 
 export interface IClassifierField extends IDataFieldWithProps<IClassifierFieldProps> {
 }
 
 interface IClassifierFieldProps {
 	typeCode?: string;
+	multiple?: boolean;
 }
 
 export interface IClassifierGroupField extends IDataFieldWithProps<IClassifierGroupFieldProps> {

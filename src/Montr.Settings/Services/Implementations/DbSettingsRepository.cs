@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
@@ -20,12 +19,15 @@ namespace Montr.Settings.Services.Implementations
 		private readonly IDbContextFactory _dbContextFactory;
 		private readonly IDateTimeProvider _dateTimeProvider;
 		private readonly IPublisher _mediator;
+		private readonly IJsonSerializer _jsonSerializer;
 
-		public DbSettingsRepository(IDbContextFactory dbContextFactory, IDateTimeProvider dateTimeProvider, IPublisher mediator)
+		public DbSettingsRepository(IDbContextFactory dbContextFactory, IDateTimeProvider dateTimeProvider,
+			IPublisher mediator, IJsonSerializer jsonSerializer)
 		{
 			_dbContextFactory = dbContextFactory;
 			_dateTimeProvider = dateTimeProvider;
 			_mediator = mediator;
+			_jsonSerializer = jsonSerializer;
 		}
 
 		public IUpdatableSettings GetSettings(string entityTypeCode, Guid entityUid, Type ofSettings)
@@ -38,7 +40,7 @@ namespace Montr.Settings.Services.Implementations
 			return new UpdatableSettings<TSettings>(this, entityTypeCode, entityUid);
 		}
 
-		// todo: change first parameter to ICollection<(string, string)> and convert outside of method
+		// todo: (?) change first parameter to ICollection<(string, string)> and convert outside of method
 		public async Task<ApiResult> Update(string entityTypeCode, Guid entityUid,
 			ICollection<(string, object)> values, CancellationToken cancellationToken)
 		{
@@ -50,7 +52,7 @@ namespace Montr.Settings.Services.Implementations
 			{
 				foreach (var (key, value) in values)
 				{
-					var stringValue = value != null ? Convert.ToString(value, CultureInfo.InvariantCulture) : null;
+					var stringValue = ConvertToString(value);
 
 					var updated = await db.GetTable<DbSettings>()
 						.Where(x => x.EntityTypeCode == entityTypeCode &&
@@ -90,6 +92,14 @@ namespace Montr.Settings.Services.Implementations
 			};
 
 			return new ApiResult { AffectedRows = affected };
+		}
+
+		// todo: convert to string using settings type provider
+		private string ConvertToString(object value)
+		{
+			// return value != null ? Convert.ToString(value, CultureInfo.InvariantCulture) : null;
+
+			return value != null ? _jsonSerializer.Serialize(value) : null;
 		}
 
 		private class UpdatableSettings : IUpdatableSettings

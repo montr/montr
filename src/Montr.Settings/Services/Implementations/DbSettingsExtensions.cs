@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -13,6 +14,8 @@ using Montr.Core.Services;
 using Montr.Core.Services.Implementations;
 using Montr.Settings.Entities;
 using Montr.Settings.Events;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
 using IConfigurationProvider = Microsoft.Extensions.Configuration.IConfigurationProvider;
 
 namespace Montr.Settings.Services.Implementations
@@ -94,10 +97,35 @@ namespace Montr.Settings.Services.Implementations
 			using (var db = _dbContextFactory.Create())
 			{
 				// only Application settings available in DbConfigurationProvider
-				Data = db.GetTable<DbSettings>()
+
+				var dbData = db.GetTable<DbSettings>()
 					.Where(x => x.EntityTypeCode == Application.EntityTypeCode &&
 					            x.EntityUid == Application.EntityUid)
 					.ToDictionary(x => x.Key, x => x.Value, StringComparer.OrdinalIgnoreCase);
+
+				var result = new Dictionary<string, string>();
+
+				foreach (var pair in dbData)
+				{
+					// todo: store settings type in db to recognize arrays
+					var valueIsArray = pair.Value?.Length > 0 && pair.Value[0] == '[' && pair.Value[^1] == ']';
+
+					if (valueIsArray)
+					{
+						var array = (JArray)JsonConvert.DeserializeObject(pair.Value);
+
+						for (var i = 0; i < array?.Count; i++)
+						{
+							result[pair.Key + ":" + i] = array[i].Value<string>();
+						}
+					}
+					else
+					{
+						result[pair.Key] = pair.Value;
+					}
+				}
+
+				Data = result;
 			}
 
 			OnReload();

@@ -74,8 +74,11 @@ export class ClassifierSelect extends React.Component<Props, State> {
 		const { field } = this.props,
 			{ value } = this.state;
 
+		// focus works only with single select (for now)
+		const focusUid = field.props.multiple ? null : value;
+
 		const data = await this.classifierService.list({
-			typeCode: field.props.typeCode, focusUid: value, pageSize: 1000
+			typeCode: field.props.typeCode, focusUid: focusUid, pageSize: 1000
 		});
 
 		this.setState({ loading: false, items: data?.rows });
@@ -126,6 +129,7 @@ export class ClassifierSelect extends React.Component<Props, State> {
 			notFoundContent={fetching ? <Spin size="small" /> : null}
 			filterOption={false}
 			placeholder={field.placeholder}
+			mode={field.props.multiple ? "multiple" : undefined}
 			// allowClear={!field.required}
 			onChange={this.handleChange}
 			dropdownRender={menu => (
