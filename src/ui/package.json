@@ -18,7 +18,7 @@
 		"@emotion/babel-preset-css-prop": "^11.11.0",
 		"@emotion/react": "^11.11.4",
 		"ansi-regex": ">=5.0.1",
-		"antd": "^5.18.0",
+		"antd": "^5.18.1",
 		"axios": "1.7",
 		"dayjs": "1.11",
 		"i18next": "^23.11.5",
