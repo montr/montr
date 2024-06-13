@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading;
@@ -97,9 +98,17 @@ namespace Montr.Settings.Services.Implementations
 		// todo: convert to string using settings type provider
 		private string ConvertToString(object value)
 		{
-			// return value != null ? Convert.ToString(value, CultureInfo.InvariantCulture) : null;
+			if (value != null)
+			{
+				var valueType = value.GetType();
 
-			return value != null ? _jsonSerializer.Serialize(value) : null;
+				if (valueType.IsEnum)
+					return Convert.ToString(value, CultureInfo.InvariantCulture);
+
+				return _jsonSerializer.Serialize(value);
+			}
+
+			return null;
 		}
 
 		private class UpdatableSettings : IUpdatableSettings

@@ -16,8 +16,6 @@ using Microsoft.Extensions.Primitives;
 using Montr.Core.Models;
 using Montr.Core.Services;
 using Montr.Core.Services.Implementations;
-using Newtonsoft.Json.Converters;
-using Newtonsoft.Json.Serialization;
 
 namespace Montr.Core
 {
@@ -44,7 +42,7 @@ namespace Montr.Core
 				var actionContextAccessor = x.GetRequiredService<IActionContextAccessor>();
 				var urlHelperFactory = x.GetRequiredService<IUrlHelperFactory>();
 
-				return urlHelperFactory.GetUrlHelper(actionContextAccessor.ActionContext);
+				return urlHelperFactory.GetUrlHelper(actionContextAccessor!.ActionContext!);
 			});
 
 			appBuilder.Services.BindOptions<AppOptions>(appBuilder.Configuration);
@@ -184,11 +182,7 @@ namespace Montr.Core
 			{
 				mvcBuilder.AddNewtonsoftJson(options =>
 				{
-					options.SerializerSettings.MaxDepth = 64;
-
-					// options.SerializerSettings.DefaultValueHandling = DefaultValueHandling.Ignore; // do not use - zeros in numbers ignored also
-					options.SerializerSettings.Converters.Add(new StringEnumConverter());
-					options.SerializerSettings.ContractResolver = new CamelCasePropertyNamesContractResolver();
+					NewtonsoftJsonSerializer.SetupDefaultSettings(options.SerializerSettings);
 				});
 			}
 		}
